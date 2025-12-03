@@ -3,9 +3,8 @@ include README.md
 include LICENSE
 include requirements.txt
 
-# Include data files if needed
-# Uncomment the following lines if you want to include data files in the package
-# recursive-include data *.csv *.parquet *.h5ad
+# Include data files in SpaceTravLR_data package
+recursive-include src/SpaceTravLR_data *.csv *.parquet
 
 # Include documentation
 # recursive-include docs *.rst *.md
