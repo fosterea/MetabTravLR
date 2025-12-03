@@ -365,23 +365,6 @@ class GeneFactory(BaseTravLR):
             self.adata.uns['received_ligands'] = rw_ligands_0
             self.adata.uns['received_ligands_tfl'] = rw_tfligands_0
 
-        # this shouldn't be here
-        # rw_ligands_0 = pd.concat(
-        #         [rw_ligands_0, rw_tfligands_0], axis=1
-        #     ).groupby(level=0, axis=1).max().reindex(
-        #         index=obs, 
-        #         columns=self.adata.var_names, 
-        #         fill_value=0
-        #     )
-
-        
-        all_ligands = list(set(self.ligands) | set(self.tfl_ligands))
-        ligands_0 = self.adata.to_df(layer='imputed_count')[all_ligands].reindex(
-            index=self.obs_names, 
-            columns=self.adata.var_names, 
-            fill_value=0
-        )
-
 
         all_ligands = list(set(self.ligands) | set(self.tfl_ligands))
         ligands_0 = self.adata.to_df(layer='imputed_count')[all_ligands].reindex(
@@ -390,8 +373,20 @@ class GeneFactory(BaseTravLR):
             fill_value=0
         )
 
+        # copy the original values
         gene_mtx_1 = gene_mtx.copy()
-        
+        rw_ligands_1 = rw_ligands_0.copy()
+        rw_tfligands_1 = rw_tfligands_0.copy()
+
+        # get the max weighted ligand expression (could be zeroed out in rw_ligands_0)
+        rw_ligands_0 = pd.concat(
+            [rw_ligands_0, rw_tfligands_0], axis=1
+        ).groupby(level=0, axis=1).max().reindex(
+            index=obs, 
+            columns=self.adata.var_names, 
+            fill_value=0
+        )
+
         self.iter = 0
         self.max_iter = n_propagation
         min_ = gene_mtx.min(axis=0)
@@ -407,7 +402,7 @@ class GeneFactory(BaseTravLR):
 
             # weight betas by the gene expression from the previous iteration
             splashed_beta_dict = self._get_wbetas_dict(
-                self.beta_dict, rw_ligands_0, rw_tfligands_0, gene_mtx_1, cell_thresholds)
+                self.beta_dict, rw_ligands_1, rw_tfligands_1, gene_mtx_1, cell_thresholds)
             
             # get updated gene expressions
             gene_mtx_1 = gene_mtx + delta_simulated
@@ -444,21 +439,9 @@ class GeneFactory(BaseTravLR):
             )
 
             delta_ligands = ligands_1.values - ligands_0.values
-
-            # delta_df = pd.DataFrame(
-            #     delta_simulated, 
-            #     columns=self.adata.var_names, 
-            #     index=self.adata.obs_names
-            # )
             
-            # delta_ligands = pd.concat(
-            #         [delta_df[self.ligands], delta_df[self.tfl_ligands]], axis=1
-            #     ).groupby(level=0, axis=1).max().reindex(
-            #         index=self.adata.obs_names, 
-            #         columns=self.adata.var_names, 
-            #         fill_value=0
-            #     ).values
-            
+            # the model sees delta wL, not delta L
+            # delta_simulated contains delta L, so remove and replace with wL
             delta_simulated = delta_simulated + delta_rw_ligands - delta_ligands
             _simulated = self._perturb_all_cells(delta_simulated, splashed_beta_dict)
             delta_simulated = np.array(_simulated)
