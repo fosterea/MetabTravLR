@@ -225,7 +225,6 @@ class SpaceShip:
     def run_commot_(self, radius=350):
         from .tools.network import expand_paired_interactions
         from .tools.network import get_cellchat_db
-        from .models.parallel_estimators import init_received_ligands
         import commot as ct
         
         adata = self.adata
@@ -328,11 +327,6 @@ class SpaceShip:
         
         if self.status_bar:
             self.status_bar.update('Caching received ligands...')
-        adata = init_received_ligands(
-            adata, 
-            radius=radius, 
-            cell_threshes=df
-        )
         
         keys = list(adata.obsm.keys())
         for key in keys:
@@ -408,6 +402,7 @@ class SpaceShip:
         partition='preempt', 
         clusters='gpu', 
         gres='gpu:1', 
+        memory='20G',
         job_name='SpaceTravLR',
         lifespan=3, # hours
         python_path='python',
@@ -420,6 +415,7 @@ class SpaceShip:
             partition=partition,
             clusters=clusters,
             gres=gres,
+            mem=memory,
             ignore_pbs=True,
             job_name=job_name+'_'+self.name,
             output=outlog,
@@ -441,6 +437,7 @@ class SpaceShip:
         
         from .oracles import SpaceTravLR
         from .tools.network import RegulatoryFactory
+        from .models.parallel_estimators import init_received_ligands
         
         base_dir = f'{self.outdir}/betadata/'
         adata = sc.read_h5ad(f'{self.outdir}/input_data/_adata.h5ad')
@@ -448,6 +445,12 @@ class SpaceShip:
         links = pickle.load(open(f'{self.outdir}/input_data/celloracle_links.pkl', 'rb'))
 
         co_grn = RegulatoryFactory(links=links)
+
+        adata = init_received_ligands(
+            adata, 
+            radius=radius, 
+            cell_threshes=adata.uns['cell_thresholds']
+        )
         
         space_travlr = SpaceTravLR(
             adata=adata,

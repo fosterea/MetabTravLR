@@ -365,13 +365,14 @@ class GeneFactory(BaseTravLR):
             self.adata.uns['received_ligands'] = rw_ligands_0
             self.adata.uns['received_ligands_tfl'] = rw_tfligands_0
 
-        rw_ligands_0 = pd.concat(
-                [rw_ligands_0, rw_tfligands_0], axis=1
-            ).groupby(level=0, axis=1).max().reindex(
-                index=obs, 
-                columns=self.adata.var_names, 
-                fill_value=0
-            )
+        # this shouldn't be here
+        # rw_ligands_0 = pd.concat(
+        #         [rw_ligands_0, rw_tfligands_0], axis=1
+        #     ).groupby(level=0, axis=1).max().reindex(
+        #         index=obs, 
+        #         columns=self.adata.var_names, 
+        #         fill_value=0
+        #     )
 
         
         all_ligands = list(set(self.ligands) | set(self.tfl_ligands))
