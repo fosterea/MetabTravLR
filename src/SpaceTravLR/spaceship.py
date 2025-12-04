@@ -449,7 +449,7 @@ class SpaceShip:
         adata = init_received_ligands(
             adata, 
             radius=radius, 
-            cell_threshes=adata.uns['cell_thresholds']
+            cell_threshes=adata.uns.get('cell_thresholds', None)
         )
         
         space_travlr = SpaceTravLR(
