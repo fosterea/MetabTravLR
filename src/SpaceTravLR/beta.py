@@ -166,44 +166,59 @@ class BetaFrame(pd.DataFrame):
         lr_betas = self.filter(like='$', axis=1)
         tfl_betas = self.filter(like='#', axis=1)
 
-        rec_derivatives = pd.DataFrame(
-            np.where(
-                gex_df[self.receptors].values > 0, # LR receptor betas only present if receptor is important to cell   
-                lr_betas.values * rw_ligands[self.ligands].values,
-                0
-            ), 
-            index=self.index, 
-            columns=self.receptors
-        ).astype(float) * scale_factor
+        if len(self.receptors) > 0:
+            rec_derivatives = pd.DataFrame(
+                np.where(
+                    gex_df[self.receptors].values > 0, # LR receptor betas only present if receptor is important to cell   
+                    lr_betas.values * rw_ligands[self.ligands].values,
+                    0
+                ), 
+                index=self.index, 
+                columns=self.receptors
+            ).astype(float) * scale_factor
 
-        lig_lr_derivatives = pd.DataFrame(
-            lr_betas.values * gex_df[self.receptors].values, 
-            index=self.index, 
-            columns=self.ligands
-        ).astype(float) * scale_factor
+            lig_lr_derivatives = pd.DataFrame(
+                lr_betas.values * gex_df[self.receptors].values, 
+                index=self.index, 
+                columns=self.ligands
+            ).astype(float) * scale_factor
+        
+        else:
+            rec_derivatives = pd.DataFrame(index=self.index)
+            lig_lr_derivatives = pd.DataFrame(index=self.index)
 
-        lig_tfl_derivatives = pd.DataFrame(
-            tfl_betas.values * gex_df[self.tfl_regulators].values, 
-            index=self.index, 
-            columns=self.tfl_ligands
-        ).astype(float) * scale_factor
+        if len(self.modulators_genes) > 0:
+            tf_derivatives = pd.DataFrame(
+                self[self.tf_columns].values,
+                index=self.index,
+                columns=self.tfs
+            ).astype(float)
 
-        tf_derivatives = pd.DataFrame(
-            self[self.tf_columns].values,
-            index=self.index,
-            columns=self.tfs
-        ).astype(float)
+            # if provided, enforce links to also appear in co_grn_links
+            if grn_tfs is not None:
+                grn_tfs = [f'beta_{t}' for t in grn_tfs]
+                tf_derivatives.loc[:, ~tf_derivatives.columns.isin(grn_tfs)] = 0
 
-        # if provided, enforce links to also appear in co_grn_links
-        if grn_tfs is not None:
-            grn_tfs = [f'beta_{t}' for t in grn_tfs]
-            tf_derivatives.loc[:, ~tf_derivatives.columns.isin(grn_tfs)] = 0
+        else:
+            tf_derivatives = pd.DataFrame(index=self.index)
+        
+        if len(self.tfl_ligands) > 0:
 
-        tf_tfl_derivatives = pd.DataFrame(
-            tfl_betas.values * rw_ligands_tfl[self.tfl_ligands].values,
-            index=self.index,
-            columns=self.tfl_regulators
-        ).astype(float) * scale_factor
+            lig_tfl_derivatives = pd.DataFrame(
+                tfl_betas.values * gex_df[self.tfl_regulators].values, 
+                index=self.index, 
+                columns=self.tfl_ligands
+            ).astype(float) * scale_factor
+
+            tf_tfl_derivatives = pd.DataFrame(
+                tfl_betas.values * rw_ligands_tfl[self.tfl_ligands].values,
+                index=self.index,
+                columns=self.tfl_regulators
+            ).astype(float) * scale_factor
+        
+        else:
+            lig_tfl_derivatives = pd.DataFrame(index=self.index)
+            tf_tfl_derivatives = pd.DataFrame(index=self.index)
 
         _df = pd.concat(
             [
@@ -216,7 +231,6 @@ class BetaFrame(pd.DataFrame):
         
         if beta_cap is not None:
             _df = _df.clip(lower=-beta_cap, upper=beta_cap)
-
 
         _df.columns = 'beta_' + _df.columns.astype(str)
         return _df[self.modulators_genes]
@@ -324,7 +338,7 @@ class Betabase:
         beta_tfl_out.index.name = cell_type
         beta_tfl_out['interaction_type'] = 'ligand-tf'
         out_df = pd.concat([beta_tf_out, beta_lr_out, beta_tfl_out])
-        out_df = out_df.query('interaction != "beta0"')
+        out_df = out_df.query('interasefction != "beta0"')
         
         return 
         
