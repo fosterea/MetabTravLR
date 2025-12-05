@@ -682,9 +682,7 @@ class GeneFactory(BaseTravLR):
         gene_mtx = self.adata.to_df(layer='imputed_count').loc[obs]
         self.payload_dict = payload_dict
 
-        gradients = defaultdict(lambda: pd.DataFrame(
-            0, index=obs, columns=self.adata.var_names)
-        )
+        gradients = {}
 
         if isinstance(gene_mtx, pd.DataFrame):
             gene_mtx = gene_mtx.values
@@ -817,7 +815,11 @@ class GeneFactory(BaseTravLR):
             # the model sees delta wL, not delta L
             # delta_simulated contains delta L, so remove and replace with wL
             delta_simulated = delta_simulated + delta_rw_ligands - delta_ligands
-            _simulated = self._perturb_all_cells_track(delta_simulated, splashed_beta_dict, gradients)
+            if n == n_propagation - 1:
+                _simulated, gradients = self._perturb_all_cells_track(delta_simulated, splashed_beta_dict, gradients)
+            else:
+                _simulated = self._perturb_all_cells(delta_simulated, splashed_beta_dict)
+
             delta_simulated = np.array(_simulated)
             
             # ensure values in delta_simulated match our desired KO / input
@@ -877,7 +879,7 @@ class GeneFactory(BaseTravLR):
             if _beta_out is not None:
                 mod_idx = self.beta_dict.data[gene].modulator_gene_indices
                 grad = _beta_out * gex_delta[:, mod_idx]
-                gradients[gene] = gradients[gene] + grad
+                gradients[gene] = grad
                 result[:, i] = np.sum(grad.values, axis=1)
                 
         assert not np.isnan(result).any(), "NaN values found in delta_simulated"
