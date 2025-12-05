@@ -364,8 +364,19 @@ class GeneFactory(BaseTravLR):
                 gene_mtx, cell_thresholds=None, genes=self.tfl_ligands)
             self.adata.uns['received_ligands'] = rw_ligands_0
             self.adata.uns['received_ligands_tfl'] = rw_tfligands_0
-
-
+        
+        # Make sure that the received ligands are indexed to the same cells as in the adata
+        rw_ligands_0 = self.adata.uns['received_ligands'].reindex(
+            index=obs, 
+            columns=self.adata.var_names, 
+            fill_value=0
+        )
+        rw_tfligands_0 = self.adata.uns['received_ligands_tfl'].reindex(
+            index=obs, 
+            columns=self.adata.var_names, 
+            fill_value=0
+        )
+        
         all_ligands = list(set(self.ligands) | set(self.tfl_ligands))
         ligands_0 = self.adata.to_df(layer='imputed_count')[all_ligands].reindex(
             index=self.obs_names, 
@@ -648,10 +659,8 @@ class GeneFactory(BaseTravLR):
         save_layer=False,
         delta_dir=None,
         ):
+
         
-        gradients = defaultdict(lambda: pd.DataFrame(
-            0, index=self.adata.obs_names, columns=self.adata.var_names)
-        )
         payload_dict = {}
         output_name = None
         
@@ -669,11 +678,13 @@ class GeneFactory(BaseTravLR):
             raise ValueError(f'Invalid target info')
         
         self.current_target = output_name
-        
         obs = self.obs_names
-        
         gene_mtx = self.adata.to_df(layer='imputed_count').loc[obs]
         self.payload_dict = payload_dict
+
+        gradients = defaultdict(lambda: pd.DataFrame(
+            0, index=obs, columns=self.adata.var_names)
+        )
 
         if isinstance(gene_mtx, pd.DataFrame):
             gene_mtx = gene_mtx.values
@@ -718,13 +729,13 @@ class GeneFactory(BaseTravLR):
             self.adata.uns['received_ligands_tfl'] = rw_tfligands_0
         
         # Make sure that the received ligands are indexed to the same cells as in the adata
-        self.adata.uns['received_ligands'] = self.adata.uns['received_ligands'].reindex(
-            index=self.obs_names, 
+        rw_ligands_0 = self.adata.uns['received_ligands'].reindex(
+            index=obs, 
             columns=self.adata.var_names, 
             fill_value=0
         )
-        self.adata.uns['received_ligands_tfl'] = self.adata.uns['received_ligands_tfl'].reindex(
-            index=self.obs_names, 
+        rw_tfligands_0 = self.adata.uns['received_ligands_tfl'].reindex(
+            index=obs, 
             columns=self.adata.var_names, 
             fill_value=0
         )
