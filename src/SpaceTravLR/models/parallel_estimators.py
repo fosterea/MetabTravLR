@@ -131,17 +131,20 @@ def init_received_ligands(adata, radius, cell_threshes, contact_distance=50, lay
     counts_df = adata.to_df(layer=layer)
     ligands = np.unique(lr.ligand)
 
-    adata.uns['received_ligands'] = received_ligands(
-        xy=adata.obsm['spatial'], 
-        ligands_df=get_filtered_df(counts_df, cell_thresholds=cell_threshes, genes=ligands),
-        lr_info=lr
-    )
-
     adata.uns['received_ligands_tfl'] = received_ligands(
         xy=adata.obsm['spatial'], 
         ligands_df=get_filtered_df(counts_df, None, genes=ligands), # Only Commot LRs should be filtered
         lr_info=lr
     )
+
+    if cell_threshes is not None:
+        adata.uns['received_ligands'] = received_ligands(
+            xy=adata.obsm['spatial'], 
+            ligands_df=get_filtered_df(counts_df, cell_thresholds=cell_threshes, genes=ligands),
+            lr_info=lr
+        )
+    else:
+        adata.uns['received_ligands'] = adata.uns['received_ligands_tfl']
 
     return adata
 
