@@ -42,6 +42,8 @@ def create_test_adata(n_cells=100, n_genes=50, species='human'):
     
     adata.layers['raw_count'] = X.copy()
     adata.layers['normalized_count'] = X.copy()
+    adata.layers['imputed_count'] = X.copy()
+
     
     return adata
 
@@ -354,6 +356,7 @@ class TestSpaceShip(unittest.TestCase):
         os.makedirs('output/input_data', exist_ok=True)
         
         adata = create_test_adata()
+        del adata.layers['imputed_count']
         adata.write_h5ad('output/input_data/_adata.h5ad')
         
         with open('output/input_data/celloracle_links.pkl', 'wb') as f:

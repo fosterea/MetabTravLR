@@ -72,15 +72,8 @@ def received_ligands(xy, ligands_df, lr_info, scale_factor=1):
             lr_info['ligand'].isin(np.unique(ligands_df.columns))
         ].drop_duplicates(subset='ligand', keep='first')   
     
-    full_df = []
-
-    for radius in lr_info['radius'].unique():
-        radius_ligands = lr_info[lr_info['radius'] == radius]['ligand'].values
-        full_df.append(
-            compute_radius_weights(
-                xy, ligands_df[radius_ligands], radius, scale_factor
-            )
-        )
+    if lr_info.empty:
+        return pd.DataFrame(0.0, index=ligands_df.index, columns=ligands_df.columns)
 
     full_df = pd.concat([df for df in full_df if not df.empty], axis=1)
     full_df = full_df.reindex(ligands_df.index).reindex(ligands_df.columns, axis=1).fillna(0)
