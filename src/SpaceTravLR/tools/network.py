@@ -92,7 +92,11 @@ class CellOracleLinks:
         grouped_regulators = regulators_with_pvalues.groupby('source').mean()
         filtered_regulators = grouped_regulators[grouped_regulators.index.isin(adata.var_names)]
 
-        return filtered_regulators.index.tolist()
+        filtered_regulators = filtered_regulators.index.tolist()
+        if target_gene in filtered_regulators:
+            filtered_regulators.remove(target_gene)
+        return filtered_regulators
+
     
     def get_targets(self, adata, tf, alpha=0.05):
         targets_with_pvalues = self.get_targets_with_pvalues(adata, tf, alpha)
