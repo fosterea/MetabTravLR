@@ -80,12 +80,17 @@ def received_ligands(xy, ligands_df, lr_info, scale_factor=1):
             compute_radius_weights(xy, ligands_df[radius_ligands], radius, scale_factor)
         )
 
-    full_df = pd.concat([df for df in full_df if not df.empty], axis=1)
-    full_df = (
-        full_df.reindex(ligands_df.index).reindex(ligands_df.columns, axis=1).fillna(0)
-    )
+    non_empty_dfs = [df for df in full_df if not df.empty]
+    if len(non_empty_dfs) == 0:
+        full_df = pd.DataFrame(index=ligands_df.index, columns=ligands_df.columns).fillna(0)
+    else:
+        full_df = pd.concat(non_empty_dfs, axis=1)
+        full_df = (
+            full_df.reindex(ligands_df.index).reindex(ligands_df.columns, axis=1).fillna(0)
+        )
 
     return full_df
+    
 def get_filtered_df(counts_df, cell_thresholds=None, genes=None, min_expression=1e-9):
     '''Get filtered expression of ligands/ receptors based on celltype/ thresholds'''
 
