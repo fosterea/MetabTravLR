@@ -63,23 +63,29 @@ def compute_radius_weights(xy, lig_df, radius, scale_factor):
         columns=lig_df.index
     ).T
 
-def received_ligands(xy, ligands_df, lr_info, scale_factor=1):
 
+def received_ligands(xy, ligands_df, lr_info, scale_factor=1):
     lr_info = lr_info.copy()
-    lr_info = lr_info[lr_info['ligand'].isin(np.unique(ligands_df.columns))]
+    lr_info = lr_info[lr_info["ligand"].isin(np.unique(ligands_df.columns))]
 
     lr_info = lr_info[
-            lr_info['ligand'].isin(np.unique(ligands_df.columns))
-        ].drop_duplicates(subset='ligand', keep='first')   
-    
-    if lr_info.empty:
-        return pd.DataFrame(0.0, index=ligands_df.index, columns=ligands_df.columns)
+        lr_info["ligand"].isin(np.unique(ligands_df.columns))
+    ].drop_duplicates(subset="ligand", keep="first")
+
+    full_df = []
+
+    for radius in lr_info["radius"].unique():
+        radius_ligands = lr_info[lr_info["radius"] == radius]["ligand"].values
+        full_df.append(
+            compute_radius_weights(xy, ligands_df[radius_ligands], radius, scale_factor)
+        )
 
     full_df = pd.concat([df for df in full_df if not df.empty], axis=1)
-    full_df = full_df.reindex(ligands_df.index).reindex(ligands_df.columns, axis=1).fillna(0)
+    full_df = (
+        full_df.reindex(ligands_df.index).reindex(ligands_df.columns, axis=1).fillna(0)
+    )
 
     return full_df
-
 def get_filtered_df(counts_df, cell_thresholds=None, genes=None, min_expression=1e-9):
     '''Get filtered expression of ligands/ receptors based on celltype/ thresholds'''
 
@@ -102,7 +108,7 @@ def get_filtered_df(counts_df, cell_thresholds=None, genes=None, min_expression=
     return ligand_counts
 
 
-def init_received_ligands(adata, radius, cell_threshes, contact_distance=50, layer='imputed_count'):
+def init_received_ligands(adata, radius, cell_threshes=None, contact_distance=50, layer='imputed_count'):
     species = 'mouse' if is_mouse_data(adata) else 'human'
     # df_ligrec = ct.pp.ligand_receptor_database(
     #     database='CellChat', 
@@ -124,17 +130,20 @@ def init_received_ligands(adata, radius, cell_threshes, contact_distance=50, lay
     counts_df = adata.to_df(layer=layer)
     ligands = np.unique(lr.ligand)
 
-    adata.uns['received_ligands'] = received_ligands(
-        xy=adata.obsm['spatial'], 
-        ligands_df=get_filtered_df(counts_df, cell_thresholds=cell_threshes, genes=ligands),
-        lr_info=lr
-    )
-
     adata.uns['received_ligands_tfl'] = received_ligands(
         xy=adata.obsm['spatial'], 
         ligands_df=get_filtered_df(counts_df, None, genes=ligands), # Only Commot LRs should be filtered
         lr_info=lr
     )
+
+    if cell_threshes is not None:
+        adata.uns['received_ligands'] = received_ligands(
+            xy=adata.obsm['spatial'], 
+            ligands_df=get_filtered_df(counts_df, cell_thresholds=cell_threshes, genes=ligands),
+            lr_info=lr
+        )
+    else:
+        adata.uns['received_ligands'] = adata.uns['received_ligands_tfl']
 
     return adata
 
@@ -272,9 +281,13 @@ def init_ligands_and_receptors(
         row = nichenet_lt.loc[tf_]
         top_5 = row.nlargest(5)
         for lig_, value in top_5.items():
-            if target_gene not in ligand_regulators[lig_] and \
-                tf_ not in ligand_regulators[lig_] and \
-                value > tf_ligand_cutoff:
+
+            if (
+                # for low number of genes in dataset, we don't exclude tfl pairs that have genes in other places
+                ((len(adata.var_names) < 1000) or (target_gene not in ligand_regulators[lig_]))
+                and ((len(adata.var_names) < 1000) or (tf_ not in ligand_regulators[lig_]))
+                and value > tf_ligand_cutoff
+            ):
                 tfl_ligands.append(lig_)
                 tfl_regulators.append(tf_)
                 tfl_pairs.append(f"{lig_}#{tf_}")
@@ -298,7 +311,8 @@ class SpatialCellularProgramsEstimator:
             cluster_annot='cell_type_int', layer='imputed_count', 
             radius=100, contact_distance=30, use_ligands=True,
             tf_ligand_cutoff=0.01, receptor_thresh=0.1,
-            regulators=None, grn=None, colinks_path=None, scale_factor=1):
+            regulators=None, grn=None, colinks_path=None, scale_factor=1,
+            use_extra_modulators=False, extra_modulators=None):
         
 
         assert isinstance(adata, AnnData), 'adata must be an AnnData object'
@@ -338,6 +352,9 @@ class SpatialCellularProgramsEstimator:
         else:
             self.regulators = regulators
             self.grn = None
+        
+        assert self.target_gene not in self.regulators, 'target_gene must not be in regulators'
+        assert self.target_gene in self.adata.var_names, 'target_gene must be in adata.var_names'
 
         if self.use_ligands:
         
@@ -373,12 +390,26 @@ class SpatialCellularProgramsEstimator:
         
         self.lr_pairs = self.lr['pairs']
         
-        
         self.n_clusters = len(self.adata.obs[self.cluster_annot].unique())
-        self.modulators = self.regulators + list(self.lr_pairs) + self.tfl_pairs
-
-        self.modulators_genes = list(np.unique(
+        modulators = self.regulators + list(self.lr_pairs) + self.tfl_pairs
+        modulators_genes = list(np.unique(
             self.regulators+self.ligands+self.receptors+self.tfl_regulators+self.tfl_ligands))
+
+        if use_extra_modulators:
+            
+            self.extra_modulators = list(set(adata.var_names) - (set(modulators_genes) | {self.target_gene}))
+            
+            if extra_modulators is not None:
+                filtered_extra_modulators = [x for x in extra_modulators if x in x in self.extra_modulators]
+                if len(filtered_extra_modulators) < len(extra_modulators):
+                    # Don't include genes that are already in other modulator groups
+                    print(f'Excluding {set(extra_modulators) - set(filtered_extra_modulators)} from extra_modulators')
+                    self.extra_modulators = filtered_extra_modulators
+        else:
+            self.extra_modulators = []
+        
+        self.modulators = modulators + self.extra_modulators
+        self.modulators_genes = list(set(modulators_genes + self.extra_modulators))
 
         assert len(self.ligands) == len(self.receptors)
         assert np.isin(self.ligands, self.adata.var_names).all()
@@ -548,7 +579,12 @@ class SpatialCellularProgramsEstimator:
         self.train_df = self.adata.to_df(layer=self.layer)[
             [self.target_gene]+self.regulators] \
             .join(self.adata.uns['ligand_receptor']) \
-            .join(self.adata.uns['ligand_regulator'])
+            .join(self.adata.uns['ligand_regulator']) 
+        
+        if len(self.extra_modulators) > 0:
+            self.train_df = self.train_df.join(
+                self.adata.to_df(layer=self.layer)[self.extra_modulators]
+            )
 
         if not 'spatial_features' in self.adata.obsm.keys():
             self.spatial_features = create_spatial_features(
@@ -594,13 +630,9 @@ class SpatialCellularProgramsEstimator:
             lig, reg = i.split('#')
             self.tfl_ligands.append(lig)
             self.tfl_regulators.append(reg)
-            
-            
-        self.modulators = self.regulators + list(self.lr_pairs) + self.tfl_pairs
-        self.modulators_genes = list(np.unique(
-            self.regulators+self.ligands+self.receptors+self.tfl_regulators+self.tfl_ligands))
-
+         
         assert len(self.ligands) == len(self.receptors)
+        assert len(self.train_df.columns) - 1 == (len(self.lr_pairs) + len(self.tfl_pairs) + len(self.regulators) + len(self.extra_modulators))
 
         X = self.train_df.drop(columns=[self.target_gene]).values
         y = self.train_df[self.target_gene].values
@@ -692,7 +724,7 @@ class SpatialCellularProgramsEstimator:
             print(f'\t{len(self.regulators)} Transcription Factors')
             print(f'\t{len(self.lr_pairs)} Ligand-Receptor Pairs')
             print(f'\t{len(self.tfl_pairs)} TranscriptionFactor-Ligand Pairs')
-            
+            print(f'\t{len(self.extra_modulators)} Extra modulators')
             
         self.scores = {}
         
@@ -725,7 +757,7 @@ class SpatialCellularProgramsEstimator:
                 _betas = np.hstack([m.intercept_, m.coef_])
 
             elif self.estimator == 'lasso':
-                groups = [1]*len(self.regulators) + [2]*len(self.lr_pairs) + [3]*len(self.tfl_pairs)
+                groups = [1]*len(self.regulators) + [2]*len(self.lr_pairs) + [3]*len(self.tfl_pairs) + [4]*len(self.extra_modulators)
                 groups = np.array(groups)
                 gl = GroupLasso(
                     groups=groups,
@@ -738,7 +770,6 @@ class SpatialCellularProgramsEstimator:
                     # subsampling_scheme=1,
                     supress_warning=True,
                     n_iter=1500,
-                    # warm_start=True,
                     tol=1e-5,
                 )
                 

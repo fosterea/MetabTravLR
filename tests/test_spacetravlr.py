@@ -285,6 +285,7 @@ class TestSpaceShip(unittest.TestCase):
         ship = SpaceShip()
         
         adata = create_test_adata()
+        adata.layers['imputed_count'] = adata.X.copy()
         adata.write_h5ad('output/input_data/_adata.h5ad')
         
         mock_links = {'TypeA': pd.DataFrame(), 'TypeB': pd.DataFrame()}

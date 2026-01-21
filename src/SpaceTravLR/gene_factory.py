@@ -346,7 +346,7 @@ class GeneFactory(BaseTravLR):
             self.beta_dict = self._get_spatial_betas_dict(obs_names=self.obs_names) 
 
         # get LR specific filtered gex contributions
-        cell_thresholds = self.adata.uns.get('cell_thresholds').loc[obs]
+        cell_thresholds = self.adata.uns.get('cell_thresholds')
         if cell_thresholds is not None:
             cell_thresholds = cell_thresholds.reindex(              
                 index=obs, columns=self.adata.var_names, fill_value=1)
@@ -364,16 +364,18 @@ class GeneFactory(BaseTravLR):
                 gene_mtx, cell_thresholds=None, genes=self.tfl_ligands)
             self.adata.uns['received_ligands'] = rw_ligands_0
             self.adata.uns['received_ligands_tfl'] = rw_tfligands_0
-
-        # this shouldn't be here
-        # rw_ligands_0 = pd.concat(
-        #         [rw_ligands_0, rw_tfligands_0], axis=1
-        #     ).groupby(level=0, axis=1).max().reindex(
-        #         index=obs, 
-        #         columns=self.adata.var_names, 
-        #         fill_value=0
-        #     )
-
+        
+        # Make sure that the received ligands are indexed to the same cells as in the adata
+        rw_ligands_0 = self.adata.uns['received_ligands'].reindex(
+            index=obs, 
+            columns=self.adata.var_names, 
+            fill_value=0
+        )
+        rw_tfligands_0 = self.adata.uns['received_ligands_tfl'].reindex(
+            index=obs, 
+            columns=self.adata.var_names, 
+            fill_value=0
+        )
         
         all_ligands = list(set(self.ligands) | set(self.tfl_ligands))
         ligands_0 = self.adata.to_df(layer='imputed_count')[all_ligands].reindex(
@@ -382,16 +384,20 @@ class GeneFactory(BaseTravLR):
             fill_value=0
         )
 
-
-        all_ligands = list(set(self.ligands) | set(self.tfl_ligands))
-        ligands_0 = self.adata.to_df(layer='imputed_count')[all_ligands].reindex(
-            index=self.obs_names, 
-            columns=self.adata.var_names, 
-            fill_value=0
-        )
-
+        # copy the original values
         gene_mtx_1 = gene_mtx.copy()
-        
+        rw_ligands_1 = rw_ligands_0.copy()
+        rw_tfligands_1 = rw_tfligands_0.copy()
+
+        # get the max weighted ligand expression (could be zeroed out in rw_ligands_0)
+        rw_ligands_0 = pd.concat(
+            [rw_ligands_0, rw_tfligands_0], axis=1
+        ).groupby(level=0, axis=1).max().reindex(
+            index=obs, 
+            columns=self.adata.var_names, 
+            fill_value=0
+        )
+
         self.iter = 0
         self.max_iter = n_propagation
         min_ = gene_mtx.min(axis=0)
@@ -407,7 +413,7 @@ class GeneFactory(BaseTravLR):
 
             # weight betas by the gene expression from the previous iteration
             splashed_beta_dict = self._get_wbetas_dict(
-                self.beta_dict, rw_ligands_0, rw_tfligands_0, gene_mtx_1, cell_thresholds)
+                self.beta_dict, rw_ligands_1, rw_tfligands_1, gene_mtx_1, cell_thresholds)
             
             # get updated gene expressions
             gene_mtx_1 = gene_mtx + delta_simulated
@@ -444,21 +450,9 @@ class GeneFactory(BaseTravLR):
             )
 
             delta_ligands = ligands_1.values - ligands_0.values
-
-            # delta_df = pd.DataFrame(
-            #     delta_simulated, 
-            #     columns=self.adata.var_names, 
-            #     index=self.adata.obs_names
-            # )
             
-            # delta_ligands = pd.concat(
-            #         [delta_df[self.ligands], delta_df[self.tfl_ligands]], axis=1
-            #     ).groupby(level=0, axis=1).max().reindex(
-            #         index=self.adata.obs_names, 
-            #         columns=self.adata.var_names, 
-            #         fill_value=0
-            #     ).values
-            
+            # the model sees delta wL, not delta L
+            # delta_simulated contains delta L, so remove and replace with wL
             delta_simulated = delta_simulated + delta_rw_ligands - delta_ligands
             _simulated = self._perturb_all_cells(delta_simulated, splashed_beta_dict)
             delta_simulated = np.array(_simulated)
@@ -655,3 +649,238 @@ class GeneFactory(BaseTravLR):
             gex_out.to_parquet(
                 f'{save_to}/{file_name}.parquet')
                 
+
+    def perturb_track(
+        self, 
+        target, 
+        n_propagation=4, 
+        gene_expr=0, 
+        cells=None, 
+        save_layer=False,
+        delta_dir=None,
+        ):
+
+        
+        payload_dict = {}
+        output_name = None
+        
+        if isinstance(target, str):
+            assert isinstance(gene_expr, (int, float))
+            assert target in self.adata.var_names
+            payload_dict[target] = gene_expr
+            output_name = f'{target}_{n_propagation}n_{round(gene_expr, 2)}x'
+            
+        elif isinstance(target, list) and isinstance(gene_expr, list):
+            assert len(target) == len(gene_expr)
+            payload_dict = {t: g for t, g in zip(target, gene_expr)}
+            output_name = '_'.join([f'{t}_{n_propagation}n_{round(g, 2)}x' for t, g in zip(target, gene_expr)])
+        else:
+            raise ValueError(f'Invalid target info')
+        
+        self.current_target = output_name
+        obs = self.obs_names
+        gene_mtx = self.adata.to_df(layer='imputed_count').loc[obs]
+        self.payload_dict = payload_dict
+
+        gradients = {}
+
+        if isinstance(gene_mtx, pd.DataFrame):
+            gene_mtx = gene_mtx.values
+            
+        simulation_input = gene_mtx.copy()
+
+        for target, gene_expr in self.payload_dict.items():
+            assert gene_expr >= 0
+            assert target in self.adata.var_names
+            target_index = self.gene2index[target]  
+
+            if cells is None:
+                simulation_input[:, target_index] = gene_expr   
+            else:
+                # cells is a list of cell indices
+                simulation_input[cells, target_index] = gene_expr
+        
+        delta_input = simulation_input - gene_mtx
+        delta_simulated = delta_input.copy() 
+
+        if self.beta_dict is None:
+            self.beta_dict = self._get_spatial_betas_dict(obs_names=self.obs_names) 
+
+        # get LR specific filtered gex contributions
+        cell_thresholds = self.adata.uns.get('cell_thresholds').loc[obs]
+        if cell_thresholds is not None:
+            cell_thresholds = cell_thresholds.reindex(              
+                index=obs, columns=self.adata.var_names, fill_value=1)
+            self.adata.uns['cell_thresholds'] = cell_thresholds
+        else:
+            print('warning: cell_thresholds not found in adata.uns')
+
+        rw_ligands_0 = self.adata.uns.get('received_ligands')
+        rw_tfligands_0 = self.adata.uns.get('received_ligands_tfl')
+        
+        if rw_ligands_0 is None or rw_tfligands_0 is None:
+            rw_ligands_0 = self._compute_weighted_ligands(
+                gene_mtx, cell_thresholds, genes=self.ligands)
+            rw_tfligands_0 = self._compute_weighted_ligands(
+                gene_mtx, cell_thresholds=None, genes=self.tfl_ligands)
+            self.adata.uns['received_ligands'] = rw_ligands_0
+            self.adata.uns['received_ligands_tfl'] = rw_tfligands_0
+        
+        # Make sure that the received ligands are indexed to the same cells as in the adata
+        rw_ligands_0 = self.adata.uns['received_ligands'].reindex(
+            index=obs, 
+            columns=self.adata.var_names, 
+            fill_value=0
+        )
+        rw_tfligands_0 = self.adata.uns['received_ligands_tfl'].reindex(
+            index=obs, 
+            columns=self.adata.var_names, 
+            fill_value=0
+        )
+
+        all_ligands = list(set(self.ligands) | set(self.tfl_ligands))
+        ligands_0 = self.adata.to_df(layer='imputed_count')[all_ligands].reindex(
+            index=self.obs_names, 
+            columns=self.adata.var_names, 
+            fill_value=0
+        )
+
+        # copy the original values
+        gene_mtx_1 = gene_mtx.copy()
+        rw_ligands_1 = rw_ligands_0.copy()
+        rw_tfligands_1 = rw_tfligands_0.copy()
+
+        # get the max weighted ligand expression (could be zeroed out in rw_ligands_0)
+        rw_ligands_0 = pd.concat(
+            [rw_ligands_0, rw_tfligands_0], axis=1
+        ).groupby(level=0, axis=1).max().reindex(
+            index=obs, 
+            columns=self.adata.var_names, 
+            fill_value=0
+        )
+
+        self.iter = 0
+        self.max_iter = n_propagation
+        min_ = gene_mtx.min(axis=0)
+        max_ = gene_mtx.max(axis=0)
+        
+        ## refer: src/celloracle/trajectory/oracle_GRN.py
+
+        for n in range(n_propagation):
+            self.iter+=1
+            self.update_status(
+                f'{target} -> {gene_expr} - {n+1}/{n_propagation}', 
+                color='black_on_salmon')
+
+            # weight betas by the gene expression from the previous iteration
+            splashed_beta_dict = self._get_wbetas_dict(
+                self.beta_dict, rw_ligands_1, rw_tfligands_1, gene_mtx_1, cell_thresholds)
+            
+            # get updated gene expressions
+            gene_mtx_1 = gene_mtx + delta_simulated
+            w_ligands_1 = self._compute_weighted_ligands(
+                gene_mtx_1, cell_thresholds, genes=self.ligands)
+            w_tfligands_1 = self._compute_weighted_ligands(
+                gene_mtx_1, cell_thresholds=None, genes=self.tfl_ligands)
+
+            # update deltas to reflect change in received ligands
+            # we consider dy/dwL: we replace delta l with delta wL in delta_simulated
+            rw_ligands_1 = pd.concat(
+                [w_ligands_1, w_tfligands_1], axis=1
+            ).groupby(level=0, axis=1).max().reindex(      # w_ligands <= w_tfligands because of cell_thresholds
+                index=self.obs_names, 
+                columns=self.adata.var_names, 
+                fill_value=0
+            )
+
+            delta_rw_ligands = rw_ligands_1.values - rw_ligands_0.values
+
+            # get the change in ligand expression within the gene_df that should be replaced with rw_ligand
+            gene_df_1 = pd.DataFrame(
+                gene_mtx_1,
+                columns=self.adata.var_names,
+                index=obs
+            )
+
+            ligands_1 = pd.concat(
+                [gene_df_1[self.ligands], gene_df_1[self.tfl_ligands]], axis=1
+            ).groupby(level=0, axis=1).max().reindex(
+                index=obs, 
+                columns=self.adata.var_names, 
+                fill_value=0
+            )
+
+            delta_ligands = ligands_1.values - ligands_0.values
+            
+            # the model sees delta wL, not delta L
+            # delta_simulated contains delta L, so remove and replace with wL
+            delta_simulated = delta_simulated + delta_rw_ligands - delta_ligands
+            if n == n_propagation - 1:
+                _simulated, gradients = self._perturb_all_cells_track(delta_simulated, splashed_beta_dict, gradients)
+            else:
+                _simulated = self._perturb_all_cells(delta_simulated, splashed_beta_dict)
+
+            delta_simulated = np.array(_simulated)
+            
+            # ensure values in delta_simulated match our desired KO / input
+            delta_simulated = np.where(delta_input != 0, delta_input, delta_simulated)
+
+            # Don't allow simulated to exceed observed values
+            gem_tmp = gene_mtx + delta_simulated
+            gem_tmp = pd.DataFrame(gem_tmp).clip(lower=min_, upper=max_, axis=1).values
+
+            delta_simulated = gem_tmp - gene_mtx # update delta_simulated in case of negative values
+            
+            if delta_dir:
+                os.makedirs(delta_dir, exist_ok=True)
+                np.save(
+                    f'{delta_dir}/{target}_{n}n_{gene_expr}x.npy', 
+                    gene_mtx + delta_simulated
+                )
+            
+            del splashed_beta_dict
+            gc.collect()
+
+        gem_simulated = gene_mtx + delta_simulated
+        assert gem_simulated.shape == gene_mtx.shape
+
+        for target_name, target_gene_expr in self.payload_dict.items():
+            target_index = self.gene2index[target_name]  
+
+            if cells is None:
+                gem_simulated[:, target_index] = target_gene_expr   
+            else:
+                gem_simulated[cells, target_index] = target_gene_expr
+
+            self.update_status(
+                f'{target_name} -> {target_gene_expr} - {n_propagation}/{n_propagation} - Done')
+        
+        if save_layer:
+            self.adata.layers[output_name] = gem_simulated
+            
+        gex_out = pd.DataFrame(gem_simulated, index=obs, columns=self.adata.var_names)
+        gex_out.index.name = output_name
+            
+        return gex_out, gradients
+
+    def _perturb_all_cells_track(self, gex_delta, betas_dict, gradients):
+        n_obs, n_genes = gex_delta.shape
+        result = np.zeros((n_obs, n_genes))
+        n_vars = len(self.adata.var_names)
+
+        for i, gene in enumerate(self.adata.var_names):
+            self.update_status(
+                f'[{self.iter}/{self.max_iter}] | Perturbing 🧬️🐝️ {i+1}/{n_vars} ', 
+                color='black_on_cyan'
+            )
+            
+            _beta_out = betas_dict.get(gene, None)
+
+            if _beta_out is not None:
+                mod_idx = self.beta_dict.data[gene].modulator_gene_indices
+                grad = _beta_out * gex_delta[:, mod_idx]
+                gradients[gene] = grad
+                result[:, i] = np.sum(grad.values, axis=1)
+                
+        assert not np.isnan(result).any(), "NaN values found in delta_simulated"
+        return result, gradients

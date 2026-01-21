@@ -338,7 +338,10 @@ class SpaceTravLR(BaseTravLR):
         radius=200, 
         contact_distance=30,
         skip_clusters=None,
-        scale_factor=1):
+        scale_factor=1,
+        use_extra_modulators=False,
+        extra_modulators=None
+        ):
         
         super().__init__(adata, fields_to_keep=[annot, 'cell_thresholds'])
         if grn is None:
@@ -364,6 +367,8 @@ class SpaceTravLR(BaseTravLR):
         self.radius = radius
         self.contact_distance = contact_distance
         self.scale_factor = scale_factor
+        self.use_extra_modulators = use_extra_modulators
+        self.extra_modulators = extra_modulators
 
         self.estimator_models = {}
         self.ligands = set()
@@ -389,7 +394,9 @@ class SpaceTravLR(BaseTravLR):
                     'layer': layer,
                     'save_dir': save_dir,
                     'n_genes': len(self.genes),
-                    'scale_factor': scale_factor
+                    'scale_factor': scale_factor,
+                    'use_extra_modulators': use_extra_modulators,
+                    'extra_modulators': extra_modulators
                 }, f, indent=4)
 
     
@@ -430,7 +437,9 @@ class SpaceTravLR(BaseTravLR):
                 contact_distance=self.contact_distance,
                 tf_ligand_cutoff=self.tf_ligand_cutoff,
                 grn=self.grn,
-                scale_factor=self.scale_factor
+                scale_factor=self.scale_factor,
+                use_extra_modulators=self.use_extra_modulators,
+                extra_modulators=self.extra_modulators
             )
             
             estimator.test_mode = False
