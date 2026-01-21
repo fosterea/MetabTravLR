@@ -108,7 +108,7 @@ def get_filtered_df(counts_df, cell_thresholds=None, genes=None, min_expression=
     return ligand_counts
 
 
-def init_received_ligands(adata, radius, cell_threshes, contact_distance=50, layer='imputed_count'):
+def init_received_ligands(adata, radius, cell_threshes=None, contact_distance=50, layer='imputed_count'):
     species = 'mouse' if is_mouse_data(adata) else 'human'
     # df_ligrec = ct.pp.ligand_receptor_database(
     #     database='CellChat', 
@@ -312,7 +312,7 @@ class SpatialCellularProgramsEstimator:
             radius=100, contact_distance=30, use_ligands=True,
             tf_ligand_cutoff=0.01, receptor_thresh=0.1,
             regulators=None, grn=None, colinks_path=None, scale_factor=1,
-            use_extra_modulators=False):
+            use_extra_modulators=False, extra_modulators=None):
         
 
         assert isinstance(adata, AnnData), 'adata must be an AnnData object'
@@ -390,14 +390,21 @@ class SpatialCellularProgramsEstimator:
         
         self.lr_pairs = self.lr['pairs']
         
-        
         self.n_clusters = len(self.adata.obs[self.cluster_annot].unique())
         modulators = self.regulators + list(self.lr_pairs) + self.tfl_pairs
         modulators_genes = list(np.unique(
             self.regulators+self.ligands+self.receptors+self.tfl_regulators+self.tfl_ligands))
 
         if use_extra_modulators:
+            
             self.extra_modulators = list(set(adata.var_names) - (set(modulators_genes) | {self.target_gene}))
+            
+            if extra_modulators is not None:
+                filtered_extra_modulators = [x for x in extra_modulators if x in x in self.extra_modulators]
+                if len(filtered_extra_modulators) < len(extra_modulators):
+                    # Don't include genes that are already in other modulator groups
+                    print(f'Excluding {set(extra_modulators) - set(filtered_extra_modulators)} from extra_modulators')
+                    self.extra_modulators = filtered_extra_modulators
         else:
             self.extra_modulators = []
         

@@ -346,7 +346,7 @@ class GeneFactory(BaseTravLR):
             self.beta_dict = self._get_spatial_betas_dict(obs_names=self.obs_names) 
 
         # get LR specific filtered gex contributions
-        cell_thresholds = self.adata.uns.get('cell_thresholds').loc[obs]
+        cell_thresholds = self.adata.uns.get('cell_thresholds')
         if cell_thresholds is not None:
             cell_thresholds = cell_thresholds.reindex(              
                 index=obs, columns=self.adata.var_names, fill_value=1)
