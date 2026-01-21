@@ -394,6 +394,146 @@ class TestSpaceShip(unittest.TestCase):
         self.assertEqual(call_count[0], 1)
 
 
+class TestExtraModulators(unittest.TestCase):
+    """Tests for extra modulators functionality in SpatialCellularProgramsEstimator."""
+    
+    def setUp(self):
+        self.temp_dir = tempfile.mkdtemp()
+        self.original_cwd = os.getcwd()
+        os.chdir(self.temp_dir)
+        
+        # Create test adata with specific genes for testing
+        np.random.seed(42)
+        n_cells = 100
+        n_genes = 20
+        
+        self.gene_names = [f'GENE{i}' for i in range(n_genes)]
+        X = np.random.rand(n_cells, n_genes)
+        
+        self.adata = ad.AnnData(X=X)
+        self.adata.var_names = self.gene_names
+        self.adata.obs_names = [f'cell_{i}' for i in range(n_cells)]
+        
+        cell_types = np.random.choice([0, 1, 2], size=n_cells)
+        self.adata.obs['cell_type_int'] = cell_types
+        
+        spatial_coords = np.random.rand(n_cells, 2) * 1000
+        self.adata.obsm['spatial'] = spatial_coords
+        
+        self.adata.layers['imputed_count'] = X.copy()
+        
+    def tearDown(self):
+        os.chdir(self.original_cwd)
+        if os.path.exists(self.temp_dir):
+            shutil.rmtree(self.temp_dir)
+    
+    def test_extra_modulators_disabled_by_default(self):
+        """Test that extra_modulators is empty when use_extra_modulators=False."""
+        from SpaceTravLR.models.parallel_estimators import SpatialCellularProgramsEstimator
+        
+        target_gene = 'GENE0'
+        regulators = ['GENE1', 'GENE2']
+        
+        estimator = SpatialCellularProgramsEstimator(
+            adata=self.adata,
+            target_gene=target_gene,
+            regulators=regulators,
+            use_ligands=False,
+            use_extra_modulators=False
+        )
+        
+        self.assertEqual(estimator.extra_modulators, [])
+        self.assertEqual(set(estimator.modulators), set(regulators))
+    
+    def test_use_extra_modulators_includes_remaining_genes(self):
+        """Test that use_extra_modulators=True includes non-regulator genes."""
+        from SpaceTravLR.models.parallel_estimators import SpatialCellularProgramsEstimator
+        
+        target_gene = 'GENE0'
+        regulators = ['GENE1', 'GENE2']
+        
+        estimator = SpatialCellularProgramsEstimator(
+            adata=self.adata,
+            target_gene=target_gene,
+            regulators=regulators,
+            use_ligands=False,
+            use_extra_modulators=True
+        )
+        
+        # Extra modulators should be all genes except target and regulators
+        expected_extra = set(self.gene_names) - {target_gene} - set(regulators)
+        self.assertEqual(set(estimator.extra_modulators), expected_extra)
+        
+        # Modulators should include regulators + extra modulators
+        expected_modulators = set(regulators) | expected_extra
+        self.assertEqual(set(estimator.modulators), expected_modulators)
+    
+    def test_extra_modulators_list_filters_correctly(self):
+        """Test that a specific extra_modulators list is filtered properly."""
+        from SpaceTravLR.models.parallel_estimators import SpatialCellularProgramsEstimator
+        
+        target_gene = 'GENE0'
+        regulators = ['GENE1', 'GENE2']
+        specific_extra = ['GENE3', 'GENE4', 'GENE5']
+        
+        estimator = SpatialCellularProgramsEstimator(
+            adata=self.adata,
+            target_gene=target_gene,
+            regulators=regulators,
+            use_ligands=False,
+            use_extra_modulators=True,
+            extra_modulators=specific_extra
+        )
+        
+        # Extra modulators should only include the specified genes
+        self.assertEqual(set(estimator.extra_modulators), set(specific_extra))
+    
+    def test_extra_modulators_excludes_existing_modulators(self):
+        """Test that genes already in regulators are excluded from extra_modulators."""
+        from SpaceTravLR.models.parallel_estimators import SpatialCellularProgramsEstimator
+        
+        target_gene = 'GENE0'
+        regulators = ['GENE1', 'GENE2']
+        # Include a gene that's already a regulator - should be excluded
+        extra_with_overlap = ['GENE1', 'GENE3', 'GENE4']
+        
+        estimator = SpatialCellularProgramsEstimator(
+            adata=self.adata,
+            target_gene=target_gene,
+            regulators=regulators,
+            use_ligands=False,
+            use_extra_modulators=True,
+            extra_modulators=extra_with_overlap
+        )
+        
+        # GENE1 should be excluded since it's already a regulator
+        self.assertNotIn('GENE1', estimator.extra_modulators)
+        self.assertIn('GENE3', estimator.extra_modulators)
+        self.assertIn('GENE4', estimator.extra_modulators)
+    
+    def test_extra_modulators_excludes_target_gene(self):
+        """Test that target gene is excluded from extra_modulators."""
+        from SpaceTravLR.models.parallel_estimators import SpatialCellularProgramsEstimator
+        
+        target_gene = 'GENE0'
+        regulators = ['GENE1', 'GENE2']
+        # Include the target gene - should be excluded
+        extra_with_target = ['GENE0', 'GENE3', 'GENE4']
+        
+        estimator = SpatialCellularProgramsEstimator(
+            adata=self.adata,
+            target_gene=target_gene,
+            regulators=regulators,
+            use_ligands=False,
+            use_extra_modulators=True,
+            extra_modulators=extra_with_target
+        )
+        
+        # GENE0 (target) should be excluded
+        self.assertNotIn('GENE0', estimator.extra_modulators)
+        self.assertIn('GENE3', estimator.extra_modulators)
+        self.assertIn('GENE4', estimator.extra_modulators)
+
+
 if __name__ == '__main__':
     unittest.main()
-
