@@ -463,7 +463,6 @@ class SpaceShip:
         batch_size: int = 512, 
         radius: int = 300, 
         contact_distance: int = 50,
-        use_extra_modulators: bool = False,
         extra_modulators: list[str] = None
     ):
         
@@ -495,7 +494,6 @@ class SpaceShip:
             contact_distance=contact_distance,
             save_dir=base_dir,
             tflinks=tflinks,
-            use_extra_modulators=use_extra_modulators,
             extra_modulators=extra_modulators
         )
 

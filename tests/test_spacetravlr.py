@@ -428,7 +428,6 @@ class TestExtraModulators(unittest.TestCase):
             shutil.rmtree(self.temp_dir)
     
     def test_extra_modulators_disabled_by_default(self):
-        """Test that extra_modulators is empty when use_extra_modulators=False."""
         from SpaceTravLR.models.parallel_estimators import SpatialCellularProgramsEstimator
         
         target_gene = 'GENE0'
@@ -439,14 +438,12 @@ class TestExtraModulators(unittest.TestCase):
             target_gene=target_gene,
             regulators=regulators,
             use_ligands=False,
-            use_extra_modulators=False
         )
         
         self.assertEqual(estimator.extra_modulators, [])
         self.assertEqual(set(estimator.modulators), set(regulators))
     
-    def test_use_extra_modulators_includes_remaining_genes(self):
-        """Test that use_extra_modulators=True includes non-regulator genes."""
+    def test_extra_modulators_includes_remaining_genes(self):
         from SpaceTravLR.models.parallel_estimators import SpatialCellularProgramsEstimator
         
         target_gene = 'GENE0'
@@ -457,7 +454,6 @@ class TestExtraModulators(unittest.TestCase):
             target_gene=target_gene,
             regulators=regulators,
             use_ligands=False,
-            use_extra_modulators=True
         )
         
         # Extra modulators should be all genes except target and regulators
@@ -481,7 +477,6 @@ class TestExtraModulators(unittest.TestCase):
             target_gene=target_gene,
             regulators=regulators,
             use_ligands=False,
-            use_extra_modulators=True,
             extra_modulators=specific_extra
         )
         
@@ -502,7 +497,6 @@ class TestExtraModulators(unittest.TestCase):
             target_gene=target_gene,
             regulators=regulators,
             use_ligands=False,
-            use_extra_modulators=True,
             extra_modulators=extra_with_overlap
         )
         
@@ -525,7 +519,6 @@ class TestExtraModulators(unittest.TestCase):
             target_gene=target_gene,
             regulators=regulators,
             use_ligands=False,
-            use_extra_modulators=True,
             extra_modulators=extra_with_target
         )
         
