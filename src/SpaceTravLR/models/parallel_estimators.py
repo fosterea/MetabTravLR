@@ -113,8 +113,9 @@ def get_filtered_df(counts_df, cell_thresholds=None, genes=None, min_expression=
     return ligand_counts
 
 
-def init_received_ligands(adata, radius, cell_threshes=None, contact_distance=50, layer='imputed_count'):
+def init_received_ligands(adata, radius, cell_threshes=None, contact_distance=50, layer='imputed_count', extra_lr=None):
     species = 'mouse' if is_mouse_data(adata) else 'human'
+
     # df_ligrec = ct.pp.ligand_receptor_database(
     #     database='CellChat', 
     #     species=species, 
@@ -127,6 +128,37 @@ def init_received_ligands(adata, radius, cell_threshes=None, contact_distance=50
     lr = expand_paired_interactions(df_ligrec)
     lr = lr[lr.ligand.isin(adata.var_names) &\
         (lr.receptor.isin(adata.var_names))]
+
+    if extra_lr is not None:
+
+        pathway="Unknown"
+        signaling="Secreted Signaling"
+
+        if not (
+            isinstance(extra_lr, list)
+            and all(
+                isinstance(p, tuple)
+                and len(p) == 2
+                and all(isinstance(g, str) and g in adata.var_names for g in p)
+                for p in extra_lr
+            )
+        ):
+            raise ValueError("Input must be list[tuple[str, str]] with genes in adata.var_names")
+
+        lrdf = pd.DataFrame(
+            [
+                {
+                    "ligand": lig,
+                    "receptor": rec,
+                    "pathway": pathway,
+                    "signaling": signaling,
+                }
+                for lig, rec in extra_lr
+            ]
+        )
+
+        lr = pd.concat([lr, lrdf], ignore_index=True)
+
     lr['radius'] = np.where(
         lr['signaling'] == 'Secreted Signaling', 
         radius, contact_distance
@@ -219,7 +251,8 @@ def init_ligands_and_receptors(
     contact_distance,
     tf_ligand_cutoff, 
     regulators,
-    grn):
+    grn, 
+    extra_lr=None):
     
     
     ligand_mixtures = edict()
@@ -237,6 +270,36 @@ def init_ligands_and_receptors(
     lr = expand_paired_interactions(df_ligrec)
     lr = lr[lr.ligand.isin(adata.var_names) &\
         (lr.receptor.isin(adata.var_names))]
+
+    if extra_lr is not None:
+
+        pathway="Unknown"
+        signaling="Secreted Signaling"
+
+        if not (
+            isinstance(extra_lr, list)
+            and all(
+                isinstance(p, tuple)
+                and len(p) == 2
+                and all(isinstance(g, str) and g in adata.var_names for g in p)
+                for p in extra_lr
+            )
+        ):
+            raise ValueError("Input must be list[tuple[str, str]] with genes in adata.var_names")
+
+        lrdf = pd.DataFrame(
+            [
+                {
+                    "ligand": lig,
+                    "receptor": rec,
+                    "pathway": pathway,
+                    "signaling": signaling,
+                }
+                for lig, rec in extra_lr
+            ]
+        )
+
+        lr = pd.concat([lr, lrdf], ignore_index=True)
     
     receptors = list(lr.receptor.values)
     _layer = 'normalized_count' if 'normalized_count' in adata.layers else 'imputed_count'
@@ -260,12 +323,17 @@ def init_ligands_and_receptors(
     ligands = list(lr.ligand.values)
     receptors = list(lr.receptor.values)
 
-    # current_dir = os.path.dirname(os.path.abspath(__file__))
-    # data_path = os.path.abspath(
-    #     os.path.join(
-    #         current_dir, '..', '..', 'SpaceTravLR_data', f'ligand_target_{species}.parquet'))
-    data_path = f'https://zenodo.org/records/17594271/files/ligand_target_{species}.parquet'
-    nichenet_lt = pd.read_parquet(data_path)
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    data_path = os.path.abspath(
+        os.path.join(
+            current_dir, '..', '..', '..', 'data', f'ligand_target_{species}.parquet'))
+    
+    if os.path.exists(data_path):
+        nichenet_lt = pd.read_parquet(data_path)
+    else:
+        print(f"Downloading ligand_target_{species}.parquet")
+        data_path = f'https://zenodo.org/records/17594271/files/ligand_target_{species}.parquet'
+        nichenet_lt = pd.read_parquet(data_path)
 
     nichenet_lt = nichenet_lt.loc[
         np.intersect1d(nichenet_lt.index, regulators)][
@@ -317,7 +385,7 @@ class SpatialCellularProgramsEstimator:
             radius=100, contact_distance=30, use_ligands=True,
             tf_ligand_cutoff=0.01, receptor_thresh=0.1,
             regulators=None, grn=None, colinks_path=None, scale_factor=1,
-            use_extra_modulators=False, extra_modulators=None):
+            extra_modulators=None, extra_lr=None):
         
 
         assert isinstance(adata, AnnData), 'adata must be an AnnData object'
@@ -342,6 +410,7 @@ class SpatialCellularProgramsEstimator:
             index=adata.obs.index, 
             columns=['x', 'y']
         )
+        self.extra_lr = extra_lr
 
         self.species = 'mouse' if is_mouse_data(adata) else 'human'
 
@@ -374,6 +443,7 @@ class SpatialCellularProgramsEstimator:
                 tf_ligand_cutoff=self.tf_ligand_cutoff,
                 regulators=self.regulators,
                 grn=self.grn,
+                extra_lr=self.extra_lr
             )
             
             self.lr = ligand_mixtures.lr
@@ -392,7 +462,6 @@ class SpatialCellularProgramsEstimator:
             self.tfl_regulators = []
             self.tfl_ligands = []
             
-        
         self.lr_pairs = self.lr['pairs']
         
         self.n_clusters = len(self.adata.obs[self.cluster_annot].unique())
@@ -400,7 +469,7 @@ class SpatialCellularProgramsEstimator:
         modulators_genes = list(np.unique(
             self.regulators+self.ligands+self.receptors+self.tfl_regulators+self.tfl_ligands))
 
-        if use_extra_modulators:
+        if len(extra_modulators) > 0:
             
             self.extra_modulators = list(set(adata.var_names) - (set(modulators_genes) | {self.target_gene}))
             
@@ -420,6 +489,8 @@ class SpatialCellularProgramsEstimator:
         assert np.isin(self.ligands, self.adata.var_names).all()
         assert np.isin(self.receptors, self.adata.var_names).all()
         assert np.isin(self.regulators, self.adata.var_names).all()
+
+
 
 
     def plot_modulators(self, use_expression=True):
@@ -522,8 +593,8 @@ class SpatialCellularProgramsEstimator:
         counts_df = adata.to_df(layer=layer)
         cell_thresholds = adata.uns.get('cell_thresholds', None)
 
-        if cell_thresholds is None:
-            print('warning: cell_thresholds not found in adata.uns')
+        # if cell_thresholds is None:
+        #     print('warning: cell_thresholds not found in adata.uns')
 
         return counts_df, cell_thresholds
 
@@ -541,7 +612,8 @@ class SpatialCellularProgramsEstimator:
                 self.adata,
                 radius=self.radius, 
                 contact_distance=self.contact_distance, 
-                cell_threshes=cell_thresholds
+                cell_threshes=cell_thresholds,
+                extra_lr=self.extra_lr
             )
 
         if len(self.lr['pairs']) > 0:

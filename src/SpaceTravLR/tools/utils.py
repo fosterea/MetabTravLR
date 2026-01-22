@@ -282,7 +282,7 @@ def is_mouse_data(adata):
         True if the data appears to be from mouse, False if it appears to be from human
     """
     # Get a sample of gene names to check (up to 100)
-    gene_sample = adata.var_names[:100]
+    gene_sample = adata.var_names[:1000]
     
     # Count genes that follow mouse naming convention (only first letter capitalized)
     mouse_pattern_count = sum(1 for gene in gene_sample if 
