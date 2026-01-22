@@ -463,7 +463,8 @@ class SpaceShip:
         batch_size: int = 512, 
         radius: int = 300, 
         contact_distance: int = 50,
-        extra_modulators: list[str] = None
+        extra_modulators: list[str] = None,
+        extra_lr: list[tuple[str, str]] = None,
     ):
         
         from .oracles import SpaceTravLR
@@ -494,7 +495,8 @@ class SpaceShip:
             contact_distance=contact_distance,
             save_dir=base_dir,
             tflinks=tflinks,
-            extra_modulators=extra_modulators
+            extra_modulators=extra_modulators, 
+            extra_lr=extra_lr
         )
 
         space_travlr.run()

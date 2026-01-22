@@ -469,7 +469,7 @@ class SpatialCellularProgramsEstimator:
         modulators_genes = list(np.unique(
             self.regulators+self.ligands+self.receptors+self.tfl_regulators+self.tfl_ligands))
 
-        if len(extra_modulators) > 0:
+        if extra_modulators is not None and len(extra_modulators) > 0:
             
             self.extra_modulators = list(set(adata.var_names) - (set(modulators_genes) | {self.target_gene}))
             
