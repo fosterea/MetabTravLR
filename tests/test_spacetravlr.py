@@ -44,7 +44,7 @@ def create_test_adata(n_cells=100, n_genes=50, species='human'):
     adata.layers['normalized_count'] = X.copy()
     adata.layers['imputed_count'] = X.copy()
 
-    adata.obs['index'] = adata.obs['index'].astype(str)
+    adata.obs.index = adata.obs.index.astype(str)
 
     
     return adata
