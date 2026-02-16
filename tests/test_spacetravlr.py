@@ -44,6 +44,8 @@ def create_test_adata(n_cells=100, n_genes=50, species='human'):
     adata.layers['normalized_count'] = X.copy()
     adata.layers['imputed_count'] = X.copy()
 
+    adata.obs.index = adata.obs.index.astype(str)
+
     
     return adata
 
@@ -286,6 +288,12 @@ class TestSpaceShip(unittest.TestCase):
         
         adata = create_test_adata()
         adata.layers['imputed_count'] = adata.X.copy()
+        for col in adata.obs.select_dtypes(include="string"):
+            adata.obs[col] = adata.obs[col].astype(str)
+
+        for col in adata.var.select_dtypes(include="string"):
+            adata.var[col] = adata.var[col].astype(str)
+        
         adata.write_h5ad('output/input_data/_adata.h5ad')
         
         mock_links = {'TypeA': pd.DataFrame(), 'TypeB': pd.DataFrame()}
@@ -332,6 +340,11 @@ class TestSpaceShip(unittest.TestCase):
         adata.layers['imputed_count'] = adata.X.copy()
         adata.obsm['X_umap'] = np.random.rand(len(adata), 2)
         adata.obs['cell_type_int'] = np.random.randint(0, 3, len(adata))
+        for col in adata.obs.select_dtypes(include="string"):
+            adata.obs[col] = adata.obs[col].astype(str)
+
+        for col in adata.var.select_dtypes(include="string"):
+            adata.var[col] = adata.var[col].astype(str)
         adata.write_h5ad('output/input_data/_adata.h5ad')
         
         with open('output/input_data/celloracle_links.pkl', 'wb') as f:
@@ -358,6 +371,10 @@ class TestSpaceShip(unittest.TestCase):
         
         adata = create_test_adata()
         del adata.layers['imputed_count']
+        for col in adata.obs.select_dtypes(include="string"):
+            adata.obs[col] = adata.obs[col].astype(str)
+        for col in adata.var.select_dtypes(include="string"):
+            adata.var[col] = adata.var[col].astype(str)
         adata.write_h5ad('output/input_data/_adata.h5ad')
         
         with open('output/input_data/celloracle_links.pkl', 'wb') as f:
@@ -394,6 +411,213 @@ class TestSpaceShip(unittest.TestCase):
         self.assertEqual(call_count[0], 1)
 
 
+class TestExtraModulators(unittest.TestCase):
+    """Tests for extra modulators functionality in SpatialCellularProgramsEstimator."""
+    
+    def setUp(self):
+        self.temp_dir = tempfile.mkdtemp()
+        self.original_cwd = os.getcwd()
+        os.chdir(self.temp_dir)
+        
+        # Create test adata with specific genes for testing
+        np.random.seed(42)
+        n_cells = 100
+        n_genes = 20
+        
+        self.gene_names = [f'GENE{i}' for i in range(n_genes)]
+        X = np.random.rand(n_cells, n_genes)
+        
+        self.adata = ad.AnnData(X=X)
+        self.adata.var_names = self.gene_names
+        self.adata.obs_names = [f'cell_{i}' for i in range(n_cells)]
+        
+        cell_types = np.random.choice([0, 1, 2], size=n_cells)
+        self.adata.obs['cell_type_int'] = cell_types
+        
+        spatial_coords = np.random.rand(n_cells, 2) * 1000
+        self.adata.obsm['spatial'] = spatial_coords
+        
+        self.adata.layers['imputed_count'] = X.copy()
+        
+    def tearDown(self):
+        os.chdir(self.original_cwd)
+        if os.path.exists(self.temp_dir):
+            shutil.rmtree(self.temp_dir)
+    
+    def test_extra_modulators_disabled_by_default(self):
+        from SpaceTravLR.models.parallel_estimators import SpatialCellularProgramsEstimator
+        
+        target_gene = 'GENE0'
+        regulators = ['GENE1', 'GENE2']
+        
+        estimator = SpatialCellularProgramsEstimator(
+            adata=self.adata,
+            target_gene=target_gene,
+            regulators=regulators,
+            use_ligands=False,
+        )
+        
+        self.assertEqual(estimator.extra_modulators, [])
+        self.assertEqual(set(estimator.modulators), set(regulators))
+    
+
+    def test_extra_modulators_list_filters_correctly(self):
+        """Test that a specific extra_modulators list is filtered properly."""
+        from SpaceTravLR.models.parallel_estimators import SpatialCellularProgramsEstimator
+        
+        target_gene = 'GENE0'
+        regulators = ['GENE1', 'GENE2']
+        specific_extra = ['GENE3', 'GENE4', 'GENE5']
+        
+        estimator = SpatialCellularProgramsEstimator(
+            adata=self.adata,
+            target_gene=target_gene,
+            regulators=regulators,
+            use_ligands=False,
+            extra_modulators=specific_extra
+        )
+        
+        # Extra modulators should only include the specified genes
+        self.assertEqual(set(estimator.extra_modulators), set(specific_extra))
+    
+    def test_extra_modulators_excludes_existing_modulators(self):
+        """Test that genes already in regulators are excluded from extra_modulators."""
+        from SpaceTravLR.models.parallel_estimators import SpatialCellularProgramsEstimator
+        
+        target_gene = 'GENE0'
+        regulators = ['GENE1', 'GENE2']
+        # Include a gene that's already a regulator - should be excluded
+        extra_with_overlap = ['GENE1', 'GENE3', 'GENE4']
+        
+        estimator = SpatialCellularProgramsEstimator(
+            adata=self.adata,
+            target_gene=target_gene,
+            regulators=regulators,
+            use_ligands=False,
+            extra_modulators=extra_with_overlap
+        )
+        
+        # GENE1 should be excluded since it's already a regulator
+        self.assertNotIn('GENE1', estimator.extra_modulators)
+        self.assertIn('GENE3', estimator.extra_modulators)
+        self.assertIn('GENE4', estimator.extra_modulators)
+    
+    def test_extra_modulators_excludes_target_gene(self):
+        """Test that target gene is excluded from extra_modulators."""
+        from SpaceTravLR.models.parallel_estimators import SpatialCellularProgramsEstimator
+        
+        target_gene = 'GENE0'
+        regulators = ['GENE1', 'GENE2']
+        # Include the target gene - should be excluded
+        extra_with_target = ['GENE0', 'GENE3', 'GENE4']
+        
+        estimator = SpatialCellularProgramsEstimator(
+            adata=self.adata,
+            target_gene=target_gene,
+            regulators=regulators,
+            use_ligands=False,
+            extra_modulators=extra_with_target
+        )
+        
+        # GENE0 (target) should be excluded
+        self.assertNotIn('GENE0', estimator.extra_modulators)
+        self.assertIn('GENE3', estimator.extra_modulators)
+        self.assertIn('GENE4', estimator.extra_modulators)
+
+
+class TestExtraLR(unittest.TestCase):
+    def setUp(self):
+        self.temp_dir = tempfile.mkdtemp()
+        self.original_cwd = os.getcwd()
+        os.chdir(self.temp_dir)
+        
+        # Create test adata
+        np.random.seed(42)
+        n_cells = 100
+        n_genes = 20
+        
+        self.gene_names = [f'GENE{i}' for i in range(n_genes)]
+        X = np.random.rand(n_cells, n_genes)
+        
+        self.adata = ad.AnnData(X=X)
+        self.adata.var_names = self.gene_names
+        self.adata.obs_names = [f'cell_{i}' for i in range(n_cells)]
+        
+        cell_types = np.random.choice([0, 1, 2], size=n_cells)
+        self.adata.obs['cell_type_int'] = cell_types
+        
+        spatial_coords = np.random.rand(n_cells, 2) * 1000
+        self.adata.obsm['spatial'] = spatial_coords
+        
+        self.adata.layers['imputed_count'] = X.copy()
+        
+    def tearDown(self):
+        os.chdir(self.original_cwd)
+        if os.path.exists(self.temp_dir):
+            shutil.rmtree(self.temp_dir)
+
+    def test_extra_lr_integration(self):
+        """Test that extra_lr pairs are correctly added."""
+        from SpaceTravLR.models.parallel_estimators import SpatialCellularProgramsEstimator
+        
+        target_gene = 'GENE0'
+        regulators = ['GENE1', 'GENE2']
+        extra_lr = [('GENE3', 'GENE4')]
+        
+        estimator = SpatialCellularProgramsEstimator(
+            adata=self.adata,
+            target_gene=target_gene,
+            regulators=regulators,
+            use_ligands=True,
+            extra_lr=extra_lr
+        )
+        
+        # Check if pair is in lr_pairs
+        expected_pair = 'GENE3$GENE4'
+        self.assertIn(expected_pair, estimator.lr_pairs.values)
+        
+        # Check if ligand and receptor are in respective lists
+        self.assertIn('GENE3', estimator.ligands)
+        self.assertIn('GENE4', estimator.receptors)
+
+    def test_extra_lr_validation_format(self):
+        """Test that invalid extra_lr format raises ValueError."""
+        from SpaceTravLR.models.parallel_estimators import SpatialCellularProgramsEstimator
+        
+        target_gene = 'GENE0'
+        regulators = ['GENE1', 'GENE2']
+        
+        # Invalid format: list of strings instead of tuples
+        invalid_extra_lr = ['GENE3', 'GENE4']
+        
+        with self.assertRaises(ValueError):
+            SpatialCellularProgramsEstimator(
+                adata=self.adata,
+                target_gene=target_gene,
+                regulators=regulators,
+                use_ligands=True,
+                extra_lr=invalid_extra_lr
+            )
+
+    def test_extra_lr_validation_genes(self):
+        """Test that extra_lr with missing genes raises ValueError."""
+        from SpaceTravLR.models.parallel_estimators import SpatialCellularProgramsEstimator
+        
+        target_gene = 'GENE0'
+        regulators = ['GENE1', 'GENE2']
+        
+        # Invalid genes: MISSING_GENE not in adata.var_names
+        invalid_extra_lr = [('GENE3', 'MISSING_GENE')]
+        
+        with self.assertRaises(ValueError):
+            SpatialCellularProgramsEstimator(
+                adata=self.adata,
+                target_gene=target_gene,
+                regulators=regulators,
+                use_ligands=True,
+                extra_lr=invalid_extra_lr
+            )
+
+
 if __name__ == '__main__':
     unittest.main()
-
