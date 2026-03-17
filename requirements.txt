@@ -16,24 +16,35 @@ pysal==24.1
 scanpy==1.10.2
 # scikit_learn==1.5.1
 # scipy==1.14.0
+# scipy>=1.11.0
 # seaborn==0.13.2
-# torch==2.4.0
+torch
 torchvision
 # tqdm==4.66.4
 pyarrow
 enlighten
 pyro-ppl
-commot
+# commot
 group-lasso
 pqdm
 magic-impute
 wordcloud
-simple_slurm
 # pysankeybeta
 easydict
 # velocyto==0.17.17
 # shiny>=0.6.0
+# scanpy>=1.10.0
 # pandas>=2.0.0
-# numpy>=1.24.0
-anndata==0.10.8
+numpy==1.24.0
+# anndata>=0.10.0
 # matplotlib>=3.7.0
+sphinx
+sphinx-rtd-theme
+nbsphinx
+jscatter
+simple_slurm
+group_lasso
+easydict
+cellrank
+plotly
+adjustText

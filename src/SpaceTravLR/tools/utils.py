@@ -159,6 +159,18 @@ def clean_up_adata(adata, fields_to_keep):
 
 @jit
 def gaussian_kernel_2d(origin, xy_array, radius, eps=0.001):
+    """
+    Compute a 2D Gaussian kernel weights for a given origin on a given grid.
+
+    Args:
+        origin (np.ndarray): The center point for the Gaussian kernel.
+        xy_array (np.ndarray): Array of points to compute weights for.
+        radius (float): The radius of the Gaussian kernel.
+        eps (float): A small epsilon value to prevent division by zero.
+
+    Returns:
+        np.ndarray: Array of Gaussian weights.
+    """
     distances = np.sqrt(np.sum((xy_array - origin)**2, axis=1))
     sigma = radius / np.sqrt(-2 * np.log(eps))
     weights = np.exp(-(distances**2) / (2 * sigma**2))
@@ -282,7 +294,7 @@ def is_mouse_data(adata):
         True if the data appears to be from mouse, False if it appears to be from human
     """
     # Get a sample of gene names to check (up to 100)
-    gene_sample = adata.var_names[:1000]
+    gene_sample = np.random.choice(adata.var_names, size=min(100, len(adata.var_names)), replace=False)
     
     # Count genes that follow mouse naming convention (only first letter capitalized)
     mouse_pattern_count = sum(1 for gene in gene_sample if 

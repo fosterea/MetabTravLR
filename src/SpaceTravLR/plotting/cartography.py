@@ -733,9 +733,9 @@ class Cartography:
                         bbox=dict(
                             facecolor=color,
                             alpha=1,
-                            edgecolor=None,
+                            edgecolor='black',
                             boxstyle='round',
-                            linewidth=0.15
+                            linewidth=0.25
                         ))
                 texts.append(text)
             

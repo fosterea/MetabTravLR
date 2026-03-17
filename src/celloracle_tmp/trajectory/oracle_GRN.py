@@ -51,7 +51,6 @@ def _do_simulation(coef_matrix, simulation_input, gem, n_propagation):
 
     return gem_simulated
 
-
 def _getCoefMatrix(gem, TFdict, alpha=1, verbose=True):
     """
     Calculate GRN and return CoefMatrix (network weights)

@@ -107,9 +107,9 @@ def xyc2spatial(x, y, c, m, n, split_channels=True, disable_tqdm=True):
 def xyc2spatial_fast(xyc, m, n):
     """
     Converts spatial coordinates (x, y) and cluster labels (c) to a spatial \
-        distance map with grid sizes mxn. 
+        distance map with grid sizes m x n. 
     Each channels encodes the distance map for a unique cluster.
-    Note: The distance maps are reversed such that far away points are closer to 0.
+
     Return (n_samples, n_clusters, m, n)
     """
 
