@@ -61,6 +61,46 @@ def compute_radius_weights(xy, lig_df, radius, scale_factor):
 
     return pd.DataFrame(weighted_ligands, index=u_ligands, columns=lig_df.index).T
 
+@numba.njit(parallel=True)
+def _gaussian_kernel_2d_batch(xy: np.ndarray, radius: float) -> np.ndarray:
+    """Compute full N×N weight matrix in one parallelized pass."""
+    n = xy.shape[0]
+    W = np.empty((n, n), dtype=np.float64)
+    inv_2r2 = -1.0 / (2.0 * radius * radius)
+    for i in numba.prange(n):
+        xi, yi = xy[i, 0], xy[i, 1]
+        for j in range(n):
+            dx = xi - xy[j, 0]
+            dy = yi - xy[j, 1]
+            W[i, j] = np.exp((dx * dx + dy * dy) * inv_2r2)
+    return W  # (n_cells, n_cells)
+
+
+@numba.njit(parallel=True)
+def _weighted_mean(W: np.ndarray, lig_values: np.ndarray) -> np.ndarray:
+    n = W.shape[0]
+    n_lig = lig_values.shape[1]
+    out = np.zeros((n, n_lig), dtype=np.float64)
+    for i in numba.prange(n):
+        for k in range(n):
+            w = W[i, k]
+            for j in range(n_lig):
+                out[i, j] += w * lig_values[k, j]
+        for j in range(n_lig):
+            out[i, j] /= n
+    return out
+
+
+def compute_radius_weights_fast(xy, lig_df, radius, scale_factor):
+    W = scale_factor * _gaussian_kernel_2d_batch(
+        np.ascontiguousarray(xy, dtype=np.float64), radius
+    )
+    lig_values = np.ascontiguousarray(lig_df.values, dtype=np.float64)
+    result = _weighted_mean(W, lig_values)
+    return pd.DataFrame(result, index=lig_df.index, columns=lig_df.columns)
+
+
+
 
 def received_ligands(xy, ligands_df, lr_info, scale_factor=1):
     """
@@ -86,7 +126,7 @@ def received_ligands(xy, ligands_df, lr_info, scale_factor=1):
     for radius in lr_info["radius"].unique():
         radius_ligands = lr_info[lr_info["radius"] == radius]["ligand"].values
         full_df.append(
-            compute_radius_weights(xy, ligands_df[radius_ligands], radius, scale_factor)
+            compute_radius_weights_fast(xy, ligands_df[radius_ligands], radius, scale_factor)
         )
 
     full_df = pd.concat([df for df in full_df if not df.empty], axis=1)
@@ -383,7 +423,6 @@ class SpatialCellularProgramsEstimator:
         radius=100,
         contact_distance=30,
         use_ligands=True,
-        use_tfs=True,
         tf_ligand_cutoff=0.01,
         receptor_thresh=0.1,
         regulators=None,
@@ -491,9 +530,6 @@ class SpatialCellularProgramsEstimator:
         self.regulators = [
             i for i in self.regulators if i in adata.var_names and i != self.target_gene
         ]
-
-        if not use_tfs:
-            self.regulators = []
 
         if self.use_ligands:
             ligand_mixtures = init_ligands_and_receptors(
