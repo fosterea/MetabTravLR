@@ -383,6 +383,7 @@ class SpatialCellularProgramsEstimator:
         radius=100,
         contact_distance=30,
         use_ligands=True,
+        use_tfs=True,
         tf_ligand_cutoff=0.01,
         receptor_thresh=0.1,
         regulators=None,
@@ -490,6 +491,9 @@ class SpatialCellularProgramsEstimator:
         self.regulators = [
             i for i in self.regulators if i in adata.var_names and i != self.target_gene
         ]
+
+        if not use_tfs:
+            self.regulators = []
 
         if self.use_ligands:
             ligand_mixtures = init_ligands_and_receptors(

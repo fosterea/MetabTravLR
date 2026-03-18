@@ -299,8 +299,9 @@ class Betabase:
         return self.data.get(gene_name, None)
     
     
-    def collect_interactions(self, cell_type, annot='cell_type'):
+    def collect_interactions(self, cell_type, annot='cell_type', aggregate='mean'):
         assert cell_type in self.obs[annot].unique()
+        assert aggregate in ['mean', 'min', 'max', 'sum', 'positive', 'negative']
         
         beta_lr = defaultdict(list)
         beta_tfl = defaultdict(list)
@@ -319,8 +320,21 @@ class Betabase:
             gene_name = f.split('/')[-1].replace('_betadata.parquet', '')
             beta = pd.read_parquet(f)
             beta = beta.join(self.obs[annot]).query(f'{annot}==@cell_type').drop(columns=[annot])
+
+            if aggregate == 'mean':
+                beta_ = beta.mean()
+            elif aggregate == 'min':
+                beta_ = beta.min()
+            elif aggregate == 'max':    
+                beta_ = beta.max()
+            elif aggregate == 'sum':
+                beta_ = beta.sum()
+            elif aggregate == 'positive':
+                beta_ = beta[beta > 0].fillna(0).mean()
+            elif aggregate == 'negative':
+                beta_ = beta[beta < 0].fillna(0).mean()
             
-            for k, v in beta.mean().to_dict().items():
+            for k, v in beta_.to_dict().items():
                 if abs(v) > 0:
                     if '$' in k:
                         beta_lr[k].append((gene_name, v))
