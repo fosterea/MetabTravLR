@@ -803,21 +803,22 @@ class VirtualTissue:
         if pd.api.types.is_numeric_dtype(adata.obs[obs_key]):
             smoothed = np.nanmean(neighbor_values, axis=1)
             adata.obs[new_key] = smoothed
-            print(f"Smoothed continuous variable '{obs_key}' -> '{new_key}'")
             
         else:
             mode_result = stats.mode(neighbor_values, axis=1, keepdims=False)
             smoothed = mode_result.mode
             adata.obs[new_key] = pd.Categorical(
                 smoothed, categories=adata.obs[obs_key].cat.categories)
-            print(f"Smoothed categorical variable '{obs_key}' -> '{new_key}'")
 
         return adata
 
     def compute_branched_pseudotime(self, pairs, annot, source_cell_type, knn=10, n_components=5, n_source_cells=20):
         import scanpy.external as sce
-        adata = self.adata
 
+        if 'pseudotime' in self.adata.obs:
+            del self.adata.obs['pseudotime']
+            
+        adata = self.adata
         source_cells = adata[adata.obs[annot]==source_cell_type].obs_names
         source_cells = np.random.choice(source_cells, n_source_cells)
 
