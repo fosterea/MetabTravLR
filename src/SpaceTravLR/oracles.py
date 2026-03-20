@@ -335,12 +335,14 @@ class SpaceTravLR(BaseTravLR):
         threshold_lambda=1e-6, 
         tflinks=None,
         tf_ligand_cutoff=0.01, 
+        receptor_thresh=0.01,
         radius=200, 
         contact_distance=30,
         skip_clusters=None,
-        scale_factor=1,
+        scale_factor=100,
         extra_modulators=None,
         extra_lr=None,
+        activation='identity'
         ):
         
         super().__init__(adata, fields_to_keep=[annot, 'cell_thresholds'])
@@ -362,6 +364,7 @@ class SpaceTravLR(BaseTravLR):
         self.alpha = alpha
         self.threshold_lambda = threshold_lambda
         self.tf_ligand_cutoff = tf_ligand_cutoff
+        self.receptor_thresh = receptor_thresh
         self.beta_dict = None
         self.coef_matrix = None
         self.radius = radius
@@ -369,6 +372,8 @@ class SpaceTravLR(BaseTravLR):
         self.scale_factor = scale_factor
         self.extra_modulators = extra_modulators
         self.extra_lr = extra_lr
+        self.activation = activation
+        self.tflinks = tflinks
 
         self.estimator_models = {}
         self.ligands = set()
@@ -396,7 +401,8 @@ class SpaceTravLR(BaseTravLR):
                     'n_genes': len(self.genes),
                     'scale_factor': scale_factor,
                     'extra_modulators': extra_modulators,
-                    'extra_lr': extra_lr
+                    'extra_lr': extra_lr,
+                    'activation': activation
                 }, f, indent=4)
 
     
@@ -439,7 +445,10 @@ class SpaceTravLR(BaseTravLR):
                 grn=self.grn,
                 scale_factor=self.scale_factor,
                 extra_modulators=self.extra_modulators,
-                extra_lr=self.extra_lr
+                extra_lr=self.extra_lr,
+                activation=self.activation,
+                tflinks=self.tflinks,
+                receptor_thresh=self.receptor_thresh
             )
             
             estimator.test_mode = False

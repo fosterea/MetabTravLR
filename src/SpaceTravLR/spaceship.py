@@ -465,6 +465,8 @@ class SpaceShip:
         contact_distance: int = 50,
         extra_modulators: list[str] = None,
         extra_lr: list[tuple[str, str]] = None,
+        activation: str = 'identity',
+        scale_factor: int = 100
     ):
         
         from .oracles import SpaceTravLR
@@ -496,7 +498,9 @@ class SpaceShip:
             save_dir=base_dir,
             tflinks=tflinks,
             extra_modulators=extra_modulators, 
-            extra_lr=extra_lr
+            extra_lr=extra_lr,
+            activation=activation,
+            scale_factor=scale_factor
         )
 
         space_travlr.run()
@@ -526,6 +530,178 @@ class SpaceShip:
         print("We're going on a trip in our favorite rocket ship 🚀️")
         
         return True
+    
+    @catch_errors
+    def sweep_spacetravlr(self, target_genes: list[str], wandb_project: str, wandb_name: str, training_params: dict):
+        
+        from .tools.network import RegulatoryFactory
+        from .models.parallel_estimators import init_received_ligands
+        from .models.parallel_estimators import SpatialCellularProgramsEstimator, create_spatial_features
+        from sklearn.preprocessing import MinMaxScaler
+        from sklearn.metrics import r2_score
+        import time
+        import wandb
 
+        wandb_logs = {}
 
+        # initialize wandb
+        # wandb.init(
+        #     project=wandb_project, 
+        #     name=wandb_name
+        # )
+        # for key, value in training_params.items():
+        #     wandb.config[key] = value
+        
+        # load data from setup
+        adata_base = sc.read_h5ad(f'{self.outdir}/input_data/_adata.h5ad')
+        tflinks = pd.read_parquet(f'{self.outdir}/input_data/tflinks.parquet')
+        links = pickle.load(open(f'{self.outdir}/input_data/celloracle_links.pkl', 'rb'))
 
+        co_grn = RegulatoryFactory(links=links)
+
+        n_hvgs = training_params['n_hvgs']
+        n_cells = training_params['n_cells']
+
+        # temporary fix because I forgot to remove uninformative genes
+        adata_base.var_names_make_unique()
+        adata_base.var["MT"] = adata_base.var_names.str.startswith("MT-")
+
+        sc.pp.calculate_qc_metrics(adata_base, qc_vars=["MT"], inplace=True)
+        sc.pp.filter_cells(adata_base, min_counts=50)
+        adata_base = adata_base[adata_base.obs["pct_counts_MT"] < 10].copy()
+        adata_base = adata_base[:, ~adata_base.var["MT"]]
+
+        adata_base = adata_base[:, ~adata_base.var_names.str.contains('RIK')]
+        adata_base = adata_base[:, ~adata_base.var_names.str.contains(r'^HB\w+-\w+$')]
+        adata_base = adata_base[:, ~adata_base.var_names.str.contains('HP')]
+        adata_base = adata_base[:, ~adata_base.var_names.str.startswith('RP')]
+        adata_base = adata_base[:, ~adata_base.var_names.str.startswith('AA')]
+        adata_base = adata_base[:, ~adata_base.var_names.str.startswith('AB')]
+        adata_base = adata_base[:, ~adata_base.var_names.str.startswith('AC')]
+        adata_base = adata_base[:, ~adata_base.var_names.str.startswith('GM')]
+        adata_base = adata_base[:, ~adata_base.var_names.str.startswith('MIR')]
+        adata_base = adata_base[:, ~adata_base.var_names.str.startswith('TTT')]
+        adata_base = adata_base[:, ~adata_base.var_names.str.startswith('LINC')]
+        adata_base = adata_base[:, ~adata_base.var_names.str.endswith('-AS1')]
+
+        housekeeping_genes = pd.read_csv('/ix/djishnu/shared/djishnu_kor11/tonsil_sweep/Housekeeping_GenesHuman.csv', index_col=0, sep=';')
+        housekeeping_genes = housekeeping_genes['Gene.name'].tolist()
+        adata_base = adata_base[:, ~adata_base.var_names.isin(housekeeping_genes)]
+        sc.pp.filter_genes(adata_base, min_cells=10)
+
+        # Subset into train and val
+        adata = adata_base.copy()
+        sc.pp.highly_variable_genes(
+            adata, 
+            n_top_genes=n_hvgs, 
+            batch_key='cell_type_int', 
+            flavor='seurat_v3', 
+            inplace=True
+        )
+        train_cells = np.random.choice(adata.obs_names, size=n_cells, replace=False)
+        adata_train = adata[train_cells]
+        adata_val = adata[~adata.obs_names.isin(train_cells)]
+        
+        # make sure that the density of the validation set is the same as the training set
+        if len(adata_val) < n_cells:
+            extra_cells = np.random.choice(train_cells, size=n_cells - len(adata_val), replace=False)
+            adata_val = sc.concat([adata_val, adata[extra_cells]], axis=0)
+        if len(adata_val) > n_cells:
+            adata_val = adata_val[np.random.choice(adata_val.obs_names, size=n_cells, replace=False)]
+
+        adata_train = init_received_ligands(
+            adata_train, 
+            radius=training_params['radius'], 
+            cell_threshes=adata_train.uns.get('cell_thresholds', None),
+            scale_factor=training_params['scale_factor']
+        )
+
+        adata_val = init_received_ligands(
+            adata_val, 
+            radius=training_params['radius'], 
+            cell_threshes=adata_val.uns.get('cell_thresholds', None),
+            scale_factor=training_params['scale_factor']
+        )
+
+        def sp_feature_from_adata(adata, radius):
+            spatial_features = create_spatial_features(
+                adata.obsm['spatial'][:, 0], 
+                adata.obsm['spatial'][:, 1], 
+                adata.obs['cell_type_int'], 
+                adata.obs.index,
+                radius=radius
+            )
+            spatial_features = pd.DataFrame(
+                MinMaxScaler().fit_transform(spatial_features.values), 
+                columns=spatial_features.columns, 
+                index=spatial_features.index
+            )
+            return spatial_features
+
+        adata_val.obsm['spatial_features'] = sp_feature_from_adata(
+            adata_val,
+            radius=training_params['radius']
+        )
+
+        adata_train.obsm['spatial_features'] = sp_feature_from_adata(
+            adata_train,
+            radius=training_params['radius']
+        )
+
+        start_time = time.time()
+
+        # initialize estimator
+        for target_gene in target_genes:
+            
+            print(f"Starting training for {target_gene}")
+            
+            estimator = SpatialCellularProgramsEstimator(
+                adata=adata_train,
+                target_gene=target_gene,
+                layer='imputed_count',
+                cluster_annot='cell_type_int',
+                spatial_dim=training_params['spatial_dim'],
+                radius=training_params['radius'],
+                contact_distance=training_params['contact_distance'],
+                tf_ligand_cutoff=training_params['tf_ligand_cutoff'],
+                receptor_thresh=training_params['receptor_thresh'],
+                grn=co_grn,
+                use_ligands=training_params['use_ligands'],
+                tflinks=tflinks,
+                activation=training_params['activation'],
+                scale_factor=training_params['scale_factor']
+            )
+
+            estimator.fit(
+                num_epochs=training_params['max_epochs'],
+                learning_rate=training_params['learning_rate'],
+                batch_size=training_params['batch_size'],
+                use_pbar=False,
+                estimator='lasso',
+                vision_model='cnn',
+                lasso_params=training_params['lasso_params']
+            )
+
+            for ct in adata_train.obs['cell_type_int'].unique():
+
+                y_train, y_train_pred = estimator.predict(ct, adata_train)
+                r2_train = r2_score(y_train, y_train_pred)
+                
+                y_val, y_val_pred = estimator.predict(ct, adata_val)
+                r2_val = r2_score(y_val, y_val_pred)
+
+                # sometimes we zero out the prediction because of bad values
+                if y_train_pred.sum() <= 0:
+                    continue
+                else:
+                    wandb_logs[f'r2_train_{target_gene}_{ct}'] = r2_train
+                    wandb_logs[f'r2_val_{target_gene}_{ct}'] = r2_val
+
+        end_time = time.time()
+
+        wandb_logs['training_time'] = end_time - start_time
+        r2_val_keys = [k for k in wandb_logs if k.startswith('r2_val_')]
+        r2_train_keys = [k for k in wandb_logs if k.startswith('r2_train_')]
+        wandb_logs['r2_val_mean'] = np.mean([wandb_logs[k] for k in r2_val_keys])
+        wandb_logs['r2_train_mean'] = np.mean([wandb_logs[k] for k in r2_train_keys])
+        wandb.log(wandb_logs)

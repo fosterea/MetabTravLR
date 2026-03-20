@@ -299,6 +299,29 @@ class GeneFactory(BaseTravLR):
         save_layer=False,
         delta_dir=None,
         ):
+        """
+        Simulates perturbation of a target gene and propagates the effect.
+        
+        Parameters
+        ----------
+        target : str or list
+            Target gene(s) to perturb.
+        n_propagation : int, optional
+            Number of propagation steps, by default 4.
+        gene_expr : float, optional
+            Expression level of the target gene (0 for knockout), by default 0.
+        cells : list, optional
+            List of cell indices to apply perturbation to, by default None.
+        save_layer : bool, optional
+            Whether to save the result as a layer in adata, by default False.
+        delta_dir : str, optional
+            Directory to save delta matrices, by default None.
+            
+        Returns
+        -------
+        pd.DataFrame
+            DataFrame containing the simulated gene expression.
+        """
         
         payload_dict = {}
         output_name = None
@@ -348,11 +371,11 @@ class GeneFactory(BaseTravLR):
         # get LR specific filtered gex contributions
         cell_thresholds = self.adata.uns.get('cell_thresholds')
         if cell_thresholds is not None:
-            cell_thresholds = cell_thresholds.reindex(              
+            cell_thresholds = cell_thresholds.loc[obs].reindex(              
                 index=obs, columns=self.adata.var_names, fill_value=1)
             self.adata.uns['cell_thresholds'] = cell_thresholds
-        else:
-            print('warning: cell_thresholds not found in adata.uns')
+        # else:
+            # print('warning: cell_thresholds not found in adata.uns')
 
         rw_ligands_0 = self.adata.uns.get('received_ligands')
         rw_tfligands_0 = self.adata.uns.get('received_ligands_tfl')
@@ -364,19 +387,8 @@ class GeneFactory(BaseTravLR):
                 gene_mtx, cell_thresholds=None, genes=self.tfl_ligands)
             self.adata.uns['received_ligands'] = rw_ligands_0
             self.adata.uns['received_ligands_tfl'] = rw_tfligands_0
-        
-        # Make sure that the received ligands are indexed to the same cells as in the adata
-        rw_ligands_0 = self.adata.uns['received_ligands'].reindex(
-            index=obs, 
-            columns=self.adata.var_names, 
-            fill_value=0
-        )
-        rw_tfligands_0 = self.adata.uns['received_ligands_tfl'].reindex(
-            index=obs, 
-            columns=self.adata.var_names, 
-            fill_value=0
-        )
-        
+
+
         all_ligands = list(set(self.ligands) | set(self.tfl_ligands))
         ligands_0 = self.adata.to_df(layer='imputed_count')[all_ligands].reindex(
             index=self.obs_names, 
@@ -390,17 +402,18 @@ class GeneFactory(BaseTravLR):
         rw_tfligands_1 = rw_tfligands_0.copy()
 
         # get the max weighted ligand expression (could be zeroed out in rw_ligands_0)
-        rw_ligands_0 = pd.concat(
-            [rw_ligands_0, rw_tfligands_0], axis=1
-        ).groupby(level=0, axis=1).max().reindex(
-            index=obs, 
-            columns=self.adata.var_names, 
-            fill_value=0
+        w0 = rw_ligands_0.reindex(columns=self.adata.var_names, fill_value=0).values
+        w0_tfl = rw_tfligands_0.reindex(columns=self.adata.var_names, fill_value=0).values
+        rw_ligands_0 = pd.DataFrame(
+            np.maximum(w0, w0_tfl),
+            index=obs,
+            columns=self.adata.var_names
         )
 
         self.iter = 0
         self.max_iter = n_propagation
-        min_ = gene_mtx.min(axis=0)
+        # min_ = gene_mtx.min(axis=0)
+        min_ = 0.0
         max_ = gene_mtx.max(axis=0)
         
         ## refer: src/celloracle/trajectory/oracle_GRN.py
@@ -424,12 +437,12 @@ class GeneFactory(BaseTravLR):
 
             # update deltas to reflect change in received ligands
             # we consider dy/dwL: we replace delta l with delta wL in delta_simulated
-            rw_ligands_1 = pd.concat(
-                [w_ligands_1, w_tfligands_1], axis=1
-            ).groupby(level=0, axis=1).max().reindex(      # w_ligands <= w_tfligands because of cell_thresholds
-                index=self.obs_names, 
-                columns=self.adata.var_names, 
-                fill_value=0
+            w1 = w_ligands_1.reindex(columns=self.adata.var_names, fill_value=0).values
+            w1_tfl = w_tfligands_1.reindex(columns=self.adata.var_names, fill_value=0).values
+            rw_ligands_1 = pd.DataFrame(
+                np.maximum(w1, w1_tfl),
+                index=self.obs_names,
+                columns=self.adata.var_names
             )
 
             delta_rw_ligands = rw_ligands_1.values - rw_ligands_0.values
@@ -441,9 +454,7 @@ class GeneFactory(BaseTravLR):
                 index=obs
             )
 
-            ligands_1 = pd.concat(
-                [gene_df_1[self.ligands], gene_df_1[self.tfl_ligands]], axis=1
-            ).groupby(level=0, axis=1).max().reindex(
+            ligands_1 = gene_df_1[all_ligands].reindex(
                 index=obs, 
                 columns=self.adata.var_names, 
                 fill_value=0
@@ -462,7 +473,7 @@ class GeneFactory(BaseTravLR):
 
             # Don't allow simulated to exceed observed values
             gem_tmp = gene_mtx + delta_simulated
-            gem_tmp = pd.DataFrame(gem_tmp).clip(lower=min_, upper=max_, axis=1).values
+            gem_tmp = np.clip(gem_tmp, a_min=min_, a_max=max_)
 
             delta_simulated = gem_tmp - gene_mtx # update delta_simulated in case of negative values
             
@@ -474,7 +485,7 @@ class GeneFactory(BaseTravLR):
                 )
             
             del splashed_beta_dict
-            gc.collect()
+            # gc.collect()
 
         gem_simulated = gene_mtx + delta_simulated
         assert gem_simulated.shape == gene_mtx.shape
@@ -487,8 +498,9 @@ class GeneFactory(BaseTravLR):
             else:
                 gem_simulated[cells, target_index] = target_gene_expr
 
-            self.update_status(
-                f'{target_name} -> {target_gene_expr} - {n_propagation}/{n_propagation} - Done')
+            if target_index % 5 == 0:
+                self.update_status(
+                    f'{target_name} -> {target_gene_expr} - {n_propagation}/{n_propagation} - Done')
         
         if save_layer:
             self.adata.layers[output_name] = gem_simulated

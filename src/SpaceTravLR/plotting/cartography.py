@@ -208,7 +208,7 @@ class Cartography:
 
         base_celltypes = self.adata.obs[annot]
 
-        for ix in tqdm(range(transition_df.shape[0])):
+        for ix in range(transition_df.shape[0]):
 
             fate_df = transition_df.iloc[ix].to_frame().join(
                 base_celltypes).groupby(annot).mean().loc[allowed_fates]
@@ -230,7 +230,7 @@ class Cartography:
                 transitions.append(source_ct)
 
         
-        print(f'source ct {source_ct}', Counter(transitions), np.mean(transition_fate), self_thresh)
+        # print(f'source ct {source_ct}', Counter(transitions), np.mean(transition_fate), self_thresh)
         return transitions
 
     def get_transition_annot(self, corr, allowed_fates, thresh=0.0002, annot='leiden'):
@@ -493,7 +493,8 @@ class Cartography:
             arrow_alpha_non_highlighted=0.3,
             threshold=0,
             dynamic_alpha=True,
-            lightgrey="#9c8d7c"
+            lightgrey="#9c8d7c",
+            make_plot=True
         ):
         assert 'X_umap' in self.adata.obsm
         assert 'cell_type' in self.adata.obs
@@ -594,8 +595,12 @@ class Cartography:
             plot_df['highlighted'] = plot_df[hue].isin(highlight_clusters)
             
             vector_magnitudes = np.linalg.norm(V_simulated, axis=1)
-            vector_magnitudes = 0.1 + 0.9 * (vector_magnitudes - vector_magnitudes.min()) / (vector_magnitudes.max() - vector_magnitudes.min())
-            vector_magnitudes = np.clip(vector_magnitudes, 0.01, 1) * alpha
+            mag_range = vector_magnitudes.max() - vector_magnitudes.min()
+            if mag_range > 0:
+                vector_magnitudes = 0.1 + 0.9 * (vector_magnitudes - vector_magnitudes.min()) / mag_range
+            else:
+                vector_magnitudes = np.full_like(vector_magnitudes, 0.5)
+            vector_magnitudes = np.clip(vector_magnitudes * alpha, 0.01, 1)
 
             sns.scatterplot(
                 data=plot_df,
@@ -642,113 +647,113 @@ class Cartography:
             non_highlighted_points = grid_points[~highlighted_regions]
             non_highlighted_vectors = vector_field[~highlighted_regions]
             
-            
-            if len(highlighted_points) > 0:
-                if curve:
-                        sort_idx = np.argsort(grid_points[:, 0])
-                        x_ = grid_points[sort_idx, 0]
-                        y_ = grid_points[sort_idx, 1]
-                        u_ = vector_field[sort_idx, 0] 
-                        v_ = vector_field[sort_idx, 1]
-                        xi = np.linspace(x_.min(), x_.max(), 100)
-                        yi = np.linspace(y_.min(), y_.max(), 100)
-                        xi, yi = np.meshgrid(xi, yi)
-                        ui = griddata((x_, y_), u_, (xi, yi), method='linear')
-                        vi = griddata((x_, y_), v_, (xi, yi), method='linear')
+            if make_plot:
+                if len(highlighted_points) > 0:
+                    if curve:
+                            sort_idx = np.argsort(grid_points[:, 0])
+                            x_ = grid_points[sort_idx, 0]
+                            y_ = grid_points[sort_idx, 1]
+                            u_ = vector_field[sort_idx, 0] 
+                            v_ = vector_field[sort_idx, 1]
+                            xi = np.linspace(x_.min(), x_.max(), 100)
+                            yi = np.linspace(y_.min(), y_.max(), 100)
+                            xi, yi = np.meshgrid(xi, yi)
+                            ui = griddata((x_, y_), u_, (xi, yi), method='linear')
+                            vi = griddata((x_, y_), v_, (xi, yi), method='linear')
+                            
+                            alpha_values = np.full_like(ui, 0.15)
+                            for i in range(len(xi)):
+                                for j in range(len(yi)):
+                                    point = np.array([xi[i,j], yi[i,j]])
+                                    indices = get_neighborhood(point, layout_embedding)
+                                    if len(indices) > 0:
+                                        cell_indices = self.adata.obs_names[indices]
+                                        if plot_df.loc[cell_indices, 'highlighted'].any():
+                                            alpha_values[i,j] = 1.0
+
+                            velovect(ax, 
+                                xi[0,:], yi[:,0], ui, vi,
+                                arrowstyle=arrowstyle,
+                                color='black',
+                                arrowsize=arrowsize,
+                                linewidth=arrow_linewidth,
+                                # alpha=alpha_values,
+                                scale=scale, grains=grains)
+                    else:
+                        ax.quiver(
+                            highlighted_points[:, 0], highlighted_points[:, 1],   
+                            highlighted_vectors[:, 0], highlighted_vectors[:, 1], 
+                            angles='xy', scale_units='xy', scale=1, 
+                            headwidth=quiver_headwidth, headlength=quiver_headlength, headaxislength=quiver_headaxislength,
+                            width=quiver_width, alpha=vector_magnitudes
+                        )
                         
-                        alpha_values = np.full_like(ui, 0.15)
-                        for i in range(len(xi)):
-                            for j in range(len(yi)):
-                                point = np.array([xi[i,j], yi[i,j]])
-                                indices = get_neighborhood(point, layout_embedding)
-                                if len(indices) > 0:
-                                    cell_indices = self.adata.obs_names[indices]
-                                    if plot_df.loc[cell_indices, 'highlighted'].any():
-                                        alpha_values[i,j] = 1.0
+                    
+                
+                if len(non_highlighted_points) > 0:
+                    
+                    if curve:
+                        pass
+                        
+                    else:
+                        ax.quiver(
+                            non_highlighted_points[:, 0], non_highlighted_points[:, 1],   
+                            non_highlighted_vectors[:, 0], non_highlighted_vectors[:, 1], 
+                            angles='xy', scale_units='xy', scale=1, 
+                            headwidth=quiver_headwidth, headlength=quiver_headlength, headaxislength=quiver_headaxislength,
+                            width=quiver_width, alpha=arrow_alpha_non_highlighted
+                        )
+                    
 
-                        velovect(ax, 
-                            xi[0,:], yi[:,0], ui, vi,
-                            arrowstyle=arrowstyle,
+            else:
+                plot_quiver(grid_points, vector_field, background=None, ax=ax)
+            
+            ax.set_frame_on(False)
+            ax.set_xticks([])
+            ax.set_yticks([])
+            ax.set_xlabel('')
+            ax.set_ylabel('')
+            ax.set_title('')
+            
+            alt_colors = self.color_dict
+            all_cts = self.adata.obs[hue]
+
+            if legend_on_loc:
+                texts = []
+                for cluster in sorted(all_cts.unique()):
+                    cluster_cells = all_cts == cluster
+                    x = np.mean(self.adata.obsm['X_umap'][cluster_cells, 0])
+                    y = np.mean(self.adata.obsm['X_umap'][cluster_cells, 1])
+                    
+                    if highlight_clusters is not None and cluster not in highlight_clusters:
+                        color = lightgrey if grey_out else alt_colors[cluster]
+                    else:
+                        color = alt_colors[cluster]
+                    
+                    text = ax.text(x, y, rename.get(cluster, cluster), 
+                            fontsize=legend_fontsize, 
+                            ha='center', 
+                            va='center',
                             color='black',
-                            arrowsize=arrowsize,
-                            linewidth=arrow_linewidth,
-                            # alpha=alpha_values,
-                            scale=scale, grains=grains)
-                else:
-                    ax.quiver(
-                        highlighted_points[:, 0], highlighted_points[:, 1],   
-                        highlighted_vectors[:, 0], highlighted_vectors[:, 1], 
-                        angles='xy', scale_units='xy', scale=1, 
-                        headwidth=quiver_headwidth, headlength=quiver_headlength, headaxislength=quiver_headaxislength,
-                        width=quiver_width, alpha=vector_magnitudes
-                    )
+                            bbox=dict(
+                                facecolor=color,
+                                alpha=1,
+                                edgecolor=None,
+                                boxstyle='round',
+                                linewidth=0.15
+                            ))
+                    texts.append(text)
+                
+                if texts:
+                    adjust_text(texts, 
+                            arrowprops=dict(arrowstyle='->', color='gray', lw=0.5, alpha=0.7),
+                            ax=ax)
                     
-                
             
-            if len(non_highlighted_points) > 0:
-                
-                if curve:
-                    pass
-                    
-                else:
-                    ax.quiver(
-                        non_highlighted_points[:, 0], non_highlighted_points[:, 1],   
-                        non_highlighted_vectors[:, 0], non_highlighted_vectors[:, 1], 
-                        angles='xy', scale_units='xy', scale=1, 
-                        headwidth=quiver_headwidth, headlength=quiver_headlength, headaxislength=quiver_headaxislength,
-                        width=quiver_width, alpha=arrow_alpha_non_highlighted
-                    )
-                
-
-        else:
-            plot_quiver(grid_points, vector_field, background=None, ax=ax)
-         
-        ax.set_frame_on(False)
-        ax.set_xticks([])
-        ax.set_yticks([])
-        ax.set_xlabel('')
-        ax.set_ylabel('')
-        ax.set_title('')
-        
-        alt_colors = self.color_dict
-        all_cts = self.adata.obs[hue]
-
-        if legend_on_loc:
-            texts = []
-            for cluster in sorted(all_cts.unique()):
-                cluster_cells = all_cts == cluster
-                x = np.mean(self.adata.obsm['X_umap'][cluster_cells, 0])
-                y = np.mean(self.adata.obsm['X_umap'][cluster_cells, 1])
-                
-                if highlight_clusters is not None and cluster not in highlight_clusters:
-                    color = lightgrey if grey_out else alt_colors[cluster]
-                else:
-                    color = alt_colors[cluster]
-                
-                text = ax.text(x, y, rename.get(cluster, cluster), 
-                        fontsize=legend_fontsize, 
-                        ha='center', 
-                        va='center',
-                        color='black',
-                        bbox=dict(
-                            facecolor=color,
-                            alpha=1,
-                            edgecolor=None,
-                            boxstyle='round',
-                            linewidth=0.15
-                        ))
-                texts.append(text)
+            if not legend_on_loc:
+                handles = [plt.scatter([], [], c=alt_colors[label], label=label) for label in sorted(all_cts.unique())]
+                legend = ax.legend(handles=handles, bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0., fontsize=legend_fontsize)
             
-            if texts:
-                adjust_text(texts, 
-                           arrowprops=dict(arrowstyle='->', color='gray', lw=0.5, alpha=0.7),
-                           ax=ax)
-                
-        
-        if not legend_on_loc:
-            handles = [plt.scatter([], [], c=alt_colors[label], label=label) for label in sorted(all_cts.unique())]
-            legend = ax.legend(handles=handles, bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0., fontsize=legend_fontsize)
-        
         return grid_points, vector_field, P
     
     def plot_umap_pseudotime(

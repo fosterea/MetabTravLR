@@ -59,7 +59,7 @@ class BetaFrame(pd.DataFrame):
     def from_path(cls, path, obs_names=None, float16=False):
         df = pd.read_parquet(path, engine='pyarrow')
         df.index.name = path.split('/')[-1].split('_')[0]
-        
+
         if float16:
             df = df.astype(np.float16)
         
@@ -228,6 +228,8 @@ class BetaFrame(pd.DataFrame):
                 tf_derivatives,
                 tf_tfl_derivatives
             ], axis=1).groupby(level=0, axis=1).sum()
+            # ], axis=1).groupby(level=0).sum()
+                
         
         if beta_cap is not None:
             _df = _df.clip(lower=-beta_cap, upper=beta_cap)
@@ -338,9 +340,9 @@ class Betabase:
         beta_tfl_out.index.name = cell_type
         beta_tfl_out['interaction_type'] = 'ligand-tf'
         out_df = pd.concat([beta_tf_out, beta_lr_out, beta_tfl_out])
-        out_df = out_df.query('interasefction != "beta0"')
+        out_df = out_df.query('interasection != "beta0"')
         
-        return 
+        return out_df
         
 
     def load_betadata(self, gene_name):
