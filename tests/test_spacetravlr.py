@@ -44,6 +44,8 @@ def create_test_adata(n_cells=100, n_genes=50, species='human'):
     adata.layers['normalized_count'] = X.copy()
     adata.layers['imputed_count'] = X.copy()
 
+    adata.obs.index = adata.obs.index.astype(str)
+
     
     return adata
 
@@ -286,6 +288,12 @@ class TestSpaceShip(unittest.TestCase):
         
         adata = create_test_adata()
         adata.layers['imputed_count'] = adata.X.copy()
+        for col in adata.obs.select_dtypes(include="string"):
+            adata.obs[col] = adata.obs[col].astype(str)
+
+        for col in adata.var.select_dtypes(include="string"):
+            adata.var[col] = adata.var[col].astype(str)
+        
         adata.write_h5ad('output/input_data/_adata.h5ad')
         
         mock_links = {'TypeA': pd.DataFrame(), 'TypeB': pd.DataFrame()}
@@ -332,6 +340,11 @@ class TestSpaceShip(unittest.TestCase):
         adata.layers['imputed_count'] = adata.X.copy()
         adata.obsm['X_umap'] = np.random.rand(len(adata), 2)
         adata.obs['cell_type_int'] = np.random.randint(0, 3, len(adata))
+        for col in adata.obs.select_dtypes(include="string"):
+            adata.obs[col] = adata.obs[col].astype(str)
+
+        for col in adata.var.select_dtypes(include="string"):
+            adata.var[col] = adata.var[col].astype(str)
         adata.write_h5ad('output/input_data/_adata.h5ad')
         
         with open('output/input_data/celloracle_links.pkl', 'wb') as f:
@@ -358,6 +371,10 @@ class TestSpaceShip(unittest.TestCase):
         
         adata = create_test_adata()
         del adata.layers['imputed_count']
+        for col in adata.obs.select_dtypes(include="string"):
+            adata.obs[col] = adata.obs[col].astype(str)
+        for col in adata.var.select_dtypes(include="string"):
+            adata.var[col] = adata.var[col].astype(str)
         adata.write_h5ad('output/input_data/_adata.h5ad')
         
         with open('output/input_data/celloracle_links.pkl', 'wb') as f:
