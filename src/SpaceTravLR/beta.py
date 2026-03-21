@@ -9,6 +9,7 @@ from typing import List, Optional, Tuple
 from numba import jit, prange
 import numpy as np
 from tqdm import tqdm as tqdm_mock
+import pyarrow.parquet as pq
 tqdm_mock.__init__ = partialmethod(tqdm_mock.__init__, disable=True)
 import warnings
 import enlighten
@@ -56,8 +57,14 @@ def compute_all_derivatives(tf_vals, lr_betas, lr_ligs, lr_recs, tfl_betas, tfl_
 class BetaFrame(pd.DataFrame):
 
     @classmethod
-    def from_path(cls, path, obs_names=None, float16=False):
-        df = pd.read_parquet(path, engine='pyarrow')
+    def from_path(cls, path, obs_names=None, float16=False, randomize=False):
+        if randomize:
+            columns = pq.read_schema(path).names
+            columns = [c for c in columns if c.startswith('beta')]
+            df = pd.DataFrame(columns=columns, index=obs_names)
+            df = df.apply(lambda x: np.random.randn(len(x)))
+        else:
+            df = pd.read_parquet(path, engine='pyarrow')
         df.index.name = path.split('/')[-1].split('_')[0]
 
         if float16:
@@ -65,9 +72,11 @@ class BetaFrame(pd.DataFrame):
         
         if obs_names is not None:
             df = df.loc[obs_names]
+
+
             
         return cls(df)
-        
+
     def reindex(self, *args, **kwargs):
         result = super().reindex(*args, **kwargs)
         result = BetaFrame(result)
@@ -99,6 +108,8 @@ class BetaFrame(pd.DataFrame):
         # to be filled in later
         self.modulator_gene_indices = None
         self.wbetas = None
+
+        self.is_random = False
         
         for col in self.columns:
             if col.startswith(self.prefix):
@@ -166,59 +177,44 @@ class BetaFrame(pd.DataFrame):
         lr_betas = self.filter(like='$', axis=1)
         tfl_betas = self.filter(like='#', axis=1)
 
-        if len(self.receptors) > 0:
-            rec_derivatives = pd.DataFrame(
-                np.where(
-                    gex_df[self.receptors].values > 0, # LR receptor betas only present if receptor is important to cell   
-                    lr_betas.values * rw_ligands[self.ligands].values,
-                    0
-                ), 
-                index=self.index, 
-                columns=self.receptors
-            ).astype(float) * scale_factor
+        rec_derivatives = pd.DataFrame(
+            np.where(
+                gex_df[self.receptors].values > 0, # LR receptor betas only present if receptor is important to cell   
+                lr_betas.values * rw_ligands[self.ligands].values,
+                0
+            ), 
+            index=self.index, 
+            columns=self.receptors
+        ).astype(float) * scale_factor
 
-            lig_lr_derivatives = pd.DataFrame(
-                lr_betas.values * gex_df[self.receptors].values, 
-                index=self.index, 
-                columns=self.ligands
-            ).astype(float) * scale_factor
-        
-        else:
-            rec_derivatives = pd.DataFrame(index=self.index)
-            lig_lr_derivatives = pd.DataFrame(index=self.index)
+        lig_lr_derivatives = pd.DataFrame(
+            lr_betas.values * gex_df[self.receptors].values, 
+            index=self.index, 
+            columns=self.ligands
+        ).astype(float) * scale_factor
 
-        if len(self.modulators_genes) > 0:
-            tf_derivatives = pd.DataFrame(
-                self[self.tf_columns].values,
-                index=self.index,
-                columns=self.tfs
-            ).astype(float)
+        lig_tfl_derivatives = pd.DataFrame(
+            tfl_betas.values * gex_df[self.tfl_regulators].values, 
+            index=self.index, 
+            columns=self.tfl_ligands
+        ).astype(float) * scale_factor
 
-            # if provided, enforce links to also appear in co_grn_links
-            if grn_tfs is not None:
-                grn_tfs = [f'beta_{t}' for t in grn_tfs]
-                tf_derivatives.loc[:, ~tf_derivatives.columns.isin(grn_tfs)] = 0
+        tf_derivatives = pd.DataFrame(
+            self[self.tf_columns].values,
+            index=self.index,
+            columns=self.tfs
+        ).astype(float)
 
-        else:
-            tf_derivatives = pd.DataFrame(index=self.index)
-        
-        if len(self.tfl_ligands) > 0:
+        # if provided, enforce links to also appear in co_grn_links
+        if grn_tfs is not None:
+            grn_tfs = [f'beta_{t}' for t in grn_tfs]
+            tf_derivatives.loc[:, ~tf_derivatives.columns.isin(grn_tfs)] = 0
 
-            lig_tfl_derivatives = pd.DataFrame(
-                tfl_betas.values * gex_df[self.tfl_regulators].values, 
-                index=self.index, 
-                columns=self.tfl_ligands
-            ).astype(float) * scale_factor
-
-            tf_tfl_derivatives = pd.DataFrame(
-                tfl_betas.values * rw_ligands_tfl[self.tfl_ligands].values,
-                index=self.index,
-                columns=self.tfl_regulators
-            ).astype(float) * scale_factor
-        
-        else:
-            lig_tfl_derivatives = pd.DataFrame(index=self.index)
-            tf_tfl_derivatives = pd.DataFrame(index=self.index)
+        tf_tfl_derivatives = pd.DataFrame(
+            tfl_betas.values * rw_ligands_tfl[self.tfl_ligands].values,
+            index=self.index,
+            columns=self.tfl_regulators
+        ).astype(float) * scale_factor
 
         _df = pd.concat(
             [
@@ -233,6 +229,7 @@ class BetaFrame(pd.DataFrame):
         
         if beta_cap is not None:
             _df = _df.clip(lower=-beta_cap, upper=beta_cap)
+
 
         _df.columns = 'beta_' + _df.columns.astype(str)
         return _df[self.modulators_genes]
@@ -253,7 +250,18 @@ class Betabase:
     """
     Holds a collection of BetaFrames for each gene.
     """
-    def __init__(self, adata, folder, gene_subset=None, subsample=None, float16=False, obs_names=None, auto_load=True):
+    def __init__(
+        self, 
+        adata, 
+        folder, 
+        gene_subset=None, 
+        subsample=None, 
+        float16=True, 
+        obs_names=None,
+        genes=None,
+        randomize=False,
+        auto_load=True):
+        
         assert os.path.exists(folder), f'Folder {folder} does not exist'
         # self.adata = adata
         self.xydf = pd.DataFrame(
@@ -269,6 +277,9 @@ class Betabase:
         self.obs = adata.obs.copy()
         self.beta_paths = glob.glob(f'{self.folder}/*_betadata.parquet')
         
+        if genes is not None:
+            self.beta_paths = [path for path in self.beta_paths if any(gene in path for gene in genes)]
+        
         if subsample is not None:
             self.beta_paths = self.beta_paths[:subsample]
 
@@ -278,6 +289,7 @@ class Betabase:
         self.tfl_ligands_set = set()
         self.tfs_set = set()
         self.float16 = float16
+        self.randomize = randomize
         
         if auto_load:
             self.load_betas_from_disk(obs_names=obs_names)
@@ -289,8 +301,9 @@ class Betabase:
         return self.data.get(gene_name, None)
     
     
-    def collect_interactions(self, cell_type, annot='cell_type'):
+    def collect_interactions(self, cell_type, annot='cell_type', aggregate='mean'):
         assert cell_type in self.obs[annot].unique()
+        assert aggregate in ['mean', 'min', 'max', 'sum', 'positive', 'negative']
         
         beta_lr = defaultdict(list)
         beta_tfl = defaultdict(list)
@@ -309,8 +322,21 @@ class Betabase:
             gene_name = f.split('/')[-1].replace('_betadata.parquet', '')
             beta = pd.read_parquet(f)
             beta = beta.join(self.obs[annot]).query(f'{annot}==@cell_type').drop(columns=[annot])
+
+            if aggregate == 'mean':
+                beta_ = beta.mean()
+            elif aggregate == 'min':
+                beta_ = beta.min()
+            elif aggregate == 'max':    
+                beta_ = beta.max()
+            elif aggregate == 'sum':
+                beta_ = beta.sum()
+            elif aggregate == 'positive':
+                beta_ = beta[beta > 0].fillna(0).mean()
+            elif aggregate == 'negative':
+                beta_ = beta[beta < 0].fillna(0).mean()
             
-            for k, v in beta.mean().to_dict().items():
+            for k, v in beta_.to_dict().items():
                 if abs(v) > 0:
                     if '$' in k:
                         beta_lr[k].append((gene_name, v))
@@ -340,7 +366,7 @@ class Betabase:
         beta_tfl_out.index.name = cell_type
         beta_tfl_out['interaction_type'] = 'ligand-tf'
         out_df = pd.concat([beta_tf_out, beta_lr_out, beta_tfl_out])
-        out_df = out_df.query('interasection != "beta0"')
+        out_df = out_df.query('interaction != "beta0"')
         
         return out_df
         
@@ -361,16 +387,12 @@ class Betabase:
         )   
         for path in self.beta_paths:
             gene_name = path.split('/')[-1].split('_')[0]
+            
             if self.gene_subset is not None and gene_name not in self.gene_subset:
                 continue
-            self.data[gene_name] = BetaFrame.from_path(path, obs_names=obs_names)
-            
-            # Zero out LR and TFL beta columns
-            # lr_tfl_cols = [col for col in self.data[gene_name].columns if '$' in col or '#' in col]
-            
-#             if lr_tfl_cols:
-#                 self.data[gene_name][lr_tfl_cols] = 0
-            
+
+            self.data[gene_name] = BetaFrame.from_path(
+                path, obs_names=obs_names, randomize=self.randomize)
             
             self.ligands_set.update(self.data[gene_name]._ligands)
             self.tfl_ligands_set.update(self.data[gene_name]._tfl_ligands)

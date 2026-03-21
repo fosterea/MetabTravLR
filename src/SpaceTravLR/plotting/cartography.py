@@ -13,7 +13,7 @@ from velocyto.estimation import colDeltaCor, colDeltaCorpartial
 from tqdm import tqdm
 import seaborn as sns
 from scipy.spatial import KDTree
-import cellrank as cr
+# import cellrank as cr
 from .shift import estimate_transition_probabilities, project_probabilities
 from .layout import get_grid_layout, plot_quiver
 import glob
@@ -718,42 +718,42 @@ class Cartography:
             alt_colors = self.color_dict
             all_cts = self.adata.obs[hue]
 
-            if legend_on_loc:
-                texts = []
-                for cluster in sorted(all_cts.unique()):
-                    cluster_cells = all_cts == cluster
-                    x = np.mean(self.adata.obsm['X_umap'][cluster_cells, 0])
-                    y = np.mean(self.adata.obsm['X_umap'][cluster_cells, 1])
-                    
-                    if highlight_clusters is not None and cluster not in highlight_clusters:
-                        color = lightgrey if grey_out else alt_colors[cluster]
-                    else:
-                        color = alt_colors[cluster]
-                    
-                    text = ax.text(x, y, rename.get(cluster, cluster), 
-                            fontsize=legend_fontsize, 
-                            ha='center', 
-                            va='center',
-                            color='black',
-                            bbox=dict(
-                                facecolor=color,
-                                alpha=1,
-                                edgecolor=None,
-                                boxstyle='round',
-                                linewidth=0.15
-                            ))
-                    texts.append(text)
+        if legend_on_loc:
+            texts = []
+            for cluster in sorted(all_cts.unique()):
+                cluster_cells = all_cts == cluster
+                x = np.mean(self.adata.obsm['X_umap'][cluster_cells, 0])
+                y = np.mean(self.adata.obsm['X_umap'][cluster_cells, 1])
                 
-                if texts:
-                    adjust_text(texts, 
-                            arrowprops=dict(arrowstyle='->', color='gray', lw=0.5, alpha=0.7),
-                            ax=ax)
-                    
+                if highlight_clusters is not None and cluster not in highlight_clusters:
+                    color = lightgrey if grey_out else alt_colors[cluster]
+                else:
+                    color = alt_colors[cluster]
+                
+                text = ax.text(x, y, rename.get(cluster, cluster), 
+                        fontsize=legend_fontsize, 
+                        ha='center', 
+                        va='center',
+                        color='black',
+                        bbox=dict(
+                            facecolor=color,
+                            alpha=1,
+                            edgecolor='black',
+                            boxstyle='round',
+                            linewidth=0.25
+                        ))
+                texts.append(text)
             
-            if not legend_on_loc:
-                handles = [plt.scatter([], [], c=alt_colors[label], label=label) for label in sorted(all_cts.unique())]
-                legend = ax.legend(handles=handles, bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0., fontsize=legend_fontsize)
-            
+            if texts:
+                adjust_text(texts, 
+                           arrowprops=dict(arrowstyle='->', color='gray', lw=0.5, alpha=0.7),
+                           ax=ax)
+                
+        
+        if not legend_on_loc:
+            handles = [plt.scatter([], [], c=alt_colors[label], label=label) for label in sorted(all_cts.unique())]
+            legend = ax.legend(handles=handles, bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0., fontsize=legend_fontsize)
+        
         return grid_points, vector_field, P
     
     def plot_umap_pseudotime(
@@ -969,11 +969,11 @@ class Cartography:
         
         return grid_points, vector_field, P
     
-    def get_grids(self, P, projection_params):
+    # def get_grids(self, P, projection_params):
         
-        self.adata.obsp['_shift'] = P.copy()
-        ck = cr.kernels.ConnectivityKernel(self.adata, conn_key='_shift')
-        ck.compute_transition_matrix(density_normalize=True)
+    #     self.adata.obsp['_shift'] = P.copy()
+    #     ck = cr.kernels.ConnectivityKernel(self.adata, conn_key='_shift')
+    #     ck.compute_transition_matrix(density_normalize=True)
         
         return ck.plot_projection(**projection_params)
     

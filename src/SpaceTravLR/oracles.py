@@ -184,7 +184,20 @@ class BaseTravLR(ABC):
 
 class OracleQueue:
 
+    """
+    A jobs manager for training gene models in parallel
+    Ideal for HPC environments
+    """
+
     def __init__(self, model_dir, all_genes, priority_genes=None,lock_timeout=3600):
+        """
+        Args:
+            model_dir (str): Directory to store the trained model weights.
+            all_genes (list): List of all genes to train models for.
+            priority_genes (list, optional): List of genes to train models for first.
+            lock_timeout (int, optional): Timeout for job locks in seconds.
+        """
+
         if not os.path.exists(model_dir):
             os.makedirs(model_dir)
             
@@ -199,9 +212,11 @@ class OracleQueue:
         
     @property
     def age(self):
+        """Return the age of the queue in seconds."""
         return (datetime.datetime.now() - self.created_on).total_seconds()
     
     def last_refresh_age(self):
+        """Return the age of the last refresh in seconds."""
         return (datetime.datetime.now() - self.last_refresh_on).total_seconds()
     
         
@@ -218,6 +233,10 @@ class OracleQueue:
         return self
 
     def __next__(self):
+        """
+        Get a gene to train for
+        """
+
         if self.is_empty:
             raise StopIteration
         
@@ -261,6 +280,10 @@ class OracleQueue:
             set(completed_genes+locked_genes+orphan_genes)))
 
     def create_lock(self, gene):
+        """
+        Create a lock for a gene while the model is being trained.
+        This prevents multiple processes from training the same gene.
+        """
         now = str(datetime.datetime.now())
         pid = os.getpid()
         with open(f'{self.model_dir}/{gene}.lock', 'w') as f:
@@ -293,6 +316,11 @@ class OracleQueue:
 
 
     def add_orphan(self, gene):
+        """
+        Creates a .orphan file to mark a gene as untrainable.
+        Used when a gene-gene network is too sparse to train a model.
+        For example when a gene has no known TFs.
+        """
         now = str(datetime.datetime.now())
         pid = os.getpid()
         with open(f'{self.model_dir}/{gene}.orphan', 'w') as f:
@@ -339,11 +367,7 @@ class SpaceTravLR(BaseTravLR):
         radius=200, 
         contact_distance=30,
         skip_clusters=None,
-        scale_factor=100,
-        extra_modulators=None,
-        extra_lr=None,
-        activation='identity'
-        ):
+        scale_factor=1):
         
         super().__init__(adata, fields_to_keep=[annot, 'cell_thresholds'])
         if grn is None:
@@ -370,8 +394,6 @@ class SpaceTravLR(BaseTravLR):
         self.radius = radius
         self.contact_distance = contact_distance
         self.scale_factor = scale_factor
-        self.extra_modulators = extra_modulators
-        self.extra_lr = extra_lr
         self.activation = activation
         self.tflinks = tflinks
 
@@ -400,8 +422,6 @@ class SpaceTravLR(BaseTravLR):
                     'save_dir': save_dir,
                     'n_genes': len(self.genes),
                     'scale_factor': scale_factor,
-                    'extra_modulators': extra_modulators,
-                    'extra_lr': extra_lr,
                     'activation': activation
                 }, f, indent=4)
 
@@ -444,8 +464,6 @@ class SpaceTravLR(BaseTravLR):
                 tf_ligand_cutoff=self.tf_ligand_cutoff,
                 grn=self.grn,
                 scale_factor=self.scale_factor,
-                extra_modulators=self.extra_modulators,
-                extra_lr=self.extra_lr,
                 activation=self.activation,
                 tflinks=self.tflinks,
                 receptor_thresh=self.receptor_thresh
@@ -504,6 +522,9 @@ class SpaceTravLR(BaseTravLR):
     @staticmethod
     def imbue_adata_with_space(adata, annot='cell_type_int', 
             spatial_dim=64, in_place=False, method='fast'):
+        """
+        Generate and cache 2D spatial maps for each cell location
+        """
         clusters = np.array(adata.obs[annot])
         xy = np.array(adata.obsm['spatial'])
 

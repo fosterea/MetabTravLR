@@ -24,8 +24,12 @@ SpaceTravLR leverages convolutional neural networks to generate a sparse graph w
 
 ##  Quick start
 
+Make & sync your Environment the [modern](https://docs.astral.sh/uv/) way
+
+~~pip install -r requirements.txt~~
+
 ```bash
-pip install SpaceTravLR==0.1.18
+uv pip install SpaceTravLR==0.1.17
 ```
 
 
