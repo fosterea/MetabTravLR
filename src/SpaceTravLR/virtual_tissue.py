@@ -1,5 +1,6 @@
 import warnings
 warnings.filterwarnings("ignore")
+import sys
 
 from functools import cache
 import pandas as pd
@@ -814,8 +815,13 @@ class VirtualTissue:
 
     def compute_branched_pseudotime(self, pairs, annot, source_cell_type, knn=10, n_components=5, n_source_cells=20):
         import scanpy.external as sce
+        import scanpy as sc
+
+        if 'X_pca' not in self.adata.obsm:
+            sc.pp.pca(self.adata)
 
         if 'pseudotime' in self.adata.obs:
+            print("Deleting existing pseudotime column")
             del self.adata.obs['pseudotime']
             
         adata = self.adata
@@ -824,9 +830,10 @@ class VirtualTissue:
 
         pseudo_frames = []
 
+
         for pair in pairs:
             _adata = adata[adata.obs[annot].isin([pair[0], pair[1]])].copy()
-
+            
             sce.tl.palantir(_adata, n_components=n_components, knn=knn)
 
             for ij, cell in enumerate(source_cells):
@@ -847,12 +854,8 @@ class VirtualTissue:
         _df_pst.columns = ['pseudotime']
         _df_pst = _df_pst.groupby(_df_pst.index).mean()
 
-        if 'pseudotime' in self.adata.obs:
-            del self.adata.obs['pseudotime']
-
         self.adata.obs = self.adata.obs.join(_df_pst)
         self.chart.adata.obs = self.chart.adata.obs.join(_df_pst)
-
 
     def calculate_cell_type_alignment(
         self,
@@ -898,7 +901,6 @@ class VirtualTissue:
             result[ct] = cell_ids[mask][closest_idx]
 
         return result
-
 
     def compute_vector_alignment(
         self, 

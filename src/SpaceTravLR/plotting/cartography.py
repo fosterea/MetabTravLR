@@ -13,7 +13,7 @@ from velocyto.estimation import colDeltaCor, colDeltaCorpartial
 from tqdm import tqdm
 import seaborn as sns
 from scipy.spatial import KDTree
-import cellrank as cr
+# import cellrank as cr
 from .shift import estimate_transition_probabilities, project_probabilities
 from .layout import get_grid_layout, plot_quiver
 import glob
@@ -964,11 +964,11 @@ class Cartography:
         
         return grid_points, vector_field, P
     
-    def get_grids(self, P, projection_params):
+    # def get_grids(self, P, projection_params):
         
-        self.adata.obsp['_shift'] = P.copy()
-        ck = cr.kernels.ConnectivityKernel(self.adata, conn_key='_shift')
-        ck.compute_transition_matrix(density_normalize=True)
+    #     self.adata.obsp['_shift'] = P.copy()
+    #     ck = cr.kernels.ConnectivityKernel(self.adata, conn_key='_shift')
+    #     ck.compute_transition_matrix(density_normalize=True)
         
         return ck.plot_projection(**projection_params)
     
