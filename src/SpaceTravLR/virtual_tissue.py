@@ -1,3 +1,7 @@
+import warnings
+warnings.filterwarnings("ignore")
+import sys
+
 from functools import cache
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -7,16 +11,36 @@ import matplotlib as mpl
 from itertools import cycle
 from scipy.stats import pearsonr
 from sklearn.preprocessing import StandardScaler, RobustScaler, MinMaxScaler
+from sklearn.neighbors import KNeighborsRegressor
 import glob
 import enlighten
 import numpy as np
 import random
 import os
+from scipy.spatial import cKDTree
 from .models.parallel_estimators import create_spatial_features
-
+from sklearn.neighbors import NearestNeighbors
 from .plotting.cartography import Cartography, xy_from_adata
 from .gene_factory import GeneFactory
 from .beta import BetaFrame
+
+def normalize_gradient(gradient, method="sqrt"):
+    if method == "sqrt":
+        size = np.sqrt(np.power(gradient, 2).sum(axis=1))
+        size_sq = np.sqrt(size)
+        size_sq[size_sq == 0] = 1
+        factor = np.repeat(np.expand_dims(size_sq, axis=1), 2, axis=1)
+
+    return gradient / factor
+
+def get_gradient(value_on_grid):
+    n = int(np.sqrt(value_on_grid.shape[0]))
+    value_on_grid_as_matrix = value_on_grid.reshape(n, n)
+    dy, dx = np.gradient(value_on_grid_as_matrix)
+    gradient = np.stack([dx.flatten(), dy.flatten()], axis=1)
+    return gradient
+
+
 
 class VirtualTissue:
     
@@ -29,9 +53,7 @@ class VirtualTissue:
         color_dict=None,
         spf_radius=200,
         annot='cell_type',
-        n_props=4
-        ):
-        
+        n_props=4):
         
         self.adata = adata
         self.betadatas_path = betadatas_path
@@ -73,7 +95,6 @@ class VirtualTissue:
             obs_names=self.adata.obs_names
         )
         
-        
     def plot_gene_vs_proximity(
         self, perturb_target, perturbed_df, gene, color_gene, 
         cell_filter, cell_groups, cmap='rainbow_r',
@@ -110,7 +131,38 @@ class VirtualTissue:
         ax.set_xlabel(f'Number of {" & ".join(cell_groups)} cells within {self.spf_radius}um')
         
         return ax, datadf
-        
+
+    def _knn_regression(self, x, y, x_new, y_new, value, n_knn=30):
+        data = np.stack([x, y], axis=1)
+        model = KNeighborsRegressor(n_neighbors=n_knn)
+        model.fit(data, value)
+        data_new = np.stack([x_new, y_new], axis=1)
+
+        return model.predict(data_new)
+
+    def signature2gradient(self, grid_points, vector_field, n_knn=30, genes=None, precomputed=None):
+        embedding = self.chart.adata.obsm['X_umap']
+        x, y = embedding[:, 0], embedding[:, 1]
+        x_new, y_new = grid_points[:, 0], grid_points[:, 1]
+
+        if precomputed is None:
+            value = self.chart.adata.to_df(
+                layer='imputed_count')[genes].sum(1).values
+        else:
+            value = self.chart.adata.obs[precomputed].values
+
+        signature_on_grid = self._knn_regression(
+            x, y, x_new, y_new, value, n_knn=n_knn)
+        gradient = get_gradient(value_on_grid=signature_on_grid)
+        gradient = normalize_gradient(gradient, method="sqrt")
+        l2_norm = np.linalg.norm(gradient, ord=2, axis=1)
+        scale_factor = 1 / l2_norm.mean()
+        ref_flow = gradient * 2
+
+        zero_mask = (vector_field[:,0] == 0) & (vector_field[:,1] == 0)
+        ref_flow[zero_mask] = 0
+
+        return ref_flow
     
     def init_gene_factory(self):
 
@@ -122,7 +174,6 @@ class VirtualTissue:
             }
         )
         
-        
     def init_cartography(self, adata=None, restrict_to=None):
         if adata is None:
             adata = self.adata.copy()
@@ -132,7 +183,6 @@ class VirtualTissue:
         else:
             atmp = adata
         self.chart = Cartography(atmp, self.color_dict)
-        
         
     def plot_arrows_pseudotime(self, perturb_target, perturbed_df=None, mode='max', **params):
         if perturbed_df is None:
@@ -146,8 +196,7 @@ class VirtualTissue:
         grid_points, vector_field, P = self.chart.plot_umap_pseudotime(**params)
         return grid_points, vector_field
     
-        
-    def plot_arrows(self, perturb_target, threshold=0, perturbed_df=None, ax=None, mode='max', **params):
+    def plot_arrows(self, perturb_target='', threshold=0, perturbed_df=None, ax=None, mode='max', **params):
         if perturbed_df is None:
             perturbed_df = pd.read_parquet(
                 f'{self.ovx_path}/{perturb_target}_4n_{mode}x.parquet')
@@ -284,8 +333,8 @@ class VirtualTissue:
         label_size=20,
         legend_size=12,
         color_dict=None,
-        show_legend=False
-    ):
+        show_legend=False):
+
         colors = [color_dict[l] for l in labels]
 
         processed = []
@@ -541,7 +590,6 @@ class VirtualTissue:
         
         return fig, axs
 
-
     def plot_comparative_bar(
         self, 
         genes, 
@@ -554,8 +602,7 @@ class VirtualTissue:
         label_size=20, 
         legend_size=12, 
         cache_path=None,
-        legend_labels=None
-    ):
+        legend_labels=None):
         """
         Prettier comparative bar plot for gene impacts across cell types and datasets.
         Bars are colored differently depending on x position (cell type), and
@@ -721,6 +768,202 @@ class VirtualTissue:
         if cache_path is not None:
             plt.savefig(cache_path, bbox_inches='tight', dpi=dpi, facecolor=fig.get_facecolor())
         return fig
+
+    def smooth_over_manifold(self, obs_key, k=15, use_rep='X_umap', new_key_suffix='_smoothed'):
+        """
+        Smooths a variable in adata.obs over a specified embedding (default UMAP) using KNN.
+
+        Args:
+            adata (AnnData): The annotated data matrix.
+            obs_key (str): The column name in adata.obs to smooth.
+            k (int): The number of nearest neighbors to use for smoothing.
+            use_rep (str): The key in adata.obsm containing the coordinates (default 'X_umap').
+            new_key_suffix (str): Suffix added to the original key for the new smoothed column.
+
+        Returns:
+            AnnData: The modified AnnData object (modified in place).
+        """
+
+        adata = self.chart.adata
+        
+        if use_rep not in adata.obsm.keys():
+            raise ValueError(f"Embedding '{use_rep}' not found in adata.obsm.")
+        if obs_key not in adata.obs.columns:
+            raise ValueError(f"Column '{obs_key}' not found in adata.obs.")
+            
+        coords = adata.obsm[use_rep]
+        target_values = adata.obs[obs_key].values
+        
+        nbrs = NearestNeighbors(n_neighbors=k, algorithm='auto').fit(coords)
+        _, indices = nbrs.kneighbors(coords)
+        
+        neighbor_values = target_values[indices]
+        
+        new_key = f"{obs_key}{new_key_suffix}"
+        
+        if pd.api.types.is_numeric_dtype(adata.obs[obs_key]):
+            smoothed = np.nanmean(neighbor_values, axis=1)
+            adata.obs[new_key] = smoothed
+            
+        else:
+            mode_result = stats.mode(neighbor_values, axis=1, keepdims=False)
+            smoothed = mode_result.mode
+            adata.obs[new_key] = pd.Categorical(
+                smoothed, categories=adata.obs[obs_key].cat.categories)
+
+        return adata
+
+    def compute_branched_pseudotime(self, pairs, annot, source_cell_type, knn=10, n_components=5, n_source_cells=20):
+        import scanpy.external as sce
+        import scanpy as sc
+
+        if 'X_pca' not in self.adata.obsm:
+            sc.pp.pca(self.adata)
+
+        if 'pseudotime' in self.adata.obs:
+            print("Deleting existing pseudotime column")
+            del self.adata.obs['pseudotime']
+            
+        adata = self.adata
+        source_cells = adata[adata.obs[annot]==source_cell_type].obs_names
+        source_cells = np.random.choice(source_cells, n_source_cells)
+
+        pseudo_frames = []
+
+
+        for pair in pairs:
+            _adata = adata[adata.obs[annot].isin([pair[0], pair[1]])].copy()
+            
+            sce.tl.palantir(_adata, n_components=n_components, knn=knn)
+
+            for ij, cell in enumerate(source_cells):
+                pltr = sce.tl.palantir_results(
+                    _adata, 
+                    cell
+                )
+
+                _df = pltr.pseudotime.to_frame()
+                _df.columns=[f'pseudotime_{pairs[0]}+{pairs[1]}_{ij}']
+                _adata.obs = _adata.obs.join(_df)
+
+                pseudo_frames.append(
+                    _adata.obs[
+                        f'pseudotime_{pairs[0]}+{pairs[1]}_{ij}'].to_frame().copy())
+
+        _df_pst = pd.concat(pseudo_frames).fillna(0).sum(1).to_frame()
+        _df_pst.columns = ['pseudotime']
+        _df_pst = _df_pst.groupby(_df_pst.index).mean()
+
+        self.adata.obs = self.adata.obs.join(_df_pst)
+        self.chart.adata.obs = self.chart.adata.obs.join(_df_pst)
+
+    def calculate_cell_type_alignment(
+        self,
+        cell_coords, 
+        grid_points, 
+        grid_cosine_sim, 
+        cell_types, 
+        agg_func='mean'):
+
+        cell_coords = np.asarray(cell_coords)
+        grid_points = np.asarray(grid_points)
+        grid_cosine_sim = np.asarray(grid_cosine_sim)
+        cell_types = np.asarray(cell_types)
+
+        tree = cKDTree(grid_points)
+        distances, indices = tree.query(cell_coords, k=1)
+        cell_cosine_sim = grid_cosine_sim[indices]
+        df = pd.DataFrame({
+            'alignment': cell_cosine_sim,
+            'cell_type': cell_types
+        })
+        
+        alignment_per_ctype = df.groupby('cell_type')['alignment'].agg(agg_func)
+        
+        return alignment_per_ctype.sort_values(ascending=False), df
+
+    def get_umap_centroid_cells(adata, celltype_key="cell_type", umap_key="X_umap"):
+
+        umap = adata.obsm[umap_key]
+        celltypes = adata.obs[celltype_key].values
+        cell_ids = adata.obs_names
+
+        result = {}
+
+        for ct in np.unique(celltypes):
+            mask = celltypes == ct
+            coords = umap[mask]
+
+            centroid = coords.mean(axis=0)
+            dists = np.linalg.norm(coords - centroid, axis=1)
+
+            closest_idx = np.argmin(dists)
+            result[ct] = cell_ids[mask][closest_idx]
+
+        return result
+
+    def compute_vector_alignment(
+        self, 
+        grid_points, 
+        vector_field_a, 
+        vector_field_b, 
+        annot='cell_type_2',
+        obs_key='pseudotime', 
+        k=300):
+
+        assert obs_key in self.chart.adata.obs
+
+        self.chart.adata = self.smooth_over_manifold(k=k, obs_key=obs_key)
+
+        ref_flow = self.signature2gradient(
+            grid_points=grid_points,
+            vector_field=vector_field_a,
+            n_knn=100,
+            precomputed=obs_key+'_smoothed'
+        )
+
+        ref_flow_rand = self.signature2gradient(
+            grid_points=grid_points,
+            vector_field=vector_field_b,
+            n_knn=100,
+            precomputed=obs_key+'_smoothed'
+        )
+
+        eps = 1e-8
+
+        inner_prod = np.sum(vector_field_a * ref_flow, axis=1)
+        norm_v = np.linalg.norm(vector_field_a, axis=1)
+        norm_r = np.linalg.norm(ref_flow, axis=1)
+        cosine_sim = inner_prod / ((norm_v * norm_r) + eps)
+
+        inner_prod_rand = np.sum(vector_field_b * ref_flow_rand, axis=1)
+        norm_v_rand = np.linalg.norm(vector_field_b, axis=1)
+        norm_r_rand = np.linalg.norm(ref_flow_rand, axis=1)
+        cosine_sim_rand = inner_prod_rand / ((norm_v_rand * norm_r_rand) + eps)
+
+        cell_coords = self.chart.adata.obsm['X_umap']
+        cell_types = self.chart.adata.obs[annot].values
+
+        alignment_df, df = self.calculate_cell_type_alignment(
+            cell_coords=cell_coords,
+            grid_points=grid_points,
+            grid_cosine_sim=cosine_sim,
+            # grid_cosine_sim=inner_prod,
+            cell_types=cell_types
+        )
+
+        alignment_df_rand, df_rand = self.calculate_cell_type_alignment(
+            cell_coords=cell_coords,
+            grid_points=grid_points,
+            grid_cosine_sim=cosine_sim_rand,
+            # grid_cosine_sim=inner_prod,
+            cell_types=cell_types
+        )
+
+        return alignment_df, df, alignment_df_rand, df_rand
+
+
+
     
 class SubsampledTissue(VirtualTissue):
     

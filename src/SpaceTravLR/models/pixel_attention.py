@@ -203,13 +203,12 @@ class CellularNicheNetwork(nn.Module):
         return model
 
      
-    def __init__(self, n_modulators, anchors=None, spatial_dim=64, n_clusters=7, activation='identity'):
+    def __init__(self, n_modulators, anchors=None, spatial_dim=64, n_clusters=7):
         super().__init__()
         self.in_channels = 1
         self.out_channels = 1
         self.spatial_dim = spatial_dim
         self.dim = n_modulators+1
-        self.activation = activation
         if anchors is None:
             anchors = np.ones(self.dim)
 
@@ -235,16 +234,11 @@ class CellularNicheNetwork(nn.Module):
             nn.Linear(64, self.dim)
         )
 
-        if self.activation == 'tanh':
-            self.output_activation = nn.Tanh()
-        elif self.activation == 'sigmoid':
-            self.output_activation = nn.Sigmoid()
-        elif self.activation == 'gelu':
-            self.output_activation = nn.GELU()
-        elif self.activation == 'softplus':
-            self.output_activation = nn.Softplus()
-        else:
-            self.output_activation = nn.Identity()
+        # self.output_activation = nn.Tanh()
+        self.output_activation = nn.Sigmoid()
+        # self.output_activation = nn.GELU()
+        # self.output_activation = nn.Identity()
+        # self.output_activation = nn.Softplus()
 
 
     def get_betas(self, spatial_maps, spatial_features):

@@ -4,14 +4,10 @@ import os
 
 setup(
     name="SpaceTravLR",
-    version="0.1.18",  
+    version="0.1.16",  
     description="Spatially perturbing Transcription factors, Ligands & Receptors",
     packages=find_packages(where="src"),
     package_dir={"": "src"},
-    package_data={
-        "SpaceTravLR_data": ["*.csv", "*.parquet"],
-    },
-    include_package_data=True,
     python_requires=">=3.8",
     install_requires=[
         "setuptools<81",
@@ -35,7 +31,16 @@ setup(
         "pybedtools",
         "ipywidgets",
         "commot",
-        "numpy==1.26"
+        "sphinx-rtd-theme",
+        "nbsphinx",
+        "furo",
+        "myst_nb",
+        "sphinx_copybutton",
+        "sphinx_design",
+        "sphinx_tippy",
+        "sphinx_autodoc_typehints",
+        "numpy==1.26",
+        "jscatter"
     ],
     classifiers=[
         "Development Status :: 3 - Alpha",
