@@ -6,8 +6,7 @@ import torch
 import os
 import numpy as np
 import pandas as pd
-from tqdm import tqdm
-from sklearn.preprocessing import MinMaxScaler, StandardScaler
+from sklearn.preprocessing import MinMaxScaler
 from torch.utils.data import DataLoader, Dataset
 from sklearn.linear_model import ARDRegression, BayesianRidge
 from group_lasso import GroupLasso
@@ -16,55 +15,106 @@ from SpaceTravLR.tools.network import RegulatoryFactory, expand_paired_interacti
 from .pixel_attention import CellularNicheNetwork, CellularViT
 from ..tools.utils import gaussian_kernel_2d, is_mouse_data, set_seed
 from ..tools.network import get_cellchat_db
-# import commot as ct
 from scipy.spatial.distance import cdist
 import numba
 from wordcloud import WordCloud
 import matplotlib.pyplot as plt
 import pickle
+from easydict import EasyDict as edict
 from matplotlib.colors import rgb2hex
+import warnings
+warnings.filterwarnings("ignore")
+
 
 tt = torch.tensor
 set_seed(42)
-
-
-import warnings
-warnings.filterwarnings('ignore')
-
+if torch.backends.mps.is_available():
+    device = torch.device("mps")
+elif torch.cuda.is_available():
+    device = torch.device("cuda")
+else:
+    device = torch.device("cpu")
 
 @numba.njit(parallel=True)
 def calculate_weighted_ligands(gauss_weights, lig_df_values, u_ligands):
     n_ligands = len(u_ligands)
     n_cells = len(gauss_weights)
     weighted_ligands = np.zeros((n_ligands, n_cells))
-    
+
     for i in numba.prange(n_ligands):
         for j in range(n_cells):
             weighted_ligands[i, j] = np.mean(gauss_weights[j] * lig_df_values[:, i])
-    
+
     return weighted_ligands
+
 
 def compute_radius_weights(xy, lig_df, radius, scale_factor):
     ligands = lig_df.columns
     gauss_weights = [
-        scale_factor * gaussian_kernel_2d(
-            xy[i], 
-            xy, 
-            radius=radius) for i in range(len(lig_df))
+        scale_factor * gaussian_kernel_2d(xy[i], xy, radius=radius)
+        for i in range(len(lig_df))
     ]
     u_ligands = list(np.unique(ligands))
     lig_df_values = lig_df[u_ligands].values
     weighted_ligands = calculate_weighted_ligands(
-        gauss_weights, lig_df_values, u_ligands)
+        gauss_weights, lig_df_values, u_ligands
+    )
 
-    return pd.DataFrame(
-        weighted_ligands, 
-        index=u_ligands, 
-        columns=lig_df.index
-    ).T
+    return pd.DataFrame(weighted_ligands, index=u_ligands, columns=lig_df.index).T
+
+@numba.njit(parallel=True)
+def _gaussian_kernel_2d_batch(xy: np.ndarray, radius: float) -> np.ndarray:
+    """Compute full N×N weight matrix in one parallelized pass."""
+    n = xy.shape[0]
+    W = np.empty((n, n), dtype=np.float64)
+    inv_2r2 = -1.0 / (2.0 * radius * radius)
+    for i in numba.prange(n):
+        xi, yi = xy[i, 0], xy[i, 1]
+        for j in range(n):
+            dx = xi - xy[j, 0]
+            dy = yi - xy[j, 1]
+            W[i, j] = np.exp((dx * dx + dy * dy) * inv_2r2)
+    return W  # (n_cells, n_cells)
 
 
-def received_ligands(xy, ligands_df, lr_info, scale_factor=100, contact_distance=50):
+@numba.njit(parallel=True)
+def _weighted_mean(W: np.ndarray, lig_values: np.ndarray) -> np.ndarray:
+    n = W.shape[0]
+    n_lig = lig_values.shape[1]
+    out = np.zeros((n, n_lig), dtype=np.float64)
+    for i in numba.prange(n):
+        for k in range(n):
+            w = W[i, k]
+            for j in range(n_lig):
+                out[i, j] += w * lig_values[k, j]
+        for j in range(n_lig):
+            out[i, j] /= n
+    return out
+
+
+def compute_radius_weights_fast(xy, lig_df, radius, scale_factor):
+    W = scale_factor * _gaussian_kernel_2d_batch(
+        np.ascontiguousarray(xy, dtype=np.float64), radius
+    )
+    lig_values = np.ascontiguousarray(lig_df.values, dtype=np.float64)
+    result = _weighted_mean(W, lig_values)
+    return pd.DataFrame(result, index=lig_df.index, columns=lig_df.columns)
+
+
+
+
+def received_ligands(xy, ligands_df, lr_info, scale_factor=1):
+    """
+    Compute the amount of ligand received on 
+    the surface of each cell based on location.
+
+    Args:
+        xy (np.ndarray): Array of spatial coordinates (x, y).
+        ligands_df (pd.DataFrame): ligand gene expression values.
+
+    Returns:
+        pd.DataFrame: DataFrame of received ligands for each cell.
+    """
     lr_info = lr_info.copy()
     lr_info = lr_info[lr_info["ligand"].isin(np.unique(ligands_df.columns))]
 
@@ -77,22 +127,19 @@ def received_ligands(xy, ligands_df, lr_info, scale_factor=100, contact_distance
     for radius in lr_info["radius"].unique():
         radius_ligands = lr_info[lr_info["radius"] == radius]["ligand"].values
         full_df.append(
-            compute_radius_weights(xy, ligands_df[radius_ligands], radius, scale_factor)
+            compute_radius_weights_fast(xy, ligands_df[radius_ligands], radius, scale_factor)
         )
 
-    non_empty_dfs = [df for df in full_df if not df.empty]
-    if len(non_empty_dfs) == 0:
-        full_df = pd.DataFrame(index=ligands_df.index, columns=ligands_df.columns).fillna(0)
-    else:
-        full_df = pd.concat(non_empty_dfs, axis=1)
-        full_df = (
-            full_df.reindex(ligands_df.index).reindex(ligands_df.columns, axis=1).fillna(0)
-        )
+    full_df = pd.concat([df for df in full_df if not df.empty], axis=1)
+    full_df = (
+        full_df.reindex(ligands_df.index).reindex(ligands_df.columns, axis=1).fillna(0)
+    )
 
     return full_df
-    
+
+
 def get_filtered_df(counts_df, cell_thresholds=None, genes=None, min_expression=1e-9):
-    '''Get filtered expression of ligands/ receptors based on celltype/ thresholds'''
+    """Get filtered expression of ligands/ receptors based on celltype/ thresholds"""
 
     ligand_counts = counts_df[np.unique(genes)]
 
@@ -103,7 +150,9 @@ def get_filtered_df(counts_df, cell_thresholds=None, genes=None, min_expression=
     if cell_thresholds is not None:
         cell_thresholds = cell_thresholds.loc[counts_df.index]
 
-        assert cell_thresholds.index.equals(counts_df.index), 'error aligning cell_thresholds and counts_df, check if obs_names has duplicates'
+        assert cell_thresholds.index.equals(counts_df.index), (
+            "error aligning cell_thresholds and counts_df, check if obs_names has duplicates"
+        )
 
         mask = cell_thresholds.reindex(ligand_counts.columns, axis=1).fillna(0).values
         mask = np.where(mask > 0, 1, 0)
@@ -186,6 +235,8 @@ def init_received_ligands(adata, radius, cell_threshes=None, contact_distance=50
 
     return adata
 
+
+    
 def create_spatial_features(x, y, celltypes, obs_index, radius=200):
     coords = np.column_stack((x, y))
     unique_celltypes = np.unique(celltypes)
@@ -195,15 +246,14 @@ def create_spatial_features(x, y, celltypes, obs_index, radius=200):
         mask = celltypes == celltype
         neighbors = (distances <= radius)[:, mask]
         result[:, i] = np.sum(neighbors, axis=1)
-    
+
     if result.shape != (len(x), len(unique_celltypes)):
         raise ValueError(f"Expected: {(len(x), len(unique_celltypes))}")
-    
-    columns = [f'{ct}_within' for ct in unique_celltypes]
-    df = pd.DataFrame(result, columns=columns, index=obs_index)
-    
-    return df
 
+    columns = [f"{ct}_within" for ct in unique_celltypes]
+    df = pd.DataFrame(result, columns=columns, index=obs_index)
+
+    return df
 
 
 if torch.backends.mps.is_available():
@@ -215,7 +265,9 @@ else:
 
 
 class RotatedTensorDataset(Dataset):
-    def __init__(self, sp_maps, X_cell, y_cell, cluster, spatial_features, rotate_maps=True):
+    def __init__(
+        self, sp_maps, X_cell, y_cell, cluster, spatial_features, rotate_maps=True
+    ):
         self.sp_maps = sp_maps
         self.X_cell = X_cell
         self.y_cell = y_cell
@@ -227,21 +279,20 @@ class RotatedTensorDataset(Dataset):
         return len(self.X_cell)
 
     def __getitem__(self, idx):
-        sp_map = self.sp_maps[idx, self.cluster:self.cluster+1, :, :]
+        sp_map = self.sp_maps[idx, self.cluster : self.cluster + 1, :, :]
         if self.rotate_maps:
             k = np.random.choice([0, 1, 2, 3])
             sp_map = np.rot90(sp_map, k=k, axes=(1, 2))
-
 
         return (
             torch.from_numpy(sp_map.copy()).float(),
             torch.from_numpy(self.X_cell[idx]).float(),
             torch.from_numpy(np.array(self.y_cell[idx])).float(),
-            torch.from_numpy(self.spatial_features[idx]).float()
+            torch.from_numpy(self.spatial_features[idx]).float(),
         )
-      
-  
-from easydict import EasyDict as edict
+
+
+
 
 def init_ligands_and_receptors(
     species, 
@@ -383,6 +434,7 @@ def init_ligands_and_receptors(
     ligand_mixtures.tfl_ligands = tfl_ligands
 
     return ligand_mixtures
+
 
 
 class SpatialCellularProgramsEstimator:
