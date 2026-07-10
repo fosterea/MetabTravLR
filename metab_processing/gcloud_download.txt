@@ -1,0 +1,25 @@
+# 1. (one time) install the SDK into your conda env â this is what gives you `gcloud`
+conda install -c conda-forge google-cloud-sdk
+
+# 2. (one time) sign in with ANY Google account (headless-friendly)
+gcloud auth login --no-launch-browser
+#    -> open the printed URL on your laptop, sign in, paste the code back.
+#    (If a later command complains it needs a project:
+#       gcloud config set project ANY_PROJECT_YOU_HAVE )
+
+gcloud config set storage/check_hashes never
+
+DEST=/global/scratch/users/fosterangus/MetabTravLR/Data/MERSCOPE/vz-ffpe-showcase
+for d in $(gcloud storage ls gs://vz-ffpe-showcase/); do
+  name=$(basename "$d")
+  mkdir -p "$DEST/$name"
+  echo ">>> $name"
+  gcloud storage cp -n "${d}cell_by_gene.csv" "${d}cell_metadata.csv" "$DEST/$name/"
+done
+
+Then verify you got all 18 of each:
+ls "$DEST"/*/cell_by_gene.csv  | wc -l     # expect 18
+ls "$DEST"/*/cell_metadata.csv | wc -l     # expect 18
+du -sh "$DEST"                             # expect ~30 GB
+
+If any folder is missing a file, the wc -l will be < 18 â re-running the same block (it's idempotent with -n) will grab whatever's missing.
