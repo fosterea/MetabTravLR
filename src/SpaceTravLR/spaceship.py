@@ -509,11 +509,13 @@ class SpaceShip:
         
     def spawn_worker(
         self, 
-        partition='preempt', 
-        clusters='gpu', 
-        gres='gpu:1', 
+        account='fc_wagnerlab',        # <-- VERIFY, see below
+        partition='savio4_gpu',
+        qos='a5k_gpu4_normal',
+        gres='gpu:A5000:1',
+        cpus_per_task=4,               # A5000 is 4 CPU : 1 GPU
         job_name='SpaceTravLR',
-        lifespan=3, # hours
+        lifespan=3,
         python_path='python',
         ):
         """
@@ -537,18 +539,30 @@ class SpaceShip:
         
         outlog = f'{self.outdir}/logs/training_{str(time.strftime("%Y%m%d_%H%M%S"))}.log'
         
+        # slurm = Slurm(
+        #     cpus_per_task=1,
+        #     partition=partition,
+        #     clusters=clusters,
+        #     gres=gres,
+        #     ignore_pbs=True,
+        #     job_name=job_name+'_'+self.name,
+        #     output=outlog,
+        #     time=timedelta(hours=lifespan),
+        # ) 
+
         slurm = Slurm(
-            cpus_per_task=1,
-            partition=partition,
-            clusters=clusters,
-            gres=gres,
+            account=account,               # REQUIRED on Savio, e.g. 'fc_wagnerlab'
+            partition=partition,           # 'savio4_gpu'
+            qos=qos,                       # 'a5k_gpu4_normal' (A5000) or 'savio_lowprio' (L40)
+            gres=gres,                     # 'gpu:A5000:1'
+            cpus_per_task=cpus_per_task,   # 4 for A5000, 8 for L40
             ignore_pbs=True,
-            job_name=job_name+'_'+self.name,
+            job_name=job_name + '_' + self.name,
             output=outlog,
             time=timedelta(hours=lifespan),
-        ) 
+        )    
         
-        slurm.sbatch(python_path + ' launch.py')
+        slurm.sbatch(python_path + ' /global/home/users/fosterangus/Projects/MetabTravLR/SpaceTravLR/tutorial/launch.py')
         
     @catch_errors
     def run_spacetravlr(
