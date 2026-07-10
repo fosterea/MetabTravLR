@@ -6,7 +6,7 @@ from SpaceTravLR.spaceship import SpaceShip
 
 spacetravlr = SpaceShip(
     name='myTonsil', 
-    outdir='output/'
+    outdir='/global/scratch/users/fosterangus/MetabTravLR/Data/SpaceTravlrTonsilTest'
 )
 assert spacetravlr.is_everything_ok()
 
