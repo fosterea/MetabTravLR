@@ -49,7 +49,7 @@ class CPU_Unpickler(pickle.Unpickler):
 class BaseTravLR(ABC):
     
     def __init__(self, adata, fields_to_keep=['cell_type', 'cell_type_int', 'cell_thresholds']):
-        assert 'normalized_count' in adata.layers
+        assert 'normalized_count' in adata.layers or 'imputed_count' in adata.layers
         
         self.settings = EasyDict()
         
@@ -367,6 +367,7 @@ class SpaceTravLR(BaseTravLR):
         radius=200, 
         contact_distance=30,
         skip_clusters=None,
+        activation='identity', # Foster had to add
         scale_factor=1):
         
         super().__init__(adata, fields_to_keep=[annot, 'cell_thresholds'])
