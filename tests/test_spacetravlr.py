@@ -69,11 +69,26 @@ class TestSpaceShip(unittest.TestCase):
         assert ship.name == 'AlienTissue'
         assert ship.status == Status.BORN
         del ship
-        
+
         ship = SpaceShip(name='TestShip')
         assert ship.name == 'TestShip'
         assert ship.status == Status.BORN
         del ship
+
+    def test_init_focus_genes_default_none(self):
+        ship = SpaceShip()
+        assert ship.focus_genes is None
+
+    def test_init_focus_genes_stored(self):
+        ship = SpaceShip(genes=['GENE0', 'GENE1'])
+        assert ship.focus_genes == ['GENE0', 'GENE1']
+
+    def test_init_focus_genes_copies_input_list(self):
+        genes = ['GENE0', 'GENE1']
+        ship = SpaceShip(genes=genes)
+        genes.append('GENE2')
+        # mutating the caller's list afterwards must not affect the stored copy
+        assert ship.focus_genes == ['GENE0', 'GENE1']
     
     def test_process_adata_basic(self):
         os.makedirs('output/input_data', exist_ok=True)
@@ -301,7 +316,64 @@ class TestSpaceShip(unittest.TestCase):
             )
             
             mock_space_travlr.run.assert_called_once()
-    
+
+    def test_run_spacetravlr_forwards_genes_none_by_default(self):
+        # NOTE: uses a mocked pd.read_parquet (rather than writing/reading a real
+        # tflinks.parquet) to avoid a pre-existing, unrelated pyarrow extension-type
+        # registration flake that surfaces when a real to_parquet/read_parquet call
+        # follows test_run_celloracle_'s celloracle_tmp mocking earlier in this file
+        # (reproducible on unmodified HEAD; unrelated to the genes= feature here).
+        os.makedirs('output/input_data', exist_ok=True)
+        os.makedirs('output/betadata', exist_ok=True)
+
+        ship = SpaceShip()
+
+        adata = create_test_adata()
+        adata.write_h5ad('output/input_data/_adata.h5ad')
+
+        mock_links = {'TypeA': pd.DataFrame(), 'TypeB': pd.DataFrame()}
+        with open('output/input_data/celloracle_links.pkl', 'wb') as f:
+            pickle.dump(mock_links, f)
+
+        mock_nichenet_links = create_test_tfls(adata.var_names, n_ligands=3, n_tfs=10)
+
+        mock_space_travlr = MagicMock()
+
+        with patch('SpaceTravLR.oracles.SpaceTravLR', return_value=mock_space_travlr) as mock_cls, \
+             patch('SpaceTravLR.tools.network.RegulatoryFactory', return_value=MagicMock()), \
+             patch('pandas.read_parquet', return_value=mock_nichenet_links):
+            ship.run_spacetravlr(max_epochs=10)
+
+            assert mock_cls.call_args.kwargs['genes'] is None
+
+    def test_run_spacetravlr_forwards_focus_genes(self):
+        # See NOTE in test_run_spacetravlr_forwards_genes_none_by_default re: mocking
+        # pd.read_parquet instead of writing a real tflinks.parquet.
+        os.makedirs('output/input_data', exist_ok=True)
+        os.makedirs('output/betadata', exist_ok=True)
+
+        focus_genes = ['GENE0', 'GENE5']
+        ship = SpaceShip(genes=focus_genes)
+
+        adata = create_test_adata()
+        adata.write_h5ad('output/input_data/_adata.h5ad')
+
+        mock_links = {'TypeA': pd.DataFrame(), 'TypeB': pd.DataFrame()}
+        with open('output/input_data/celloracle_links.pkl', 'wb') as f:
+            pickle.dump(mock_links, f)
+
+        mock_nichenet_links = create_test_tfls(adata.var_names, n_ligands=3, n_tfs=10)
+
+        mock_space_travlr = MagicMock()
+
+        with patch('SpaceTravLR.oracles.SpaceTravLR', return_value=mock_space_travlr) as mock_cls, \
+             patch('SpaceTravLR.tools.network.RegulatoryFactory', return_value=MagicMock()), \
+             patch('pandas.read_parquet', return_value=mock_nichenet_links):
+            ship.run_spacetravlr(max_epochs=10)
+
+            mock_space_travlr.run.assert_called_once()
+            assert mock_cls.call_args.kwargs['genes'] == focus_genes
+
     def test_fit_alias(self):
         ship = SpaceShip()
         

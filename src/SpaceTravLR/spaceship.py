@@ -88,13 +88,18 @@ class SpaceShip:
         Name of the project/analysis, by default 'AlienTissue'.
     outdir : str, optional
         Path to the output directory where results will be saved, by default './output'.
+    genes : list, optional
+        If provided, restrict per-gene model training (`run_spacetravlr`) to only these
+        target genes, instead of all `adata.var_names`. Does not affect which genes are
+        available as regulators/ligands/receptors. By default None (train all genes).
     """
-    def __init__(self, name: str = 'AlienTissue', outdir: str = './output'):
+    def __init__(self, name: str = 'AlienTissue', outdir: str = './output', genes: list = None):
         self.name = name
         self.outdir = outdir.rstrip("/\\")
         self.manager = None
         self.status_bar = None
-        
+        self.focus_genes = list(genes) if genes is not None else None
+
         self.status = Status.BORN
      
     @catch_errors
@@ -581,6 +586,10 @@ class SpaceShip:
         model to predict gene expression based on TF activity and spatial
         ligand-receptor interactions.
 
+        If `genes` was passed to `SpaceShip(...)`, training is restricted to
+        only those target genes (stored as `self.focus_genes`); otherwise a
+        model is trained for every gene in `adata.var_names`.
+
         Parameters
         ----------
         max_epochs : int, optional
@@ -617,7 +626,8 @@ class SpaceShip:
             radius=radius,
             contact_distance=contact_distance,
             save_dir=base_dir,
-            tflinks=tflinks
+            tflinks=tflinks,
+            genes=self.focus_genes
         )
 
         space_travlr.run()

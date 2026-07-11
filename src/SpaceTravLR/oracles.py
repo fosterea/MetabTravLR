@@ -368,16 +368,35 @@ class SpaceTravLR(BaseTravLR):
         contact_distance=30,
         skip_clusters=None,
         activation='identity', # Foster had to add
-        scale_factor=1):
-        
+        scale_factor=1,
+        genes=None):
+
         super().__init__(adata, fields_to_keep=[annot, 'cell_thresholds'])
         if grn is None:
             self.grn = DayThreeRegulatoryNetwork() # CellOracle GRN
-        else: 
+        else:
             self.grn = grn
 
+        if genes is not None:
+            if isinstance(genes, str):
+                raise TypeError(
+                    "genes must be a list of gene names, not a string"
+                )
+            if len(genes) == 0:
+                raise ValueError(
+                    "genes was passed as an empty list; pass genes=None to train all genes"
+                )
+            all_genes = list(dict.fromkeys(genes))
+            missing = [g for g in all_genes if g not in set(self.adata.var_names)]
+            if missing:
+                raise ValueError(
+                    f"genes not found in adata.var_names: {missing}"
+                )
+        else:
+            all_genes = list(self.adata.var_names)
+
         self.save_dir = save_dir
-        self.queue = OracleQueue(save_dir, all_genes=self.adata.var_names)
+        self.queue = OracleQueue(save_dir, all_genes=all_genes)
 
         self.annot = annot
         self.max_epochs = max_epochs
@@ -401,7 +420,7 @@ class SpaceTravLR(BaseTravLR):
         self.estimator_models = {}
         self.ligands = set()
 
-        self.genes = list(self.adata.var_names)
+        self.genes = all_genes
         self.trained_genes = []
         self.skip_clusters = skip_clusters
         
