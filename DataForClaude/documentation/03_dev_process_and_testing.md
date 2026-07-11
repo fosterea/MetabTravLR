@@ -133,6 +133,47 @@ mitigations at 100k+ cells and end-to-end runtime/memory. Driven by our scripts 
   decision changes; this process doc evolves with the workflow.
 - Agent specs live in `.claude/agents/metab-dev.md` and `.claude/agents/metab-review.md`.
 
-## 4. Status
-Process + agents defined; **not yet running** the loop (no code changes started — we're still
-planning the design in `02_...md`). Refine after the first real change unit.
+## 4. Run log & learnings
+
+### Run 1 — CU-3 gene-focus (`SpaceShip(genes=…)`), 2026-07-11
+The first live use of the dev/review loop. What we learned (leanings to carry forward):
+
+**What worked well — keep doing:**
+- **Baseline before dispatch.** Establishing the env + green baseline ourselves (19 fast tests,
+  `spacetravlr_env`) and identifying the reusable test fixtures (`test_oracle.py`'s
+  `MockRegulatoryFactory` + `generate_realistic_data()`; `test_spacetravlr.py`'s
+  `create_test_adata` + mocks) gave the dev agent a known-good starting point and made its
+  tests idiomatic. **Always baseline + scout fixtures first.**
+- **Sonnet for BOTH dev and review was sufficient** for this plumbing change. Dev produced a
+  clean surgical diff + 13 tests and *self-flagged two pre-existing bugs*; review
+  *independently reproduced* both bugs and returned calibrated, non-rubber-stamp nits.
+  → Leaning: **Sonnet/Sonnet for plumbing/logic CUs; escalate the reviewer to Opus only for
+  numerically-sensitive CUs** (the O(N²)→sparse kernel, β/splash/flux math, metabolite CU-1).
+- **The adversarial review earned its cost** — it re-derived the logic by hand and empirically
+  reproduced the bug claims rather than trusting the dev. High value; keep for substantive CUs.
+
+**Process improvements to adopt:**
+- **Agent invocation:** we dispatched via `subagent_type: general-purpose` + `model` override +
+  inline role/spec (pointing at `.claude/agents/*.md`), because it was unclear whether the
+  custom `metab-dev`/`metab-review` types register mid-session. TODO: confirm whether
+  `.claude/agents/*.md` are directly invocable as `subagent_type`; if so, use them (auto-applies
+  their system prompt + model). Until confirmed, the general-purpose + inline-spec path is the
+  reliable default.
+- **Don't spawn a full review agent for trivial nits.** For the nit-fix pass, a self-run of the
+  suite is enough; reserve the review agent for substantive change. (Applied on Run 1's 2nd pass.)
+- **Continue the same dev agent via SendMessage** for follow-up passes (preserves its context)
+  rather than a fresh Agent call.
+- Timings: dev ≈ 20 min, review ≈ 12 min (synchronous). Fine for one CU; for independent CUs,
+  dispatch in the background/parallel.
+
+**Testing gaps this run exposed (act on before the metabolite CU):**
+- Real-training tests on tiny/noisy data land in the group-lasso **`R² < 0.15` → zeroed-anchors
+  shortcut**, so they exercise the queue/estimator/betadata-write plumbing but NOT the CNN
+  training inner loop or real β emission. For CU-1 (metabolite group) we need a fixture that
+  actually trains (R² ≥ 0.15) so we can assert a real `beta_<export>@<import>` column with a
+  finite learned value.
+- Pre-existing bugs will bite our real runs — see `04_decisions_and_state.md` "Known pre-existing
+  bugs". The `activation`-kwarg crash in particular blocks any real `fit()` that hits the
+  poor-fit branch; decide whether to fix it (tiny, core) before scaling metabolite training.
+
+Refine again after CU-1.

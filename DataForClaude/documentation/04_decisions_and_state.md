@@ -54,6 +54,55 @@ labeled gene sets to rank metabolites by effect (e.g. ↑T-cell activity / ↓ex
   `create_spatial_features` `cdist`) OOM at ≥100k cells. See `02_...md` §3 for fixes.
 - Harreman data contract & bugs: see `02_...md` §1. `extra_lr` hook: `models/parallel_estimators.py`.
 
+## Known pre-existing bugs (found during Run 1)
+Confirmed present at HEAD, independently reproduced. Relevant because our metabolite work
+exercises the same paths.
+- ✅ **FIXED — `activation` kwarg crash** — `parallel_estimators.py` fallback branch passed
+  `activation=self.activation` into `CellularNicheNetwork.__init__`, which doesn't accept it →
+  crashed any real `fit()` hitting the group-lasso **R²<0.15 "poor fit" branch**. Reproduced on
+  real data. Fixed by dropping the dead kwarg (identity behavior unchanged) in commit `2699947`;
+  the gene-focus end-to-end test now runs unpatched as a regression test.
+- **`get_betas` non-contiguous `cell_type_int`** — NOT a real bug. `process_adata_` creates
+  `cell_type_int` contiguously (`encode_labels`, `0..n-1`); the failure only appeared in a
+  hand-subset test. No fix needed (tests remap to contiguous, as real setup does).
+- **pyarrow extension-type flake** — `run_celloracle_` tests corrupt pyarrow's registry
+  (`ArrowKeyError: pandas.period already defined`), breaking later real parquet I/O in the same
+  process. Order-dependent test flake; our tests sidestep it by mocking parquet I/O. Deferred.
+- **`spawn_worker(clusters=…)`** — `test_spacetravlr.py::test_spawn_worker` fails at HEAD
+  (signature changed for Savio, test not updated). **Paused per Foster** (real logic is what
+  matters); left as a known pre-existing red.
+
+## Setup-cost complexity (from the "don't skip other genes" investigation, 2026-07-11)
+- **CellChat (L–R) + NicheNet (L–TF) modulator construction are ALREADY skipped for non-focus
+  genes** — they run inside the per-gene estimator (`init_ligands_and_receptors`,
+  `grn.get_regulators`), only built for queued (focus) genes. No slowdown; no CellChat-vs-NicheNet
+  inconsistency (same per-gene mechanism).
+- **The only all-gene setup cost is the CellOracle base-GRN build** (`run_celloracle_`):
+  `get_links` fits bagging-ridge **per cluster × per target gene** over the base GRN's targets →
+  `O(#clusters × #targets × 20 × ridge(#cells × #TFs))`, **linear in the full gene count**. At
+  100k–1M cells × ~5k-gene panels this is real and avoidable. **Plan (greenlit): filter the base
+  GRN to `gene_short_name ∈ focus_genes` before `import_TF_data`** so `get_links` only fits focus
+  targets — lossless for us (we only need a focus gene's own TF regulators; we don't propagate).
+  → dev/review loop, upcoming.
+- **The real scaling wall is the dense O(N²) received-ligand kernel + `cdist` spatial features**
+  (cell-count-driven, `02_...md` §3 / CU-5) — orthogonal to gene focus; gene focus won't help it.
+  (Audit whether MAGIC imputation + `xyc2spatial` add further O(N²) before the CU-5 work.)
+
+## Change-unit status
+- **CU-3 (gene focus, `SpaceShip(genes=…)`):** ✅ done + **committed** `2e523aa`, 2026-07-11.
+  Restricts the training `OracleQueue` to the focus genes; does not subset `adata.var` or the
+  GRN/received-ligand setup. Guards: bare-string `TypeError`, empty-list/missing-gene
+  `ValueError`, dedupe. Tests: `tests/test_gene_focus.py` (10, incl. a multi-gene "attempts/writes
+  exactly the focus set" proof + a real-data end-to-end) + 5 plumbing tests in
+  `tests/test_spacetravlr.py`. Foster's jscatter changes stayed uncommitted (hunks isolated).
+- **Activation-bug fix:** ✅ committed `2699947`.
+- **CellOracle base-GRN focus restriction (perf):** greenlit; next via dev/review loop. Filter
+  base GRN to focus targets in `SpaceShip.run_celloracle_` when `self.focus_genes` is set.
+- **CU-1 (metabolite group) / CU-5 (O(N²) sparse):** not started. CU-5 is the real large-data
+  enabler.
+
+Commit series (this session): `2e523aa` feat gene-focus → `2699947` fix activation → docs.
+
 ## Local assets for dev/testing
 - Demo data in `data/`: `Slidetags_human_tonsil.h5ad`, `Slidetags_human_melanoma.h5ad`,
   `SlideSeqV2_mouse_lymphnode.h5ad`, `XYZeqV2_mouse_kidney_replicate_{1,2}.h5ad`,
