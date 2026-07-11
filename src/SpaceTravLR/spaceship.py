@@ -279,6 +279,17 @@ class SpaceShip:
         
         base_GRN = self.load_base_GRN(self.species)
 
+        if self.focus_genes is not None:
+            # We read CellOracle's fitted coefficients directly (no perturbation/
+            # propagation), so we only ever need each focus gene's own TF regulators.
+            # Fitting links for non-focus target genes is therefore wasted work -
+            # restrict the base GRN's target (row) column to the focus set before
+            # `get_links` does its per-cluster-per-target ridge fits. TF (column)
+            # info is left untouched. Lossless for our use; a focus gene absent
+            # from the base GRN is simply dropped (no TF regulators -> orphaned
+            # at train time, which is acceptable).
+            base_GRN = base_GRN[base_GRN['gene_short_name'].isin(self.focus_genes)]
+
         oracle.import_TF_data(TF_info_matrix=base_GRN)
         
         if self.status_bar:

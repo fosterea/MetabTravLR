@@ -215,6 +215,127 @@ class TestSpaceShip(unittest.TestCase):
             except (ImportError, AttributeError):
                 pass
 
+    def test_run_celloracle_focus_genes_filters_base_grn(self):
+        """With SpaceShip(genes=[...]), only focus target genes should be passed
+        to oracle.import_TF_data, and TF (column) info must be preserved."""
+        os.makedirs('output/input_data', exist_ok=True)
+
+        adata = create_test_adata()
+        adata.layers['raw_count'] = adata.X.copy()
+        adata.obsm['X_umap'] = np.random.rand(len(adata), 2)
+
+        ship = SpaceShip(genes=['GENE0', 'GENE2'])
+        ship.adata = adata
+        ship.annot = 'cell_type'
+        ship.species = 'human'
+
+        mock_base_grn = pd.DataFrame({
+            'gene_short_name': ['GENE0', 'GENE1', 'GENE2', 'GENE3'],
+            'peak_id': ['p0', 'p1', 'p2', 'p3'],
+            'TF1': [1, 0, 1, 0],
+            'TF2': [0, 1, 0, 1],
+        })
+
+        mock_oracle = MagicMock()
+        mock_links = MagicMock()
+        mock_links.links_dict = {'TypeA': pd.DataFrame()}
+        mock_oracle.get_links.return_value = mock_links
+
+        mock_co = MagicMock()
+        mock_co.Oracle.return_value = mock_oracle
+
+        with patch('SpaceTravLR.spaceship.sys.path'), \
+             patch.dict('sys.modules', {'celloracle_tmp': mock_co}), \
+             patch('pandas.read_parquet', return_value=mock_base_grn):
+            ship.run_celloracle_(alpha=5)
+
+        passed_grn = mock_oracle.import_TF_data.call_args.kwargs['TF_info_matrix']
+
+        # only the focus target genes should remain
+        self.assertEqual(set(passed_grn['gene_short_name']), {'GENE0', 'GENE2'})
+        # TF (column) info must not be dropped
+        self.assertIn('TF1', passed_grn.columns)
+        self.assertIn('TF2', passed_grn.columns)
+        self.assertIn('peak_id', passed_grn.columns)
+
+    def test_run_celloracle_no_focus_genes_uses_full_base_grn(self):
+        """With genes=None (focus_genes is None), behavior is unchanged: the
+        full base GRN is passed through untouched."""
+        os.makedirs('output/input_data', exist_ok=True)
+
+        adata = create_test_adata()
+        adata.layers['raw_count'] = adata.X.copy()
+        adata.obsm['X_umap'] = np.random.rand(len(adata), 2)
+
+        ship = SpaceShip()
+        self.assertIsNone(ship.focus_genes)
+        ship.adata = adata
+        ship.annot = 'cell_type'
+        ship.species = 'human'
+
+        mock_base_grn = pd.DataFrame({
+            'gene_short_name': ['GENE0', 'GENE1', 'GENE2', 'GENE3'],
+            'peak_id': ['p0', 'p1', 'p2', 'p3'],
+            'TF1': [1, 0, 1, 0],
+        })
+
+        mock_oracle = MagicMock()
+        mock_links = MagicMock()
+        mock_links.links_dict = {'TypeA': pd.DataFrame()}
+        mock_oracle.get_links.return_value = mock_links
+
+        mock_co = MagicMock()
+        mock_co.Oracle.return_value = mock_oracle
+
+        with patch('SpaceTravLR.spaceship.sys.path'), \
+             patch.dict('sys.modules', {'celloracle_tmp': mock_co}), \
+             patch('pandas.read_parquet', return_value=mock_base_grn):
+            ship.run_celloracle_(alpha=5)
+
+        passed_grn = mock_oracle.import_TF_data.call_args.kwargs['TF_info_matrix']
+
+        pd.testing.assert_frame_equal(
+            passed_grn.reset_index(drop=True), mock_base_grn.reset_index(drop=True)
+        )
+
+    def test_run_celloracle_focus_gene_missing_from_base_grn(self):
+        """A focus gene absent from the base GRN must simply be dropped (no
+        TF regulators -> orphaned at train time), not crash setup."""
+        os.makedirs('output/input_data', exist_ok=True)
+
+        adata = create_test_adata()
+        adata.layers['raw_count'] = adata.X.copy()
+        adata.obsm['X_umap'] = np.random.rand(len(adata), 2)
+
+        ship = SpaceShip(genes=['GENE0', 'NOT_IN_BASE_GRN'])
+        ship.adata = adata
+        ship.annot = 'cell_type'
+        ship.species = 'human'
+
+        mock_base_grn = pd.DataFrame({
+            'gene_short_name': ['GENE0', 'GENE1'],
+            'peak_id': ['p0', 'p1'],
+            'TF1': [1, 0],
+        })
+
+        mock_oracle = MagicMock()
+        mock_links = MagicMock()
+        mock_links.links_dict = {'TypeA': pd.DataFrame()}
+        mock_oracle.get_links.return_value = mock_links
+
+        mock_co = MagicMock()
+        mock_co.Oracle.return_value = mock_oracle
+
+        with patch('SpaceTravLR.spaceship.sys.path'), \
+             patch.dict('sys.modules', {'celloracle_tmp': mock_co}), \
+             patch('pandas.read_parquet', return_value=mock_base_grn):
+            ship.run_celloracle_(alpha=5)  # must not raise
+
+        passed_grn = mock_oracle.import_TF_data.call_args.kwargs['TF_info_matrix']
+
+        self.assertEqual(list(passed_grn['gene_short_name']), ['GENE0'])
+        self.assertTrue(hasattr(ship, 'links'))
+
     def test_setup_new(self):
         adata = create_test_adata()
         ship = SpaceShip()
