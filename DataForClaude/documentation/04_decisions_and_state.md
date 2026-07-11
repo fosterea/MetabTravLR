@@ -86,7 +86,23 @@ exercises the same paths.
   → dev/review loop, upcoming.
 - **The real scaling wall is the dense O(N²) received-ligand kernel + `cdist` spatial features**
   (cell-count-driven, `02_...md` §3 / CU-5) — orthogonal to gene focus; gene focus won't help it.
-  (Audit whether MAGIC imputation + `xyc2spatial` add further O(N²) before the CU-5 work.)
+- **Full O(N²) / memory audit for CU-5** (2026-07-11): (a) `_gaussian_kernel_2d_batch` (received
+  ligands) — dense N×N; (b) `create_spatial_features` `cdist` — dense N×N; (c) `xyc2spatial_fast`
+  spatial maps — *linear* in N but materializes the whole `(N, n_clusters, 64, 64)` tensor (~160 GB
+  @1M) → must be batched/streamed too; (d) **MAGIC imputation** — Foster reports it runs tractably
+  at 100k, so deprioritized (verify backend only if we push toward 1M). CU-5 = (a)+(b) sparse
+  radius-neighbors + (c) batched spatial maps.
+
+## ✅ Real-data full-pass validation (2026-07-11)
+`scripts/real_data_smoke.py` ran the whole `SpaceShip` pipeline on real data
+(`snrna_germinal_center.h5ad`, 1309 cells) with `genes=['CD74','BCL6','FOXO1']`:
+- `setup_` 73s (MAGIC + CellOracle + NicheNet download all worked); `run_spacetravlr` 64s.
+- **CellOracle restriction verified live:** links covered exactly the 3 focus targets, no others.
+- **Real CNN training exercised** (R² 0.72–0.99 — not the fallback shortcut), full modulator
+  assembly (e.g. CD74 = 20 TF + 687 L–R + 96 L–TF). Activation fix let fallback branches run.
+- Only the 3 focus genes trained; `BCL6_betadata.parquet` = 1309×740, all-finite, 239k nonzero.
+This validates gene-focus + the CellOracle restriction + the activation fix **together**, and
+closes the "tests only hit the R²<0.15 shortcut" gap.
 
 ## Change-unit status
 - **CU-3 (gene focus, `SpaceShip(genes=…)`):** ✅ done + **committed** `2e523aa`, 2026-07-11.

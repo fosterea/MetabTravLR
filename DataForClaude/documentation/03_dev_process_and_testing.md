@@ -111,6 +111,22 @@ but **only trains a tiny curated gene list** so it finishes in minutes:
 Real Xenium subset with real harreman edges + the actual gene sets; validates the O(N²)
 mitigations at 100k+ cells and end-to-end runtime/memory. Driven by our scripts + SLURM.
 
+### Testing posture: over-test on purpose (Foster, 2026-07-11)
+We **develop here, run later on Savio**, so a broken thing may not surface until an expensive
+remote run. Therefore: **bias toward MORE tests, not fewer** — add regression/guard tests
+liberally "just to make sure nothing breaks," even for behavior that seems obviously fine.
+Every change unit should leave a wider safety net than it found. When in doubt, add the test.
+
+### Standalone real-data full-pass script (not a pytest)
+`scripts/real_data_smoke.py` runs the **actual** `SpaceShip` pipeline end-to-end on a small
+real demo dataset with gene focus on (preprocess → CellOracle[focus-restricted] → NicheNet →
+per-gene training → betadata → read coefficients back). It's a **manual dev smoke**, kept out
+of the pytest suite on purpose (real training; may need network for the NicheNet download).
+Run it by hand to sanity-check the whole integration after nontrivial changes:
+`~/miniconda3/envs/spacetravlr_env/bin/python scripts/real_data_smoke.py --genes CD74 BCL6 FOXO1 --epochs 5`.
+This complements the formal Tier-0/1 tests: the suite proves units in isolation; the script
+proves the pieces work together on real data.
+
 ### Being smart about long runs (Foster's concern)
 - Default to Tier 0/1 in the loop; gate Tier 2/3 behind explicit invocation.
 - **Gene-focusing is the primary lever** — every real-data test names its target genes.
