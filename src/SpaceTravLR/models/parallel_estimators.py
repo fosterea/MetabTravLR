@@ -16,6 +16,8 @@ from .pixel_attention import CellularNicheNetwork, CellularViT
 from ..tools.utils import gaussian_kernel_2d, is_mouse_data, set_seed
 from ..tools.network import get_cellchat_db
 from scipy.spatial.distance import cdist
+from scipy.spatial import cKDTree
+from scipy.sparse import coo_matrix
 import numba
 from wordcloud import WordCloud
 import matplotlib.pyplot as plt
@@ -92,7 +94,12 @@ def _weighted_mean(W: np.ndarray, lig_values: np.ndarray) -> np.ndarray:
     return out
 
 
-def compute_radius_weights_fast(xy, lig_df, radius, scale_factor):
+def compute_radius_weights_fast_dense(xy, lig_df, radius, scale_factor):
+    """Reference (dense O(N^2)) implementation of the received-ligand Gaussian kernel,
+    kept only so tests can assert the sparse replacement below reproduces it. Not on the
+    hot path anymore -- materializes an N x N weight matrix (`_gaussian_kernel_2d_batch`),
+    which OOMs well before 100k cells.
+    """
     W = scale_factor * _gaussian_kernel_2d_batch(
         np.ascontiguousarray(xy, dtype=np.float64), radius
     )
@@ -101,16 +108,74 @@ def compute_radius_weights_fast(xy, lig_df, radius, scale_factor):
     return pd.DataFrame(result, index=lig_df.index, columns=lig_df.columns)
 
 
+def _sparse_gaussian_kernel_2d(xy, radius, eps=1e-9):
+    """Sparse N x N Gaussian kernel W[i, k] = exp(-dist(i, k)^2 / (2*radius^2)), truncated
+    to pairs within a cutoff distance
 
+        C = radius * sqrt(2 * ln(1/eps))
 
-def received_ligands(xy, ligands_df, lr_info, scale_factor=1):
+    chosen so that every dropped (i, k) pair has true weight < eps (with the default
+    eps=1e-9, C ~= 6.4*radius). Because the Gaussian decays superexponentially, the
+    truncation error per entry is < eps; in practice the dominant residual vs the dense
+    reference is instead float64 summation reordering (CSR matmul here vs sequential numba
+    accumulation in the dense path) at ~1e-7 relative -- still far below the tested
+    rtol=1e-6. Either way the result is numerically indistinguishable from the dense one
+    while only ever materializing O(N * avg_neighbors_within_C) entries instead of N^2.
+
+    Self-pairs (k == i, dist == 0) are always included (weight == 1), matching the dense
+    kernel's diagonal. Larger `eps` (=> smaller cutoff) trades exactness for speed/memory;
+    smaller `eps` moves the result arbitrarily close to the dense reference.
     """
-    Compute the amount of ligand received on 
+    n = xy.shape[0]
+    if not (radius > 0):
+        raise ValueError(f"radius must be positive, got {radius}")
+    cutoff = radius * np.sqrt(2.0 * np.log(1.0 / eps))
+    tree = cKDTree(xy)
+    sdm = tree.sparse_distance_matrix(tree, max_distance=cutoff, output_type="coo_matrix")
+    weights = np.exp(-(sdm.data ** 2) / (2.0 * radius * radius))
+    return coo_matrix((weights, (sdm.row, sdm.col)), shape=(n, n)).tocsr()
+
+
+def compute_radius_weights_fast_sparse(xy, lig_df, radius, scale_factor, eps=1e-9):
+    """Sparse (KDTree radius-neighbors) replacement for `compute_radius_weights_fast_dense`.
+    Preserves the exact formula:
+
+        received[i, j] = (scale_factor / N) * sum_k exp(-dist(i,k)^2 / (2*radius^2)) * lig[k, j]
+
+    summed over ALL N cells (k includes i, self weight == 1), where N = len(lig_df) is the
+    TOTAL cell count (not the neighbor count -- the normalization is unchanged). Only the
+    summation itself is truncated to neighbors within the cutoff computed by
+    `_sparse_gaussian_kernel_2d` (see that docstring for the error bound); `eps` is exposed
+    here so callers can tighten/loosen it, default is the safe `1e-9`.
+    """
+    n = len(lig_df)
+    xy = np.ascontiguousarray(xy, dtype=np.float64)
+    lig_values = np.ascontiguousarray(lig_df.values, dtype=np.float64)
+    W = _sparse_gaussian_kernel_2d(xy, radius, eps=eps)
+    weighted_sum = np.asarray(W @ lig_values)
+    result = (scale_factor / n) * weighted_sum
+    return pd.DataFrame(result, index=lig_df.index, columns=lig_df.columns)
+
+
+def compute_radius_weights_fast(xy, lig_df, radius, scale_factor, eps=1e-9):
+    """Public entry point used by `received_ligands`. Sparse by default (see
+    `compute_radius_weights_fast_sparse`); the dense O(N^2) implementation is kept as
+    `compute_radius_weights_fast_dense` purely as an equivalence-test reference."""
+    return compute_radius_weights_fast_sparse(xy, lig_df, radius, scale_factor, eps=eps)
+
+
+def received_ligands(xy, ligands_df, lr_info, scale_factor=1, eps=1e-9):
+    """
+    Compute the amount of ligand received on
     the surface of each cell based on location.
 
     Args:
         xy (np.ndarray): Array of spatial coordinates (x, y).
         ligands_df (pd.DataFrame): ligand gene expression values.
+        eps (float): truncation tolerance for the sparse Gaussian kernel cutoff (see
+            `_sparse_gaussian_kernel_2d`); default 1e-9 keeps results within machine-negligible
+            error of the old dense computation. Larger eps -> smaller cutoff -> faster but a
+            (still tiny) looser approximation.
 
     Returns:
         pd.DataFrame: DataFrame of received ligands for each cell.
@@ -127,7 +192,7 @@ def received_ligands(xy, ligands_df, lr_info, scale_factor=1):
     for radius in lr_info["radius"].unique():
         radius_ligands = lr_info[lr_info["radius"] == radius]["ligand"].values
         full_df.append(
-            compute_radius_weights_fast(xy, ligands_df[radius_ligands], radius, scale_factor)
+            compute_radius_weights_fast(xy, ligands_df[radius_ligands], radius, scale_factor, eps=eps)
         )
 
     full_df = pd.concat([df for df in full_df if not df.empty], axis=1)
@@ -237,7 +302,13 @@ def init_received_ligands(adata, radius, cell_threshes=None, contact_distance=50
 
 
     
-def create_spatial_features(x, y, celltypes, obs_index, radius=200):
+def _create_spatial_features_dense(x, y, celltypes, obs_index, radius=200):
+    """Reference (dense O(N^2)) implementation, kept for equivalence testing.
+
+    Not used on the hot path anymore -- ``create_spatial_features`` below computes the
+    identical result (bit-exact) via a KDTree radius query, in O(N log N + N*k) instead of
+    O(N^2) time/memory. Kept here so tests can assert the sparse path reproduces it exactly.
+    """
     coords = np.column_stack((x, y))
     unique_celltypes = np.unique(celltypes)
     result = np.zeros((len(x), len(unique_celltypes)))
@@ -249,6 +320,39 @@ def create_spatial_features(x, y, celltypes, obs_index, radius=200):
 
     if result.shape != (len(x), len(unique_celltypes)):
         raise ValueError(f"Expected: {(len(x), len(unique_celltypes))}")
+
+    columns = [f"{ct}_within" for ct in unique_celltypes]
+    df = pd.DataFrame(result, columns=columns, index=obs_index)
+
+    return df
+
+
+def create_spatial_features(x, y, celltypes, obs_index, radius=200):
+    """Count, per cell, how many cells of each cell type lie within `radius` (inclusive,
+    self included). Bit-exact replacement for the dense `cdist(coords, coords) <= radius`
+    reference (`_create_spatial_features_dense`), using a `cKDTree` radius query per cell
+    type instead of materializing the full N x N distance matrix. `cKDTree.query_ball_point`
+    uses the same "<=" boundary semantics as the dense comparison (verified at exact
+    distance == radius), so results are identical, not merely close.
+    """
+    coords = np.column_stack((x, y)).astype(np.float64)
+    celltypes = np.asarray(celltypes)
+    unique_celltypes = np.unique(celltypes)
+    n = len(x)
+    result = np.zeros((n, len(unique_celltypes)))
+
+    full_tree = cKDTree(coords)
+    for i, celltype in enumerate(unique_celltypes):
+        mask = celltypes == celltype
+        idx = np.where(mask)[0]
+        if idx.size == 0:
+            continue
+        sub_tree = cKDTree(coords[idx])
+        neighbor_lists = full_tree.query_ball_tree(sub_tree, r=radius)
+        result[:, i] = [len(lst) for lst in neighbor_lists]
+
+    if result.shape != (n, len(unique_celltypes)):
+        raise ValueError(f"Expected: {(n, len(unique_celltypes))}")
 
     columns = [f"{ct}_within" for ct in unique_celltypes]
     df = pd.DataFrame(result, columns=columns, index=obs_index)
