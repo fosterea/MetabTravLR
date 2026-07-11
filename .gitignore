@@ -119,3 +119,4 @@ cython_debug/
 .DS_Store
 
 tutorial/
+tmp/
