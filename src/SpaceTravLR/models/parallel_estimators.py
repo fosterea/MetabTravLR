@@ -973,11 +973,10 @@ class SpatialCellularProgramsEstimator:
             
             if r2 < 0.15:
                 _model = CellularNicheNetwork(
-                    n_modulators = len(self.modulators), 
+                    n_modulators = len(self.modulators),
                     anchors=_betas*0,
                     spatial_dim=self.spatial_dim,
-                    n_clusters=self.n_clusters,
-                    activation=self.activation
+                    n_clusters=self.n_clusters
                 ).to(self.device)
                 
                 self.models[cluster] = _model

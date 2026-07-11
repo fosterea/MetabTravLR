@@ -249,17 +249,12 @@ def test_gene_focus_end_to_end_trains_only_target_gene(temp_dir):
     data/snrna_germinal_center.h5ad, restricted via genes=['CD74'], and checks
     that ONLY CD74_betadata.parquet is produced in save_dir -- no other gene.
 
-    NOTE: this test patches SpaceTravLR.models.pixel_attention.CellularNicheNetwork
-    .__init__ to swallow an `activation` kwarg. This works around a pre-existing,
-    unrelated bug in the repo (models/parallel_estimators.py:980 passes
-    `activation=self.activation` to CellularNicheNetwork, whose __init__ doesn't
-    accept it) that is hit whenever a cluster's group-lasso fit has r2 < 0.15 --
-    completely independent of the gene-focus feature under test here, and
-    reproducible on main with or without this change. It is out of scope to fix
-    as part of this surgical change; flagged for a separate patch.
+    This also serves as a regression test for the `activation`-kwarg fix: the
+    tiny/low-signal fit lands in the group-lasso r2 < 0.15 fallback branch, which
+    previously crashed by passing an unsupported `activation` kwarg into
+    CellularNicheNetwork. It now runs unpatched.
     """
     import time
-    from SpaceTravLR.models.pixel_attention import CellularNicheNetwork
 
     test_dir = os.path.dirname(os.path.abspath(__file__))
     data_path = os.path.abspath(os.path.join(test_dir, '..', 'data', 'snrna_germinal_center.h5ad'))
@@ -291,24 +286,18 @@ def test_gene_focus_end_to_end_trains_only_target_gene(temp_dir):
     # tiny NicheNet-style ligand-target matrix: TFs (index) x ligands (columns)
     tflinks = pd.DataFrame([[0.5], [0.5]], index=['NFKB1', 'STAT3'], columns=['BMP2'])
 
-    orig_init = CellularNicheNetwork.__init__
-
-    def patched_init(self, *args, activation='identity', **kwargs):
-        return orig_init(self, *args, **kwargs)
-
     t0 = time.time()
-    with patch.object(CellularNicheNetwork, '__init__', patched_init):
-        st = SpaceTravLR(
-            adata=adata,
-            save_dir=temp_dir,
-            grn=grn,
-            genes=['CD74'],
-            max_epochs=2,
-            batch_size=64,
-            tflinks=tflinks,
-            annot='cell_type_int',
-        )
-        st.run()
+    st = SpaceTravLR(
+        adata=adata,
+        save_dir=temp_dir,
+        grn=grn,
+        genes=['CD74'],
+        max_epochs=2,
+        batch_size=64,
+        tflinks=tflinks,
+        annot='cell_type_int',
+    )
+    st.run()
     elapsed = time.time() - t0
     print(f'\n[test_gene_focus_end_to_end] run() took {elapsed:.2f}s')
 
