@@ -204,9 +204,12 @@ class HarremanRunner():
             print('Not saving cell type indep becasue file already exists.')
         else:
             adata.uns['ccc_results']['cell_com_df_gp_sig'].to_csv(cell_type_indep_path)
+            adata.uns['ccc_results']['cell_com_df_m_sig'].to_csv(Path(self.easy_download_path) / '[ccc_results][cell_com_df_m_sig].csv')
+            adata.uns['ccc_results']['cell_com_df_m'].to_csv(Path(self.easy_download_path) / '[ccc_results][cell_com_df_m].csv')
 
         adata.uns['ct_ccc_results']['cell_com_df_m'].to_csv(f'{self.easy_download_path}/{cell_type_col}/[ct_ccc_results][cell_com_df_m].csv')
-        adata.uns['ct_ccc_results']['cell_com_df_m'].to_csv(f'{self.easy_download_path}/{cell_type_col}/[ct_ccc_results][cell_com_df_gp_sig].csv')
+        adata.uns['ct_ccc_results']['cell_com_df_m_sig'].to_csv(f'{self.easy_download_path}/{cell_type_col}/[ct_ccc_results][cell_com_df_m_sig].csv')
+        adata.uns['ct_ccc_results']['cell_com_df_gp_sig'].to_csv(f'{self.easy_download_path}/{cell_type_col}/[ct_ccc_results][cell_com_df_gp_sig].csv')
 
     def save_adata(self, filename):
         adata = self.adata
