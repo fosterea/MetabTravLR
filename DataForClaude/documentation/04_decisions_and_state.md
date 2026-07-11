@@ -71,6 +71,13 @@ exercises the same paths.
 - **`spawn_worker(clusters=…)`** — `test_spacetravlr.py::test_spawn_worker` fails at HEAD
   (signature changed for Savio, test not updated). **Paused per Foster** (real logic is what
   matters); left as a known pre-existing red.
+- ✅ **FIXED — pyarrow suite flake** — tests mocking `sys.modules`/`importlib` (the celloracle
+  tests) made pyarrow re-register pandas extension types → `ArrowKeyError: pandas.period already
+  defined` on later real parquet I/O. Fixed with an idempotent-registration shim in
+  `tests/conftest.py` (commit `4071df8`). Test-only artifact; never affected the real pipeline.
+- **`plotting/niche.py:34`** — calls `received_ligands(xy=…, lig_df=…, radius=…)` with keyword
+  names that don't match the function signature (`ligands_df`, `lr_info`, no `radius`). Broken at
+  HEAD *before* CU-5 (our change only added an additive `eps` kwarg). Pre-existing; not touched.
 
 ## Setup-cost complexity (from the "don't skip other genes" investigation, 2026-07-11)
 - **CellChat (L–R) + NicheNet (L–TF) modulator construction are ALREADY skipped for non-focus
@@ -114,8 +121,17 @@ closes the "tests only hit the R²<0.15 shortcut" gap.
 - **Activation-bug fix:** ✅ committed `2699947`.
 - **CellOracle base-GRN focus restriction (perf):** greenlit; next via dev/review loop. Filter
   base GRN to focus targets in `SpaceShip.run_celloracle_` when `self.focus_genes` is set.
-- **CU-1 (metabolite group) / CU-5 (O(N²) sparse):** not started. CU-5 is the real large-data
-  enabler.
+- **CU-5 (O(N²) sparse):** ✅ committed `691ab41`, 2026-07-11. Behavior-preserving:
+  `create_spatial_features` → cKDTree radius-count (**bit-exact**); received-ligand kernel →
+  sparse cKDTree (cutoff `C=r·√(2·ln(1/eps))`, `eps=1e-9`; measured max **relative** error vs
+  dense ~4.7e-7, within rtol=1e-6; self-pair preserved). Dense kept as `*_dense` references;
+  18 equivalence tests (`tests/test_sparse_equivalence.py`); Opus-reviewed, no blockers; real-data
+  smoke passes on the sparse path. **Unblocks 100k.**
+  Follow-ups (deferred): (a) at **1M cells** the large secreted radius can still make the
+  in-cutoff neighbor set big (~hundreds of GB) → row-chunk the KDTree query; (b) `xyc2spatial_fast`
+  spatial-map tensor (~160 GB @1M) → batch/stream it. Both needed only for 1M-scale, not 100k.
+- **CU-1 (metabolite group):** not started — the actual science (add harreman metabolite pairs
+  as the new `beta_<export>@<import>` group).
 
 Commit series (this session): `2e523aa` feat gene-focus → `2699947` fix activation → docs.
 
