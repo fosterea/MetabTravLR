@@ -142,7 +142,7 @@ class HarremanRunner():
         # Run communication
         harreman.tl.compute_cell_communication(
             adata,
-            model='bernoulli',
+            model='binomial',
             M=n_permutations,
             test='both',
             layer_key_p_test='counts',
@@ -175,7 +175,7 @@ class HarremanRunner():
         # Run Test 8 — cell-type-specific metabolite crosstalk
         harreman.tl.compute_ct_cell_communication(
             adata,
-            model='bernoulli',
+            model='binomial',
             cell_type_key=cell_type_col,
             M=n_permutations,
             test='both',
