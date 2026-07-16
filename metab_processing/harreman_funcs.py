@@ -120,7 +120,7 @@ class HarremanRunner():
         harreman.tl.apply_gene_filtering(
             adata,
             layer_key='counts',
-            model='bernoulli',
+            model='danb',
             autocorrelation_filt=False,
             verbose=True
         )
@@ -142,7 +142,7 @@ class HarremanRunner():
         # Run communication
         harreman.tl.compute_cell_communication(
             adata,
-            model='binomial',
+            model='danb',
             M=n_permutations,
             test='both',
             layer_key_p_test='counts',
@@ -175,14 +175,14 @@ class HarremanRunner():
         # Run Test 8 — cell-type-specific metabolite crosstalk
         harreman.tl.compute_ct_cell_communication(
             adata,
-            model='binomial',
+            model='danb',
             cell_type_key=cell_type_col,
             M=n_permutations,
             test='both',
             layer_key_p_test='counts',
             layer_key_np_test='log_norm',
             subset_gene_pairs=gene_pairs_filt,
-            fix_gp=False,           # False = Test 8 (metabolite level)
+            fix_gp=False,
             verbose=True
         )
 
