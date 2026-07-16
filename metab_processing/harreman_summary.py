@@ -37,6 +37,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import warnings
 from collections import defaultdict
 from pathlib import Path
 
@@ -90,6 +91,27 @@ def _discover_tiers(root: Path) -> list[str]:
     return sorted(tiers)
 
 
+def _resolve_root(easy_download_path) -> Path:
+    """Accept a path to the ``harreman_outputs`` folder or its parent ``easy_download``."""
+    root = Path(easy_download_path)
+    if not (root / NETWORK_JSON).is_file() and (root / "harreman_outputs" / NETWORK_JSON).is_file():
+        root = root / "harreman_outputs"
+    if not (root / NETWORK_JSON).is_file():
+        raise FileNotFoundError(f"{NETWORK_JSON} not found under {root}")
+    return root
+
+
+def _read_sig_pair_sets(root: Path, tiers: list[str]) -> dict:
+    """Order-agnostic sets of significant transporter pairs, keyed 'global' + each tier."""
+    sets = {}
+    g = _read_sig_gene_pairs(root / CELL_INDEP_GP)
+    sets["global"] = {frozenset((r["Gene 1"], r["Gene 2"])) for _, r in g.iterrows()} if not g.empty else set()
+    for t in tiers:
+        gt = _read_ct_gene_pairs(root / t / CT_GP)
+        sets[t] = {frozenset((r["Gene 1"], r["Gene 2"])) for _, r in gt.iterrows()} if not gt.empty else set()
+    return sets
+
+
 # ======================================================================================
 # core
 # ======================================================================================
@@ -110,12 +132,7 @@ def summarize_harreman_folder(
     sample_id : optional identifier stamped into both tables as a ``sample_id`` column,
         for later multi-sample concatenation.
     """
-    root = Path(easy_download_path)
-    if not (root / NETWORK_JSON).is_file() and (root / "harreman_outputs" / NETWORK_JSON).is_file():
-        root = root / "harreman_outputs"
-    if not (root / NETWORK_JSON).is_file():
-        raise FileNotFoundError(f"{NETWORK_JSON} not found under {root}")
-
+    root = _resolve_root(easy_download_path)
     network = json.loads((root / NETWORK_JSON).read_text())
     pair2metab = _pair_to_metabolites(network)
     tiers = _discover_tiers(root)
@@ -307,6 +324,140 @@ def _count_sig_pairs_per_metabolite(sig_pairs: pd.DataFrame, pair2metab) -> dict
         for metab in pair2metab.get(frozenset((r["Gene 1"], r["Gene 2"])), []):
             counts[metab] += 1
     return counts
+
+
+# ======================================================================================
+# metabolite selection file (input spec for SpaceTravLR)
+# ======================================================================================
+def write_metabolite_selection(easy_download_path, metabolites, out_path=None, fmt="yaml"):
+    """Write a minimal metabolite-selection file: for each given metabolite, its name and
+    only its **globally-significant** transporter gene pairs.
+
+    Task-independent — you pass the set of metabolite names to include (the "settings").
+    ``select_tcell_metabolites`` is the application-specific wrapper that computes that set.
+
+    A gene pair is "globally significant" if it passed harreman's cell-type-independent
+    CCC test (it appears in ``[ccc_results][cell_com_df_gp_sig].csv``). All transporters are
+    IMP-EXP (bidirectional), so no direction/type is stored.
+
+    Parameters
+    ----------
+    easy_download_path : path to the harreman_outputs folder (or its parent).
+    metabolites : iterable of metabolite names to include.
+    out_path : output path; defaults to ``<harreman_outputs>/metabolite_selection.{yaml|json}``.
+        A ``.json`` extension implies ``fmt='json'``.
+    fmt : ``"yaml"`` (needs pyyaml) or ``"json"`` (stdlib).
+    """
+    root = _resolve_root(easy_download_path)
+    network = json.loads((root / NETWORK_JSON).read_text())
+    gpm = network.get("gp_per_metabolite", {})
+    global_sig = _read_sig_pair_sets(root, [])["global"]  # cell-type-independent sig pairs
+
+    names = list(dict.fromkeys(metabolites))  # de-dupe, keep order
+    missing = [m for m in names if m not in gpm]
+    if missing:
+        warnings.warn(f"{len(missing)} metabolite(s) not in the network and skipped: {missing}")
+
+    entries = []
+    for m in names:
+        if m not in gpm:
+            continue
+        pairs = [[g1, g2] for g1, g2 in gpm[m].get("gene_pair", []) if frozenset((g1, g2)) in global_sig]
+        entries.append({"name": m, "gene_pairs": pairs})
+    entries.sort(key=lambda e: e["name"])
+
+    if out_path is None:
+        out_path = root / f"metabolite_selection.{'json' if fmt == 'json' else 'yaml'}"
+    out_path = Path(out_path)
+    if out_path.suffix.lower() == ".json":
+        fmt = "json"
+
+    _dump_selection({"metabolites": entries}, out_path, fmt)
+    return out_path
+
+
+def select_tcell_metabolites(easy_download_path, out_path=None, *, tiers=None,
+                             tcell_types=None, background_label="other", fmt="yaml"):
+    """Application-specific selector: keep every metabolite that has any significant
+    cell-type-aware interaction involving a **T cell** (any label that is not
+    ``background_label``), then write it via :func:`write_metabolite_selection`.
+
+    Parameters
+    ----------
+    tiers : restrict the T-cell interaction to these tier(s); ``None`` = any tier.
+    tcell_types : restrict the T-cell side to these specific label(s), e.g.
+        ``["CD8 T Cell"]`` or ``["Effector CD8 T cell"]``; ``None`` = any non-background label.
+    background_label : the non-T "other" label (default ``"other"``).
+    """
+    root = _resolve_root(easy_download_path)
+    all_tiers = _discover_tiers(root)
+    sig_ints = _sig_ct_interactions(root, all_tiers)  # metab -> [(tier, ct1, ct2), ...]
+
+    if tiers:
+        bad = [t for t in tiers if t not in all_tiers]
+        if bad:
+            warnings.warn(f"tiers {bad} not found; available: {all_tiers}")
+    if tcell_types:
+        present = {ct for rows in sig_ints.values() for (_, a, b) in rows for ct in (a, b)}
+        bad = [c for c in tcell_types if c not in present]
+        if bad:
+            warnings.warn(f"tcell_types {bad} not found in any significant interaction")
+
+    want_types = set(tcell_types) if tcell_types else None
+    tier_filter = set(tiers) if tiers else None
+    names = []
+    for metab, rows in sig_ints.items():
+        for (tier, a, b) in rows:
+            if tier_filter and tier not in tier_filter:
+                continue
+            t_types = {x for x in (a, b) if _is_tcell(x, background_label)}
+            if not t_types:
+                continue
+            if want_types and not (t_types & want_types):
+                continue
+            names.append(metab)
+            break
+
+    return write_metabolite_selection(root, sorted(names), out_path=out_path, fmt=fmt)
+
+
+def _sig_ct_interactions(root: Path, tiers: list[str]) -> dict:
+    """metab -> list of (tier, cell_type_1, cell_type_2) for significant cell-type-aware rows."""
+    out = defaultdict(list)
+    for t in tiers:
+        tm = _read_ct_m(root / t / CT_M)
+        sig = tm[_as_bool(tm["selected"])]
+        for _, r in sig.iterrows():
+            out[r["metabolite"]].append((t, r["Cell Type 1"], r["Cell Type 2"]))
+    return out
+
+
+_SELECTION_HEADER = (
+    "# Metabolite selection for SpaceTravLR (generated by harreman_summary).\n"
+    "# Each entry: the metabolite name and its globally-significant transporter gene pairs\n"
+    "# (pairs that passed harreman's cell-type-independent CCC test). Transporters are IMP-EXP.\n"
+)
+
+
+def _dump_selection(doc, out_path: Path, fmt: str):
+    if fmt == "yaml":
+        try:
+            import yaml
+        except ImportError as e:
+            raise ImportError("pyyaml not installed; pass fmt='json' (or use a .json path).") from e
+
+        class _NoAliasDumper(yaml.SafeDumper):
+            def ignore_aliases(self, data):  # never emit &anchor / *alias
+                return True
+
+        body = yaml.dump(doc, Dumper=_NoAliasDumper, sort_keys=False,
+                         default_flow_style=None, width=4096, allow_unicode=True)
+        out_path.write_text(_SELECTION_HEADER + body)
+    elif fmt == "json":
+        out_path.write_text(json.dumps(doc, indent=2))
+    else:
+        raise ValueError("fmt must be 'yaml' or 'json'")
+    print(f"Wrote {len(doc['metabolites'])} metabolites -> {out_path}")
 
 
 # ======================================================================================
