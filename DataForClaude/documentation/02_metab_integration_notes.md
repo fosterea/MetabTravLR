@@ -28,7 +28,7 @@ easy_download/harreman_outputs/
 ├── [ccc_results][cell_com_df_gp_sig].csv         # cell-type-INDEPENDENT, gene-pair level
 ├── Tier1/                                         # cell-type-AWARE, per annotation column "Tier1"
 │   ├── [ct_ccc_results][cell_com_df_m].csv        #   metabolite level, per (CellType1→CellType2)
-│   └── [ct_ccc_results][cell_com_df_gp_sig].csv   #   (currently a duplicate of _m — see bug note)
+│   └── [ct_ccc_results][cell_com_df_gp_sig].csv   #   gene-pair level, per (CellType1→CellType2) — real (see note)
 └── Tier2/  (same as Tier1 for the finer annotation)
 ```
 
@@ -62,11 +62,22 @@ Keys: `num_transporter_genes` (100), `num_metab` (160), `num_gp` (416),
 4. Those gene pairs become the candidate metabolite edges for SpaceTravLR (§2).
 
 ### Bugs / rough edges spotted (note, don't fix yet)
-- `save_harreman_outputs` writes `cell_com_df_m` to **both** `[..][cell_com_df_m].csv` and
-  `[..][cell_com_df_gp_sig].csv` (lines 208–209) → the ct `gp_sig` file is not the gene-pair
-  table it implies; it's a duplicate of `_m`. If we need ct-level *gene-pair* significance
-  we'll have to re-derive it.
+- ~~`save_harreman_outputs` writes `cell_com_df_m` to both `_m` and `_gp_sig`~~ — **fixed in the
+  current runner** (`save_harreman_outputs` writes `cell_com_df_gp_sig` distinctly, cols:
+  `Cell Type 1, Cell Type 2, Gene 1, Gene 2, …, selected`). Verified 2026-07-16 against the
+  `easy_download` example; `metab_processing/harreman_summary.py` relies on this real ct-level
+  gene-pair table.
 - JSON key typo `transporter_gense`.
+- ⚠️ **`Cell Type 1 → Cell Type 2` is NOT a direction — RESOLVED (2026-07-16).** The
+  ordering is just the **sorted label order**: `compute_gene_pairs` enumerates ct pairs with
+  `itertools.combinations_with_replacement` (when `fix_ct` unset), so each unordered pair is
+  computed once and the reverse is never tested (verified: the ct-pair set in every tier CSV
+  equals `combinations_with_replacement` of the sorted labels; `other` sorts last so
+  `(other → T)` never exists). All transporter genes are typed `IMP-EXP` (2042/2042) and both
+  gene orders are folded into each pair, so the score is an **undirected** spatial
+  co-expression across the CT1–CT2 interface. My earlier "T cells only export" reading was an
+  artifact. `harreman_summary.py` now reports undirected `A–B` interfaces / `A (self)`.
+  Full trace + score formula in [`05_harreman_reference.md`](05_harreman_reference.md).
 
 ---
 

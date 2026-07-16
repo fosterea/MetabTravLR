@@ -21,6 +21,10 @@ memory; the root `../../CLAUDE.md` points here).
 - `01_pipeline_deep_dive.md` — exact call sites + line refs and the **surgical wiring map**
   (change units CU-1…CU-5) for adding metabolites as a new modulator group. Read when we
   start coding.
+- `05_harreman_reference.md` — **what harreman actually does**, read from its source: the
+  pipeline, output tables, the **`CT1→CT2` "arrow" is NOT a direction** (undirected interface;
+  sorted-label artifact), and the **per-cell "neighborhood" analysis + its GPU-OOM** and fix
+  directions. Read before consuming harreman output or debugging the OOM.
 - `paper_fulltext.txt` — plain-text extraction of `../Space_TravLR_Preprint.pdf` (bioRxiv
   2025.11.13.688264), for quick grep/reference without re-parsing the PDF. Note: equations
   came through as garbled Unicode; use the PDF for the exact math.
