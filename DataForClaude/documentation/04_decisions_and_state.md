@@ -28,6 +28,7 @@ labeled gene sets to rank metabolites by effect (e.g. ↑T-cell activity / ↓ex
 | D5 | 2026-07-10 | Restrict training to **target genes of interest** (valid because we read β directly). | Seed `OracleQueue` with a gene subset; biggest tractability win. |
 | D6 | 2026-07-10 | Metabolites are their **own new modulator group** (a 5th group), **not** folded into the L–R `extra_lr` group. | Separate group-lasso group + **distinct betadata separator** (e.g. `@`, since `$`/`#` are taken) so metabolite β's are independently identifiable. See `01_pipeline_deep_dive.md`. |
 | D7 | 2026-07-10 | **Keep TF + L–R modulators, but optional** (default keep). | Metabolite β estimated controlling for known regulation. Likely **skip COMMOT** (harreman is our prior). |
+| D8 | 2026-07-16 | **Fix the received-ligand kernel: hard cutoff at `radius` + narrow σ; row-chunk.** Committed `793c096`. | Auto mode, **verified against the paper's actual methods text** (Foster's prompt to check). Finding: the paper *mandates a hard cutoff* — "spatial neighbors n as all locations i within a circle … with a predefined radius r", summing over only in-radius neighbors — so the old "fast" kernel (`σ=radius`, **no cutoff**, sum over all cells) genuinely **violates the paper** (real bug; OOM'd at 57 GB @100k). The paper does **NOT** specify σ (defers to CytoSignal); `σ=radius/3.72` is the codebase's own `gaussian_kernel_2d` convention (makes the Gaussian ≈0 at the cutoff) and is what the original slow `compute_radius_weights` uses. So the fix = align fast path to `gaussian_kernel_2d`: cutoff = paper-mandated, σ = code-convention. → ~1.34 GB @20k, matches narrow reference to ~2e-16, chunk-invariant. **CHANGES results vs old wide kernel — intended.** Old wide fns kept as `*_wide_deprecated`. Paper refs: Methods "Spatially informed signaling inference" (p17); σ nuance in `05`/agent trace. |
 
 ## Leaning / proposed (not final)
 - Signed gene-set score: `mean_{positive} β̄ − mean_{negative/exhaustion} β̄`.
@@ -130,6 +131,15 @@ closes the "tests only hit the R²<0.15 shortcut" gap.
   Follow-ups (deferred): (a) at **1M cells** the large secreted radius can still make the
   in-cutoff neighbor set big (~hundreds of GB) → row-chunk the KDTree query; (b) `xyc2spatial_fast`
   spatial-map tensor (~160 GB @1M) → batch/stream it. Both needed only for 1M-scale, not 100k.
+- **CU-5b (received-ligand OOM at Xenium scale, D8):** ✅ committed `793c096`, 2026-07-16.
+  Diagnosis: at Xenium density (~15 µm spacing) with `radius=300`, the received-ligand matrix hit
+  **57 GB @100k / 202 GB @300k** (crashed Foster's in-kernel `fit()` on the melanoma Xenium set).
+  Fix (D8) = narrow kernel + hard cutoff at `radius` + row-chunking → ~1.34 GB @20k, bounded.
+  `create_spatial_features` (1.4 GB @100k) is fine. **NEXT ceiling = the spatial-maps tensor**
+  (`xyc2spatial_fast`, ~20 GB @100k, 59 GB @300k) — batch/stream it (CU-5c). Needed for 300k+;
+  100k should now fit on a normal node.
+- **Gene-focus missing-gene handling:** now **drops missing focus genes with a printed warning**
+  (was ValueError); all-missing still errors. Committed `fd815ed`.
 - **CU-1 (metabolite group):** not started — the actual science (add harreman metabolite pairs
   as the new `beta_<export>@<import>` group).
 
