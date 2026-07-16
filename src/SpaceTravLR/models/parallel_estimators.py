@@ -65,8 +65,13 @@ def compute_radius_weights(xy, lig_df, radius, scale_factor):
     return pd.DataFrame(weighted_ligands, index=u_ligands, columns=lig_df.index).T
 
 @numba.njit(parallel=True)
-def _gaussian_kernel_2d_batch(xy: np.ndarray, radius: float) -> np.ndarray:
-    """Compute full N×N weight matrix in one parallelized pass."""
+def _gaussian_kernel_2d_batch_wide_deprecated(xy: np.ndarray, radius: float) -> np.ndarray:
+    """DEPRECATED -- reproduces the OLD (unintentionally wide) sparse-path kernel:
+    sigma == radius (no /sqrt(-2*ln(eps)) narrowing) and no cutoff. This does NOT match
+    `gaussian_kernel_2d` (the original/intended semantics) and is no longer a correctness
+    reference for anything. Kept only for historical comparison; do not assert equivalence
+    against this in new tests -- use the narrow `gaussian_kernel_2d`-based reference instead.
+    """
     n = xy.shape[0]
     W = np.empty((n, n), dtype=np.float64)
     inv_2r2 = -1.0 / (2.0 * radius * radius)
@@ -94,13 +99,16 @@ def _weighted_mean(W: np.ndarray, lig_values: np.ndarray) -> np.ndarray:
     return out
 
 
-def compute_radius_weights_fast_dense(xy, lig_df, radius, scale_factor):
-    """Reference (dense O(N^2)) implementation of the received-ligand Gaussian kernel,
-    kept only so tests can assert the sparse replacement below reproduces it. Not on the
-    hot path anymore -- materializes an N x N weight matrix (`_gaussian_kernel_2d_batch`),
-    which OOMs well before 100k cells.
+def compute_radius_weights_fast_dense_wide_deprecated(xy, lig_df, radius, scale_factor):
+    """DEPRECATED wide-kernel dense reference (sigma == radius, no cutoff). This reproduces
+    the OLD, unintentionally-too-wide fast-path behavior (~3.7x wider sigma and ~6.4x larger
+    cutoff than the original/intended `gaussian_kernel_2d`), which is what caused the
+    received-ligand sparse matrix to blow up in memory at Xenium density (~57 GB at 100k
+    cells). It is kept only so the old behavior can still be inspected/compared by hand; it
+    is NOT a correctness reference anymore -- `gaussian_kernel_2d` (narrow kernel, hard
+    cutoff at `radius`) is. Also still O(N^2) and OOMs well before 100k cells.
     """
-    W = scale_factor * _gaussian_kernel_2d_batch(
+    W = scale_factor * _gaussian_kernel_2d_batch_wide_deprecated(
         np.ascontiguousarray(xy, dtype=np.float64), radius
     )
     lig_values = np.ascontiguousarray(lig_df.values, dtype=np.float64)
@@ -108,63 +116,100 @@ def compute_radius_weights_fast_dense(xy, lig_df, radius, scale_factor):
     return pd.DataFrame(result, index=lig_df.index, columns=lig_df.columns)
 
 
-def _sparse_gaussian_kernel_2d(xy, radius, eps=1e-9):
-    """Sparse N x N Gaussian kernel W[i, k] = exp(-dist(i, k)^2 / (2*radius^2)), truncated
-    to pairs within a cutoff distance
+def _sparse_gaussian_kernel_2d(xy, radius, eps=0.001, query_xy=None, tree=None):
+    """Sparse Gaussian kernel matching the original/intended `gaussian_kernel_2d` semantics
+    exactly (tools/utils.py::gaussian_kernel_2d):
 
-        C = radius * sqrt(2 * ln(1/eps))
+        sigma  = radius / sqrt(-2 * ln(eps))     (eps default 0.001 -> sigma = radius/3.7169)
+        weight = exp(-dist^2 / (2 * sigma^2))
+        cutoff: only pairs with dist <= radius contribute (weight is hard-zeroed beyond
+                radius itself, NOT at some multiple of radius)
 
-    chosen so that every dropped (i, k) pair has true weight < eps (with the default
-    eps=1e-9, C ~= 6.4*radius). Because the Gaussian decays superexponentially, the
-    truncation error per entry is < eps; in practice the dominant residual vs the dense
-    reference is instead float64 summation reordering (CSR matmul here vs sequential numba
-    accumulation in the dense path) at ~1e-7 relative -- still far below the tested
-    rtol=1e-6. Either way the result is numerically indistinguishable from the dense one
-    while only ever materializing O(N * avg_neighbors_within_C) entries instead of N^2.
+    This replaces the old fast-path kernel, which used sigma == radius (no /3.7169 narrowing)
+    and a truncation cutoff of `radius*sqrt(2*ln(1/eps))` (~6.44*radius at eps=1e-9) -- i.e.
+    ~3.7x too wide a kernel pulling in a cutoff ~6.4x too large. At Xenium density
+    (radius=300) that pulled in ~35k neighbors/cell; this narrow/cutoff-at-`radius` version
+    keeps the neighbor count to the O(1e3) that the original dense `gaussian_kernel_2d`
+    reference intended.
 
-    Self-pairs (k == i, dist == 0) are always included (weight == 1), matching the dense
-    kernel's diagonal. Larger `eps` (=> smaller cutoff) trades exactness for speed/memory;
-    smaller `eps` moves the result arbitrarily close to the dense reference.
+    `eps` here is the KERNEL-WIDTH eps of `gaussian_kernel_2d` (defines sigma, and doubles as
+    the hard cutoff distance = radius), NOT the old truncation-eps that controlled the
+    cutoff multiple -- do not pass 1e-9 expecting the old wide behavior.
+
+    query_xy (default: xy itself) lets a subset of rows be queried against the full `xy`
+    point set, so the caller can row-chunk (see `compute_radius_weights_fast_sparse`)
+    without ever materializing the full N x N (or N x nnz) matrix at once. `tree`, if given,
+    is a pre-built `cKDTree(xy)` to avoid rebuilding it once per chunk.
+
+    Self-pairs (dist == 0, when query_xy overlaps xy) always get weight == 1 (dist 0 <=
+    radius for any radius > 0, and exp(0) == 1), matching the dense kernel's diagonal.
     """
-    n = xy.shape[0]
     if not (radius > 0):
         raise ValueError(f"radius must be positive, got {radius}")
-    cutoff = radius * np.sqrt(2.0 * np.log(1.0 / eps))
-    tree = cKDTree(xy)
-    sdm = tree.sparse_distance_matrix(tree, max_distance=cutoff, output_type="coo_matrix")
-    weights = np.exp(-(sdm.data ** 2) / (2.0 * radius * radius))
-    return coo_matrix((weights, (sdm.row, sdm.col)), shape=(n, n)).tocsr()
+    if query_xy is None:
+        query_xy = xy
+    if tree is None:
+        tree = cKDTree(xy)
+    n_rows = query_xy.shape[0]
+    n_cols = xy.shape[0]
+    sigma = radius / np.sqrt(-2.0 * np.log(eps))
+    query_tree = cKDTree(query_xy)
+    sdm = query_tree.sparse_distance_matrix(tree, max_distance=radius, output_type="coo_matrix")
+    weights = np.exp(-(sdm.data ** 2) / (2.0 * sigma * sigma))
+    return coo_matrix((weights, (sdm.row, sdm.col)), shape=(n_rows, n_cols)).tocsr()
 
 
-def compute_radius_weights_fast_sparse(xy, lig_df, radius, scale_factor, eps=1e-9):
-    """Sparse (KDTree radius-neighbors) replacement for `compute_radius_weights_fast_dense`.
-    Preserves the exact formula:
+def compute_radius_weights_fast_sparse(xy, lig_df, radius, scale_factor, eps=0.001, chunk_size=8000):
+    """Sparse (KDTree radius-neighbors) replacement for the old
+    `compute_radius_weights_fast_dense_wide_deprecated`. Preserves the exact formula:
 
-        received[i, j] = (scale_factor / N) * sum_k exp(-dist(i,k)^2 / (2*radius^2)) * lig[k, j]
+        received[i, j] = (scale_factor / N) * sum_k Knarrow(i, k) * lig[k, j]
 
-    summed over ALL N cells (k includes i, self weight == 1), where N = len(lig_df) is the
-    TOTAL cell count (not the neighbor count -- the normalization is unchanged). Only the
-    summation itself is truncated to neighbors within the cutoff computed by
-    `_sparse_gaussian_kernel_2d` (see that docstring for the error bound); `eps` is exposed
-    here so callers can tighten/loosen it, default is the safe `1e-9`.
+    where `Knarrow` is the narrow, hard-cutoff-at-`radius` Gaussian kernel of
+    `gaussian_kernel_2d` (see `_sparse_gaussian_kernel_2d`), summed over ALL N cells (k
+    includes i, self weight == 1), and N = len(lig_df) is the TOTAL cell count (not the
+    neighbor count -- the normalization is unchanged).
+
+    Row-chunked: cells are processed `chunk_size` rows at a time (default 8000) so memory
+    stays bounded by O(chunk_size * avg_neighbors_within_radius) regardless of N or radius --
+    the full N x N (or N x nnz) matrix is never materialized. Each chunk's result depends
+    only on that chunk's own rows, so the result is identical (not merely close) regardless
+    of `chunk_size`, including `chunk_size >= N` (single chunk, i.e. unchunked) and
+    `chunk_size == 1`.
     """
     n = len(lig_df)
     xy = np.ascontiguousarray(xy, dtype=np.float64)
     lig_values = np.ascontiguousarray(lig_df.values, dtype=np.float64)
-    W = _sparse_gaussian_kernel_2d(xy, radius, eps=eps)
-    weighted_sum = np.asarray(W @ lig_values)
-    result = (scale_factor / n) * weighted_sum
+    n_lig = lig_values.shape[1]
+    result = np.empty((n, n_lig), dtype=np.float64)
+
+    if n == 0:
+        return pd.DataFrame(result, index=lig_df.index, columns=lig_df.columns)
+
+    effective_chunk = n if (chunk_size is None or chunk_size <= 0) else chunk_size
+    tree = cKDTree(xy)
+    for start in range(0, n, effective_chunk):
+        end = min(start + effective_chunk, n)
+        W_chunk = _sparse_gaussian_kernel_2d(
+            xy, radius, eps=eps, query_xy=xy[start:end], tree=tree
+        )
+        weighted_sum = np.asarray(W_chunk @ lig_values)
+        result[start:end] = (scale_factor / n) * weighted_sum
+
     return pd.DataFrame(result, index=lig_df.index, columns=lig_df.columns)
 
 
-def compute_radius_weights_fast(xy, lig_df, radius, scale_factor, eps=1e-9):
-    """Public entry point used by `received_ligands`. Sparse by default (see
-    `compute_radius_weights_fast_sparse`); the dense O(N^2) implementation is kept as
-    `compute_radius_weights_fast_dense` purely as an equivalence-test reference."""
-    return compute_radius_weights_fast_sparse(xy, lig_df, radius, scale_factor, eps=eps)
+def compute_radius_weights_fast(xy, lig_df, radius, scale_factor, eps=0.001, chunk_size=8000):
+    """Public entry point used by `received_ligands`. Sparse + row-chunked by default (see
+    `compute_radius_weights_fast_sparse`); the OLD wide-kernel dense implementation is kept
+    (deprecated) as `compute_radius_weights_fast_dense_wide_deprecated` purely for historical
+    comparison -- it is no longer a correctness reference."""
+    return compute_radius_weights_fast_sparse(
+        xy, lig_df, radius, scale_factor, eps=eps, chunk_size=chunk_size
+    )
 
 
-def received_ligands(xy, ligands_df, lr_info, scale_factor=1, eps=1e-9):
+def received_ligands(xy, ligands_df, lr_info, scale_factor=1, eps=0.001, chunk_size=8000):
     """
     Compute the amount of ligand received on
     the surface of each cell based on location.
@@ -172,10 +217,14 @@ def received_ligands(xy, ligands_df, lr_info, scale_factor=1, eps=1e-9):
     Args:
         xy (np.ndarray): Array of spatial coordinates (x, y).
         ligands_df (pd.DataFrame): ligand gene expression values.
-        eps (float): truncation tolerance for the sparse Gaussian kernel cutoff (see
-            `_sparse_gaussian_kernel_2d`); default 1e-9 keeps results within machine-negligible
-            error of the old dense computation. Larger eps -> smaller cutoff -> faster but a
-            (still tiny) looser approximation.
+        eps (float): kernel-width epsilon for the Gaussian kernel (see
+            `_sparse_gaussian_kernel_2d` / `gaussian_kernel_2d`); default 0.001 matches the
+            original/intended kernel (sigma = radius/sqrt(-2*ln(eps)), hard cutoff at
+            `radius`). This is NOT a truncation tolerance on an oversized cutoff -- it
+            directly sets the kernel width, exactly like `gaussian_kernel_2d`.
+        chunk_size (int): number of cells processed per chunk in the underlying sparse
+            computation, so memory stays bounded regardless of cell count / radius. Does
+            not change the result (see `compute_radius_weights_fast_sparse`).
 
     Returns:
         pd.DataFrame: DataFrame of received ligands for each cell.
@@ -192,7 +241,10 @@ def received_ligands(xy, ligands_df, lr_info, scale_factor=1, eps=1e-9):
     for radius in lr_info["radius"].unique():
         radius_ligands = lr_info[lr_info["radius"] == radius]["ligand"].values
         full_df.append(
-            compute_radius_weights_fast(xy, ligands_df[radius_ligands], radius, scale_factor, eps=eps)
+            compute_radius_weights_fast(
+                xy, ligands_df[radius_ligands], radius, scale_factor,
+                eps=eps, chunk_size=chunk_size
+            )
         )
 
     full_df = pd.concat([df for df in full_df if not df.empty], axis=1)
