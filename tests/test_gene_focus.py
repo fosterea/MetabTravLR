@@ -139,23 +139,30 @@ def test_genes_preserve_order(temp_dir):
     assert st.queue.all_genes == ['RecA', 'CD74', 'TF1']
 
 
-def test_genes_invalid_gene_raises(temp_dir):
+def test_genes_missing_are_dropped_with_warning(temp_dir, capsys):
+    """Genes absent from adata are DROPPED (not errored) with a printed warning naming
+    them; the present genes are still trained, in order."""
     adata = make_synthetic_adata(ALL_GENES)
     grn = MockRegulatoryFactory()
 
-    with pytest.raises(ValueError, match='NotAGene'):
-        SpaceTravLR(adata=adata, save_dir=temp_dir, grn=grn, genes=['CD74', 'NotAGene'])
+    st = SpaceTravLR(adata=adata, save_dir=temp_dir, grn=grn,
+                     genes=['CD74', 'NotAGene', 'LigA', 'AlsoBogus'])
+
+    assert st.queue.all_genes == ['CD74', 'LigA']   # present kept, order preserved
+    assert st.genes == ['CD74', 'LigA']
+    assert list(st.adata.var_names) == ALL_GENES     # predictors untouched
+    out = capsys.readouterr().out
+    assert 'NotAGene' in out and 'AlsoBogus' in out
+    assert 'drop' in out.lower()
 
 
-def test_genes_multiple_invalid_genes_all_named(temp_dir):
+def test_genes_all_missing_raises(temp_dir):
+    """If NONE of the focus genes are in the data, that's a real error (not silent no-op)."""
     adata = make_synthetic_adata(ALL_GENES)
     grn = MockRegulatoryFactory()
 
-    with pytest.raises(ValueError) as excinfo:
+    with pytest.raises(ValueError, match='none of the requested focus genes'):
         SpaceTravLR(adata=adata, save_dir=temp_dir, grn=grn, genes=['Bogus1', 'Bogus2'])
-
-    assert 'Bogus1' in str(excinfo.value)
-    assert 'Bogus2' in str(excinfo.value)
 
 
 def test_genes_empty_list_raises(temp_dir):

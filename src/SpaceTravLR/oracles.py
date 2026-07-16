@@ -387,10 +387,19 @@ class SpaceTravLR(BaseTravLR):
                     "genes was passed as an empty list; pass genes=None to train all genes"
                 )
             all_genes = list(dict.fromkeys(genes))
-            missing = [g for g in all_genes if g not in set(self.adata.var_names)]
+            var_set = set(self.adata.var_names)
+            missing = [g for g in all_genes if g not in var_set]
             if missing:
+                # Drop genes absent from the data (warn loudly) rather than erroring, so a
+                # focus list can be reused across datasets with slightly different panels.
+                print(
+                    f"⚠️  SpaceTravLR: dropping {len(missing)} focus gene(s) not in "
+                    f"adata.var_names: {missing}"
+                )
+                all_genes = [g for g in all_genes if g in var_set]
+            if len(all_genes) == 0:
                 raise ValueError(
-                    f"genes not found in adata.var_names: {missing}"
+                    "none of the requested focus genes are present in adata.var_names"
                 )
         else:
             all_genes = list(self.adata.var_names)
