@@ -120,3 +120,5 @@ cython_debug/
 
 tutorial/
 tmp/
+# Playwright MCP test artifacts (screenshots, snapshots, console logs)
+.playwright-mcp/
