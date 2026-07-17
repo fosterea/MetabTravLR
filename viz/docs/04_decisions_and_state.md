@@ -67,6 +67,12 @@ restart. Dates are absolute (project "today" was 2026-07-16 at kickoff).
 6. Screenshot captured as evidence.
 
 ## Changelog
+- 2026-07-17: **GitHub Pages deploy wired up.** Added `.github/workflows/deploy-viz.yml` (repo
+  root — the sanctioned out-of-`viz/` file, per Foster's explicit deploy request): builds
+  `viz/` and deploys `viz/dist` to Pages on push to `release` touching `viz/**` + manual
+  dispatch. Verified `npm run build` locally (dist 615KB JS / 198KB gz, relative `./assets`,
+  `public/data` bundled). **Foster's one-time step:** Settings → Pages → Source: GitHub
+  Actions. Site → `https://fosterea.github.io/MetabTravLR/`. Docs in `06_hosting.md`.
 - 2026-07-17: **Unit 6 (gene-pair tabs).** A tab strip over the canvas (`GenePairTabs`) lets you
   view the selected metabolite's transporter pairs individually: "All (metabolite)" plus one
   tab per gene pair significant at the current tier (with its interface count, sorted by

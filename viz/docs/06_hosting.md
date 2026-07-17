@@ -57,6 +57,11 @@ All have generous free tiers that comfortably cover a static site this size.
   enable Pages (or a `gh-pages` deploy action) pointing at the built `dist/`. `base: './'`
   already makes subpath hosting (`user.github.io/repo/`) work. **Tradeoff:** free Pages
   sites are **public only** (see privacy note below).
+  - **✅ Now wired up (2026-07-17).** `.github/workflows/deploy-viz.yml` builds `viz/` and
+    deploys `viz/dist` to Pages on every push to `release` touching `viz/**` (and on manual
+    "Run workflow"). **One-time step for Foster:** repo **Settings → Pages → Source: GitHub
+    Actions**. Then the site publishes at `https://fosterea.github.io/MetabTravLR/`. Because
+    the data is bundled into the build, there is no separate data upload.
 - **Cloudflare Pages** — connect the GitHub repo, set build command `npm run build` and
   output dir `dist`. Fast global CDN, very generous free tier. **Tradeoff:** a separate
   Cloudflare account/dashboard to manage.
