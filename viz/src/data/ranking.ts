@@ -9,6 +9,22 @@ export interface RankedEntity {
   hint: string;
   /** True if this entity is significant/involved at the current tier (for a badge). */
   flagged: boolean;
+  /** True if the metabolite has NO significant interaction at ANY tier (nor globally): it is
+   *  supported in the network but was eliminated for insignificance. Shown greyed, at the
+   *  bottom, so the full network support stays visible. */
+  eliminated?: boolean;
+}
+
+/** Significant somewhere — globally or at any tier. Independent of the currently-selected tier
+ *  (a metabolite significant at another tier is NOT "eliminated", just not involved here). */
+function metaboliteInvolvedAnywhere(m: MetaboliteEntity): boolean {
+  if (m.globalSignificant) return true;
+  if ((m.nSigGenePairsGlobal ?? 0) > 0) return true;
+  for (const t of Object.values(m.perTier)) {
+    if (t?.tcellInvolved) return true;
+    if ((t?.nSigPairs ?? 0) > 0) return true;
+  }
+  return false;
 }
 
 export function rankMetabolites(list: MetaboliteEntity[], tierId: string): RankedEntity[] {
@@ -16,20 +32,34 @@ export function rankMetabolites(list: MetaboliteEntity[], tierId: string): Ranke
     const t = m.perTier[tierId];
     const involved = t?.tcellInvolved === true;
     const nSig = t?.nSigPairs ?? 0;
+    const eliminated = !metaboliteInvolvedAnywhere(m);
     const rank =
       (involved ? 1_000_000 : 0) +
       (nSig ?? 0) * 1000 +
       (m.globalSignificant ? 100 : 0) +
       (m.nSigGenePairsGlobal ?? 0);
-    const hint = t?.tcellInvolved
-      ? `T-cell involved · ${nSig} sig pair${nSig === 1 ? '' : 's'}`
-      : m.globalSignificant
-        ? `global sig · ${m.nGenePairs} pairs`
-        : `${m.nGenePairs} pairs`;
-    return { entity: m as Entity, hint, flagged: involved || nSig > 0, rank };
+    const hint = eliminated
+      ? 'eliminated — not significant'
+      : t?.tcellInvolved
+        ? `T-cell involved · ${nSig} sig pair${nSig === 1 ? '' : 's'}`
+        : m.globalSignificant
+          ? `global sig · ${m.nGenePairs} pairs`
+          : `${m.nGenePairs} pairs`;
+    return { entity: m as Entity, hint, flagged: !eliminated && (involved || nSig > 0), rank, eliminated };
   });
-  scored.sort((a, b) => b.rank - a.rank || a.entity.id.localeCompare(b.entity.id));
-  return scored.map(({ entity, hint, flagged }) => ({ entity, hint, flagged }));
+  // Eliminated metabolites always sort below the significant ones (network support preserved).
+  scored.sort(
+    (a, b) =>
+      Number(a.eliminated) - Number(b.eliminated) ||
+      b.rank - a.rank ||
+      a.entity.id.localeCompare(b.entity.id),
+  );
+  return scored.map(({ entity, hint, flagged, eliminated }) => ({
+    entity,
+    hint,
+    flagged,
+    eliminated,
+  }));
 }
 
 export function rankGenePairs(list: GenePairEntity[]): RankedEntity[] {

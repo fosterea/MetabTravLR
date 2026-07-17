@@ -67,6 +67,13 @@ restart. Dates are absolute (project "today" was 2026-07-16 at kickoff).
 6. Screenshot captured as evidence.
 
 ## Changelog
+- 2026-07-17: **Unit 5 (full metabolite support).** All 160 network metabolites already show
+  in the side panel (none were cut); the 17 that are insignificant everywhere (no global sig +
+  no sig pair at any tier) are now marked `eliminated`, greyed, hinted "eliminated — not
+  significant", and sorted below a divider ("Eliminated — not significant (full network
+  support)"), so the complete network support is visible while the significant ones stay on
+  top. `metaboliteInvolvedAnywhere` is tier-independent (a metabolite significant at another
+  tier is not eliminated). Playwright-verified: 17 greyed items under the divider.
 - 2026-07-17: **Unit 4 (edge legibility).** Fixed edge clumping (Foster feedback, incl. the
   non-significant-included case). Nodes 40→56px and max edge width 22→15px so strong edges
   anchor cleanly instead of blobbing into small nodes; self-loops arc up-and-out

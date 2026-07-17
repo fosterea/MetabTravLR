@@ -1,6 +1,6 @@
 /** Left sidebar: searchable, ranked list of entities (metabolites / gene pairs). Selecting an
  *  item drives the graph. Metabolites are ranked to surface tier-relevant ones first. */
-import { useMemo, useState } from 'react';
+import { Fragment, useMemo, useState } from 'react';
 import { useVizStore } from '@/store/useVizStore';
 import {
   entityLabel,
@@ -50,23 +50,34 @@ export default function EntityPanel() {
       </div>
 
       <ul className={styles.list}>
-        {visible.map((r) => {
+        {visible.map((r, i) => {
           const id = r.entity.id;
           const selected = id === entityId;
+          // Divider announcing the greyed, insignificant tail (full network support shown).
+          const startEliminated = r.eliminated && !visible[i - 1]?.eliminated;
           return (
-            <li key={id}>
-              <button
-                className={`${styles.item} ${selected ? styles.selected : ''}`}
-                aria-pressed={selected}
-                onClick={() => selectEntity(id)}
-              >
-                <span className={styles.name}>{entityLabel(r.entity)}</span>
-                <span className={styles.hint}>
-                  {r.flagged && <span className={styles.dot} aria-hidden />}
-                  {r.hint}
-                </span>
-              </button>
-            </li>
+            <Fragment key={id}>
+              {startEliminated && (
+                <li className={styles.divider} aria-hidden>
+                  Eliminated — not significant (full network support)
+                </li>
+              )}
+              <li>
+                <button
+                  className={`${styles.item} ${selected ? styles.selected : ''} ${
+                    r.eliminated ? styles.eliminated : ''
+                  }`}
+                  aria-pressed={selected}
+                  onClick={() => selectEntity(id)}
+                >
+                  <span className={styles.name}>{entityLabel(r.entity)}</span>
+                  <span className={styles.hint}>
+                    {r.flagged && <span className={styles.dot} aria-hidden />}
+                    {r.hint}
+                  </span>
+                </button>
+              </li>
+            </Fragment>
           );
         })}
         {visible.length === 0 && <li className={styles.subtle}>No matches.</li>}
