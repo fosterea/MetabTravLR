@@ -88,12 +88,14 @@ batching (in eval mode — see §5). The **next** thing you'll hit at ~200–300
 | 6 | **get_betas batched (eval mode)** | fixes GPU OOM; ~1e-7 β change (correct) | `63f0400` |
 
 ### Still to make (ranked by impact for your data)
-1. **CU-5c — stream the spatial-maps tensor** (the 20 GB@100k / 59 GB@300k ceiling). Instead
-   of materializing `adata.obsm['spatial_maps']` (N × C × 64²) up front, generate each cell's
-   64×64 map **on the fly inside the DataLoader** (per batch), and drop the cached tensor.
-   Moderately invasive (touches `xyc2spatial`, `RotatedTensorDataset`, `init_data`); must be
-   behavior-preserving. **This is what unblocks 300k–1M.** *(Needed once you go past ~150k on a
-   64 GB node.)*
+1. **Spatial-maps: store 1 channel, not C** (supersedes the old "CU-5c streaming" idea — see
+   §5). The `(N, C, 64, 64)` tensor holds **C bit-identical copies** of the same distance map
+   (verified: max channel diff = 0), the CNN is `in_channels=1`, and only 1 channel is ever
+   read. Storing a single `(N, 1, 64, 64)` channel is a **C× memory cut** (20 GB→1.5 GB @100k,
+   208 GB→16 GB @1M), **~free** (no recompute; build is *faster*), and **bit-identical**. This
+   is strictly better than streaming (which would recompute maps ~G×E times ≈ +2 h/run). Touches
+   `xyc2spatial`/`init_data`/the dataset/`get_betas`; behavior-preserving. **This is the
+   spatial-maps fix; handles up to ~1M.** *(True per-batch streaming is only needed beyond that.)*
 2. **received-ligand: restrict L to the ligands actually used** (only ligands that appear in
    some gene's modulators, or only metabolite exporters if we go metabolite-only) — cuts the
    O(N·nbr·L) precompute. Cheap; big if L drops 10×.
@@ -159,8 +161,33 @@ Consequences:
   small MLP added to the CNN output. Neither is a scaling wall; C just multiplies the
   spatial-maps memory linearly (another reason CU-5c matters when C is large).
 
-So: the CNN is appropriately **linear in cells**; the work to scale is memory-streaming
-(CU-5c) + batching (done), not a rethink of the model.
+So: the CNN is appropriately **linear in cells**; the work to scale is memory (store 1 channel,
+above) + batching (done), not a rethink of the model.
+
+### The SPG is single-channel BY DESIGN — the multi-channel tensor is vestigial (paper-confirmed 2026-07-17)
+This matters for the spatial-maps fix and for interpreting β. Confirmed from the paper (Methods
+p.18, "Spatially Weighted Regression") + code:
+- **The SPG is ONE distance map per cell**: `𝒟ᵢ = √((uᵢ−u_cg)² + (vᵢ−v_cg)²)` from the cell's
+  `(x,y)` to each 64×64 grid center. It encodes the cell's **position**, and `βᵢ = f(𝒟ᵢ(uᵢ,vᵢ))`
+  — coefficients are a smooth **function of location**. The CNN is `in_channels=1`.
+- **Cell type does NOT enter via the grid.** Per the paper, *"cell type specific metadata can be
+  concatenated with the flattened spatial features from the CNN"* → it feeds the **MLP**. In the
+  code that metadata is the **neighborhood cell-type counts** (`create_spatial_features`, the
+  `spatial_features_mlp`); the paper leaves the exact metadata unspecified. The cell's **own**
+  type is captured by training a **separate model per cell type** (per cluster).
+- **The `(N, n_clusters, 64, 64)` tensor has no counterpart in the paper.** Its per-channel design
+  is inert (a no-op `mask=ones`; channels are identical), so it's a **vestige** of an abandoned
+  multi-channel idea — NOT a feature to "restore." Storing 1 channel is therefore both
+  behavior-preserving *and* paper-aligned.
+- **So "store 1 channel" (efficiency) and "restore per-cluster channels" (a hypothetical
+  modeling change) do NOT contradict** — the latter isn't the paper's design and would be a
+  from-scratch architecture change, not a bugfix. We do the former; we do NOT do the latter.
+- **What this means for β:** within a cell type, β is a smooth function of the cell's exact
+  location (the CNN; not binned to grid cells — the 64×64 is the output *sampling* resolution)
+  plus the neighborhood cell-type counts (the MLP). Two same-type cells at the same location with
+  the same neighborhood counts get the same β; otherwise β varies continuously. The model does
+  **not** use the spatial *arrangement* of specific cell types around a cell — only aggregate
+  counts — which is a genuine expressiveness limit, but it is consistent with the paper.
 
 ---
 
