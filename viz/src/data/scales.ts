@@ -7,7 +7,7 @@
  */
 import type { EntityEdge } from './types';
 
-export const EDGE_WIDTH_PX = { min: 2, max: 22 } as const;
+export const EDGE_WIDTH_PX = { min: 2, max: 15 } as const;
 
 export interface EdgeWidthScale {
   (value: number): number;

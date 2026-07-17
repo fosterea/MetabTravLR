@@ -35,8 +35,10 @@ export function buildStylesheet(): cytoscape.StylesheetJson {
         'text-background-opacity': 0.85,
         'text-background-shape': 'roundrectangle',
         'text-background-padding': '3px',
-        width: 40,
-        height: 40,
+        // Larger than the max edge width (15px) so strong edges anchor cleanly instead of
+        // blobbing into a small node.
+        width: 56,
+        height: 56,
         'border-width': 2,
         'border-color': border,
       },
@@ -54,19 +56,24 @@ export function buildStylesheet(): cytoscape.StylesheetJson {
       style: {
         width: 'data(w)',
         'curve-style': 'bezier',
+        // Wider control-point step spreads parallel edges (e.g. gene-pair fan-outs) apart
+        // instead of bundling them into one clump.
+        'control-point-step-size': 55,
         'line-color': edgeNonsig,
         opacity: 0.9,
-        'loop-direction': '-45deg',
-        'loop-sweep': '-30deg',
+        // Self-loops arc up and away from the below-node label; a wide sweep reads as a clear
+        // arc rather than a blob on top of the node.
+        'loop-direction': '-90deg',
+        'loop-sweep': '80deg',
       },
     },
     {
       selector: 'edge.sig',
-      style: { 'line-color': edgeSig, opacity: 1 },
+      style: { 'line-color': edgeSig, opacity: 0.92 },
     },
     {
       selector: 'edge.nonsig',
-      style: { 'line-color': edgeNonsig, 'line-style': 'dashed', opacity: 0.5 },
+      style: { 'line-color': edgeNonsig, 'line-style': 'dashed', width: 1.5, opacity: 0.3 },
     },
     {
       // Fan-out transporter-gene-pair sub-edges (metabolite "graph" expand mode). Slightly

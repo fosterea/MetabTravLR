@@ -67,6 +67,15 @@ restart. Dates are absolute (project "today" was 2026-07-16 at kickoff).
 6. Screenshot captured as evidence.
 
 ## Changelog
+- 2026-07-17: **Unit 4 (edge legibility).** Fixed edge clumping (Foster feedback, incl. the
+  non-significant-included case). Nodes 40→56px and max edge width 22→15px so strong edges
+  anchor cleanly instead of blobbing into small nodes; self-loops arc up-and-out
+  (`loop-direction -90deg`, `loop-sweep 80deg`) instead of sitting as a blob on the node;
+  parallel edges (gene-pair fan-outs) spread via `control-point-step-size: 55`; non-significant
+  edges recede to a thin (1.5px) faint (opacity 0.3) dashed line so they stop competing with
+  significant interfaces. Playwright-verified both the non-sig metabolite view and the
+  expand-all fan-out; 0 console errors. Also: `.playwright-mcp/` and `*.tsbuildinfo` gitignored
+  (the two tsbuildinfo files untracked); root `.gitignore` touched by explicit request.
 - 2026-07-17: **Unit 3 review follow-up.** Addressed the review's Medium + 2 Lows: metabolite
   edges now scale over the full view set (not just the unfanned fallback remainder), so a lone
   fallback interface no longer jumps to max width; `genePairsAtInterface` dedups on a canonical
