@@ -64,7 +64,7 @@ INPUT: AnnData  X:(N×genes) counts, obsm['spatial']:(N×2), obs['cell_type']
 |---|---|---|---|---|
 | received-ligand matrix | O(N·nbr) | ~1.5 GB | ~4 GB | ✅ fixed (narrow kernel + chunk, `793c096`) — was **57 GB** |
 | **get_betas CNN forward** (per cluster, GPU) | O(batch·16·d²) | bounded | bounded | ✅ batched (`63f0400`) — was **>9 GB → OOM** (the crash) |
-| **spatial-maps tensor** (CPU) | O(N·C·d²) | **~20 GB** | ~59 GB | ⚠ **next ceiling — not yet fixed** (CU-5c) |
+| **spatial-maps tensor** (CPU) | O(N·**1**·d²) | ~1.5 GB | ~4.9 GB | ✅ 1-channel (`53e8d3d`) — was O(N·C·d²) = **20 GB / 59 GB** |
 | betadata parquet (per gene) | O(N·M) | ~1 GB | ~3 GB | ok; smaller if fewer modulators (§4) |
 | create_spatial_features | O(N·nbr) | ~1.4 GB | ~4 GB | ✅ KDTree (`691ab41`) — was 80 GB |
 
@@ -86,10 +86,11 @@ batching (in eval mode — see §5). The **next** thing you'll hit at ~200–300
 | 4 | **create_spatial_features → KDTree** (bit-exact) | 80 GB → 1.4 GB @100k | `691ab41` |
 | 5 | **received-ligand kernel: narrow + hard cutoff + row-chunk** | 57 GB → ~1.5 GB @100k; also a paper-correctness fix (hard cutoff at `radius`) | `793c096` |
 | 6 | **get_betas batched (eval mode)** | fixes GPU OOM; ~1e-7 β change (correct) | `63f0400` |
+| 7 | **spatial-maps: 1 channel not C** (bit-identical) | C× memory cut (20→1.5 GB @100k); handles ~1M | `53e8d3d` |
 
 ### Still to make (ranked by impact for your data)
-1. **Spatial-maps: store 1 channel, not C** (supersedes the old "CU-5c streaming" idea — see
-   §5). The `(N, C, 64, 64)` tensor holds **C bit-identical copies** of the same distance map
+1. ✅ **DONE (`53e8d3d`) — Spatial-maps: store 1 channel, not C** (supersedes the old "CU-5c
+   streaming" idea — see §5). The `(N, C, 64, 64)` tensor held **C bit-identical copies** of the same distance map
    (verified: max channel diff = 0), the CNN is `in_channels=1`, and only 1 channel is ever
    read. Storing a single `(N, 1, 64, 64)` channel is a **C× memory cut** (20 GB→1.5 GB @100k,
    208 GB→16 GB @1M), **~free** (no recompute; build is *faster*), and **bit-identical**. This
