@@ -17,14 +17,23 @@ export default function EdgeDetails() {
   const gpBundle = useVizStore((s) => s.gpBundle);
   const showNonSignificant = useVizStore((s) => s.showNonSignificant);
   const gpExpandMode = useVizStore((s) => s.gpExpandMode);
+  const gpTab = useVizStore((s) => s.gpTab);
   const selectedEdge = useVizStore((s) => s.selectedEdge);
   const selectEdge = useVizStore((s) => s.selectEdge);
 
   // Resolve against the SAME visible set the graph renders, so the panel and the canvas never
-  // disagree (e.g. after toggling non-significant off, a now-hidden pick shows no panel).
+  // disagree (e.g. after toggling non-significant off, a now-hidden pick shows no panel). When
+  // a gene-pair tab is isolated, resolve against that pair's edges instead.
   const edge = useMemo(() => {
-    if (!selectedEdge || !entityId || !edgeBundle || !tier) return undefined;
+    if (!selectedEdge || !tier) return undefined;
     const present = new Set(tier.cellTypes);
+    if (gpTab && gpBundle) {
+      const list = (gpBundle.byEntity[gpTab] ?? []).filter(
+        (e) => present.has(e.source) && present.has(e.target),
+      );
+      return list.find((e) => sameInterface(e, selectedEdge));
+    }
+    if (!entityId || !edgeBundle) return undefined;
     const visible = (edgeBundle.byEntity[entityId] ?? []).filter(
       (e) =>
         present.has(e.source) &&
@@ -32,7 +41,13 @@ export default function EdgeDetails() {
         (showNonSignificant || e.scores.selected),
     );
     return visible.find((e) => sameInterface(e, selectedEdge));
-  }, [selectedEdge, entityId, edgeBundle, tier, showNonSignificant]);
+  }, [selectedEdge, entityId, edgeBundle, gpTab, gpBundle, tier, showNonSignificant]);
+
+  const gpTabLabel = useMemo(() => {
+    if (!gpTab) return undefined;
+    const gp = dataset?.entities.gene_pair?.find((g) => g.id === gpTab);
+    return gp ? gp.genes.join(' – ') : gpTab.replace('__', ' – ');
+  }, [gpTab, dataset]);
 
   const metab = useMemo(
     () =>
@@ -42,17 +57,20 @@ export default function EdgeDetails() {
     [dataset, entityKind, entityId],
   );
 
-  // Panel-mode gene-pair breakdown for a metabolite interface (empty in graph mode / gp view).
+  // Panel-mode gene-pair breakdown for a metabolite interface (empty in graph mode, gp view,
+  // or when a single gene-pair tab is already isolated).
   const gps = useMemo(
     () =>
-      edge && metab && gpExpandMode === 'panel' ? genePairsAtInterface(metab, gpBundle, edge) : [],
-    [edge, metab, gpBundle, gpExpandMode],
+      edge && metab && gpExpandMode === 'panel' && !gpTab
+        ? genePairsAtInterface(metab, gpBundle, edge)
+        : [],
+    [edge, metab, gpBundle, gpExpandMode, gpTab],
   );
 
   if (!edge) return null;
   const self = isSelfEdge(edge);
   const s = edge.scores;
-  const showBreakdown = !!metab && gpExpandMode === 'panel';
+  const showBreakdown = !!metab && gpExpandMode === 'panel' && !gpTab;
 
   return (
     <div className={styles.panel} aria-label="Selected interface details">
@@ -73,8 +91,12 @@ export default function EdgeDetails() {
         </button>
       </div>
       <div className={styles.sub}>
-        {entityKind === 'metabolite' ? 'metabolite' : 'gene-pair'} interface
-        {self ? ' · within cell type' : ''} · {tier?.label}
+        {gpTab
+          ? `gene pair ${gpTabLabel}`
+          : entityKind === 'metabolite'
+            ? 'metabolite'
+            : 'gene-pair'}{' '}
+        interface{self ? ' · within cell type' : ''} · {tier?.label}
       </div>
       <dl className={styles.rows}>
         <div className={styles.row}>

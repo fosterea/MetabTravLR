@@ -31,6 +31,9 @@ interface VizState {
   gpExpandMode: 'panel' | 'graph';
   /** Graph mode only: fan out every interface at once (vs just the clicked one). */
   gpExpandAll: boolean;
+  /** A single transporter gene pair (id) of the current metabolite, isolated in its own
+   *  "tab": the graph shows only that pair's interfaces. Undefined = the metabolite ("All"). */
+  gpTab?: string;
 
   /** Edge bundle for the current (datasetId, tierId, entityKind). */
   edgeBundle?: EdgeBundle;
@@ -46,6 +49,7 @@ interface VizState {
   selectEdge: (edge: { source: string; target: string } | undefined) => void;
   setGpExpandMode: (mode: 'panel' | 'graph') => void;
   toggleGpExpandAll: () => void;
+  setGpTab: (gpTab: string | undefined) => void;
   toggleNonSignificant: () => void;
 }
 
@@ -88,6 +92,7 @@ export const useVizStore = create<VizState>((set, get) => ({
         selectedEdge: undefined,
         edgeBundle: undefined,
         gpBundle: undefined,
+        gpTab: undefined,
       });
       if (tierId) await loadBundle(set, get);
     } catch (e) {
@@ -98,7 +103,7 @@ export const useVizStore = create<VizState>((set, get) => ({
   selectTier: async (tierId) => {
     try {
       // Drop the stale bundle so the graph never renders a metabolite's old-tier edges.
-      set({ tierId, selectedEdge: undefined, edgeBundle: undefined, gpBundle: undefined });
+      set({ tierId, selectedEdge: undefined, edgeBundle: undefined, gpBundle: undefined, gpTab: undefined });
       await loadBundle(set, get);
     } catch (e) {
       set({ status: 'error', error: (e as Error).message });
@@ -114,6 +119,7 @@ export const useVizStore = create<VizState>((set, get) => ({
         selectedEdge: undefined,
         edgeBundle: undefined,
         gpBundle: undefined,
+        gpTab: undefined,
       });
       await loadBundle(set, get);
     } catch (e) {
@@ -122,13 +128,16 @@ export const useVizStore = create<VizState>((set, get) => ({
   },
 
   // Changing the entity swaps the whole edge set, so any picked edge is now stale.
-  selectEntity: (entityId) => set({ entityId, selectedEdge: undefined }),
+  selectEntity: (entityId) => set({ entityId, selectedEdge: undefined, gpTab: undefined }),
 
   selectEdge: (selectedEdge) => set({ selectedEdge }),
 
   setGpExpandMode: (gpExpandMode) => set({ gpExpandMode }),
 
   toggleGpExpandAll: () => set((s) => ({ gpExpandAll: !s.gpExpandAll })),
+
+  // Isolating a gene-pair tab swaps the whole displayed edge set, so drop any picked edge.
+  setGpTab: (gpTab) => set({ gpTab, selectedEdge: undefined }),
 
   toggleNonSignificant: () => set((s) => ({ showNonSignificant: !s.showNonSignificant })),
 }));

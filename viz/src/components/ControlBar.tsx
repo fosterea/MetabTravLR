@@ -10,6 +10,9 @@ export default function ControlBar() {
   const showNonSignificant = useVizStore((s) => s.showNonSignificant);
   const gpExpandMode = useVizStore((s) => s.gpExpandMode);
   const gpExpandAll = useVizStore((s) => s.gpExpandAll);
+  const gpTab = useVizStore((s) => s.gpTab);
+  // These metabolite controls don't apply while a single gene-pair tab is isolated.
+  const metabControls = entityKind === 'metabolite' && !gpTab;
 
   const selectDataset = useVizStore((s) => s.selectDataset);
   const selectTier = useVizStore((s) => s.selectTier);
@@ -78,7 +81,7 @@ export default function ControlBar() {
 
       {/* Metabolite → transporter gene-pair expansion. "In panel" lists the pairs in the edge
           details; "On graph" fans the picked (or all) interface into gene-pair sub-edges. */}
-      {entityKind === 'metabolite' && (
+      {metabControls && (
         <div className="field">
           <label>Gene pairs</label>
           <div className="segmented" role="group" aria-label="Gene-pair expansion">
@@ -100,7 +103,7 @@ export default function ControlBar() {
         </div>
       )}
 
-      {entityKind === 'metabolite' && gpExpandMode === 'graph' && (
+      {metabControls && gpExpandMode === 'graph' && (
         <label className="checkbox">
           <input type="checkbox" checked={gpExpandAll} onChange={toggleGpExpandAll} />
           Expand all interfaces
@@ -109,7 +112,7 @@ export default function ControlBar() {
 
       {/* Gene-pair edges come from harreman's _gp_sig table (significant-only), so the
           non-significant toggle is meaningless there — only offer it for metabolites. */}
-      {entityKind === 'metabolite' && (
+      {metabControls && (
         <label className="checkbox" style={{ marginLeft: 'auto' }}>
           <input type="checkbox" checked={showNonSignificant} onChange={toggleNonSignificant} />
           Show non-significant edges

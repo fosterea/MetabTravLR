@@ -67,6 +67,15 @@ restart. Dates are absolute (project "today" was 2026-07-16 at kickoff).
 6. Screenshot captured as evidence.
 
 ## Changelog
+- 2026-07-17: **Unit 6 (gene-pair tabs).** A tab strip over the canvas (`GenePairTabs`) lets you
+  view the selected metabolite's transporter pairs individually: "All (metabolite)" plus one
+  tab per gene pair significant at the current tier (with its interface count, sorted by
+  strength). Picking a pair tab (`store.gpTab`) isolates just that pair's interfaces on the
+  graph — a per-pair drill-down complementing the on-graph fan-out and the panel list. While a
+  tab is active the metabolite-only controls (expand mode / expand-all / non-sig) hide, the
+  EdgeDetails panel resolves against the pair's edges and labels it "gene pair X interface",
+  and hover shows the pair. Playwright-verified: 7 pair tabs for Iron@Tier3, CUBN–CUBN isolates
+  11 interfaces, controls hidden, panel + hover correct; 0 console errors.
 - 2026-07-17: **Unit 5 (full metabolite support).** All 160 network metabolites already show
   in the side panel (none were cut); the 17 that are insignificant everywhere (no global sig +
   no sig pair at any tier) are now marked `eliminated`, greyed, hinted "eliminated — not
