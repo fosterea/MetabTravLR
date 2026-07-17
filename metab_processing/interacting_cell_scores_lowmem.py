@@ -210,7 +210,7 @@ def compute_interacting_cell_scores_lowmem(
             print("[lowmem] Running the parametric test...")
         adata.uns["interacting_cell_results"]["p"] = {"gp": {}, "m": {}}
 
-        Wtot2 = torch.tensor((weights.values() ** 2).sum(), device=device)
+        Wtot2 = torch.tensor((weights.coalesce().values() ** 2).sum(), device=device)
 
         counts = counts_from_anndata(adata[cells, genes], layer_key_p_test, dense=True)
         counts = torch.tensor(counts, dtype=torch.float64, device=device)
