@@ -82,6 +82,12 @@ export function buildStylesheet(): cytoscape.StylesheetJson {
       style: { 'line-color': edgeNonsig, 'line-style': 'dashed', width: 1.5, opacity: 0.3 },
     },
     {
+      // Background-only significant interface (no T-cell endpoint): recessive so T-cell
+      // interfaces read first. Compound selector so it only dims the otherwise-bold sig edges.
+      selector: 'edge.sig.bg',
+      style: { opacity: 0.32 },
+    },
+    {
       // Fan-out transporter-gene-pair sub-edges (metabolite "graph" expand mode). Each pair
       // gets a categorical color (edge.gp-slot-N below) so the fan is differentiable.
       selector: 'edge.gp',

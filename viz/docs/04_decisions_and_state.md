@@ -67,6 +67,17 @@ restart. Dates are absolute (project "today" was 2026-07-16 at kickoff).
 6. Screenshot captured as evidence.
 
 ## Changelog
+- 2026-07-17: **Usability pass (drove the app for "which metabolites influence T cells?").**
+  Top finding + fix: the background `other↔other` self-interaction dwarfs the T-cell interfaces
+  (Tier1 Iron: bg C_np 194,927 vs T↔other 14,116, T↔T 2,590) and visually dominated. Now
+  background-only significant interfaces (neither endpoint a focal/T-cell node, via
+  `classifyCellType` — not a hard-coded string) render recessive (`edge.sig.bg` opacity 0.32)
+  so T-cell interfaces read first; fan-out/gene-pair views are exempt (there you want all pairs
+  vivid). Playwright-verified Tier1 (bg self-loop faded, T-cell edges bold) and Tier3 (only the
+  lone other↔other dims). **Other findings logged, not yet actioned** (see Open questions):
+  2-node tiers waste horizontal space (circle layout stacks them vertically); expand-mode/
+  expand-all persist across metabolite+tier changes; top-left gp-tabs vs top-right entity panel
+  can crowd on a narrow window.
 - 2026-07-17: **Gene-pair color-coding (differentiate the fan-out).** Each transporter pair now
   gets a stable categorical color (theme.css `--gp-1..8`, validated colorblind-safe dataviz
   palette; adjacent CVD in the 6–8 band → legal because the **labelled tabs + hover** are the
