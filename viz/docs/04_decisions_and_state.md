@@ -67,6 +67,23 @@ restart. Dates are absolute (project "today" was 2026-07-16 at kickoff).
 6. Screenshot captured as evidence.
 
 ## Changelog
+- 2026-07-17: **Gene-pair color-coding (differentiate the fan-out).** Each transporter pair now
+  gets a stable categorical color (theme.css `--gp-1..8`, validated colorblind-safe dataviz
+  palette; adjacent CVD in the 6–8 band → legal because the **labelled tabs + hover** are the
+  required secondary encoding, plus all 8 clear 3:1 contrast on both themes). Shared ordering
+  (`metaboliteSigPairsAtTier` → slot) means a pair's color is identical across the on-graph
+  fan-out sub-edges, its tab swatch, the isolated-pair view, and the panel breakdown swatches.
+  Playwright-verified: 7 pairs → 7 distinct edge colors matching their tab swatches; 0 console
+  errors. Also folded in the Unit-6 review L2 (gpTabInfo guards on gpBundle) and made gpTab
+  lookups order-tolerant (`gpEdgesInTier`).
+- 2026-07-17: **Sig-interaction counts + full gene-pair support.** Side panel now shows each
+  entity's # significant cell-type interfaces at the current tier (from the loaded bundle):
+  metabolites read "N sig interfaces · T-cell"; the **gene-pair view now lists all 416 pairs**
+  (was significant-only), **sorted by sig-interaction count desc**, each "N sig interfaces · M
+  metabolites", with the 280 pairs that have no significant interaction at the tier greyed below
+  a "No significant interactions at this tier (full support)" divider — same treatment as the
+  eliminated metabolites. Counts/sorting/greying update per tier. Playwright-verified: 416
+  listed, 280 greyed at Tier3, top sorted CUBN–CUBN (11) → CD38–CD38 (7) → …
 - 2026-07-17: **GitHub Pages deploy wired up.** Added `.github/workflows/deploy-viz.yml` (repo
   root — the sanctioned out-of-`viz/` file, per Foster's explicit deploy request): builds
   `viz/` and deploys `viz/dist` to Pages on push to `release` touching `viz/**` + manual

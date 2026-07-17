@@ -16,16 +16,24 @@ export default function EntityPanel() {
   const tierId = useVizStore((s) => s.tierId);
   const entityKind = useVizStore((s) => s.entityKind);
   const entityId = useVizStore((s) => s.entityId);
+  const edgeBundle = useVizStore((s) => s.edgeBundle);
   const selectEntity = useVizStore((s) => s.selectEntity);
   const [query, setQuery] = useState('');
 
+  // byEntity is the current (tier, kind) bundle, so counts/sorting update per tier.
+  const byEntity = edgeBundle?.byEntity;
   const ranked: RankedEntity[] = useMemo(() => {
     if (!dataset) return [];
     if (entityKind === 'metabolite') {
-      return rankMetabolites(dataset.entities.metabolite ?? [], tierId ?? '');
+      return rankMetabolites(dataset.entities.metabolite ?? [], tierId ?? '', byEntity);
     }
-    return rankGenePairs(dataset.entities.gene_pair ?? []);
-  }, [dataset, tierId, entityKind]);
+    return rankGenePairs(dataset.entities.gene_pair ?? [], byEntity);
+  }, [dataset, tierId, entityKind, byEntity]);
+
+  const dividerLabel =
+    entityKind === 'metabolite'
+      ? 'Eliminated — not significant (full network support)'
+      : 'No significant interactions at this tier (full support)';
 
   const visible = useMemo(() => filterEntities(ranked, query), [ranked, query]);
 
@@ -59,7 +67,7 @@ export default function EntityPanel() {
             <Fragment key={id}>
               {startEliminated && (
                 <li className={styles.divider} aria-hidden>
-                  Eliminated — not significant (full network support)
+                  {dividerLabel}
                 </li>
               )}
               <li>

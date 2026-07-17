@@ -1,7 +1,12 @@
 /** Entity list ordering for the side panel. Metabolites are ranked to surface the ones most
  *  involved at the current tier (serves the "which metabolites influence T cells?" question
  *  without hard-coding T cells — it uses the tier's own T-cell-involvement summary field). */
-import type { Entity, GenePairEntity, MetaboliteEntity } from './types';
+import type { Entity, EntityEdge, GenePairEntity, MetaboliteEntity } from './types';
+
+/** entityId -> its edges at the current (tier, kind), i.e. `EdgeBundle.byEntity`. */
+type ByEntity = Record<string, EntityEdge[]> | undefined;
+
+const plural = (n: number) => (n === 1 ? '' : 's');
 
 export interface RankedEntity {
   entity: Entity;
@@ -27,25 +32,40 @@ function metaboliteInvolvedAnywhere(m: MetaboliteEntity): boolean {
   return false;
 }
 
-export function rankMetabolites(list: MetaboliteEntity[], tierId: string): RankedEntity[] {
+export function rankMetabolites(
+  list: MetaboliteEntity[],
+  tierId: string,
+  byEntity?: ByEntity,
+): RankedEntity[] {
   const scored = list.map((m) => {
     const t = m.perTier[tierId];
     const involved = t?.tcellInvolved === true;
-    const nSig = t?.nSigPairs ?? 0;
     const eliminated = !metaboliteInvolvedAnywhere(m);
+    // # significant cell-type interfaces for this metabolite at the current tier (from the
+    // loaded bundle); falls back to the summary sig-pair count while the bundle is loading.
+    const nSigInt = byEntity ? (byEntity[m.id] ?? []).filter((e) => e.scores.selected).length : null;
+    const nForRank = nSigInt ?? t?.nSigPairs ?? 0;
     const rank =
       (involved ? 1_000_000 : 0) +
-      (nSig ?? 0) * 1000 +
+      nForRank * 1000 +
       (m.globalSignificant ? 100 : 0) +
       (m.nSigGenePairsGlobal ?? 0);
     const hint = eliminated
       ? 'eliminated — not significant'
-      : t?.tcellInvolved
-        ? `T-cell involved · ${nSig} sig pair${nSig === 1 ? '' : 's'}`
-        : m.globalSignificant
-          ? `global sig · ${m.nGenePairs} pairs`
-          : `${m.nGenePairs} pairs`;
-    return { entity: m as Entity, hint, flagged: !eliminated && (involved || nSig > 0), rank, eliminated };
+      : nSigInt != null
+        ? `${nSigInt} sig interface${plural(nSigInt)}${involved ? ' · T-cell' : ''}`
+        : involved
+          ? 'T-cell involved'
+          : m.globalSignificant
+            ? 'global sig'
+            : `${m.nGenePairs} pairs`;
+    return {
+      entity: m as Entity,
+      hint,
+      flagged: !eliminated && (involved || (nSigInt ?? 0) > 0),
+      rank,
+      eliminated,
+    };
   });
   // Eliminated metabolites always sort below the significant ones (network support preserved).
   scored.sort(
@@ -62,14 +82,37 @@ export function rankMetabolites(list: MetaboliteEntity[], tierId: string): Ranke
   }));
 }
 
-export function rankGenePairs(list: GenePairEntity[]): RankedEntity[] {
-  return [...list]
-    .sort((a, b) => b.metabolites.length - a.metabolites.length || a.id.localeCompare(b.id))
-    .map((g) => ({
-      entity: g as Entity,
-      hint: `${g.metabolites.length} metabolite${g.metabolites.length === 1 ? '' : 's'}`,
-      flagged: g.metabolites.length > 0,
-    }));
+export function rankGenePairs(list: GenePairEntity[], byEntity?: ByEntity): RankedEntity[] {
+  const scored = list.map((g) => {
+    // The gene_pair bundle is significant-only, so its edge count IS the number of significant
+    // interactions at this tier. Pairs absent from the bundle have none (greyed, like eliminated
+    // metabolites) — but all network pairs stay listed so the full support is visible.
+    const nSigInt = byEntity ? (byEntity[g.id]?.length ?? 0) : null;
+    const nMetab = g.metabolites.length;
+    const eliminated = nSigInt === 0;
+    const hint =
+      nSigInt == null
+        ? `${nMetab} metabolite${plural(nMetab)}`
+        : nSigInt === 0
+          ? `no sig interactions here · ${nMetab} metabolite${plural(nMetab)}`
+          : `${nSigInt} sig interface${plural(nSigInt)} · ${nMetab} metabolite${plural(nMetab)}`;
+    return { entity: g as Entity, hint, flagged: (nSigInt ?? 0) > 0, eliminated, nSigInt, nMetab };
+  });
+  // Sort by # significant interactions (desc), then metabolite count; greyed (0) sink to the
+  // bottom. While the bundle is loading (nSigInt null) fall back to metabolite-count order.
+  scored.sort(
+    (a, b) =>
+      Number(a.eliminated) - Number(b.eliminated) ||
+      (b.nSigInt ?? 0) - (a.nSigInt ?? 0) ||
+      b.nMetab - a.nMetab ||
+      a.entity.id.localeCompare(b.entity.id),
+  );
+  return scored.map(({ entity, hint, flagged, eliminated }) => ({
+    entity,
+    hint,
+    flagged,
+    eliminated,
+  }));
 }
 
 export const entityLabel = (e: Entity): string =>
