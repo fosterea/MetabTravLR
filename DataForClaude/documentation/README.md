@@ -21,6 +21,10 @@ memory; the root `../../CLAUDE.md` points here).
 - `01_pipeline_deep_dive.md` — exact call sites + line refs and the **surgical wiring map**
   (change units CU-1…CU-5) for adding metabolites as a new modulator group. Read when we
   start coding.
+- `06_efficiency_and_dataflow.md` — **how a training run flows with a memory/compute lens**:
+  where the big tensors are, what scales with cells vs modulators, the efficiency improvements
+  made + still to make, and answers to "what would metabolite-only training save?" and "how does
+  the CNN-over-a-grid scale?". Read to reason about large-dataset performance.
 - `05_harreman_reference.md` — **what harreman actually does**, read from its source: the
   pipeline, output tables, the **`CT1→CT2` "arrow" is NOT a direction** (undirected interface;
   sorted-label artifact), and the **per-cell "neighborhood" analysis + its GPU-OOM** and fix

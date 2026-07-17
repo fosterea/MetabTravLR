@@ -140,6 +140,14 @@ closes the "tests only hit the R²<0.15 shortcut" gap.
   100k should now fit on a normal node.
 - **Gene-focus missing-gene handling:** now **drops missing focus genes with a printed warning**
   (was ValueError); all-missing still errors. Committed `fd815ed`.
+- **get_betas GPU OOM (112k Xenium run, 2026-07-17):** the actual crash on Foster's 112,551-cell
+  melanoma run (10.5 GB GPU) was a CUDA OOM in `get_betas` — it ran the CNN forward on a whole
+  cluster's cells at once (unbatched). Fix (in progress): **batch it in eval mode**. `get_betas`
+  used train-mode BatchNorm (full-cluster stats), inconsistent with `predict()` (eval); measured
+  eval-vs-train β diff is **max abs 1.19e-7 / mean 5.6e-10** (negligible), so eval-mode batching
+  is effectively behavior-preserving and correct. **Full data-flow / memory analysis + efficiency
+  roadmap + the metabolite-only and CNN-scaling answers are in `06_efficiency_and_dataflow.md`.**
+  Next ceiling after this = the spatial-maps tensor (~20 GB@100k, CU-5c).
 - **CU-1 (metabolite group):** not started — the actual science (add harreman metabolite pairs
   as the new `beta_<export>@<import>` group).
 
