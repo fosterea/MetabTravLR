@@ -39,6 +39,9 @@ export default function GraphView() {
       maxZoom: 3,
     });
     cyRef.current = cy;
+    // Dev-only test handle: Cytoscape renders to <canvas> (no DOM to probe), so expose the
+    // instance for the playwright MCP to assert node/label/edge geometry. Stripped in prod.
+    if (import.meta.env.DEV) (window as unknown as { __cy?: cytoscape.Core }).__cy = cy;
     return () => {
       cy.destroy();
       cyRef.current = null;
@@ -73,8 +76,9 @@ export default function GraphView() {
       cy.add(els);
     });
     cy.style(buildStylesheet());
-    cy.layout({ name: 'circle', padding: 40, animate: false }).run();
-    cy.fit(undefined, 48);
+    cy.layout({ name: 'circle', padding: 60, animate: false }).run();
+    // Extra fit padding leaves room for the below-node labels so they aren't clipped.
+    cy.fit(undefined, 72);
   }, [tier, edges]);
 
   // Loading takes precedence over the empty state so the two never overlap.

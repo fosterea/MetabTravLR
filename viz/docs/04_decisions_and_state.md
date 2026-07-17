@@ -59,6 +59,17 @@ restart. Dates are absolute (project "today" was 2026-07-16 at kickoff).
 6. Screenshot captured as evidence.
 
 ## Changelog
+- 2026-07-17: **Unit 1 (graph legibility).** (1) Cell-type labels moved BELOW the node
+  (`text-valign: bottom` + canvas-colored halo) so long names ("Proliferating CD8 T cell")
+  no longer overflow the circle. (2) Edge-width scale now normalizes between the view's
+  log-min and log-max (was 0..max) and widened px range 2–22 (was 1.5–14), so strengths are
+  visibly distinguishable instead of hugging the floor; a lone/all-equal edge maps to max.
+  Added a **dev-only `window.__cy` test handle** (stripped in prod) so the playwright MCP can
+  assert node/label/edge geometry against the canvas. Playwright-verified: 5 labels render
+  below their nodes; edge widths span 2→22 with good spread; 0 console errors.
+- 2026-07-17: Wrote `docs/06_hosting.md` — static-hosting guide (Firebase Hosting steps +
+  GitHub Pages / Cloudflare Pages / Netlify alternatives, access-control/privacy note,
+  "when data grows" future note, cost summary). No code or deploy; docs only.
 - 2026-07-16: Scaffold, docs, ingest adapter, data validated. (this file created)
 - 2026-07-16: MVP built + committed (638bf1f). Ran the dev/review loop once: review
   sub-agent audited the baseline; dev sub-agent fixed all findings — H1 (tier-switch stale
