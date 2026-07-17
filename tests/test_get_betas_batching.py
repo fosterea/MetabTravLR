@@ -123,7 +123,11 @@ def test_eval_mode_matches_old_train_mode_within_tiny_tolerance():
                 continue
             m = est.models[c]
             m.train()  # old behavior: NOT eval
-            sm = torch.from_numpy(est.sp_maps[mask][:, c:c + 1, :, :]).float().to(est.device)
+            # `sp_maps` now stores a single channel that is bit-identical to
+            # the old per-cluster channel `c` (see `xyc2spatial_fast` in
+            # `models/spatial_map.py`), so channel 0 here is what channel `c`
+            # used to be.
+            sm = torch.from_numpy(est.sp_maps[mask][:, 0:1, :, :]).float().to(est.device)
             sf = torch.from_numpy(est.spatial_features.values[mask]).float().to(est.device)
             betas.extend(m.get_betas(sm, sf).cpu().numpy())
     old_train = pd.DataFrame(

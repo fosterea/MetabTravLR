@@ -435,7 +435,12 @@ class RotatedTensorDataset(Dataset):
         return len(self.X_cell)
 
     def __getitem__(self, idx):
-        sp_map = self.sp_maps[idx, self.cluster : self.cluster + 1, :, :]
+        # `sp_maps` now has a single channel (see `xyc2spatial_fast`): every
+        # old per-cluster channel was a bit-identical copy of channel 0, so
+        # `self.cluster` (kept for backward-compat/reference) is no longer
+        # needed to select the channel -- channel 0 IS the old channel
+        # `self.cluster`.
+        sp_map = self.sp_maps[idx, 0:1, :, :]
         if self.rotate_maps:
             k = np.random.choice([0, 1, 2, 3])
             sp_map = np.rot90(sp_map, k=k, axes=(1, 2))
@@ -1019,7 +1024,9 @@ class SpatialCellularProgramsEstimator:
                 model = self.models[cluster_target]
                 model.eval()
 
-                cluster_sp_maps_np = self.sp_maps[mask][:, cluster_target:cluster_target+1, :, :]
+                # `sp_maps` now has a single channel that is bit-identical to
+                # the old `cluster_target`-th channel (see `xyc2spatial_fast`).
+                cluster_sp_maps_np = self.sp_maps[mask][:, 0:1, :, :]
                 spf_np = self.spatial_features.values[mask]
 
                 n_cells = cluster_sp_maps_np.shape[0]

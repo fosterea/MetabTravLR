@@ -26,10 +26,18 @@ class SpatialMapsTest(TestCase):
     #     )
 
     def test_xyc2spatial_fast(self):
+        # NOTE: `xyc2spatial_fast` now returns a single channel `(N, 1, m, n)`
+        # instead of one (bit-identical) channel per cluster `(N, n_clusters, m, n)`.
+        # All channels used to be exact copies of each other (the per-cluster
+        # mask was a no-op), so storing n_clusters copies was pure wasted
+        # memory; see `models/spatial_map.py::xyc2spatial_fast` and
+        # `tests/test_spatial_maps_single_channel.py` for the bit-identity
+        # proof against the old multi-channel behavior. This test now only
+        # asserts the (updated) shape contract.
         n_samples = np.random.randint(100, 1000)
         n_clusters = np.random.randint(2, 10)
         m = n = np.random.randint(3, 12)
-        
+
         X, y = make_regression(n_samples=n_samples, n_features=2, noise=0.1)
         labels = np.random.randint(0, n_clusters, (n_samples,))
 
@@ -40,8 +48,8 @@ class SpatialMapsTest(TestCase):
         ).astype(np.float32)
 
         self.assertEqual(
-            spatial_maps.shape, 
-            (n_samples, n_clusters, m, n)
+            spatial_maps.shape,
+            (n_samples, 1, m, n)
         )
     
     def test_create_spatial_features(self):
