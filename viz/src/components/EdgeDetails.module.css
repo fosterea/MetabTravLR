@@ -73,6 +73,41 @@
   color: var(--edge-sig);
   font-weight: 600;
 }
+.gp {
+  border-top: 1px solid var(--border);
+  padding-top: var(--sp-2);
+  font-size: 12px;
+}
+.gpHead {
+  color: var(--text-secondary);
+  margin-bottom: 5px;
+}
+.gpList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  max-height: 168px;
+  overflow-y: auto;
+}
+.gpItem {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-2);
+}
+.gpName {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-primary);
+}
+.gpVal {
+  font-variant-numeric: tabular-nums;
+  color: var(--edge-sig);
+  flex: none;
+}
 .note {
   border-top: 1px solid var(--border);
   padding-top: var(--sp-2);

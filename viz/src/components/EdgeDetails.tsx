@@ -1,29 +1,58 @@
 /** Canvas overlay: details for the clicked edge (an undirected cell-type interface) — its
- *  strength, significance, and cell types. Unit 3 will extend this with the metabolite→
- *  gene-pair breakdown at this interface. Cleared by clicking empty canvas or the close ×. */
+ *  strength, significance, cell types, and (metabolite + "In panel" mode) the transporter
+ *  gene pairs that carry it at this interface. Cleared by clicking empty canvas or the × . */
 import { useMemo } from 'react';
 import { useVizStore, selectCurrentTier } from '@/store/useVizStore';
 import { sameInterface, isSelfEdge } from '@/data/scales';
+import { genePairsAtInterface } from '@/data/genePairs';
 import { formatStrength, formatFdr } from '@/data/format';
 import styles from './EdgeDetails.module.css';
 
 export default function EdgeDetails() {
+  const dataset = useVizStore((s) => s.dataset);
   const tier = useVizStore(selectCurrentTier);
   const entityId = useVizStore((s) => s.entityId);
   const entityKind = useVizStore((s) => s.entityKind);
   const edgeBundle = useVizStore((s) => s.edgeBundle);
+  const gpBundle = useVizStore((s) => s.gpBundle);
+  const showNonSignificant = useVizStore((s) => s.showNonSignificant);
+  const gpExpandMode = useVizStore((s) => s.gpExpandMode);
   const selectedEdge = useVizStore((s) => s.selectedEdge);
   const selectEdge = useVizStore((s) => s.selectEdge);
 
+  // Resolve against the SAME visible set the graph renders, so the panel and the canvas never
+  // disagree (e.g. after toggling non-significant off, a now-hidden pick shows no panel).
   const edge = useMemo(() => {
-    if (!selectedEdge || !entityId || !edgeBundle) return undefined;
-    const list = edgeBundle.byEntity[entityId] ?? [];
-    return list.find((e) => sameInterface(e, selectedEdge));
-  }, [selectedEdge, entityId, edgeBundle]);
+    if (!selectedEdge || !entityId || !edgeBundle || !tier) return undefined;
+    const present = new Set(tier.cellTypes);
+    const visible = (edgeBundle.byEntity[entityId] ?? []).filter(
+      (e) =>
+        present.has(e.source) &&
+        present.has(e.target) &&
+        (showNonSignificant || e.scores.selected),
+    );
+    return visible.find((e) => sameInterface(e, selectedEdge));
+  }, [selectedEdge, entityId, edgeBundle, tier, showNonSignificant]);
+
+  const metab = useMemo(
+    () =>
+      entityKind === 'metabolite'
+        ? dataset?.entities.metabolite?.find((m) => m.id === entityId)
+        : undefined,
+    [dataset, entityKind, entityId],
+  );
+
+  // Panel-mode gene-pair breakdown for a metabolite interface (empty in graph mode / gp view).
+  const gps = useMemo(
+    () =>
+      edge && metab && gpExpandMode === 'panel' ? genePairsAtInterface(metab, gpBundle, edge) : [],
+    [edge, metab, gpBundle, gpExpandMode],
+  );
 
   if (!edge) return null;
   const self = isSelfEdge(edge);
   const s = edge.scores;
+  const showBreakdown = !!metab && gpExpandMode === 'panel';
 
   return (
     <div className={styles.panel} aria-label="Selected interface details">
@@ -73,6 +102,30 @@ export default function EdgeDetails() {
           </dd>
         </div>
       </dl>
+
+      {showBreakdown && (
+        <div className={styles.gp}>
+          {gps.length > 0 ? (
+            <>
+              <div className={styles.gpHead}>
+                Carried by {gps.length} transporter pair{gps.length === 1 ? '' : 's'}
+                <span className="muted"> (sig here)</span>
+              </div>
+              <ul className={styles.gpList}>
+                {gps.map((g) => (
+                  <li key={g.id} className={styles.gpItem}>
+                    <span className={styles.gpName}>{g.label}</span>
+                    <span className={styles.gpVal}>{formatStrength(g.edge.scores.C_np)}</span>
+                  </li>
+                ))}
+              </ul>
+            </>
+          ) : (
+            <div className="muted">No individually-significant transporter pairs at this interface.</div>
+          )}
+        </div>
+      )}
+
       <div className={styles.note}>Interfaces are undirected — order is not a direction.</div>
     </div>
   );

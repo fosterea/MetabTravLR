@@ -26,8 +26,16 @@ interface VizState {
   /** The clicked edge (an undirected cell-type interface), identified by its endpoints. */
   selectedEdge?: { source: string; target: string };
 
+  /** How a metabolite edge's transporter gene pairs are revealed: listed in the details
+   *  panel, or fanned out as parallel sub-edges on the graph. */
+  gpExpandMode: 'panel' | 'graph';
+  /** Graph mode only: fan out every interface at once (vs just the clicked one). */
+  gpExpandAll: boolean;
+
   /** Edge bundle for the current (datasetId, tierId, entityKind). */
   edgeBundle?: EdgeBundle;
+  /** Same-tier gene_pair bundle, loaded alongside in metabolite mode for gp expansion. */
+  gpBundle?: EdgeBundle;
   bundleLoading: boolean;
 
   init: () => Promise<void>;
@@ -36,6 +44,8 @@ interface VizState {
   selectEntityKind: (kind: EntityKind) => Promise<void>;
   selectEntity: (entityId: string | undefined) => void;
   selectEdge: (edge: { source: string; target: string } | undefined) => void;
+  setGpExpandMode: (mode: 'panel' | 'graph') => void;
+  toggleGpExpandAll: () => void;
   toggleNonSignificant: () => void;
 }
 
@@ -43,6 +53,8 @@ export const useVizStore = create<VizState>((set, get) => ({
   status: 'idle',
   entityKind: 'metabolite',
   showNonSignificant: false,
+  gpExpandMode: 'panel',
+  gpExpandAll: false,
   bundleLoading: false,
 
   init: async () => {
@@ -75,6 +87,7 @@ export const useVizStore = create<VizState>((set, get) => ({
         entityId: undefined,
         selectedEdge: undefined,
         edgeBundle: undefined,
+        gpBundle: undefined,
       });
       if (tierId) await loadBundle(set, get);
     } catch (e) {
@@ -85,7 +98,7 @@ export const useVizStore = create<VizState>((set, get) => ({
   selectTier: async (tierId) => {
     try {
       // Drop the stale bundle so the graph never renders a metabolite's old-tier edges.
-      set({ tierId, selectedEdge: undefined, edgeBundle: undefined });
+      set({ tierId, selectedEdge: undefined, edgeBundle: undefined, gpBundle: undefined });
       await loadBundle(set, get);
     } catch (e) {
       set({ status: 'error', error: (e as Error).message });
@@ -95,7 +108,13 @@ export const useVizStore = create<VizState>((set, get) => ({
   selectEntityKind: async (kind) => {
     try {
       // Drop the stale bundle: metabolite edges must not linger into gene-pair mode.
-      set({ entityKind: kind, entityId: undefined, selectedEdge: undefined, edgeBundle: undefined });
+      set({
+        entityKind: kind,
+        entityId: undefined,
+        selectedEdge: undefined,
+        edgeBundle: undefined,
+        gpBundle: undefined,
+      });
       await loadBundle(set, get);
     } catch (e) {
       set({ status: 'error', error: (e as Error).message });
@@ -106,6 +125,10 @@ export const useVizStore = create<VizState>((set, get) => ({
   selectEntity: (entityId) => set({ entityId, selectedEdge: undefined }),
 
   selectEdge: (selectedEdge) => set({ selectedEdge }),
+
+  setGpExpandMode: (gpExpandMode) => set({ gpExpandMode }),
+
+  toggleGpExpandAll: () => set((s) => ({ gpExpandAll: !s.gpExpandAll })),
 
   toggleNonSignificant: () => set((s) => ({ showNonSignificant: !s.showNonSignificant })),
 }));
@@ -120,9 +143,16 @@ async function loadBundle(set: (partial: Partial<VizState>) => void, get: () => 
     return cur.datasetId === datasetId && cur.tierId === tierId && cur.entityKind === entityKind;
   };
   try {
-    const edgeBundle = await fetchEdgeBundle(datasetId, tierId, entityKind);
+    // In metabolite mode also load the same-tier gene_pair bundle so a metabolite edge can be
+    // expanded into its contributing transporter pairs (client-side; no extra ingest).
+    const [edgeBundle, gpBundle] = await Promise.all([
+      fetchEdgeBundle(datasetId, tierId, entityKind),
+      entityKind === 'metabolite'
+        ? fetchEdgeBundle(datasetId, tierId, 'gene_pair')
+        : Promise.resolve(undefined),
+    ]);
     if (matchesRequest()) {
-      set({ edgeBundle, bundleLoading: false });
+      set({ edgeBundle, gpBundle, bundleLoading: false });
     } else {
       // Lost the race to a newer selection; still clear our flag so it can't stick true.
       set({ bundleLoading: false });

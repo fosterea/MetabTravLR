@@ -42,13 +42,21 @@ restart. Dates are absolute (project "today" was 2026-07-16 at kickoff).
   Confirm vs `Z`/`C_p` for the width encoding.
 
 ## Roadmap / TODO (designed-for)
-- [ ] Gene-pair view toggle (data already ingested) + show served metabolites (many-to-many).
+- [x] Gene-pair view toggle (data already ingested) + show served metabolites (many-to-many).
+      (MVP; details overlay lists served metabolites.)
+- [x] Metabolite → gene-pair **expansion** (panel list + on-graph fan-out; per-edge + all).
+      (Unit 3, 2026-07-17.)
 - [ ] Parent cell-type marking via tier hierarchy (needs crosswalk above).
 - [ ] Multiple datasets + `<root>/<datasetName>/easy_download` deploy layout (ingest already
       auto-detects this; app dataset switcher needed).
 - [ ] SpaceTravLR signed two-value edges: width=|value|, color=sign (`--val-pos`/`--val-neg`).
+      NOTE: these are **directed scalers** on edges — the fan-out gp sub-edges and the reserved
+      `value`/`sign` edge fields are the intended carrier; likely a per-edge multiplier applied
+      on top of the existing width scale + diverging color.
 - [ ] Metabolite ranking controls in the side panel (by T-cell involvement / significance).
-- [ ] Static deploy of `dist/` when Foster wants it.
+- [ ] Bottom overlays (legend / EdgeDetails) can overlap on very narrow canvases — reposition
+      or hide on small screens (Unit 2 review Low; desktop-first so deferred).
+- [ ] Static deploy of `dist/` when Foster wants it (see `06_hosting.md`).
 
 ## Smoke checklist (re-verify after changes, via playwright MCP)
 1. `npm run dev`; open http://localhost:5173 — no console errors.
@@ -59,6 +67,26 @@ restart. Dates are absolute (project "today" was 2026-07-16 at kickoff).
 6. Screenshot captured as evidence.
 
 ## Changelog
+- 2026-07-17: **Unit 3 (gp-aware metabolite expansion).** A metabolite edge can be broken
+  into its contributing transporter **gene pairs**, two ways, toggled in the control bar
+  ("Gene pairs: In panel / On graph"):
+  - **In panel**: clicking a metabolite edge lists the gene pairs significant at that
+    interface (name + C_np, sorted) in EdgeDetails.
+  - **On graph**: the picked interface (or, with "Expand all interfaces", every interface)
+    fans out into parallel gene-pair sub-edges between the same cell-type nodes (width =
+    per-pair strength, own width scale, translucent `.gp` style); hover a sub-edge for its
+    gene pair + strength; clicking selects the whole fan.
+  Data is client-side only (`genePairsAtInterface` joins a metabolite's `genePairs` against
+  the same-tier gene_pair bundle, now loaded alongside in metabolite mode) — **no ingest or
+  source-pipeline change** (A3/A4 hold). GraphView refactored so layout/fit run ONLY on tier
+  change (a primitive `expansionKey` drives edge rebuilds), so expanding/picking never
+  relayouts. Also **fixed the Unit 2 review Medium**: EdgeDetails now resolves the pick
+  against the same *visible* (tier+significance-filtered) edge set as the graph, so toggling
+  non-significant off no longer orphans the panel; tooltip a11y contradiction removed.
+  Playwright-verified: panel breakdown (Iron@Effector↔other → CUBN–CUBN 6128); graph
+  expand-all (9 metabolite edges → 17 gp sub-edges); per-edge fan (only clicked interface);
+  gp hover shows "CUBN – CUBN … Cnp 309"; non-sig-off clears orphan panel; Tier1 relayout
+  clean (no node stacking); gp controls hidden in gene-pair mode; 0 console errors.
 - 2026-07-17: **Unit 2 (edge interaction).** Click an edge → new bottom-right **EdgeDetails**
   panel (interface cell types, C_np strength, significance/FDR, parametric C_p/Z, undirected
   note; × or empty-canvas click clears). Hover an edge → floating tooltip with the numeric

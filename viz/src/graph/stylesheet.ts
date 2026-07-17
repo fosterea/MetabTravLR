@@ -69,6 +69,12 @@ export function buildStylesheet(): cytoscape.StylesheetJson {
       style: { 'line-color': edgeNonsig, 'line-style': 'dashed', opacity: 0.5 },
     },
     {
+      // Fan-out transporter-gene-pair sub-edges (metabolite "graph" expand mode). Slightly
+      // translucent so the parallel fan reads as a decomposition of the metabolite edge.
+      selector: 'edge.gp',
+      style: { 'line-color': edgeSig, opacity: 0.75, 'curve-style': 'bezier' },
+    },
+    {
       selector: 'edge.self',
       style: { 'line-cap': 'round' },
     },
