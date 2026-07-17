@@ -142,7 +142,7 @@ closes the "tests only hit the R²<0.15 shortcut" gap.
   (was ValueError); all-missing still errors. Committed `fd815ed`.
 - **get_betas GPU OOM (112k Xenium run, 2026-07-17):** the actual crash on Foster's 112,551-cell
   melanoma run (10.5 GB GPU) was a CUDA OOM in `get_betas` — it ran the CNN forward on a whole
-  cluster's cells at once (unbatched). Fix (in progress): **batch it in eval mode**. `get_betas`
+  cluster's cells at once (unbatched). ✅ Fixed `63f0400`: **batch it (4096) in eval mode**. `get_betas`
   used train-mode BatchNorm (full-cluster stats), inconsistent with `predict()` (eval); measured
   eval-vs-train β diff is **max abs 1.19e-7 / mean 5.6e-10** (negligible), so eval-mode batching
   is effectively behavior-preserving and correct. **Full data-flow / memory analysis + efficiency

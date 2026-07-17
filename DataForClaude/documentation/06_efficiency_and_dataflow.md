@@ -63,7 +63,7 @@ INPUT: AnnData  X:(N×genes) counts, obsm['spatial']:(N×2), obs['cell_type']
 | Structure | Size | @100k | @300k | Status |
 |---|---|---|---|---|
 | received-ligand matrix | O(N·nbr) | ~1.5 GB | ~4 GB | ✅ fixed (narrow kernel + chunk, `793c096`) — was **57 GB** |
-| **get_betas CNN forward** (per cluster, GPU) | O(N_c·16·d²) | **>9 GB → OOM** | worse | ⏳ **being batched now** (the actual crash) |
+| **get_betas CNN forward** (per cluster, GPU) | O(batch·16·d²) | bounded | bounded | ✅ batched (`63f0400`) — was **>9 GB → OOM** (the crash) |
 | **spatial-maps tensor** (CPU) | O(N·C·d²) | **~20 GB** | ~59 GB | ⚠ **next ceiling — not yet fixed** (CU-5c) |
 | betadata parquet (per gene) | O(N·M) | ~1 GB | ~3 GB | ok; smaller if fewer modulators (§4) |
 | create_spatial_features | O(N·nbr) | ~1.4 GB | ~4 GB | ✅ KDTree (`691ab41`) — was 80 GB |
@@ -85,7 +85,7 @@ batching (in eval mode — see §5). The **next** thing you'll hit at ~200–300
 | 3 | **activation-kwarg crash fix** | unblocks real training (poor-fit branch) | `2699947` |
 | 4 | **create_spatial_features → KDTree** (bit-exact) | 80 GB → 1.4 GB @100k | `691ab41` |
 | 5 | **received-ligand kernel: narrow + hard cutoff + row-chunk** | 57 GB → ~1.5 GB @100k; also a paper-correctness fix (hard cutoff at `radius`) | `793c096` |
-| 6 | **get_betas batched (eval mode)** | fixes GPU OOM; ~1e-7 β change (correct) | ⏳ in progress |
+| 6 | **get_betas batched (eval mode)** | fixes GPU OOM; ~1e-7 β change (correct) | `63f0400` |
 
 ### Still to make (ranked by impact for your data)
 1. **CU-5c — stream the spatial-maps tensor** (the 20 GB@100k / 59 GB@300k ceiling). Instead
