@@ -18,6 +18,7 @@
   /* interactive */
   --accent: #4c9aff;
   --accent-weak: #1f3a5f;
+  --on-accent: #fff; /* text/icons on top of --accent (white reads on the accent in both themes) */
   --focus-ring: #4c9aff;
 
   /* domain: cell-type node families (colorblind-safe warm vs neutral) */
@@ -62,6 +63,7 @@
     --text-muted: #78828f;
     --accent: #1f6feb;
     --accent-weak: #cfe0ff;
+    --on-accent: #fff;
     --cell-tcell: #d9701f;
     --cell-tcell-ink: #fff;
     --cell-other: #8a94a2;

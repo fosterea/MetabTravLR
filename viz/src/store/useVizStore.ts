@@ -53,27 +53,42 @@ export const useVizStore = create<VizState>((set, get) => ({
         return;
       }
       await get().selectDataset(first.id);
-      set({ status: 'ready' });
+      // selectDataset self-reports errors; don't mask them with 'ready'.
+      if (get().status !== 'error') set({ status: 'ready' });
     } catch (e) {
       set({ status: 'error', error: (e as Error).message });
     }
   },
 
   selectDataset: async (id) => {
-    const dataset = await fetchDataset(id);
-    const tierId = dataset.tiers.at(-1)?.id ?? dataset.tiers[0]?.id; // default to finest tier
-    set({ datasetId: id, dataset, tierId, entityId: undefined, edgeBundle: undefined });
-    if (tierId) await loadBundle(set, get);
+    try {
+      const dataset = await fetchDataset(id);
+      const tierId = dataset.tiers.at(-1)?.id ?? dataset.tiers[0]?.id; // default to finest tier
+      set({ datasetId: id, dataset, tierId, entityId: undefined, edgeBundle: undefined });
+      if (tierId) await loadBundle(set, get);
+    } catch (e) {
+      set({ status: 'error', error: (e as Error).message });
+    }
   },
 
   selectTier: async (tierId) => {
-    set({ tierId });
-    await loadBundle(set, get);
+    try {
+      // Drop the stale bundle so the graph never renders a metabolite's old-tier edges.
+      set({ tierId, edgeBundle: undefined });
+      await loadBundle(set, get);
+    } catch (e) {
+      set({ status: 'error', error: (e as Error).message });
+    }
   },
 
   selectEntityKind: async (kind) => {
-    set({ entityKind: kind, entityId: undefined });
-    await loadBundle(set, get);
+    try {
+      // Drop the stale bundle: metabolite edges must not linger into gene-pair mode.
+      set({ entityKind: kind, entityId: undefined, edgeBundle: undefined });
+      await loadBundle(set, get);
+    } catch (e) {
+      set({ status: 'error', error: (e as Error).message });
+    }
   },
 
   selectEntity: (entityId) => set({ entityId }),
@@ -85,15 +100,25 @@ async function loadBundle(set: (partial: Partial<VizState>) => void, get: () => 
   const { datasetId, tierId, entityKind } = get();
   if (!datasetId || !tierId) return;
   set({ bundleLoading: true });
+  // The selection this request was issued for; ignore results if it changed underneath us.
+  const matchesRequest = () => {
+    const cur = get();
+    return cur.datasetId === datasetId && cur.tierId === tierId && cur.entityKind === entityKind;
+  };
   try {
     const edgeBundle = await fetchEdgeBundle(datasetId, tierId, entityKind);
-    // Ignore if selection changed while loading.
-    const cur = get();
-    if (cur.datasetId === datasetId && cur.tierId === tierId && cur.entityKind === entityKind) {
+    if (matchesRequest()) {
       set({ edgeBundle, bundleLoading: false });
+    } else {
+      // Lost the race to a newer selection; still clear our flag so it can't stick true.
+      set({ bundleLoading: false });
     }
   } catch (e) {
-    set({ error: (e as Error).message, bundleLoading: false });
+    if (matchesRequest()) {
+      set({ error: (e as Error).message, bundleLoading: false });
+    } else {
+      set({ bundleLoading: false });
+    }
   }
 }
 

@@ -12,6 +12,7 @@ export function buildStylesheet(): cytoscape.StylesheetJson {
   const edgeSig = cssVar('--edge-sig');
   const edgeNonsig = cssVar('--edge-nonsig');
   const accent = cssVar('--accent');
+  const border = cssVar('--border');
 
   return [
     {
@@ -30,7 +31,7 @@ export function buildStylesheet(): cytoscape.StylesheetJson {
         width: 46,
         height: 46,
         'border-width': 2,
-        'border-color': 'rgba(255,255,255,0.15)',
+        'border-color': border,
       },
     },
     {

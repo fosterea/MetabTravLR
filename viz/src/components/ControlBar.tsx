@@ -72,10 +72,14 @@ export default function ControlBar() {
         </div>
       </div>
 
-      <label className="checkbox" style={{ marginLeft: 'auto' }}>
-        <input type="checkbox" checked={showNonSignificant} onChange={toggleNonSignificant} />
-        Show non-significant edges
-      </label>
+      {/* Gene-pair edges come from harreman's _gp_sig table (significant-only), so the
+          non-significant toggle is meaningless there — only offer it for metabolites. */}
+      {entityKind === 'metabolite' && (
+        <label className="checkbox" style={{ marginLeft: 'auto' }}>
+          <input type="checkbox" checked={showNonSignificant} onChange={toggleNonSignificant} />
+          Show non-significant edges
+        </label>
+      )}
     </header>
   );
 }

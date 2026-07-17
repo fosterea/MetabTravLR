@@ -42,7 +42,7 @@
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  border: 2px solid rgba(255, 255, 255, 0.2);
+  border: 2px solid var(--border-strong);
 }
 .tcell {
   background: var(--cell-tcell);

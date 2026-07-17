@@ -16,13 +16,18 @@ export default function GraphView() {
   const edgeBundle = useVizStore((s) => s.edgeBundle);
   const entityId = useVizStore((s) => s.entityId);
   const showNonSignificant = useVizStore((s) => s.showNonSignificant);
+  const bundleLoading = useVizStore((s) => s.bundleLoading);
 
-  // Edges to display for the current selection.
+  // Edges to display for the current selection. Defensively drop any edge whose endpoints
+  // aren't in the current tier — a stale bundle can linger for a frame after a tier/kind
+  // switch and would otherwise make cy.add throw "nonexistant source".
   const edges: EntityEdge[] = useMemo(() => {
-    if (!entityId || !edgeBundle) return [];
+    if (!entityId || !edgeBundle || !tier) return [];
     const all = edgeBundle.byEntity[entityId] ?? [];
-    return showNonSignificant ? all : all.filter((e) => e.scores.selected);
-  }, [entityId, edgeBundle, showNonSignificant]);
+    const present = new Set(tier.cellTypes);
+    const inTier = all.filter((e) => present.has(e.source) && present.has(e.target));
+    return showNonSignificant ? inTier : inTier.filter((e) => e.scores.selected);
+  }, [entityId, edgeBundle, showNonSignificant, tier]);
 
   // Create the cy instance once.
   useEffect(() => {
@@ -72,10 +77,12 @@ export default function GraphView() {
     cy.fit(undefined, 48);
   }, [tier, edges]);
 
-  const showEmpty = !entityId || edges.length === 0;
+  // Loading takes precedence over the empty state so the two never overlap.
+  const showEmpty = !bundleLoading && (!entityId || edges.length === 0);
   return (
     <>
       <div className="graph" ref={containerRef} data-testid="graph" />
+      {bundleLoading && <div className="empty">Loading…</div>}
       {showEmpty && (
         <div className="empty">
           {!entityId

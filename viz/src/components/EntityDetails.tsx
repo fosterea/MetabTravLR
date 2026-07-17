@@ -68,8 +68,18 @@ export default function EntityDetails() {
         </>
       )}
       <div className={styles.summary}>
-        <strong>{nSig}</strong> significant / {edges.length} interface
-        {edges.length === 1 ? '' : 's'} at {tier?.label}
+        {entity.kind === 'gene_pair' ? (
+          // Gene-pair edges are significant-only (harreman _gp_sig), so no sig/total split.
+          <>
+            <strong>{edges.length}</strong> significant interface
+            {edges.length === 1 ? '' : 's'} at {tier?.label}
+          </>
+        ) : (
+          <>
+            <strong>{nSig}</strong> significant / {edges.length} interface
+            {edges.length === 1 ? '' : 's'} at {tier?.label}
+          </>
+        )}
       </div>
     </div>
   );

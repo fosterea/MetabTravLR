@@ -53,11 +53,9 @@ const readJson = (p) => JSON.parse(readFileSync(p, 'utf8'));
 const F = {
   network: 'harreman_network.json',
   globalM: '[ccc_results][cell_com_df_m].csv',
-  globalGp: '[ccc_results][cell_com_df_gp_sig].csv',
   tierM: '[ct_ccc_results][cell_com_df_m].csv',
   tierGp: '[ct_ccc_results][cell_com_df_gp_sig].csv',
   metabSummary: join('summary', 'metabolite_summary.csv'),
-  gpSummary: join('summary', 'gene_pair_summary.csv'),
 };
 
 const gpId = (g1, g2) => `${g1}__${g2}`;

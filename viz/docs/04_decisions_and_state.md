@@ -60,3 +60,11 @@ restart. Dates are absolute (project "today" was 2026-07-16 at kickoff).
 
 ## Changelog
 - 2026-07-16: Scaffold, docs, ingest adapter, data validated. (this file created)
+- 2026-07-16: MVP built + committed (638bf1f). Ran the dev/review loop once: review
+  sub-agent audited the baseline; dev sub-agent fixed all findings — H1 (tier-switch stale
+  edges crashed Cytoscape → clear stale bundle + filter edges to in-tier endpoints), M2
+  (hide non-sig toggle in gene-pair view; gp tables are significant-only), M3 (loading
+  overlay), L4 (color tokens: added `--on-accent`), L5 (dead code in ingest), L6/L7 (store
+  async race + rejection hardening). Re-verified with playwright: 0 console errors on the
+  Tier3→Tier1 switch; non-sig toggle absent in gp mode. Review confirmed undirected/selected
+  semantics, entity-id integrity, and width-scale robustness are correct — do not change those.
