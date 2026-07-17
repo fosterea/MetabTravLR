@@ -59,6 +59,18 @@ restart. Dates are absolute (project "today" was 2026-07-16 at kickoff).
 6. Screenshot captured as evidence.
 
 ## Changelog
+- 2026-07-17: **Unit 2 (edge interaction).** Click an edge → new bottom-right **EdgeDetails**
+  panel (interface cell types, C_np strength, significance/FDR, parametric C_p/Z, undirected
+  note; × or empty-canvas click clears). Hover an edge → floating tooltip with the numeric
+  C_np strength (mutates a ref'd DOM node, not React state, so mousemove doesn't thrash).
+  Store gains `selectedEdge` + `selectEdge`, cleared on any dataset/tier/kind/entity change.
+  Cytoscape `autounselectify` on; highlight is store-driven via a `.picked` overlay halo
+  (dropped the dead `:selected` rule). Added `src/data/format.ts` (strength/FDR formatting)
+  and `sameInterface` (order-agnostic edge match). Legend updated to "relative strength in
+  view (log)" + hover/click hint (addresses Unit 1 review: per-view scale isn't absolute —
+  raw value now reachable via hover/panel). Playwright-verified: click→panel with correct
+  scores, exactly-one `.picked`, background-click clears, real canvas hover shows the tip;
+  0 console errors. Folds in Unit 1 review LOWs (legend text, annotated dangling ink tokens).
 - 2026-07-17: **Unit 1 (graph legibility).** (1) Cell-type labels moved BELOW the node
   (`text-valign: bottom` + canvas-colored halo) so long names ("Proliferating CD8 T cell")
   no longer overflow the circle. (2) Edge-width scale now normalizes between the view's

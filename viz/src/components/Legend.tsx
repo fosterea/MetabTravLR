@@ -6,7 +6,7 @@ export default function Legend() {
     <div className={styles.legend} aria-label="Legend">
       <div className={styles.row}>
         <span className={styles.title}>Edge width</span>
-        <span className={styles.muted}>∝ communication strength (log)</span>
+        <span className={styles.muted}>relative strength in view (log)</span>
       </div>
       <div className={styles.row}>
         <span className={`${styles.swatch} ${styles.sig}`} />
@@ -25,7 +25,10 @@ export default function Legend() {
         <span className={`${styles.node} ${styles.other}`} />
         other / background
       </div>
-      <div className={styles.note}>Loops = within-cell-type. Edges are undirected.</div>
+      <div className={styles.note}>
+        Hover an edge for its strength; click for details. Loops = within-cell-type. Edges are
+        undirected.
+      </div>
     </div>
   );
 }

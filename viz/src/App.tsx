@@ -5,6 +5,7 @@ import ControlBar from '@/components/ControlBar';
 import EntityPanel from '@/components/EntityPanel';
 import Legend from '@/components/Legend';
 import EntityDetails from '@/components/EntityDetails';
+import EdgeDetails from '@/components/EdgeDetails';
 import GraphView from '@/graph/GraphView';
 
 export default function App() {
@@ -52,6 +53,7 @@ export default function App() {
           <GraphView />
           <Legend />
           <EntityDetails />
+          <EdgeDetails />
         </main>
       </div>
     </div>

@@ -23,6 +23,9 @@ interface VizState {
   entityId?: string;
   showNonSignificant: boolean;
 
+  /** The clicked edge (an undirected cell-type interface), identified by its endpoints. */
+  selectedEdge?: { source: string; target: string };
+
   /** Edge bundle for the current (datasetId, tierId, entityKind). */
   edgeBundle?: EdgeBundle;
   bundleLoading: boolean;
@@ -32,6 +35,7 @@ interface VizState {
   selectTier: (tierId: string) => Promise<void>;
   selectEntityKind: (kind: EntityKind) => Promise<void>;
   selectEntity: (entityId: string | undefined) => void;
+  selectEdge: (edge: { source: string; target: string } | undefined) => void;
   toggleNonSignificant: () => void;
 }
 
@@ -64,7 +68,14 @@ export const useVizStore = create<VizState>((set, get) => ({
     try {
       const dataset = await fetchDataset(id);
       const tierId = dataset.tiers.at(-1)?.id ?? dataset.tiers[0]?.id; // default to finest tier
-      set({ datasetId: id, dataset, tierId, entityId: undefined, edgeBundle: undefined });
+      set({
+        datasetId: id,
+        dataset,
+        tierId,
+        entityId: undefined,
+        selectedEdge: undefined,
+        edgeBundle: undefined,
+      });
       if (tierId) await loadBundle(set, get);
     } catch (e) {
       set({ status: 'error', error: (e as Error).message });
@@ -74,7 +85,7 @@ export const useVizStore = create<VizState>((set, get) => ({
   selectTier: async (tierId) => {
     try {
       // Drop the stale bundle so the graph never renders a metabolite's old-tier edges.
-      set({ tierId, edgeBundle: undefined });
+      set({ tierId, selectedEdge: undefined, edgeBundle: undefined });
       await loadBundle(set, get);
     } catch (e) {
       set({ status: 'error', error: (e as Error).message });
@@ -84,14 +95,17 @@ export const useVizStore = create<VizState>((set, get) => ({
   selectEntityKind: async (kind) => {
     try {
       // Drop the stale bundle: metabolite edges must not linger into gene-pair mode.
-      set({ entityKind: kind, entityId: undefined, edgeBundle: undefined });
+      set({ entityKind: kind, entityId: undefined, selectedEdge: undefined, edgeBundle: undefined });
       await loadBundle(set, get);
     } catch (e) {
       set({ status: 'error', error: (e as Error).message });
     }
   },
 
-  selectEntity: (entityId) => set({ entityId }),
+  // Changing the entity swaps the whole edge set, so any picked edge is now stale.
+  selectEntity: (entityId) => set({ entityId, selectedEdge: undefined }),
+
+  selectEdge: (selectedEdge) => set({ selectedEdge }),
 
   toggleNonSignificant: () => set((s) => ({ showNonSignificant: !s.showNonSignificant })),
 }));

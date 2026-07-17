@@ -73,8 +73,16 @@ export function buildStylesheet(): cytoscape.StylesheetJson {
       style: { 'line-cap': 'round' },
     },
     {
-      selector: ':selected',
-      style: { 'border-color': accent, 'border-width': 4, 'line-color': accent },
+      // Picked (clicked) edge: an accent halo via overlay, keeping the base line-color so
+      // significance is still visible. Selection is store-driven (see GraphView `.picked`).
+      selector: 'edge.picked',
+      style: {
+        'overlay-color': accent,
+        'overlay-opacity': 0.3,
+        'overlay-padding': 5,
+        opacity: 1,
+        'z-index': 10,
+      },
     },
   ] as unknown as cytoscape.StylesheetJson;
 }

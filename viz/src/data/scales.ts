@@ -46,3 +46,11 @@ const clamp01 = (t: number) => (t < 0 ? 0 : t > 1 ? 1 : t);
 
 /** True when an edge is a within-cell-type (diagonal / self-loop) interface. */
 export const isSelfEdge = (e: EntityEdge) => e.source === e.target;
+
+/** True when two interfaces are the same undirected cell-type pair (order-agnostic). */
+export const sameInterface = (
+  a: { source: string; target: string },
+  b: { source: string; target: string },
+): boolean =>
+  (a.source === b.source && a.target === b.target) ||
+  (a.source === b.target && a.target === b.source);
