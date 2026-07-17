@@ -1,0 +1,15 @@
+# viz/ web app — local artifacts
+node_modules/
+dist/
+*.local
+.DS_Store
+npm-debug.log*
+.eslintcache
+
+# Ingested data is generated from easy_download by `npm run ingest`.
+# We DO commit the currently-ingested `harreman` dataset (id chosen at ingest time) so the
+# app works after a fresh clone without needing the source CSVs. Other/larger datasets stay
+# local — add a matching `!public/data/<id>/` line if you decide to commit another.
+public/data/*
+!public/data/harreman/
+!public/data/manifest.json

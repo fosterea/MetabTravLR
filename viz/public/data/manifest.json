@@ -1,0 +1,20 @@
+{
+  "generatedAt": null,
+  "schemaVersion": 1,
+  "datasets": [
+    {
+      "id": "harreman",
+      "name": "Harreman — metabolite crosstalk (Xenium)",
+      "source": "harreman",
+      "entityKinds": [
+        "metabolite",
+        "gene_pair"
+      ],
+      "tierIds": [
+        "Tier1",
+        "Tier2",
+        "Tier3"
+      ]
+    }
+  ]
+}

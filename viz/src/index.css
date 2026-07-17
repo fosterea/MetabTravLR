@@ -1,0 +1,150 @@
+@import './theme.css';
+
+* {
+  box-sizing: border-box;
+}
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+body {
+  font-family: var(--font-sans);
+  color: var(--text-primary);
+  background: var(--bg-app);
+  -webkit-font-smoothing: antialiased;
+}
+button,
+select,
+input {
+  font-family: inherit;
+  color: inherit;
+}
+:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
+/* ---- App layout: control bar on top, sidebar + canvas below ---- */
+.app {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  height: 100%;
+}
+.app__body {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  min-height: 0;
+}
+@media (max-width: 820px) {
+  .app__body {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+  }
+}
+
+.controlbar {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  flex-wrap: wrap;
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--bg-panel);
+  border-bottom: 1px solid var(--border);
+}
+.controlbar__brand {
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  margin-right: var(--sp-2);
+}
+.controlbar__brand small {
+  display: block;
+  font-weight: 400;
+  color: var(--text-muted);
+  font-size: 11px;
+}
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.field > label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--text-muted);
+}
+.control {
+  background: var(--bg-elev);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  padding: 6px 10px;
+  font-size: 13px;
+}
+.control:hover {
+  border-color: var(--accent);
+}
+
+.sidebar {
+  background: var(--bg-panel);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.canvas-wrap {
+  position: relative;
+  min-height: 0;
+  background: var(--bg-canvas);
+}
+.graph {
+  position: absolute;
+  inset: 0;
+}
+
+/* segmented toggle */
+.segmented {
+  display: inline-flex;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+.segmented button {
+  background: var(--bg-elev);
+  border: none;
+  padding: 6px 12px;
+  font-size: 13px;
+  cursor: pointer;
+  color: var(--text-secondary);
+}
+.segmented button[aria-pressed='true'] {
+  background: var(--accent);
+  color: #fff;
+}
+
+.checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+/* muted helper / empty states */
+.muted {
+  color: var(--text-muted);
+}
+.empty {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: var(--sp-6);
+  color: var(--text-muted);
+  pointer-events: none;
+}

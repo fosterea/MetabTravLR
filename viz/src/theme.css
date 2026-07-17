@@ -1,0 +1,75 @@
+/* Design tokens — the single source of truth for color/spacing/type.
+   Dark-first (data viz reads better on dark); light overrides at the bottom.
+   Components must reference these vars, never raw hex. See docs/02_style_and_conventions.md. */
+:root {
+  /* surfaces */
+  --bg-app: #0e1117;
+  --bg-panel: #161b22;
+  --bg-canvas: #0b0e14;
+  --bg-elev: #1c2230;
+  --border: #2a313c;
+  --border-strong: #3a4350;
+
+  /* text */
+  --text-primary: #e6edf3;
+  --text-secondary: #9da7b3;
+  --text-muted: #6b7480;
+
+  /* interactive */
+  --accent: #4c9aff;
+  --accent-weak: #1f3a5f;
+  --focus-ring: #4c9aff;
+
+  /* domain: cell-type node families (colorblind-safe warm vs neutral) */
+  --cell-tcell: #e8833a;
+  --cell-tcell-ink: #1a1206;
+  --cell-other: #5b6470;
+  --cell-other-ink: #0b0e14;
+
+  /* domain: edge significance (color) — strength is encoded by WIDTH, not color */
+  --edge-sig: #58a6ff;
+  --edge-nonsig: #454d59;
+
+  /* RESERVED — future SpaceTravLR signed two-value edges (width=|value|, color=sign).
+     Do not repurpose. Diverging red/blue. */
+  --val-pos: #f85149;
+  --val-neg: #388bfd;
+
+  /* spacing / radius / type */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 24px;
+  --sp-6: 32px;
+  --radius: 8px;
+  --radius-sm: 5px;
+  --font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, monospace;
+  --shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg-app: #f4f6fa;
+    --bg-panel: #ffffff;
+    --bg-canvas: #fbfcfe;
+    --bg-elev: #ffffff;
+    --border: #d6dbe3;
+    --border-strong: #b9c1cd;
+    --text-primary: #1a2029;
+    --text-secondary: #4a5563;
+    --text-muted: #78828f;
+    --accent: #1f6feb;
+    --accent-weak: #cfe0ff;
+    --cell-tcell: #d9701f;
+    --cell-tcell-ink: #fff;
+    --cell-other: #8a94a2;
+    --cell-other-ink: #fff;
+    --edge-sig: #1f6feb;
+    --edge-nonsig: #b3bcc8;
+    --val-pos: #d1242f;
+    --val-neg: #0969da;
+    --shadow: 0 6px 20px rgba(20, 30, 50, 0.12);
+  }
+}
