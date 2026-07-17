@@ -108,8 +108,7 @@ export default function EdgeDetails() {
           {gps.length > 0 ? (
             <>
               <div className={styles.gpHead}>
-                Carried by {gps.length} transporter pair{gps.length === 1 ? '' : 's'}
-                <span className="muted"> (sig here)</span>
+                Carried by {gps.length} significant transporter pair{gps.length === 1 ? '' : 's'}
               </div>
               <ul className={styles.gpList}>
                 {gps.map((g) => (
@@ -119,6 +118,9 @@ export default function EdgeDetails() {
                   </li>
                 ))}
               </ul>
+              <div className={styles.gpFoot}>
+                Significant subset — pair strengths need not sum to the metabolite total.
+              </div>
             </>
           ) : (
             <div className="muted">No individually-significant transporter pairs at this interface.</div>

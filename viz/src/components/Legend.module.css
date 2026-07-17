@@ -38,6 +38,10 @@
 .nonsig {
   border-top: 3px dashed var(--edge-nonsig);
 }
+.gp {
+  border-top: 3px solid var(--edge-sig);
+  opacity: 0.75;
+}
 .node {
   width: 14px;
   height: 14px;

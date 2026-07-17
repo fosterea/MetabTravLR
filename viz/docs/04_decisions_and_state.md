@@ -67,6 +67,14 @@ restart. Dates are absolute (project "today" was 2026-07-16 at kickoff).
 6. Screenshot captured as evidence.
 
 ## Changelog
+- 2026-07-17: **Unit 3 review follow-up.** Addressed the review's Medium + 2 Lows: metabolite
+  edges now scale over the full view set (not just the unfanned fallback remainder), so a lone
+  fallback interface no longer jumps to max width; `genePairsAtInterface` dedups on a canonical
+  (sorted) key (hardens against a metabolite ever listing both gene orders); the panel notes
+  the fan is a "significant subset — pair strengths need not sum to the metabolite total"; and
+  the legend shows a "gene-pair sub-edge (own scale)" key in graph-expand mode. tsc+lint clean,
+  playwright-verified, 0 console errors. (Unit 3 review: no Critical/High; data join verified
+  correct against raw data — 96 primary-key hits, 0 fallback, no double-count.)
 - 2026-07-17: **Unit 3 (gp-aware metabolite expansion).** A metabolite edge can be broken
   into its contributing transporter **gene pairs**, two ways, toggled in the control bar
   ("Gene pairs: In panel / On graph"):

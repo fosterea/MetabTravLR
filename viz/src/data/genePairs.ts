@@ -28,8 +28,11 @@ export function genePairsAtInterface(
   const seen = new Set<string>();
   for (const [a, b] of metab.genePairs) {
     const id = `${a}__${b}`;
-    if (seen.has(id)) continue;
-    seen.add(id);
+    // Dedup on the CANONICAL (order-independent) key so a pair listed in both gene orders
+    // can't be counted twice (both orders resolve to the same undirected gp edge).
+    const key = a <= b ? `${a}__${b}` : `${b}__${a}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
     // The pair id order in the network vs the tier CSV should agree, but check both to be safe.
     const edges = gpBundle.byEntity[id] ?? gpBundle.byEntity[`${b}__${a}`] ?? [];
     const at = edges.find((e) => sameInterface(e, iface));

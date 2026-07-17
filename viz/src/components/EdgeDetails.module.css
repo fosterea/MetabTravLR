@@ -108,6 +108,11 @@
   color: var(--edge-sig);
   flex: none;
 }
+.gpFoot {
+  margin-top: 5px;
+  font-size: 10px;
+  color: var(--text-muted);
+}
 .note {
   border-top: 1px solid var(--border);
   padding-top: var(--sp-2);
