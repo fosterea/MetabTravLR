@@ -4,7 +4,12 @@
 import { useMemo } from 'react';
 import { useVizStore, selectCurrentTier } from '@/store/useVizStore';
 import { sameInterface, isSelfEdge } from '@/data/scales';
-import { genePairsAtInterface } from '@/data/genePairs';
+import {
+  genePairsAtInterface,
+  gpEdgesInTier,
+  gpSlotMap,
+  metaboliteSigPairsAtTier,
+} from '@/data/genePairs';
 import { formatStrength, formatFdr } from '@/data/format';
 import styles from './EdgeDetails.module.css';
 
@@ -26,14 +31,13 @@ export default function EdgeDetails() {
   // a gene-pair tab is isolated, resolve against that pair's edges instead.
   const edge = useMemo(() => {
     if (!selectedEdge || !tier) return undefined;
-    const present = new Set(tier.cellTypes);
     if (gpTab && gpBundle) {
-      const list = (gpBundle.byEntity[gpTab] ?? []).filter(
-        (e) => present.has(e.source) && present.has(e.target),
+      return gpEdgesInTier(gpBundle, gpTab, tier.cellTypes).find((e) =>
+        sameInterface(e, selectedEdge),
       );
-      return list.find((e) => sameInterface(e, selectedEdge));
     }
     if (!entityId || !edgeBundle) return undefined;
+    const present = new Set(tier.cellTypes);
     const visible = (edgeBundle.byEntity[entityId] ?? []).filter(
       (e) =>
         present.has(e.source) &&
@@ -55,6 +59,12 @@ export default function EdgeDetails() {
         ? dataset?.entities.metabolite?.find((m) => m.id === entityId)
         : undefined,
     [dataset, entityKind, entityId],
+  );
+
+  // Color slots for the panel breakdown swatches (match the on-graph fan-out colors).
+  const pairSlots = useMemo(
+    () => gpSlotMap(metaboliteSigPairsAtTier(metab, gpBundle, tier)),
+    [metab, gpBundle, tier],
   );
 
   // Panel-mode gene-pair breakdown for a metabolite interface (empty in graph mode, gp view,
@@ -135,6 +145,11 @@ export default function EdgeDetails() {
               <ul className={styles.gpList}>
                 {gps.map((g) => (
                   <li key={g.id} className={styles.gpItem}>
+                    <span
+                      className={styles.gpSwatch}
+                      style={{ background: `var(--gp-${(pairSlots.get(g.id) ?? 0) + 1})` }}
+                      aria-hidden
+                    />
                     <span className={styles.gpName}>{g.label}</span>
                     <span className={styles.gpVal}>{formatStrength(g.edge.scores.C_np)}</span>
                   </li>

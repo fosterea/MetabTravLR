@@ -3,7 +3,7 @@
  *  gene pairs' scores (harreman `compute_metabolite_cs`); this recovers which of those pairs
  *  are individually significant at a given cell-type interface, from the same-tier gene_pair
  *  bundle (which is significant-only, see docs/05_data_contract.md). No source/ingest change. */
-import type { EdgeBundle, EntityEdge, MetaboliteEntity } from './types';
+import type { EdgeBundle, EntityEdge, MetaboliteEntity, Tier } from './types';
 import { sameInterface } from './scales';
 
 export interface GpContribution {
@@ -11,6 +11,77 @@ export interface GpContribution {
   genes: [string, string];
   label: string; // "GENE1 – GENE2"
   edge: EntityEdge; // the gene-pair edge at this interface (carries its own scores)
+}
+
+/** How many distinct categorical colors gene pairs are cycled through (see theme.css --gp-*).
+ *  A validated colorblind-safe order; identity is never color-alone (tabs are a labelled key
+ *  + hover names the pair), so cycling past this is acceptable for this interactive tool. */
+export const GP_COLOR_SLOTS = 8;
+
+/** Reverse a "A__B" gene-pair id (order-tolerant bundle lookups). */
+export const reverseGpId = (id: string): string => {
+  const i = id.indexOf('__');
+  return i < 0 ? id : `${id.slice(i + 2)}__${id.slice(0, i)}`;
+};
+
+/** Edges of a gene pair (id order-tolerant) whose endpoints are both in the tier. */
+export function gpEdgesInTier(
+  gpBundle: EdgeBundle | undefined,
+  id: string,
+  cellTypes: string[],
+): EntityEdge[] {
+  if (!gpBundle) return [];
+  const present = new Set(cellTypes);
+  const rows = gpBundle.byEntity[id] ?? gpBundle.byEntity[reverseGpId(id)] ?? [];
+  return rows.filter((e) => present.has(e.source) && present.has(e.target));
+}
+
+export interface MetaboliteGpAtTier {
+  id: string; // "GENE1__GENE2" (network order)
+  label: string; // "GENE1 – GENE2"
+  genes: [string, string];
+  nInterfaces: number;
+  maxC: number;
+  /** Categorical color slot (0..GP_COLOR_SLOTS-1) — stable for this ordered list. */
+  slot: number;
+}
+
+/**
+ * The selected metabolite's transporter gene pairs that are significant at the given tier,
+ * ordered by strength (maxC desc) and assigned a stable categorical color slot. Shared by the
+ * gene-pair tabs (labelled color key), the on-graph fan-out coloring, and the panel breakdown,
+ * so the same pair gets the same color everywhere.
+ */
+export function metaboliteSigPairsAtTier(
+  metab: MetaboliteEntity | undefined,
+  gpBundle: EdgeBundle | undefined,
+  tier: Tier | undefined,
+): MetaboliteGpAtTier[] {
+  if (!metab || !gpBundle || !tier) return [];
+  const seen = new Set<string>();
+  const out: Omit<MetaboliteGpAtTier, 'slot'>[] = [];
+  for (const [a, b] of metab.genePairs) {
+    const canon = a <= b ? `${a}__${b}` : `${b}__${a}`;
+    if (seen.has(canon)) continue;
+    seen.add(canon);
+    const id = `${a}__${b}`;
+    const edges = gpEdgesInTier(gpBundle, id, tier.cellTypes);
+    if (!edges.length) continue;
+    out.push({
+      id,
+      label: `${a} – ${b}`,
+      genes: [a, b],
+      nInterfaces: edges.length,
+      maxC: edges.reduce((m, e) => Math.max(m, e.scores.C_np), 0),
+    });
+  }
+  out.sort((x, y) => y.maxC - x.maxC);
+  return out.map((p, i) => ({ ...p, slot: i % GP_COLOR_SLOTS }));
+}
+
+/** id -> color slot, from the ordered list above (for the fan-out edge coloring). */
+export function gpSlotMap(pairs: MetaboliteGpAtTier[]): Map<string, number> {
+  return new Map(pairs.map((p) => [p.id, p.slot]));
 }
 
 /**
