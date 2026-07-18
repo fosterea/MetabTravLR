@@ -13,13 +13,16 @@ import os
 warnings.filterwarnings("ignore")
 from pathlib import Path
 
+import nbhd_scores
+
 
 class HarremanRunner():
 
-    def __init__(self, data_path):
+    def __init__(self, data_path, compute_nbhd_scores=True):
         self.easy_download_path = f'{data_path}/easy_download/harreman_outputs'
         self.data_path = data_path
         self.adata_path = f'{data_path}/adata.h5ad'
+        self.compute_nbhd_scores = compute_nbhd_scores
 
     def load_adata(self):
         self.adata = sc.read_h5ad(self.adata_path)
@@ -152,6 +155,10 @@ class HarremanRunner():
 
         harreman.tl.select_significant_interactions(adata, test='non-parametric', threshold=fdr_threshold)
 
+        if self.compute_nbhd_scores:
+            print('computing neighborhood scores')
+            nbhd_scores.compute_nbhd_scores(adata, M=n_permutations, verbose=True)
+
     def run_cell_aware(self, cell_type_col, n_permutations=1000, fdr_threshold=0.05):
 
         adata = self.adata
@@ -168,6 +175,11 @@ class HarremanRunner():
         else:
             raise Exception('Didn\'t load sig genes for filtering')
         gene_pairs_filt = list(zip(cell_communication_df['Gene 1'], cell_communication_df['Gene 2']))
+
+        # compute_gene_pairs writes these with uns.setdefault, so a second tier would keep the
+        # first tier's cell type labels and KeyError in create_weights_ct_pairs.
+        for key in ('cell_type_pairs', 'gene_pairs_per_ct_pair'):
+            adata.uns.pop(key, None)
 
         # Compute cell-type-specific gene pairs
         harreman.tl.compute_gene_pairs(adata, cell_type_key=cell_type_col, verbose=True)
@@ -210,6 +222,11 @@ class HarremanRunner():
         adata.uns['ct_ccc_results']['cell_com_df_m'].to_csv(f'{self.easy_download_path}/{cell_type_col}/[ct_ccc_results][cell_com_df_m].csv')
         adata.uns['ct_ccc_results']['cell_com_df_m_sig'].to_csv(f'{self.easy_download_path}/{cell_type_col}/[ct_ccc_results][cell_com_df_m_sig].csv')
         adata.uns['ct_ccc_results']['cell_com_df_gp_sig'].to_csv(f'{self.easy_download_path}/{cell_type_col}/[ct_ccc_results][cell_com_df_gp_sig].csv')
+
+        if self.compute_nbhd_scores:
+            for grain in ('m', 'gp'):
+                summary = nbhd_scores.summarize_nbhd_scores(adata, cell_type_col, grain=grain)
+                summary.to_csv(f'{self.easy_download_path}/{cell_type_col}/[nbhd_scores][summary_{grain}].csv', index=False)
 
     def save_adata(self, filename):
         adata = self.adata
