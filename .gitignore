@@ -122,3 +122,6 @@ tutorial/
 tmp/
 # Playwright MCP test artifacts (screenshots, snapshots, console logs)
 .playwright-mcp/
+
+# don't git ignore Results
+!Results/**/*.csv
