@@ -19,6 +19,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "s
 import numpy as np
 import pandas as pd
 import anndata as ad
+import torch
 
 from SpaceTravLR.tools.network import RegulatoryFactory
 from SpaceTravLR.models.parallel_estimators import SpatialCellularProgramsEstimator
@@ -28,7 +29,21 @@ def _trained_estimator(N=1200, seed=0, num_epochs=25):
     """A fitted estimator whose clusters train a REAL CNN (target = linear combo of
     regulators + small noise -> R2 >= 0.15, so we exercise the trained-model path, not the
     zeroed-anchor fallback). use_ligands=False + pre-seeded received-ligand frames keep it
-    self-contained (no CellChat gene lookups)."""
+    self-contained (no CellChat gene lookups).
+
+    Seeds the GLOBAL torch/numpy RNGs (not just the local `rng` used for the
+    synthetic data below) so this fixture -- and any test built on it -- is
+    order-independent within the suite. Model weight init (CellularNicheNetwork),
+    DataLoader shuffling, and RotatedTensorDataset's rotation (`np.random.choice`)
+    all draw from the GLOBAL RNGs, not the local `np.random.default_rng(seed)`
+    below; without this, a preceding test that also trains a model shifts those
+    global RNGs and can tip loose-bound assertions here (observed: another test
+    file's training run, executed first, changed this fixture's trained betas
+    enough to fail `test_eval_mode_matches_old_train_mode_within_tiny_tolerance`'s
+    1e-2 bound).
+    """
+    torch.manual_seed(seed)
+    np.random.seed(seed)
     rng = np.random.default_rng(seed)
     G = 12
     X = rng.random((N, G)).astype(np.float32)

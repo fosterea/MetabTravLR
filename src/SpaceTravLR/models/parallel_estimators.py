@@ -604,7 +604,7 @@ class SpatialCellularProgramsEstimator:
             radius=100, contact_distance=30, use_ligands=True,
             tf_ligand_cutoff=0.01, receptor_thresh=0.01,
             regulators=None, grn=None, colinks_path=None, tflinks=None, scale_factor=100,
-            extra_modulators=None, extra_lr=None, activation='identity'):
+            extra_modulators=None, extra_lr=None, metab_pairs=None, activation='identity'):
         
 
         assert isinstance(adata, AnnData), 'adata must be an AnnData object'
@@ -707,6 +707,72 @@ class SpatialCellularProgramsEstimator:
         self.modulators = modulators + self.extra_modulators
         self.modulators_genes = list(set(modulators_genes + self.extra_modulators))
 
+        # --- Metabolite transporter pairs: own modulator group (D6), '@' separator ---
+        # Reuses the L-R computation (received_ligand(export, diffused) x import(local))
+        # but is kept independent of the extra_lr/L-R group #2.
+        self.metab_pairs_input = metab_pairs
+
+        # Check the container type FIRST (before calling len()/iterating), so a
+        # non-list, non-len-able input (e.g. an int) raises our intended ValueError
+        # instead of a TypeError from len().
+        if metab_pairs is not None and not isinstance(metab_pairs, list):
+            raise ValueError("metab_pairs must be list[tuple[export:str, import:str]]")
+
+        if metab_pairs is not None and len(metab_pairs) > 0:
+            if not all(
+                isinstance(p, (tuple, list))
+                and len(p) == 2
+                and all(isinstance(g, str) for g in p)
+                for p in metab_pairs
+            ):
+                raise ValueError("metab_pairs must be list[tuple[export:str, import:str]]")
+
+            # Filter to genes present in adata.var_names (both genes present), deduped.
+            _var_filtered = []
+            _seen_var = set()
+            n_dropped = 0
+            for e, i in metab_pairs:
+                if e in adata.var_names and i in adata.var_names:
+                    if (e, i) not in _seen_var:
+                        _seen_var.add((e, i))
+                        _var_filtered.append((e, i))
+                else:
+                    n_dropped += 1
+            if n_dropped > 0:
+                print(f'Excluding {n_dropped} metab_pairs with genes not in adata.var_names')
+
+            # For diffusion: target-agnostic, so the shared received_ligands_tfl cache
+            # (built by the first gene in a training loop) contains every export gene
+            # any later gene needs. Do NOT target-filter this.
+            _diffusion_pairs = list(_var_filtered)
+
+            # For modulator columns: additionally exclude pairs touching the target gene
+            # (a gene can't predict itself), dedupe preserving order.
+            self.metab_exports = []
+            self.metab_imports = []
+            _seen_modulator = set()
+            for e, i in _var_filtered:
+                if e == self.target_gene or i == self.target_gene:
+                    continue
+                if (e, i) in _seen_modulator:
+                    continue
+                _seen_modulator.add((e, i))
+                self.metab_exports.append(e)
+                self.metab_imports.append(i)
+            self.metab_pairs = [f"{e}@{i}" for e, i in zip(self.metab_exports, self.metab_imports)]
+
+            self._diffusion_extra_lr = (list(self.extra_lr) if self.extra_lr else []) + _diffusion_pairs
+            if len(self._diffusion_extra_lr) == 0:
+                self._diffusion_extra_lr = None
+        else:
+            self.metab_pairs = []
+            self.metab_exports = []
+            self.metab_imports = []
+            self._diffusion_extra_lr = self.extra_lr
+
+        self.modulators = self.modulators + self.metab_pairs
+        self.modulators_genes = list(set(self.modulators_genes + self.metab_exports + self.metab_imports))
+
         assert len(self.ligands) == len(self.receptors)
         assert np.isin(self.ligands, self.adata.var_names).all()
         assert np.isin(self.receptors, self.adata.var_names).all()
@@ -806,10 +872,25 @@ class SpatialCellularProgramsEstimator:
         return pd.DataFrame(
             ltf_interactions, 
             columns=[i[0]+'#'+i[1] for i in zip(
-                received_ligands_df.columns, regulator_gex_df.columns)], 
+                received_ligands_df.columns, regulator_gex_df.columns)],
             index=regulator_gex_df.index
         )
-    
+
+    @staticmethod
+    def metabolite_interactions(received_export_df, import_gex_df):
+        """received_ligand(export, diffused) × import(local); '@'-separated columns.
+        Mirrors ligand_regulators_interactions but is its own metabolite group."""
+        assert isinstance(received_export_df, pd.DataFrame)
+        assert isinstance(import_gex_df, pd.DataFrame)
+        assert received_export_df.index.equals(import_gex_df.index)
+        assert received_export_df.shape[1] == import_gex_df.shape[1]
+        interactions = received_export_df.values * import_gex_df.values
+        return pd.DataFrame(
+            interactions,
+            columns=[e + '@' + i for e, i in zip(received_export_df.columns, import_gex_df.columns)],
+            index=import_gex_df.index,
+        )
+
     @staticmethod
     def check_LR_properties(adata, layer):
         counts_df = adata.to_df(layer=layer)
@@ -874,7 +955,7 @@ class SpatialCellularProgramsEstimator:
                 radius=self.radius, 
                 contact_distance=self.contact_distance, 
                 cell_threshes=cell_thresholds,
-                extra_lr=self.extra_lr,
+                extra_lr=self._diffusion_extra_lr,
                 scale_factor=self.scale_factor
             )
 
@@ -897,6 +978,24 @@ class SpatialCellularProgramsEstimator:
             )
         else:
             adata.uns['ligand_regulator'] = pd.DataFrame(index=adata.obs.index)
+
+        if len(self.metab_pairs) > 0:
+            # Read from received_ligands_tfl, NOT received_ligands: the no-L-R branch
+            # above overwrites adata.uns['received_ligands'] with an empty frame, and
+            # uns is shared across genes in the training loop, so received_ligands can
+            # be empty; received_ligands_tfl is never wiped and always holds the full
+            # diffusion. Use RAW import expression (like the L-TF path uses raw
+            # regulator expression).
+            assert 'received_ligands_tfl' in adata.uns, (
+                'metab modulators require received_ligands_tfl; '
+                'init_received_ligands did not run'
+            )
+            adata.uns['metabolite_interactions'] = self.metabolite_interactions(
+                adata.uns['received_ligands_tfl'][self.metab_exports],
+                counts_df[self.metab_imports],
+            )
+        else:
+            adata.uns['metabolite_interactions'] = pd.DataFrame(index=adata.obs.index)
 
         self.xy = np.array(adata.obsm['spatial'])
         cluster_labels = np.array(adata.obs[self.cluster_annot])
@@ -924,6 +1023,9 @@ class SpatialCellularProgramsEstimator:
             self.train_df = self.train_df.join(
                 adata.to_df(layer=self.layer)[self.extra_modulators]
             )
+
+        if len(self.metab_pairs) > 0:
+            self.train_df = self.train_df.join(adata.uns['metabolite_interactions'])
 
         if not 'spatial_features' in adata.obsm.keys():
             self.spatial_features = create_spatial_features(
@@ -971,7 +1073,7 @@ class SpatialCellularProgramsEstimator:
             self.tfl_regulators.append(reg)
          
         assert len(self.ligands) == len(self.receptors)
-        assert len(self.train_df.columns) - 1 == (len(self.lr_pairs) + len(self.tfl_pairs) + len(self.regulators) + len(self.extra_modulators))
+        assert len(self.train_df.columns) - 1 == (len(self.lr_pairs) + len(self.tfl_pairs) + len(self.regulators) + len(self.extra_modulators) + len(self.metab_pairs))
 
         X = self.train_df.drop(columns=[self.target_gene]).values
         y = self.train_df[self.target_gene].values
@@ -1105,6 +1207,7 @@ class SpatialCellularProgramsEstimator:
             print(f'\t{len(self.lr_pairs)} Ligand-Receptor Pairs')
             print(f'\t{len(self.tfl_pairs)} TranscriptionFactor-Ligand Pairs')
             print(f'\t{len(self.extra_modulators)} Extra modulators')
+            print(f'\t{len(self.metab_pairs)} Metabolite Pairs')
             
         self.scores = {}
         
@@ -1138,7 +1241,7 @@ class SpatialCellularProgramsEstimator:
                 _betas = np.hstack([m.intercept_, m.coef_])
 
             elif self.estimator == 'lasso':
-                groups = [1]*len(self.regulators) + [2]*len(self.lr_pairs) + [3]*len(self.tfl_pairs) + [4]*len(self.extra_modulators)
+                groups = [1]*len(self.regulators) + [2]*len(self.lr_pairs) + [3]*len(self.tfl_pairs) + [4]*len(self.extra_modulators) + [5]*len(self.metab_pairs)
                 groups = np.array(groups)
                 if lasso_params is None:
                     gl = GroupLasso(
