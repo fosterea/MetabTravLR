@@ -93,17 +93,21 @@ class HarremanRunner():
         #     pass
 
 
-    def run_harreman(self, cell_type_col, cell_type_indep_fdr=0.05, cell_type_dep_fdr=0.05):
-        self.run_cell_independent(fdr_threshold=cell_type_indep_fdr)
+    def run_harreman(self, cell_type_col, cell_type_indep_fdr=0.05, cell_type_dep_fdr=0.05, recompute_cell_indep=True):
+        self.run_cell_independent(fdr_threshold=cell_type_indep_fdr, recompute_cell_indep=recompute_cell_indep)
         self.run_cell_aware(cell_type_col, fdr_threshold=cell_type_dep_fdr)
-        self.save_harreman_outputs(cell_type_col)
+        self.save_harreman_outputs(cell_type_col, recompute_cell_indep=recompute_cell_indep)
 
 
-    def run_cell_independent(self, n_permutations=1000, fdr_threshold=0.05):
+    def run_cell_independent(self, n_permutations=1000, fdr_threshold=0.05, recompute_cell_indep=True):
         adata = self.adata
 
+        if 'ccc_results' in adata.obs.keys():
+            print('Already have ccc_results')
+            return
+
         cell_type_indep_path = Path(self.easy_download_path) / '[ccc_results][cell_com_df_gp_sig].csv'
-        if cell_type_indep_path.is_file():
+        if cell_type_indep_path.is_file() and not recompute_cell_indep:
             print('Cell indep already saved, not running')
             return
         
@@ -205,14 +209,14 @@ class HarremanRunner():
             threshold=fdr_threshold
         )
 
-    def save_harreman_outputs(self, cell_type_col):
+    def save_harreman_outputs(self, cell_type_col, recompute_cell_indep=True):
 
         adata = self.adata
 
         Path(f'{self.easy_download_path}/{cell_type_col}').mkdir(parents=True, exist_ok=True)
 
         cell_type_indep_path = Path(self.easy_download_path) / '[ccc_results][cell_com_df_gp_sig].csv'
-        if cell_type_indep_path.is_file():
+        if cell_type_indep_path.is_file() and not recompute_cell_indep:
             print('Not saving cell type indep becasue file already exists.')
         else:
             adata.uns['ccc_results']['cell_com_df_gp_sig'].to_csv(cell_type_indep_path)
