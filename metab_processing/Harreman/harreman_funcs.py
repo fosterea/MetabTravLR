@@ -102,7 +102,7 @@ class HarremanRunner():
     def run_cell_independent(self, n_permutations=1000, fdr_threshold=0.05, recompute_cell_indep=True):
         adata = self.adata
 
-        if 'ccc_results' in adata.obs.keys():
+        if 'ccc_results' in adata.uns.keys():
             print('Already have ccc_results')
             return
 
