@@ -2,6 +2,7 @@
  *  involved at the current tier (serves the "which metabolites influence T cells?" question
  *  without hard-coding T cells — it uses the tier's own T-cell-involvement summary field). */
 import type { Entity, EntityEdge, GenePairEntity, MetaboliteEntity } from './types';
+import { reverseGpId } from './genePairs';
 
 /** entityId -> its edges at the current (tier, kind), i.e. `EdgeBundle.byEntity`. */
 type ByEntity = Record<string, EntityEdge[]> | undefined;
@@ -42,9 +43,10 @@ export function rankMetabolites(
     const involved = t?.tcellInvolved === true;
     const eliminated = !metaboliteInvolvedAnywhere(m);
     // # significant cell-type interfaces for this metabolite at the current tier (from the
-    // loaded bundle); falls back to the summary sig-pair count while the bundle is loading.
+    // loaded bundle), shown in the hint. Ranking stays on the summary sig-pair count so the
+    // order is stable regardless of bundle-load timing (keeps App's auto-select in agreement).
     const nSigInt = byEntity ? (byEntity[m.id] ?? []).filter((e) => e.scores.selected).length : null;
-    const nForRank = nSigInt ?? t?.nSigPairs ?? 0;
+    const nForRank = t?.nSigPairs ?? 0;
     const rank =
       (involved ? 1_000_000 : 0) +
       nForRank * 1000 +
@@ -86,8 +88,11 @@ export function rankGenePairs(list: GenePairEntity[], byEntity?: ByEntity): Rank
   const scored = list.map((g) => {
     // The gene_pair bundle is significant-only, so its edge count IS the number of significant
     // interactions at this tier. Pairs absent from the bundle have none (greyed, like eliminated
-    // metabolites) — but all network pairs stay listed so the full support is visible.
-    const nSigInt = byEntity ? (byEntity[g.id]?.length ?? 0) : null;
+    // metabolites) — but all network pairs stay listed so the full support is visible. Id lookup
+    // is order-tolerant to match the graph/panel paths.
+    const nSigInt = byEntity
+      ? (byEntity[g.id] ?? byEntity[reverseGpId(g.id)])?.length ?? 0
+      : null;
     const nMetab = g.metabolites.length;
     const eliminated = nSigInt === 0;
     const hint =

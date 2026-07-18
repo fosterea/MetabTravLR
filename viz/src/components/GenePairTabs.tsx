@@ -54,11 +54,6 @@ export default function GenePairTabs() {
           onClick={() => setGpTab(p.id)}
           title={`${p.nInterfaces} interface${p.nInterfaces === 1 ? '' : 's'} · max C_np ${formatStrength(p.maxC)}`}
         >
-          <span
-            className={styles.swatch}
-            style={{ background: `var(--gp-${p.slot + 1})` }}
-            aria-hidden
-          />
           {p.label} <span className={styles.count}>{p.nInterfaces}</span>
         </button>
       ))}

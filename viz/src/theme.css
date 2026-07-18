@@ -37,18 +37,6 @@
   --val-pos: #f85149;
   --val-neg: #388bfd;
 
-  /* Categorical colors for gene pairs in the metabolite fan-out (colorblind-safe order,
-     validated dataviz palette; dark steps here, light overrides below). Used as a labelled
-     key via the gene-pair tabs + hover, so color is an aid, never the sole channel. */
-  --gp-1: #3987e5; /* blue */
-  --gp-2: #2fae59; /* green (lightened from #008300 for the dark surface) */
-  --gp-3: #d55181; /* magenta */
-  --gp-4: #c98500; /* yellow */
-  --gp-5: #199e70; /* aqua */
-  --gp-6: #d95926; /* orange */
-  --gp-7: #9085e9; /* violet */
-  --gp-8: #e66767; /* red */
-
   /* spacing / radius / type */
   --sp-1: 4px;
   --sp-2: 8px;
@@ -85,15 +73,6 @@
     --edge-nonsig: #b3bcc8;
     --val-pos: #d1242f;
     --val-neg: #0969da;
-    /* gene-pair categorical (light steps of the same validated palette) */
-    --gp-1: #2a78d6;
-    --gp-2: #008300;
-    --gp-3: #d64d7d;
-    --gp-4: #b57400;
-    --gp-5: #12855c;
-    --gp-6: #d94e1f;
-    --gp-7: #4a3aa7;
-    --gp-8: #d83a39;
     --shadow: 0 6px 20px rgba(20, 30, 50, 0.12);
   }
 }

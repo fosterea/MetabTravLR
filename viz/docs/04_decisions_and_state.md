@@ -67,6 +67,21 @@ restart. Dates are absolute (project "today" was 2026-07-16 at kickoff).
 6. Screenshot captured as evidence.
 
 ## Changelog
+- 2026-07-17: **Reverted gene-pair color-coding + background de-emphasis; fixed fan-out
+  overlap with curvature instead (Foster feedback).** (1) The color-coding didn't help — an
+  interface fan's sub-edges overlapped into one line, and with >8 pairs two pairs shared a
+  color anyway (review Medium). **Removed** all gene-pair coloring (theme `--gp-*` tokens,
+  `edge.gp-slot-*`, tab/panel swatches, `slot`/`gpSlotMap`). Root fix: the fan-out sub-edges
+  now spread apart geometrically — non-self edges bow via a per-edge `control-point-distances`
+  (`unbundled-bezier`, spacing capped at 200px so dense fans stay on-screen); self-loops fan
+  around the node as separate "petals" via per-edge `loop-direction`. Playwright-verified:
+  L-Glutamine's 11-pair self-interface renders as an 11-petal flower, clearly separable with no
+  color. Color can be re-added later only if still needed. (2) **Removed the T-cell background
+  greying** — keep the app agnostic to the activity; nothing T-cell-specific without asking.
+  (3) **Fixed 2-node tiers** (Tier1/Tier2) to lay out side by side (grid, 1 row) instead of the
+  circle layout stacking them vertically. (4) Applied the review Lows: metabolite ranking stays
+  on the summary sig-pair count so App's auto-select agrees with the panel's top row; the
+  gene-pair count lookup is now order-tolerant. tsc+lint clean, 0 console errors.
 - 2026-07-17: **Usability pass (drove the app for "which metabolites influence T cells?").**
   Top finding + fix: the background `other↔other` self-interaction dwarfs the T-cell interfaces
   (Tier1 Iron: bg C_np 194,927 vs T↔other 14,116, T↔T 2,590) and visually dominated. Now

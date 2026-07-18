@@ -4,12 +4,7 @@
 import { useMemo } from 'react';
 import { useVizStore, selectCurrentTier } from '@/store/useVizStore';
 import { sameInterface, isSelfEdge } from '@/data/scales';
-import {
-  genePairsAtInterface,
-  gpEdgesInTier,
-  gpSlotMap,
-  metaboliteSigPairsAtTier,
-} from '@/data/genePairs';
+import { genePairsAtInterface, gpEdgesInTier } from '@/data/genePairs';
 import { formatStrength, formatFdr } from '@/data/format';
 import styles from './EdgeDetails.module.css';
 
@@ -59,12 +54,6 @@ export default function EdgeDetails() {
         ? dataset?.entities.metabolite?.find((m) => m.id === entityId)
         : undefined,
     [dataset, entityKind, entityId],
-  );
-
-  // Color slots for the panel breakdown swatches (match the on-graph fan-out colors).
-  const pairSlots = useMemo(
-    () => gpSlotMap(metaboliteSigPairsAtTier(metab, gpBundle, tier)),
-    [metab, gpBundle, tier],
   );
 
   // Panel-mode gene-pair breakdown for a metabolite interface (empty in graph mode, gp view,
@@ -145,11 +134,6 @@ export default function EdgeDetails() {
               <ul className={styles.gpList}>
                 {gps.map((g) => (
                   <li key={g.id} className={styles.gpItem}>
-                    <span
-                      className={styles.gpSwatch}
-                      style={{ background: `var(--gp-${(pairSlots.get(g.id) ?? 0) + 1})` }}
-                      aria-hidden
-                    />
                     <span className={styles.gpName}>{g.label}</span>
                     <span className={styles.gpVal}>{formatStrength(g.edge.scores.C_np)}</span>
                   </li>

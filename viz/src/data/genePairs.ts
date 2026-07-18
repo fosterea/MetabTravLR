@@ -13,11 +13,6 @@ export interface GpContribution {
   edge: EntityEdge; // the gene-pair edge at this interface (carries its own scores)
 }
 
-/** How many distinct categorical colors gene pairs are cycled through (see theme.css --gp-*).
- *  A validated colorblind-safe order; identity is never color-alone (tabs are a labelled key
- *  + hover names the pair), so cycling past this is acceptable for this interactive tool. */
-export const GP_COLOR_SLOTS = 8;
-
 /** Reverse a "A__B" gene-pair id (order-tolerant bundle lookups). */
 export const reverseGpId = (id: string): string => {
   const i = id.indexOf('__');
@@ -42,15 +37,11 @@ export interface MetaboliteGpAtTier {
   genes: [string, string];
   nInterfaces: number;
   maxC: number;
-  /** Categorical color slot (0..GP_COLOR_SLOTS-1) — stable for this ordered list. */
-  slot: number;
 }
 
 /**
  * The selected metabolite's transporter gene pairs that are significant at the given tier,
- * ordered by strength (maxC desc) and assigned a stable categorical color slot. Shared by the
- * gene-pair tabs (labelled color key), the on-graph fan-out coloring, and the panel breakdown,
- * so the same pair gets the same color everywhere.
+ * ordered by strength (maxC desc). Shared by the gene-pair tabs and the panel breakdown.
  */
 export function metaboliteSigPairsAtTier(
   metab: MetaboliteEntity | undefined,
@@ -59,7 +50,7 @@ export function metaboliteSigPairsAtTier(
 ): MetaboliteGpAtTier[] {
   if (!metab || !gpBundle || !tier) return [];
   const seen = new Set<string>();
-  const out: Omit<MetaboliteGpAtTier, 'slot'>[] = [];
+  const out: MetaboliteGpAtTier[] = [];
   for (const [a, b] of metab.genePairs) {
     const canon = a <= b ? `${a}__${b}` : `${b}__${a}`;
     if (seen.has(canon)) continue;
@@ -76,12 +67,7 @@ export function metaboliteSigPairsAtTier(
     });
   }
   out.sort((x, y) => y.maxC - x.maxC);
-  return out.map((p, i) => ({ ...p, slot: i % GP_COLOR_SLOTS }));
-}
-
-/** id -> color slot, from the ordered list above (for the fan-out edge coloring). */
-export function gpSlotMap(pairs: MetaboliteGpAtTier[]): Map<string, number> {
-  return new Map(pairs.map((p) => [p.id, p.slot]));
+  return out;
 }
 
 /**

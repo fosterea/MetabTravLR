@@ -12,12 +12,6 @@ export function buildStylesheet(): cytoscape.StylesheetJson {
   const accent = cssVar('--accent');
   const border = cssVar('--border');
   const canvasBg = cssVar('--bg-canvas');
-  // Categorical colors for gene-pair fan-out sub-edges (see theme.css --gp-*).
-  const gpColors = Array.from({ length: 8 }, (_, i) => cssVar(`--gp-${i + 1}`));
-  const gpSlotRules = gpColors.map((color, i) => ({
-    selector: `edge.gp-slot-${i}`,
-    style: { 'line-color': color },
-  }));
 
   return [
     {
@@ -82,19 +76,28 @@ export function buildStylesheet(): cytoscape.StylesheetJson {
       style: { 'line-color': edgeNonsig, 'line-style': 'dashed', width: 1.5, opacity: 0.3 },
     },
     {
-      // Background-only significant interface (no T-cell endpoint): recessive so T-cell
-      // interfaces read first. Compound selector so it only dims the otherwise-bold sig edges.
-      selector: 'edge.sig.bg',
-      style: { opacity: 0.32 },
+      // Fan-out transporter-gene-pair sub-edges (metabolite "graph" expand mode). Each of an
+      // interface's parallel sub-edges gets an explicit control point (data 'cpd') so they bow
+      // apart into distinct curves instead of overlapping into one line.
+      selector: 'edge.gp',
+      style: {
+        'line-color': edgeSig,
+        opacity: 0.9,
+        'curve-style': 'unbundled-bezier',
+        'control-point-distances': 'data(cpd)',
+        'control-point-weights': 0.5,
+      },
     },
     {
-      // Fan-out transporter-gene-pair sub-edges (metabolite "graph" expand mode). Each pair
-      // gets a categorical color (edge.gp-slot-N below) so the fan is differentiable.
-      selector: 'edge.gp',
-      style: { 'line-color': edgeSig, opacity: 0.9, 'curve-style': 'bezier' },
+      // Fan-out self-loops: fan them around the node by per-edge direction (data 'loopDir')
+      // with a tight sweep, so many within-cell-type pairs read as separate petals.
+      selector: 'edge.gp.self',
+      style: {
+        'curve-style': 'bezier',
+        'loop-direction': 'data(loopDir)',
+        'loop-sweep': '26deg',
+      },
     },
-    // Per-pair color slots — placed after edge.gp so line-color wins.
-    ...gpSlotRules,
     {
       selector: 'edge.self',
       style: { 'line-cap': 'round' },
