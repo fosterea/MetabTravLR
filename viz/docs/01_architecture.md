@@ -38,13 +38,15 @@ viz/
 
 ## Data flow
 ```
-metab_processing/  ->  easy_download/harreman_outputs/*.csv,*.json   (SOURCE, read-only)
+metab_processing/  ->  Results/<project>/<dataset>/easy_download/harreman_outputs/
+                                                       *.csv,*.json   (SOURCE, read-only)
         |
-        |  npm run ingest -- <path>            (scripts/ingest.mjs, Node + Papa Parse)
+        |  npm run ingest -- ../Results        (scripts/ingest.mjs, Node + Papa Parse)
         v
 public/data/manifest.json
 public/data/<id>/dataset.json                  (tiers, entities + ranking metrics)
 public/data/<id>/edges/<Tier>.<entityKind>.json  (edges indexed byEntity for O(1) select)
+public/data/<id>/nbhd/<Tier>.json                (neighborhood scores, if the run has them)
         |
         |  fetch() at runtime (src/data/loadDataset.ts)
         v
@@ -55,9 +57,13 @@ The **ingest adapter is the only code that knows the raw file format.** A new so
 See `05_data_contract.md`.
 
 ## The ingest adapter (`scripts/ingest.mjs`)
-- Auto-detects the input path: a `harreman_outputs/` dir, an `easy_download/` dir, or a
-  `<root>/<datasetName>/easy_download/…` tree (the future multi-dataset deploy layout).
-- Emits the manifest + per-dataset descriptor + per-(tier,entityKind) edge bundles.
+- Auto-detects the input path: a `harreman_outputs/` dir, an `easy_download/` dir, a
+  `<root>/<datasetName>/easy_download/…` tree, or a `<root>/<project>/<datasetName>/…` tree
+  (`Results/`, the current source).
+- Emits the manifest + per-dataset descriptor + per-(tier,entityKind) edge bundles + per-tier
+  neighborhood-score bundles.
+- **Never hard-fails on one bad dataset**: an incomplete harreman run becomes an
+  `available: false` manifest entry with a reason, which the app shows disabled.
 - Tier parentage is inferred from coarse→fine ordering (`Tier1←Tier2←Tier3`). The
   **cell-type-level** parent crosswalk is left `null` (no annotation map available yet).
 - Re-run after the data changes. The `harreman` dataset output is committed so a fresh clone

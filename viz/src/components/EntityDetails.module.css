@@ -54,6 +54,7 @@
   gap: 4px;
   margin-top: 6px;
 }
+/* A chip is a link into the metabolite view (see EntityDetails). */
 .chip {
   font-size: 11px;
   padding: 2px 7px;
@@ -61,6 +62,12 @@
   background: var(--bg-elev);
   border: 1px solid var(--border);
   color: var(--text-secondary);
+  cursor: pointer;
+  text-align: left;
+}
+.chip:hover {
+  border-color: var(--accent);
+  color: var(--text-primary);
 }
 .summary {
   border-top: 1px solid var(--border);

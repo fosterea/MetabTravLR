@@ -1,8 +1,10 @@
 /** Canvas overlay: details for the clicked edge (an undirected cell-type interface) — its
- *  strength, significance, cell types, and (metabolite + "In panel" mode) the transporter
- *  gene pairs that carry it at this interface. Cleared by clicking empty canvas or the × . */
+ *  strength, significance, cell types, and the transporter gene pairs that carry it at this
+ *  interface. The pair list shows in BOTH gene-pair expand modes: "On graph" additionally fans
+ *  the pairs out as sub-edges, and the two stay linked (hover/click one, the other highlights).
+ *  Each pair is a link to its own gene-pair view. Cleared by clicking empty canvas or the × . */
 import { useMemo } from 'react';
-import { useVizStore, selectCurrentTier } from '@/store/useVizStore';
+import { useVizStore, selectCurrentTier, selectFocusedGp } from '@/store/useVizStore';
 import { sameInterface, isSelfEdge } from '@/data/scales';
 import { genePairsAtInterface, gpEdgesInTier } from '@/data/genePairs';
 import { formatStrength, formatFdr } from '@/data/format';
@@ -20,6 +22,10 @@ export default function EdgeDetails() {
   const gpTab = useVizStore((s) => s.gpTab);
   const selectedEdge = useVizStore((s) => s.selectedEdge);
   const selectEdge = useVizStore((s) => s.selectEdge);
+  const focusedGp = useVizStore(selectFocusedGp);
+  const pinnedGp = useVizStore((s) => s.pinnedGp);
+  const setHoverGp = useVizStore((s) => s.setHoverGp);
+  const goToEntity = useVizStore((s) => s.goToEntity);
 
   // Resolve against the SAME visible set the graph renders, so the panel and the canvas never
   // disagree (e.g. after toggling non-significant off, a now-hidden pick shows no panel). When
@@ -56,20 +62,18 @@ export default function EdgeDetails() {
     [dataset, entityKind, entityId],
   );
 
-  // Panel-mode gene-pair breakdown for a metabolite interface (empty in graph mode, gp view,
-  // or when a single gene-pair tab is already isolated).
+  // Gene-pair breakdown for a metabolite interface. Shown in BOTH expand modes — "On graph"
+  // adds the fan-out, it doesn't replace the list (the list is where the numbers and the links
+  // live). Empty in the gene-pair view, or when a single pair tab is already isolated.
   const gps = useMemo(
-    () =>
-      edge && metab && gpExpandMode === 'panel' && !gpTab
-        ? genePairsAtInterface(metab, gpBundle, edge)
-        : [],
-    [edge, metab, gpBundle, gpExpandMode, gpTab],
+    () => (edge && metab && !gpTab ? genePairsAtInterface(metab, gpBundle, edge) : []),
+    [edge, metab, gpBundle, gpTab],
   );
 
   if (!edge) return null;
   const self = isSelfEdge(edge);
   const s = edge.scores;
-  const showBreakdown = !!metab && gpExpandMode === 'panel' && !gpTab;
+  const showBreakdown = !!metab && !gpTab;
 
   return (
     <div className={styles.panel} aria-label="Selected interface details">
@@ -133,14 +137,29 @@ export default function EdgeDetails() {
               </div>
               <ul className={styles.gpList}>
                 {gps.map((g) => (
-                  <li key={g.id} className={styles.gpItem}>
-                    <span className={styles.gpName}>{g.label}</span>
-                    <span className={styles.gpVal}>{formatStrength(g.edge.scores.C_np)}</span>
+                  <li key={g.id}>
+                    <button
+                      className={`${styles.gpItem} ${focusedGp === g.id ? styles.gpFocused : ''} ${
+                        pinnedGp === g.id ? styles.gpPinned : ''
+                      }`}
+                      // Hovering previews the pair on the graph's fan-out; clicking opens the
+                      // pair's own view (the per-kind memory makes coming back one click).
+                      onMouseEnter={() => setHoverGp(g.id)}
+                      onMouseLeave={() => setHoverGp(undefined)}
+                      onFocus={() => setHoverGp(g.id)}
+                      onBlur={() => setHoverGp(undefined)}
+                      onClick={() => void goToEntity('gene_pair', g.id)}
+                      title={`Open the ${g.label} gene-pair view`}
+                    >
+                      <span className={styles.gpName}>{g.label}</span>
+                      <span className={styles.gpVal}>{formatStrength(g.edge.scores.C_np)}</span>
+                    </button>
                   </li>
                 ))}
               </ul>
               <div className={styles.gpFoot}>
                 Significant subset — pair strengths need not sum to the metabolite total.
+                {gpExpandMode === 'graph' && ' Hover a row to find it in the on-graph fan.'}
               </div>
             </>
           ) : (

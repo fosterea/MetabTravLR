@@ -103,6 +103,23 @@ export function buildStylesheet(): cytoscape.StylesheetJson {
       style: { 'line-cap': 'round' },
     },
     {
+      // The one gene pair currently highlighted from the details panel (hover) or by clicking
+      // its sub-edge. Its siblings recede so the pair is findable inside a dense fan; the
+      // highlight itself is an accent halo, so significance color is untouched.
+      selector: 'edge.gp-dim',
+      style: { opacity: 0.16 },
+    },
+    {
+      selector: 'edge.gp-focus',
+      style: {
+        'overlay-color': accent,
+        'overlay-opacity': 0.25,
+        'overlay-padding': 4,
+        opacity: 1,
+        'z-index': 12,
+      },
+    },
+    {
       // Picked (clicked) edge: an accent halo via overlay, keeping the base line-color so
       // significance is still visible. Selection is store-driven (see GraphView `.picked`).
       selector: 'edge.picked',

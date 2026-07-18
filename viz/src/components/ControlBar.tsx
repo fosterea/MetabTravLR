@@ -1,5 +1,7 @@
-/** Top control bar: dataset, tier, entity-kind, and the show-non-significant toggle. */
+/** Top control bar: dataset, tier, view, entity-kind, and the show-non-significant toggle. */
+import { Fragment, useMemo } from 'react';
 import { useVizStore } from '@/store/useVizStore';
+import type { DatasetRef } from '@/data/types';
 
 export default function ControlBar() {
   const manifest = useVizStore((s) => s.manifest);
@@ -11,8 +13,10 @@ export default function ControlBar() {
   const gpExpandMode = useVizStore((s) => s.gpExpandMode);
   const gpExpandAll = useVizStore((s) => s.gpExpandAll);
   const gpTab = useVizStore((s) => s.gpTab);
-  // These metabolite controls don't apply while a single gene-pair tab is isolated.
-  const metabControls = entityKind === 'metabolite' && !gpTab;
+  const view = useVizStore((s) => s.view);
+  // These metabolite controls only apply to the graph, and not while a single gene-pair tab
+  // is isolated.
+  const metabControls = view === 'graph' && entityKind === 'metabolite' && !gpTab;
 
   const selectDataset = useVizStore((s) => s.selectDataset);
   const selectTier = useVizStore((s) => s.selectTier);
@@ -20,6 +24,20 @@ export default function ControlBar() {
   const toggleNonSignificant = useVizStore((s) => s.toggleNonSignificant);
   const setGpExpandMode = useVizStore((s) => s.setGpExpandMode);
   const toggleGpExpandAll = useVizStore((s) => s.toggleGpExpandAll);
+  const setView = useVizStore((s) => s.setView);
+
+  // Group datasets by their source project folder, so a future second project stays legible.
+  // Datasets whose harreman run never finished are listed but disabled, with the reason —
+  // silently hiding them would look like data loss.
+  const groups = useMemo(() => {
+    const by = new Map<string, DatasetRef[]>();
+    for (const d of manifest?.datasets ?? []) {
+      const key = d.project ?? '';
+      if (!by.has(key)) by.set(key, []);
+      by.get(key)!.push(d);
+    }
+    return [...by.entries()];
+  }, [manifest]);
 
   return (
     <header className="controlbar">
@@ -36,11 +54,27 @@ export default function ControlBar() {
           value={datasetId ?? ''}
           onChange={(e) => selectDataset(e.target.value)}
         >
-          {manifest?.datasets.map((d) => (
-            <option key={d.id} value={d.id}>
-              {d.name}
-            </option>
-          ))}
+          {groups.map(([project, ds]) => {
+            const options = ds.map((d) => (
+              <option
+                key={d.id}
+                value={d.id}
+                disabled={d.available === false}
+                title={d.unavailableReason}
+              >
+                {d.name}
+                {d.available === false ? ' — incomplete run' : ''}
+              </option>
+            ));
+            // Only wrap in a <optgroup> when there is something to distinguish.
+            return project && groups.length > 1 ? (
+              <optgroup key={project} label={project}>
+                {options}
+              </optgroup>
+            ) : (
+              <Fragment key={project || 'all'}>{options}</Fragment>
+            );
+          })}
         </select>
       </div>
 
@@ -58,6 +92,30 @@ export default function ControlBar() {
             </option>
           ))}
         </select>
+      </div>
+
+      {/* Graph = harreman's cell-type INTERFACE statistic. Neighborhoods = the per-cell scores
+          bucketed by each cell's own type — a different question, hence a different view rather
+          than another encoding on the same graph. */}
+      <div className="field">
+        <label>View</label>
+        <div className="segmented" role="group" aria-label="View">
+          <button aria-pressed={view === 'graph'} onClick={() => setView('graph')}>
+            Graph
+          </button>
+          <button
+            aria-pressed={view === 'nbhd'}
+            onClick={() => setView('nbhd')}
+            disabled={!dataset?.hasNbhd}
+            title={
+              dataset?.hasNbhd
+                ? 'Which cell types sit in high-scoring neighborhoods for the selected entity'
+                : 'This dataset has no neighborhood scores'
+            }
+          >
+            Neighborhoods
+          </button>
+        </div>
       </div>
 
       <div className="field">

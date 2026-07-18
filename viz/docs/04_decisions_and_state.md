@@ -4,6 +4,24 @@
 restart. Dates are absolute (project "today" was 2026-07-16 at kickoff).
 
 ## Current state
+- **2026-07-18 — Multi-dataset + neighborhood view + cross-navigation. Playwright-verified.**
+  - Data source moved to `Results/<project>/<dataset>/easy_download/harreman_outputs`. Ingest
+    now emits **3 datasets** (Human Lung, Human Prostate Adenocarcinoma, Primary Dermal
+    Melanoma); the 2 unfinished runs (Human Breast, Human Cervical Cancer) degrade to
+    `available: false` manifest entries and appear **disabled** in the picker. `public/data` is
+    4.5 MB and fully committed (the Pages deploy serves it).
+  - New **Neighborhoods view** (`NeighborhoodView`) beside the graph — per-cell-type bars for
+    the selected entity, 3 metrics, "thin" flags on small-n rows. See decisions A9/A10.
+  - Entity selection is **remembered per kind**, gene pairs get a **default selection**, and
+    metabolites ⇄ gene pairs are **click-through linked** (A11).
+  - The gene-pair list stays in the details panel in "On graph" mode, linked to the fan-out by
+    a shared highlight (A12).
+  - `tsc` + `lint` + `build` clean; **0 console errors/warnings** across the full smoke pass.
+  - **Two latent bugs found and fixed while testing** (both only reachable once the view switch
+    and dataset picker existed): the "already laid out" ref outlived its Cytoscape instance
+    (blank-graph crash on remount), and it was keyed on tier id alone — every dataset names its
+    finest tier `Tier3`, so switching dataset kept the previous dataset's nodes and threw
+    `nonexistent source`. Now keyed on `(datasetId, tierId)` and cleared with the instance.
 - **2026-07-16 — MVP built & verified end-to-end (playwright). Baseline committed.**
   - `viz/` initialized: Vite + React + TS + Cytoscape + Zustand. Deps installed.
   - Full docs set written (`docs/00`–`05`) + `viz/CLAUDE.md` + root-CLAUDE pointer.
@@ -30,12 +48,20 @@ restart. Dates are absolute (project "today" was 2026-07-16 at kickoff).
 | A4 | Data contract is entity-agnostic (`metabolite`/`gene_pair`, extensible) | Gene pairs wanted now; SpaceTravLR genes/gene-sets later — same edge model. |
 | A5 | Edges are **undirected**; diagonal = self-loop | harreman `CT1→CT2` is a sorted-label artifact, not flow (parent doc 05 §3). |
 | A6 | Edge magnitude on **log/normalized-per-view** scale | `C_np` spans orders of magnitude; raw linear is unreadable. |
-| A7 | Committed the `harreman` ingested dataset; other datasets stay local | Fresh clone runs without source CSVs; large data shouldn't bloat git. |
+| A7 | Commit the ingested `public/data` (all datasets) | Fresh clone runs without source CSVs, and the Pages deploy serves this folder verbatim. ~4.5 MB today; revisit if an ingest ever gets to tens of MB. (Superseded the earlier harreman-only allowlist, 2026-07-18.) |
 | A8 | Tier parentage inferred (coarse→fine); cell-type crosswalk left `null` | No annotation map available yet; UI tolerates absence. |
+| A9 | Neighborhood scores get their **own view**, never an edge encoding | They are not an interface statistic (cells bucketed by their own label, no direction). Drawing them on the cell-type graph would assert an interface that the numbers do not support. Parent doc 05 §5a. |
+| A10 | nbhd chart = horizontal bars, one hue; enrichment gets a diverging pair + neutral zero | One series ⇒ no legend needed; enrichment is the only signed metric. Palette validated with the dataviz validator against `--bg-canvas` in both themes. New `--nbhd-*` tokens rather than reusing the RESERVED `--val-*`. |
+| A11 | Entity selection is remembered **per kind**; cross-links jump between kinds | Foster: switching to gene pairs had no default and lost your place. Memory makes the metabolite⇄pair links safe to follow — the way back is one click. |
+| A12 | The gene-pair list stays in the panel in "On graph" mode (was either/or) | The two are complements, not alternatives: the fan shows *where*, the list shows *which + how much* and is where the links live. A shared highlight (`pinnedGp` + `hoverGp` → `selectFocusedGp`) ties them together; hover previews without destroying a pinned choice. |
+| A13 | Incomplete datasets are listed **disabled**, not hidden | Silently dropping a dataset Foster knows he ran looks like data loss; the reason travels in the manifest. |
 
 ## Open questions / needs Foster
-- **Dataset naming/id** for the current data: used `id=harreman`, name "Harreman — metabolite
-  crosstalk (Xenium)". Confirm or rename.
+- **Dataset naming**: ids/names now come straight from the `Results/` folder names
+  ("Human_Lung" → "Human Lung"), with the project folder as a group label. Resolved — but say
+  if you want prettier display names.
+- **Human Breast / Human Cervical Cancer** only have `harreman_network.json`; they show as
+  disabled. Re-run ingest after those finish and they light up on their own.
 - **Cell-type parent crosswalk** (Tier3 subtype → Tier2 `CD8 T Cell` → Tier1 `T Cell`): not in
   the outputs. If Foster can emit it from `metab_processing/`, we can draw true parent grouping.
 - Primary magnitude column: using `C_np` (non-parametric, matches harreman's significance).
@@ -47,8 +73,11 @@ restart. Dates are absolute (project "today" was 2026-07-16 at kickoff).
 - [x] Metabolite → gene-pair **expansion** (panel list + on-graph fan-out; per-edge + all).
       (Unit 3, 2026-07-17.)
 - [ ] Parent cell-type marking via tier hierarchy (needs crosswalk above).
-- [ ] Multiple datasets + `<root>/<datasetName>/easy_download` deploy layout (ingest already
-      auto-detects this; app dataset switcher needed).
+- [x] Multiple datasets + `<root>/<project>/<datasetName>/easy_download` layout, with a dataset
+      switcher and graceful handling of incomplete runs. (2026-07-18.)
+- [x] Neighborhood scores surfaced as their own view. (2026-07-18.)
+- [ ] Compare datasets side by side (e.g. one metabolite's neighborhood profile across Lung /
+      Prostate / Melanoma). The data is all client-side now, so this is a UI-only change.
 - [ ] SpaceTravLR signed two-value edges: width=|value|, color=sign (`--val-pos`/`--val-neg`).
       NOTE: these are **directed scalers** on edges — the fan-out gp sub-edges and the reserved
       `value`/`sign` edge fields are the intended carrier; likely a per-edge multiplier applied
@@ -64,9 +93,40 @@ restart. Dates are absolute (project "today" was 2026-07-16 at kickoff).
 3. Selecting a tier renders its cell-type nodes; selecting a metabolite draws its edges.
 4. Significant edges are visually distinct; diagonal shown as self-loop; legend present.
 5. Empty state shows a message when a metabolite has no edges at a tier.
-6. Screenshot captured as evidence.
+6. Switch dataset — nodes/edges must become the NEW dataset's cell types (tier ids repeat
+   across datasets, so this is the case that used to break); incomplete datasets are disabled.
+7. Switch View → Neighborhoods and back — the graph must rebuild, not come back blank.
+8. Switch Metabolite ⇄ Gene pair — each kind keeps its own selection; gene pairs have a default.
+9. "On graph" mode: the pair list stays in the details panel; clicking a sub-edge pins its row;
+   hovering a row highlights that pair on the graph and releases back to the pinned one.
+10. Screenshot captured as evidence.
 
 ## Changelog
+- 2026-07-18: **Multi-dataset source, neighborhood-scores view, selection memory + cross-links.**
+  (1) **Ingest** (`scripts/ingest.mjs`, schemaVersion 2): walks `Results/<project>/<dataset>/`,
+  tags each dataset with its project, prettifies ids ("Human_Lung" → "Human Lung"), and never
+  hard-fails — an unfinished run (network JSON, no tier tables) or any per-dataset exception
+  becomes an `available: false` manifest entry with a reason. Also fixed discovery preferring a
+  stray `easy_download/harreman_network.json` over the real `harreman_outputs/` child, which had
+  made Human Lung look incomplete. Emits `nbhd/<Tier>.json` from the
+  `[nbhd_scores][summary_{m,gp}]` tables, resolving the tables' ambiguous single-underscore gene
+  -pair keys through the network's own `gp` list.
+  (2) **Neighborhoods view**: a second canvas view (control-bar "View" switch) showing, per cell
+  type, how much that type's own cells sit in high-scoring neighborhoods for the selected entity
+  — bars over 3 metrics (significant share / mean score / log₂ enrichment), all stats in-row,
+  small-n rows flagged "thin" (<25 significant cells, per the parent docs' instability warning),
+  and a standing caveat that this is NOT an interface statistic. Deliberately not an edge
+  encoding (A9). Works for metabolites and gene pairs; disabled for datasets without the scores.
+  (3) **Selection memory + defaults**: gene-pair view now auto-selects its top-ranked pair (it
+  waits for the tier bundle, since gp ranking is bundle-derived), and each kind remembers its
+  last entity across switches.
+  (4) **Panel + graph linked**: the transporter-pair list stays in the details panel in "On
+  graph" mode; clicking a fanned sub-edge pins its row, hovering either side previews (the pair
+  lights up, siblings recede), and clicking a row opens that pair's own view. Metabolite chips in
+  the entity panel link the other way. Playwright-verified end to end: 57 sub-edges fanned,
+  pin/hover/fallback correct, click-through + return-to-Iron, all 3 datasets and all 3 tiers,
+  0 console errors.
+  (5) **Fixed two latent graph bugs** the new navigation exposed — see Current state.
 - 2026-07-17: **Reverted gene-pair color-coding + background de-emphasis; fixed fan-out
   overlap with curvature instead (Foster feedback).** (1) The color-coding didn't help — an
   interface fan's sub-edges overlapped into one line, and with >8 pairs two pairs shared a

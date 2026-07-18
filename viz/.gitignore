@@ -6,13 +6,11 @@ dist/
 npm-debug.log*
 .eslintcache
 
-# Ingested data is generated from easy_download by `npm run ingest`.
-# We DO commit the currently-ingested `harreman` dataset (id chosen at ingest time) so the
-# app works after a fresh clone without needing the source CSVs. Other/larger datasets stay
-# local — add a matching `!public/data/<id>/` line if you decide to commit another.
-public/data/*
-!public/data/harreman/
-!public/data/manifest.json
+# Ingested data is generated from ../Results by `npm run ingest`. It IS committed: a fresh
+# clone must work without the source CSVs, and the GitHub Pages deploy serves this folder
+# verbatim (there is no separate data upload). Currently ~4.5 MB for 3 datasets, which is fine
+# for git. If a future ingest gets big (tens of MB), ignore the heavy datasets here and move
+# them to real hosting rather than committing them.
 
 # TypeScript incremental build caches (should not be tracked)
 *.tsbuildinfo

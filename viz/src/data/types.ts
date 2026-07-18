@@ -103,12 +103,47 @@ export interface EdgeBundle {
   byEntity: Record<string, EntityEdge[]>;
 }
 
+/**
+ * One row of the **neighborhood scores** (`<Tier>/[nbhd_scores][summary_*].csv`): how much a
+ * cell type's OWN cells sit in high-scoring neighborhoods for an entity.
+ *
+ * ⚠️ This is NOT the cell-type-interface statistic the graph draws. Each cell's score is bucketed
+ * by that cell's own label, so a row reads "cells of type X score high on metabolite M" — never
+ * "X exchanges M with Y", and it carries no direction. Keep it out of the edge model entirely.
+ * `log2Enrichment` is unstable for tiny cell types; always weigh it against `nCells`.
+ */
+export interface NbhdRow {
+  cellType: string;
+  /** Cells of this type at this tier (the denominator; small ⇒ distrust log2Enrichment). */
+  nCells: number | null;
+  /** Fraction of those cells with a significant score for this entity. Primary UI magnitude. */
+  fracSig: number | null;
+  /** Mean score over all cells of the type. */
+  meanCs: number | null;
+  /** Mean score over only the significant cells. */
+  meanCsSig: number | null;
+  meanNegLog10P: number | null;
+  /** log2(observed / expected) significant share. Unstable for small `nCells`. */
+  log2Enrichment: number | null;
+}
+
+/** Neighborhood scores for one tier (`public/data/<id>/nbhd/<Tier>.json`). */
+export interface NbhdBundle {
+  tier: string;
+  cellTypes: string[];
+  byEntity: Record<EntityKind, Record<string, NbhdRow[]>>;
+}
+
 /** Per-dataset descriptor (`public/data/<id>/dataset.json`). */
 export interface Dataset {
   id: string;
   name: string;
+  /** Grouping folder the dataset came from (`Results/<project>/<dataset>`), or null. */
+  project: string | null;
   source: 'harreman' | 'spacetravlr';
   entityKinds: EntityKind[];
+  /** Whether `nbhd/<Tier>.json` files exist (older runs predate the neighborhood scores). */
+  hasNbhd: boolean;
   tiers: Tier[];
   entities: {
     metabolite?: MetaboliteEntity[];
@@ -127,7 +162,16 @@ export interface Manifest {
 export interface DatasetRef {
   id: string;
   name: string;
+  project: string | null;
   source: 'harreman' | 'spacetravlr';
   entityKinds: EntityKind[];
   tierIds: string[];
+  hasNbhd: boolean;
+  /**
+   * False when the source run is incomplete (e.g. the harreman network JSON exists but no tier
+   * tables were written). Such datasets have NO files on disk — the app must list them
+   * disabled with `unavailableReason` rather than trying to load them.
+   */
+  available: boolean;
+  unavailableReason?: string;
 }

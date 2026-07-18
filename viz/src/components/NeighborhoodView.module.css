@@ -1,0 +1,180 @@
+/* Neighborhood-scores view. Fills the canvas area (which is position:relative), scrolls on its
+   own. Marks are thin with rounded data-ends; grid/axis ink stays recessive. */
+.wrap {
+  position: absolute;
+  inset: 0;
+  overflow-y: auto;
+  padding: var(--sp-4) var(--sp-5);
+}
+
+.head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  flex-wrap: wrap;
+}
+.title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+}
+.subtitle {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+.metrics {
+  display: inline-flex;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+.metricBtn {
+  background: var(--bg-elev);
+  border: none;
+  padding: 6px 11px;
+  font-size: 12px;
+  cursor: pointer;
+  color: var(--text-secondary);
+}
+.metricBtn:hover {
+  color: var(--text-primary);
+}
+.metricOn {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.caveat {
+  margin: var(--sp-3) 0 var(--sp-4);
+  padding: var(--sp-2) var(--sp-3);
+  border-left: 2px solid var(--border-strong);
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--text-secondary);
+  max-width: 78ch;
+}
+
+.none {
+  color: var(--text-muted);
+  font-size: 13px;
+  padding: var(--sp-5) 0;
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* cell type | bar | value | sig cells | cells */
+.row {
+  display: grid;
+  grid-template-columns: minmax(120px, 200px) 1fr 84px 76px 76px;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: 5px 0;
+}
+.colHead {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: var(--sp-2);
+}
+.plotHead {
+  position: relative;
+}
+/* Marks the diverging axis' zero position in the header, so the centre line has a label. */
+.zeroTick {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.numHead,
+.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.num {
+  font-size: 12px;
+  font-family: var(--font-mono);
+  color: var(--text-secondary);
+}
+
+.name {
+  font-size: 13px;
+  line-height: 1.25;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Small-n flag: a label, not just a color, so it survives greyscale/CVD. */
+.thinTag {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--text-muted);
+  border: 1px solid var(--border-strong);
+  border-radius: 3px;
+  padding: 0 4px;
+}
+.thin .num,
+.thin .name {
+  color: var(--text-muted);
+}
+.thin .bar {
+  opacity: 0.5;
+}
+
+.plot {
+  min-width: 0;
+}
+.axis {
+  position: relative;
+  display: block;
+  height: 10px;
+  background: color-mix(in srgb, var(--border) 55%, transparent);
+  border-radius: 2px;
+}
+.bar {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  min-width: 2px;
+  background: var(--nbhd-bar);
+  border-radius: 0 4px 4px 0; /* rounded data-end, square against the baseline */
+}
+/* Diverging: bars grow out of a neutral centre line. */
+.zeroLine {
+  position: absolute;
+  left: 50%;
+  top: -2px;
+  bottom: -2px;
+  width: 1px;
+  background: var(--nbhd-zero);
+}
+.barPos {
+  left: 50%;
+  background: var(--nbhd-enr-pos);
+  border-radius: 0 4px 4px 0;
+}
+.barNeg {
+  left: auto;
+  right: 50%;
+  background: var(--nbhd-enr-neg);
+  border-radius: 4px 0 0 4px;
+}
+
+.foot {
+  margin-top: var(--sp-4);
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--text-muted);
+  max-width: 78ch;
+}

@@ -10,8 +10,24 @@ in sync. Producer of the raw data: `metab_processing/` (harreman). See the paren
 manifest.json                         # { generatedAt, schemaVersion, datasets: DatasetRef[] }
 <id>/dataset.json                     # Dataset: tiers + entities (+ ranking metrics)
 <id>/edges/<Tier>.<entityKind>.json   # EdgeBundle: { tier, entityKind, cellTypes, byEntity }
+<id>/nbhd/<Tier>.json                 # NbhdBundle: neighborhood scores (omitted if absent)
 ```
 `byEntity` maps `entityId -> EntityEdge[]` so selecting an entity is an O(1) lookup.
+`schemaVersion` is **2** (v2 added `nbhd/`, and `project`/`hasNbhd`/`available` on `DatasetRef`).
+
+## Multiple datasets, and incomplete ones
+The input path may be a single `harreman_outputs/`, a `<root>/<dataset>/easy_download/…` tree,
+or a `<root>/<project>/<dataset>/easy_download/…` tree (`Results/`). Each dataset dir becomes
+one `DatasetRef`, tagged with its `project`.
+
+A harreman run writes `harreman_network.json` early and the tier tables last, so an interrupted
+run leaves a network JSON and nothing else. Ingest **never hard-fails** on these: a dataset with
+no usable tier (or any other build error) is written to the manifest as
+`available: false` + `unavailableReason`, with no files on disk. The app lists those disabled in
+the dataset picker, so an unfinished run reads as "not ready yet" rather than as missing data.
+Gotcha handled: some runs also drop a stray `harreman_network.json` in `easy_download/` itself —
+discovery prefers the `harreman_outputs/` child, or that stray copy would masquerade as an
+empty dataset.
 
 ## Types (summary — see `types.ts` for the exact shape)
 - **EntityKind** = `'metabolite' | 'gene_pair'` (extensible: `'gene' | 'gene_set'`).
@@ -29,7 +45,15 @@ manifest.json                         # { generatedAt, schemaVersion, datasets: 
   (`nSigPairs`, `tcellInvolved`, `withinTcell`, `tcellInterfaces`, `interactions`).
 - **GenePairEntity** = `{ id: "GENE1__GENE2", genes, kind, metabolites }`. `metabolites` is the
   **many-to-many** set of metabolites this pair serves.
-- **Dataset** = `{ id, name, source, entityKinds, tiers, entities:{ metabolite?, gene_pair? } }`.
+- **Dataset** = `{ id, name, project, source, entityKinds, hasNbhd, tiers,
+  entities:{ metabolite?, gene_pair? } }`.
+- **NbhdRow** = `{ cellType, nCells, fracSig, meanCs, meanCsSig, meanNegLog10P, log2Enrichment }`;
+  **NbhdBundle** = `{ tier, cellTypes, byEntity: { metabolite, gene_pair } }`.
+  ⚠️ **Not the interface statistic.** Each cell's score is bucketed by that cell's OWN label, so
+  a row means "cells of type X sit in high-scoring neighborhoods for entity E" — never
+  "X exchanges E with Y", and it carries no direction. It must never be folded into `EntityEdge`.
+  `log2Enrichment` is unstable for small `nCells` (parent doc 05 §5a), so `nCells` travels with
+  every row and the UI flags rows under 25 significant cells as "thin".
 
 ## Source → contract mapping (harreman adapter)
 | Contract field | Source |
@@ -42,6 +66,7 @@ manifest.json                         # { generatedAt, schemaVersion, datasets: 
 | gene-pair edges per tier | `Tier*/[ct_ccc_results][cell_com_df_gp_sig].csv` |
 | tier `cellTypes` | distinct `Cell Type 1/2` in the tier CSVs |
 | tier `parentTier` | coarse→fine ordering of `Tier*` dirs |
+| neighborhood scores | `Tier*/[nbhd_scores][summary_{m,gp}].csv` |
 
 Notes / gotchas the adapter handles:
 - Metabolite names contain commas → must be parsed with a real CSV parser (Papa Parse), never
@@ -49,6 +74,9 @@ Notes / gotchas the adapter handles:
 - Numbers may be empty strings → `null`. Booleans are `"True"/"False"` strings.
 - The `selected` column in tier `_m` files is the significance bool (earlier naive comma-splits
   made it look numeric — a parsing artifact, not the real value).
+- The nbhd tables key gene pairs as `GENE1_GENE2` (**single** underscore), which can't be split
+  unambiguously — the adapter resolves them through the network's own `gp` list instead of
+  guessing, and drops rows it can't resolve rather than mis-attributing them.
 
 ## Adding a new source (e.g. SpaceTravLR)
 Write a sibling adapter that emits **this same contract**. Populate `EntityEdge.value`/`sign`

@@ -1,10 +1,11 @@
 {
   "generatedAt": null,
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "datasets": [
     {
-      "id": "harreman",
-      "name": "Harreman — metabolite crosstalk (Xenium)",
+      "id": "Human_Lung",
+      "name": "Human Lung",
+      "project": "Xenium Tcell Dataset",
       "source": "harreman",
       "entityKinds": [
         "metabolite",
@@ -14,7 +15,65 @@
         "Tier1",
         "Tier2",
         "Tier3"
-      ]
+      ],
+      "hasNbhd": true,
+      "available": true
+    },
+    {
+      "id": "Human_Prostate_Adenocarcinoma",
+      "name": "Human Prostate Adenocarcinoma",
+      "project": "Xenium Tcell Dataset",
+      "source": "harreman",
+      "entityKinds": [
+        "metabolite",
+        "gene_pair"
+      ],
+      "tierIds": [
+        "Tier1",
+        "Tier2",
+        "Tier3"
+      ],
+      "hasNbhd": true,
+      "available": true
+    },
+    {
+      "id": "Primary_Dermal_Melanoma",
+      "name": "Primary Dermal Melanoma",
+      "project": "Xenium Tcell Dataset",
+      "source": "harreman",
+      "entityKinds": [
+        "metabolite",
+        "gene_pair"
+      ],
+      "tierIds": [
+        "Tier1",
+        "Tier2",
+        "Tier3"
+      ],
+      "hasNbhd": true,
+      "available": true
+    },
+    {
+      "id": "Human_Breast",
+      "name": "Human Breast",
+      "project": "Xenium Tcell Dataset",
+      "source": "harreman",
+      "entityKinds": [],
+      "tierIds": [],
+      "hasNbhd": false,
+      "available": false,
+      "unavailableReason": "no tier outputs — the harreman run for \"Human_Breast\" is incomplete"
+    },
+    {
+      "id": "Human_Cervical_Cancer",
+      "name": "Human Cervical Cancer",
+      "project": "Xenium Tcell Dataset",
+      "source": "harreman",
+      "entityKinds": [],
+      "tierIds": [],
+      "hasNbhd": false,
+      "available": false,
+      "unavailableReason": "no tier outputs — the harreman run for \"Human_Cervical_Cancer\" is incomplete"
     }
   ]
 }

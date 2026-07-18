@@ -92,11 +92,29 @@
   max-height: 168px;
   overflow-y: auto;
 }
+/* Each pair is a link to its own gene-pair view, and the target of the graph⇄panel highlight. */
 .gpItem {
   display: flex;
+  width: 100%;
   align-items: baseline;
   justify-content: space-between;
   gap: var(--sp-2);
+  text-align: left;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  padding: 2px 5px;
+  cursor: pointer;
+}
+.gpItem:hover,
+.gpFocused {
+  background: var(--bg-elev);
+  border-color: var(--border-strong);
+}
+/* Pinned by clicking its sub-edge on the graph — a stronger, persistent marker. */
+.gpPinned {
+  background: var(--accent-weak);
+  border-color: var(--accent);
 }
 .gpName {
   font-family: var(--font-mono);

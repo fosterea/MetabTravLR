@@ -124,6 +124,11 @@ input {
   background: var(--accent);
   color: var(--on-accent);
 }
+.segmented button:disabled {
+  color: var(--text-muted);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
 
 .checkbox {
   display: inline-flex;

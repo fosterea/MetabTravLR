@@ -1,6 +1,18 @@
 name: Spaceship tests
 
-on: [push]
+# Scoped to the Python package on purpose. This used to be `on: [push]`, which meant every
+# push — including web-app-only pushes that just redeploy viz/ — ran the suite and emailed a
+# failure notification even though nothing Python had changed. Now it only runs when something
+# it actually tests changes, and can always be started by hand from the Actions tab.
+on:
+  push:
+    paths:
+      - 'src/**'
+      - 'tests/**'
+      - 'requirements.txt'
+      - 'setup.py'
+      - '.github/workflows/python-package-conda.yml'
+  workflow_dispatch:
 
 jobs:
   build-linux:
@@ -9,9 +21,9 @@ jobs:
       max-parallel: 8
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - name: Set up Python 3.10
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: '3.10'
         cache: 'pip'

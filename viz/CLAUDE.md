@@ -33,7 +33,7 @@ pipeline in `metab_processing/` and the research docs in `DataForClaude/document
 ```bash
 cd viz
 npm install
-npm run ingest -- ../easy_download --id harreman --name "Harreman — metabolite crosstalk (Xenium)"
+npm run ingest -- ../Results        # every dataset under Results/<project>/<dataset>/
 npm run dev            # http://localhost:5173
 ```
 

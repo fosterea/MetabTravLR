@@ -9,6 +9,7 @@ export default function EntityDetails() {
   const entityKind = useVizStore((s) => s.entityKind);
   const entityId = useVizStore((s) => s.entityId);
   const edgeBundle = useVizStore((s) => s.edgeBundle);
+  const goToEntity = useVizStore((s) => s.goToEntity);
 
   const entity = useMemo(() => {
     if (!dataset || !entityId) return undefined;
@@ -54,11 +55,18 @@ export default function EntityDetails() {
           <div className={styles.metric}>
             Serves {entity.metabolites.length} metabolite
             {entity.metabolites.length === 1 ? '' : 's'} (many-to-many):
+            {/* Each metabolite is a link into the metabolite view. The per-kind selection memory
+                means the way back to this pair is one click on "Gene pair". */}
             <div className={styles.chips}>
               {entity.metabolites.slice(0, 8).map((m) => (
-                <span key={m} className={styles.chip}>
+                <button
+                  key={m}
+                  className={styles.chip}
+                  onClick={() => void goToEntity('metabolite', m)}
+                  title={`Open ${m} in the metabolite view`}
+                >
                   {m}
-                </span>
+                </button>
               ))}
               {entity.metabolites.length > 8 && (
                 <span className="muted">+{entity.metabolites.length - 8}</span>

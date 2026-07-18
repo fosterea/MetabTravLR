@@ -37,6 +37,17 @@
   --val-pos: #f85149;
   --val-neg: #388bfd;
 
+  /* domain: neighborhood scores (the nbhd view's bars).
+     --nbhd-bar = sequential single hue for the non-negative metrics (share / mean score).
+     --nbhd-enr-* = the DIVERGING pair for log2 enrichment (enriched warm / depleted cool,
+     neutral gray at zero). Validated with the dataviz validator against --bg-canvas in both
+     themes (all six checks pass; CVD ΔE 25.8 dark / 30.6 light). Distinct from --val-* on
+     purpose: those stay reserved for SpaceTravLR signed edges. */
+  --nbhd-bar: #4590e8;
+  --nbhd-enr-pos: #d4762c;
+  --nbhd-enr-neg: #4590e8;
+  --nbhd-zero: #5b6470;
+
   /* spacing / radius / type */
   --sp-1: 4px;
   --sp-2: 8px;
@@ -73,6 +84,10 @@
     --edge-nonsig: #b3bcc8;
     --val-pos: #d1242f;
     --val-neg: #0969da;
+    --nbhd-bar: #1f6feb;
+    --nbhd-enr-pos: #d9701f;
+    --nbhd-enr-neg: #1f6feb;
+    --nbhd-zero: #8a94a2;
     --shadow: 0 6px 20px rgba(20, 30, 50, 0.12);
   }
 }

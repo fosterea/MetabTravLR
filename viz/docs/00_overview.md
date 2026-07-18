@@ -18,8 +18,12 @@ knows about datasets, tiers, cell types, and entities, not about T cells specifi
 Source: harreman spatial cell–cell communication on Xenium data (see the parent project's
 `DataForClaude/documentation/05_harreman_reference.md`). Key facts baked into the design:
 
-- **Dataset** = one `easy_download` folder of harreman outputs. Today there is exactly one.
-  Eventually many, laid out as `<root>/<datasetName>/easy_download/…`.
+- **Dataset** = one `easy_download` folder of harreman outputs. Today there are several, laid
+  out as `Results/<project>/<datasetName>/easy_download/…`; a dataset whose run never finished
+  is listed but disabled.
+- **Neighborhood score** = a per-(cell type, entity) summary of the per-cell scores, bucketed by
+  each cell's OWN label. It answers "which cell types sit in high-scoring neighborhoods for this
+  entity" and is **not** an interface statistic — it lives in its own view, never on the graph.
 - **Tier** = one cell-type annotation granularity. They form a **parent hierarchy of T-cell
   resolution**:
   - Tier1: `T Cell` vs `other`
@@ -53,7 +57,7 @@ Source: harreman spatial cell–cell communication on Xenium data (see the paren
 - **Gene-pair view** toggle (data already ingested); show the metabolites a pair serves.
 - **Parent cell-type marking**: use the tier hierarchy to relate a Tier3 subtype back to its
   Tier2/Tier1 parent (needs an annotation crosswalk — currently absent, tolerate absence).
-- **Multiple datasets** and the `<root>/<datasetName>/easy_download` deploy layout.
+- ~~**Multiple datasets**~~ — built 2026-07-18 (`Results/<project>/<dataset>/…`, with a picker).
 - **SpaceTravLR integration**: select genes / gene sets / precomputed contradicting gene sets
   (positive vs negative), where an edge carries **two values** → encode as **width + diverging
   color**. The edge model already reserves `value`/`sign` for this.
