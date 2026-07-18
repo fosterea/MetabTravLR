@@ -148,10 +148,53 @@ closes the "tests only hit the R²<0.15 shortcut" gap.
   is effectively behavior-preserving and correct. **Full data-flow / memory analysis + efficiency
   roadmap + the metabolite-only and CNN-scaling answers are in `06_efficiency_and_dataflow.md`.**
   Next ceiling after this = the spatial-maps tensor (~20 GB@100k, CU-5c).
-- **CU-1 (metabolite group):** not started — the actual science (add harreman metabolite pairs
-  as the new `beta_<export>@<import>` group).
+- **CU-1 (metabolite group):** ✅ done + **committed** `1602172`, 2026-07-17. `metab_pairs` arg on
+  `SpatialCellularProgramsEstimator` → group-lasso group #5, `beta_<export>@<import>` columns via a
+  `metabolite_interactions` static method (`received_ligand_tfl(export, diffused) × import(local)`,
+  mirrors the L–TF path). Column order kept consistent across `train_df`/`self.modulators`/groups/
+  betadata names. Diffusion cache made target-agnostic (`_diffusion_extra_lr`) so the first gene's
+  shared `received_ligands_tfl` holds every export gene later genes need. Guards: target-gene
+  exclusion, drop genes absent from `var_names`, dedup, fail-fast type validation. Default None →
+  byte-identical. Opus-reviewed (no blockers). Tests `tests/test_metab_group.py` (group-5 pinned,
+  known-answer flux incl. duplicate transporter genes, real-diffusion path).
+- **Metabolite loader:** ✅ `metab_processing/metab_loader.py` (committed `1602172`). `metabolite_
+  selection.yaml` → `{metabolite: [(g1,g2)]}` (grouped, for read-back) + flat deduped `metab_pairs`
+  (homotypic once, heterotypic **both orientations** per D3, optional `var_names` filter). The real
+  file = 76 metabolites → 144 model pairs. `tests/test_metab_loader.py`.
+- **CU-2 (thread `metab_pairs` + relax orphan skip):** ✅ done + **committed** `68ec51d`, 2026-07-17.
+  `oracles.SpaceTravLR(metab_pairs=…)` → estimator; `SpaceShip.run_spacetravlr(metab_pairs=…)`
+  forwards it (`fit(metab_pairs=…)` works). Orphan gate #1 relaxed: orphan iff no TF regulators AND
+  `n_metab==0` (byte-identical when metab absent). Gate #2 now decides write-vs-orphan on the
+  **post-zero-filter** column count, so a metab-only gene whose fit hits the R²<0.15 zeroed-anchor
+  fallback is orphaned cleanly (was: degenerate 0-column parquet). Reviewed (Medium fixes applied).
+  Tests `tests/test_metab_wiring.py` incl. a REAL-estimator Tier-1 driving a TF-less metab-only gene
+  through `run()` to a finite `beta_@` column.
+- **Beta-analysis read-back:** ✅ `metab_processing/beta_analysis.py` (committed `c04ccad`). `read_
+  metab_beta_summary` (stream `@`-cols → per-(gene,pair[,cell_type]) mean/std/frac_nonzero) →
+  `aggregate_to_metabolite` (roll pairs→metabolite via loader map, orientation-agnostic, plain or
+  `C_np`-weighted) → `gene_set_score` (signed = positive−negative). `gene_pair_cnp_weights` reads
+  harreman's `gene_pair_summary.csv`. Verified end-to-end on the real easy_download outputs.
+  `tests/test_beta_analysis.py`.
+- **Quickstart notebook:** ✅ `metab_processing/quick_start_metab.ipynb` (committed `c04ccad`) —
+  data-dir/dataset config, editable gene-sets cell, yaml→`metab_pairs`, `setup_`(COMMOT off)+
+  focus-gene `fit(metab_pairs=…)`, coefficient read-back; results under the dataset dir.
 
-Commit series (this session): `2e523aa` feat gene-focus → `2699947` fix activation → docs.
+## Key finding — regularization is near-zero, so "direction from which orientation survives" ≠ pruning (2026-07-17)
+`SpatialCellularProgramsEstimator.fit` defaults: `group_reg=threshold_lambda=1e-7`, `l1_reg=1e-9`
+(`parallel_estimators.py:1146-1147`) → **effectively near-OLS**; groups are essentially never zeroed
+and there is **no within-group sparsity**. Consequences for the metabolite work (Foster's per-pair,
+both-orientations plan): both orientations of a heterotypic pair get nonzero β's, so **direction is
+read from β *magnitude*** (|export@import| vs |import@export| aggregated), **not** from one surviving
+group-lasso pruning. This is a **soft, collinearity-sensitive** signal (many pairs share SLC2A*/ABC*
+genes) — corroborate across genes/cell types, don't over-trust. If direction becomes a primary
+deliverable, we'd need to raise `group_reg`/`l1_reg` AND group finer (per-metabolite or per-pair
+groups) — a departure from current defaults. Decision (this session): **keep one metabolite group #5
+at default hyperparams; aggregate pairs→metabolite at read-time (not in-model)** — max info, can't
+un-sum. Note also: harreman-directed orientation (D3's "revisit later") is **moot** — the `CT1→CT2`
+arrow is a sorted-label artifact (05 §3), so harreman can't supply a real flux direction anyway.
+
+Commit series (this session): `1602172` feat CU-1 metab group + loader → `68ec51d` feat CU-2 thread +
+orphan relax → `c04ccad` feat beta-analysis + notebook.
 
 ## Local assets for dev/testing
 - Demo data in `data/`: `Slidetags_human_tonsil.h5ad`, `Slidetags_human_melanoma.h5ad`,
