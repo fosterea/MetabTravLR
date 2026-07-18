@@ -157,7 +157,7 @@ closes the "tests only hit the R²<0.15 shortcut" gap.
   exclusion, drop genes absent from `var_names`, dedup, fail-fast type validation. Default None →
   byte-identical. Opus-reviewed (no blockers). Tests `tests/test_metab_group.py` (group-5 pinned,
   known-answer flux incl. duplicate transporter genes, real-diffusion path).
-- **Metabolite loader:** ✅ `metab_processing/metab_loader.py` (committed `1602172`). `metabolite_
+- **Metabolite loader:** ✅ `metab_processing/SpaceTravLR/metab_loader.py` (committed `1602172`). `metabolite_
   selection.yaml` → `{metabolite: [(g1,g2)]}` (grouped, for read-back) + flat deduped `metab_pairs`
   (homotypic once, heterotypic **both orientations** per D3, optional `var_names` filter). The real
   file = 76 metabolites → 144 model pairs. `tests/test_metab_loader.py`.
@@ -169,7 +169,7 @@ closes the "tests only hit the R²<0.15 shortcut" gap.
   fallback is orphaned cleanly (was: degenerate 0-column parquet). Reviewed (Medium fixes applied).
   Tests `tests/test_metab_wiring.py` incl. a REAL-estimator Tier-1 driving a TF-less metab-only gene
   through `run()` to a finite `beta_@` column.
-- **Beta-analysis read-back:** ✅ `metab_processing/beta_analysis.py` (committed `c04ccad`). `read_
+- **Beta-analysis read-back:** ✅ `metab_processing/SpaceTravLR/beta_analysis.py` (committed `c04ccad`). `read_
   metab_beta_summary` (stream `@`-cols → per-(gene,pair[,cell_type]) mean/std/frac_nonzero) →
   `aggregate_to_metabolite` (roll pairs→metabolite via loader map, orientation-agnostic, plain or
   `C_np`-weighted) → `gene_set_score` (signed = positive−negative). `gene_pair_cnp_weights` reads
@@ -195,6 +195,26 @@ arrow is a sorted-label artifact (05 §3), so harreman can't supply a real flux 
 
 Commit series (this session): `1602172` feat CU-1 metab group + loader → `68ec51d` feat CU-2 thread +
 orphan relax → `c04ccad` feat beta-analysis + notebook.
+
+## Session 2026-07-18 — neighborhood scores, tier reruns, metab_processing layout
+- **Neighborhood scores** wired into `HarremanRunner` behind `compute_nbhd_scores=True`
+  (`nbhd_scores.py`). Computed once in the cell-indep step, summarized per tier. See 05 §5a for
+  the stats and the "not the ct statistic" warning. **Ran clean on Savio for melanoma, all 3 tiers.**
+- **Tier reruns fixed**: `compute_gene_pairs` uses `uns.setdefault`, so tier 2+ reused tier 1's
+  cell-type keys → `KeyError`. `run_cell_aware` pops `cell_type_pairs` / `gene_pairs_per_ct_pair`
+  first. This is what makes looping tiers possible at all (05 §5a).
+- **Corrected 05 §3 item 3**: both gene orders are built but filtered back out by
+  `subset_gene_pairs`; only one order is actually scored. Conclusion (undirected) unchanged.
+- **`metab_processing/` reorganized** into `Harreman/`, `Preprocess/`, `SpaceTravLR/`.
+  `quick_start_metab.ipynb` deliberately **left in the old flat location and unmodified** (running
+  on Savio, avoiding git conflicts) — its `metab_loader`/`beta_analysis` imports are stale until
+  Foster moves it.
+- **`run_full_harr.ipynb`** added — all datasets, all tiers, summaries, `.dataset_name` marker (05 §5b).
+- Commit series: `fdef7d9` feat nbhd + setdefault fix → `8ef2d74` refactor layout →
+  `4720919` feat run_full_harr.
+- Local testing note: conda env **`spacetravlr_env`** has pandas/numpy/scanpy/anndata/torch, but
+  **harreman is not installed locally** (Savio only) — anything importing harreman can only be
+  checked statically.
 
 ## Local assets for dev/testing
 - Demo data in `data/`: `Slidetags_human_tonsil.h5ad`, `Slidetags_human_melanoma.h5ad`,

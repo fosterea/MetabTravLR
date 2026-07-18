@@ -17,7 +17,7 @@
 COMMOT). It uses a **transporter** database to build **gene pairs** per metabolite, then
 permutation-tests which pairs/metabolites show significant spatial crosstalk. It runs on a
 cheap **KNN graph** (`n_neighbors=5`), not a dense spatial kernel. Driven by
-`metab_processing/harreman_funcs.py::HarremanRunner`.
+`metab_processing/Harreman/harreman_funcs.py::HarremanRunner`.
 
 **On-disk layout** (example in `easy_download/harreman_outputs/`; full data on Savio under
 `<data>/easy_download/harreman_outputs/`):
@@ -65,7 +65,7 @@ Keys: `num_transporter_genes` (100), `num_metab` (160), `num_gp` (416),
 - ~~`save_harreman_outputs` writes `cell_com_df_m` to both `_m` and `_gp_sig`~~ — **fixed in the
   current runner** (`save_harreman_outputs` writes `cell_com_df_gp_sig` distinctly, cols:
   `Cell Type 1, Cell Type 2, Gene 1, Gene 2, …, selected`). Verified 2026-07-16 against the
-  `easy_download` example; `metab_processing/harreman_summary.py` relies on this real ct-level
+  `easy_download` example; `metab_processing/Harreman/harreman_summary.py` relies on this real ct-level
   gene-pair table.
 - JSON key typo `transporter_gense`.
 - ⚠️ **`Cell Type 1 → Cell Type 2` is NOT a direction — RESOLVED (2026-07-16).** The
@@ -233,4 +233,4 @@ Kept here so the eventual plan is concrete. **Not** proposing to edit yet.
 ## 6. Cross-refs
 - Architecture & two-phase model: `00_overview.md`.
 - Paper text: `paper_fulltext.txt`.
-- Harreman driver: `../../metab_processing/harreman_funcs.py`, `run_harreman.ipynb`.
+- Harreman driver: `../../metab_processing/Harreman/harreman_funcs.py`, `run_harreman.ipynb`.

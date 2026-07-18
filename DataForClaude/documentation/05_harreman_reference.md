@@ -2,7 +2,7 @@
 
 Durable notes on **harreman**, the package Foster runs to score metabolite crosstalk between
 cells. Written by reading harreman's `tools` source + the `HarremanRunner` wrapper
-(`metab_processing/harreman_funcs.py`) and verifying against the `easy_download` example.
+(`metab_processing/Harreman/harreman_funcs.py`) and verifying against the `easy_download` example.
 **Read this before touching anything that consumes harreman output.** It is the source of
 truth for the arrow semantics, the output tables, and the known GPU-OOM in the per-cell
 ("neighborhood") analysis.
@@ -31,7 +31,7 @@ come from there.
 
 ## 2. The pipeline (functions in call order)
 
-Wrapper = `HarremanRunner` in `metab_processing/harreman_funcs.py`. It calls these harreman
+Wrapper = `HarremanRunner` in `metab_processing/Harreman/harreman_funcs.py`. It calls these harreman
 `tl`/`pp` functions:
 
 | Step | Function | What it does |
@@ -80,9 +80,14 @@ independently-sufficient reasons:
    simply never exists — it was *not tested*, not *found insignificant*.
 2. **Genes carry no direction.** Every transporter gene is typed **`IMP-EXP`** (bidirectional)
    — verified 2042/2042 type slots. No pure IMP/EXP anywhere.
-3. **Both gene orders are folded in.** For transporters `compute_gene_pairs` unions
-   `combinations_with_replacement` **and** `permutations`, so within a ct pair both `(a,b)` and
-   `(b,a)` gene orders contribute to the metabolite score.
+3. **Both gene orders are built, then filtered back out** (corrected 2026-07-18; this item
+   previously claimed both orders contribute). `compute_gene_pairs` does union
+   `combinations_with_replacement` **and** `permutations` for transporters when `ct_specific`,
+   so `gene_pairs_per_ct_pair` holds both `(a,b)` and `(b,a)`. But `run_ct_cell_communication_
+   analysis` then keeps only pairs present in `gene_pairs` — and `HarremanRunner` passes
+   `subset_gene_pairs=<sig pairs from the cell-indep run>`, which is single-order. The reverse
+   pairs are dropped by `if pair not in gene_pairs: continue`. Net effect on our runs: **only
+   one gene order is scored.** The conclusion (undirected) is unchanged; the mechanism is not.
 
 **Correct reading:** `score(CT1,CT2)` is an **undirected** measure of how strongly a
 metabolite's transporters are **spatially co-expressed across the CT1–CT2 neighbor interface**
@@ -93,7 +98,7 @@ To get any directionality you'd have to rerun with **`fix_ct='all'`** (→ `iter
 both orderings) and compare `score(X,Y)` vs `score(Y,X)` — but with `IMP-EXP` genes even that
 asymmetry is spatial-anchoring, not metabolite flux. Not recommended as "direction".
 
-`metab_processing/harreman_summary.py` encodes all of the above: undirected `A–B` interfaces
+`metab_processing/Harreman/harreman_summary.py` encodes all of the above: undirected `A–B` interfaces
 and `A (self)` diagonals; `tcell_involvement ∈ {within_Tcell, within_other, Tcell_interface,
 non_Tcell_interface, cell_type_independent}`.
 
@@ -192,7 +197,7 @@ a per-cell axis**, on GPU:
 If we ever need per-cell metabolite scores at Xenium scale, option (1) is the surgical fix.
 (Also relevant to the tractability analysis in `02_metab_integration_notes.md`.)
 
-**Implemented (2026-07-16):** `metab_processing/interacting_cell_scores_lowmem.py` is a
+**Implemented (2026-07-16):** `metab_processing/Harreman/interacting_cell_scores_lowmem.py` is a
 drop-in `compute_interacting_cell_scores_lowmem` applying fix (1) — it accumulates the
 exceedance counters per permutation instead of storing the `(cells, pairs, M)` arrays, and
 no longer writes the raw `perm_cs_*` to `uns`. It reuses harreman's own helpers (imported
@@ -205,6 +210,43 @@ was 112,551 cells × 136 sig pairs × M=1000 → ~114 GiB *per array* (×4). Onl
 (`compute_ct_interacting_cell_scores`) is still un-patched — it needs cell-axis chunking as
 well since its `cs_gp` is dense `(n_ct_pairs, n_cells, n_gene_pairs)`.
 
+### 5a. Neighborhood scores in the wrapper (`nbhd_scores.py`, 2026-07-18) ✅ ran on Savio
+harreman has **no table-builder for the per-cell scores** — `select_significant_interactions`
+reduces tests 7/8 into `cell_com_df_*`, but `compute_interacting_cell_scores` just leaves raw
+`(n_cells, n_interactions)` matrices in `uns['interacting_cell_results']`. The only shipped
+consumers are `compute_interaction_module_correlation` and the two `plots.plot_*` functions.
+
+`HarremanRunner(data_path, compute_nbhd_scores=True)` (default on; `False` = previous behavior
+exactly) computes them once in `run_cell_independent` — they are cell-type-**independent**, so
+every tier is a groupby over the same matrices, no recompute. `save_harreman_outputs` writes
+`<Tier>/[nbhd_scores][summary_{m,gp}].csv`: one row per (cell type, metabolite | gene pair)
+with `n_cells, frac_sig, mean_cs, mean_cs_sig, mean_neg_log10_pval, log2_enrichment`.
+Significance = harreman's own `selected` rule (`FDR < alpha AND cs > 0`).
+
+⚠️ **This is not the ct statistic.** It buckets each cell's score by that cell's *own* label;
+`ct_ccc_results` restricts weights to a CT1–CT2 interface (§3). Read it as "which cell types
+sit in high-scoring neighborhoods", never as an interface or a direction. It is a cheap
+complement to `compute_ct_interacting_cell_scores` (still OOM, still no permutation test).
+Also: `log2_enrichment` is unstable for small labels — melanoma Tier3 top hits sat in a
+239-cell type with 3 significant cells. Filter on `n_cells`/`n_cells_sig` before ranking on it.
+The stored FDRs are BH over the flattened cells × interactions matrix, so they are conservative.
+
+**The `setdefault` trap (fixed).** `compute_gene_pairs` saves with `adata.uns.setdefault(...)`,
+which only writes when a key is *absent*. So a second tier in the same session kept the **first
+tier's** `cell_type_pairs` / `gene_pairs_per_ct_pair` and died with `KeyError: <tier-1 label>`
+in `create_weights_ct_pairs`. `run_cell_aware` now pops both keys first. Everything else on the
+ct path is written by direct assignment and refreshes on its own. With that fix, running all
+tiers is a plain loop — no orchestration needed — which is what `run_full_harr.ipynb` does.
+(`gene_pairs` / `gene_pairs_per_metabolite` are `setdefault` too, and are frozen by the first
+`ct_specific=False` call, but that is harmless here — see §3 item 3.)
+
+### 5b. `run_full_harr.ipynb` (2026-07-18)
+Loops datasets under the Xenium data dir → runs harreman on whichever of Tier1/2/3 are in
+`adata.obs` → writes `summary/{metabolite,gene_pair}_summary.csv` and the SpaceTravLR
+`metabolite_selection.yaml`. Per-dataset `try/except` so a failure (no adata, no annotations)
+skips and retries next run. A `.dataset_name` marker is written to `easy_download/` **only on
+full success** and is what the skip check reads.
+
 ---
 
 ## 6. Quick "how do I…" index
@@ -213,5 +255,8 @@ well since its `cs_gp` is dense `(n_ct_pairs, n_cells, n_gene_pairs)`.
   read pairs as **undirected** interfaces (§3).
 - *Which transporter genes carry it there?* → `Tier*/[ct_ccc_results][cell_com_df_gp_sig].csv`
   (+ `gp_per_metabolite` in the network JSON for the metabolite↔pair map).
-- *One tidy view of all of the above* → `metab_processing/harreman_summary.py`.
+- *One tidy view of all of the above* → `metab_processing/Harreman/harreman_summary.py`.
 - *Per-cell "who is talking"* → the interacting-cell-score funcs (§5) — **OOM risk**.
+- *Which cell types carry a metabolite's neighborhood score?* → `<Tier>/[nbhd_scores][summary_m].csv`
+  (§5a) — mind the "not the ct statistic" warning.
+- *Run every dataset end to end* → `metab_processing/Harreman/run_full_harr.ipynb` (§5b).
