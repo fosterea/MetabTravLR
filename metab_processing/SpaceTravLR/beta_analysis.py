@@ -225,7 +225,7 @@ def gene_pair_cnp_weights(easy_download_path, tier=None, agg="max") -> dict:
     elif (path / "gene_pair_summary.csv").is_file():
         genepairs = pd.read_csv(path / "gene_pair_summary.csv")
     else:
-        from metab_processing.harreman_summary import summarize_harreman_folder
+        from metab_processing.Harreman.harreman_summary import summarize_harreman_folder
         _, genepairs = summarize_harreman_folder(path)
 
     if tier is not None:

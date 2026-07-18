@@ -18,7 +18,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "s
 import numpy as np
 import pandas as pd
 
-from metab_processing.beta_analysis import (
+from metab_processing.SpaceTravLR.beta_analysis import (
     aggregate_to_metabolite,
     gene_pair_cnp_weights,
     gene_set_score,

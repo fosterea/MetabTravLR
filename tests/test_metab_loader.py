@@ -15,7 +15,7 @@ import yaml
 
 sys.path.append(os.path.abspath(os.path.dirname(__file__) + "/.."))
 
-from metab_processing.metab_loader import (
+from metab_processing.SpaceTravLR.metab_loader import (
     build_metab_pairs,
     load_metab_pairs,
     load_metabolite_selection,
