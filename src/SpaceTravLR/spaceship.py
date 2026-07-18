@@ -587,12 +587,13 @@ class SpaceShip:
         learning_rate: float = 5e-3, 
         spatial_dim: int = 64, 
         batch_size: int = 512, 
-        radius: int = 300, 
+        radius: int = 300,
         contact_distance: int = 50,
+        metab_pairs=None,
     ):
         """
         Trains the SpaceTravLR model to learn spatial gene regulation.
-        
+
         This method initializes and trains the SpaceTravLR neural network
         model to predict gene expression based on TF activity and spatial
         ligand-receptor interactions.
@@ -615,22 +616,24 @@ class SpaceShip:
             Radius for secreted signaling, by default 300.
         contact_distance : int, optional
             Distance for contact-dependent signaling, by default 50.
+        metab_pairs : list[(export, import)], optional
+            Transporter gene pairs added as a metabolite modulator group, by default None.
         """
-        
+
         from .oracles import SpaceTravLR
         from .tools.network import RegulatoryFactory
-        
+
         base_dir = f'{self.outdir}/betadata/'
         adata = sc.read_h5ad(f'{self.outdir}/input_data/_adata.h5ad')
         tflinks = pd.read_parquet(f'{self.outdir}/input_data/tflinks.parquet')
         links = pickle.load(open(f'{self.outdir}/input_data/celloracle_links.pkl', 'rb'))
 
         co_grn = RegulatoryFactory(links=links)
-        
+
         space_travlr = SpaceTravLR(
             adata=adata,
-            max_epochs=max_epochs, 
-            learning_rate=learning_rate, 
+            max_epochs=max_epochs,
+            learning_rate=learning_rate,
             spatial_dim=spatial_dim,
             batch_size=batch_size,
             grn=co_grn,
@@ -638,7 +641,8 @@ class SpaceShip:
             contact_distance=contact_distance,
             save_dir=base_dir,
             tflinks=tflinks,
-            genes=self.focus_genes
+            genes=self.focus_genes,
+            metab_pairs=metab_pairs,
         )
 
         space_travlr.run()

@@ -369,7 +369,8 @@ class SpaceTravLR(BaseTravLR):
         skip_clusters=None,
         activation='identity', # Foster had to add
         scale_factor=1,
-        genes=None):
+        genes=None,
+        metab_pairs=None):
 
         super().__init__(adata, fields_to_keep=[annot, 'cell_thresholds'])
         if grn is None:
@@ -429,10 +430,26 @@ class SpaceTravLR(BaseTravLR):
         self.estimator_models = {}
         self.ligands = set()
 
+        if metab_pairs is not None and (
+            not isinstance(metab_pairs, list)
+            or not all(
+                isinstance(p, (tuple, list)) and len(p) == 2
+                and all(isinstance(g, str) for g in p)
+                for p in metab_pairs
+            )
+        ):
+            # Fail fast at construction (not only when the first gene trains) --
+            # matters for unattended Savio runs. The estimator does its own
+            # (more thorough) validation too; this is a cheap up-front guard.
+            raise ValueError(
+                "metab_pairs must be a list of (export, import) gene-name tuples, or None"
+            )
+
         self.genes = all_genes
         self.trained_genes = []
         self.skip_clusters = skip_clusters
-        
+        self.metab_pairs = metab_pairs
+
         if not os.path.exists(self.save_dir+'/run_params.json'):
             with open(self.save_dir+'/run_params.json', 'w') as f:
                 json.dump({
@@ -442,7 +459,7 @@ class SpaceTravLR(BaseTravLR):
                     'learning_rate': learning_rate,
                     'batch_size': batch_size,
                     'rotate_maps': rotate_maps,
-                    'threshold_lambda': threshold_lambda, 
+                    'threshold_lambda': threshold_lambda,
                     'tf_ligand_cutoff': tf_ligand_cutoff,
                     'radius': radius,
                     'contact_distance': contact_distance,
@@ -451,7 +468,8 @@ class SpaceTravLR(BaseTravLR):
                     'save_dir': save_dir,
                     'n_genes': len(self.genes),
                     'scale_factor': scale_factor,
-                    'activation': activation
+                    'activation': activation,
+                    'n_metab_pairs': len(metab_pairs) if metab_pairs else 0
                 }, f, indent=4)
 
     
@@ -495,12 +513,18 @@ class SpaceTravLR(BaseTravLR):
                 scale_factor=self.scale_factor,
                 activation=self.activation,
                 tflinks=self.tflinks,
-                receptor_thresh=self.receptor_thresh
+                receptor_thresh=self.receptor_thresh,
+                metab_pairs=self.metab_pairs,
             )
-            
+
             estimator.test_mode = False
-            
-            if len(estimator.regulators) == 0:
+
+            # A gene with metabolite (or other) modulators but no TF regulators should still
+            # train. Historically we orphaned on TF regulators alone; only relax that when the
+            # gene actually has metabolite modulators, so behavior is unchanged when metab_pairs
+            # is not supplied (n_metab == 0 for every gene).
+            n_metab = len(getattr(estimator, 'metab_pairs', []))
+            if len(estimator.regulators) == 0 and n_metab == 0:
                 self.queue.add_orphan(gene)
                 continue
 
@@ -525,8 +549,9 @@ class SpaceTravLR(BaseTravLR):
                 
                 ## filter out columns with all zeros
                 betadata = estimator.betadata
-                if betadata.shape[1] > 1:   
-                    betadata.loc[:, (betadata != 0).any(axis=0)].to_parquet(
+                nonzero_betadata = betadata.loc[:, (betadata != 0).any(axis=0)]
+                if nonzero_betadata.shape[1] > 0:
+                    nonzero_betadata.to_parquet(
                         f'{self.save_dir}/{gene}_betadata.parquet')
                 else:
                     self.queue.add_orphan(gene)
