@@ -1,0 +1,738 @@
+sample_id,tier,cell_type_1,cell_type_2,gene1,gene2,tcell_involvement,metabolites,FDR_np,pval_np,C_np
+Primary_Dermal_Melanoma,Tier1,T Cell,other,SLC38A7,SLC3A2,Tcell_interface,L-Glutamine,0.0025316298608224,0.0009990009990009,2493.7512
+Primary_Dermal_Melanoma,Tier1,T Cell,other,SLC16A1,SLC16A4,Tcell_interface,Acetate | L-Lactate,0.0025316298608224,0.0009990009990009,2542.2993
+Primary_Dermal_Melanoma,Tier1,T Cell,other,SLC16A1,SLC22A5,Tcell_interface,4-ene-Valproic acid | Nicotinate,0.0025316298608224,0.0009990009990009,8122.845
+Primary_Dermal_Melanoma,Tier1,T Cell,other,SLC39A8,SLC39A8,Tcell_interface,Cadmium | Manganese | Zinc,0.0025316298608224,0.0009990009990009,1466.0435
+Primary_Dermal_Melanoma,Tier1,T Cell,other,CUBN,SLC11A2,Tcell_interface,Iron,0.0025316298608224,0.0009990009990009,14116.013
+Primary_Dermal_Melanoma,Tier1,T Cell,other,SLC12A2,SLC22A5,Tcell_interface,Sodium,0.0025316298608224,0.0009990009990009,5569.8896
+Primary_Dermal_Melanoma,Tier1,T Cell,other,CD36,CD36,Tcell_interface,Cholesterol | Fatty acid | Vitamin D3,0.0025316298608224,0.0009990009990009,2270.0493
+Primary_Dermal_Melanoma,Tier1,T Cell,other,CD36,CPT1A,Tcell_interface,Fatty acid,0.0025316298608224,0.0009990009990009,1638.4408
+Primary_Dermal_Melanoma,Tier1,T Cell,other,MSR1,MSR1,Tcell_interface,Fatty acid,0.0025316298608224,0.0009990009990009,728.2051
+Primary_Dermal_Melanoma,Tier1,T Cell,other,CPT1A,MSR1,Tcell_interface,Fatty acid,0.0025316298608224,0.0009990009990009,13351.656
+Primary_Dermal_Melanoma,Tier1,T Cell,other,CPT1A,CPT1A,Tcell_interface,Fatty acid,0.0025316298608224,0.0009990009990009,5084.443
+Primary_Dermal_Melanoma,Tier1,T Cell,other,ABCA1,ABCA1,Tcell_interface,25-Hydroxycholesterol,0.0025316298608224,0.0009990009990009,6179.653
+Primary_Dermal_Melanoma,Tier1,T Cell,other,ABCC3,FOLR2,Tcell_interface,Folic acid,0.0025316298608224,0.0009990009990009,431.645
+Primary_Dermal_Melanoma,Tier1,T Cell,other,LRP1,LRP1,Tcell_interface,Heme,0.0025316298608224,0.0009990009990009,2740.0708
+Primary_Dermal_Melanoma,Tier1,T Cell,other,CD38,CD38,Tcell_interface,Adenosine diphosphate ribose,0.0025316298608224,0.0009990009990009,4547.6235
+Primary_Dermal_Melanoma,Tier1,T Cell,other,ABCC2,ABCC4,Tcell_interface,Cholic acid | Folinic acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0025316298608224,0.0009990009990009,5708.497
+Primary_Dermal_Melanoma,Tier1,T Cell,other,ATP7B,TAP1,Tcell_interface,Adenosine triphosphate,0.0025316298608224,0.0009990009990009,3175.924
+Primary_Dermal_Melanoma,Tier1,T Cell,other,ATP7A,TAP1,Tcell_interface,Adenosine triphosphate,0.0025316298608224,0.0009990009990009,35922.367
+Primary_Dermal_Melanoma,Tier1,T Cell,other,AQP5,AQP9,Tcell_interface,Water,0.0025316298608224,0.0009990009990009,95.55664
+Primary_Dermal_Melanoma,Tier1,T Cell,other,SLC6A17,SLC6A17,Tcell_interface,Neurotransmitter,0.0025316298608224,0.0009990009990009,2182.427
+Primary_Dermal_Melanoma,Tier1,T Cell,other,SLCO2B1,SLCO2B1,Tcell_interface,Acetate | Citric acid | Estradiol | Nicotinate | Oxalic acid | Taurocholic acid,0.0047671626618995,0.0019980019980019,753.3186
+Primary_Dermal_Melanoma,Tier1,T Cell,other,ABCC2,SLC16A1,Tcell_interface,Taurocholic acid,0.0047671626618995,0.0019980019980019,3051.1042
+Primary_Dermal_Melanoma,Tier1,T Cell,other,SCARB1,SCARB1,Tcell_interface,alpha-Tocopherol,0.0067185561691056,0.0029970029970029,930.8636
+Primary_Dermal_Melanoma,Tier1,T Cell,other,ORAI3,ORAI3,Tcell_interface,Calcium release-activated calcium transport,0.0067185561691056,0.0029970029970029,896.05963
+Primary_Dermal_Melanoma,Tier1,T Cell,other,SLC38A7,SLC7A5,Tcell_interface,L-Glutamine,0.0087654281202668,0.0039960039960039,3765.3545
+Primary_Dermal_Melanoma,Tier1,T Cell,other,SLC29A3,SLC29A3,Tcell_interface,Adenine,0.0168079343337075,0.0079920079920079,236.39516
+Primary_Dermal_Melanoma,Tier1,T Cell,other,ABCC1,SLCO2B1,Tcell_interface,Taurocholic acid,0.0186209729356937,0.0089910089910089,665.555
+Primary_Dermal_Melanoma,Tier1,T Cell,other,SLC43A2,SLC43A2,Tcell_interface,L-Cysteine | L-Isoleucine | L-Leucine | L-Methionine | L-Phenylalanine | L-Valine,0.0255975908149821,0.0129870129870129,244.87717
+Primary_Dermal_Melanoma,Tier1,T Cell,other,SLC16A4,SLCO2B1,Tcell_interface,Acetate,0.0255975908149821,0.0129870129870129,2323.4492
+Primary_Dermal_Melanoma,Tier1,T Cell,other,ABCC3,SLCO2B1,Tcell_interface,Taurocholic acid,0.0273028406999698,0.0139860139860139,181.23767
+Primary_Dermal_Melanoma,Tier1,T Cell,other,CD36,MSR1,Tcell_interface,Fatty acid,0.0309074811444479,0.0159840159840159,1359.6201
+Primary_Dermal_Melanoma,Tier1,T Cell,other,CLCN3,CLCN5,Tcell_interface,Chloride,0.0409453560138491,0.0219780219780219,5270.861
+Primary_Dermal_Melanoma,Tier1,T Cell,T Cell,CUBN,SLC11A2,within_Tcell,Iron,0.0025316298608224,0.0009990009990009,2590.4458
+Primary_Dermal_Melanoma,Tier1,T Cell,T Cell,ATP7A,TAP1,within_Tcell,Adenosine triphosphate,0.0047671626618995,0.0019980019980019,7783.9688
+Primary_Dermal_Melanoma,Tier1,T Cell,T Cell,SLC29A1,SLC5A3,within_Tcell,Sodium,0.0067185561691056,0.0029970029970029,457.11688
+Primary_Dermal_Melanoma,Tier1,T Cell,T Cell,CD38,CD38,within_Tcell,Adenosine diphosphate ribose,0.0067185561691056,0.0029970029970029,1582.0461
+Primary_Dermal_Melanoma,Tier1,T Cell,T Cell,CPT1A,MSR1,within_Tcell,Fatty acid,0.0087654281202668,0.0039960039960039,1779.3585
+Primary_Dermal_Melanoma,Tier1,T Cell,T Cell,SLC1A5,SLC29A1,within_Tcell,Sodium,0.0186209729356937,0.0089910089910089,238.37717
+Primary_Dermal_Melanoma,Tier1,T Cell,T Cell,SLC12A2,SLC1A5,within_Tcell,Sodium,0.0309074811444479,0.0159840159840159,179.2394
+Primary_Dermal_Melanoma,Tier1,T Cell,T Cell,SLC38A7,SLC3A2,within_Tcell,L-Glutamine,0.0346069025314308,0.0179820179820179,315.25513
+Primary_Dermal_Melanoma,Tier1,T Cell,T Cell,SLC1A5,SLC5A3,within_Tcell,Sodium,0.0392634888047732,0.0209790209790209,586.22906
+Primary_Dermal_Melanoma,Tier1,T Cell,T Cell,ABCC3,FOLR2,within_Tcell,Folic acid,0.0444646262828081,0.0239760239760239,108.01788
+Primary_Dermal_Melanoma,Tier1,other,other,SLC2A9,SLC2A9,within_other,D-Glucose,0.0025316298608224,0.0009990009990009,111515.94
+Primary_Dermal_Melanoma,Tier1,other,other,SLC2A1,SLC2A3,within_other,D-Galactose | D-Glucose | D-Mannose | Dehydroascorbic acid | Docosahexaenoic acid,0.0025316298608224,0.0009990009990009,7517.248
+Primary_Dermal_Melanoma,Tier1,other,other,SLC2A1,SLC2A1,within_other,D-Galactose | D-Glucose | D-Mannose | Dehydroascorbic acid | Docosahexaenoic acid | Glucosamine,0.0025316298608224,0.0009990009990009,72118.08
+Primary_Dermal_Melanoma,Tier1,other,other,SLC2A1,SLC2A9,within_other,D-Glucose,0.0025316298608224,0.0009990009990009,1658.778
+Primary_Dermal_Melanoma,Tier1,other,other,SLC2A3,SLC2A3,within_other,D-Galactose | D-Glucose | D-Maltose | D-Mannose | D-Xylose | Dehydroascorbic acid | Docosahexaenoic acid,0.0025316298608224,0.0009990009990009,295025.12
+Primary_Dermal_Melanoma,Tier1,other,other,SLC1A5,SLC1A5,within_other,L-Alanine | L-Asparagine | L-Cysteine | L-Glutamate | L-Glutamine | L-Leucine | L-Serine | L-Threonine | Sodium,0.0025316298608224,0.0009990009990009,84702.87
+Primary_Dermal_Melanoma,Tier1,other,other,SLC7A5,SLC7A5,within_other,L-Arginine | L-Glutamine | L-Histidine | L-Leucine | L-Methionine | L-Phenylalanine | L-Tyrosine,0.0025316298608224,0.0009990009990009,17504.752
+Primary_Dermal_Melanoma,Tier1,other,other,SLC7A7,SLC7A7,within_other,L-Glutamine,0.0025316298608224,0.0009990009990009,93664.05
+Primary_Dermal_Melanoma,Tier1,other,other,SLC3A2,SLC3A2,within_other,Iron | L-Cystine | L-Glutamate | L-Glutamine | L-Leucine | L-Serine,0.0025316298608224,0.0009990009990009,48118.098
+Primary_Dermal_Melanoma,Tier1,other,other,SLC3A2,SLC7A5,within_other,L-Glutamine | L-Leucine,0.0025316298608224,0.0009990009990009,35214.223
+Primary_Dermal_Melanoma,Tier1,other,other,SLC1A5,SLC3A2,within_other,L-Glutamate | L-Glutamine | L-Leucine | L-Serine,0.0025316298608224,0.0009990009990009,7452.6353
+Primary_Dermal_Melanoma,Tier1,other,other,SLC1A5,SLC38A7,within_other,L-Glutamine,0.0025316298608224,0.0009990009990009,178500.8
+Primary_Dermal_Melanoma,Tier1,other,other,SLC1A5,SLC7A5,within_other,L-Glutamine | L-Leucine,0.0025316298608224,0.0009990009990009,38745.52
+Primary_Dermal_Melanoma,Tier1,other,other,SLC38A7,SLC3A2,within_other,L-Glutamine,0.0025316298608224,0.0009990009990009,31539.82
+Primary_Dermal_Melanoma,Tier1,other,other,SLC38A7,SLC38A7,within_other,L-Glutamine,0.0025316298608224,0.0009990009990009,203656.02
+Primary_Dermal_Melanoma,Tier1,other,other,SLC38A7,SLC7A5,within_other,L-Glutamine,0.0025316298608224,0.0009990009990009,246660.83
+Primary_Dermal_Melanoma,Tier1,other,other,SLC43A2,SLC43A2,within_other,L-Cysteine | L-Isoleucine | L-Leucine | L-Methionine | L-Phenylalanine | L-Valine,0.0025316298608224,0.0009990009990009,9074.5205
+Primary_Dermal_Melanoma,Tier1,other,other,SLC1A5,SLC7A11,within_other,L-Cysteine | L-Glutamate,0.0025316298608224,0.0009990009990009,1685.968
+Primary_Dermal_Melanoma,Tier1,other,other,SLC7A11,SLC7A11,within_other,L-Cysteine | L-Cystine | L-Glutamate,0.0025316298608224,0.0009990009990009,219.68878
+Primary_Dermal_Melanoma,Tier1,other,other,SLC16A4,SLC16A4,within_other,Acetate | L-Lactate,0.0025316298608224,0.0009990009990009,74134.43
+Primary_Dermal_Melanoma,Tier1,other,other,SLC16A1,SLC16A1,within_other,4-ene-Valproic acid | Acetate | Butyrate | D-Lactate | Ketone bodies | L-Glutamate | L-Lactate | Nicotinate | Pyruvate | Taurocholic acid | alpha-Ketoisovaleric acid,0.0025316298608224,0.0009990009990009,117928.445
+Primary_Dermal_Melanoma,Tier1,other,other,SLC16A1,SLC16A4,within_other,Acetate | L-Lactate,0.0025316298608224,0.0009990009990009,238332.55
+Primary_Dermal_Melanoma,Tier1,other,other,SLC16A1,SLC22A5,within_other,4-ene-Valproic acid | Nicotinate,0.0025316298608224,0.0009990009990009,208643.67
+Primary_Dermal_Melanoma,Tier1,other,other,SLC22A5,SLCO2B1,within_other,Nicotinate,0.0025316298608224,0.0009990009990009,23816.104
+Primary_Dermal_Melanoma,Tier1,other,other,SLCO2B1,SLCO2B1,within_other,Acetate | Citric acid | Estradiol | Nicotinate | Oxalic acid | Taurocholic acid,0.0025316298608224,0.0009990009990009,32815.82
+Primary_Dermal_Melanoma,Tier1,other,other,SLC22A5,SLC22A5,within_other,4-ene-Valproic acid | Acetyl-L-Carnitine | Choline | Creatine | Dopamine | Histamine | L-Carnitine | Nicotinate | Norepinephrine | O-Desmethylverapamil (D-702) | Sodium,0.0025316298608224,0.0009990009990009,9254.486
+Primary_Dermal_Melanoma,Tier1,other,other,SLC16A1,SLC3A2,within_other,L-Glutamate,0.0025316298608224,0.0009990009990009,3185.798
+Primary_Dermal_Melanoma,Tier1,other,other,SLC1A1,SLC1A1,within_other,L-Glutamate,0.0025316298608224,0.0009990009990009,108092.77
+Primary_Dermal_Melanoma,Tier1,other,other,SLC1A1,SLC1A2,within_other,L-Glutamate,0.0025316298608224,0.0009990009990009,2366.156
+Primary_Dermal_Melanoma,Tier1,other,other,SLC3A2,SLC7A11,within_other,L-Cystine | L-Glutamate,0.0025316298608224,0.0009990009990009,53404.812
+Primary_Dermal_Melanoma,Tier1,other,other,SLC1A3,SLC1A3,within_other,D-Aspartate | L-Aspartate | L-Glutamate | Malic acid,0.0025316298608224,0.0009990009990009,7549.0034
+Primary_Dermal_Melanoma,Tier1,other,other,SLC30A8,SLC30A8,within_other,Zinc,0.0025316298608224,0.0009990009990009,179.90938
+Primary_Dermal_Melanoma,Tier1,other,other,SLC39A8,SLC39A8,within_other,Cadmium | Manganese | Zinc,0.0025316298608224,0.0009990009990009,48981.863
+Primary_Dermal_Melanoma,Tier1,other,other,CUBN,SLC3A2,within_other,Iron,0.0025316298608224,0.0009990009990009,194926.95
+Primary_Dermal_Melanoma,Tier1,other,other,CUBN,SLC11A2,within_other,Iron,0.0025316298608224,0.0009990009990009,133831.52
+Primary_Dermal_Melanoma,Tier1,other,other,SLC11A2,SLC3A2,within_other,Iron,0.0025316298608224,0.0009990009990009,19622.64
+Primary_Dermal_Melanoma,Tier1,other,other,SLC11A2,SLC11A2,within_other,Iron,0.0025316298608224,0.0009990009990009,176649.55
+Primary_Dermal_Melanoma,Tier1,other,other,SLC40A1,SLC40A1,within_other,Iron,0.0025316298608224,0.0009990009990009,20086.924
+Primary_Dermal_Melanoma,Tier1,other,other,CUBN,CUBN,within_other,Adenosylcobalamin | Calcidiol | Calcium | Cobalamin | Iron,0.0025316298608224,0.0009990009990009,3588.5828
+Primary_Dermal_Melanoma,Tier1,other,other,SLC16A9,SLC16A9,within_other,L-Carnitine,0.0025316298608224,0.0009990009990009,155.18855
+Primary_Dermal_Melanoma,Tier1,other,other,SLC12A2,SLC5A3,within_other,Sodium,0.0025316298608224,0.0009990009990009,16733.547
+Primary_Dermal_Melanoma,Tier1,other,other,SLC12A2,SLC1A5,within_other,Sodium,0.0025316298608224,0.0009990009990009,112642.73
+Primary_Dermal_Melanoma,Tier1,other,other,SLC5A1,SLC5A5,within_other,Sodium | Urea,0.0025316298608224,0.0009990009990009,71.91935
+Primary_Dermal_Melanoma,Tier1,other,other,SLC5A3,SLC5A3,within_other,Sodium,0.0025316298608224,0.0009990009990009,8865.771
+Primary_Dermal_Melanoma,Tier1,other,other,SLC12A2,SLC12A2,within_other,Chloride ion | Sodium,0.0025316298608224,0.0009990009990009,28007.486
+Primary_Dermal_Melanoma,Tier1,other,other,SLC22A5,SLC29A1,within_other,Sodium,0.0025316298608224,0.0009990009990009,62908.074
+Primary_Dermal_Melanoma,Tier1,other,other,SLC10A1,SLC6A2,within_other,Sodium,0.0025316298608224,0.0009990009990009,186099.4
+Primary_Dermal_Melanoma,Tier1,other,other,SLC1A5,SLC29A1,within_other,Sodium,0.0025316298608224,0.0009990009990009,53282.215
+Primary_Dermal_Melanoma,Tier1,other,other,SLC5A7,SLC5A7,within_other,Chloride ion | Choline | Sodium,0.0025316298608224,0.0009990009990009,110.22053
+Primary_Dermal_Melanoma,Tier1,other,other,SLC1A5,SLC22A5,within_other,Sodium,0.0025316298608224,0.0009990009990009,32548.338
+Primary_Dermal_Melanoma,Tier1,other,other,SLC12A2,SLC29A1,within_other,Sodium,0.0025316298608224,0.0009990009990009,154.34465
+Primary_Dermal_Melanoma,Tier1,other,other,SLC1A5,SLC5A3,within_other,Sodium,0.0025316298608224,0.0009990009990009,98925.04
+Primary_Dermal_Melanoma,Tier1,other,other,SLC6A4,SLC6A4,within_other,N-Desmethylcitalopram | O-Desmethylverapamil (D-702) | Serotonin | Sodium,0.0025316298608224,0.0009990009990009,148.15518
+Primary_Dermal_Melanoma,Tier1,other,other,SLC29A1,SLC29A1,within_other,Adenosine | Cytidine | Ethanol | Guanosine | Inosine | Sodium | Thymidine | Uridine,0.0025316298608224,0.0009990009990009,59639.254
+Primary_Dermal_Melanoma,Tier1,other,other,SLC5A5,SLC5A5,within_other,Sodium | Urea,0.0025316298608224,0.0009990009990009,18344.156
+Primary_Dermal_Melanoma,Tier1,other,other,SLC29A1,SLC5A3,within_other,Sodium,0.0025316298608224,0.0009990009990009,125712.6
+Primary_Dermal_Melanoma,Tier1,other,other,SLC5A1,SLC5A1,within_other,Sodium | Urea,0.0025316298608224,0.0009990009990009,34409.297
+Primary_Dermal_Melanoma,Tier1,other,other,SLC12A2,SLC22A5,within_other,Sodium,0.0025316298608224,0.0009990009990009,432736.1
+Primary_Dermal_Melanoma,Tier1,other,other,SLC16A4,SLCO2B1,within_other,Acetate,0.0025316298608224,0.0009990009990009,144683.14
+Primary_Dermal_Melanoma,Tier1,other,other,CD36,MSR1,within_other,Fatty acid,0.0025316298608224,0.0009990009990009,18747.47
+Primary_Dermal_Melanoma,Tier1,other,other,CD36,CD36,within_other,Cholesterol | Fatty acid | Vitamin D3,0.0025316298608224,0.0009990009990009,60356.402
+Primary_Dermal_Melanoma,Tier1,other,other,CD36,CPT1A,within_other,Fatty acid,0.0025316298608224,0.0009990009990009,134419.58
+Primary_Dermal_Melanoma,Tier1,other,other,MSR1,MSR1,within_other,Fatty acid,0.0025316298608224,0.0009990009990009,21140.537
+Primary_Dermal_Melanoma,Tier1,other,other,CPT1A,MSR1,within_other,Fatty acid,0.0025316298608224,0.0009990009990009,172085.8
+Primary_Dermal_Melanoma,Tier1,other,other,CPT1A,CPT1A,within_other,Fatty acid,0.0025316298608224,0.0009990009990009,35056.875
+Primary_Dermal_Melanoma,Tier1,other,other,SLCO1C1,SLCO1C1,within_other,"3',4'-Dihydrodiol | 4'-Hydroxydiclofenac | Estrone sulfate | Taurocholic acid | Thyroxine",0.0025316298608224,0.0009990009990009,157.72209
+Primary_Dermal_Melanoma,Tier1,other,other,ABCA1,ABCA1,within_other,25-Hydroxycholesterol,0.0025316298608224,0.0009990009990009,224234.95
+Primary_Dermal_Melanoma,Tier1,other,other,ABCB1,ABCB1,within_other,"17a-Ethynylestradiol | 2-Hydroxychlorpropamide | 3',4'-Dihydrodiol | 4'-Hydroxydiclofenac | 4-Hydroxycyclophosphamide | 5-Hydroxyomeprazole | 8-Hydroxycarvedilol | Cholesterol | Cholic acid | Cortisol | E-3179 | Estradiol | Estriol | Glycerol | Hydroxylansoprazole | N-Desmethylcitalopram | N-Desmethyleletriptan | N-Desmethyltamoxifen | N-desmethylimatinib | O-Deethylated candesartan | O-Desmethylverapamil (D-702) | Progesterone | Taurocholic acid | Testosterone",0.0025316298608224,0.0009990009990009,774.772
+Primary_Dermal_Melanoma,Tier1,other,other,ABCG2,CD36,within_other,Cholesterol,0.0025316298608224,0.0009990009990009,1006.30774
+Primary_Dermal_Melanoma,Tier1,other,other,ATP7A,ATP7A,within_other,ADP | Adenosine triphosphate | Phosphate | Water,0.0025316298608224,0.0009990009990009,6024.136
+Primary_Dermal_Melanoma,Tier1,other,other,SLC20A2,SLC20A2,within_other,Phosphate,0.0025316298608224,0.0009990009990009,2348.4153
+Primary_Dermal_Melanoma,Tier1,other,other,ATP7A,ATP7B,within_other,ADP | Adenosine triphosphate | Phosphate | Water,0.0025316298608224,0.0009990009990009,24743.92
+Primary_Dermal_Melanoma,Tier1,other,other,ATP7B,SLC20A2,within_other,Phosphate,0.0025316298608224,0.0009990009990009,2508.083
+Primary_Dermal_Melanoma,Tier1,other,other,ATP7A,SLC20A2,within_other,Phosphate,0.0025316298608224,0.0009990009990009,893.67694
+Primary_Dermal_Melanoma,Tier1,other,other,CHRNA5,CHRNA5,within_other,Ethanol,0.0025316298608224,0.0009990009990009,3924.53
+Primary_Dermal_Melanoma,Tier1,other,other,CHRNA5,SLC29A1,within_other,Ethanol,0.0025316298608224,0.0009990009990009,35990.74
+Primary_Dermal_Melanoma,Tier1,other,other,ABCC3,FOLR2,within_other,Folic acid,0.0025316298608224,0.0009990009990009,9291.059
+Primary_Dermal_Melanoma,Tier1,other,other,FOLR1,FOLR1,within_other,5-Methyltetrahydrofolic acid | Folic acid,0.0025316298608224,0.0009990009990009,1989.5964
+Primary_Dermal_Melanoma,Tier1,other,other,ABCC4,ABCC4,within_other,4'-Hydroxydiclofenac | Cholic acid | Cyclic AMP | Folic acid | Folinic acid | Glutathione | Hydroxycelecoxib | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0025316298608224,0.0009990009990009,5994.1865
+Primary_Dermal_Melanoma,Tier1,other,other,FOLR2,FOLR2,within_other,Folic acid,0.0025316298608224,0.0009990009990009,858.86926
+Primary_Dermal_Melanoma,Tier1,other,other,TRPV6,TRPV6,within_other,Heme,0.0025316298608224,0.0009990009990009,97.62745
+Primary_Dermal_Melanoma,Tier1,other,other,LRP1,LRP1,within_other,Heme,0.0025316298608224,0.0009990009990009,111099.41
+Primary_Dermal_Melanoma,Tier1,other,other,SLC29A3,SLC29A3,within_other,Adenine,0.0025316298608224,0.0009990009990009,3285.8005
+Primary_Dermal_Melanoma,Tier1,other,other,SLC15A1,SLC15A1,within_other,2-Hydroxychlorpropamide | Glycyl-glycine | L-Dopa,0.0025316298608224,0.0009990009990009,11636.712
+Primary_Dermal_Melanoma,Tier1,other,other,CD38,CD38,within_other,Adenosine diphosphate ribose,0.0025316298608224,0.0009990009990009,30673.076
+Primary_Dermal_Melanoma,Tier1,other,other,SLC12A6,SLC12A6,within_other,Chloride ion,0.0025316298608224,0.0009990009990009,974.62067
+Primary_Dermal_Melanoma,Tier1,other,other,SCARB1,SCARB1,within_other,alpha-Tocopherol,0.0025316298608224,0.0009990009990009,97196.305
+Primary_Dermal_Melanoma,Tier1,other,other,ABCC2,SLCO2B1,within_other,Taurocholic acid,0.0025316298608224,0.0009990009990009,42446.016
+Primary_Dermal_Melanoma,Tier1,other,other,ABCC1,SLCO2B1,within_other,Taurocholic acid,0.0025316298608224,0.0009990009990009,37068.266
+Primary_Dermal_Melanoma,Tier1,other,other,ABCC1,SLC16A1,within_other,Taurocholic acid,0.0025316298608224,0.0009990009990009,38937.406
+Primary_Dermal_Melanoma,Tier1,other,other,ABCC2,ABCC4,within_other,Cholic acid | Folinic acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0025316298608224,0.0009990009990009,75145.63
+Primary_Dermal_Melanoma,Tier1,other,other,ABCC4,SLCO2B1,within_other,Taurocholic acid,0.0025316298608224,0.0009990009990009,8281.993
+Primary_Dermal_Melanoma,Tier1,other,other,ABCC3,SLCO2B1,within_other,Taurocholic acid,0.0025316298608224,0.0009990009990009,14860.231
+Primary_Dermal_Melanoma,Tier1,other,other,ABCC1,ABCC4,within_other,4'-Hydroxydiclofenac | Cholic acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0025316298608224,0.0009990009990009,18223.363
+Primary_Dermal_Melanoma,Tier1,other,other,ABCC4,SLC16A1,within_other,Taurocholic acid,0.0025316298608224,0.0009990009990009,1679.6229
+Primary_Dermal_Melanoma,Tier1,other,other,ABCB1,SLCO2B1,within_other,Estradiol | Taurocholic acid,0.0025316298608224,0.0009990009990009,29023.266
+Primary_Dermal_Melanoma,Tier1,other,other,ATP7B,TAP1,within_other,Adenosine triphosphate,0.0025316298608224,0.0009990009990009,68872.61
+Primary_Dermal_Melanoma,Tier1,other,other,ATP7A,TAP1,within_other,Adenosine triphosphate,0.0025316298608224,0.0009990009990009,353351.6
+Primary_Dermal_Melanoma,Tier1,other,other,TAP1,TAP1,within_other,Adenosine triphosphate,0.0025316298608224,0.0009990009990009,9647.252
+Primary_Dermal_Melanoma,Tier1,other,other,AQP9,ATP7A,within_other,Water,0.0025316298608224,0.0009990009990009,5232.6353
+Primary_Dermal_Melanoma,Tier1,other,other,AQP9,AQP9,within_other,Water,0.0025316298608224,0.0009990009990009,1418.1761
+Primary_Dermal_Melanoma,Tier1,other,other,AQP5,ATP7A,within_other,Water,0.0025316298608224,0.0009990009990009,4643.091
+Primary_Dermal_Melanoma,Tier1,other,other,AQP5,AQP9,within_other,Water,0.0025316298608224,0.0009990009990009,5633.8706
+Primary_Dermal_Melanoma,Tier1,other,other,AQP5,AQP5,within_other,Water,0.0025316298608224,0.0009990009990009,3704.6902
+Primary_Dermal_Melanoma,Tier1,other,other,ABCC2,SLC22A5,within_other,O-Desmethylverapamil (D-702),0.0025316298608224,0.0009990009990009,6779.444
+Primary_Dermal_Melanoma,Tier1,other,other,ABCC4,SLC22A5,within_other,O-Desmethylverapamil (D-702),0.0025316298608224,0.0009990009990009,11431.17
+Primary_Dermal_Melanoma,Tier1,other,other,SLC24A4,SLC24A4,within_other,Sodium_calcium_potassium exchange,0.0025316298608224,0.0009990009990009,682.74805
+Primary_Dermal_Melanoma,Tier1,other,other,CLCN4,CLCN4,within_other,Chloride,0.0025316298608224,0.0009990009990009,76537.375
+Primary_Dermal_Melanoma,Tier1,other,other,CLCN3,CLCN3,within_other,Chloride,0.0025316298608224,0.0009990009990009,15077.938
+Primary_Dermal_Melanoma,Tier1,other,other,CLCN3,CLCN5,within_other,Chloride,0.0025316298608224,0.0009990009990009,432982.16
+Primary_Dermal_Melanoma,Tier1,other,other,SLC9A1,SLC9A1,within_other,Sodium_hydrogen exchange,0.0025316298608224,0.0009990009990009,11641.21
+Primary_Dermal_Melanoma,Tier1,other,other,SLC6A17,SLC6A17,within_other,Neurotransmitter,0.0025316298608224,0.0009990009990009,312368.03
+Primary_Dermal_Melanoma,Tier1,other,other,SLC6A9,SLC6A9,within_other,Neurotransmitter,0.0025316298608224,0.0009990009990009,23401.928
+Primary_Dermal_Melanoma,Tier1,other,other,SLC6A17,SLC6A9,within_other,Neurotransmitter,0.0025316298608224,0.0009990009990009,6637.619
+Primary_Dermal_Melanoma,Tier1,other,other,SLC26A2,SLC26A2,within_other,Anion exchange,0.0025316298608224,0.0009990009990009,51322.28
+Primary_Dermal_Melanoma,Tier1,other,other,ORAI2,ORAI2,within_other,Calcium release-activated calcium transport,0.0025316298608224,0.0009990009990009,22488.303
+Primary_Dermal_Melanoma,Tier1,other,other,ORAI2,ORAI3,within_other,Calcium release-activated calcium transport,0.0025316298608224,0.0009990009990009,17692.35
+Primary_Dermal_Melanoma,Tier1,other,other,ORAI3,ORAI3,within_other,Calcium release-activated calcium transport,0.0025316298608224,0.0009990009990009,17038.76
+Primary_Dermal_Melanoma,Tier1,other,other,SCNN1G,SCNN1G,within_other,Amiloride-sensitive sodium transport,0.0025316298608224,0.0009990009990009,760.4466
+Primary_Dermal_Melanoma,Tier1,other,other,SCNN1A,SCNN1A,within_other,Amiloride-sensitive sodium transport,0.0025316298608224,0.0009990009990009,16762.045
+Primary_Dermal_Melanoma,Tier1,other,other,SLC23A2,SLC23A2,within_other,Vitamin C,0.0025316298608224,0.0009990009990009,32108.025
+Primary_Dermal_Melanoma,Tier1,other,other,SLC6A1,SLC6A1,within_other,GABA,0.0047671626618995,0.0019980019980019,137.94775
+Primary_Dermal_Melanoma,Tier1,other,other,ABCC2,ABCC2,within_other,"17a-Ethynylestradiol | 3',4'-Dihydrodiol | Bilirubin | Cholic acid | Folinic acid | Fusidic Acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid",0.0047671626618995,0.0019980019980019,26899.926
+Primary_Dermal_Melanoma,Tier1,other,other,CLCN5,CLCN5,within_other,Chloride,0.0047671626618995,0.0019980019980019,175.99197
+Primary_Dermal_Melanoma,Tier1,other,other,SLC16A1,SLC7A11,within_other,L-Glutamate,0.0067185561691056,0.0029970029970029,59.52634
+Primary_Dermal_Melanoma,Tier1,other,other,SCNN1A,SCNN1G,within_other,Amiloride-sensitive sodium transport,0.0067185561691056,0.0029970029970029,38.151657
+Primary_Dermal_Melanoma,Tier1,other,other,AQP7,ATP7B,within_other,Water,0.0087654281202668,0.0039960039960039,472.5157
+Primary_Dermal_Melanoma,Tier1,other,other,ABCB1,ABCC2,within_other,"17a-Ethynylestradiol | 3',4'-Dihydrodiol | Cholic acid | O-Desmethylverapamil (D-702) | Taurocholic acid",0.0128713391871286,0.0059940059940059,4344.2427
+Primary_Dermal_Melanoma,Tier1,other,other,ABCC4,SLC19A1,within_other,Folic acid,0.0186209729356937,0.0089910089910089,53.522675
+Primary_Dermal_Melanoma,Tier1,other,other,LRP2,LRP2,within_other,Calcidiol,0.0205854751309296,0.0099900099900099,35.71323
+Primary_Dermal_Melanoma,Tier1,other,other,SLC22A5,SLC5A3,within_other,Sodium,0.0221956261560221,0.0109890109890109,37.48331
+Primary_Dermal_Melanoma,Tier1,other,other,SLC16A1,SLC1A5,within_other,L-Glutamate,0.0255975908149821,0.0129870129870129,77.421104
+Primary_Dermal_Melanoma,Tier1,other,other,SLC10A1,SLC10A1,within_other,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 17a-Ethynylestradiol | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Deoxycholic acid | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | Progesterone | Sodium | Sulfolithocholic acid | Taurocholic acid | Testosterone | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0255975908149821,0.0129870129870129,27.20536
+Primary_Dermal_Melanoma,Tier1,other,other,ABCC1,ABCC1,within_other,4'-Hydroxydiclofenac | Cholic acid | Glutathione | Leukotriene C4 | O-Desmethylverapamil (D-702) | Progesterone | Taurocholic acid,0.0363580081889941,0.0189810189810189,12294.429
+Primary_Dermal_Melanoma,Tier1,other,other,SLC19A1,SLC19A1,within_other,Folic acid | Thiamine,0.0392634888047732,0.0209790209790209,726.7012
+Primary_Dermal_Melanoma,Tier2,CD8 T Cell,other,SLC38A7,SLC7A5,Tcell_interface,L-Glutamine,0.0025316298608224,0.0009990009990009,2493.7512
+Primary_Dermal_Melanoma,Tier2,CD8 T Cell,other,SLC16A1,SLC16A4,Tcell_interface,Acetate | L-Lactate,0.0025316298608224,0.0009990009990009,2542.2993
+Primary_Dermal_Melanoma,Tier2,CD8 T Cell,other,SLCO2B1,SLCO2B1,Tcell_interface,Acetate | Citric acid | Estradiol | Nicotinate | Oxalic acid | Taurocholic acid,0.0025316298608224,0.0009990009990009,8122.845
+Primary_Dermal_Melanoma,Tier2,CD8 T Cell,other,SLC30A8,SLC30A8,Tcell_interface,Zinc,0.0025316298608224,0.0009990009990009,1466.0435
+Primary_Dermal_Melanoma,Tier2,CD8 T Cell,other,SLC11A2,SLC11A2,Tcell_interface,Iron,0.0025316298608224,0.0009990009990009,14116.013
+Primary_Dermal_Melanoma,Tier2,CD8 T Cell,other,SLC29A1,SLC29A1,Tcell_interface,Adenosine | Cytidine | Ethanol | Guanosine | Inosine | Sodium | Thymidine | Uridine,0.0025316298608224,0.0009990009990009,5569.8896
+Primary_Dermal_Melanoma,Tier2,CD8 T Cell,other,CD36,MSR1,Tcell_interface,Fatty acid,0.0025316298608224,0.0009990009990009,2270.0493
+Primary_Dermal_Melanoma,Tier2,CD8 T Cell,other,CD36,CD36,Tcell_interface,Cholesterol | Fatty acid | Vitamin D3,0.0025316298608224,0.0009990009990009,1638.4408
+Primary_Dermal_Melanoma,Tier2,CD8 T Cell,other,CD36,CPT1A,Tcell_interface,Fatty acid,0.0025316298608224,0.0009990009990009,728.2051
+Primary_Dermal_Melanoma,Tier2,CD8 T Cell,other,MSR1,MSR1,Tcell_interface,Fatty acid,0.0025316298608224,0.0009990009990009,13351.656
+Primary_Dermal_Melanoma,Tier2,CD8 T Cell,other,CPT1A,MSR1,Tcell_interface,Fatty acid,0.0025316298608224,0.0009990009990009,5084.443
+Primary_Dermal_Melanoma,Tier2,CD8 T Cell,other,ABCA1,ABCA1,Tcell_interface,25-Hydroxycholesterol,0.0025316298608224,0.0009990009990009,6179.653
+Primary_Dermal_Melanoma,Tier2,CD8 T Cell,other,FOLR2,FOLR2,Tcell_interface,Folic acid,0.0025316298608224,0.0009990009990009,431.645
+Primary_Dermal_Melanoma,Tier2,CD8 T Cell,other,LRP1,LRP1,Tcell_interface,Heme,0.0025316298608224,0.0009990009990009,2740.0708
+Primary_Dermal_Melanoma,Tier2,CD8 T Cell,other,CD38,CD38,Tcell_interface,Adenosine diphosphate ribose,0.0025316298608224,0.0009990009990009,4547.6235
+Primary_Dermal_Melanoma,Tier2,CD8 T Cell,other,ABCC1,SLCO2B1,Tcell_interface,Taurocholic acid,0.0025316298608224,0.0009990009990009,5708.497
+Primary_Dermal_Melanoma,Tier2,CD8 T Cell,other,ATP7A,TAP1,Tcell_interface,Adenosine triphosphate,0.0025316298608224,0.0009990009990009,3175.924
+Primary_Dermal_Melanoma,Tier2,CD8 T Cell,other,TAP1,TAP1,Tcell_interface,Adenosine triphosphate,0.0025316298608224,0.0009990009990009,35922.367
+Primary_Dermal_Melanoma,Tier2,CD8 T Cell,other,AQP5,AQP5,Tcell_interface,Water,0.0025316298608224,0.0009990009990009,95.55664
+Primary_Dermal_Melanoma,Tier2,CD8 T Cell,other,SLC6A17,SLC6A17,Tcell_interface,Neurotransmitter,0.0025316298608224,0.0009990009990009,2182.427
+Primary_Dermal_Melanoma,Tier2,CD8 T Cell,other,SLC22A5,SLCO2B1,Tcell_interface,Nicotinate,0.0047671626618995,0.0019980019980019,753.3186
+Primary_Dermal_Melanoma,Tier2,CD8 T Cell,other,ABCB1,SLCO2B1,Tcell_interface,Estradiol | Taurocholic acid,0.0047671626618995,0.0019980019980019,3051.1042
+Primary_Dermal_Melanoma,Tier2,CD8 T Cell,other,SCARB1,SCARB1,Tcell_interface,alpha-Tocopherol,0.0067185561691056,0.0029970029970029,930.8636
+Primary_Dermal_Melanoma,Tier2,CD8 T Cell,other,ORAI2,ORAI3,Tcell_interface,Calcium release-activated calcium transport,0.0067185561691056,0.0029970029970029,896.05963
+Primary_Dermal_Melanoma,Tier2,CD8 T Cell,other,SLC3A2,SLC7A5,Tcell_interface,L-Glutamine | L-Leucine,0.0087654281202668,0.0039960039960039,3765.3545
+Primary_Dermal_Melanoma,Tier2,CD8 T Cell,other,SLC29A3,SLC29A3,Tcell_interface,Adenine,0.0168079343337075,0.0079920079920079,236.39516
+Primary_Dermal_Melanoma,Tier2,CD8 T Cell,other,ABCC2,SLCO2B1,Tcell_interface,Taurocholic acid,0.0186209729356937,0.0089910089910089,665.555
+Primary_Dermal_Melanoma,Tier2,CD8 T Cell,other,SLC43A2,SLC43A2,Tcell_interface,L-Cysteine | L-Isoleucine | L-Leucine | L-Methionine | L-Phenylalanine | L-Valine,0.0255975908149821,0.0129870129870129,244.87717
+Primary_Dermal_Melanoma,Tier2,CD8 T Cell,other,SLC16A4,SLCO2B1,Tcell_interface,Acetate,0.0255975908149821,0.0129870129870129,2323.4492
+Primary_Dermal_Melanoma,Tier2,CD8 T Cell,other,ABCC2,ABCC2,Tcell_interface,"17a-Ethynylestradiol | 3',4'-Dihydrodiol | Bilirubin | Cholic acid | Folinic acid | Fusidic Acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid",0.0273028406999698,0.0139860139860139,181.23767
+Primary_Dermal_Melanoma,Tier2,CD8 T Cell,other,CPT1A,CPT1A,Tcell_interface,Fatty acid,0.0309074811444479,0.0159840159840159,1359.6201
+Primary_Dermal_Melanoma,Tier2,CD8 T Cell,other,CLCN3,CLCN3,Tcell_interface,Chloride,0.0409453560138491,0.0219780219780219,5270.861
+Primary_Dermal_Melanoma,Tier2,CD8 T Cell,CD8 T Cell,SLC11A2,SLC11A2,within_Tcell,Iron,0.0025316298608224,0.0009990009990009,2590.4458
+Primary_Dermal_Melanoma,Tier2,CD8 T Cell,CD8 T Cell,TAP1,TAP1,within_Tcell,Adenosine triphosphate,0.0047671626618995,0.0019980019980019,7783.9688
+Primary_Dermal_Melanoma,Tier2,CD8 T Cell,CD8 T Cell,SLC1A5,SLC29A1,within_Tcell,Sodium,0.0067185561691056,0.0029970029970029,457.11688
+Primary_Dermal_Melanoma,Tier2,CD8 T Cell,CD8 T Cell,CD38,CD38,within_Tcell,Adenosine diphosphate ribose,0.0067185561691056,0.0029970029970029,1582.0461
+Primary_Dermal_Melanoma,Tier2,CD8 T Cell,CD8 T Cell,MSR1,MSR1,within_Tcell,Fatty acid,0.0087654281202668,0.0039960039960039,1779.3585
+Primary_Dermal_Melanoma,Tier2,CD8 T Cell,CD8 T Cell,SLC12A2,SLC5A3,within_Tcell,Sodium,0.0186209729356937,0.0089910089910089,238.37717
+Primary_Dermal_Melanoma,Tier2,CD8 T Cell,CD8 T Cell,SLC12A2,SLC29A1,within_Tcell,Sodium,0.0309074811444479,0.0159840159840159,179.2394
+Primary_Dermal_Melanoma,Tier2,CD8 T Cell,CD8 T Cell,SLC38A7,SLC7A5,within_Tcell,L-Glutamine,0.0346069025314308,0.0179820179820179,315.25513
+Primary_Dermal_Melanoma,Tier2,CD8 T Cell,CD8 T Cell,SLC5A3,SLC5A3,within_Tcell,Sodium,0.0392634888047732,0.0209790209790209,586.22906
+Primary_Dermal_Melanoma,Tier2,CD8 T Cell,CD8 T Cell,FOLR2,FOLR2,within_Tcell,Folic acid,0.0444646262828081,0.0239760239760239,108.01788
+Primary_Dermal_Melanoma,Tier2,other,other,SLC2A9,SLC2A9,within_other,D-Glucose,0.0025316298608224,0.0009990009990009,111515.94
+Primary_Dermal_Melanoma,Tier2,other,other,SLC2A1,SLC2A3,within_other,D-Galactose | D-Glucose | D-Mannose | Dehydroascorbic acid | Docosahexaenoic acid,0.0025316298608224,0.0009990009990009,1658.778
+Primary_Dermal_Melanoma,Tier2,other,other,SLC2A1,SLC2A1,within_other,D-Galactose | D-Glucose | D-Mannose | Dehydroascorbic acid | Docosahexaenoic acid | Glucosamine,0.0025316298608224,0.0009990009990009,295025.12
+Primary_Dermal_Melanoma,Tier2,other,other,SLC2A1,SLC2A9,within_other,D-Glucose,0.0025316298608224,0.0009990009990009,72118.08
+Primary_Dermal_Melanoma,Tier2,other,other,SLC2A3,SLC2A3,within_other,D-Galactose | D-Glucose | D-Maltose | D-Mannose | D-Xylose | Dehydroascorbic acid | Docosahexaenoic acid,0.0025316298608224,0.0009990009990009,7517.248
+Primary_Dermal_Melanoma,Tier2,other,other,SLC1A5,SLC1A5,within_other,L-Alanine | L-Asparagine | L-Cysteine | L-Glutamate | L-Glutamine | L-Leucine | L-Serine | L-Threonine | Sodium,0.0025316298608224,0.0009990009990009,84702.87
+Primary_Dermal_Melanoma,Tier2,other,other,SLC7A5,SLC7A5,within_other,L-Arginine | L-Glutamine | L-Histidine | L-Leucine | L-Methionine | L-Phenylalanine | L-Tyrosine,0.0025316298608224,0.0009990009990009,35214.223
+Primary_Dermal_Melanoma,Tier2,other,other,SLC7A7,SLC7A7,within_other,L-Glutamine,0.0025316298608224,0.0009990009990009,203656.02
+Primary_Dermal_Melanoma,Tier2,other,other,SLC3A2,SLC3A2,within_other,Iron | L-Cystine | L-Glutamate | L-Glutamine | L-Leucine | L-Serine,0.0025316298608224,0.0009990009990009,48118.098
+Primary_Dermal_Melanoma,Tier2,other,other,SLC3A2,SLC7A5,within_other,L-Glutamine | L-Leucine,0.0025316298608224,0.0009990009990009,246660.83
+Primary_Dermal_Melanoma,Tier2,other,other,SLC1A5,SLC3A2,within_other,L-Glutamate | L-Glutamine | L-Leucine | L-Serine,0.0025316298608224,0.0009990009990009,17504.752
+Primary_Dermal_Melanoma,Tier2,other,other,SLC1A5,SLC38A7,within_other,L-Glutamine,0.0025316298608224,0.0009990009990009,93664.05
+Primary_Dermal_Melanoma,Tier2,other,other,SLC1A5,SLC7A5,within_other,L-Glutamine | L-Leucine,0.0025316298608224,0.0009990009990009,7452.6353
+Primary_Dermal_Melanoma,Tier2,other,other,SLC38A7,SLC3A2,within_other,L-Glutamine,0.0025316298608224,0.0009990009990009,38745.52
+Primary_Dermal_Melanoma,Tier2,other,other,SLC38A7,SLC38A7,within_other,L-Glutamine,0.0025316298608224,0.0009990009990009,178500.8
+Primary_Dermal_Melanoma,Tier2,other,other,SLC38A7,SLC7A5,within_other,L-Glutamine,0.0025316298608224,0.0009990009990009,31539.82
+Primary_Dermal_Melanoma,Tier2,other,other,SLC43A2,SLC43A2,within_other,L-Cysteine | L-Isoleucine | L-Leucine | L-Methionine | L-Phenylalanine | L-Valine,0.0025316298608224,0.0009990009990009,9074.5205
+Primary_Dermal_Melanoma,Tier2,other,other,SLC1A5,SLC7A11,within_other,L-Cysteine | L-Glutamate,0.0025316298608224,0.0009990009990009,1685.968
+Primary_Dermal_Melanoma,Tier2,other,other,SLC7A11,SLC7A11,within_other,L-Cysteine | L-Cystine | L-Glutamate,0.0025316298608224,0.0009990009990009,219.68878
+Primary_Dermal_Melanoma,Tier2,other,other,SLC16A4,SLC16A4,within_other,Acetate | L-Lactate,0.0025316298608224,0.0009990009990009,74134.43
+Primary_Dermal_Melanoma,Tier2,other,other,SLC16A1,SLC16A1,within_other,4-ene-Valproic acid | Acetate | Butyrate | D-Lactate | Ketone bodies | L-Glutamate | L-Lactate | Nicotinate | Pyruvate | Taurocholic acid | alpha-Ketoisovaleric acid,0.0025316298608224,0.0009990009990009,117928.445
+Primary_Dermal_Melanoma,Tier2,other,other,SLC16A1,SLC16A4,within_other,Acetate | L-Lactate,0.0025316298608224,0.0009990009990009,238332.55
+Primary_Dermal_Melanoma,Tier2,other,other,SLC16A1,SLC22A5,within_other,4-ene-Valproic acid | Nicotinate,0.0025316298608224,0.0009990009990009,23816.104
+Primary_Dermal_Melanoma,Tier2,other,other,SLC22A5,SLCO2B1,within_other,Nicotinate,0.0025316298608224,0.0009990009990009,32815.82
+Primary_Dermal_Melanoma,Tier2,other,other,SLCO2B1,SLCO2B1,within_other,Acetate | Citric acid | Estradiol | Nicotinate | Oxalic acid | Taurocholic acid,0.0025316298608224,0.0009990009990009,208643.67
+Primary_Dermal_Melanoma,Tier2,other,other,SLC22A5,SLC22A5,within_other,4-ene-Valproic acid | Acetyl-L-Carnitine | Choline | Creatine | Dopamine | Histamine | L-Carnitine | Nicotinate | Norepinephrine | O-Desmethylverapamil (D-702) | Sodium,0.0025316298608224,0.0009990009990009,9254.486
+Primary_Dermal_Melanoma,Tier2,other,other,SLC16A1,SLC7A11,within_other,L-Glutamate,0.0025316298608224,0.0009990009990009,53404.812
+Primary_Dermal_Melanoma,Tier2,other,other,SLC16A1,SLC3A2,within_other,L-Glutamate,0.0025316298608224,0.0009990009990009,3185.798
+Primary_Dermal_Melanoma,Tier2,other,other,SLC1A1,SLC1A1,within_other,L-Glutamate,0.0025316298608224,0.0009990009990009,2366.156
+Primary_Dermal_Melanoma,Tier2,other,other,SLC1A1,SLC1A2,within_other,L-Glutamate,0.0025316298608224,0.0009990009990009,108092.77
+Primary_Dermal_Melanoma,Tier2,other,other,SLC16A1,SLC1A5,within_other,L-Glutamate,0.0025316298608224,0.0009990009990009,7549.0034
+Primary_Dermal_Melanoma,Tier2,other,other,SLC30A8,SLC30A8,within_other,Zinc,0.0025316298608224,0.0009990009990009,48981.863
+Primary_Dermal_Melanoma,Tier2,other,other,SLC39A8,SLC39A8,within_other,Cadmium | Manganese | Zinc,0.0025316298608224,0.0009990009990009,179.90938
+Primary_Dermal_Melanoma,Tier2,other,other,CUBN,SLC3A2,within_other,Iron,0.0025316298608224,0.0009990009990009,3588.5828
+Primary_Dermal_Melanoma,Tier2,other,other,CUBN,SLC11A2,within_other,Iron,0.0025316298608224,0.0009990009990009,19622.64
+Primary_Dermal_Melanoma,Tier2,other,other,SLC11A2,SLC3A2,within_other,Iron,0.0025316298608224,0.0009990009990009,176649.55
+Primary_Dermal_Melanoma,Tier2,other,other,SLC11A2,SLC11A2,within_other,Iron,0.0025316298608224,0.0009990009990009,133831.52
+Primary_Dermal_Melanoma,Tier2,other,other,SLC40A1,SLC40A1,within_other,Iron,0.0025316298608224,0.0009990009990009,194926.95
+Primary_Dermal_Melanoma,Tier2,other,other,CUBN,CUBN,within_other,Adenosylcobalamin | Calcidiol | Calcium | Cobalamin | Iron,0.0025316298608224,0.0009990009990009,20086.924
+Primary_Dermal_Melanoma,Tier2,other,other,SLC16A9,SLC16A9,within_other,L-Carnitine,0.0025316298608224,0.0009990009990009,155.18855
+Primary_Dermal_Melanoma,Tier2,other,other,SLC12A2,SLC5A3,within_other,Sodium,0.0025316298608224,0.0009990009990009,53282.215
+Primary_Dermal_Melanoma,Tier2,other,other,SLC12A2,SLC1A5,within_other,Sodium,0.0025316298608224,0.0009990009990009,34409.297
+Primary_Dermal_Melanoma,Tier2,other,other,SLC5A1,SLC5A5,within_other,Sodium | Urea,0.0025316298608224,0.0009990009990009,154.34465
+Primary_Dermal_Melanoma,Tier2,other,other,SLC10A1,SLC10A1,within_other,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 17a-Ethynylestradiol | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Deoxycholic acid | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | Progesterone | Sodium | Sulfolithocholic acid | Taurocholic acid | Testosterone | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0025316298608224,0.0009990009990009,71.91935
+Primary_Dermal_Melanoma,Tier2,other,other,SLC5A3,SLC5A3,within_other,Sodium,0.0025316298608224,0.0009990009990009,98925.04
+Primary_Dermal_Melanoma,Tier2,other,other,SLC12A2,SLC12A2,within_other,Chloride ion | Sodium,0.0025316298608224,0.0009990009990009,32548.338
+Primary_Dermal_Melanoma,Tier2,other,other,SLC22A5,SLC29A1,within_other,Sodium,0.0025316298608224,0.0009990009990009,59639.254
+Primary_Dermal_Melanoma,Tier2,other,other,SLC1A5,SLC29A1,within_other,Sodium,0.0025316298608224,0.0009990009990009,125712.6
+Primary_Dermal_Melanoma,Tier2,other,other,SLC22A5,SLC5A3,within_other,Sodium,0.0025316298608224,0.0009990009990009,28007.486
+Primary_Dermal_Melanoma,Tier2,other,other,SLC1A5,SLC22A5,within_other,Sodium,0.0025316298608224,0.0009990009990009,18344.156
+Primary_Dermal_Melanoma,Tier2,other,other,SLC12A2,SLC29A1,within_other,Sodium,0.0025316298608224,0.0009990009990009,112642.73
+Primary_Dermal_Melanoma,Tier2,other,other,SLC1A5,SLC5A3,within_other,Sodium,0.0025316298608224,0.0009990009990009,62908.074
+Primary_Dermal_Melanoma,Tier2,other,other,SLC6A4,SLC6A4,within_other,N-Desmethylcitalopram | O-Desmethylverapamil (D-702) | Serotonin | Sodium,0.0025316298608224,0.0009990009990009,110.22053
+Primary_Dermal_Melanoma,Tier2,other,other,SLC29A1,SLC29A1,within_other,Adenosine | Cytidine | Ethanol | Guanosine | Inosine | Sodium | Thymidine | Uridine,0.0025316298608224,0.0009990009990009,432736.1
+Primary_Dermal_Melanoma,Tier2,other,other,SLC5A5,SLC5A5,within_other,Sodium | Urea,0.0025316298608224,0.0009990009990009,148.15518
+Primary_Dermal_Melanoma,Tier2,other,other,SLC29A1,SLC5A3,within_other,Sodium,0.0025316298608224,0.0009990009990009,186099.4
+Primary_Dermal_Melanoma,Tier2,other,other,SLC5A1,SLC5A1,within_other,Sodium | Urea,0.0025316298608224,0.0009990009990009,8865.771
+Primary_Dermal_Melanoma,Tier2,other,other,SLC12A2,SLC22A5,within_other,Sodium,0.0025316298608224,0.0009990009990009,16733.547
+Primary_Dermal_Melanoma,Tier2,other,other,SLC16A4,SLCO2B1,within_other,Acetate,0.0025316298608224,0.0009990009990009,144683.14
+Primary_Dermal_Melanoma,Tier2,other,other,CD36,MSR1,within_other,Fatty acid,0.0025316298608224,0.0009990009990009,60356.402
+Primary_Dermal_Melanoma,Tier2,other,other,CD36,CD36,within_other,Cholesterol | Fatty acid | Vitamin D3,0.0025316298608224,0.0009990009990009,134419.58
+Primary_Dermal_Melanoma,Tier2,other,other,CD36,CPT1A,within_other,Fatty acid,0.0025316298608224,0.0009990009990009,21140.537
+Primary_Dermal_Melanoma,Tier2,other,other,MSR1,MSR1,within_other,Fatty acid,0.0025316298608224,0.0009990009990009,172085.8
+Primary_Dermal_Melanoma,Tier2,other,other,CPT1A,MSR1,within_other,Fatty acid,0.0025316298608224,0.0009990009990009,35056.875
+Primary_Dermal_Melanoma,Tier2,other,other,CPT1A,CPT1A,within_other,Fatty acid,0.0025316298608224,0.0009990009990009,18747.47
+Primary_Dermal_Melanoma,Tier2,other,other,SLCO1C1,SLCO1C1,within_other,"3',4'-Dihydrodiol | 4'-Hydroxydiclofenac | Estrone sulfate | Taurocholic acid | Thyroxine",0.0025316298608224,0.0009990009990009,157.72209
+Primary_Dermal_Melanoma,Tier2,other,other,ABCA1,ABCA1,within_other,25-Hydroxycholesterol,0.0025316298608224,0.0009990009990009,224234.95
+Primary_Dermal_Melanoma,Tier2,other,other,ABCB1,ABCB1,within_other,"17a-Ethynylestradiol | 2-Hydroxychlorpropamide | 3',4'-Dihydrodiol | 4'-Hydroxydiclofenac | 4-Hydroxycyclophosphamide | 5-Hydroxyomeprazole | 8-Hydroxycarvedilol | Cholesterol | Cholic acid | Cortisol | E-3179 | Estradiol | Estriol | Glycerol | Hydroxylansoprazole | N-Desmethylcitalopram | N-Desmethyleletriptan | N-Desmethyltamoxifen | N-desmethylimatinib | O-Deethylated candesartan | O-Desmethylverapamil (D-702) | Progesterone | Taurocholic acid | Testosterone",0.0025316298608224,0.0009990009990009,1006.30774
+Primary_Dermal_Melanoma,Tier2,other,other,ABCG2,CD36,within_other,Cholesterol,0.0025316298608224,0.0009990009990009,774.772
+Primary_Dermal_Melanoma,Tier2,other,other,ATP7A,ATP7A,within_other,ADP | Adenosine triphosphate | Phosphate | Water,0.0025316298608224,0.0009990009990009,24743.92
+Primary_Dermal_Melanoma,Tier2,other,other,SLC20A2,SLC20A2,within_other,Phosphate,0.0025316298608224,0.0009990009990009,2508.083
+Primary_Dermal_Melanoma,Tier2,other,other,ATP7A,ATP7B,within_other,ADP | Adenosine triphosphate | Phosphate | Water,0.0025316298608224,0.0009990009990009,2348.4153
+Primary_Dermal_Melanoma,Tier2,other,other,ATP7B,SLC20A2,within_other,Phosphate,0.0025316298608224,0.0009990009990009,893.67694
+Primary_Dermal_Melanoma,Tier2,other,other,ATP7A,SLC20A2,within_other,Phosphate,0.0025316298608224,0.0009990009990009,6024.136
+Primary_Dermal_Melanoma,Tier2,other,other,CHRNA5,CHRNA5,within_other,Ethanol,0.0025316298608224,0.0009990009990009,3924.53
+Primary_Dermal_Melanoma,Tier2,other,other,CHRNA5,SLC29A1,within_other,Ethanol,0.0025316298608224,0.0009990009990009,35990.74
+Primary_Dermal_Melanoma,Tier2,other,other,ABCC3,FOLR2,within_other,Folic acid,0.0025316298608224,0.0009990009990009,858.86926
+Primary_Dermal_Melanoma,Tier2,other,other,ABCC4,ABCC4,within_other,4'-Hydroxydiclofenac | Cholic acid | Cyclic AMP | Folic acid | Folinic acid | Glutathione | Hydroxycelecoxib | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0025316298608224,0.0009990009990009,5994.1865
+Primary_Dermal_Melanoma,Tier2,other,other,FOLR2,FOLR2,within_other,Folic acid,0.0025316298608224,0.0009990009990009,9291.059
+Primary_Dermal_Melanoma,Tier2,other,other,ABCC4,SLC19A1,within_other,Folic acid,0.0025316298608224,0.0009990009990009,1989.5964
+Primary_Dermal_Melanoma,Tier2,other,other,TRPV6,TRPV6,within_other,Heme,0.0025316298608224,0.0009990009990009,97.62745
+Primary_Dermal_Melanoma,Tier2,other,other,LRP1,LRP1,within_other,Heme,0.0025316298608224,0.0009990009990009,111099.41
+Primary_Dermal_Melanoma,Tier2,other,other,SLC29A3,SLC29A3,within_other,Adenine,0.0025316298608224,0.0009990009990009,3285.8005
+Primary_Dermal_Melanoma,Tier2,other,other,SLC15A1,SLC15A1,within_other,2-Hydroxychlorpropamide | Glycyl-glycine | L-Dopa,0.0025316298608224,0.0009990009990009,11636.712
+Primary_Dermal_Melanoma,Tier2,other,other,CD38,CD38,within_other,Adenosine diphosphate ribose,0.0025316298608224,0.0009990009990009,30673.076
+Primary_Dermal_Melanoma,Tier2,other,other,SLC12A6,SLC12A6,within_other,Chloride ion,0.0025316298608224,0.0009990009990009,974.62067
+Primary_Dermal_Melanoma,Tier2,other,other,SCARB1,SCARB1,within_other,alpha-Tocopherol,0.0025316298608224,0.0009990009990009,97196.305
+Primary_Dermal_Melanoma,Tier2,other,other,ABCC2,SLCO2B1,within_other,Taurocholic acid,0.0025316298608224,0.0009990009990009,37068.266
+Primary_Dermal_Melanoma,Tier2,other,other,ABCC1,SLCO2B1,within_other,Taurocholic acid,0.0025316298608224,0.0009990009990009,75145.63
+Primary_Dermal_Melanoma,Tier2,other,other,ABCC1,SLC16A1,within_other,Taurocholic acid,0.0025316298608224,0.0009990009990009,42446.016
+Primary_Dermal_Melanoma,Tier2,other,other,ABCC2,SLC16A1,within_other,Taurocholic acid,0.0025316298608224,0.0009990009990009,29023.266
+Primary_Dermal_Melanoma,Tier2,other,other,ABCB1,ABCC2,within_other,"17a-Ethynylestradiol | 3',4'-Dihydrodiol | Cholic acid | O-Desmethylverapamil (D-702) | Taurocholic acid",0.0025316298608224,0.0009990009990009,1679.6229
+Primary_Dermal_Melanoma,Tier2,other,other,ABCC2,ABCC4,within_other,Cholic acid | Folinic acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0025316298608224,0.0009990009990009,8281.993
+Primary_Dermal_Melanoma,Tier2,other,other,ABCC4,SLC16A1,within_other,Taurocholic acid,0.0025316298608224,0.0009990009990009,18223.363
+Primary_Dermal_Melanoma,Tier2,other,other,ABCC2,ABCC2,within_other,"17a-Ethynylestradiol | 3',4'-Dihydrodiol | Bilirubin | Cholic acid | Folinic acid | Fusidic Acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid",0.0025316298608224,0.0009990009990009,14860.231
+Primary_Dermal_Melanoma,Tier2,other,other,ABCC1,ABCC1,within_other,4'-Hydroxydiclofenac | Cholic acid | Glutathione | Leukotriene C4 | O-Desmethylverapamil (D-702) | Progesterone | Taurocholic acid,0.0025316298608224,0.0009990009990009,38937.406
+Primary_Dermal_Melanoma,Tier2,other,other,ATP7B,TAP1,within_other,Adenosine triphosphate,0.0025316298608224,0.0009990009990009,9647.252
+Primary_Dermal_Melanoma,Tier2,other,other,ATP7A,TAP1,within_other,Adenosine triphosphate,0.0025316298608224,0.0009990009990009,68872.61
+Primary_Dermal_Melanoma,Tier2,other,other,TAP1,TAP1,within_other,Adenosine triphosphate,0.0025316298608224,0.0009990009990009,353351.6
+Primary_Dermal_Melanoma,Tier2,other,other,AQP9,ATP7A,within_other,Water,0.0025316298608224,0.0009990009990009,4643.091
+Primary_Dermal_Melanoma,Tier2,other,other,AQP9,AQP9,within_other,Water,0.0025316298608224,0.0009990009990009,3704.6902
+Primary_Dermal_Melanoma,Tier2,other,other,AQP7,ATP7B,within_other,Water,0.0025316298608224,0.0009990009990009,1418.1761
+Primary_Dermal_Melanoma,Tier2,other,other,AQP5,AQP9,within_other,Water,0.0025316298608224,0.0009990009990009,5232.6353
+Primary_Dermal_Melanoma,Tier2,other,other,AQP5,AQP5,within_other,Water,0.0025316298608224,0.0009990009990009,5633.8706
+Primary_Dermal_Melanoma,Tier2,other,other,ABCC2,SLC22A5,within_other,O-Desmethylverapamil (D-702),0.0025316298608224,0.0009990009990009,11431.17
+Primary_Dermal_Melanoma,Tier2,other,other,ABCC4,SLC22A5,within_other,O-Desmethylverapamil (D-702),0.0025316298608224,0.0009990009990009,6779.444
+Primary_Dermal_Melanoma,Tier2,other,other,SLC24A4,SLC24A4,within_other,Sodium_calcium_potassium exchange,0.0025316298608224,0.0009990009990009,682.74805
+Primary_Dermal_Melanoma,Tier2,other,other,CLCN5,CLCN5,within_other,Chloride,0.0025316298608224,0.0009990009990009,15077.938
+Primary_Dermal_Melanoma,Tier2,other,other,CLCN3,CLCN3,within_other,Chloride,0.0025316298608224,0.0009990009990009,432982.16
+Primary_Dermal_Melanoma,Tier2,other,other,CLCN3,CLCN5,within_other,Chloride,0.0025316298608224,0.0009990009990009,76537.375
+Primary_Dermal_Melanoma,Tier2,other,other,SLC9A1,SLC9A1,within_other,Sodium_hydrogen exchange,0.0025316298608224,0.0009990009990009,11641.21
+Primary_Dermal_Melanoma,Tier2,other,other,SLC6A17,SLC6A17,within_other,Neurotransmitter,0.0025316298608224,0.0009990009990009,312368.03
+Primary_Dermal_Melanoma,Tier2,other,other,SLC6A9,SLC6A9,within_other,Neurotransmitter,0.0025316298608224,0.0009990009990009,6637.619
+Primary_Dermal_Melanoma,Tier2,other,other,SLC6A17,SLC6A9,within_other,Neurotransmitter,0.0025316298608224,0.0009990009990009,23401.928
+Primary_Dermal_Melanoma,Tier2,other,other,SLC26A2,SLC26A2,within_other,Anion exchange,0.0025316298608224,0.0009990009990009,51322.28
+Primary_Dermal_Melanoma,Tier2,other,other,ORAI2,ORAI2,within_other,Calcium release-activated calcium transport,0.0025316298608224,0.0009990009990009,17692.35
+Primary_Dermal_Melanoma,Tier2,other,other,ORAI2,ORAI3,within_other,Calcium release-activated calcium transport,0.0025316298608224,0.0009990009990009,17038.76
+Primary_Dermal_Melanoma,Tier2,other,other,ORAI3,ORAI3,within_other,Calcium release-activated calcium transport,0.0025316298608224,0.0009990009990009,22488.303
+Primary_Dermal_Melanoma,Tier2,other,other,SCNN1G,SCNN1G,within_other,Amiloride-sensitive sodium transport,0.0025316298608224,0.0009990009990009,760.4466
+Primary_Dermal_Melanoma,Tier2,other,other,SCNN1A,SCNN1G,within_other,Amiloride-sensitive sodium transport,0.0025316298608224,0.0009990009990009,16762.045
+Primary_Dermal_Melanoma,Tier2,other,other,SLC23A2,SLC23A2,within_other,Vitamin C,0.0025316298608224,0.0009990009990009,32108.025
+Primary_Dermal_Melanoma,Tier2,other,other,SLC6A1,SLC6A1,within_other,GABA,0.0047671626618995,0.0019980019980019,137.94775
+Primary_Dermal_Melanoma,Tier2,other,other,ABCC4,SLCO2B1,within_other,Taurocholic acid,0.0047671626618995,0.0019980019980019,26899.926
+Primary_Dermal_Melanoma,Tier2,other,other,CLCN4,CLCN4,within_other,Chloride,0.0047671626618995,0.0019980019980019,175.99197
+Primary_Dermal_Melanoma,Tier2,other,other,SLC1A3,SLC1A3,within_other,D-Aspartate | L-Aspartate | L-Glutamate | Malic acid,0.0067185561691056,0.0029970029970029,59.52634
+Primary_Dermal_Melanoma,Tier2,other,other,SCNN1A,SCNN1A,within_other,Amiloride-sensitive sodium transport,0.0067185561691056,0.0029970029970029,38.151657
+Primary_Dermal_Melanoma,Tier2,other,other,AQP5,ATP7A,within_other,Water,0.0087654281202668,0.0039960039960039,472.5157
+Primary_Dermal_Melanoma,Tier2,other,other,ABCC3,SLCO2B1,within_other,Taurocholic acid,0.0128713391871286,0.0059940059940059,4344.2427
+Primary_Dermal_Melanoma,Tier2,other,other,FOLR1,FOLR1,within_other,5-Methyltetrahydrofolic acid | Folic acid,0.0186209729356937,0.0089910089910089,53.522675
+Primary_Dermal_Melanoma,Tier2,other,other,LRP2,LRP2,within_other,Calcidiol,0.0205854751309296,0.0099900099900099,35.71323
+Primary_Dermal_Melanoma,Tier2,other,other,SLC10A1,SLC6A2,within_other,Sodium,0.0221956261560221,0.0109890109890109,37.48331
+Primary_Dermal_Melanoma,Tier2,other,other,SLC3A2,SLC7A11,within_other,L-Cystine | L-Glutamate,0.0255975908149821,0.0129870129870129,77.421104
+Primary_Dermal_Melanoma,Tier2,other,other,SLC5A7,SLC5A7,within_other,Chloride ion | Choline | Sodium,0.0255975908149821,0.0129870129870129,27.20536
+Primary_Dermal_Melanoma,Tier2,other,other,ABCC1,ABCC4,within_other,4'-Hydroxydiclofenac | Cholic acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0363580081889941,0.0189810189810189,12294.429
+Primary_Dermal_Melanoma,Tier2,other,other,SLC19A1,SLC19A1,within_other,Folic acid | Thiamine,0.0392634888047732,0.0209790209790209,726.7012
+Primary_Dermal_Melanoma,Tier3,Effector CD8 T cell,other,SLC38A7,SLC7A5,Tcell_interface,L-Glutamine,0.0034366982090422,0.0009990009990009,1119.5958
+Primary_Dermal_Melanoma,Tier3,Effector CD8 T cell,other,SLCO2B1,SLCO2B1,Tcell_interface,Acetate | Citric acid | Estradiol | Nicotinate | Oxalic acid | Taurocholic acid,0.0034366982090422,0.0009990009990009,3444.8843
+Primary_Dermal_Melanoma,Tier3,Effector CD8 T cell,other,SLC30A8,SLC30A8,Tcell_interface,Zinc,0.0034366982090422,0.0009990009990009,871.5105
+Primary_Dermal_Melanoma,Tier3,Effector CD8 T cell,other,SLC11A2,SLC11A2,Tcell_interface,Iron,0.0034366982090422,0.0009990009990009,6128.162
+Primary_Dermal_Melanoma,Tier3,Effector CD8 T cell,other,SLC29A1,SLC29A1,Tcell_interface,Adenosine | Cytidine | Ethanol | Guanosine | Inosine | Sodium | Thymidine | Uridine,0.0034366982090422,0.0009990009990009,2222.2832
+Primary_Dermal_Melanoma,Tier3,Effector CD8 T cell,other,CD36,MSR1,Tcell_interface,Fatty acid,0.0034366982090422,0.0009990009990009,838.56793
+Primary_Dermal_Melanoma,Tier3,Effector CD8 T cell,other,CD36,CD36,Tcell_interface,Cholesterol | Fatty acid | Vitamin D3,0.0034366982090422,0.0009990009990009,421.63693
+Primary_Dermal_Melanoma,Tier3,Effector CD8 T cell,other,MSR1,MSR1,Tcell_interface,Fatty acid,0.0034366982090422,0.0009990009990009,4636.2173
+Primary_Dermal_Melanoma,Tier3,Effector CD8 T cell,other,CPT1A,MSR1,Tcell_interface,Fatty acid,0.0034366982090422,0.0009990009990009,1789.9993
+Primary_Dermal_Melanoma,Tier3,Effector CD8 T cell,other,ABCA1,ABCA1,Tcell_interface,25-Hydroxycholesterol,0.0034366982090422,0.0009990009990009,2719.146
+Primary_Dermal_Melanoma,Tier3,Effector CD8 T cell,other,LRP1,LRP1,Tcell_interface,Heme,0.0034366982090422,0.0009990009990009,1174.195
+Primary_Dermal_Melanoma,Tier3,Effector CD8 T cell,other,CD38,CD38,Tcell_interface,Adenosine diphosphate ribose,0.0034366982090422,0.0009990009990009,1574.0225
+Primary_Dermal_Melanoma,Tier3,Effector CD8 T cell,other,TAP1,TAP1,Tcell_interface,Adenosine triphosphate,0.0034366982090422,0.0009990009990009,14748.266
+Primary_Dermal_Melanoma,Tier3,Effector CD8 T cell,other,SLC6A17,SLC6A17,Tcell_interface,Neurotransmitter,0.0034366982090422,0.0009990009990009,816.0747
+Primary_Dermal_Melanoma,Tier3,Effector CD8 T cell,other,ORAI2,ORAI3,Tcell_interface,Calcium release-activated calcium transport,0.0034366982090422,0.0009990009990009,493.07077
+Primary_Dermal_Melanoma,Tier3,Gamma delta T cell,other,SLC38A7,SLC7A5,Tcell_interface,L-Glutamine,0.0034366982090422,0.0009990009990009,754.1305
+Primary_Dermal_Melanoma,Tier3,Gamma delta T cell,other,SLCO2B1,SLCO2B1,Tcell_interface,Acetate | Citric acid | Estradiol | Nicotinate | Oxalic acid | Taurocholic acid,0.0034366982090422,0.0009990009990009,2565.2322
+Primary_Dermal_Melanoma,Tier3,Gamma delta T cell,other,SLC11A2,SLC11A2,Tcell_interface,Iron,0.0034366982090422,0.0009990009990009,5013.1895
+Primary_Dermal_Melanoma,Tier3,Gamma delta T cell,other,CD36,MSR1,Tcell_interface,Fatty acid,0.0034366982090422,0.0009990009990009,836.33856
+Primary_Dermal_Melanoma,Tier3,Gamma delta T cell,other,CD36,CD36,Tcell_interface,Cholesterol | Fatty acid | Vitamin D3,0.0034366982090422,0.0009990009990009,695.0973
+Primary_Dermal_Melanoma,Tier3,Gamma delta T cell,other,CD36,CPT1A,Tcell_interface,Fatty acid,0.0034366982090422,0.0009990009990009,373.432
+Primary_Dermal_Melanoma,Tier3,Gamma delta T cell,other,MSR1,MSR1,Tcell_interface,Fatty acid,0.0034366982090422,0.0009990009990009,4896.9365
+Primary_Dermal_Melanoma,Tier3,Gamma delta T cell,other,CPT1A,MSR1,Tcell_interface,Fatty acid,0.0034366982090422,0.0009990009990009,1590.7188
+Primary_Dermal_Melanoma,Tier3,Gamma delta T cell,other,ABCA1,ABCA1,Tcell_interface,25-Hydroxycholesterol,0.0034366982090422,0.0009990009990009,2154.5032
+Primary_Dermal_Melanoma,Tier3,Gamma delta T cell,other,LRP1,LRP1,Tcell_interface,Heme,0.0034366982090422,0.0009990009990009,1081.0017
+Primary_Dermal_Melanoma,Tier3,Gamma delta T cell,other,CD38,CD38,Tcell_interface,Adenosine diphosphate ribose,0.0034366982090422,0.0009990009990009,1178.7914
+Primary_Dermal_Melanoma,Tier3,Gamma delta T cell,other,TAP1,TAP1,Tcell_interface,Adenosine triphosphate,0.0034366982090422,0.0009990009990009,7183.5386
+Primary_Dermal_Melanoma,Tier3,Gamma delta T cell,other,SLC6A17,SLC6A17,Tcell_interface,Neurotransmitter,0.0034366982090422,0.0009990009990009,579.3525
+Primary_Dermal_Melanoma,Tier3,ISG CD8 T cell,Proliferating CD8 T cell,SLC11A2,SLC11A2,Tcell_interface,Iron,0.0034366982090422,0.0009990009990009,62.212635
+Primary_Dermal_Melanoma,Tier3,ISG CD8 T cell,other,SLC11A2,SLC11A2,Tcell_interface,Iron,0.0034366982090422,0.0009990009990009,561.00586
+Primary_Dermal_Melanoma,Tier3,ISG CD8 T cell,other,TAP1,TAP1,Tcell_interface,Adenosine triphosphate,0.0034366982090422,0.0009990009990009,1168.2379
+Primary_Dermal_Melanoma,Tier3,Proliferating CD8 T cell,other,SLC38A7,SLC7A5,Tcell_interface,L-Glutamine,0.0034366982090422,0.0009990009990009,605.9048
+Primary_Dermal_Melanoma,Tier3,Proliferating CD8 T cell,other,SLC16A1,SLC16A4,Tcell_interface,Acetate | L-Lactate,0.0034366982090422,0.0009990009990009,885.8167
+Primary_Dermal_Melanoma,Tier3,Proliferating CD8 T cell,other,SLC22A5,SLCO2B1,Tcell_interface,Nicotinate,0.0034366982090422,0.0009990009990009,298.7011
+Primary_Dermal_Melanoma,Tier3,Proliferating CD8 T cell,other,SLCO2B1,SLCO2B1,Tcell_interface,Acetate | Citric acid | Estradiol | Nicotinate | Oxalic acid | Taurocholic acid,0.0034366982090422,0.0009990009990009,1998.1481
+Primary_Dermal_Melanoma,Tier3,Proliferating CD8 T cell,other,SLC11A2,SLC11A2,Tcell_interface,Iron,0.0034366982090422,0.0009990009990009,2413.655
+Primary_Dermal_Melanoma,Tier3,Proliferating CD8 T cell,other,CD36,MSR1,Tcell_interface,Fatty acid,0.0034366982090422,0.0009990009990009,595.1428
+Primary_Dermal_Melanoma,Tier3,Proliferating CD8 T cell,other,CD36,CD36,Tcell_interface,Cholesterol | Fatty acid | Vitamin D3,0.0034366982090422,0.0009990009990009,521.7066
+Primary_Dermal_Melanoma,Tier3,Proliferating CD8 T cell,other,MSR1,MSR1,Tcell_interface,Fatty acid,0.0034366982090422,0.0009990009990009,3608.8025
+Primary_Dermal_Melanoma,Tier3,Proliferating CD8 T cell,other,CPT1A,MSR1,Tcell_interface,Fatty acid,0.0034366982090422,0.0009990009990009,1654.952
+Primary_Dermal_Melanoma,Tier3,Proliferating CD8 T cell,other,SLC29A3,SLC29A3,Tcell_interface,Adenine,0.0034366982090422,0.0009990009990009,117.21862
+Primary_Dermal_Melanoma,Tier3,Proliferating CD8 T cell,other,CD38,CD38,Tcell_interface,Adenosine diphosphate ribose,0.0034366982090422,0.0009990009990009,1652.6101
+Primary_Dermal_Melanoma,Tier3,Proliferating CD8 T cell,other,ATP7A,TAP1,Tcell_interface,Adenosine triphosphate,0.0034366982090422,0.0009990009990009,1203.2722
+Primary_Dermal_Melanoma,Tier3,Proliferating CD8 T cell,other,TAP1,TAP1,Tcell_interface,Adenosine triphosphate,0.0034366982090422,0.0009990009990009,12822.324
+Primary_Dermal_Melanoma,Tier3,Proliferating CD8 T cell,other,CLCN3,CLCN3,Tcell_interface,Chloride,0.0034366982090422,0.0009990009990009,2098.9817
+Primary_Dermal_Melanoma,Tier3,Proliferating CD8 T cell,other,SLC6A17,SLC6A17,Tcell_interface,Neurotransmitter,0.0034366982090422,0.0009990009990009,748.0346
+Primary_Dermal_Melanoma,Tier3,Proliferating CD8 T cell,other,ABCA1,ABCA1,Tcell_interface,25-Hydroxycholesterol,0.0064289023279559,0.0019980019980019,1150.953
+Primary_Dermal_Melanoma,Tier3,Proliferating CD8 T cell,other,CLCN3,CLCN5,Tcell_interface,Chloride,0.0064289023279559,0.0019980019980019,455.9426
+Primary_Dermal_Melanoma,Tier3,Effector CD8 T cell,ISG CD8 T cell,SLC11A2,SLC11A2,Tcell_interface,Iron,0.0091938137050919,0.0029970029970029,103.02728
+Primary_Dermal_Melanoma,Tier3,Effector CD8 T cell,Proliferating CD8 T cell,ABCC4,SLC16A1,Tcell_interface,Taurocholic acid,0.0091938137050919,0.0029970029970029,34.70428
+Primary_Dermal_Melanoma,Tier3,Effector CD8 T cell,other,ABCC2,SLCO2B1,Tcell_interface,Taurocholic acid,0.0091938137050919,0.0029970029970029,413.8322
+Primary_Dermal_Melanoma,Tier3,Gamma delta T cell,Proliferating CD8 T cell,MSR1,MSR1,Tcell_interface,Fatty acid,0.0091938137050919,0.0029970029970029,266.75772
+Primary_Dermal_Melanoma,Tier3,Proliferating CD8 T cell,other,SCARB1,SCARB1,Tcell_interface,alpha-Tocopherol,0.0091938137050919,0.0029970029970029,390.8884
+Primary_Dermal_Melanoma,Tier3,Effector CD8 T cell,other,FOLR2,FOLR2,Tcell_interface,Folic acid,0.0115958010694852,0.0039960039960039,184.8577
+Primary_Dermal_Melanoma,Tier3,Effector CD8 T cell,other,ABCC1,SLCO2B1,Tcell_interface,Taurocholic acid,0.0115958010694852,0.0039960039960039,2834.156
+Primary_Dermal_Melanoma,Tier3,Gamma delta T cell,Proliferating CD8 T cell,SLC1A5,SLC5A3,Tcell_interface,Sodium,0.0115958010694852,0.0039960039960039,76.95405
+Primary_Dermal_Melanoma,Tier3,Gamma delta T cell,other,SLC3A2,SLC7A5,Tcell_interface,L-Glutamine | L-Leucine,0.0115958010694852,0.0039960039960039,673.1076
+Primary_Dermal_Melanoma,Tier3,Gamma delta T cell,other,SLC16A1,SLC16A4,Tcell_interface,Acetate | L-Lactate,0.0115958010694852,0.0039960039960039,575.0834
+Primary_Dermal_Melanoma,Tier3,ISG CD8 T cell,Proliferating CD8 T cell,SLC23A2,SLC23A2,Tcell_interface,Vitamin C,0.0115958010694852,0.0039960039960039,15.046918
+Primary_Dermal_Melanoma,Tier3,Proliferating CD8 T cell,other,CUBN,SLC11A2,Tcell_interface,Iron,0.0115958010694852,0.0039960039960039,120.347046
+Primary_Dermal_Melanoma,Tier3,Effector CD8 T cell,other,SLC3A2,SLC7A5,Tcell_interface,L-Glutamine | L-Leucine,0.0139777917555695,0.0049950049950049,1447.2018
+Primary_Dermal_Melanoma,Tier3,ISG CD8 T cell,Proliferating CD8 T cell,SLC2A1,SLC2A1,Tcell_interface,D-Galactose | D-Glucose | D-Mannose | Dehydroascorbic acid | Docosahexaenoic acid | Glucosamine,0.0139777917555695,0.0049950049950049,36.023426
+Primary_Dermal_Melanoma,Tier3,ISG CD8 T cell,other,CD38,CD38,Tcell_interface,Adenosine diphosphate ribose,0.0139777917555695,0.0049950049950049,142.19958
+Primary_Dermal_Melanoma,Tier3,Proliferating CD8 T cell,other,CD36,CPT1A,Tcell_interface,Fatty acid,0.0139777917555695,0.0049950049950049,171.10411
+Primary_Dermal_Melanoma,Tier3,Proliferating CD8 T cell,other,FOLR2,FOLR2,Tcell_interface,Folic acid,0.0139777917555695,0.0049950049950049,100.167366
+Primary_Dermal_Melanoma,Tier3,Effector CD8 T cell,Gamma delta T cell,SLC43A2,SLC43A2,Tcell_interface,L-Cysteine | L-Isoleucine | L-Leucine | L-Methionine | L-Phenylalanine | L-Valine,0.0162603354092715,0.0059940059940059,25.290766
+Primary_Dermal_Melanoma,Tier3,Gamma delta T cell,Proliferating CD8 T cell,SLC38A7,SLC7A5,Tcell_interface,L-Glutamine,0.0162603354092715,0.0059940059940059,59.126633
+Primary_Dermal_Melanoma,Tier3,Proliferating CD8 T cell,other,ABCB1,SLCO2B1,Tcell_interface,Estradiol | Taurocholic acid,0.0162603354092715,0.0059940059940059,695.3302
+Primary_Dermal_Melanoma,Tier3,Proliferating CD8 T cell,other,AQP5,AQP5,Tcell_interface,Water,0.0162603354092715,0.0059940059940059,32.710052
+Primary_Dermal_Melanoma,Tier3,Effector CD8 T cell,Gamma delta T cell,SLC11A2,SLC11A2,Tcell_interface,Iron,0.0185510198514099,0.0069930069930069,309.40958
+Primary_Dermal_Melanoma,Tier3,Gamma delta T cell,other,SLC30A8,SLC30A8,Tcell_interface,Zinc,0.0185510198514099,0.0069930069930069,334.48038
+Primary_Dermal_Melanoma,Tier3,Effector CD8 T cell,other,ABCC2,ABCC2,Tcell_interface,"17a-Ethynylestradiol | 3',4'-Dihydrodiol | Bilirubin | Cholic acid | Folinic acid | Fusidic Acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid",0.0206375902578434,0.0079920079920079,118.794464
+Primary_Dermal_Melanoma,Tier3,ISG CD8 T cell,Proliferating CD8 T cell,ABCB1,SLCO2B1,Tcell_interface,Estradiol | Taurocholic acid,0.0206375902578434,0.0079920079920079,17.437794
+Primary_Dermal_Melanoma,Tier3,Effector CD8 T cell,Proliferating CD8 T cell,SLC38A7,SLC38A7,Tcell_interface,L-Glutamine,0.0226720127832612,0.0089910089910089,79.37197
+Primary_Dermal_Melanoma,Tier3,Effector CD8 T cell,other,SLC16A1,SLC16A4,Tcell_interface,Acetate | L-Lactate,0.0226720127832612,0.0089910089910089,1001.55255
+Primary_Dermal_Melanoma,Tier3,ISG CD8 T cell,other,ATP7A,ATP7A,Tcell_interface,ADP | Adenosine triphosphate | Phosphate | Water,0.0226720127832612,0.0089910089910089,27.694946
+Primary_Dermal_Melanoma,Tier3,Proliferating CD8 T cell,other,ATP7A,SLC20A2,Tcell_interface,Phosphate,0.0226720127832612,0.0089910089910089,104.224686
+Primary_Dermal_Melanoma,Tier3,Effector CD8 T cell,other,ABCB1,SLCO2B1,Tcell_interface,Estradiol | Taurocholic acid,0.0246428299632652,0.0099900099900099,1345.2656
+Primary_Dermal_Melanoma,Tier3,Proliferating CD8 T cell,other,ABCB1,ABCB1,Tcell_interface,"17a-Ethynylestradiol | 2-Hydroxychlorpropamide | 3',4'-Dihydrodiol | 4'-Hydroxydiclofenac | 4-Hydroxycyclophosphamide | 5-Hydroxyomeprazole | 8-Hydroxycarvedilol | Cholesterol | Cholic acid | Cortisol | E-3179 | Estradiol | Estriol | Glycerol | Hydroxylansoprazole | N-Desmethylcitalopram | N-Desmethyleletriptan | N-Desmethyltamoxifen | N-desmethylimatinib | O-Deethylated candesartan | O-Desmethylverapamil (D-702) | Progesterone | Taurocholic acid | Testosterone",0.0246428299632652,0.0099900099900099,56.446156
+Primary_Dermal_Melanoma,Tier3,Effector CD8 T cell,Proliferating CD8 T cell,TAP1,TAP1,Tcell_interface,Adenosine triphosphate,0.0263117164525615,0.0109890109890109,886.4376
+Primary_Dermal_Melanoma,Tier3,Gamma delta T cell,Proliferating CD8 T cell,ABCC3,SLCO2B1,Tcell_interface,Taurocholic acid,0.0263117164525615,0.0109890109890109,14.27513
+Primary_Dermal_Melanoma,Tier3,ISG CD8 T cell,other,SLC16A1,SLC1A5,Tcell_interface,L-Glutamate,0.0263117164525615,0.0109890109890109,27.784294
+Primary_Dermal_Melanoma,Tier3,ISG CD8 T cell,other,ABCC1,ABCC4,Tcell_interface,4'-Hydroxydiclofenac | Cholic acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0263117164525615,0.0109890109890109,55.574654
+Primary_Dermal_Melanoma,Tier3,Effector CD8 T cell,Gamma delta T cell,SLC1A5,SLC38A7,Tcell_interface,L-Glutamine,0.0284036520970318,0.0119880119880119,62.179035
+Primary_Dermal_Melanoma,Tier3,Effector CD8 T cell,other,ATP7A,TAP1,Tcell_interface,Adenosine triphosphate,0.0284036520970318,0.0119880119880119,1334.301
+Primary_Dermal_Melanoma,Tier3,Effector CD8 T cell,other,AQP5,AQP5,Tcell_interface,Water,0.0322754168908015,0.0139860139860139,38.10615
+Primary_Dermal_Melanoma,Tier3,Gamma delta T cell,ISG CD8 T cell,LRP1,LRP1,Tcell_interface,Heme,0.0322754168908015,0.0139860139860139,17.060196
+Primary_Dermal_Melanoma,Tier3,Effector CD8 T cell,Gamma delta T cell,SLC12A2,SLC29A1,Tcell_interface,Sodium,0.0342322850721506,0.0149850149850149,42.021797
+Primary_Dermal_Melanoma,Tier3,Gamma delta T cell,Proliferating CD8 T cell,SLC1A5,SLC29A1,Tcell_interface,Sodium,0.0378224395691644,0.0169830169830169,54.381557
+Primary_Dermal_Melanoma,Tier3,Gamma delta T cell,other,SLC1A1,SLC1A1,Tcell_interface,L-Glutamate,0.0378224395691644,0.0169830169830169,25.898935
+Primary_Dermal_Melanoma,Tier3,Effector CD8 T cell,Proliferating CD8 T cell,CD38,CD38,Tcell_interface,Adenosine diphosphate ribose,0.0395720784070298,0.0179820179820179,205.2061
+Primary_Dermal_Melanoma,Tier3,Effector CD8 T cell,other,CHRNA5,SLC29A1,Tcell_interface,Ethanol,0.0429044639570955,0.0199800199800199,278.77893
+Primary_Dermal_Melanoma,Tier3,ISG CD8 T cell,other,ABCC4,SLCO2B1,Tcell_interface,Taurocholic acid,0.0429044639570955,0.0199800199800199,62.640224
+Primary_Dermal_Melanoma,Tier3,Proliferating CD8 T cell,other,SLC29A1,SLC29A1,Tcell_interface,Adenosine | Cytidine | Ethanol | Guanosine | Inosine | Sodium | Thymidine | Uridine,0.0429044639570955,0.0199800199800199,2159.3562
+Primary_Dermal_Melanoma,Tier3,Proliferating CD8 T cell,other,SLC16A4,SLCO2B1,Tcell_interface,Acetate,0.0429044639570955,0.0199800199800199,730.96497
+Primary_Dermal_Melanoma,Tier3,Effector CD8 T cell,ISG CD8 T cell,CD36,MSR1,Tcell_interface,Fatty acid,0.0443035225643921,0.0209790209790209,19.459715
+Primary_Dermal_Melanoma,Tier3,ISG CD8 T cell,other,SLC22A5,SLC22A5,Tcell_interface,4-ene-Valproic acid | Acetyl-L-Carnitine | Choline | Creatine | Dopamine | Histamine | L-Carnitine | Nicotinate | Norepinephrine | O-Desmethylverapamil (D-702) | Sodium,0.0443035225643921,0.0209790209790209,21.520985
+Primary_Dermal_Melanoma,Tier3,Effector CD8 T cell,other,SLC22A5,SLCO2B1,Tcell_interface,Nicotinate,0.046079306099861,0.0219780219780219,291.0647
+Primary_Dermal_Melanoma,Tier3,Gamma delta T cell,ISG CD8 T cell,CD38,CD38,Tcell_interface,Adenosine diphosphate ribose,0.046079306099861,0.0219780219780219,38.83587
+Primary_Dermal_Melanoma,Tier3,Proliferating CD8 T cell,other,SLC2A3,SLC2A3,Tcell_interface,D-Galactose | D-Glucose | D-Maltose | D-Mannose | D-Xylose | Dehydroascorbic acid | Docosahexaenoic acid,0.04925588007159,0.0239760239760239,114.493546
+Primary_Dermal_Melanoma,Tier3,Effector CD8 T cell,Effector CD8 T cell,SLC11A2,SLC11A2,within_Tcell,Iron,0.0064289023279559,0.0019980019980019,517.0608
+Primary_Dermal_Melanoma,Tier3,Proliferating CD8 T cell,Proliferating CD8 T cell,SLC11A2,SLC11A2,within_Tcell,Iron,0.0162603354092715,0.0059940059940059,264.16467
+Primary_Dermal_Melanoma,Tier3,Gamma delta T cell,Gamma delta T cell,FOLR2,FOLR2,within_Tcell,Folic acid,0.0206375902578434,0.0079920079920079,68.31418
+Primary_Dermal_Melanoma,Tier3,Gamma delta T cell,Gamma delta T cell,SLC12A2,SLC29A1,within_Tcell,Sodium,0.0246428299632652,0.0099900099900099,34.766857
+Primary_Dermal_Melanoma,Tier3,Gamma delta T cell,Gamma delta T cell,SLC11A2,SLC11A2,within_Tcell,Iron,0.0263117164525615,0.0109890109890109,295.57617
+Primary_Dermal_Melanoma,Tier3,Effector CD8 T cell,Effector CD8 T cell,SLC6A17,SLC6A17,within_Tcell,Neurotransmitter,0.0303476592136386,0.0129870129870129,47.899296
+Primary_Dermal_Melanoma,Tier3,Effector CD8 T cell,Effector CD8 T cell,SLC3A2,SLC7A5,within_Tcell,L-Glutamine | L-Leucine,0.0342322850721506,0.0149850149850149,97.81152
+Primary_Dermal_Melanoma,Tier3,Gamma delta T cell,Gamma delta T cell,SLC6A17,SLC6A17,within_Tcell,Neurotransmitter,0.0342322850721506,0.0149850149850149,33.871655
+Primary_Dermal_Melanoma,Tier3,Proliferating CD8 T cell,Proliferating CD8 T cell,SLC1A5,SLC29A1,within_Tcell,Sodium,0.0342322850721506,0.0149850149850149,191.6359
+Primary_Dermal_Melanoma,Tier3,Proliferating CD8 T cell,Proliferating CD8 T cell,SLC12A2,SLC5A3,within_Tcell,Sodium,0.0412806809395295,0.0189810189810189,92.49203
+Primary_Dermal_Melanoma,Tier3,Proliferating CD8 T cell,Proliferating CD8 T cell,ABCC1,SLCO2B1,within_Tcell,Taurocholic acid,0.0412806809395295,0.0189810189810189,165.326
+Primary_Dermal_Melanoma,Tier3,other,other,SLC2A9,SLC2A9,within_other,D-Glucose,0.0034366982090422,0.0009990009990009,111515.94
+Primary_Dermal_Melanoma,Tier3,other,other,SLC2A1,SLC2A3,within_other,D-Galactose | D-Glucose | D-Mannose | Dehydroascorbic acid | Docosahexaenoic acid,0.0034366982090422,0.0009990009990009,1658.778
+Primary_Dermal_Melanoma,Tier3,other,other,SLC2A1,SLC2A1,within_other,D-Galactose | D-Glucose | D-Mannose | Dehydroascorbic acid | Docosahexaenoic acid | Glucosamine,0.0034366982090422,0.0009990009990009,295025.12
+Primary_Dermal_Melanoma,Tier3,other,other,SLC2A1,SLC2A9,within_other,D-Glucose,0.0034366982090422,0.0009990009990009,72118.08
+Primary_Dermal_Melanoma,Tier3,other,other,SLC2A3,SLC2A3,within_other,D-Galactose | D-Glucose | D-Maltose | D-Mannose | D-Xylose | Dehydroascorbic acid | Docosahexaenoic acid,0.0034366982090422,0.0009990009990009,7517.248
+Primary_Dermal_Melanoma,Tier3,other,other,SLC1A5,SLC1A5,within_other,L-Alanine | L-Asparagine | L-Cysteine | L-Glutamate | L-Glutamine | L-Leucine | L-Serine | L-Threonine | Sodium,0.0034366982090422,0.0009990009990009,84702.87
+Primary_Dermal_Melanoma,Tier3,other,other,SLC7A5,SLC7A5,within_other,L-Arginine | L-Glutamine | L-Histidine | L-Leucine | L-Methionine | L-Phenylalanine | L-Tyrosine,0.0034366982090422,0.0009990009990009,35214.223
+Primary_Dermal_Melanoma,Tier3,other,other,SLC7A7,SLC7A7,within_other,L-Glutamine,0.0034366982090422,0.0009990009990009,203656.02
+Primary_Dermal_Melanoma,Tier3,other,other,SLC3A2,SLC3A2,within_other,Iron | L-Cystine | L-Glutamate | L-Glutamine | L-Leucine | L-Serine,0.0034366982090422,0.0009990009990009,48118.098
+Primary_Dermal_Melanoma,Tier3,other,other,SLC3A2,SLC7A5,within_other,L-Glutamine | L-Leucine,0.0034366982090422,0.0009990009990009,246660.83
+Primary_Dermal_Melanoma,Tier3,other,other,SLC1A5,SLC3A2,within_other,L-Glutamate | L-Glutamine | L-Leucine | L-Serine,0.0034366982090422,0.0009990009990009,17504.752
+Primary_Dermal_Melanoma,Tier3,other,other,SLC1A5,SLC38A7,within_other,L-Glutamine,0.0034366982090422,0.0009990009990009,93664.05
+Primary_Dermal_Melanoma,Tier3,other,other,SLC1A5,SLC7A5,within_other,L-Glutamine | L-Leucine,0.0034366982090422,0.0009990009990009,7452.6353
+Primary_Dermal_Melanoma,Tier3,other,other,SLC38A7,SLC3A2,within_other,L-Glutamine,0.0034366982090422,0.0009990009990009,38745.52
+Primary_Dermal_Melanoma,Tier3,other,other,SLC38A7,SLC38A7,within_other,L-Glutamine,0.0034366982090422,0.0009990009990009,178500.8
+Primary_Dermal_Melanoma,Tier3,other,other,SLC38A7,SLC7A5,within_other,L-Glutamine,0.0034366982090422,0.0009990009990009,31539.82
+Primary_Dermal_Melanoma,Tier3,other,other,SLC43A2,SLC43A2,within_other,L-Cysteine | L-Isoleucine | L-Leucine | L-Methionine | L-Phenylalanine | L-Valine,0.0034366982090422,0.0009990009990009,9074.5205
+Primary_Dermal_Melanoma,Tier3,other,other,SLC1A5,SLC7A11,within_other,L-Cysteine | L-Glutamate,0.0034366982090422,0.0009990009990009,1685.968
+Primary_Dermal_Melanoma,Tier3,other,other,SLC7A11,SLC7A11,within_other,L-Cysteine | L-Cystine | L-Glutamate,0.0034366982090422,0.0009990009990009,219.68878
+Primary_Dermal_Melanoma,Tier3,other,other,SLC16A4,SLC16A4,within_other,Acetate | L-Lactate,0.0034366982090422,0.0009990009990009,74134.43
+Primary_Dermal_Melanoma,Tier3,other,other,SLC16A1,SLC16A1,within_other,4-ene-Valproic acid | Acetate | Butyrate | D-Lactate | Ketone bodies | L-Glutamate | L-Lactate | Nicotinate | Pyruvate | Taurocholic acid | alpha-Ketoisovaleric acid,0.0034366982090422,0.0009990009990009,117928.445
+Primary_Dermal_Melanoma,Tier3,other,other,SLC16A1,SLC16A4,within_other,Acetate | L-Lactate,0.0034366982090422,0.0009990009990009,238332.55
+Primary_Dermal_Melanoma,Tier3,other,other,SLC16A1,SLC22A5,within_other,4-ene-Valproic acid | Nicotinate,0.0034366982090422,0.0009990009990009,23816.104
+Primary_Dermal_Melanoma,Tier3,other,other,SLC22A5,SLCO2B1,within_other,Nicotinate,0.0034366982090422,0.0009990009990009,32815.82
+Primary_Dermal_Melanoma,Tier3,other,other,SLCO2B1,SLCO2B1,within_other,Acetate | Citric acid | Estradiol | Nicotinate | Oxalic acid | Taurocholic acid,0.0034366982090422,0.0009990009990009,208643.67
+Primary_Dermal_Melanoma,Tier3,other,other,SLC22A5,SLC22A5,within_other,4-ene-Valproic acid | Acetyl-L-Carnitine | Choline | Creatine | Dopamine | Histamine | L-Carnitine | Nicotinate | Norepinephrine | O-Desmethylverapamil (D-702) | Sodium,0.0034366982090422,0.0009990009990009,9254.486
+Primary_Dermal_Melanoma,Tier3,other,other,SLC16A1,SLC7A11,within_other,L-Glutamate,0.0034366982090422,0.0009990009990009,53404.812
+Primary_Dermal_Melanoma,Tier3,other,other,SLC16A1,SLC3A2,within_other,L-Glutamate,0.0034366982090422,0.0009990009990009,3185.798
+Primary_Dermal_Melanoma,Tier3,other,other,SLC1A1,SLC1A1,within_other,L-Glutamate,0.0034366982090422,0.0009990009990009,2366.156
+Primary_Dermal_Melanoma,Tier3,other,other,SLC1A1,SLC1A2,within_other,L-Glutamate,0.0034366982090422,0.0009990009990009,108092.77
+Primary_Dermal_Melanoma,Tier3,other,other,SLC16A1,SLC1A5,within_other,L-Glutamate,0.0034366982090422,0.0009990009990009,7549.0034
+Primary_Dermal_Melanoma,Tier3,other,other,SLC30A8,SLC30A8,within_other,Zinc,0.0034366982090422,0.0009990009990009,48981.863
+Primary_Dermal_Melanoma,Tier3,other,other,SLC39A8,SLC39A8,within_other,Cadmium | Manganese | Zinc,0.0034366982090422,0.0009990009990009,179.90938
+Primary_Dermal_Melanoma,Tier3,other,other,CUBN,SLC3A2,within_other,Iron,0.0034366982090422,0.0009990009990009,3588.5828
+Primary_Dermal_Melanoma,Tier3,other,other,CUBN,SLC11A2,within_other,Iron,0.0034366982090422,0.0009990009990009,19622.64
+Primary_Dermal_Melanoma,Tier3,other,other,SLC11A2,SLC3A2,within_other,Iron,0.0034366982090422,0.0009990009990009,176649.55
+Primary_Dermal_Melanoma,Tier3,other,other,SLC11A2,SLC11A2,within_other,Iron,0.0034366982090422,0.0009990009990009,133831.52
+Primary_Dermal_Melanoma,Tier3,other,other,SLC40A1,SLC40A1,within_other,Iron,0.0034366982090422,0.0009990009990009,194926.95
+Primary_Dermal_Melanoma,Tier3,other,other,CUBN,CUBN,within_other,Adenosylcobalamin | Calcidiol | Calcium | Cobalamin | Iron,0.0034366982090422,0.0009990009990009,20086.924
+Primary_Dermal_Melanoma,Tier3,other,other,SLC16A9,SLC16A9,within_other,L-Carnitine,0.0034366982090422,0.0009990009990009,155.18855
+Primary_Dermal_Melanoma,Tier3,other,other,SLC12A2,SLC5A3,within_other,Sodium,0.0034366982090422,0.0009990009990009,53282.215
+Primary_Dermal_Melanoma,Tier3,other,other,SLC12A2,SLC1A5,within_other,Sodium,0.0034366982090422,0.0009990009990009,34409.297
+Primary_Dermal_Melanoma,Tier3,other,other,SLC5A1,SLC5A5,within_other,Sodium | Urea,0.0034366982090422,0.0009990009990009,154.34465
+Primary_Dermal_Melanoma,Tier3,other,other,SLC5A3,SLC5A3,within_other,Sodium,0.0034366982090422,0.0009990009990009,98925.04
+Primary_Dermal_Melanoma,Tier3,other,other,SLC12A2,SLC12A2,within_other,Chloride ion | Sodium,0.0034366982090422,0.0009990009990009,32548.338
+Primary_Dermal_Melanoma,Tier3,other,other,SLC22A5,SLC29A1,within_other,Sodium,0.0034366982090422,0.0009990009990009,59639.254
+Primary_Dermal_Melanoma,Tier3,other,other,SLC1A5,SLC29A1,within_other,Sodium,0.0034366982090422,0.0009990009990009,125712.6
+Primary_Dermal_Melanoma,Tier3,other,other,SLC22A5,SLC5A3,within_other,Sodium,0.0034366982090422,0.0009990009990009,28007.486
+Primary_Dermal_Melanoma,Tier3,other,other,SLC1A5,SLC22A5,within_other,Sodium,0.0034366982090422,0.0009990009990009,18344.156
+Primary_Dermal_Melanoma,Tier3,other,other,SLC12A2,SLC29A1,within_other,Sodium,0.0034366982090422,0.0009990009990009,112642.73
+Primary_Dermal_Melanoma,Tier3,other,other,SLC1A5,SLC5A3,within_other,Sodium,0.0034366982090422,0.0009990009990009,62908.074
+Primary_Dermal_Melanoma,Tier3,other,other,SLC6A4,SLC6A4,within_other,N-Desmethylcitalopram | O-Desmethylverapamil (D-702) | Serotonin | Sodium,0.0034366982090422,0.0009990009990009,110.22053
+Primary_Dermal_Melanoma,Tier3,other,other,SLC29A1,SLC29A1,within_other,Adenosine | Cytidine | Ethanol | Guanosine | Inosine | Sodium | Thymidine | Uridine,0.0034366982090422,0.0009990009990009,432736.1
+Primary_Dermal_Melanoma,Tier3,other,other,SLC5A5,SLC5A5,within_other,Sodium | Urea,0.0034366982090422,0.0009990009990009,148.15518
+Primary_Dermal_Melanoma,Tier3,other,other,SLC29A1,SLC5A3,within_other,Sodium,0.0034366982090422,0.0009990009990009,186099.4
+Primary_Dermal_Melanoma,Tier3,other,other,SLC5A1,SLC5A1,within_other,Sodium | Urea,0.0034366982090422,0.0009990009990009,8865.771
+Primary_Dermal_Melanoma,Tier3,other,other,SLC12A2,SLC22A5,within_other,Sodium,0.0034366982090422,0.0009990009990009,16733.547
+Primary_Dermal_Melanoma,Tier3,other,other,SLC16A4,SLCO2B1,within_other,Acetate,0.0034366982090422,0.0009990009990009,144683.14
+Primary_Dermal_Melanoma,Tier3,other,other,CD36,MSR1,within_other,Fatty acid,0.0034366982090422,0.0009990009990009,60356.402
+Primary_Dermal_Melanoma,Tier3,other,other,CD36,CD36,within_other,Cholesterol | Fatty acid | Vitamin D3,0.0034366982090422,0.0009990009990009,134419.58
+Primary_Dermal_Melanoma,Tier3,other,other,CD36,CPT1A,within_other,Fatty acid,0.0034366982090422,0.0009990009990009,21140.537
+Primary_Dermal_Melanoma,Tier3,other,other,MSR1,MSR1,within_other,Fatty acid,0.0034366982090422,0.0009990009990009,172085.8
+Primary_Dermal_Melanoma,Tier3,other,other,CPT1A,MSR1,within_other,Fatty acid,0.0034366982090422,0.0009990009990009,35056.875
+Primary_Dermal_Melanoma,Tier3,other,other,CPT1A,CPT1A,within_other,Fatty acid,0.0034366982090422,0.0009990009990009,18747.47
+Primary_Dermal_Melanoma,Tier3,other,other,SLC6A1,SLC6A1,within_other,GABA,0.0034366982090422,0.0009990009990009,137.94775
+Primary_Dermal_Melanoma,Tier3,other,other,SLCO1C1,SLCO1C1,within_other,"3',4'-Dihydrodiol | 4'-Hydroxydiclofenac | Estrone sulfate | Taurocholic acid | Thyroxine",0.0034366982090422,0.0009990009990009,157.72209
+Primary_Dermal_Melanoma,Tier3,other,other,ABCA1,ABCA1,within_other,25-Hydroxycholesterol,0.0034366982090422,0.0009990009990009,224234.95
+Primary_Dermal_Melanoma,Tier3,other,other,ABCB1,ABCB1,within_other,"17a-Ethynylestradiol | 2-Hydroxychlorpropamide | 3',4'-Dihydrodiol | 4'-Hydroxydiclofenac | 4-Hydroxycyclophosphamide | 5-Hydroxyomeprazole | 8-Hydroxycarvedilol | Cholesterol | Cholic acid | Cortisol | E-3179 | Estradiol | Estriol | Glycerol | Hydroxylansoprazole | N-Desmethylcitalopram | N-Desmethyleletriptan | N-Desmethyltamoxifen | N-desmethylimatinib | O-Deethylated candesartan | O-Desmethylverapamil (D-702) | Progesterone | Taurocholic acid | Testosterone",0.0034366982090422,0.0009990009990009,1006.30774
+Primary_Dermal_Melanoma,Tier3,other,other,ATP7A,ATP7A,within_other,ADP | Adenosine triphosphate | Phosphate | Water,0.0034366982090422,0.0009990009990009,24743.92
+Primary_Dermal_Melanoma,Tier3,other,other,SLC20A2,SLC20A2,within_other,Phosphate,0.0034366982090422,0.0009990009990009,2508.083
+Primary_Dermal_Melanoma,Tier3,other,other,ATP7A,ATP7B,within_other,ADP | Adenosine triphosphate | Phosphate | Water,0.0034366982090422,0.0009990009990009,2348.4153
+Primary_Dermal_Melanoma,Tier3,other,other,ATP7A,SLC20A2,within_other,Phosphate,0.0034366982090422,0.0009990009990009,6024.136
+Primary_Dermal_Melanoma,Tier3,other,other,CHRNA5,CHRNA5,within_other,Ethanol,0.0034366982090422,0.0009990009990009,3924.53
+Primary_Dermal_Melanoma,Tier3,other,other,CHRNA5,SLC29A1,within_other,Ethanol,0.0034366982090422,0.0009990009990009,35990.74
+Primary_Dermal_Melanoma,Tier3,other,other,ABCC3,FOLR2,within_other,Folic acid,0.0034366982090422,0.0009990009990009,858.86926
+Primary_Dermal_Melanoma,Tier3,other,other,ABCC4,ABCC4,within_other,4'-Hydroxydiclofenac | Cholic acid | Cyclic AMP | Folic acid | Folinic acid | Glutathione | Hydroxycelecoxib | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0034366982090422,0.0009990009990009,5994.1865
+Primary_Dermal_Melanoma,Tier3,other,other,FOLR2,FOLR2,within_other,Folic acid,0.0034366982090422,0.0009990009990009,9291.059
+Primary_Dermal_Melanoma,Tier3,other,other,ABCC4,SLC19A1,within_other,Folic acid,0.0034366982090422,0.0009990009990009,1989.5964
+Primary_Dermal_Melanoma,Tier3,other,other,TRPV6,TRPV6,within_other,Heme,0.0034366982090422,0.0009990009990009,97.62745
+Primary_Dermal_Melanoma,Tier3,other,other,LRP1,LRP1,within_other,Heme,0.0034366982090422,0.0009990009990009,111099.41
+Primary_Dermal_Melanoma,Tier3,other,other,SLC29A3,SLC29A3,within_other,Adenine,0.0034366982090422,0.0009990009990009,3285.8005
+Primary_Dermal_Melanoma,Tier3,other,other,SLC15A1,SLC15A1,within_other,2-Hydroxychlorpropamide | Glycyl-glycine | L-Dopa,0.0034366982090422,0.0009990009990009,11636.712
+Primary_Dermal_Melanoma,Tier3,other,other,CD38,CD38,within_other,Adenosine diphosphate ribose,0.0034366982090422,0.0009990009990009,30673.076
+Primary_Dermal_Melanoma,Tier3,other,other,SLC12A6,SLC12A6,within_other,Chloride ion,0.0034366982090422,0.0009990009990009,974.62067
+Primary_Dermal_Melanoma,Tier3,other,other,SCARB1,SCARB1,within_other,alpha-Tocopherol,0.0034366982090422,0.0009990009990009,97196.305
+Primary_Dermal_Melanoma,Tier3,other,other,ABCC2,SLCO2B1,within_other,Taurocholic acid,0.0034366982090422,0.0009990009990009,37068.266
+Primary_Dermal_Melanoma,Tier3,other,other,ABCC1,SLCO2B1,within_other,Taurocholic acid,0.0034366982090422,0.0009990009990009,75145.63
+Primary_Dermal_Melanoma,Tier3,other,other,ABCC1,SLC16A1,within_other,Taurocholic acid,0.0034366982090422,0.0009990009990009,42446.016
+Primary_Dermal_Melanoma,Tier3,other,other,ABCC2,SLC16A1,within_other,Taurocholic acid,0.0034366982090422,0.0009990009990009,29023.266
+Primary_Dermal_Melanoma,Tier3,other,other,ABCB1,ABCC2,within_other,"17a-Ethynylestradiol | 3',4'-Dihydrodiol | Cholic acid | O-Desmethylverapamil (D-702) | Taurocholic acid",0.0034366982090422,0.0009990009990009,1679.6229
+Primary_Dermal_Melanoma,Tier3,other,other,ABCC2,ABCC4,within_other,Cholic acid | Folinic acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0034366982090422,0.0009990009990009,8281.993
+Primary_Dermal_Melanoma,Tier3,other,other,ABCC4,SLCO2B1,within_other,Taurocholic acid,0.0034366982090422,0.0009990009990009,26899.926
+Primary_Dermal_Melanoma,Tier3,other,other,ABCC4,SLC16A1,within_other,Taurocholic acid,0.0034366982090422,0.0009990009990009,18223.363
+Primary_Dermal_Melanoma,Tier3,other,other,ABCC2,ABCC2,within_other,"17a-Ethynylestradiol | 3',4'-Dihydrodiol | Bilirubin | Cholic acid | Folinic acid | Fusidic Acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid",0.0034366982090422,0.0009990009990009,14860.231
+Primary_Dermal_Melanoma,Tier3,other,other,ABCC1,ABCC1,within_other,4'-Hydroxydiclofenac | Cholic acid | Glutathione | Leukotriene C4 | O-Desmethylverapamil (D-702) | Progesterone | Taurocholic acid,0.0034366982090422,0.0009990009990009,38937.406
+Primary_Dermal_Melanoma,Tier3,other,other,ATP7B,TAP1,within_other,Adenosine triphosphate,0.0034366982090422,0.0009990009990009,9647.252
+Primary_Dermal_Melanoma,Tier3,other,other,ATP7A,TAP1,within_other,Adenosine triphosphate,0.0034366982090422,0.0009990009990009,68872.61
+Primary_Dermal_Melanoma,Tier3,other,other,TAP1,TAP1,within_other,Adenosine triphosphate,0.0034366982090422,0.0009990009990009,353351.6
+Primary_Dermal_Melanoma,Tier3,other,other,AQP9,ATP7A,within_other,Water,0.0034366982090422,0.0009990009990009,4643.091
+Primary_Dermal_Melanoma,Tier3,other,other,AQP9,AQP9,within_other,Water,0.0034366982090422,0.0009990009990009,3704.6902
+Primary_Dermal_Melanoma,Tier3,other,other,AQP7,ATP7B,within_other,Water,0.0034366982090422,0.0009990009990009,1418.1761
+Primary_Dermal_Melanoma,Tier3,other,other,AQP5,AQP9,within_other,Water,0.0034366982090422,0.0009990009990009,5232.6353
+Primary_Dermal_Melanoma,Tier3,other,other,AQP5,AQP5,within_other,Water,0.0034366982090422,0.0009990009990009,5633.8706
+Primary_Dermal_Melanoma,Tier3,other,other,ABCC2,SLC22A5,within_other,O-Desmethylverapamil (D-702),0.0034366982090422,0.0009990009990009,11431.17
+Primary_Dermal_Melanoma,Tier3,other,other,ABCC4,SLC22A5,within_other,O-Desmethylverapamil (D-702),0.0034366982090422,0.0009990009990009,6779.444
+Primary_Dermal_Melanoma,Tier3,other,other,SLC24A4,SLC24A4,within_other,Sodium_calcium_potassium exchange,0.0034366982090422,0.0009990009990009,682.74805
+Primary_Dermal_Melanoma,Tier3,other,other,CLCN5,CLCN5,within_other,Chloride,0.0034366982090422,0.0009990009990009,15077.938
+Primary_Dermal_Melanoma,Tier3,other,other,CLCN3,CLCN3,within_other,Chloride,0.0034366982090422,0.0009990009990009,432982.16
+Primary_Dermal_Melanoma,Tier3,other,other,CLCN3,CLCN5,within_other,Chloride,0.0034366982090422,0.0009990009990009,76537.375
+Primary_Dermal_Melanoma,Tier3,other,other,SLC9A1,SLC9A1,within_other,Sodium_hydrogen exchange,0.0034366982090422,0.0009990009990009,11641.21
+Primary_Dermal_Melanoma,Tier3,other,other,SLC6A17,SLC6A17,within_other,Neurotransmitter,0.0034366982090422,0.0009990009990009,312368.03
+Primary_Dermal_Melanoma,Tier3,other,other,SLC6A9,SLC6A9,within_other,Neurotransmitter,0.0034366982090422,0.0009990009990009,6637.619
+Primary_Dermal_Melanoma,Tier3,other,other,SLC6A17,SLC6A9,within_other,Neurotransmitter,0.0034366982090422,0.0009990009990009,23401.928
+Primary_Dermal_Melanoma,Tier3,other,other,SLC26A2,SLC26A2,within_other,Anion exchange,0.0034366982090422,0.0009990009990009,51322.28
+Primary_Dermal_Melanoma,Tier3,other,other,ORAI2,ORAI2,within_other,Calcium release-activated calcium transport,0.0034366982090422,0.0009990009990009,17692.35
+Primary_Dermal_Melanoma,Tier3,other,other,ORAI2,ORAI3,within_other,Calcium release-activated calcium transport,0.0034366982090422,0.0009990009990009,17038.76
+Primary_Dermal_Melanoma,Tier3,other,other,ORAI3,ORAI3,within_other,Calcium release-activated calcium transport,0.0034366982090422,0.0009990009990009,22488.303
+Primary_Dermal_Melanoma,Tier3,other,other,SCNN1G,SCNN1G,within_other,Amiloride-sensitive sodium transport,0.0034366982090422,0.0009990009990009,760.4466
+Primary_Dermal_Melanoma,Tier3,other,other,SCNN1A,SCNN1G,within_other,Amiloride-sensitive sodium transport,0.0034366982090422,0.0009990009990009,16762.045
+Primary_Dermal_Melanoma,Tier3,other,other,SLC23A2,SLC23A2,within_other,Vitamin C,0.0034366982090422,0.0009990009990009,32108.025
+Primary_Dermal_Melanoma,Tier3,other,other,ABCG2,CD36,within_other,Cholesterol,0.0064289023279559,0.0019980019980019,774.772
+Primary_Dermal_Melanoma,Tier3,other,other,ATP7B,SLC20A2,within_other,Phosphate,0.0064289023279559,0.0019980019980019,893.67694
+Primary_Dermal_Melanoma,Tier3,other,other,SLC1A3,SLC1A3,within_other,D-Aspartate | L-Aspartate | L-Glutamate | Malic acid,0.0091938137050919,0.0029970029970029,59.52634
+Primary_Dermal_Melanoma,Tier3,other,other,FOLR1,FOLR1,within_other,5-Methyltetrahydrofolic acid | Folic acid,0.0091938137050919,0.0029970029970029,53.522675
+Primary_Dermal_Melanoma,Tier3,other,other,CLCN4,CLCN4,within_other,Chloride,0.0091938137050919,0.0029970029970029,175.99197
+Primary_Dermal_Melanoma,Tier3,other,other,SCNN1A,SCNN1A,within_other,Amiloride-sensitive sodium transport,0.0091938137050919,0.0029970029970029,38.151657
+Primary_Dermal_Melanoma,Tier3,other,other,SLC10A1,SLC10A1,within_other,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 17a-Ethynylestradiol | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Deoxycholic acid | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | Progesterone | Sodium | Sulfolithocholic acid | Taurocholic acid | Testosterone | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0115958010694852,0.0039960039960039,71.91935
+Primary_Dermal_Melanoma,Tier3,other,other,SLC10A1,SLC6A2,within_other,Sodium,0.0115958010694852,0.0039960039960039,37.48331
+Primary_Dermal_Melanoma,Tier3,other,other,AQP5,ATP7A,within_other,Water,0.0206375902578434,0.0079920079920079,472.5157
+Primary_Dermal_Melanoma,Tier3,other,other,ABCC3,SLCO2B1,within_other,Taurocholic acid,0.0226720127832612,0.0089910089910089,4344.2427
+Primary_Dermal_Melanoma,Tier3,other,other,SLC5A7,SLC5A7,within_other,Chloride ion | Choline | Sodium,0.0263117164525615,0.0109890109890109,27.20536
+Primary_Dermal_Melanoma,Tier3,other,other,LRP2,LRP2,within_other,Calcidiol,0.0322754168908015,0.0139860139860139,35.71323
+Primary_Dermal_Melanoma,Tier3,other,other,SLC19A1,SLC19A1,within_other,Folic acid | Thiamine,0.0342322850721506,0.0149850149850149,726.7012
+Primary_Dermal_Melanoma,Tier3,other,other,ABCC1,ABCC4,within_other,4'-Hydroxydiclofenac | Cholic acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0378224395691644,0.0169830169830169,12294.429
+Primary_Dermal_Melanoma,Tier3,other,other,SLC3A2,SLC7A11,within_other,L-Cystine | L-Glutamate,0.0395720784070298,0.0179820179820179,77.421104
+Primary_Dermal_Melanoma,Tier3,other,other,ABCB1,SLCO2B1,within_other,Estradiol | Taurocholic acid,0.0429044639570955,0.0199800199800199,5609.0474
+Primary_Dermal_Melanoma,global,,,SLC2A1,SLC2A1,cell_type_independent,D-Galactose | D-Glucose | D-Mannose | Dehydroascorbic acid | Docosahexaenoic acid | Glucosamine,0.0035826241725991,0.000999001,113176.38547419535
+Primary_Dermal_Melanoma,global,,,SLC2A9,SLC2A9,cell_type_independent,D-Glucose,0.0035826241725991,0.000999001,1701.1064318917402
+Primary_Dermal_Melanoma,global,,,SLC2A3,SLC2A3,cell_type_independent,D-Galactose | D-Glucose | D-Maltose | D-Mannose | D-Xylose | Dehydroascorbic acid | Docosahexaenoic acid,0.0035826241725991,0.000999001,318006.04988512804
+Primary_Dermal_Melanoma,global,,,SLC2A1,SLC2A3,cell_type_independent,D-Galactose | D-Glucose | D-Mannose | Dehydroascorbic acid | Docosahexaenoic acid,0.0035826241725991,0.000999001,155729.53045317234
+Primary_Dermal_Melanoma,global,,,SLC2A1,SLC2A9,cell_type_independent,D-Glucose,0.0035826241725991,0.000999001,15879.14248489414
+Primary_Dermal_Melanoma,global,,,SLC1A5,SLC3A2,cell_type_independent,L-Glutamate | L-Glutamine | L-Leucine | L-Serine,0.0035826241725991,0.000999001,179685.8704980406
+Primary_Dermal_Melanoma,global,,,SLC38A7,SLC3A2,cell_type_independent,L-Glutamine,0.0035826241725991,0.000999001,72868.54307599683
+Primary_Dermal_Melanoma,global,,,SLC3A2,SLC7A5,cell_type_independent,L-Glutamine | L-Leucine,0.0035826241725991,0.000999001,422749.3009580206
+Primary_Dermal_Melanoma,global,,,SLC1A5,SLC1A5,cell_type_independent,L-Alanine | L-Asparagine | L-Cysteine | L-Glutamate | L-Glutamine | L-Leucine | L-Serine | L-Threonine | Sodium,0.0035826241725991,0.000999001,52812.870296451365
+Primary_Dermal_Melanoma,global,,,SLC7A5,SLC7A5,cell_type_independent,L-Arginine | L-Glutamine | L-Histidine | L-Leucine | L-Methionine | L-Phenylalanine | L-Tyrosine,0.0035826241725991,0.000999001,254883.3610297205
+Primary_Dermal_Melanoma,global,,,SLC1A5,SLC38A7,cell_type_independent,L-Glutamine,0.0035826241725991,0.000999001,37986.34656777318
+Primary_Dermal_Melanoma,global,,,SLC1A5,SLC7A5,cell_type_independent,L-Glutamine | L-Leucine,0.0035826241725991,0.000999001,199611.6548629321
+Primary_Dermal_Melanoma,global,,,SLC38A7,SLC38A7,cell_type_independent,L-Glutamine,0.0035826241725991,0.000999001,7730.019192253007
+Primary_Dermal_Melanoma,global,,,SLC38A7,SLC7A5,cell_type_independent,L-Glutamine,0.0035826241725991,0.000999001,81269.62929252791
+Primary_Dermal_Melanoma,global,,,SLC3A2,SLC3A2,cell_type_independent,Iron | L-Cystine | L-Glutamate | L-Glutamine | L-Leucine | L-Serine,0.0035826241725991,0.000999001,184739.4846123972
+Primary_Dermal_Melanoma,global,,,SLC7A7,SLC7A7,cell_type_independent,L-Glutamine,0.0035826241725991,0.000999001,36937.11652126191
+Primary_Dermal_Melanoma,global,,,SLC43A2,SLC43A2,cell_type_independent,L-Cysteine | L-Isoleucine | L-Leucine | L-Methionine | L-Phenylalanine | L-Valine,0.0035826241725991,0.000999001,9657.704536870042
+Primary_Dermal_Melanoma,global,,,SLC7A11,SLC7A11,cell_type_independent,L-Cysteine | L-Cystine | L-Glutamate,0.0035826241725991,0.000999001,219.6887752190609
+Primary_Dermal_Melanoma,global,,,SLC16A1,SLC16A1,cell_type_independent,4-ene-Valproic acid | Acetate | Butyrate | D-Lactate | Ketone bodies | L-Glutamate | L-Lactate | Nicotinate | Pyruvate | Taurocholic acid | alpha-Ketoisovaleric acid,0.0035826241725991,0.000999001,76253.54078229412
+Primary_Dermal_Melanoma,global,,,SLC16A1,SLC16A4,cell_type_independent,Acetate | L-Lactate,0.0035826241725991,0.000999001,241658.26503622215
+Primary_Dermal_Melanoma,global,,,SLC16A4,SLC16A4,cell_type_independent,Acetate | L-Lactate,0.0035826241725991,0.000999001,243605.19090911085
+Primary_Dermal_Melanoma,global,,,SLC16A1,SLC22A5,cell_type_independent,4-ene-Valproic acid | Nicotinate,0.0035826241725991,0.000999001,48713.90027258771
+Primary_Dermal_Melanoma,global,,,SLC22A5,SLCO2B1,cell_type_independent,Nicotinate,0.0035826241725991,0.000999001,68419.63753605835
+Primary_Dermal_Melanoma,global,,,SLCO2B1,SLCO2B1,cell_type_independent,Acetate | Citric acid | Estradiol | Nicotinate | Oxalic acid | Taurocholic acid,0.0035826241725991,0.000999001,225722.16666308595
+Primary_Dermal_Melanoma,global,,,SLC22A5,SLC22A5,cell_type_independent,4-ene-Valproic acid | Acetyl-L-Carnitine | Choline | Creatine | Dopamine | Histamine | L-Carnitine | Nicotinate | Norepinephrine | O-Desmethylverapamil (D-702) | Sodium,0.0035826241725991,0.000999001,9467.096133102368
+Primary_Dermal_Melanoma,global,,,SLC16A1,SLC1A5,cell_type_independent,L-Glutamate,0.0035826241725991,0.000999001,112532.16458110536
+Primary_Dermal_Melanoma,global,,,SLC3A2,SLC7A11,cell_type_independent,L-Cystine | L-Glutamate,0.0035826241725991,0.000999001,6766.327444829532
+Primary_Dermal_Melanoma,global,,,SLC16A1,SLC7A11,cell_type_independent,L-Glutamate,0.0035826241725991,0.000999001,4821.457440244177
+Primary_Dermal_Melanoma,global,,,SLC16A1,SLC3A2,cell_type_independent,L-Glutamate,0.0035826241725991,0.000999001,221320.5680704511
+Primary_Dermal_Melanoma,global,,,SLC1A3,SLC1A3,cell_type_independent,D-Aspartate | L-Aspartate | L-Glutamate | Malic acid,0.0035826241725991,0.000999001,7957.743597399009
+Primary_Dermal_Melanoma,global,,,SLC39A8,SLC39A8,cell_type_independent,Cadmium | Manganese | Zinc,0.0035826241725991,0.000999001,52079.16293731685
+Primary_Dermal_Melanoma,global,,,SLC30A8,SLC30A8,cell_type_independent,Zinc,0.0035826241725991,0.000999001,179.9093707493065
+Primary_Dermal_Melanoma,global,,,CUBN,CUBN,cell_type_independent,Adenosylcobalamin | Calcidiol | Calcium | Cobalamin | Iron,0.0035826241725991,0.000999001,3679.560203463177
+Primary_Dermal_Melanoma,global,,,CUBN,SLC3A2,cell_type_independent,Iron,0.0035826241725991,0.000999001,40349.681534896576
+Primary_Dermal_Melanoma,global,,,SLC11A2,SLC3A2,cell_type_independent,Iron,0.0035826241725991,0.000999001,365694.080217984
+Primary_Dermal_Melanoma,global,,,SLC40A1,SLC40A1,cell_type_independent,Iron,0.0035826241725991,0.000999001,165287.49127536686
+Primary_Dermal_Melanoma,global,,,SLC11A2,SLC11A2,cell_type_independent,Iron,0.0035826241725991,0.000999001,202371.9714056868
+Primary_Dermal_Melanoma,global,,,CUBN,SLC11A2,cell_type_independent,Iron,0.0035826241725991,0.000999001,41384.33663452727
+Primary_Dermal_Melanoma,global,,,SLC16A9,SLC16A9,cell_type_independent,L-Carnitine,0.0035826241725991,0.000999001,155.18854965219705
+Primary_Dermal_Melanoma,global,,,SLC12A2,SLC5A3,cell_type_independent,Sodium,0.0035826241725991,0.000999001,111396.43115693826
+Primary_Dermal_Melanoma,global,,,SLC12A2,SLC1A5,cell_type_independent,Sodium,0.0035826241725991,0.000999001,72946.55497635197
+Primary_Dermal_Melanoma,global,,,SLC5A3,SLC5A3,cell_type_independent,Sodium,0.0035826241725991,0.000999001,105416.89738230217
+Primary_Dermal_Melanoma,global,,,SLC12A2,SLC12A2,cell_type_independent,Chloride ion | Sodium,0.0035826241725991,0.000999001,33532.05742825245
+Primary_Dermal_Melanoma,global,,,SLC22A5,SLC29A1,cell_type_independent,Sodium,0.0035826241725991,0.000999001,121403.9949740791
+Primary_Dermal_Melanoma,global,,,SLC1A5,SLC29A1,cell_type_independent,Sodium,0.0035826241725991,0.000999001,265298.4300838792
+Primary_Dermal_Melanoma,global,,,SLC22A5,SLC5A3,cell_type_independent,Sodium,0.0035826241725991,0.000999001,58242.01170961143
+Primary_Dermal_Melanoma,global,,,SLC1A5,SLC22A5,cell_type_independent,Sodium,0.0035826241725991,0.000999001,38739.02860878396
+Primary_Dermal_Melanoma,global,,,SLC12A2,SLC29A1,cell_type_independent,Sodium,0.0035826241725991,0.000999001,230495.06983886208
+Primary_Dermal_Melanoma,global,,,SLC1A5,SLC5A3,cell_type_independent,Sodium,0.0035826241725991,0.000999001,135918.54724518754
+Primary_Dermal_Melanoma,global,,,SLC6A4,SLC6A4,cell_type_independent,N-Desmethylcitalopram | O-Desmethylverapamil (D-702) | Serotonin | Sodium,0.0035826241725991,0.000999001,110.22052505381816
+Primary_Dermal_Melanoma,global,,,SLC29A1,SLC29A1,cell_type_independent,Adenosine | Cytidine | Ethanol | Guanosine | Inosine | Sodium | Thymidine | Uridine,0.0035826241725991,0.000999001,444750.7553044885
+Primary_Dermal_Melanoma,global,,,SLC5A5,SLC5A5,cell_type_independent,Sodium | Urea,0.0035826241725991,0.000999001,148.15518091564115
+Primary_Dermal_Melanoma,global,,,SLC29A1,SLC5A3,cell_type_independent,Sodium,0.0035826241725991,0.000999001,389703.5885137657
+Primary_Dermal_Melanoma,global,,,SLC5A1,SLC5A1,cell_type_independent,Sodium | Urea,0.0035826241725991,0.000999001,8865.771282669477
+Primary_Dermal_Melanoma,global,,,SLC12A2,SLC22A5,cell_type_independent,Sodium,0.0035826241725991,0.000999001,34124.10574516545
+Primary_Dermal_Melanoma,global,,,SLC16A4,SLCO2B1,cell_type_independent,Acetate,0.0035826241725991,0.000999001,298732.5140923225
+Primary_Dermal_Melanoma,global,,,CD36,MSR1,cell_type_independent,Fatty acid,0.0035826241725991,0.000999001,132254.20619059764
+Primary_Dermal_Melanoma,global,,,CD36,CD36,cell_type_independent,Cholesterol | Fatty acid | Vitamin D3,0.0035826241725991,0.000999001,137797.3670944434
+Primary_Dermal_Melanoma,global,,,CD36,CPT1A,cell_type_independent,Fatty acid,0.0035826241725991,0.000999001,48007.29846141996
+Primary_Dermal_Melanoma,global,,,MSR1,MSR1,cell_type_independent,Fatty acid,0.0035826241725991,0.000999001,201145.04570447857
+Primary_Dermal_Melanoma,global,,,CPT1A,MSR1,cell_type_independent,Fatty acid,0.0035826241725991,0.000999001,86375.66934694618
+Primary_Dermal_Melanoma,global,,,CPT1A,CPT1A,cell_type_independent,Fatty acid,0.0035826241725991,0.000999001,21604.927883895725
+Primary_Dermal_Melanoma,global,,,SLC6A1,SLC6A1,cell_type_independent,GABA,0.0035826241725991,0.000999001,137.94774713050566
+Primary_Dermal_Melanoma,global,,,SLCO1C1,SLCO1C1,cell_type_independent,"3',4'-Dihydrodiol | 4'-Hydroxydiclofenac | Estrone sulfate | Taurocholic acid | Thyroxine",0.0035826241725991,0.000999001,157.72209003815942
+Primary_Dermal_Melanoma,global,,,ABCA1,ABCA1,cell_type_independent,25-Hydroxycholesterol,0.0035826241725991,0.000999001,236939.99476707337
+Primary_Dermal_Melanoma,global,,,ABCB1,ABCB1,cell_type_independent,"17a-Ethynylestradiol | 2-Hydroxychlorpropamide | 3',4'-Dihydrodiol | 4'-Hydroxydiclofenac | 4-Hydroxycyclophosphamide | 5-Hydroxyomeprazole | 8-Hydroxycarvedilol | Cholesterol | Cholic acid | Cortisol | E-3179 | Estradiol | Estriol | Glycerol | Hydroxylansoprazole | N-Desmethylcitalopram | N-Desmethyleletriptan | N-Desmethyltamoxifen | N-desmethylimatinib | O-Deethylated candesartan | O-Desmethylverapamil (D-702) | Progesterone | Taurocholic acid | Testosterone",0.0035826241725991,0.000999001,1363.6114226138593
+Primary_Dermal_Melanoma,global,,,ATP7A,ATP7A,cell_type_independent,ADP | Adenosine triphosphate | Phosphate | Water,0.0035826241725991,0.000999001,25685.30825726186
+Primary_Dermal_Melanoma,global,,,SLC20A2,SLC20A2,cell_type_independent,Phosphate,0.0035826241725991,0.000999001,2621.44637278639
+Primary_Dermal_Melanoma,global,,,ATP7A,ATP7B,cell_type_independent,ADP | Adenosine triphosphate | Phosphate | Water,0.0035826241725991,0.000999001,4882.29717122434
+Primary_Dermal_Melanoma,global,,,ATP7A,SLC20A2,cell_type_independent,Phosphate,0.0035826241725991,0.000999001,12998.465711773984
+Primary_Dermal_Melanoma,global,,,CHRNA5,CHRNA5,cell_type_independent,Ethanol,0.0035826241725991,0.000999001,3967.054363489344
+Primary_Dermal_Melanoma,global,,,CHRNA5,SLC29A1,cell_type_independent,Ethanol,0.0035826241725991,0.000999001,73296.79550048336
+Primary_Dermal_Melanoma,global,,,ABCC4,ABCC4,cell_type_independent,4'-Hydroxydiclofenac | Cholic acid | Cyclic AMP | Folic acid | Folinic acid | Glutathione | Hydroxycelecoxib | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0035826241725991,0.000999001,6254.367883865243
+Primary_Dermal_Melanoma,global,,,FOLR2,FOLR2,cell_type_independent,Folic acid,0.0035826241725991,0.000999001,10296.617496964802
+Primary_Dermal_Melanoma,global,,,ABCC4,SLC19A1,cell_type_independent,Folic acid,0.0035826241725991,0.000999001,4054.853411135653
+Primary_Dermal_Melanoma,global,,,TRPV6,TRPV6,cell_type_independent,Heme,0.0035826241725991,0.000999001,97.62744869602228
+Primary_Dermal_Melanoma,global,,,LRP1,LRP1,cell_type_independent,Heme,0.0035826241725991,0.000999001,116858.44775154276
+Primary_Dermal_Melanoma,global,,,SLC29A3,SLC29A3,cell_type_independent,Adenine,0.0035826241725991,0.000999001,3770.339588931713
+Primary_Dermal_Melanoma,global,,,SLC15A1,SLC15A1,cell_type_independent,2-Hydroxychlorpropamide | Glycyl-glycine | L-Dopa,0.0035826241725991,0.000999001,11636.711450540246
+Primary_Dermal_Melanoma,global,,,CD38,CD38,cell_type_independent,Adenosine diphosphate ribose,0.0035826241725991,0.000999001,41621.50175761456
+Primary_Dermal_Melanoma,global,,,SLC12A6,SLC12A6,cell_type_independent,Chloride ion,0.0035826241725991,0.000999001,1086.057591568166
+Primary_Dermal_Melanoma,global,,,SCARB1,SCARB1,cell_type_independent,alpha-Tocopherol,0.0035826241725991,0.000999001,99081.13522890735
+Primary_Dermal_Melanoma,global,,,ABCC2,SLCO2B1,cell_type_independent,Taurocholic acid,0.0035826241725991,0.000999001,76663.90151022433
+Primary_Dermal_Melanoma,global,,,ABCC1,SLCO2B1,cell_type_independent,Taurocholic acid,0.0035826241725991,0.000999001,166572.91040565577
+Primary_Dermal_Melanoma,global,,,ABCC1,SLC16A1,cell_type_independent,Taurocholic acid,0.0035826241725991,0.000999001,90577.57767231224
+Primary_Dermal_Melanoma,global,,,ABCC2,SLC16A1,cell_type_independent,Taurocholic acid,0.0035826241725991,0.000999001,59121.43175148191
+Primary_Dermal_Melanoma,global,,,ABCB1,ABCC2,cell_type_independent,"17a-Ethynylestradiol | 3',4'-Dihydrodiol | Cholic acid | O-Desmethylverapamil (D-702) | Taurocholic acid",0.0035826241725991,0.000999001,4309.220949892864
+Primary_Dermal_Melanoma,global,,,ABCC2,ABCC4,cell_type_independent,Cholic acid | Folinic acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0035826241725991,0.000999001,17127.077367938946
+Primary_Dermal_Melanoma,global,,,ABCC4,SLC16A1,cell_type_independent,Taurocholic acid,0.0035826241725991,0.000999001,37735.62626339118
+Primary_Dermal_Melanoma,global,,,ABCC2,ABCC2,cell_type_independent,"17a-Ethynylestradiol | 3',4'-Dihydrodiol | Bilirubin | Cholic acid | Folinic acid | Fusidic Acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid",0.0035826241725991,0.000999001,15236.30226194576
+Primary_Dermal_Melanoma,global,,,ABCC1,ABCC1,cell_type_independent,4'-Hydroxydiclofenac | Cholic acid | Glutathione | Leukotriene C4 | O-Desmethylverapamil (D-702) | Progesterone | Taurocholic acid,0.0035826241725991,0.000999001,44475.68123869222
+Primary_Dermal_Melanoma,global,,,ATP7B,TAP1,cell_type_independent,Adenosine triphosphate,0.0035826241725991,0.000999001,20711.060008270448
+Primary_Dermal_Melanoma,global,,,ATP7A,TAP1,cell_type_independent,Adenosine triphosphate,0.0035826241725991,0.000999001,153491.46914961762
+Primary_Dermal_Melanoma,global,,,TAP1,TAP1,cell_type_independent,Adenosine triphosphate,0.0035826241725991,0.000999001,434571.2259432853
+Primary_Dermal_Melanoma,global,,,AQP5,ATP7A,cell_type_independent,Water,0.0035826241725991,0.000999001,9483.905015813349
+Primary_Dermal_Melanoma,global,,,AQP9,ATP7A,cell_type_independent,Water,0.0035826241725991,0.000999001,7602.6733702802685
+Primary_Dermal_Melanoma,global,,,AQP5,AQP9,cell_type_independent,Water,0.0035826241725991,0.000999001,2895.514828782485
+Primary_Dermal_Melanoma,global,,,AQP5,AQP5,cell_type_independent,Water,0.0035826241725991,0.000999001,5232.635142162602
+Primary_Dermal_Melanoma,global,,,AQP9,AQP9,cell_type_independent,Water,0.0035826241725991,0.000999001,5837.145806259807
+Primary_Dermal_Melanoma,global,,,ABCC2,SLC22A5,cell_type_independent,O-Desmethylverapamil (D-702),0.0035826241725991,0.000999001,23192.605187446738
+Primary_Dermal_Melanoma,global,,,ABCC4,SLC22A5,cell_type_independent,O-Desmethylverapamil (D-702),0.0035826241725991,0.000999001,14056.026140161644
+Primary_Dermal_Melanoma,global,,,SLC24A4,SLC24A4,cell_type_independent,Sodium_calcium_potassium exchange,0.0035826241725991,0.000999001,682.7480601146158
+Primary_Dermal_Melanoma,global,,,CLCN5,CLCN5,cell_type_independent,Chloride,0.0035826241725991,0.000999001,15280.870851496926
+Primary_Dermal_Melanoma,global,,,CLCN3,CLCN3,cell_type_independent,Chloride,0.0035826241725991,0.000999001,444136.1356025913
+Primary_Dermal_Melanoma,global,,,CLCN3,CLCN5,cell_type_independent,Chloride,0.0035826241725991,0.000999001,157297.35542942723
+Primary_Dermal_Melanoma,global,,,SLC9A1,SLC9A1,cell_type_independent,Sodium_hydrogen exchange,0.0035826241725991,0.000999001,12413.5766801225
+Primary_Dermal_Melanoma,global,,,SLC6A17,SLC6A17,cell_type_independent,Neurotransmitter,0.0035826241725991,0.000999001,316980.58182667725
+Primary_Dermal_Melanoma,global,,,SLC6A9,SLC6A9,cell_type_independent,Neurotransmitter,0.0035826241725991,0.000999001,6686.892180772276
+Primary_Dermal_Melanoma,global,,,SLC6A17,SLC6A9,cell_type_independent,Neurotransmitter,0.0035826241725991,0.000999001,47009.94484015618
+Primary_Dermal_Melanoma,global,,,SLC26A2,SLC26A2,cell_type_independent,Anion exchange,0.0035826241725991,0.000999001,52522.93515881887
+Primary_Dermal_Melanoma,global,,,ORAI2,ORAI3,cell_type_independent,Calcium release-activated calcium transport,0.0035826241725991,0.000999001,38113.018115069804
+Primary_Dermal_Melanoma,global,,,ORAI2,ORAI2,cell_type_independent,Calcium release-activated calcium transport,0.0035826241725991,0.000999001,18961.15840104394
+Primary_Dermal_Melanoma,global,,,ORAI3,ORAI3,cell_type_independent,Calcium release-activated calcium transport,0.0035826241725991,0.000999001,23596.46866049938
+Primary_Dermal_Melanoma,global,,,SCNN1A,SCNN1G,cell_type_independent,Amiloride-sensitive sodium transport,0.0035826241725991,0.000999001,1563.165948761341
+Primary_Dermal_Melanoma,global,,,SCNN1A,SCNN1A,cell_type_independent,Amiloride-sensitive sodium transport,0.0035826241725991,0.000999001,16762.044264874585
+Primary_Dermal_Melanoma,global,,,SLC23A2,SLC23A2,cell_type_independent,Vitamin C,0.0035826241725991,0.000999001,32807.20524589387
+Primary_Dermal_Melanoma,global,,,ATP7B,SLC20A2,cell_type_independent,Phosphate,0.0069846118322941,0.001998002,1769.52109165268
+Primary_Dermal_Melanoma,global,,,ABCC4,SLCO2B1,cell_type_independent,Taurocholic acid,0.0069846118322941,0.001998002,56478.29417351216
+Primary_Dermal_Melanoma,global,,,CLCN4,CLCN4,cell_type_independent,Chloride,0.0069846118322941,0.001998002,175.99197117268466
+Primary_Dermal_Melanoma,global,,,SLC5A1,SLC5A5,cell_type_independent,Sodium | Urea,0.0103037459544899,0.002997003,301.3709421405921
+Primary_Dermal_Melanoma,global,,,SCNN1G,SCNN1G,cell_type_independent,Amiloride-sensitive sodium transport,0.0103037459544899,0.002997003,38.15165644563285
+Primary_Dermal_Melanoma,global,,,SLC1A1,SLC1A2,cell_type_independent,L-Glutamate,0.0136257181646393,0.003996004,119.05268097799171
+Primary_Dermal_Melanoma,global,,,ABCC3,FOLR2,cell_type_independent,Folic acid,0.0168936745664937,0.0049950047,1660.9774744296378
+Primary_Dermal_Melanoma,global,,,ABCC3,SLCO2B1,cell_type_independent,Taurocholic acid,0.0201089235563432,0.005994006,9242.472155027222
+Primary_Dermal_Melanoma,global,,,SLC19A1,SLC19A1,cell_type_independent,Folic acid | Thiamine,0.02290622737464,0.006993007,760.6028606127953
+Primary_Dermal_Melanoma,global,,,FOLR1,FOLR1,cell_type_independent,5-Methyltetrahydrofolic acid | Folic acid,0.02290622737464,0.006993007,53.52267535118472
+Primary_Dermal_Melanoma,global,,,ABCB1,SLCO2B1,cell_type_independent,Estradiol | Taurocholic acid,0.02290622737464,0.006993007,17897.863887446198
+Primary_Dermal_Melanoma,global,,,SLC1A5,SLC7A11,cell_type_independent,L-Cysteine | L-Glutamate,0.0257726762183876,0.007992008,3388.224072675921
+Primary_Dermal_Melanoma,global,,,ABCC1,ABCC4,cell_type_independent,4'-Hydroxydiclofenac | Cholic acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0257726762183876,0.007992008,26905.55669192367
+Primary_Dermal_Melanoma,global,,,SLC5A7,SLC5A7,cell_type_independent,Chloride ion | Choline | Sodium,0.028551599906601,0.008991009,27.205359655912616
+Primary_Dermal_Melanoma,global,,,AQP7,ATP7B,cell_type_independent,Water,0.028551599906601,0.008991009,953.9561651692576
+Primary_Dermal_Melanoma,global,,,SLC10A1,SLC10A1,cell_type_independent,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 17a-Ethynylestradiol | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Deoxycholic acid | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | Progesterone | Sodium | Sulfolithocholic acid | Taurocholic acid | Testosterone | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0372165152386053,0.011988012,71.91935011359965
+Primary_Dermal_Melanoma,global,,,SLC10A1,SLC6A2,cell_type_independent,Sodium,0.0372165152386053,0.011988012,74.96662116753123
+Primary_Dermal_Melanoma,global,,,LRP2,LRP2,cell_type_independent,Calcidiol,0.0372165152386053,0.011988012,35.71323148103619
+Primary_Dermal_Melanoma,global,,,SLC1A1,SLC1A1,cell_type_independent,L-Glutamate,0.0461760452500096,0.014985015,77.4211033079905
+Primary_Dermal_Melanoma,global,,,ABCG2,CD36,cell_type_independent,Cholesterol,0.048892282826059,0.015984016,1671.1961026540678

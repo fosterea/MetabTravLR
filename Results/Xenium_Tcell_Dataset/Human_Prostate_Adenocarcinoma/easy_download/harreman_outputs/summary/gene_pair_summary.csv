@@ -1,0 +1,687 @@
+sample_id,tier,cell_type_1,cell_type_2,gene1,gene2,tcell_involvement,metabolites,FDR_np,pval_np,C_np
+Human_Prostate_Adenocarcinoma,Tier1,T Cell,other,SLC2A3,SLC2A4,Tcell_interface,D-Glucose | Dehydroascorbic acid | Docosahexaenoic acid,0.0030550095066224,0.0009990009990009,3857.1306
+Human_Prostate_Adenocarcinoma,Tier1,T Cell,other,SLC40A1,SLC40A1,Tcell_interface,Iron,0.0030550095066224,0.0009990009990009,2313.4233
+Human_Prostate_Adenocarcinoma,Tier1,T Cell,other,SLC16A4,SLCO2B1,Tcell_interface,Acetate,0.0030550095066224,0.0009990009990009,98.4053
+Human_Prostate_Adenocarcinoma,Tier1,T Cell,other,MSR1,MSR1,Tcell_interface,Fatty acid,0.0030550095066224,0.0009990009990009,161.9585
+Human_Prostate_Adenocarcinoma,Tier1,T Cell,other,FOLR2,FOLR2,Tcell_interface,Folic acid,0.0030550095066224,0.0009990009990009,81.00695
+Human_Prostate_Adenocarcinoma,Tier1,T Cell,other,ABCB1,SLCO2B1,Tcell_interface,Estradiol | Taurocholic acid,0.0030550095066224,0.0009990009990009,392.26764
+Human_Prostate_Adenocarcinoma,Tier1,T Cell,other,CPT1A,CPT1A,Tcell_interface,Fatty acid,0.0119577392304665,0.0049950049950049,278.00873
+Human_Prostate_Adenocarcinoma,Tier1,T Cell,other,SLCO2B1,SLCO2B1,Tcell_interface,Acetate | Citric acid | Estradiol | Nicotinate | Oxalic acid | Taurocholic acid,0.0135293278150421,0.0059940059940059,112.197
+Human_Prostate_Adenocarcinoma,Tier1,T Cell,other,SCNN1G,SCNN1G,Tcell_interface,Amiloride-sensitive sodium transport,0.0151355493821247,0.0069930069930069,26.678585
+Human_Prostate_Adenocarcinoma,Tier1,T Cell,other,AQP9,AQP9,Tcell_interface,Water,0.0179820179820179,0.0089910089910089,24.48905
+Human_Prostate_Adenocarcinoma,Tier1,T Cell,other,SLC16A1,SLC1A5,Tcell_interface,L-Glutamate,0.028186099614671,0.0149850149850149,20.009583
+Human_Prostate_Adenocarcinoma,Tier1,T Cell,other,SLC2A3,SLC2A3,Tcell_interface,D-Galactose | D-Glucose | D-Maltose | D-Mannose | D-Xylose | Dehydroascorbic acid | Docosahexaenoic acid,0.0297114650055826,0.0159840159840159,202.1429
+Human_Prostate_Adenocarcinoma,Tier1,T Cell,other,SLC5A7,SLC5A7,Tcell_interface,Chloride ion | Choline | Sodium,0.0387270721843212,0.0219780219780219,18.012146
+Human_Prostate_Adenocarcinoma,Tier1,T Cell,other,ABCB1,ABCB1,Tcell_interface,"17a-Ethynylestradiol | 2-Hydroxychlorpropamide | 3',4'-Dihydrodiol | 4'-Hydroxydiclofenac | 4-Hydroxycyclophosphamide | 5-Hydroxyomeprazole | 8-Hydroxycarvedilol | Cholesterol | Cholic acid | Cortisol | E-3179 | Estradiol | Estriol | Glycerol | Hydroxylansoprazole | N-Desmethylcitalopram | N-Desmethyleletriptan | N-Desmethyltamoxifen | N-desmethylimatinib | O-Deethylated candesartan | O-Desmethylverapamil (D-702) | Progesterone | Taurocholic acid | Testosterone",0.0485239142482958,0.0289710289710289,175.58784
+Human_Prostate_Adenocarcinoma,Tier1,T Cell,T Cell,ABCC3,SLCO2B1,within_Tcell,Taurocholic acid,0.0098651348651348,0.0039960039960039,21.738579
+Human_Prostate_Adenocarcinoma,Tier1,T Cell,T Cell,SLCO2B1,SLCO2B1,within_Tcell,Acetate | Citric acid | Estradiol | Nicotinate | Oxalic acid | Taurocholic acid,0.0163284990871197,0.0079920079920079,43.477158
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC2A1,SLC2A1,within_other,D-Galactose | D-Glucose | D-Mannose | Dehydroascorbic acid | Docosahexaenoic acid | Glucosamine,0.0030550095066224,0.0009990009990009,42589.67
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC2A3,SLC2A9,within_other,D-Glucose,0.0030550095066224,0.0009990009990009,787.0824
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC2A9,SLC2A9,within_other,D-Glucose,0.0030550095066224,0.0009990009990009,4976.988
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC2A3,SLC2A4,within_other,D-Glucose | Dehydroascorbic acid | Docosahexaenoic acid,0.0030550095066224,0.0009990009990009,280196.25
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC1A5,SLC38A7,within_other,L-Glutamine,0.0030550095066224,0.0009990009990009,23587.871
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC1A5,SLC3A2,within_other,L-Glutamate | L-Glutamine | L-Leucine | L-Serine,0.0030550095066224,0.0009990009990009,131929.02
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC7A5,SLC7A5,within_other,L-Arginine | L-Glutamine | L-Histidine | L-Leucine | L-Methionine | L-Phenylalanine | L-Tyrosine,0.0030550095066224,0.0009990009990009,1685.8776
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC3A2,SLC3A2,within_other,Iron | L-Cystine | L-Glutamate | L-Glutamine | L-Leucine | L-Serine,0.0030550095066224,0.0009990009990009,1531.2981
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC38A7,SLC38A7,within_other,L-Glutamine,0.0030550095066224,0.0009990009990009,7772.896
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC38A7,SLC3A2,within_other,L-Glutamine,0.0030550095066224,0.0009990009990009,438651.8
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC7A7,SLC7A7,within_other,L-Glutamine,0.0030550095066224,0.0009990009990009,1467.388
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC1A5,SLC1A5,within_other,L-Alanine | L-Asparagine | L-Cysteine | L-Glutamate | L-Glutamine | L-Leucine | L-Serine | L-Threonine | Sodium,0.0030550095066224,0.0009990009990009,46405.695
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC1A5,SLC43A2,within_other,L-Cysteine | L-Leucine,0.0030550095066224,0.0009990009990009,30950.85
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC43A2,SLC43A2,within_other,L-Cysteine | L-Isoleucine | L-Leucine | L-Methionine | L-Phenylalanine | L-Valine,0.0030550095066224,0.0009990009990009,3597.0535
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC1A5,SLC7A11,within_other,L-Cysteine | L-Glutamate,0.0030550095066224,0.0009990009990009,8551.376
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC16A1,SLC16A1,within_other,4-ene-Valproic acid | Acetate | Butyrate | D-Lactate | Ketone bodies | L-Glutamate | L-Lactate | Nicotinate | Pyruvate | Taurocholic acid | alpha-Ketoisovaleric acid,0.0030550095066224,0.0009990009990009,39098.758
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC16A4,SLC16A4,within_other,Acetate | L-Lactate,0.0030550095066224,0.0009990009990009,2622.0576
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC16A1,SLC22A5,within_other,4-ene-Valproic acid | Nicotinate,0.0030550095066224,0.0009990009990009,26179.02
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC22A5,SLC22A5,within_other,4-ene-Valproic acid | Acetyl-L-Carnitine | Choline | Creatine | Dopamine | Histamine | L-Carnitine | Nicotinate | Norepinephrine | O-Desmethylverapamil (D-702) | Sodium,0.0030550095066224,0.0009990009990009,20219.293
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLCO2B1,SLCO2B1,within_other,Acetate | Citric acid | Estradiol | Nicotinate | Oxalic acid | Taurocholic acid,0.0030550095066224,0.0009990009990009,12510.808
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC1A1,SLC7A11,within_other,L-Glutamate,0.0030550095066224,0.0009990009990009,9270.511
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC16A1,SLC1A1,within_other,L-Glutamate,0.0030550095066224,0.0009990009990009,2542.9077
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC16A1,SLC1A5,within_other,L-Glutamate,0.0030550095066224,0.0009990009990009,721.822
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC16A1,SLC3A2,within_other,L-Glutamate,0.0030550095066224,0.0009990009990009,9060.704
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC1A1,SLC3A2,within_other,L-Glutamate,0.0030550095066224,0.0009990009990009,3335.9824
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC1A1,SLC1A1,within_other,L-Glutamate,0.0030550095066224,0.0009990009990009,114998.65
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC1A2,SLC7A11,within_other,L-Glutamate,0.0030550095066224,0.0009990009990009,29913.934
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC1A1,SLC1A5,within_other,L-Glutamate,0.0030550095066224,0.0009990009990009,35661.312
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC1A3,SLC1A3,within_other,D-Aspartate | L-Aspartate | L-Glutamate | Malic acid,0.0030550095066224,0.0009990009990009,1198.9873
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC39A8,SLC39A8,within_other,Cadmium | Manganese | Zinc,0.0030550095066224,0.0009990009990009,12810.152
+Human_Prostate_Adenocarcinoma,Tier1,other,other,CUBN,SLC11A2,within_other,Iron,0.0030550095066224,0.0009990009990009,76414.1
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC11A2,SLC40A1,within_other,Iron,0.0030550095066224,0.0009990009990009,149349.7
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC11A2,SLC3A2,within_other,Iron,0.0030550095066224,0.0009990009990009,79600.37
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC40A1,SLC40A1,within_other,Iron,0.0030550095066224,0.0009990009990009,228545.16
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC3A2,SLC40A1,within_other,Iron,0.0030550095066224,0.0009990009990009,162885.19
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC22A4,SLC22A5,within_other,L-Carnitine | O-Desmethylverapamil (D-702) | Sodium,0.0030550095066224,0.0009990009990009,4796.4927
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLCO1B1,SLCO1B1,within_other,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | 4-Hydroxyvalsartan | Bilirubin | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Dehydroepiandrosterone | Deoxycholic acid | Digoxin | Estradiol | Estrone | Estrone sulfate | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | L-Carnitine | Lithocholic acid | O-Desmethylverapamil (D-702) | Prostaglandins | Sulfolithocholic acid | Taurocholic acid | Thyroxine | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0030550095066224,0.0009990009990009,9398.887
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC16A9,SLC22A4,within_other,L-Carnitine,0.0030550095066224,0.0009990009990009,7812.476
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC16A9,SLC22A5,within_other,L-Carnitine,0.0030550095066224,0.0009990009990009,11529.956
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC22A4,SLC22A4,within_other,L-Carnitine | O-Desmethylverapamil (D-702) | Putrescine | Sodium | Spermine | Testosterone,0.0030550095066224,0.0009990009990009,4034.6843
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC5A1,SLC5A1,within_other,Sodium | Urea,0.0030550095066224,0.0009990009990009,4414.182
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC29A1,SLC29A1,within_other,Adenosine | Cytidine | Ethanol | Guanosine | Inosine | Sodium | Thymidine | Uridine,0.0030550095066224,0.0009990009990009,11639.796
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC12A2,SLC1A5,within_other,Sodium,0.0030550095066224,0.0009990009990009,291445.56
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC22A5,SLC5A1,within_other,Sodium,0.0030550095066224,0.0009990009990009,3495.9763
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC12A2,SLC22A5,within_other,Sodium,0.0030550095066224,0.0009990009990009,63690.63
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC1A5,SLC6A4,within_other,Sodium,0.0030550095066224,0.0009990009990009,5103.7656
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC22A4,SLC5A1,within_other,Sodium,0.0030550095066224,0.0009990009990009,1778.2329
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC5A1,SLC5A3,within_other,Sodium,0.0030550095066224,0.0009990009990009,2760.5088
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC1A5,SLC22A4,within_other,Sodium,0.0030550095066224,0.0009990009990009,34640.023
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC22A5,SLC5A3,within_other,Sodium,0.0030550095066224,0.0009990009990009,13060.441
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC12A2,SLC22A4,within_other,Sodium,0.0030550095066224,0.0009990009990009,26129.062
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC1A5,SLC5A3,within_other,Sodium,0.0030550095066224,0.0009990009990009,62604.902
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC5A1,SLC5A5,within_other,Sodium | Urea,0.0030550095066224,0.0009990009990009,300.71817
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC5A3,SLC5A3,within_other,Sodium,0.0030550095066224,0.0009990009990009,10772.282
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC12A2,SLC5A1,within_other,Sodium,0.0030550095066224,0.0009990009990009,12516.017
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC22A4,SLC5A3,within_other,Sodium,0.0030550095066224,0.0009990009990009,5512.414
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC12A2,SLC12A2,within_other,Chloride ion | Sodium,0.0030550095066224,0.0009990009990009,253062.98
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC1A5,SLC22A5,within_other,Sodium,0.0030550095066224,0.0009990009990009,86734.14
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC12A2,SLC5A3,within_other,Sodium,0.0030550095066224,0.0009990009990009,43119.47
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC1A5,SLC5A1,within_other,Sodium,0.0030550095066224,0.0009990009990009,14474.376
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC16A4,SLCO2B1,within_other,Acetate,0.0030550095066224,0.0009990009990009,3925.9255
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC3A2,SLC43A2,within_other,L-Leucine,0.0030550095066224,0.0009990009990009,10382.018
+Human_Prostate_Adenocarcinoma,Tier1,other,other,MSR1,MSR1,within_other,Fatty acid,0.0030550095066224,0.0009990009990009,7211.926
+Human_Prostate_Adenocarcinoma,Tier1,other,other,CPT1A,CPT1A,within_other,Fatty acid,0.0030550095066224,0.0009990009990009,40569.22
+Human_Prostate_Adenocarcinoma,Tier1,other,other,CD36,CD36,within_other,Cholesterol | Fatty acid | Vitamin D3,0.0030550095066224,0.0009990009990009,1269.3497
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC6A1,SLC6A1,within_other,GABA,0.0030550095066224,0.0009990009990009,323.2089
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC22A2,SLC22A5,within_other,Choline | Dopamine | Histamine | Norepinephrine,0.0030550095066224,0.0009990009990009,1697.4879
+Human_Prostate_Adenocarcinoma,Tier1,other,other,ABCA1,ABCA1,within_other,25-Hydroxycholesterol,0.0030550095066224,0.0009990009990009,27741.219
+Human_Prostate_Adenocarcinoma,Tier1,other,other,ABCB1,CD36,within_other,Cholesterol,0.0030550095066224,0.0009990009990009,1663.8981
+Human_Prostate_Adenocarcinoma,Tier1,other,other,ABCB1,ABCB1,within_other,"17a-Ethynylestradiol | 2-Hydroxychlorpropamide | 3',4'-Dihydrodiol | 4'-Hydroxydiclofenac | 4-Hydroxycyclophosphamide | 5-Hydroxyomeprazole | 8-Hydroxycarvedilol | Cholesterol | Cholic acid | Cortisol | E-3179 | Estradiol | Estriol | Glycerol | Hydroxylansoprazole | N-Desmethylcitalopram | N-Desmethyleletriptan | N-Desmethyltamoxifen | N-desmethylimatinib | O-Deethylated candesartan | O-Desmethylverapamil (D-702) | Progesterone | Taurocholic acid | Testosterone",0.0030550095066224,0.0009990009990009,7150.6216
+Human_Prostate_Adenocarcinoma,Tier1,other,other,ABCG2,ABCG2,within_other,5-Hydroxyomeprazole | Cholesterol | Cortisol | Estradiol | Folic acid | Hydroxylansoprazole | N-Desmethyltamoxifen | N-desmethylimatinib | O-Desmethylverapamil (D-702) | Taurocholic acid | Testosterone,0.0030550095066224,0.0009990009990009,6873.5103
+Human_Prostate_Adenocarcinoma,Tier1,other,other,ABCG2,CD36,within_other,Cholesterol,0.0030550095066224,0.0009990009990009,1235.629
+Human_Prostate_Adenocarcinoma,Tier1,other,other,ABCB1,ABCG2,within_other,5-Hydroxyomeprazole | Cholesterol | Cortisol | Estradiol | Hydroxylansoprazole | N-Desmethyltamoxifen | N-desmethylimatinib | O-Desmethylverapamil (D-702) | Taurocholic acid | Testosterone,0.0030550095066224,0.0009990009990009,6078.9434
+Human_Prostate_Adenocarcinoma,Tier1,other,other,ATP7A,SLC20A2,within_other,Phosphate,0.0030550095066224,0.0009990009990009,4331.702
+Human_Prostate_Adenocarcinoma,Tier1,other,other,ATP7A,ATP7A,within_other,ADP | Adenosine triphosphate | Phosphate | Water,0.0030550095066224,0.0009990009990009,9833.051
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC20A2,SLC20A2,within_other,Phosphate,0.0030550095066224,0.0009990009990009,3903.568
+Human_Prostate_Adenocarcinoma,Tier1,other,other,ATP7A,ATP7B,within_other,ADP | Adenosine triphosphate | Phosphate | Water,0.0030550095066224,0.0009990009990009,4419.457
+Human_Prostate_Adenocarcinoma,Tier1,other,other,ATP7B,ATP7B,within_other,ADP | Adenosine triphosphate | Phosphate | Water,0.0030550095066224,0.0009990009990009,2287.7256
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC19A1,SLC19A1,within_other,Folic acid | Thiamine,0.0030550095066224,0.0009990009990009,1636.4304
+Human_Prostate_Adenocarcinoma,Tier1,other,other,CHRNA5,CHRNA5,within_other,Ethanol,0.0030550095066224,0.0009990009990009,6572.614
+Human_Prostate_Adenocarcinoma,Tier1,other,other,ABCC3,ABCC3,within_other,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | 5-Hydroxyomeprazole | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Deoxycholic acid | Folic acid | Folinic acid | Glutathione | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | O-Desmethylverapamil (D-702) | Sulfolithocholic acid | Taurocholic acid | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0030550095066224,0.0009990009990009,481.84607
+Human_Prostate_Adenocarcinoma,Tier1,other,other,ABCC3,FOLR1,within_other,Folic acid,0.0030550095066224,0.0009990009990009,223.79636
+Human_Prostate_Adenocarcinoma,Tier1,other,other,ABCC4,SLC19A1,within_other,Folic acid,0.0030550095066224,0.0009990009990009,53246.824
+Human_Prostate_Adenocarcinoma,Tier1,other,other,ABCC4,ABCC4,within_other,4'-Hydroxydiclofenac | Cholic acid | Cyclic AMP | Folic acid | Folinic acid | Glutathione | Hydroxycelecoxib | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0030550095066224,0.0009990009990009,1716603.4
+Human_Prostate_Adenocarcinoma,Tier1,other,other,FOLR2,FOLR2,within_other,Folic acid,0.0030550095066224,0.0009990009990009,1474.5024
+Human_Prostate_Adenocarcinoma,Tier1,other,other,LRP1,LRP1,within_other,Heme,0.0030550095066224,0.0009990009990009,103715.93
+Human_Prostate_Adenocarcinoma,Tier1,other,other,TRPV6,TRPV6,within_other,Heme,0.0030550095066224,0.0009990009990009,54782.74
+Human_Prostate_Adenocarcinoma,Tier1,other,other,CD38,CD38,within_other,Adenosine diphosphate ribose,0.0030550095066224,0.0009990009990009,182896.75
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC12A2,SLC12A6,within_other,Chloride ion,0.0030550095066224,0.0009990009990009,16038.153
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SCARB1,SCARB1,within_other,alpha-Tocopherol,0.0030550095066224,0.0009990009990009,11160.803
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC16A1,SLCO1B3,within_other,Taurocholic acid,0.0030550095066224,0.0009990009990009,6385.6436
+Human_Prostate_Adenocarcinoma,Tier1,other,other,ABCC4,SLCO1B3,within_other,Cholic acid | Taurocholic acid,0.0030550095066224,0.0009990009990009,40995.82
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC16A1,SLC22A1,within_other,Taurocholic acid,0.0030550095066224,0.0009990009990009,2060.6833
+Human_Prostate_Adenocarcinoma,Tier1,other,other,ABCC1,SLC16A1,within_other,Taurocholic acid,0.0030550095066224,0.0009990009990009,54770.33
+Human_Prostate_Adenocarcinoma,Tier1,other,other,ABCC4,SLC22A1,within_other,O-Desmethylverapamil (D-702) | Taurocholic acid,0.0030550095066224,0.0009990009990009,11207.068
+Human_Prostate_Adenocarcinoma,Tier1,other,other,ABCB1,SLCO2B1,within_other,Estradiol | Taurocholic acid,0.0030550095066224,0.0009990009990009,6297.396
+Human_Prostate_Adenocarcinoma,Tier1,other,other,ABCC1,ABCC1,within_other,4'-Hydroxydiclofenac | Cholic acid | Glutathione | Leukotriene C4 | O-Desmethylverapamil (D-702) | Progesterone | Taurocholic acid,0.0030550095066224,0.0009990009990009,98388.06
+Human_Prostate_Adenocarcinoma,Tier1,other,other,ABCC1,SLCO1B3,within_other,Cholic acid | Taurocholic acid,0.0030550095066224,0.0009990009990009,8621.871
+Human_Prostate_Adenocarcinoma,Tier1,other,other,ABCG2,SLCO2B1,within_other,Estradiol | Taurocholic acid,0.0030550095066224,0.0009990009990009,4558.511
+Human_Prostate_Adenocarcinoma,Tier1,other,other,ABCC4,SLCO1B1,within_other,Cholic acid | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0030550095066224,0.0009990009990009,7822.943
+Human_Prostate_Adenocarcinoma,Tier1,other,other,ABCC1,ABCC4,within_other,4'-Hydroxydiclofenac | Cholic acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0030550095066224,0.0009990009990009,358056.6
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLCO1B3,SLCO1B3,within_other,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | 4-Hydroxyvalsartan | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Dehydroepiandrosterone | Deoxycholic acid | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | Sulfolithocholic acid | Taurocholic acid | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0030550095066224,0.0009990009990009,7244.4385
+Human_Prostate_Adenocarcinoma,Tier1,other,other,ABCC4,SLC16A1,within_other,Taurocholic acid,0.0030550095066224,0.0009990009990009,239383.38
+Human_Prostate_Adenocarcinoma,Tier1,other,other,ABCC1,SLC22A1,within_other,O-Desmethylverapamil (D-702) | Progesterone | Taurocholic acid,0.0030550095066224,0.0009990009990009,3077.3506
+Human_Prostate_Adenocarcinoma,Tier1,other,other,ABCC4,SLCO1C1,within_other,4'-Hydroxydiclofenac | Taurocholic acid,0.0030550095066224,0.0009990009990009,11463.484
+Human_Prostate_Adenocarcinoma,Tier1,other,other,TAP1,TAP1,within_other,Adenosine triphosphate,0.0030550095066224,0.0009990009990009,18332.787
+Human_Prostate_Adenocarcinoma,Tier1,other,other,ATP7A,TAP1,within_other,Adenosine triphosphate,0.0030550095066224,0.0009990009990009,10467.508
+Human_Prostate_Adenocarcinoma,Tier1,other,other,ATP7B,TAP1,within_other,Adenosine triphosphate,0.0030550095066224,0.0009990009990009,4915.398
+Human_Prostate_Adenocarcinoma,Tier1,other,other,AQP4,ATP7A,within_other,Water,0.0030550095066224,0.0009990009990009,3295.4492
+Human_Prostate_Adenocarcinoma,Tier1,other,other,AQP4,ATP7B,within_other,Water,0.0030550095066224,0.0009990009990009,1844.8181
+Human_Prostate_Adenocarcinoma,Tier1,other,other,ABCC4,SLC6A4,within_other,O-Desmethylverapamil (D-702),0.0030550095066224,0.0009990009990009,67069.6
+Human_Prostate_Adenocarcinoma,Tier1,other,other,ABCC2,SLC22A4,within_other,O-Desmethylverapamil (D-702),0.0030550095066224,0.0009990009990009,8283.688
+Human_Prostate_Adenocarcinoma,Tier1,other,other,ABCC4,SLC22A5,within_other,O-Desmethylverapamil (D-702),0.0030550095066224,0.0009990009990009,166398.23
+Human_Prostate_Adenocarcinoma,Tier1,other,other,ABCC4,SLC22A4,within_other,O-Desmethylverapamil (D-702),0.0030550095066224,0.0009990009990009,16328.323
+Human_Prostate_Adenocarcinoma,Tier1,other,other,ABCC1,SLC22A4,within_other,O-Desmethylverapamil (D-702),0.0030550095066224,0.0009990009990009,39948.996
+Human_Prostate_Adenocarcinoma,Tier1,other,other,CLCN3,CLCN4,within_other,Chloride,0.0030550095066224,0.0009990009990009,13927.281
+Human_Prostate_Adenocarcinoma,Tier1,other,other,CLCN3,CLCN3,within_other,Chloride,0.0030550095066224,0.0009990009990009,237395.73
+Human_Prostate_Adenocarcinoma,Tier1,other,other,CLCN3,CLCN5,within_other,Chloride,0.0030550095066224,0.0009990009990009,10986.816
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC9A1,SLC9A1,within_other,Sodium_hydrogen exchange,0.0030550095066224,0.0009990009990009,6117.904
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC26A2,SLC26A2,within_other,Anion exchange,0.0030550095066224,0.0009990009990009,11708.92
+Human_Prostate_Adenocarcinoma,Tier1,other,other,ORAI3,ORAI3,within_other,Calcium release-activated calcium transport,0.0030550095066224,0.0009990009990009,7050.8525
+Human_Prostate_Adenocarcinoma,Tier1,other,other,ORAI2,ORAI3,within_other,Calcium release-activated calcium transport,0.0030550095066224,0.0009990009990009,26462.445
+Human_Prostate_Adenocarcinoma,Tier1,other,other,ORAI2,ORAI2,within_other,Calcium release-activated calcium transport,0.0030550095066224,0.0009990009990009,3040.4807
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SCNN1A,SCNN1A,within_other,Amiloride-sensitive sodium transport,0.0030550095066224,0.0009990009990009,36134.18
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SCNN1A,SCNN1G,within_other,Amiloride-sensitive sodium transport,0.0030550095066224,0.0009990009990009,12470.339
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SCNN1G,SCNN1G,within_other,Amiloride-sensitive sodium transport,0.0030550095066224,0.0009990009990009,13330.917
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC23A2,SLC23A2,within_other,Vitamin C,0.0030550095066224,0.0009990009990009,10639.494
+Human_Prostate_Adenocarcinoma,Tier1,other,other,RHAG,RHAG,within_other,Ammonium,0.0030550095066224,0.0009990009990009,425.03116
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC2A3,SLC2A3,within_other,D-Galactose | D-Glucose | D-Maltose | D-Mannose | D-Xylose | Dehydroascorbic acid | Docosahexaenoic acid,0.0056372199229342,0.0019980019980019,6532.9263
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC6A4,SLC6A4,within_other,N-Desmethylcitalopram | O-Desmethylverapamil (D-702) | Serotonin | Sodium,0.0056372199229342,0.0019980019980019,199.22195
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC5A5,SLC5A5,within_other,Sodium | Urea,0.0056372199229342,0.0019980019980019,177.4741
+Human_Prostate_Adenocarcinoma,Tier1,other,other,FOLR1,FOLR1,within_other,5-Methyltetrahydrofolic acid | Folic acid,0.0056372199229342,0.0019980019980019,168.41582
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC12A2,SLC6A4,within_other,Sodium,0.0079361978803319,0.0029970029970029,3159.0452
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC22A5,SLC6A3,within_other,Dopamine,0.0079361978803319,0.0029970029970029,1521.1797
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC3A1,SLC3A1,within_other,L-Arginine | L-Cystine | L-Lysine | L-Ornithine,0.0098651348651348,0.0039960039960039,211.7786
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC29A3,SLC29A3,within_other,Adenine,0.0098651348651348,0.0039960039960039,1327.4061
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC12A6,SLC12A6,within_other,Chloride ion,0.0098651348651348,0.0039960039960039,1634.7059
+Human_Prostate_Adenocarcinoma,Tier1,other,other,CLCN5,CLCN5,within_other,Chloride,0.0098651348651348,0.0039960039960039,980.7696
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC16A1,SLC7A11,within_other,L-Glutamate,0.0119577392304665,0.0049950049950049,188.6879
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC43A2,SLC7A11,within_other,L-Cysteine,0.0135293278150421,0.0059940059940059,764.0268
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC11A2,SLC11A2,within_other,Iron,0.0135293278150421,0.0059940059940059,3950.1519
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC5A3,SLC5A5,within_other,Sodium,0.0135293278150421,0.0059940059940059,654.9226
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC22A1,SLC22A5,within_other,Choline | Dopamine | Norepinephrine | O-Desmethylverapamil (D-702),0.0135293278150421,0.0059940059940059,1202.4286
+Human_Prostate_Adenocarcinoma,Tier1,other,other,ABCC1,ABCC3,within_other,Cholic acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0135293278150421,0.0059940059940059,3593.8508
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC16A1,SLCO1B1,within_other,Taurocholic acid,0.0135293278150421,0.0059940059940059,1243.6078
+Human_Prostate_Adenocarcinoma,Tier1,other,other,ABCC1,SLC22A5,within_other,O-Desmethylverapamil (D-702),0.0151355493821247,0.0069930069930069,949.21063
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC24A1,SLC24A1,within_other,Sodium_calcium_potassium exchange,0.0151355493821247,0.0069930069930069,1695.6863
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC5A7,SLC5A7,within_other,Chloride ion | Choline | Sodium,0.0163284990871197,0.0079920079920079,188.22568
+Human_Prostate_Adenocarcinoma,Tier1,other,other,AQP7,AQP7,within_other,Water,0.0163284990871197,0.0079920079920079,414.52512
+Human_Prostate_Adenocarcinoma,Tier1,other,other,AQP9,AQP9,within_other,Water,0.0163284990871197,0.0079920079920079,214.6286
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC6A9,SLC6A9,within_other,Neurotransmitter,0.0163284990871197,0.0079920079920079,488.04773
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC16A9,SLC16A9,within_other,L-Carnitine,0.0179820179820179,0.0089910089910089,136.2521
+Human_Prostate_Adenocarcinoma,Tier1,other,other,ABCG2,FOLR2,within_other,Folic acid,0.0179820179820179,0.0089910089910089,1275.6478
+Human_Prostate_Adenocarcinoma,Tier1,other,other,ABCC3,SLCO2B1,within_other,Taurocholic acid,0.0266239784312073,0.0139860139860139,1037.8414
+Human_Prostate_Adenocarcinoma,Tier1,other,other,LRP2,LRP2,within_other,Calcidiol,0.028186099614671,0.0149850149850149,108.23285
+Human_Prostate_Adenocarcinoma,Tier1,other,other,CUBN,CUBN,within_other,Adenosylcobalamin | Calcidiol | Calcium | Cobalamin | Iron,0.0297114650055826,0.0159840159840159,238.76505
+Human_Prostate_Adenocarcinoma,Tier1,other,other,CLCN4,CLCN4,within_other,Chloride,0.0325323531430401,0.0179820179820179,965.059
+Human_Prostate_Adenocarcinoma,Tier1,other,other,SLC6A17,SLC6A17,within_other,Neurotransmitter,0.0372436552211833,0.0209790209790209,357.23065
+Human_Prostate_Adenocarcinoma,Tier2,CD8 T Cell,other,SLC2A3,SLC2A4,Tcell_interface,D-Glucose | Dehydroascorbic acid | Docosahexaenoic acid,0.0030550095066224,0.0009990009990009,3857.1306
+Human_Prostate_Adenocarcinoma,Tier2,CD8 T Cell,other,SLC40A1,SLC40A1,Tcell_interface,Iron,0.0030550095066224,0.0009990009990009,2313.4233
+Human_Prostate_Adenocarcinoma,Tier2,CD8 T Cell,other,SLC16A4,SLCO2B1,Tcell_interface,Acetate,0.0030550095066224,0.0009990009990009,98.4053
+Human_Prostate_Adenocarcinoma,Tier2,CD8 T Cell,other,MSR1,MSR1,Tcell_interface,Fatty acid,0.0030550095066224,0.0009990009990009,161.9585
+Human_Prostate_Adenocarcinoma,Tier2,CD8 T Cell,other,FOLR2,FOLR2,Tcell_interface,Folic acid,0.0030550095066224,0.0009990009990009,81.00695
+Human_Prostate_Adenocarcinoma,Tier2,CD8 T Cell,other,ABCB1,SLCO2B1,Tcell_interface,Estradiol | Taurocholic acid,0.0030550095066224,0.0009990009990009,392.26764
+Human_Prostate_Adenocarcinoma,Tier2,CD8 T Cell,other,CPT1A,CPT1A,Tcell_interface,Fatty acid,0.0119577392304665,0.0049950049950049,278.00873
+Human_Prostate_Adenocarcinoma,Tier2,CD8 T Cell,other,SLCO2B1,SLCO2B1,Tcell_interface,Acetate | Citric acid | Estradiol | Nicotinate | Oxalic acid | Taurocholic acid,0.0135293278150421,0.0059940059940059,112.197
+Human_Prostate_Adenocarcinoma,Tier2,CD8 T Cell,other,SCNN1G,SCNN1G,Tcell_interface,Amiloride-sensitive sodium transport,0.0151355493821247,0.0069930069930069,26.678585
+Human_Prostate_Adenocarcinoma,Tier2,CD8 T Cell,other,AQP9,AQP9,Tcell_interface,Water,0.0179820179820179,0.0089910089910089,24.48905
+Human_Prostate_Adenocarcinoma,Tier2,CD8 T Cell,other,SLC16A1,SLC1A5,Tcell_interface,L-Glutamate,0.028186099614671,0.0149850149850149,20.009583
+Human_Prostate_Adenocarcinoma,Tier2,CD8 T Cell,other,SLC2A3,SLC2A3,Tcell_interface,D-Galactose | D-Glucose | D-Maltose | D-Mannose | D-Xylose | Dehydroascorbic acid | Docosahexaenoic acid,0.0297114650055826,0.0159840159840159,202.1429
+Human_Prostate_Adenocarcinoma,Tier2,CD8 T Cell,other,SLC5A7,SLC5A7,Tcell_interface,Chloride ion | Choline | Sodium,0.0387270721843212,0.0219780219780219,18.012146
+Human_Prostate_Adenocarcinoma,Tier2,CD8 T Cell,other,ABCB1,ABCB1,Tcell_interface,"17a-Ethynylestradiol | 2-Hydroxychlorpropamide | 3',4'-Dihydrodiol | 4'-Hydroxydiclofenac | 4-Hydroxycyclophosphamide | 5-Hydroxyomeprazole | 8-Hydroxycarvedilol | Cholesterol | Cholic acid | Cortisol | E-3179 | Estradiol | Estriol | Glycerol | Hydroxylansoprazole | N-Desmethylcitalopram | N-Desmethyleletriptan | N-Desmethyltamoxifen | N-desmethylimatinib | O-Deethylated candesartan | O-Desmethylverapamil (D-702) | Progesterone | Taurocholic acid | Testosterone",0.0485239142482958,0.0289710289710289,175.58784
+Human_Prostate_Adenocarcinoma,Tier2,CD8 T Cell,CD8 T Cell,ABCC3,SLCO2B1,within_Tcell,Taurocholic acid,0.0098651348651348,0.0039960039960039,21.738579
+Human_Prostate_Adenocarcinoma,Tier2,CD8 T Cell,CD8 T Cell,SLCO2B1,SLCO2B1,within_Tcell,Acetate | Citric acid | Estradiol | Nicotinate | Oxalic acid | Taurocholic acid,0.0163284990871197,0.0079920079920079,43.477158
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC2A1,SLC2A1,within_other,D-Galactose | D-Glucose | D-Mannose | Dehydroascorbic acid | Docosahexaenoic acid | Glucosamine,0.0030550095066224,0.0009990009990009,42589.67
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC2A3,SLC2A9,within_other,D-Glucose,0.0030550095066224,0.0009990009990009,787.0824
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC2A9,SLC2A9,within_other,D-Glucose,0.0030550095066224,0.0009990009990009,4976.988
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC2A3,SLC2A4,within_other,D-Glucose | Dehydroascorbic acid | Docosahexaenoic acid,0.0030550095066224,0.0009990009990009,280196.25
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC1A5,SLC38A7,within_other,L-Glutamine,0.0030550095066224,0.0009990009990009,23587.871
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC1A5,SLC3A2,within_other,L-Glutamate | L-Glutamine | L-Leucine | L-Serine,0.0030550095066224,0.0009990009990009,131929.02
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC7A5,SLC7A5,within_other,L-Arginine | L-Glutamine | L-Histidine | L-Leucine | L-Methionine | L-Phenylalanine | L-Tyrosine,0.0030550095066224,0.0009990009990009,1685.8776
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC3A2,SLC3A2,within_other,Iron | L-Cystine | L-Glutamate | L-Glutamine | L-Leucine | L-Serine,0.0030550095066224,0.0009990009990009,1531.2981
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC38A7,SLC38A7,within_other,L-Glutamine,0.0030550095066224,0.0009990009990009,7772.896
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC38A7,SLC3A2,within_other,L-Glutamine,0.0030550095066224,0.0009990009990009,438651.8
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC7A7,SLC7A7,within_other,L-Glutamine,0.0030550095066224,0.0009990009990009,1467.388
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC1A5,SLC1A5,within_other,L-Alanine | L-Asparagine | L-Cysteine | L-Glutamate | L-Glutamine | L-Leucine | L-Serine | L-Threonine | Sodium,0.0030550095066224,0.0009990009990009,46405.695
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC1A5,SLC43A2,within_other,L-Cysteine | L-Leucine,0.0030550095066224,0.0009990009990009,30950.85
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC43A2,SLC43A2,within_other,L-Cysteine | L-Isoleucine | L-Leucine | L-Methionine | L-Phenylalanine | L-Valine,0.0030550095066224,0.0009990009990009,3597.0535
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC1A5,SLC7A11,within_other,L-Cysteine | L-Glutamate,0.0030550095066224,0.0009990009990009,8551.376
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC16A1,SLC16A1,within_other,4-ene-Valproic acid | Acetate | Butyrate | D-Lactate | Ketone bodies | L-Glutamate | L-Lactate | Nicotinate | Pyruvate | Taurocholic acid | alpha-Ketoisovaleric acid,0.0030550095066224,0.0009990009990009,39098.758
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC16A4,SLC16A4,within_other,Acetate | L-Lactate,0.0030550095066224,0.0009990009990009,2622.0576
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC16A1,SLC22A5,within_other,4-ene-Valproic acid | Nicotinate,0.0030550095066224,0.0009990009990009,26179.02
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC22A5,SLC22A5,within_other,4-ene-Valproic acid | Acetyl-L-Carnitine | Choline | Creatine | Dopamine | Histamine | L-Carnitine | Nicotinate | Norepinephrine | O-Desmethylverapamil (D-702) | Sodium,0.0030550095066224,0.0009990009990009,20219.293
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLCO2B1,SLCO2B1,within_other,Acetate | Citric acid | Estradiol | Nicotinate | Oxalic acid | Taurocholic acid,0.0030550095066224,0.0009990009990009,12510.808
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC1A1,SLC7A11,within_other,L-Glutamate,0.0030550095066224,0.0009990009990009,9270.511
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC16A1,SLC1A1,within_other,L-Glutamate,0.0030550095066224,0.0009990009990009,2542.9077
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC16A1,SLC1A5,within_other,L-Glutamate,0.0030550095066224,0.0009990009990009,721.822
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC16A1,SLC3A2,within_other,L-Glutamate,0.0030550095066224,0.0009990009990009,9060.704
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC1A1,SLC3A2,within_other,L-Glutamate,0.0030550095066224,0.0009990009990009,3335.9824
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC1A1,SLC1A1,within_other,L-Glutamate,0.0030550095066224,0.0009990009990009,114998.65
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC1A2,SLC7A11,within_other,L-Glutamate,0.0030550095066224,0.0009990009990009,29913.934
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC1A1,SLC1A5,within_other,L-Glutamate,0.0030550095066224,0.0009990009990009,35661.312
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC1A3,SLC1A3,within_other,D-Aspartate | L-Aspartate | L-Glutamate | Malic acid,0.0030550095066224,0.0009990009990009,1198.9873
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC39A8,SLC39A8,within_other,Cadmium | Manganese | Zinc,0.0030550095066224,0.0009990009990009,12810.152
+Human_Prostate_Adenocarcinoma,Tier2,other,other,CUBN,SLC11A2,within_other,Iron,0.0030550095066224,0.0009990009990009,76414.1
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC11A2,SLC40A1,within_other,Iron,0.0030550095066224,0.0009990009990009,149349.7
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC11A2,SLC3A2,within_other,Iron,0.0030550095066224,0.0009990009990009,79600.37
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC40A1,SLC40A1,within_other,Iron,0.0030550095066224,0.0009990009990009,228545.16
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC3A2,SLC40A1,within_other,Iron,0.0030550095066224,0.0009990009990009,162885.19
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC22A4,SLC22A5,within_other,L-Carnitine | O-Desmethylverapamil (D-702) | Sodium,0.0030550095066224,0.0009990009990009,4796.4927
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLCO1B1,SLCO1B1,within_other,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | 4-Hydroxyvalsartan | Bilirubin | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Dehydroepiandrosterone | Deoxycholic acid | Digoxin | Estradiol | Estrone | Estrone sulfate | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | L-Carnitine | Lithocholic acid | O-Desmethylverapamil (D-702) | Prostaglandins | Sulfolithocholic acid | Taurocholic acid | Thyroxine | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0030550095066224,0.0009990009990009,9398.887
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC16A9,SLC22A4,within_other,L-Carnitine,0.0030550095066224,0.0009990009990009,7812.476
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC16A9,SLC22A5,within_other,L-Carnitine,0.0030550095066224,0.0009990009990009,11529.956
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC22A4,SLC22A4,within_other,L-Carnitine | O-Desmethylverapamil (D-702) | Putrescine | Sodium | Spermine | Testosterone,0.0030550095066224,0.0009990009990009,4034.6843
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC5A1,SLC5A1,within_other,Sodium | Urea,0.0030550095066224,0.0009990009990009,4414.182
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC29A1,SLC29A1,within_other,Adenosine | Cytidine | Ethanol | Guanosine | Inosine | Sodium | Thymidine | Uridine,0.0030550095066224,0.0009990009990009,11639.796
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC12A2,SLC1A5,within_other,Sodium,0.0030550095066224,0.0009990009990009,291445.56
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC22A5,SLC5A1,within_other,Sodium,0.0030550095066224,0.0009990009990009,3495.9763
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC12A2,SLC22A5,within_other,Sodium,0.0030550095066224,0.0009990009990009,63690.63
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC1A5,SLC6A4,within_other,Sodium,0.0030550095066224,0.0009990009990009,5103.7656
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC22A4,SLC5A1,within_other,Sodium,0.0030550095066224,0.0009990009990009,1778.2329
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC5A1,SLC5A3,within_other,Sodium,0.0030550095066224,0.0009990009990009,2760.5088
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC1A5,SLC22A4,within_other,Sodium,0.0030550095066224,0.0009990009990009,34640.023
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC22A5,SLC5A3,within_other,Sodium,0.0030550095066224,0.0009990009990009,13060.441
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC12A2,SLC22A4,within_other,Sodium,0.0030550095066224,0.0009990009990009,26129.062
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC1A5,SLC5A3,within_other,Sodium,0.0030550095066224,0.0009990009990009,62604.902
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC5A1,SLC5A5,within_other,Sodium | Urea,0.0030550095066224,0.0009990009990009,300.71817
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC5A3,SLC5A3,within_other,Sodium,0.0030550095066224,0.0009990009990009,10772.282
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC12A2,SLC5A1,within_other,Sodium,0.0030550095066224,0.0009990009990009,12516.017
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC22A4,SLC5A3,within_other,Sodium,0.0030550095066224,0.0009990009990009,5512.414
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC12A2,SLC12A2,within_other,Chloride ion | Sodium,0.0030550095066224,0.0009990009990009,253062.98
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC1A5,SLC22A5,within_other,Sodium,0.0030550095066224,0.0009990009990009,86734.14
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC12A2,SLC5A3,within_other,Sodium,0.0030550095066224,0.0009990009990009,43119.47
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC1A5,SLC5A1,within_other,Sodium,0.0030550095066224,0.0009990009990009,14474.376
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC16A4,SLCO2B1,within_other,Acetate,0.0030550095066224,0.0009990009990009,3925.9255
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC3A2,SLC43A2,within_other,L-Leucine,0.0030550095066224,0.0009990009990009,10382.018
+Human_Prostate_Adenocarcinoma,Tier2,other,other,MSR1,MSR1,within_other,Fatty acid,0.0030550095066224,0.0009990009990009,7211.926
+Human_Prostate_Adenocarcinoma,Tier2,other,other,CPT1A,CPT1A,within_other,Fatty acid,0.0030550095066224,0.0009990009990009,40569.22
+Human_Prostate_Adenocarcinoma,Tier2,other,other,CD36,CD36,within_other,Cholesterol | Fatty acid | Vitamin D3,0.0030550095066224,0.0009990009990009,1269.3497
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC6A1,SLC6A1,within_other,GABA,0.0030550095066224,0.0009990009990009,323.2089
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC22A2,SLC22A5,within_other,Choline | Dopamine | Histamine | Norepinephrine,0.0030550095066224,0.0009990009990009,1697.4879
+Human_Prostate_Adenocarcinoma,Tier2,other,other,ABCA1,ABCA1,within_other,25-Hydroxycholesterol,0.0030550095066224,0.0009990009990009,27741.219
+Human_Prostate_Adenocarcinoma,Tier2,other,other,ABCB1,CD36,within_other,Cholesterol,0.0030550095066224,0.0009990009990009,1663.8981
+Human_Prostate_Adenocarcinoma,Tier2,other,other,ABCB1,ABCB1,within_other,"17a-Ethynylestradiol | 2-Hydroxychlorpropamide | 3',4'-Dihydrodiol | 4'-Hydroxydiclofenac | 4-Hydroxycyclophosphamide | 5-Hydroxyomeprazole | 8-Hydroxycarvedilol | Cholesterol | Cholic acid | Cortisol | E-3179 | Estradiol | Estriol | Glycerol | Hydroxylansoprazole | N-Desmethylcitalopram | N-Desmethyleletriptan | N-Desmethyltamoxifen | N-desmethylimatinib | O-Deethylated candesartan | O-Desmethylverapamil (D-702) | Progesterone | Taurocholic acid | Testosterone",0.0030550095066224,0.0009990009990009,7150.6216
+Human_Prostate_Adenocarcinoma,Tier2,other,other,ABCG2,ABCG2,within_other,5-Hydroxyomeprazole | Cholesterol | Cortisol | Estradiol | Folic acid | Hydroxylansoprazole | N-Desmethyltamoxifen | N-desmethylimatinib | O-Desmethylverapamil (D-702) | Taurocholic acid | Testosterone,0.0030550095066224,0.0009990009990009,6873.5103
+Human_Prostate_Adenocarcinoma,Tier2,other,other,ABCG2,CD36,within_other,Cholesterol,0.0030550095066224,0.0009990009990009,1235.629
+Human_Prostate_Adenocarcinoma,Tier2,other,other,ABCB1,ABCG2,within_other,5-Hydroxyomeprazole | Cholesterol | Cortisol | Estradiol | Hydroxylansoprazole | N-Desmethyltamoxifen | N-desmethylimatinib | O-Desmethylverapamil (D-702) | Taurocholic acid | Testosterone,0.0030550095066224,0.0009990009990009,6078.9434
+Human_Prostate_Adenocarcinoma,Tier2,other,other,ATP7A,SLC20A2,within_other,Phosphate,0.0030550095066224,0.0009990009990009,4331.702
+Human_Prostate_Adenocarcinoma,Tier2,other,other,ATP7A,ATP7A,within_other,ADP | Adenosine triphosphate | Phosphate | Water,0.0030550095066224,0.0009990009990009,9833.051
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC20A2,SLC20A2,within_other,Phosphate,0.0030550095066224,0.0009990009990009,3903.568
+Human_Prostate_Adenocarcinoma,Tier2,other,other,ATP7A,ATP7B,within_other,ADP | Adenosine triphosphate | Phosphate | Water,0.0030550095066224,0.0009990009990009,4419.457
+Human_Prostate_Adenocarcinoma,Tier2,other,other,ATP7B,ATP7B,within_other,ADP | Adenosine triphosphate | Phosphate | Water,0.0030550095066224,0.0009990009990009,2287.7256
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC19A1,SLC19A1,within_other,Folic acid | Thiamine,0.0030550095066224,0.0009990009990009,1636.4304
+Human_Prostate_Adenocarcinoma,Tier2,other,other,CHRNA5,CHRNA5,within_other,Ethanol,0.0030550095066224,0.0009990009990009,6572.614
+Human_Prostate_Adenocarcinoma,Tier2,other,other,ABCC3,ABCC3,within_other,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | 5-Hydroxyomeprazole | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Deoxycholic acid | Folic acid | Folinic acid | Glutathione | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | O-Desmethylverapamil (D-702) | Sulfolithocholic acid | Taurocholic acid | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0030550095066224,0.0009990009990009,481.84607
+Human_Prostate_Adenocarcinoma,Tier2,other,other,ABCC3,FOLR1,within_other,Folic acid,0.0030550095066224,0.0009990009990009,223.79636
+Human_Prostate_Adenocarcinoma,Tier2,other,other,ABCC4,SLC19A1,within_other,Folic acid,0.0030550095066224,0.0009990009990009,53246.824
+Human_Prostate_Adenocarcinoma,Tier2,other,other,ABCC4,ABCC4,within_other,4'-Hydroxydiclofenac | Cholic acid | Cyclic AMP | Folic acid | Folinic acid | Glutathione | Hydroxycelecoxib | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0030550095066224,0.0009990009990009,1716603.4
+Human_Prostate_Adenocarcinoma,Tier2,other,other,FOLR2,FOLR2,within_other,Folic acid,0.0030550095066224,0.0009990009990009,1474.5024
+Human_Prostate_Adenocarcinoma,Tier2,other,other,LRP1,LRP1,within_other,Heme,0.0030550095066224,0.0009990009990009,103715.93
+Human_Prostate_Adenocarcinoma,Tier2,other,other,TRPV6,TRPV6,within_other,Heme,0.0030550095066224,0.0009990009990009,54782.74
+Human_Prostate_Adenocarcinoma,Tier2,other,other,CD38,CD38,within_other,Adenosine diphosphate ribose,0.0030550095066224,0.0009990009990009,182896.75
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC12A2,SLC12A6,within_other,Chloride ion,0.0030550095066224,0.0009990009990009,16038.153
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SCARB1,SCARB1,within_other,alpha-Tocopherol,0.0030550095066224,0.0009990009990009,11160.803
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC16A1,SLCO1B3,within_other,Taurocholic acid,0.0030550095066224,0.0009990009990009,6385.6436
+Human_Prostate_Adenocarcinoma,Tier2,other,other,ABCC4,SLCO1B3,within_other,Cholic acid | Taurocholic acid,0.0030550095066224,0.0009990009990009,40995.82
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC16A1,SLC22A1,within_other,Taurocholic acid,0.0030550095066224,0.0009990009990009,2060.6833
+Human_Prostate_Adenocarcinoma,Tier2,other,other,ABCC1,SLC16A1,within_other,Taurocholic acid,0.0030550095066224,0.0009990009990009,54770.33
+Human_Prostate_Adenocarcinoma,Tier2,other,other,ABCC4,SLC22A1,within_other,O-Desmethylverapamil (D-702) | Taurocholic acid,0.0030550095066224,0.0009990009990009,11207.068
+Human_Prostate_Adenocarcinoma,Tier2,other,other,ABCB1,SLCO2B1,within_other,Estradiol | Taurocholic acid,0.0030550095066224,0.0009990009990009,6297.396
+Human_Prostate_Adenocarcinoma,Tier2,other,other,ABCC1,ABCC1,within_other,4'-Hydroxydiclofenac | Cholic acid | Glutathione | Leukotriene C4 | O-Desmethylverapamil (D-702) | Progesterone | Taurocholic acid,0.0030550095066224,0.0009990009990009,98388.06
+Human_Prostate_Adenocarcinoma,Tier2,other,other,ABCC1,SLCO1B3,within_other,Cholic acid | Taurocholic acid,0.0030550095066224,0.0009990009990009,8621.871
+Human_Prostate_Adenocarcinoma,Tier2,other,other,ABCG2,SLCO2B1,within_other,Estradiol | Taurocholic acid,0.0030550095066224,0.0009990009990009,4558.511
+Human_Prostate_Adenocarcinoma,Tier2,other,other,ABCC4,SLCO1B1,within_other,Cholic acid | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0030550095066224,0.0009990009990009,7822.943
+Human_Prostate_Adenocarcinoma,Tier2,other,other,ABCC1,ABCC4,within_other,4'-Hydroxydiclofenac | Cholic acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0030550095066224,0.0009990009990009,358056.6
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLCO1B3,SLCO1B3,within_other,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | 4-Hydroxyvalsartan | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Dehydroepiandrosterone | Deoxycholic acid | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | Sulfolithocholic acid | Taurocholic acid | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0030550095066224,0.0009990009990009,7244.4385
+Human_Prostate_Adenocarcinoma,Tier2,other,other,ABCC4,SLC16A1,within_other,Taurocholic acid,0.0030550095066224,0.0009990009990009,239383.38
+Human_Prostate_Adenocarcinoma,Tier2,other,other,ABCC1,SLC22A1,within_other,O-Desmethylverapamil (D-702) | Progesterone | Taurocholic acid,0.0030550095066224,0.0009990009990009,3077.3506
+Human_Prostate_Adenocarcinoma,Tier2,other,other,ABCC4,SLCO1C1,within_other,4'-Hydroxydiclofenac | Taurocholic acid,0.0030550095066224,0.0009990009990009,11463.484
+Human_Prostate_Adenocarcinoma,Tier2,other,other,TAP1,TAP1,within_other,Adenosine triphosphate,0.0030550095066224,0.0009990009990009,18332.787
+Human_Prostate_Adenocarcinoma,Tier2,other,other,ATP7A,TAP1,within_other,Adenosine triphosphate,0.0030550095066224,0.0009990009990009,10467.508
+Human_Prostate_Adenocarcinoma,Tier2,other,other,ATP7B,TAP1,within_other,Adenosine triphosphate,0.0030550095066224,0.0009990009990009,4915.398
+Human_Prostate_Adenocarcinoma,Tier2,other,other,AQP4,ATP7A,within_other,Water,0.0030550095066224,0.0009990009990009,3295.4492
+Human_Prostate_Adenocarcinoma,Tier2,other,other,AQP4,ATP7B,within_other,Water,0.0030550095066224,0.0009990009990009,1844.8181
+Human_Prostate_Adenocarcinoma,Tier2,other,other,ABCC4,SLC6A4,within_other,O-Desmethylverapamil (D-702),0.0030550095066224,0.0009990009990009,67069.6
+Human_Prostate_Adenocarcinoma,Tier2,other,other,ABCC2,SLC22A4,within_other,O-Desmethylverapamil (D-702),0.0030550095066224,0.0009990009990009,8283.688
+Human_Prostate_Adenocarcinoma,Tier2,other,other,ABCC4,SLC22A5,within_other,O-Desmethylverapamil (D-702),0.0030550095066224,0.0009990009990009,166398.23
+Human_Prostate_Adenocarcinoma,Tier2,other,other,ABCC4,SLC22A4,within_other,O-Desmethylverapamil (D-702),0.0030550095066224,0.0009990009990009,16328.323
+Human_Prostate_Adenocarcinoma,Tier2,other,other,ABCC1,SLC22A4,within_other,O-Desmethylverapamil (D-702),0.0030550095066224,0.0009990009990009,39948.996
+Human_Prostate_Adenocarcinoma,Tier2,other,other,CLCN3,CLCN4,within_other,Chloride,0.0030550095066224,0.0009990009990009,13927.281
+Human_Prostate_Adenocarcinoma,Tier2,other,other,CLCN3,CLCN3,within_other,Chloride,0.0030550095066224,0.0009990009990009,237395.73
+Human_Prostate_Adenocarcinoma,Tier2,other,other,CLCN3,CLCN5,within_other,Chloride,0.0030550095066224,0.0009990009990009,10986.816
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC9A1,SLC9A1,within_other,Sodium_hydrogen exchange,0.0030550095066224,0.0009990009990009,6117.904
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC26A2,SLC26A2,within_other,Anion exchange,0.0030550095066224,0.0009990009990009,11708.92
+Human_Prostate_Adenocarcinoma,Tier2,other,other,ORAI3,ORAI3,within_other,Calcium release-activated calcium transport,0.0030550095066224,0.0009990009990009,7050.8525
+Human_Prostate_Adenocarcinoma,Tier2,other,other,ORAI2,ORAI3,within_other,Calcium release-activated calcium transport,0.0030550095066224,0.0009990009990009,26462.445
+Human_Prostate_Adenocarcinoma,Tier2,other,other,ORAI2,ORAI2,within_other,Calcium release-activated calcium transport,0.0030550095066224,0.0009990009990009,3040.4807
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SCNN1A,SCNN1A,within_other,Amiloride-sensitive sodium transport,0.0030550095066224,0.0009990009990009,36134.18
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SCNN1A,SCNN1G,within_other,Amiloride-sensitive sodium transport,0.0030550095066224,0.0009990009990009,12470.339
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SCNN1G,SCNN1G,within_other,Amiloride-sensitive sodium transport,0.0030550095066224,0.0009990009990009,13330.917
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC23A2,SLC23A2,within_other,Vitamin C,0.0030550095066224,0.0009990009990009,10639.494
+Human_Prostate_Adenocarcinoma,Tier2,other,other,RHAG,RHAG,within_other,Ammonium,0.0030550095066224,0.0009990009990009,425.03116
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC2A3,SLC2A3,within_other,D-Galactose | D-Glucose | D-Maltose | D-Mannose | D-Xylose | Dehydroascorbic acid | Docosahexaenoic acid,0.0056372199229342,0.0019980019980019,6532.9263
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC6A4,SLC6A4,within_other,N-Desmethylcitalopram | O-Desmethylverapamil (D-702) | Serotonin | Sodium,0.0056372199229342,0.0019980019980019,199.22195
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC5A5,SLC5A5,within_other,Sodium | Urea,0.0056372199229342,0.0019980019980019,177.4741
+Human_Prostate_Adenocarcinoma,Tier2,other,other,FOLR1,FOLR1,within_other,5-Methyltetrahydrofolic acid | Folic acid,0.0056372199229342,0.0019980019980019,168.41582
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC12A2,SLC6A4,within_other,Sodium,0.0079361978803319,0.0029970029970029,3159.0452
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC22A5,SLC6A3,within_other,Dopamine,0.0079361978803319,0.0029970029970029,1521.1797
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC3A1,SLC3A1,within_other,L-Arginine | L-Cystine | L-Lysine | L-Ornithine,0.0098651348651348,0.0039960039960039,211.7786
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC29A3,SLC29A3,within_other,Adenine,0.0098651348651348,0.0039960039960039,1327.4061
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC12A6,SLC12A6,within_other,Chloride ion,0.0098651348651348,0.0039960039960039,1634.7059
+Human_Prostate_Adenocarcinoma,Tier2,other,other,CLCN5,CLCN5,within_other,Chloride,0.0098651348651348,0.0039960039960039,980.7696
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC16A1,SLC7A11,within_other,L-Glutamate,0.0119577392304665,0.0049950049950049,188.6879
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC43A2,SLC7A11,within_other,L-Cysteine,0.0135293278150421,0.0059940059940059,764.0268
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC11A2,SLC11A2,within_other,Iron,0.0135293278150421,0.0059940059940059,3950.1519
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC5A3,SLC5A5,within_other,Sodium,0.0135293278150421,0.0059940059940059,654.9226
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC22A1,SLC22A5,within_other,Choline | Dopamine | Norepinephrine | O-Desmethylverapamil (D-702),0.0135293278150421,0.0059940059940059,1202.4286
+Human_Prostate_Adenocarcinoma,Tier2,other,other,ABCC1,ABCC3,within_other,Cholic acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0135293278150421,0.0059940059940059,3593.8508
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC16A1,SLCO1B1,within_other,Taurocholic acid,0.0135293278150421,0.0059940059940059,1243.6078
+Human_Prostate_Adenocarcinoma,Tier2,other,other,ABCC1,SLC22A5,within_other,O-Desmethylverapamil (D-702),0.0151355493821247,0.0069930069930069,949.21063
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC24A1,SLC24A1,within_other,Sodium_calcium_potassium exchange,0.0151355493821247,0.0069930069930069,1695.6863
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC5A7,SLC5A7,within_other,Chloride ion | Choline | Sodium,0.0163284990871197,0.0079920079920079,188.22568
+Human_Prostate_Adenocarcinoma,Tier2,other,other,AQP7,AQP7,within_other,Water,0.0163284990871197,0.0079920079920079,414.52512
+Human_Prostate_Adenocarcinoma,Tier2,other,other,AQP9,AQP9,within_other,Water,0.0163284990871197,0.0079920079920079,214.6286
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC6A9,SLC6A9,within_other,Neurotransmitter,0.0163284990871197,0.0079920079920079,488.04773
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC16A9,SLC16A9,within_other,L-Carnitine,0.0179820179820179,0.0089910089910089,136.2521
+Human_Prostate_Adenocarcinoma,Tier2,other,other,ABCG2,FOLR2,within_other,Folic acid,0.0179820179820179,0.0089910089910089,1275.6478
+Human_Prostate_Adenocarcinoma,Tier2,other,other,ABCC3,SLCO2B1,within_other,Taurocholic acid,0.0266239784312073,0.0139860139860139,1037.8414
+Human_Prostate_Adenocarcinoma,Tier2,other,other,LRP2,LRP2,within_other,Calcidiol,0.028186099614671,0.0149850149850149,108.23285
+Human_Prostate_Adenocarcinoma,Tier2,other,other,CUBN,CUBN,within_other,Adenosylcobalamin | Calcidiol | Calcium | Cobalamin | Iron,0.0297114650055826,0.0159840159840159,238.76505
+Human_Prostate_Adenocarcinoma,Tier2,other,other,CLCN4,CLCN4,within_other,Chloride,0.0325323531430401,0.0179820179820179,965.059
+Human_Prostate_Adenocarcinoma,Tier2,other,other,SLC6A17,SLC6A17,within_other,Neurotransmitter,0.0372436552211833,0.0209790209790209,357.23065
+Human_Prostate_Adenocarcinoma,Tier3,Effector CD8 T cell,other,SLC2A3,SLC2A4,Tcell_interface,D-Glucose | Dehydroascorbic acid | Docosahexaenoic acid,0.0019343401696342,0.0009990009990009,3830.275
+Human_Prostate_Adenocarcinoma,Tier3,Effector CD8 T cell,other,SLC40A1,SLC40A1,Tcell_interface,Iron,0.0019343401696342,0.0009990009990009,2255.5361
+Human_Prostate_Adenocarcinoma,Tier3,Effector CD8 T cell,other,MSR1,MSR1,Tcell_interface,Fatty acid,0.0019343401696342,0.0009990009990009,161.9585
+Human_Prostate_Adenocarcinoma,Tier3,Effector CD8 T cell,other,FOLR2,FOLR2,Tcell_interface,Folic acid,0.0019343401696342,0.0009990009990009,81.00695
+Human_Prostate_Adenocarcinoma,Tier3,Effector CD8 T cell,other,ABCB1,SLCO2B1,Tcell_interface,Estradiol | Taurocholic acid,0.0019343401696342,0.0009990009990009,392.26764
+Human_Prostate_Adenocarcinoma,Tier3,Effector CD8 T cell,Proliferating CD8 T cell,SLC7A7,SLC7A7,Tcell_interface,L-Glutamine,0.0036369160793123,0.0019980019980019,18.095957
+Human_Prostate_Adenocarcinoma,Tier3,Effector CD8 T cell,other,SLC16A4,SLCO2B1,Tcell_interface,Acetate,0.0036369160793123,0.0019980019980019,98.4053
+Human_Prostate_Adenocarcinoma,Tier3,Effector CD8 T cell,other,SCNN1G,SCNN1G,Tcell_interface,Amiloride-sensitive sodium transport,0.0053566343159103,0.0029970029970029,26.678585
+Human_Prostate_Adenocarcinoma,Tier3,Proliferating CD8 T cell,other,SLC40A1,SLC40A1,Tcell_interface,Iron,0.0053566343159103,0.0029970029970029,57.88729
+Human_Prostate_Adenocarcinoma,Tier3,Effector CD8 T cell,other,CPT1A,CPT1A,Tcell_interface,Fatty acid,0.0099064115800517,0.0059940059940059,278.00873
+Human_Prostate_Adenocarcinoma,Tier3,Proliferating CD8 T cell,other,SLCO2B1,SLCO2B1,Tcell_interface,Acetate | Citric acid | Estradiol | Nicotinate | Oxalic acid | Taurocholic acid,0.0099064115800517,0.0059940059940059,18.18188
+Human_Prostate_Adenocarcinoma,Tier3,Proliferating CD8 T cell,other,ABCG2,SLCO2B1,Tcell_interface,Estradiol | Taurocholic acid,0.0099064115800517,0.0059940059940059,21.885538
+Human_Prostate_Adenocarcinoma,Tier3,Effector CD8 T cell,other,AQP9,AQP9,Tcell_interface,Water,0.0155662877556368,0.0099900099900099,24.48905
+Human_Prostate_Adenocarcinoma,Tier3,Effector CD8 T cell,other,SLC16A1,SLC1A5,Tcell_interface,L-Glutamate,0.0170221934927817,0.0109890109890109,20.009583
+Human_Prostate_Adenocarcinoma,Tier3,Proliferating CD8 T cell,other,SLC2A3,SLC2A3,Tcell_interface,D-Galactose | D-Glucose | D-Maltose | D-Mannose | D-Xylose | Dehydroascorbic acid | Docosahexaenoic acid,0.0195796569842371,0.0129870129870129,13.922258
+Human_Prostate_Adenocarcinoma,Tier3,Proliferating CD8 T cell,other,ABCB1,CD36,Tcell_interface,Cholesterol,0.0195796569842371,0.0129870129870129,17.672485
+Human_Prostate_Adenocarcinoma,Tier3,Proliferating CD8 T cell,other,ABCB1,ABCG2,Tcell_interface,5-Hydroxyomeprazole | Cholesterol | Cortisol | Estradiol | Hydroxylansoprazole | N-Desmethyltamoxifen | N-desmethylimatinib | O-Desmethylverapamil (D-702) | Taurocholic acid | Testosterone,0.0330634756864265,0.0229770229770229,16.758253
+Human_Prostate_Adenocarcinoma,Tier3,Effector CD8 T cell,other,SLC2A3,SLC2A3,Tcell_interface,D-Galactose | D-Glucose | D-Maltose | D-Mannose | D-Xylose | Dehydroascorbic acid | Docosahexaenoic acid,0.0380512344798059,0.0269730269730269,188.22064
+Human_Prostate_Adenocarcinoma,Tier3,Effector CD8 T cell,other,SLCO2B1,SLCO2B1,Tcell_interface,Acetate | Citric acid | Estradiol | Nicotinate | Oxalic acid | Taurocholic acid,0.0393201104944877,0.0279720279720279,94.01512
+Human_Prostate_Adenocarcinoma,Tier3,Effector CD8 T cell,other,SLC5A7,SLC5A7,Tcell_interface,Chloride ion | Choline | Sodium,0.0393201104944877,0.0279720279720279,18.012146
+Human_Prostate_Adenocarcinoma,Tier3,Effector CD8 T cell,Effector CD8 T cell,ABCC3,SLCO2B1,within_Tcell,Taurocholic acid,0.0084679269228625,0.0049950049950049,21.738579
+Human_Prostate_Adenocarcinoma,Tier3,Effector CD8 T cell,Effector CD8 T cell,SLCO2B1,SLCO2B1,within_Tcell,Acetate | Citric acid | Estradiol | Nicotinate | Oxalic acid | Taurocholic acid,0.0141774393271399,0.0089910089910089,43.477158
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC2A1,SLC2A1,within_other,D-Galactose | D-Glucose | D-Mannose | Dehydroascorbic acid | Docosahexaenoic acid | Glucosamine,0.0019343401696342,0.0009990009990009,42589.67
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC2A3,SLC2A9,within_other,D-Glucose,0.0019343401696342,0.0009990009990009,787.0824
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC2A9,SLC2A9,within_other,D-Glucose,0.0019343401696342,0.0009990009990009,4976.988
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC2A3,SLC2A4,within_other,D-Glucose | Dehydroascorbic acid | Docosahexaenoic acid,0.0019343401696342,0.0009990009990009,280196.25
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC2A3,SLC2A3,within_other,D-Galactose | D-Glucose | D-Maltose | D-Mannose | D-Xylose | Dehydroascorbic acid | Docosahexaenoic acid,0.0019343401696342,0.0009990009990009,6532.9263
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC1A5,SLC38A7,within_other,L-Glutamine,0.0019343401696342,0.0009990009990009,23587.871
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC1A5,SLC3A2,within_other,L-Glutamate | L-Glutamine | L-Leucine | L-Serine,0.0019343401696342,0.0009990009990009,131929.02
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC7A5,SLC7A5,within_other,L-Arginine | L-Glutamine | L-Histidine | L-Leucine | L-Methionine | L-Phenylalanine | L-Tyrosine,0.0019343401696342,0.0009990009990009,1685.8776
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC3A2,SLC3A2,within_other,Iron | L-Cystine | L-Glutamate | L-Glutamine | L-Leucine | L-Serine,0.0019343401696342,0.0009990009990009,1531.2981
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC38A7,SLC38A7,within_other,L-Glutamine,0.0019343401696342,0.0009990009990009,7772.896
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC38A7,SLC3A2,within_other,L-Glutamine,0.0019343401696342,0.0009990009990009,438651.8
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC7A7,SLC7A7,within_other,L-Glutamine,0.0019343401696342,0.0009990009990009,1467.388
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC1A5,SLC1A5,within_other,L-Alanine | L-Asparagine | L-Cysteine | L-Glutamate | L-Glutamine | L-Leucine | L-Serine | L-Threonine | Sodium,0.0019343401696342,0.0009990009990009,46405.695
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC1A5,SLC43A2,within_other,L-Cysteine | L-Leucine,0.0019343401696342,0.0009990009990009,30950.85
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC43A2,SLC43A2,within_other,L-Cysteine | L-Isoleucine | L-Leucine | L-Methionine | L-Phenylalanine | L-Valine,0.0019343401696342,0.0009990009990009,3597.0535
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC1A5,SLC7A11,within_other,L-Cysteine | L-Glutamate,0.0019343401696342,0.0009990009990009,8551.376
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC16A1,SLC16A1,within_other,4-ene-Valproic acid | Acetate | Butyrate | D-Lactate | Ketone bodies | L-Glutamate | L-Lactate | Nicotinate | Pyruvate | Taurocholic acid | alpha-Ketoisovaleric acid,0.0019343401696342,0.0009990009990009,39098.758
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC16A4,SLC16A4,within_other,Acetate | L-Lactate,0.0019343401696342,0.0009990009990009,2622.0576
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC16A1,SLC22A5,within_other,4-ene-Valproic acid | Nicotinate,0.0019343401696342,0.0009990009990009,26179.02
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC22A5,SLC22A5,within_other,4-ene-Valproic acid | Acetyl-L-Carnitine | Choline | Creatine | Dopamine | Histamine | L-Carnitine | Nicotinate | Norepinephrine | O-Desmethylverapamil (D-702) | Sodium,0.0019343401696342,0.0009990009990009,20219.293
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLCO2B1,SLCO2B1,within_other,Acetate | Citric acid | Estradiol | Nicotinate | Oxalic acid | Taurocholic acid,0.0019343401696342,0.0009990009990009,12510.808
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC1A1,SLC7A11,within_other,L-Glutamate,0.0019343401696342,0.0009990009990009,9270.511
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC16A1,SLC1A1,within_other,L-Glutamate,0.0019343401696342,0.0009990009990009,2542.9077
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC16A1,SLC3A2,within_other,L-Glutamate,0.0019343401696342,0.0009990009990009,9060.704
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC1A1,SLC3A2,within_other,L-Glutamate,0.0019343401696342,0.0009990009990009,3335.9824
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC1A1,SLC1A1,within_other,L-Glutamate,0.0019343401696342,0.0009990009990009,114998.65
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC1A2,SLC7A11,within_other,L-Glutamate,0.0019343401696342,0.0009990009990009,29913.934
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC1A1,SLC1A5,within_other,L-Glutamate,0.0019343401696342,0.0009990009990009,35661.312
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC1A3,SLC1A3,within_other,D-Aspartate | L-Aspartate | L-Glutamate | Malic acid,0.0019343401696342,0.0009990009990009,1198.9873
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC39A8,SLC39A8,within_other,Cadmium | Manganese | Zinc,0.0019343401696342,0.0009990009990009,12810.152
+Human_Prostate_Adenocarcinoma,Tier3,other,other,CUBN,SLC11A2,within_other,Iron,0.0019343401696342,0.0009990009990009,76414.1
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC11A2,SLC40A1,within_other,Iron,0.0019343401696342,0.0009990009990009,149349.7
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC11A2,SLC3A2,within_other,Iron,0.0019343401696342,0.0009990009990009,79600.37
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC40A1,SLC40A1,within_other,Iron,0.0019343401696342,0.0009990009990009,228545.16
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC3A2,SLC40A1,within_other,Iron,0.0019343401696342,0.0009990009990009,162885.19
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC22A4,SLC22A5,within_other,L-Carnitine | O-Desmethylverapamil (D-702) | Sodium,0.0019343401696342,0.0009990009990009,4796.4927
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLCO1B1,SLCO1B1,within_other,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | 4-Hydroxyvalsartan | Bilirubin | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Dehydroepiandrosterone | Deoxycholic acid | Digoxin | Estradiol | Estrone | Estrone sulfate | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | L-Carnitine | Lithocholic acid | O-Desmethylverapamil (D-702) | Prostaglandins | Sulfolithocholic acid | Taurocholic acid | Thyroxine | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0019343401696342,0.0009990009990009,9398.887
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC16A9,SLC22A4,within_other,L-Carnitine,0.0019343401696342,0.0009990009990009,7812.476
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC16A9,SLC22A5,within_other,L-Carnitine,0.0019343401696342,0.0009990009990009,11529.956
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC22A4,SLC22A4,within_other,L-Carnitine | O-Desmethylverapamil (D-702) | Putrescine | Sodium | Spermine | Testosterone,0.0019343401696342,0.0009990009990009,4034.6843
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC5A1,SLC5A1,within_other,Sodium | Urea,0.0019343401696342,0.0009990009990009,4414.182
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC29A1,SLC29A1,within_other,Adenosine | Cytidine | Ethanol | Guanosine | Inosine | Sodium | Thymidine | Uridine,0.0019343401696342,0.0009990009990009,11639.796
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC12A2,SLC1A5,within_other,Sodium,0.0019343401696342,0.0009990009990009,291445.56
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC22A5,SLC5A1,within_other,Sodium,0.0019343401696342,0.0009990009990009,3495.9763
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC12A2,SLC22A5,within_other,Sodium,0.0019343401696342,0.0009990009990009,63690.63
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC1A5,SLC6A4,within_other,Sodium,0.0019343401696342,0.0009990009990009,5103.7656
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC22A4,SLC5A1,within_other,Sodium,0.0019343401696342,0.0009990009990009,1778.2329
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC5A1,SLC5A3,within_other,Sodium,0.0019343401696342,0.0009990009990009,2760.5088
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC1A5,SLC22A4,within_other,Sodium,0.0019343401696342,0.0009990009990009,34640.023
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC22A5,SLC5A3,within_other,Sodium,0.0019343401696342,0.0009990009990009,13060.441
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC5A5,SLC5A5,within_other,Sodium | Urea,0.0019343401696342,0.0009990009990009,177.4741
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC12A2,SLC22A4,within_other,Sodium,0.0019343401696342,0.0009990009990009,26129.062
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC1A5,SLC5A3,within_other,Sodium,0.0019343401696342,0.0009990009990009,62604.902
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC5A1,SLC5A5,within_other,Sodium | Urea,0.0019343401696342,0.0009990009990009,300.71817
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC5A3,SLC5A3,within_other,Sodium,0.0019343401696342,0.0009990009990009,10772.282
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC12A2,SLC5A1,within_other,Sodium,0.0019343401696342,0.0009990009990009,12516.017
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC22A4,SLC5A3,within_other,Sodium,0.0019343401696342,0.0009990009990009,5512.414
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC12A2,SLC12A2,within_other,Chloride ion | Sodium,0.0019343401696342,0.0009990009990009,253062.98
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC1A5,SLC22A5,within_other,Sodium,0.0019343401696342,0.0009990009990009,86734.14
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC5A3,SLC5A5,within_other,Sodium,0.0019343401696342,0.0009990009990009,654.9226
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC12A2,SLC5A3,within_other,Sodium,0.0019343401696342,0.0009990009990009,43119.47
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC1A5,SLC5A1,within_other,Sodium,0.0019343401696342,0.0009990009990009,14474.376
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC16A4,SLCO2B1,within_other,Acetate,0.0019343401696342,0.0009990009990009,3925.9255
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC3A2,SLC43A2,within_other,L-Leucine,0.0019343401696342,0.0009990009990009,10382.018
+Human_Prostate_Adenocarcinoma,Tier3,other,other,MSR1,MSR1,within_other,Fatty acid,0.0019343401696342,0.0009990009990009,7211.926
+Human_Prostate_Adenocarcinoma,Tier3,other,other,CPT1A,CPT1A,within_other,Fatty acid,0.0019343401696342,0.0009990009990009,40569.22
+Human_Prostate_Adenocarcinoma,Tier3,other,other,CD36,CD36,within_other,Cholesterol | Fatty acid | Vitamin D3,0.0019343401696342,0.0009990009990009,1269.3497
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC6A1,SLC6A1,within_other,GABA,0.0019343401696342,0.0009990009990009,323.2089
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC22A2,SLC22A5,within_other,Choline | Dopamine | Histamine | Norepinephrine,0.0019343401696342,0.0009990009990009,1697.4879
+Human_Prostate_Adenocarcinoma,Tier3,other,other,ABCA1,ABCA1,within_other,25-Hydroxycholesterol,0.0019343401696342,0.0009990009990009,27741.219
+Human_Prostate_Adenocarcinoma,Tier3,other,other,ABCB1,CD36,within_other,Cholesterol,0.0019343401696342,0.0009990009990009,1663.8981
+Human_Prostate_Adenocarcinoma,Tier3,other,other,ABCB1,ABCB1,within_other,"17a-Ethynylestradiol | 2-Hydroxychlorpropamide | 3',4'-Dihydrodiol | 4'-Hydroxydiclofenac | 4-Hydroxycyclophosphamide | 5-Hydroxyomeprazole | 8-Hydroxycarvedilol | Cholesterol | Cholic acid | Cortisol | E-3179 | Estradiol | Estriol | Glycerol | Hydroxylansoprazole | N-Desmethylcitalopram | N-Desmethyleletriptan | N-Desmethyltamoxifen | N-desmethylimatinib | O-Deethylated candesartan | O-Desmethylverapamil (D-702) | Progesterone | Taurocholic acid | Testosterone",0.0019343401696342,0.0009990009990009,7150.6216
+Human_Prostate_Adenocarcinoma,Tier3,other,other,ABCG2,ABCG2,within_other,5-Hydroxyomeprazole | Cholesterol | Cortisol | Estradiol | Folic acid | Hydroxylansoprazole | N-Desmethyltamoxifen | N-desmethylimatinib | O-Desmethylverapamil (D-702) | Taurocholic acid | Testosterone,0.0019343401696342,0.0009990009990009,6873.5103
+Human_Prostate_Adenocarcinoma,Tier3,other,other,ABCG2,CD36,within_other,Cholesterol,0.0019343401696342,0.0009990009990009,1235.629
+Human_Prostate_Adenocarcinoma,Tier3,other,other,ABCB1,ABCG2,within_other,5-Hydroxyomeprazole | Cholesterol | Cortisol | Estradiol | Hydroxylansoprazole | N-Desmethyltamoxifen | N-desmethylimatinib | O-Desmethylverapamil (D-702) | Taurocholic acid | Testosterone,0.0019343401696342,0.0009990009990009,6078.9434
+Human_Prostate_Adenocarcinoma,Tier3,other,other,ATP7A,SLC20A2,within_other,Phosphate,0.0019343401696342,0.0009990009990009,4331.702
+Human_Prostate_Adenocarcinoma,Tier3,other,other,ATP7A,ATP7A,within_other,ADP | Adenosine triphosphate | Phosphate | Water,0.0019343401696342,0.0009990009990009,9833.051
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC20A2,SLC20A2,within_other,Phosphate,0.0019343401696342,0.0009990009990009,3903.568
+Human_Prostate_Adenocarcinoma,Tier3,other,other,ATP7A,ATP7B,within_other,ADP | Adenosine triphosphate | Phosphate | Water,0.0019343401696342,0.0009990009990009,4419.457
+Human_Prostate_Adenocarcinoma,Tier3,other,other,ATP7B,ATP7B,within_other,ADP | Adenosine triphosphate | Phosphate | Water,0.0019343401696342,0.0009990009990009,2287.7256
+Human_Prostate_Adenocarcinoma,Tier3,other,other,CHRNA5,CHRNA5,within_other,Ethanol,0.0019343401696342,0.0009990009990009,6572.614
+Human_Prostate_Adenocarcinoma,Tier3,other,other,ABCC3,ABCC3,within_other,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | 5-Hydroxyomeprazole | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Deoxycholic acid | Folic acid | Folinic acid | Glutathione | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | O-Desmethylverapamil (D-702) | Sulfolithocholic acid | Taurocholic acid | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0019343401696342,0.0009990009990009,481.84607
+Human_Prostate_Adenocarcinoma,Tier3,other,other,ABCC4,SLC19A1,within_other,Folic acid,0.0019343401696342,0.0009990009990009,53246.824
+Human_Prostate_Adenocarcinoma,Tier3,other,other,ABCC4,ABCC4,within_other,4'-Hydroxydiclofenac | Cholic acid | Cyclic AMP | Folic acid | Folinic acid | Glutathione | Hydroxycelecoxib | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0019343401696342,0.0009990009990009,1716603.4
+Human_Prostate_Adenocarcinoma,Tier3,other,other,FOLR2,FOLR2,within_other,Folic acid,0.0019343401696342,0.0009990009990009,1474.5024
+Human_Prostate_Adenocarcinoma,Tier3,other,other,LRP1,LRP1,within_other,Heme,0.0019343401696342,0.0009990009990009,103715.93
+Human_Prostate_Adenocarcinoma,Tier3,other,other,TRPV6,TRPV6,within_other,Heme,0.0019343401696342,0.0009990009990009,54782.74
+Human_Prostate_Adenocarcinoma,Tier3,other,other,CD38,CD38,within_other,Adenosine diphosphate ribose,0.0019343401696342,0.0009990009990009,182896.75
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC12A2,SLC12A6,within_other,Chloride ion,0.0019343401696342,0.0009990009990009,16038.153
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SCARB1,SCARB1,within_other,alpha-Tocopherol,0.0019343401696342,0.0009990009990009,11160.803
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC16A1,SLCO1B3,within_other,Taurocholic acid,0.0019343401696342,0.0009990009990009,6385.6436
+Human_Prostate_Adenocarcinoma,Tier3,other,other,ABCC4,SLCO1B3,within_other,Cholic acid | Taurocholic acid,0.0019343401696342,0.0009990009990009,40995.82
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC16A1,SLC22A1,within_other,Taurocholic acid,0.0019343401696342,0.0009990009990009,2060.6833
+Human_Prostate_Adenocarcinoma,Tier3,other,other,ABCC1,SLC16A1,within_other,Taurocholic acid,0.0019343401696342,0.0009990009990009,54770.33
+Human_Prostate_Adenocarcinoma,Tier3,other,other,ABCC4,SLC22A1,within_other,O-Desmethylverapamil (D-702) | Taurocholic acid,0.0019343401696342,0.0009990009990009,11207.068
+Human_Prostate_Adenocarcinoma,Tier3,other,other,ABCB1,SLCO2B1,within_other,Estradiol | Taurocholic acid,0.0019343401696342,0.0009990009990009,6297.396
+Human_Prostate_Adenocarcinoma,Tier3,other,other,ABCC1,ABCC1,within_other,4'-Hydroxydiclofenac | Cholic acid | Glutathione | Leukotriene C4 | O-Desmethylverapamil (D-702) | Progesterone | Taurocholic acid,0.0019343401696342,0.0009990009990009,98388.06
+Human_Prostate_Adenocarcinoma,Tier3,other,other,ABCC1,SLCO1B3,within_other,Cholic acid | Taurocholic acid,0.0019343401696342,0.0009990009990009,8621.871
+Human_Prostate_Adenocarcinoma,Tier3,other,other,ABCG2,SLCO2B1,within_other,Estradiol | Taurocholic acid,0.0019343401696342,0.0009990009990009,4558.511
+Human_Prostate_Adenocarcinoma,Tier3,other,other,ABCC4,SLCO1B1,within_other,Cholic acid | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0019343401696342,0.0009990009990009,7822.943
+Human_Prostate_Adenocarcinoma,Tier3,other,other,ABCC1,ABCC4,within_other,4'-Hydroxydiclofenac | Cholic acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0019343401696342,0.0009990009990009,358056.6
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLCO1B3,SLCO1B3,within_other,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | 4-Hydroxyvalsartan | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Dehydroepiandrosterone | Deoxycholic acid | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | Sulfolithocholic acid | Taurocholic acid | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0019343401696342,0.0009990009990009,7244.4385
+Human_Prostate_Adenocarcinoma,Tier3,other,other,ABCC4,SLC16A1,within_other,Taurocholic acid,0.0019343401696342,0.0009990009990009,239383.38
+Human_Prostate_Adenocarcinoma,Tier3,other,other,ABCC1,SLC22A1,within_other,O-Desmethylverapamil (D-702) | Progesterone | Taurocholic acid,0.0019343401696342,0.0009990009990009,3077.3506
+Human_Prostate_Adenocarcinoma,Tier3,other,other,ABCC4,SLCO1C1,within_other,4'-Hydroxydiclofenac | Taurocholic acid,0.0019343401696342,0.0009990009990009,11463.484
+Human_Prostate_Adenocarcinoma,Tier3,other,other,TAP1,TAP1,within_other,Adenosine triphosphate,0.0019343401696342,0.0009990009990009,18332.787
+Human_Prostate_Adenocarcinoma,Tier3,other,other,ATP7A,TAP1,within_other,Adenosine triphosphate,0.0019343401696342,0.0009990009990009,10467.508
+Human_Prostate_Adenocarcinoma,Tier3,other,other,ATP7B,TAP1,within_other,Adenosine triphosphate,0.0019343401696342,0.0009990009990009,4915.398
+Human_Prostate_Adenocarcinoma,Tier3,other,other,AQP4,ATP7A,within_other,Water,0.0019343401696342,0.0009990009990009,3295.4492
+Human_Prostate_Adenocarcinoma,Tier3,other,other,AQP4,ATP7B,within_other,Water,0.0019343401696342,0.0009990009990009,1844.8181
+Human_Prostate_Adenocarcinoma,Tier3,other,other,ABCC4,SLC6A4,within_other,O-Desmethylverapamil (D-702),0.0019343401696342,0.0009990009990009,67069.6
+Human_Prostate_Adenocarcinoma,Tier3,other,other,ABCC2,SLC22A4,within_other,O-Desmethylverapamil (D-702),0.0019343401696342,0.0009990009990009,8283.688
+Human_Prostate_Adenocarcinoma,Tier3,other,other,ABCC4,SLC22A5,within_other,O-Desmethylverapamil (D-702),0.0019343401696342,0.0009990009990009,166398.23
+Human_Prostate_Adenocarcinoma,Tier3,other,other,ABCC4,SLC22A4,within_other,O-Desmethylverapamil (D-702),0.0019343401696342,0.0009990009990009,16328.323
+Human_Prostate_Adenocarcinoma,Tier3,other,other,ABCC1,SLC22A4,within_other,O-Desmethylverapamil (D-702),0.0019343401696342,0.0009990009990009,39948.996
+Human_Prostate_Adenocarcinoma,Tier3,other,other,CLCN3,CLCN4,within_other,Chloride,0.0019343401696342,0.0009990009990009,13927.281
+Human_Prostate_Adenocarcinoma,Tier3,other,other,CLCN5,CLCN5,within_other,Chloride,0.0019343401696342,0.0009990009990009,980.7696
+Human_Prostate_Adenocarcinoma,Tier3,other,other,CLCN3,CLCN3,within_other,Chloride,0.0019343401696342,0.0009990009990009,237395.73
+Human_Prostate_Adenocarcinoma,Tier3,other,other,CLCN3,CLCN5,within_other,Chloride,0.0019343401696342,0.0009990009990009,10986.816
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC9A1,SLC9A1,within_other,Sodium_hydrogen exchange,0.0019343401696342,0.0009990009990009,6117.904
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC26A2,SLC26A2,within_other,Anion exchange,0.0019343401696342,0.0009990009990009,11708.92
+Human_Prostate_Adenocarcinoma,Tier3,other,other,ORAI3,ORAI3,within_other,Calcium release-activated calcium transport,0.0019343401696342,0.0009990009990009,7050.8525
+Human_Prostate_Adenocarcinoma,Tier3,other,other,ORAI2,ORAI3,within_other,Calcium release-activated calcium transport,0.0019343401696342,0.0009990009990009,26462.445
+Human_Prostate_Adenocarcinoma,Tier3,other,other,ORAI2,ORAI2,within_other,Calcium release-activated calcium transport,0.0019343401696342,0.0009990009990009,3040.4807
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SCNN1A,SCNN1A,within_other,Amiloride-sensitive sodium transport,0.0019343401696342,0.0009990009990009,36134.18
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SCNN1A,SCNN1G,within_other,Amiloride-sensitive sodium transport,0.0019343401696342,0.0009990009990009,12470.339
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SCNN1G,SCNN1G,within_other,Amiloride-sensitive sodium transport,0.0019343401696342,0.0009990009990009,13330.917
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC23A2,SLC23A2,within_other,Vitamin C,0.0019343401696342,0.0009990009990009,10639.494
+Human_Prostate_Adenocarcinoma,Tier3,other,other,RHAG,RHAG,within_other,Ammonium,0.0019343401696342,0.0009990009990009,425.03116
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC16A1,SLC7A11,within_other,L-Glutamate,0.0036369160793123,0.0019980019980019,188.6879
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC22A5,SLC6A3,within_other,Dopamine,0.0036369160793123,0.0019980019980019,1521.1797
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC19A1,SLC19A1,within_other,Folic acid | Thiamine,0.0036369160793123,0.0019980019980019,1636.4304
+Human_Prostate_Adenocarcinoma,Tier3,other,other,ABCC3,FOLR1,within_other,Folic acid,0.0036369160793123,0.0019980019980019,223.79636
+Human_Prostate_Adenocarcinoma,Tier3,other,other,ABCC1,ABCC3,within_other,Cholic acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0036369160793123,0.0019980019980019,3593.8508
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC12A2,SLC6A4,within_other,Sodium,0.0053566343159103,0.0029970029970029,3159.0452
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC22A1,SLC22A5,within_other,Choline | Dopamine | Norepinephrine | O-Desmethylverapamil (D-702),0.0053566343159103,0.0029970029970029,1202.4286
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC29A3,SLC29A3,within_other,Adenine,0.0053566343159103,0.0029970029970029,1327.4061
+Human_Prostate_Adenocarcinoma,Tier3,other,other,ABCC1,SLC22A5,within_other,O-Desmethylverapamil (D-702),0.0053566343159103,0.0029970029970029,949.21063
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC6A4,SLC6A4,within_other,N-Desmethylcitalopram | O-Desmethylverapamil (D-702) | Serotonin | Sodium,0.0069229016597437,0.0039960039960039,199.22195
+Human_Prostate_Adenocarcinoma,Tier3,other,other,FOLR1,FOLR1,within_other,5-Methyltetrahydrofolic acid | Folic acid,0.0069229016597437,0.0039960039960039,168.41582
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC16A1,SLCO1B1,within_other,Taurocholic acid,0.0069229016597437,0.0039960039960039,1243.6078
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC3A1,SLC3A1,within_other,L-Arginine | L-Cystine | L-Lysine | L-Ornithine,0.0084679269228625,0.0049950049950049,211.7786
+Human_Prostate_Adenocarcinoma,Tier3,other,other,AQP7,AQP7,within_other,Water,0.0084679269228625,0.0049950049950049,414.52512
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC43A2,SLC7A11,within_other,L-Cysteine,0.0099064115800517,0.0059940059940059,764.0268
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC11A2,SLC11A2,within_other,Iron,0.0099064115800517,0.0059940059940059,3950.1519
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC12A6,SLC12A6,within_other,Chloride ion,0.0099064115800517,0.0059940059940059,1634.7059
+Human_Prostate_Adenocarcinoma,Tier3,other,other,ABCG2,FOLR2,within_other,Folic acid,0.0112974959600726,0.0069930069930069,1275.6478
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC24A1,SLC24A1,within_other,Sodium_calcium_potassium exchange,0.0112974959600726,0.0069930069930069,1695.6863
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC6A9,SLC6A9,within_other,Neurotransmitter,0.0112974959600726,0.0069930069930069,488.04773
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC16A1,SLC1A5,within_other,L-Glutamate,0.0141774393271399,0.0089910089910089,721.822
+Human_Prostate_Adenocarcinoma,Tier3,other,other,AQP9,AQP9,within_other,Water,0.0155662877556368,0.0099900099900099,214.6286
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC6A17,SLC6A17,within_other,Neurotransmitter,0.0155662877556368,0.0099900099900099,357.23065
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC16A9,SLC16A9,within_other,L-Carnitine,0.0182828754257325,0.0119880119880119,136.2521
+Human_Prostate_Adenocarcinoma,Tier3,other,other,LRP2,LRP2,within_other,Calcidiol,0.0182828754257325,0.0119880119880119,108.23285
+Human_Prostate_Adenocarcinoma,Tier3,other,other,SLC5A7,SLC5A7,within_other,Chloride ion | Choline | Sodium,0.0223361544116261,0.0149850149850149,188.22568
+Human_Prostate_Adenocarcinoma,Tier3,other,other,ABCC3,SLCO2B1,within_other,Taurocholic acid,0.0330634756864265,0.0229770229770229,1037.8414
+Human_Prostate_Adenocarcinoma,Tier3,other,other,CLCN4,CLCN4,within_other,Chloride,0.0343135125743821,0.0239760239760239,965.059
+Human_Prostate_Adenocarcinoma,Tier3,other,other,CUBN,CUBN,within_other,Adenosylcobalamin | Calcidiol | Calcium | Cobalamin | Iron,0.0371057513914656,0.0259740259740259,238.76505
+Human_Prostate_Adenocarcinoma,global,,,SLC2A1,SLC2A1,cell_type_independent,D-Galactose | D-Glucose | D-Mannose | Dehydroascorbic acid | Docosahexaenoic acid | Glucosamine,0.0032215845272984,0.000999001,42812.70979125028
+Human_Prostate_Adenocarcinoma,global,,,SLC2A9,SLC2A9,cell_type_independent,D-Glucose,0.0032215845272984,0.000999001,787.0824162147869
+Human_Prostate_Adenocarcinoma,global,,,SLC2A3,SLC2A4,cell_type_independent,D-Glucose | Dehydroascorbic acid | Docosahexaenoic acid,0.0032215845272984,0.000999001,9963.686754961303
+Human_Prostate_Adenocarcinoma,global,,,SLC2A3,SLC2A3,cell_type_independent,D-Galactose | D-Glucose | D-Maltose | D-Mannose | D-Xylose | Dehydroascorbic acid | Docosahexaenoic acid,0.0032215845272984,0.000999001,288018.93381379824
+Human_Prostate_Adenocarcinoma,global,,,SLC2A3,SLC2A9,cell_type_independent,D-Glucose,0.0032215845272984,0.000999001,13324.26013498329
+Human_Prostate_Adenocarcinoma,global,,,SLC1A5,SLC38A7,cell_type_independent,L-Glutamine,0.0032215845272984,0.000999001,47863.81811263054
+Human_Prostate_Adenocarcinoma,global,,,SLC1A5,SLC3A2,cell_type_independent,L-Glutamate | L-Glutamine | L-Leucine | L-Serine,0.0032215845272984,0.000999001,266435.3395879647
+Human_Prostate_Adenocarcinoma,global,,,SLC38A7,SLC38A7,cell_type_independent,L-Glutamine,0.0032215845272984,0.000999001,1685.8775472972754
+Human_Prostate_Adenocarcinoma,global,,,SLC7A7,SLC7A7,cell_type_independent,L-Glutamine,0.0032215845272984,0.000999001,1615.960982701455
+Human_Prostate_Adenocarcinoma,global,,,SLC38A7,SLC3A2,cell_type_independent,L-Glutamine,0.0032215845272984,0.000999001,15443.618868659143
+Human_Prostate_Adenocarcinoma,global,,,SLC1A5,SLC1A5,cell_type_independent,L-Alanine | L-Asparagine | L-Cysteine | L-Glutamate | L-Glutamine | L-Leucine | L-Serine | L-Threonine | Sodium,0.0032215845272984,0.000999001,439823.684786932
+Human_Prostate_Adenocarcinoma,global,,,SLC7A5,SLC7A5,cell_type_independent,L-Arginine | L-Glutamine | L-Histidine | L-Leucine | L-Methionine | L-Phenylalanine | L-Tyrosine,0.0032215845272984,0.000999001,1676.4962693788648
+Human_Prostate_Adenocarcinoma,global,,,SLC3A2,SLC3A2,cell_type_independent,Iron | L-Cystine | L-Glutamate | L-Glutamine | L-Leucine | L-Serine,0.0032215845272984,0.000999001,46754.38355188069
+Human_Prostate_Adenocarcinoma,global,,,SLC1A5,SLC43A2,cell_type_independent,L-Cysteine | L-Leucine,0.0032215845272984,0.000999001,62719.54734697564
+Human_Prostate_Adenocarcinoma,global,,,SLC43A2,SLC43A2,cell_type_independent,L-Cysteine | L-Isoleucine | L-Leucine | L-Methionine | L-Phenylalanine | L-Valine,0.0032215845272984,0.000999001,3626.223635916961
+Human_Prostate_Adenocarcinoma,global,,,SLC1A5,SLC7A11,cell_type_independent,L-Cysteine | L-Glutamate,0.0032215845272984,0.000999001,17220.909957880183
+Human_Prostate_Adenocarcinoma,global,,,SLC16A1,SLC16A1,cell_type_independent,4-ene-Valproic acid | Acetate | Butyrate | D-Lactate | Ketone bodies | L-Glutamate | L-Lactate | Nicotinate | Pyruvate | Taurocholic acid | alpha-Ketoisovaleric acid,0.0032215845272984,0.000999001,39098.75780510454
+Human_Prostate_Adenocarcinoma,global,,,SLC16A4,SLC16A4,cell_type_independent,Acetate | L-Lactate,0.0032215845272984,0.000999001,2642.647081810295
+Human_Prostate_Adenocarcinoma,global,,,SLC16A1,SLC22A5,cell_type_independent,4-ene-Valproic acid | Nicotinate,0.0032215845272984,0.000999001,52516.8488025143
+Human_Prostate_Adenocarcinoma,global,,,SLC22A5,SLC22A5,cell_type_independent,4-ene-Valproic acid | Acetyl-L-Carnitine | Choline | Creatine | Dopamine | Histamine | L-Carnitine | Nicotinate | Norepinephrine | O-Desmethylverapamil (D-702) | Sodium,0.0032215845272984,0.000999001,20307.06918362081
+Human_Prostate_Adenocarcinoma,global,,,SLCO2B1,SLCO2B1,cell_type_independent,Acetate | Citric acid | Estradiol | Nicotinate | Oxalic acid | Taurocholic acid,0.0032215845272984,0.000999001,12795.735278321634
+Human_Prostate_Adenocarcinoma,global,,,SLC1A1,SLC3A2,cell_type_independent,L-Glutamate,0.0032215845272984,0.000999001,18501.243206901134
+Human_Prostate_Adenocarcinoma,global,,,SLC16A1,SLC7A11,cell_type_independent,L-Glutamate,0.0032215845272984,0.000999001,5282.6550006955495
+Human_Prostate_Adenocarcinoma,global,,,SLC16A1,SLC1A1,cell_type_independent,L-Glutamate,0.0032215845272984,0.000999001,18218.28126991524
+Human_Prostate_Adenocarcinoma,global,,,SLC1A1,SLC1A1,cell_type_independent,L-Glutamate,0.0032215845272984,0.000999001,3335.982389656264
+Human_Prostate_Adenocarcinoma,global,,,SLC1A2,SLC7A11,cell_type_independent,L-Glutamate,0.0032215845272984,0.000999001,448.6515413556271
+Human_Prostate_Adenocarcinoma,global,,,SLC16A1,SLC1A5,cell_type_independent,L-Glutamate,0.0032215845272984,0.000999001,229584.50884063804
+Human_Prostate_Adenocarcinoma,global,,,SLC1A1,SLC1A5,cell_type_independent,L-Glutamate,0.0032215845272984,0.000999001,59858.64769572025
+Human_Prostate_Adenocarcinoma,global,,,SLC16A1,SLC3A2,cell_type_independent,L-Glutamate,0.0032215845272984,0.000999001,71132.93200553469
+Human_Prostate_Adenocarcinoma,global,,,SLC1A3,SLC1A3,cell_type_independent,D-Aspartate | L-Aspartate | L-Glutamate | Malic acid,0.0032215845272984,0.000999001,1219.2688560800766
+Human_Prostate_Adenocarcinoma,global,,,SLC39A8,SLC39A8,cell_type_independent,Cadmium | Manganese | Zinc,0.0032215845272984,0.000999001,12993.502103176324
+Human_Prostate_Adenocarcinoma,global,,,SLC11A2,SLC3A2,cell_type_independent,Iron,0.0032215845272984,0.000999001,153858.30291820128
+Human_Prostate_Adenocarcinoma,global,,,SLC11A2,SLC40A1,cell_type_independent,Iron,0.0032215845272984,0.000999001,302332.4018158171
+Human_Prostate_Adenocarcinoma,global,,,SLC3A2,SLC40A1,cell_type_independent,Iron,0.0032215845272984,0.000999001,159615.1338181712
+Human_Prostate_Adenocarcinoma,global,,,SLC40A1,SLC40A1,cell_type_independent,Iron,0.0032215845272984,0.000999001,233163.50418976755
+Human_Prostate_Adenocarcinoma,global,,,SLC11A2,SLC11A2,cell_type_independent,Iron,0.0032215845272984,0.000999001,163486.95291327842
+Human_Prostate_Adenocarcinoma,global,,,SLC16A9,SLC22A4,cell_type_independent,L-Carnitine,0.0032215845272984,0.000999001,9565.92202073296
+Human_Prostate_Adenocarcinoma,global,,,SLC16A9,SLC16A9,cell_type_independent,L-Carnitine,0.0032215845272984,0.000999001,9421.354552442735
+Human_Prostate_Adenocarcinoma,global,,,SLC22A4,SLC22A5,cell_type_independent,L-Carnitine | O-Desmethylverapamil (D-702) | Sodium,0.0032215845272984,0.000999001,15477.676663829
+Human_Prostate_Adenocarcinoma,global,,,SLC16A9,SLC22A5,cell_type_independent,L-Carnitine,0.0032215845272984,0.000999001,22966.339683488
+Human_Prostate_Adenocarcinoma,global,,,SLC22A4,SLC22A4,cell_type_independent,L-Carnitine | O-Desmethylverapamil (D-702) | Putrescine | Sodium | Spermine | Testosterone,0.0032215845272984,0.000999001,4050.717408901339
+Human_Prostate_Adenocarcinoma,global,,,SLC5A1,SLC5A1,cell_type_independent,Sodium | Urea,0.0032215845272984,0.000999001,4414.181897818778
+Human_Prostate_Adenocarcinoma,global,,,SLC29A1,SLC29A1,cell_type_independent,Adenosine | Cytidine | Ethanol | Guanosine | Inosine | Sodium | Thymidine | Uridine,0.0032215845272984,0.000999001,11639.795889376146
+Human_Prostate_Adenocarcinoma,global,,,SLC12A2,SLC1A5,cell_type_independent,Sodium,0.0032215845272984,0.000999001,581399.0557683597
+Human_Prostate_Adenocarcinoma,global,,,SLC22A5,SLC5A1,cell_type_independent,Sodium,0.0032215845272984,0.000999001,6944.186343329448
+Human_Prostate_Adenocarcinoma,global,,,SLC12A2,SLC22A5,cell_type_independent,Sodium,0.0032215845272984,0.000999001,126785.25401638304
+Human_Prostate_Adenocarcinoma,global,,,SLC1A5,SLC6A4,cell_type_independent,Sodium,0.0032215845272984,0.000999001,10147.690939097723
+Human_Prostate_Adenocarcinoma,global,,,SLC22A4,SLC5A1,cell_type_independent,Sodium,0.0032215845272984,0.000999001,3634.89978945528
+Human_Prostate_Adenocarcinoma,global,,,SLC5A1,SLC5A3,cell_type_independent,Sodium,0.0032215845272984,0.000999001,5596.163259592446
+Human_Prostate_Adenocarcinoma,global,,,SLC1A5,SLC22A4,cell_type_independent,Sodium,0.0032215845272984,0.000999001,70134.07416976042
+Human_Prostate_Adenocarcinoma,global,,,SLC22A5,SLC5A3,cell_type_independent,Sodium,0.0032215845272984,0.000999001,26232.5122542508
+Human_Prostate_Adenocarcinoma,global,,,SLC5A5,SLC5A5,cell_type_independent,Sodium | Urea,0.0032215845272984,0.000999001,177.4741127286518
+Human_Prostate_Adenocarcinoma,global,,,SLC12A2,SLC22A4,cell_type_independent,Sodium,0.0032215845272984,0.000999001,52857.06126566285
+Human_Prostate_Adenocarcinoma,global,,,SLC1A5,SLC5A3,cell_type_independent,Sodium,0.0032215845272984,0.000999001,126994.56985306798
+Human_Prostate_Adenocarcinoma,global,,,SLC5A1,SLC5A5,cell_type_independent,Sodium | Urea,0.0032215845272984,0.000999001,610.9956897000365
+Human_Prostate_Adenocarcinoma,global,,,SLC5A3,SLC5A3,cell_type_independent,Sodium,0.0032215845272984,0.000999001,10854.154652678422
+Human_Prostate_Adenocarcinoma,global,,,SLC12A2,SLC5A1,cell_type_independent,Sodium,0.0032215845272984,0.000999001,25160.96178054412
+Human_Prostate_Adenocarcinoma,global,,,SLC22A4,SLC5A3,cell_type_independent,Sodium,0.0032215845272984,0.000999001,11117.696310453362
+Human_Prostate_Adenocarcinoma,global,,,SLC12A2,SLC12A2,cell_type_independent,Chloride ion | Sodium,0.0032215845272984,0.000999001,253136.49941301375
+Human_Prostate_Adenocarcinoma,global,,,SLC1A5,SLC22A5,cell_type_independent,Sodium,0.0032215845272984,0.000999001,173501.68110512628
+Human_Prostate_Adenocarcinoma,global,,,SLC12A2,SLC5A3,cell_type_independent,Sodium,0.0032215845272984,0.000999001,86779.01789844848
+Human_Prostate_Adenocarcinoma,global,,,SLC1A5,SLC5A1,cell_type_independent,Sodium,0.0032215845272984,0.000999001,29333.21620322371
+Human_Prostate_Adenocarcinoma,global,,,SLC16A4,SLCO2B1,cell_type_independent,Acetate,0.0032215845272984,0.000999001,7793.436764898781
+Human_Prostate_Adenocarcinoma,global,,,SLC3A2,SLC43A2,cell_type_independent,L-Leucine,0.0032215845272984,0.000999001,20876.66496839883
+Human_Prostate_Adenocarcinoma,global,,,MSR1,MSR1,cell_type_independent,Fatty acid,0.0032215845272984,0.000999001,7535.842981207154
+Human_Prostate_Adenocarcinoma,global,,,CPT1A,CPT1A,cell_type_independent,Fatty acid,0.0032215845272984,0.000999001,41124.784400015546
+Human_Prostate_Adenocarcinoma,global,,,CD36,CD36,cell_type_independent,Cholesterol | Fatty acid | Vitamin D3,0.0032215845272984,0.000999001,1269.3496914495822
+Human_Prostate_Adenocarcinoma,global,,,SLC6A1,SLC6A1,cell_type_independent,GABA,0.0032215845272984,0.000999001,323.2088817971604
+Human_Prostate_Adenocarcinoma,global,,,SLC22A2,SLC22A5,cell_type_independent,Choline | Dopamine | Histamine | Norepinephrine,0.0032215845272984,0.000999001,3316.8766706141064
+Human_Prostate_Adenocarcinoma,global,,,ABCA1,ABCA1,cell_type_independent,25-Hydroxycholesterol,0.0032215845272984,0.000999001,27971.066653578127
+Human_Prostate_Adenocarcinoma,global,,,ABCB1,CD36,cell_type_independent,Cholesterol,0.0032215845272984,0.000999001,3451.104424124468
+Human_Prostate_Adenocarcinoma,global,,,ABCB1,ABCB1,cell_type_independent,"17a-Ethynylestradiol | 2-Hydroxychlorpropamide | 3',4'-Dihydrodiol | 4'-Hydroxydiclofenac | 4-Hydroxycyclophosphamide | 5-Hydroxyomeprazole | 8-Hydroxycarvedilol | Cholesterol | Cholic acid | Cortisol | E-3179 | Estradiol | Estriol | Glycerol | Hydroxylansoprazole | N-Desmethylcitalopram | N-Desmethyleletriptan | N-Desmethyltamoxifen | N-desmethylimatinib | O-Deethylated candesartan | O-Desmethylverapamil (D-702) | Progesterone | Taurocholic acid | Testosterone",0.0032215845272984,0.000999001,7463.951596049939
+Human_Prostate_Adenocarcinoma,global,,,ABCG2,ABCG2,cell_type_independent,5-Hydroxyomeprazole | Cholesterol | Cortisol | Estradiol | Folic acid | Hydroxylansoprazole | N-Desmethyltamoxifen | N-desmethylimatinib | O-Desmethylverapamil (D-702) | Taurocholic acid | Testosterone,0.0032215845272984,0.000999001,6900.153805582695
+Human_Prostate_Adenocarcinoma,global,,,ABCB1,ABCG2,cell_type_independent,5-Hydroxyomeprazole | Cholesterol | Cortisol | Estradiol | Hydroxylansoprazole | N-Desmethyltamoxifen | N-desmethylimatinib | O-Desmethylverapamil (D-702) | Taurocholic acid | Testosterone,0.0032215845272984,0.000999001,12526.714168375873
+Human_Prostate_Adenocarcinoma,global,,,ATP7A,ATP7A,cell_type_independent,ADP | Adenosine triphosphate | Phosphate | Water,0.0032215845272984,0.000999001,9986.481451939628
+Human_Prostate_Adenocarcinoma,global,,,SLC20A2,SLC20A2,cell_type_independent,Phosphate,0.0032215845272984,0.000999001,3903.568169462599
+Human_Prostate_Adenocarcinoma,global,,,ATP7A,ATP7B,cell_type_independent,ADP | Adenosine triphosphate | Phosphate | Water,0.0032215845272984,0.000999001,8919.852429505872
+Human_Prostate_Adenocarcinoma,global,,,ATP7B,ATP7B,cell_type_independent,ADP | Adenosine triphosphate | Phosphate | Water,0.0032215845272984,0.000999001,2287.7255154102204
+Human_Prostate_Adenocarcinoma,global,,,SLC19A1,SLC19A1,cell_type_independent,Folic acid | Thiamine,0.0032215845272984,0.000999001,1636.430472210784
+Human_Prostate_Adenocarcinoma,global,,,CHRNA5,CHRNA5,cell_type_independent,Ethanol,0.0032215845272984,0.000999001,6572.613575459698
+Human_Prostate_Adenocarcinoma,global,,,ABCC3,ABCC3,cell_type_independent,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | 5-Hydroxyomeprazole | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Deoxycholic acid | Folic acid | Folinic acid | Glutathione | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | O-Desmethylverapamil (D-702) | Sulfolithocholic acid | Taurocholic acid | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0032215845272984,0.000999001,481.8460698594411
+Human_Prostate_Adenocarcinoma,global,,,ABCC3,FOLR1,cell_type_independent,Folic acid,0.0032215845272984,0.000999001,399.3436718720866
+Human_Prostate_Adenocarcinoma,global,,,ABCC4,SLC19A1,cell_type_independent,Folic acid,0.0032215845272984,0.000999001,106953.68891327622
+Human_Prostate_Adenocarcinoma,global,,,FOLR1,FOLR1,cell_type_independent,5-Methyltetrahydrofolic acid | Folic acid,0.0032215845272984,0.000999001,168.4158147981443
+Human_Prostate_Adenocarcinoma,global,,,ABCC4,ABCC4,cell_type_independent,4'-Hydroxydiclofenac | Cholic acid | Cyclic AMP | Folic acid | Folinic acid | Glutathione | Hydroxycelecoxib | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0032215845272984,0.000999001,1718000.5560719194
+Human_Prostate_Adenocarcinoma,global,,,FOLR2,FOLR2,cell_type_independent,Folic acid,0.0032215845272984,0.000999001,1653.6992224678988
+Human_Prostate_Adenocarcinoma,global,,,TRPV6,TRPV6,cell_type_independent,Heme,0.0032215845272984,0.000999001,103715.9308958829
+Human_Prostate_Adenocarcinoma,global,,,LRP1,LRP1,cell_type_independent,Heme,0.0032215845272984,0.000999001,54996.18012781638
+Human_Prostate_Adenocarcinoma,global,,,SLC29A3,SLC29A3,cell_type_independent,Adenine,0.0032215845272984,0.000999001,1360.9124954894046
+Human_Prostate_Adenocarcinoma,global,,,CD38,CD38,cell_type_independent,Adenosine diphosphate ribose,0.0032215845272984,0.000999001,183197.68357275447
+Human_Prostate_Adenocarcinoma,global,,,SLC12A2,SLC12A6,cell_type_independent,Chloride ion,0.0032215845272984,0.000999001,31958.71767916421
+Human_Prostate_Adenocarcinoma,global,,,SCARB1,SCARB1,cell_type_independent,alpha-Tocopherol,0.0032215845272984,0.000999001,11235.512020389642
+Human_Prostate_Adenocarcinoma,global,,,SLC16A1,SLCO1B3,cell_type_independent,Taurocholic acid,0.0032215845272984,0.000999001,12672.675591016348
+Human_Prostate_Adenocarcinoma,global,,,ABCC4,SLCO1B3,cell_type_independent,Cholic acid | Taurocholic acid,0.0032215845272984,0.000999001,82432.01392971032
+Human_Prostate_Adenocarcinoma,global,,,SLC16A1,SLC22A1,cell_type_independent,Taurocholic acid,0.0032215845272984,0.000999001,4144.973787138652
+Human_Prostate_Adenocarcinoma,global,,,ABCC1,SLC16A1,cell_type_independent,Taurocholic acid,0.0032215845272984,0.000999001,109476.34203493292
+Human_Prostate_Adenocarcinoma,global,,,ABCC4,SLC22A1,cell_type_independent,O-Desmethylverapamil (D-702) | Taurocholic acid,0.0032215845272984,0.000999001,22112.50629882293
+Human_Prostate_Adenocarcinoma,global,,,ABCB1,SLCO2B1,cell_type_independent,Estradiol | Taurocholic acid,0.0032215845272984,0.000999001,14000.774592287737
+Human_Prostate_Adenocarcinoma,global,,,ABCC1,ABCC1,cell_type_independent,4'-Hydroxydiclofenac | Cholic acid | Glutathione | Leukotriene C4 | O-Desmethylverapamil (D-702) | Progesterone | Taurocholic acid,0.0032215845272984,0.000999001,98820.73092145892
+Human_Prostate_Adenocarcinoma,global,,,ABCC1,SLCO1B3,cell_type_independent,Cholic acid | Taurocholic acid,0.0032215845272984,0.000999001,17287.20828159286
+Human_Prostate_Adenocarcinoma,global,,,ABCG2,SLCO2B1,cell_type_independent,Estradiol | Taurocholic acid,0.0032215845272984,0.000999001,9346.779313009196
+Human_Prostate_Adenocarcinoma,global,,,ABCC4,SLCO1B1,cell_type_independent,Cholic acid | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0032215845272984,0.000999001,16039.473022751785
+Human_Prostate_Adenocarcinoma,global,,,ABCC1,ABCC4,cell_type_independent,4'-Hydroxydiclofenac | Cholic acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0032215845272984,0.000999001,713582.0881344813
+Human_Prostate_Adenocarcinoma,global,,,SLCO1B3,SLCO1B3,cell_type_independent,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | 4-Hydroxyvalsartan | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Dehydroepiandrosterone | Deoxycholic acid | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | Sulfolithocholic acid | Taurocholic acid | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0032215845272984,0.000999001,7244.43851223865
+Human_Prostate_Adenocarcinoma,global,,,ABCC4,SLC16A1,cell_type_independent,Taurocholic acid,0.0032215845272984,0.000999001,480756.20774655056
+Human_Prostate_Adenocarcinoma,global,,,ABCC1,SLC22A1,cell_type_independent,O-Desmethylverapamil (D-702) | Progesterone | Taurocholic acid,0.0032215845272984,0.000999001,5959.042958077295
+Human_Prostate_Adenocarcinoma,global,,,ABCC4,SLCO1C1,cell_type_independent,4'-Hydroxydiclofenac | Taurocholic acid,0.0032215845272984,0.000999001,22498.08261798918
+Human_Prostate_Adenocarcinoma,global,,,TAP1,TAP1,cell_type_independent,Adenosine triphosphate,0.0032215845272984,0.000999001,19004.441124233563
+Human_Prostate_Adenocarcinoma,global,,,ATP7A,TAP1,cell_type_independent,Adenosine triphosphate,0.0032215845272984,0.000999001,21141.798777260738
+Human_Prostate_Adenocarcinoma,global,,,ATP7B,TAP1,cell_type_independent,Adenosine triphosphate,0.0032215845272984,0.000999001,9919.779136178637
+Human_Prostate_Adenocarcinoma,global,,,AQP7,AQP7,cell_type_independent,Water,0.0032215845272984,0.000999001,3295.449320377138
+Human_Prostate_Adenocarcinoma,global,,,AQP9,AQP9,cell_type_independent,Water,0.0032215845272984,0.000999001,1844.8181136406952
+Human_Prostate_Adenocarcinoma,global,,,ABCC4,SLC22A4,cell_type_independent,O-Desmethylverapamil (D-702),0.0032215845272984,0.000999001,135160.99908586105
+Human_Prostate_Adenocarcinoma,global,,,ABCC4,SLC22A5,cell_type_independent,O-Desmethylverapamil (D-702),0.0032215845272984,0.000999001,332897.5733470292
+Human_Prostate_Adenocarcinoma,global,,,ABCC1,SLC22A4,cell_type_independent,O-Desmethylverapamil (D-702),0.0032215845272984,0.000999001,32686.125548221487
+Human_Prostate_Adenocarcinoma,global,,,ABCC1,SLC22A5,cell_type_independent,O-Desmethylverapamil (D-702),0.0032215845272984,0.000999001,79755.89474203785
+Human_Prostate_Adenocarcinoma,global,,,CLCN3,CLCN4,cell_type_independent,Chloride,0.0032215845272984,0.000999001,27852.825322265864
+Human_Prostate_Adenocarcinoma,global,,,CLCN3,CLCN3,cell_type_independent,Chloride,0.0032215845272984,0.000999001,237697.22467337784
+Human_Prostate_Adenocarcinoma,global,,,CLCN3,CLCN5,cell_type_independent,Chloride,0.0032215845272984,0.000999001,22137.56524418853
+Human_Prostate_Adenocarcinoma,global,,,SLC9A1,SLC9A1,cell_type_independent,Sodium_hydrogen exchange,0.0032215845272984,0.000999001,6269.590549860668
+Human_Prostate_Adenocarcinoma,global,,,SLC26A2,SLC26A2,cell_type_independent,Anion exchange,0.0032215845272984,0.000999001,11823.297577543275
+Human_Prostate_Adenocarcinoma,global,,,ORAI2,ORAI3,cell_type_independent,Calcium release-activated calcium transport,0.0032215845272984,0.000999001,14303.802903513995
+Human_Prostate_Adenocarcinoma,global,,,ORAI3,ORAI3,cell_type_independent,Calcium release-activated calcium transport,0.0032215845272984,0.000999001,26521.06036315484
+Human_Prostate_Adenocarcinoma,global,,,ORAI2,ORAI2,cell_type_independent,Calcium release-activated calcium transport,0.0032215845272984,0.000999001,3081.3168507948767
+Human_Prostate_Adenocarcinoma,global,,,SCNN1A,SCNN1A,cell_type_independent,Amiloride-sensitive sodium transport,0.0032215845272984,0.000999001,36218.4820659854
+Human_Prostate_Adenocarcinoma,global,,,SCNN1A,SCNN1G,cell_type_independent,Amiloride-sensitive sodium transport,0.0032215845272984,0.000999001,25179.640719070725
+Human_Prostate_Adenocarcinoma,global,,,SCNN1G,SCNN1G,cell_type_independent,Amiloride-sensitive sodium transport,0.0032215845272984,0.000999001,13398.935338928475
+Human_Prostate_Adenocarcinoma,global,,,SLC23A2,SLC23A2,cell_type_independent,Vitamin C,0.0032215845272984,0.000999001,10672.1669341056
+Human_Prostate_Adenocarcinoma,global,,,RHAG,RHAG,cell_type_independent,Ammonium,0.0032215845272984,0.000999001,425.0311553894709
+Human_Prostate_Adenocarcinoma,global,,,SLC5A3,SLC5A5,cell_type_independent,Sodium,0.0062027522988283,0.001998002,1348.367225323976
+Human_Prostate_Adenocarcinoma,global,,,ABCG2,CD36,cell_type_independent,Cholesterol,0.0062027522988283,0.001998002,2424.578450533999
+Human_Prostate_Adenocarcinoma,global,,,ATP7A,SLC20A2,cell_type_independent,Phosphate,0.0062027522988283,0.001998002,8991.525926159487
+Human_Prostate_Adenocarcinoma,global,,,ABCC4,SLC6A4,cell_type_independent,O-Desmethylverapamil (D-702),0.0062027522988283,0.001998002,16378.140943350469
+Human_Prostate_Adenocarcinoma,global,,,CLCN5,CLCN5,cell_type_independent,Chloride,0.0062027522988283,0.001998002,980.7696087013146
+Human_Prostate_Adenocarcinoma,global,,,SLC1A1,SLC7A11,cell_type_independent,L-Glutamate,0.0091673033859799,0.002997003,1489.1632969017785
+Human_Prostate_Adenocarcinoma,global,,,SLC3A1,SLC3A1,cell_type_independent,L-Arginine | L-Cystine | L-Lysine | L-Ornithine,0.0091673033859799,0.002997003,211.77858824352813
+Human_Prostate_Adenocarcinoma,global,,,SLC6A4,SLC6A4,cell_type_independent,N-Desmethylcitalopram | O-Desmethylverapamil (D-702) | Serotonin | Sodium,0.0118738401149,0.003996004,199.22195777181787
+Human_Prostate_Adenocarcinoma,global,,,SLC12A2,SLC6A4,cell_type_independent,Sodium,0.0118738401149,0.003996004,6433.172240725608
+Human_Prostate_Adenocarcinoma,global,,,SLC12A6,SLC12A6,cell_type_independent,Chloride ion,0.0118738401149,0.003996004,1671.770692629806
+Human_Prostate_Adenocarcinoma,global,,,AQP4,ATP7B,cell_type_independent,Water,0.0118738401149,0.003996004,473.7193046715095
+Human_Prostate_Adenocarcinoma,global,,,ABCG2,FOLR2,cell_type_independent,Folic acid,0.0176844434112521,0.005994006,2640.611322747427
+Human_Prostate_Adenocarcinoma,global,,,ABCC1,ABCC3,cell_type_independent,Cholic acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0204865554688682,0.006993007,7144.646955307977
+Human_Prostate_Adenocarcinoma,global,,,SLC43A2,SLC7A11,cell_type_independent,L-Cysteine,0.0226168383140953,0.007992008,1503.4540213646178
+Human_Prostate_Adenocarcinoma,global,,,SLC5A7,SLC5A7,cell_type_independent,Chloride ion | Choline | Sodium,0.0226168383140953,0.007992008,206.23781752581704
+Human_Prostate_Adenocarcinoma,global,,,SLC16A1,SLCO1B1,cell_type_independent,Taurocholic acid,0.0226168383140953,0.007992008,2483.548359314215
+Human_Prostate_Adenocarcinoma,global,,,AQP4,ATP7A,cell_type_independent,Water,0.0226168383140953,0.007992008,832.8180287729849
+Human_Prostate_Adenocarcinoma,global,,,SLC6A9,SLC6A9,cell_type_independent,Neurotransmitter,0.0226168383140953,0.007992008,488.0477252473417
+Human_Prostate_Adenocarcinoma,global,,,SLC24A1,SLC24A1,cell_type_independent,Sodium_calcium_potassium exchange,0.0252720242416536,0.008991009,1716.5454450005143
+Human_Prostate_Adenocarcinoma,global,,,SLCO1B1,SLCO1B1,cell_type_independent,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | 4-Hydroxyvalsartan | Bilirubin | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Dehydroepiandrosterone | Deoxycholic acid | Digoxin | Estradiol | Estrone | Estrone sulfate | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | L-Carnitine | Lithocholic acid | O-Desmethylverapamil (D-702) | Prostaglandins | Sulfolithocholic acid | Taurocholic acid | Thyroxine | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0304761886596679,0.01098901,136.25210276510558
+Human_Prostate_Adenocarcinoma,global,,,LRP2,LRP2,cell_type_independent,Calcidiol,0.0304761886596679,0.01098901,108.2328468381654
+Human_Prostate_Adenocarcinoma,global,,,SLC22A1,SLC22A5,cell_type_independent,Choline | Dopamine | Norepinephrine | O-Desmethylverapamil (D-702),0.033026576436908,0.011988012,2376.656520203383
+Human_Prostate_Adenocarcinoma,global,,,SLC6A17,SLC6A17,cell_type_independent,Neurotransmitter,0.0410116191365216,0.014985015,357.23065724234755
+Human_Prostate_Adenocarcinoma,global,,,ABCC3,SLCO2B1,cell_type_independent,Taurocholic acid,0.0434598069564968,0.015984016,2144.7604996144805
+Human_Prostate_Adenocarcinoma,global,,,CUBN,SLC11A2,cell_type_independent,Iron,0.0455802271443028,0.016983017,7929.786251246298
+Human_Prostate_Adenocarcinoma,global,,,CLCN4,CLCN4,cell_type_independent,Chloride,0.0455802271443028,0.016983017,965.0590365117816
+Human_Prostate_Adenocarcinoma,global,,,CUBN,CUBN,cell_type_independent,Adenosylcobalamin | Calcidiol | Calcium | Cobalamin | Iron,0.047646618952417,0.017982017,238.76504301913587
+Human_Prostate_Adenocarcinoma,global,,,SLC22A5,SLC6A3,cell_type_independent,Dopamine,0.047646618952417,0.017982017,2920.121960909364
+Human_Prostate_Adenocarcinoma,global,,,ABCC2,SLC22A4,cell_type_independent,O-Desmethylverapamil (D-702),0.0499753412566607,0.018981019,1844.6667125674048
