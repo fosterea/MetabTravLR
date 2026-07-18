@@ -5,6 +5,8 @@ import ControlBar from '@/components/ControlBar';
 import EntityPanel from '@/components/EntityPanel';
 import Legend from '@/components/Legend';
 import EntityDetails from '@/components/EntityDetails';
+import EdgeDetails from '@/components/EdgeDetails';
+import GenePairTabs from '@/components/GenePairTabs';
 import GraphView from '@/graph/GraphView';
 
 export default function App() {
@@ -50,8 +52,10 @@ export default function App() {
         <EntityPanel />
         <main className="canvas-wrap">
           <GraphView />
+          <GenePairTabs />
           <Legend />
           <EntityDetails />
+          <EdgeDetails />
         </main>
       </div>
     </div>

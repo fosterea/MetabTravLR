@@ -42,13 +42,21 @@ restart. Dates are absolute (project "today" was 2026-07-16 at kickoff).
   Confirm vs `Z`/`C_p` for the width encoding.
 
 ## Roadmap / TODO (designed-for)
-- [ ] Gene-pair view toggle (data already ingested) + show served metabolites (many-to-many).
+- [x] Gene-pair view toggle (data already ingested) + show served metabolites (many-to-many).
+      (MVP; details overlay lists served metabolites.)
+- [x] Metabolite → gene-pair **expansion** (panel list + on-graph fan-out; per-edge + all).
+      (Unit 3, 2026-07-17.)
 - [ ] Parent cell-type marking via tier hierarchy (needs crosswalk above).
 - [ ] Multiple datasets + `<root>/<datasetName>/easy_download` deploy layout (ingest already
       auto-detects this; app dataset switcher needed).
 - [ ] SpaceTravLR signed two-value edges: width=|value|, color=sign (`--val-pos`/`--val-neg`).
+      NOTE: these are **directed scalers** on edges — the fan-out gp sub-edges and the reserved
+      `value`/`sign` edge fields are the intended carrier; likely a per-edge multiplier applied
+      on top of the existing width scale + diverging color.
 - [ ] Metabolite ranking controls in the side panel (by T-cell involvement / significance).
-- [ ] Static deploy of `dist/` when Foster wants it.
+- [ ] Bottom overlays (legend / EdgeDetails) can overlap on very narrow canvases — reposition
+      or hide on small screens (Unit 2 review Low; desktop-first so deferred).
+- [ ] Static deploy of `dist/` when Foster wants it (see `06_hosting.md`).
 
 ## Smoke checklist (re-verify after changes, via playwright MCP)
 1. `npm run dev`; open http://localhost:5173 — no console errors.
@@ -59,6 +67,131 @@ restart. Dates are absolute (project "today" was 2026-07-16 at kickoff).
 6. Screenshot captured as evidence.
 
 ## Changelog
+- 2026-07-17: **Reverted gene-pair color-coding + background de-emphasis; fixed fan-out
+  overlap with curvature instead (Foster feedback).** (1) The color-coding didn't help — an
+  interface fan's sub-edges overlapped into one line, and with >8 pairs two pairs shared a
+  color anyway (review Medium). **Removed** all gene-pair coloring (theme `--gp-*` tokens,
+  `edge.gp-slot-*`, tab/panel swatches, `slot`/`gpSlotMap`). Root fix: the fan-out sub-edges
+  now spread apart geometrically — non-self edges bow via a per-edge `control-point-distances`
+  (`unbundled-bezier`, spacing capped at 200px so dense fans stay on-screen); self-loops fan
+  around the node as separate "petals" via per-edge `loop-direction`. Playwright-verified:
+  L-Glutamine's 11-pair self-interface renders as an 11-petal flower, clearly separable with no
+  color. Color can be re-added later only if still needed. (2) **Removed the T-cell background
+  greying** — keep the app agnostic to the activity; nothing T-cell-specific without asking.
+  (3) **Fixed 2-node tiers** (Tier1/Tier2) to lay out side by side (grid, 1 row) instead of the
+  circle layout stacking them vertically. (4) Applied the review Lows: metabolite ranking stays
+  on the summary sig-pair count so App's auto-select agrees with the panel's top row; the
+  gene-pair count lookup is now order-tolerant. tsc+lint clean, 0 console errors.
+- 2026-07-17: **Usability pass (drove the app for "which metabolites influence T cells?").**
+  Top finding + fix: the background `other↔other` self-interaction dwarfs the T-cell interfaces
+  (Tier1 Iron: bg C_np 194,927 vs T↔other 14,116, T↔T 2,590) and visually dominated. Now
+  background-only significant interfaces (neither endpoint a focal/T-cell node, via
+  `classifyCellType` — not a hard-coded string) render recessive (`edge.sig.bg` opacity 0.32)
+  so T-cell interfaces read first; fan-out/gene-pair views are exempt (there you want all pairs
+  vivid). Playwright-verified Tier1 (bg self-loop faded, T-cell edges bold) and Tier3 (only the
+  lone other↔other dims). **Other findings logged, not yet actioned** (see Open questions):
+  2-node tiers waste horizontal space (circle layout stacks them vertically); expand-mode/
+  expand-all persist across metabolite+tier changes; top-left gp-tabs vs top-right entity panel
+  can crowd on a narrow window.
+- 2026-07-17: **Gene-pair color-coding (differentiate the fan-out).** Each transporter pair now
+  gets a stable categorical color (theme.css `--gp-1..8`, validated colorblind-safe dataviz
+  palette; adjacent CVD in the 6–8 band → legal because the **labelled tabs + hover** are the
+  required secondary encoding, plus all 8 clear 3:1 contrast on both themes). Shared ordering
+  (`metaboliteSigPairsAtTier` → slot) means a pair's color is identical across the on-graph
+  fan-out sub-edges, its tab swatch, the isolated-pair view, and the panel breakdown swatches.
+  Playwright-verified: 7 pairs → 7 distinct edge colors matching their tab swatches; 0 console
+  errors. Also folded in the Unit-6 review L2 (gpTabInfo guards on gpBundle) and made gpTab
+  lookups order-tolerant (`gpEdgesInTier`).
+- 2026-07-17: **Sig-interaction counts + full gene-pair support.** Side panel now shows each
+  entity's # significant cell-type interfaces at the current tier (from the loaded bundle):
+  metabolites read "N sig interfaces · T-cell"; the **gene-pair view now lists all 416 pairs**
+  (was significant-only), **sorted by sig-interaction count desc**, each "N sig interfaces · M
+  metabolites", with the 280 pairs that have no significant interaction at the tier greyed below
+  a "No significant interactions at this tier (full support)" divider — same treatment as the
+  eliminated metabolites. Counts/sorting/greying update per tier. Playwright-verified: 416
+  listed, 280 greyed at Tier3, top sorted CUBN–CUBN (11) → CD38–CD38 (7) → …
+- 2026-07-17: **GitHub Pages deploy wired up.** Added `.github/workflows/deploy-viz.yml` (repo
+  root — the sanctioned out-of-`viz/` file, per Foster's explicit deploy request): builds
+  `viz/` and deploys `viz/dist` to Pages on push to `release` touching `viz/**` + manual
+  dispatch. Verified `npm run build` locally (dist 615KB JS / 198KB gz, relative `./assets`,
+  `public/data` bundled). **Foster's one-time step:** Settings → Pages → Source: GitHub
+  Actions. Site → `https://fosterea.github.io/MetabTravLR/`. Docs in `06_hosting.md`.
+- 2026-07-17: **Unit 6 (gene-pair tabs).** A tab strip over the canvas (`GenePairTabs`) lets you
+  view the selected metabolite's transporter pairs individually: "All (metabolite)" plus one
+  tab per gene pair significant at the current tier (with its interface count, sorted by
+  strength). Picking a pair tab (`store.gpTab`) isolates just that pair's interfaces on the
+  graph — a per-pair drill-down complementing the on-graph fan-out and the panel list. While a
+  tab is active the metabolite-only controls (expand mode / expand-all / non-sig) hide, the
+  EdgeDetails panel resolves against the pair's edges and labels it "gene pair X interface",
+  and hover shows the pair. Playwright-verified: 7 pair tabs for Iron@Tier3, CUBN–CUBN isolates
+  11 interfaces, controls hidden, panel + hover correct; 0 console errors.
+- 2026-07-17: **Unit 5 (full metabolite support).** All 160 network metabolites already show
+  in the side panel (none were cut); the 17 that are insignificant everywhere (no global sig +
+  no sig pair at any tier) are now marked `eliminated`, greyed, hinted "eliminated — not
+  significant", and sorted below a divider ("Eliminated — not significant (full network
+  support)"), so the complete network support is visible while the significant ones stay on
+  top. `metaboliteInvolvedAnywhere` is tier-independent (a metabolite significant at another
+  tier is not eliminated). Playwright-verified: 17 greyed items under the divider.
+- 2026-07-17: **Unit 4 (edge legibility).** Fixed edge clumping (Foster feedback, incl. the
+  non-significant-included case). Nodes 40→56px and max edge width 22→15px so strong edges
+  anchor cleanly instead of blobbing into small nodes; self-loops arc up-and-out
+  (`loop-direction -90deg`, `loop-sweep 80deg`) instead of sitting as a blob on the node;
+  parallel edges (gene-pair fan-outs) spread via `control-point-step-size: 55`; non-significant
+  edges recede to a thin (1.5px) faint (opacity 0.3) dashed line so they stop competing with
+  significant interfaces. Playwright-verified both the non-sig metabolite view and the
+  expand-all fan-out; 0 console errors. Also: `.playwright-mcp/` and `*.tsbuildinfo` gitignored
+  (the two tsbuildinfo files untracked); root `.gitignore` touched by explicit request.
+- 2026-07-17: **Unit 3 review follow-up.** Addressed the review's Medium + 2 Lows: metabolite
+  edges now scale over the full view set (not just the unfanned fallback remainder), so a lone
+  fallback interface no longer jumps to max width; `genePairsAtInterface` dedups on a canonical
+  (sorted) key (hardens against a metabolite ever listing both gene orders); the panel notes
+  the fan is a "significant subset — pair strengths need not sum to the metabolite total"; and
+  the legend shows a "gene-pair sub-edge (own scale)" key in graph-expand mode. tsc+lint clean,
+  playwright-verified, 0 console errors. (Unit 3 review: no Critical/High; data join verified
+  correct against raw data — 96 primary-key hits, 0 fallback, no double-count.)
+- 2026-07-17: **Unit 3 (gp-aware metabolite expansion).** A metabolite edge can be broken
+  into its contributing transporter **gene pairs**, two ways, toggled in the control bar
+  ("Gene pairs: In panel / On graph"):
+  - **In panel**: clicking a metabolite edge lists the gene pairs significant at that
+    interface (name + C_np, sorted) in EdgeDetails.
+  - **On graph**: the picked interface (or, with "Expand all interfaces", every interface)
+    fans out into parallel gene-pair sub-edges between the same cell-type nodes (width =
+    per-pair strength, own width scale, translucent `.gp` style); hover a sub-edge for its
+    gene pair + strength; clicking selects the whole fan.
+  Data is client-side only (`genePairsAtInterface` joins a metabolite's `genePairs` against
+  the same-tier gene_pair bundle, now loaded alongside in metabolite mode) — **no ingest or
+  source-pipeline change** (A3/A4 hold). GraphView refactored so layout/fit run ONLY on tier
+  change (a primitive `expansionKey` drives edge rebuilds), so expanding/picking never
+  relayouts. Also **fixed the Unit 2 review Medium**: EdgeDetails now resolves the pick
+  against the same *visible* (tier+significance-filtered) edge set as the graph, so toggling
+  non-significant off no longer orphans the panel; tooltip a11y contradiction removed.
+  Playwright-verified: panel breakdown (Iron@Effector↔other → CUBN–CUBN 6128); graph
+  expand-all (9 metabolite edges → 17 gp sub-edges); per-edge fan (only clicked interface);
+  gp hover shows "CUBN – CUBN … Cnp 309"; non-sig-off clears orphan panel; Tier1 relayout
+  clean (no node stacking); gp controls hidden in gene-pair mode; 0 console errors.
+- 2026-07-17: **Unit 2 (edge interaction).** Click an edge → new bottom-right **EdgeDetails**
+  panel (interface cell types, C_np strength, significance/FDR, parametric C_p/Z, undirected
+  note; × or empty-canvas click clears). Hover an edge → floating tooltip with the numeric
+  C_np strength (mutates a ref'd DOM node, not React state, so mousemove doesn't thrash).
+  Store gains `selectedEdge` + `selectEdge`, cleared on any dataset/tier/kind/entity change.
+  Cytoscape `autounselectify` on; highlight is store-driven via a `.picked` overlay halo
+  (dropped the dead `:selected` rule). Added `src/data/format.ts` (strength/FDR formatting)
+  and `sameInterface` (order-agnostic edge match). Legend updated to "relative strength in
+  view (log)" + hover/click hint (addresses Unit 1 review: per-view scale isn't absolute —
+  raw value now reachable via hover/panel). Playwright-verified: click→panel with correct
+  scores, exactly-one `.picked`, background-click clears, real canvas hover shows the tip;
+  0 console errors. Folds in Unit 1 review LOWs (legend text, annotated dangling ink tokens).
+- 2026-07-17: **Unit 1 (graph legibility).** (1) Cell-type labels moved BELOW the node
+  (`text-valign: bottom` + canvas-colored halo) so long names ("Proliferating CD8 T cell")
+  no longer overflow the circle. (2) Edge-width scale now normalizes between the view's
+  log-min and log-max (was 0..max) and widened px range 2–22 (was 1.5–14), so strengths are
+  visibly distinguishable instead of hugging the floor; a lone/all-equal edge maps to max.
+  Added a **dev-only `window.__cy` test handle** (stripped in prod) so the playwright MCP can
+  assert node/label/edge geometry against the canvas. Playwright-verified: 5 labels render
+  below their nodes; edge widths span 2→22 with good spread; 0 console errors.
+- 2026-07-17: Wrote `docs/06_hosting.md` — static-hosting guide (Firebase Hosting steps +
+  GitHub Pages / Cloudflare Pages / Netlify alternatives, access-control/privacy note,
+  "when data grows" future note, cost summary). No code or deploy; docs only.
 - 2026-07-16: Scaffold, docs, ingest adapter, data validated. (this file created)
 - 2026-07-16: MVP built + committed (638bf1f). Ran the dev/review loop once: review
   sub-agent audited the baseline; dev sub-agent fixed all findings — H1 (tier-switch stale

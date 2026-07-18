@@ -19,6 +19,8 @@ you need to understand where the *data* comes from.
   Update this every session.
 - **`05_data_contract.md`** — the normalized JSON schema the app consumes and how the adapter
   maps harreman outputs onto it.
+- **`06_hosting.md`** — how to deploy the static build (Firebase / GitHub Pages / Cloudflare /
+  Netlify), access-control options, and why it's effectively free at this scale.
 
 ## Parent-project references (read-only, for data understanding)
 - `../../DataForClaude/documentation/05_harreman_reference.md` — what harreman outputs mean;

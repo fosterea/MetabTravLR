@@ -21,7 +21,8 @@
   --on-accent: #fff; /* text/icons on top of --accent (white reads on the accent in both themes) */
   --focus-ring: #4c9aff;
 
-  /* domain: cell-type node families (colorblind-safe warm vs neutral) */
+  /* domain: cell-type node families (colorblind-safe warm vs neutral).
+     *-ink = reserved on-node text colors; unused since labels moved below the node. */
   --cell-tcell: #e8833a;
   --cell-tcell-ink: #1a1206;
   --cell-other: #5b6470;

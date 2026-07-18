@@ -13,3 +13,6 @@ npm-debug.log*
 public/data/*
 !public/data/harreman/
 !public/data/manifest.json
+
+# TypeScript incremental build caches (should not be tracked)
+*.tsbuildinfo
