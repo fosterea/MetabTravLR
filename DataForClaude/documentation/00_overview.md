@@ -265,6 +265,10 @@ So to answer **"which metabolite modulates gene set S, where?"**:
   rank metabolites by their effect on the gene set. This is a **read + groupby over parquet
   files**, not a simulation.
 
+> Written before D6: metabolites ended up as their **own** modulator group with an `@`
+> separator (`beta_<export>@<import>`), not reusing `$`. The read-out is implemented in
+> `metab_processing/SpaceTravLR/beta_analysis.py` — see 04's 2026-07-19 entry.
+
 Relevant existing code to reuse for the read-out (no perturbation needed):
 - `beta.py::BetaFrame.from_path()` / `Betabase.load_betas_from_disk()` — load betadata.
 - `beta.py::Betabase.collect_interactions()` — aggregates β's per cell type (agent-confirmed).

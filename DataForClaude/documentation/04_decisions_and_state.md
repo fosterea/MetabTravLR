@@ -169,12 +169,8 @@ closes the "tests only hit the R²<0.15 shortcut" gap.
   fallback is orphaned cleanly (was: degenerate 0-column parquet). Reviewed (Medium fixes applied).
   Tests `tests/test_metab_wiring.py` incl. a REAL-estimator Tier-1 driving a TF-less metab-only gene
   through `run()` to a finite `beta_@` column.
-- **Beta-analysis read-back:** ✅ `metab_processing/SpaceTravLR/beta_analysis.py` (committed `c04ccad`). `read_
-  metab_beta_summary` (stream `@`-cols → per-(gene,pair[,cell_type]) mean/std/frac_nonzero) →
-  `aggregate_to_metabolite` (roll pairs→metabolite via loader map, orientation-agnostic, plain or
-  `C_np`-weighted) → `gene_set_score` (signed = positive−negative). `gene_pair_cnp_weights` reads
-  harreman's `gene_pair_summary.csv`. Verified end-to-end on the real easy_download outputs.
-  `tests/test_beta_analysis.py`.
+- **Beta-analysis read-back:** ✅ `metab_processing/SpaceTravLR/beta_analysis.py` (rewritten
+  2026-07-19 — see that session's entry below). `tests/test_beta_analysis.py`.
 - **Quickstart notebook:** ✅ `metab_processing/quick_start_metab.ipynb` (committed `c04ccad`) —
   data-dir/dataset config, editable gene-sets cell, yaml→`metab_pairs`, `setup_`(COMMOT off)+
   focus-gene `fit(metab_pairs=…)`, coefficient read-back; results under the dataset dir.
@@ -215,6 +211,33 @@ orphan relax → `c04ccad` feat beta-analysis + notebook.
 - Local testing note: conda env **`spacetravlr_env`** has pandas/numpy/scanpy/anndata/torch, but
   **harreman is not installed locally** (Savio only) — anything importing harreman can only be
   checked statically.
+
+## Session 2026-07-19 — beta_analysis rewritten (simple, tier-foldered)
+The first beta-analysis module (`read_metab_beta_summary` → `aggregate_to_metabolite` →
+`gene_set_score` + `gene_pair_cnp_weights`) was **thrown out** — too much machinery for what
+Foster wants read out. **Those four functions no longer exist**; the pairs→metabolite rollup,
+the `C_np` weighting and the signed gene-set ranking are all gone (do them downstream from the
+CSVs if wanted). New `metab_processing/SpaceTravLR/beta_analysis.py`, ~150 lines:
+- **A "tier" is an `adata.obs` cell-type column** (`Tier1/2/3`) and **a tier is a folder**:
+  everything is written to `easy_download/metabtravlr_outputs/<tier>/`.
+- `tier_means(betadata_dir, obs, tier, genes=, group=)` — the one shared primitive: group cells
+  by `obs[tier]`, return mean/std/n per (gene, modulator, cell type). `group` filters to a
+  modulator group; classification is by separator (`@` metab, `$` lr, `#` ltf, none → tf).
+- `write_gene_pairs(...)` → `<tier>/gene_pairs.csv`, **metabolite (`@`) pairs only**, columns
+  `gene, export, import, pair, cell_type, mean, std, n`. **Cell types stay as rows** (collapsing
+  them would defeat the point of tiers) and **both orientations of a heterotypic pair stay as
+  separate rows** — they're separate model coefficients (direction is read from magnitude, see
+  the 2026-07-17 regularization finding).
+- `write_histograms(..., bins=50, plot=False)` → `<tier>/histograms.csv` (`group, left, right,
+  count`): distribution of those per-(gene, modulator, cell type) mean betas, one histogram per
+  modulator group, pooled over genes and cell types. `plot=True` also writes `histograms.png`.
+- `betas_to_adata(adata, betadata_dir, genes=, group='metab')` → `adata.obsm['beta_<gene>']`
+  (cells x modulators, reindexed to `obs_names`, NaN for cells the gene wasn't fit on); column
+  names in `adata.uns['beta_modulators'][gene]` since obsm drops labels.
+- Notebook read-back cells updated to the new API. Tests rewritten (`tests/test_beta_analysis.py`,
+  4 tests, known-answer). Verified on pandas **2.3.3** (`spacetravlr_env`) **and 3.0.0**, no
+  FutureWarnings. Note real betadata parquets live on Savio — local `tmp/.../betadata` is empty
+  and `Results/.../metabtravler_outputs/pair_summary.csv` is old-format output from the dead code.
 
 ## Local assets for dev/testing
 - Demo data in `data/`: `Slidetags_human_tonsil.h5ad`, `Slidetags_human_melanoma.h5ad`,
