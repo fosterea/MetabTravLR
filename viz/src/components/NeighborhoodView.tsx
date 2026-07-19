@@ -16,6 +16,7 @@ import { useMemo, useState } from 'react';
 import { useVizStore, selectCurrentTier } from '@/store/useVizStore';
 import { entityLabel } from '@/data/ranking';
 import type { NbhdRow } from '@/data/types';
+import BetaPanel from './BetaPanel';
 import styles from './NeighborhoodView.module.css';
 
 type Metric = 'fracSig' | 'meanCs' | 'log2Enrichment';
@@ -83,7 +84,7 @@ export default function NeighborhoodView() {
   const metricInfo = METRICS.find((m) => m.id === metric)!;
 
   if (bundleLoading) return <div className="empty">Loading…</div>;
-  if (!dataset?.hasNbhd) {
+  if (!dataset?.hasNbhd && !dataset?.hasBeta) {
     return (
       <div className="empty">
         This dataset has no neighborhood scores — its harreman run predates them.
@@ -94,6 +95,13 @@ export default function NeighborhoodView() {
 
   return (
     <div className={styles.wrap}>
+      {!dataset.hasNbhd ? (
+        <div className={styles.none}>
+          This dataset has no harreman neighborhood scores — its run predates them. The SpaceTravLR
+          coefficients below are unaffected.
+        </div>
+      ) : (
+        <>
       <div className={styles.head}>
         <div>
           <h2 className={styles.title}>Neighborhood scores</h2>
@@ -202,6 +210,10 @@ export default function NeighborhoodView() {
           </p>
         </>
       )}
+        </>
+      )}
+
+      <BetaPanel />
     </div>
   );
 }

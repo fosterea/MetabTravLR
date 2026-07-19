@@ -134,6 +134,50 @@ export interface NbhdBundle {
   byEntity: Record<EntityKind, Record<string, NbhdRow[]>>;
 }
 
+/**
+ * One SpaceTravLR learned coefficient: how much a DIRECTED transporter pair moves one target
+ * gene, averaged over the cells of one cell type (`metabtravlr_outputs/<Tier>/gene_pairs.csv`).
+ *
+ * ⚠️ Unlike `EntityEdge`, direction here is REAL and load-bearing. `env` is the transporter gene
+ * expressed by the environment (the neighboring cells); `cell` is the one expressed by the cell
+ * being modelled. `env→cell` and `cell→env` are two separate coefficients and must never be
+ * merged, averaged, or displayed as one row.
+ *
+ * `mean` is signed — the sign is the biological claim (up- vs down-regulation of `gene`) and is
+ * the one thing an encoding must never distort. `std`/`n` are the spread and the cell count
+ * behind the mean; no significance test is applied anywhere in this pipeline.
+ */
+export interface BetaRow {
+  /** Transporter gene expressed by the ENVIRONMENT (harreman's "export" side). */
+  env: string;
+  /** Transporter gene expressed by THE CELL (harreman's "import" side). */
+  cell: string;
+  /** The target gene whose expression this coefficient moves. */
+  gene: string;
+  cellType: string;
+  /** Signed mean coefficient. */
+  mean: number | null;
+  /** Standard deviation of the coefficient across the cells of this type. */
+  std: number | null;
+  /** Cells of this type behind the mean. */
+  n: number | null;
+}
+
+/**
+ * SpaceTravLR coefficients for one tier (`public/data/<id>/beta/<Tier>.json`).
+ *
+ * Keyed by an ORDER-INDEPENDENT sorted pair key (`betaKey`), NOT by `GenePairEntity.id` — the
+ * network lists some pairs in both orders, so a directed row can't be attributed to one entity
+ * id. Look these up with `betaKey(...entity.genes)`; the direction lives in each row's env/cell.
+ */
+export interface BetaBundle {
+  tier: string;
+  cellTypes: string[];
+  /** Target genes present at this tier, sorted. The heatmap's columns. */
+  targetGenes: string[];
+  byPair: Record<string, BetaRow[]>;
+}
+
 /** Per-dataset descriptor (`public/data/<id>/dataset.json`). */
 export interface Dataset {
   id: string;
@@ -144,6 +188,8 @@ export interface Dataset {
   entityKinds: EntityKind[];
   /** Whether `nbhd/<Tier>.json` files exist (older runs predate the neighborhood scores). */
   hasNbhd: boolean;
+  /** Whether `beta/<Tier>.json` files exist (only datasets with a SpaceTravLR run have them). */
+  hasBeta: boolean;
   tiers: Tier[];
   entities: {
     metabolite?: MetaboliteEntity[];
@@ -167,6 +213,7 @@ export interface DatasetRef {
   entityKinds: EntityKind[];
   tierIds: string[];
   hasNbhd: boolean;
+  hasBeta: boolean;
   /**
    * False when the source run is incomplete (e.g. the harreman network JSON exists but no tier
    * tables were written). Such datasets have NO files on disk — the app must list them

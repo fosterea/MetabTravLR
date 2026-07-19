@@ -4,6 +4,18 @@
 restart. Dates are absolute (project "today" was 2026-07-16 at kickoff).
 
 ## Current state
+- **2026-07-19 — SpaceTravLR gene-pair coefficients in the Environment view. Playwright-verified.**
+  - Ingest (schemaVersion **3**) now also reads `easy_download/metabtravlr_outputs/<Tier>/
+    gene_pairs.csv` — a sibling of `harreman_outputs/` — into `<id>/beta/<Tier>.json`, with
+    `hasBeta` on `Dataset`/`DatasetRef`. Only **Primary Dermal Melanoma** has a SpaceTravLR run
+    today; the other datasets emit no `beta/` and simply don't show the section (+340 KB).
+  - The "Neighborhoods" view is renamed **Environment** and now holds two sections: the existing
+    harreman neighborhood bars, then a new `BetaPanel` heatmap of the SpaceTravLR coefficients.
+    Both metabolites and gene pairs are supported; a cell-type picker shows all breakdowns
+    stacked or narrows to one. See decisions A14–A17.
+  - `tsc` + `lint` + `build` clean; **0 console errors/warnings** across the full pass.
+  - Verified numerically, not just visually: all 1,555 Tier3 rows round-trip CSV→bundle, and a
+    DOM-vs-bundle diff of 125 rendered cells found 0 mismatches in value, sign, hue or ≈0 floor.
 - **2026-07-18 — Multi-dataset + neighborhood view + cross-navigation. Playwright-verified.**
   - Data source moved to `Results/<project>/<dataset>/easy_download/harreman_outputs`. Ingest
     now emits **3 datasets** (Human Lung, Human Prostate Adenocarcinoma, Primary Dermal
@@ -55,6 +67,11 @@ restart. Dates are absolute (project "today" was 2026-07-16 at kickoff).
 | A11 | Entity selection is remembered **per kind**; cross-links jump between kinds | Foster: switching to gene pairs had no default and lost your place. Memory makes the metabolite⇄pair links safe to follow — the way back is one click. |
 | A12 | The gene-pair list stays in the panel in "On graph" mode (was either/or) | The two are complements, not alternatives: the fan shows *where*, the list shows *which + how much* and is where the links live. A shared highlight (`pinnedGp` + `hoverGp` → `selectFocusedGp`) ties them together; hover previews without destroying a pinned choice. |
 | A13 | Incomplete datasets are listed **disabled**, not hidden | Silently dropping a dataset Foster knows he ran looks like data loss; the reason travels in the manifest. |
+| A14 | SpaceTravLR betas get their **own bundle** (`beta/<Tier>.json`), NOT `EntityEdge.value`/`sign` | They are not an interface statistic: a row is (target gene, directed transporter pair, cell type), with no CT↔CT pair anywhere in it. Same reasoning as A9 for nbhd. `value`/`sign` stay reserved for genuinely directed signed *edges*. |
+| A15 | Beta magnitude = **log ramp over a fixed 4 decades below the view max**; sign is a separate channel | Foster's catch: naive `sign(x)·log10|x|` turns −1e−7 into +7 — it flips AND inflates. Splitting the channels makes that class of bug impossible: `norm()` is always ≥0 and independent of sign. |
+| A16 | Anything below the floor renders **untinted + labelled `≈0`**, with no minimum bar | Foster: "some things can be almost zero and that should be communicable." A min-anchored scale gives the view's smallest value a visible pedestal, so negligible reads as "weak but real". Absence of color is the honest encoding for absence of effect. |
+| A17 | Both directions of a pair are **separate rows**, never merged | `env→cell` and `cell→env` are independent coefficients (70 of 107 pairs have both). Merging would invent a symmetry the model doesn't claim. This is the one place in the app where direction is real — hence the explicit "environment → cell" column header. |
+| A18 | The view is renamed **Environment** and enabled when `hasNbhd \|\| hasBeta` | It now holds two different per-cell measurements, both about a cell's surroundings rather than an interface. "Neighborhoods" named only the first one. |
 
 ## Open questions / needs Foster
 - **Dataset naming**: ids/names now come straight from the `Results/` folder names
@@ -78,10 +95,15 @@ restart. Dates are absolute (project "today" was 2026-07-16 at kickoff).
 - [x] Neighborhood scores surfaced as their own view. (2026-07-18.)
 - [ ] Compare datasets side by side (e.g. one metabolite's neighborhood profile across Lung /
       Prostate / Melanoma). The data is all client-side now, so this is a UI-only change.
-- [ ] SpaceTravLR signed two-value edges: width=|value|, color=sign (`--val-pos`/`--val-neg`).
-      NOTE: these are **directed scalers** on edges — the fan-out gp sub-edges and the reserved
-      `value`/`sign` edge fields are the intended carrier; likely a per-edge multiplier applied
-      on top of the existing width scale + diverging color.
+- [x] SpaceTravLR gene-pair coefficients surfaced per cell type in the Environment view.
+      (2026-07-19; `--val-pos`/`--val-neg` now in use for the heatmap.)
+- [ ] SpaceTravLR signed two-value **edges**: width=|value|, color=sign. Still open and still
+      unclaimed by A14 — the beta table has no cell-type *pair* in it, so nothing in
+      `metabtravlr_outputs/` can populate `EntityEdge.value`/`sign` yet. Needs a source table
+      keyed by (CT1, CT2) before this is buildable.
+- [ ] Beta panel follow-ups Foster may want: the 4-decade window (`BETA_DECADES`) currently sends
+      53% of Tier3 coefficients to ≈0 — widen if that hides signal he cares about; and a
+      "sort rows by target gene" control if 24-direction metabolites get unwieldy.
 - [ ] Metabolite ranking controls in the side panel (by T-cell involvement / significance).
 - [ ] Bottom overlays (legend / EdgeDetails) can overlap on very narrow canvases — reposition
       or hide on small screens (Unit 2 review Low; desktop-first so deferred).
@@ -100,8 +122,42 @@ restart. Dates are absolute (project "today" was 2026-07-16 at kickoff).
 9. "On graph" mode: the pair list stays in the details panel; clicking a sub-edge pins its row;
    hovering a row highlights that pair on the graph and releases back to the pinned one.
 10. Screenshot captured as evidence.
+11. Environment view on **Primary Dermal Melanoma**: nbhd bars AND a "SpaceTravLR coefficients"
+    heatmap. Cell-type picker narrows to one block and rescales the ramp. A bidirectional pair
+    (e.g. SLC16A4 – SLCO2B1) shows **two** rows. A pair with no betas shows the "no coefficients"
+    message, not an empty grid. On Human Lung the beta section is absent but the bars still render.
+12. Beta correctness (worth re-running after any scale change — this is where the bugs are):
+    in the console, diff the DOM against `beta/<Tier>.json` and assert, per cell, that the label
+    matches source, a negative never renders `+`, hue matches sign, and `≈0` cells carry no tint.
 
 ## Changelog
+- 2026-07-19: **SpaceTravLR gene-pair coefficients in the Environment view.**
+  (1) **Ingest** (schemaVersion 3): `buildBeta()` reads the `metabtravlr_outputs/` sibling of
+  `harreman_outputs/` and emits `<id>/beta/<Tier>.json` = `{ tier, cellTypes, targetGenes,
+  byPair }`, plus `hasBeta` on `Dataset`/`DatasetRef`. Keyed on an order-independent **sorted**
+  pair key (`betaKey`), because the network lists some pairs in both orders and a *directed* beta
+  row can't be attributed to one `gpId`; the direction survives inside each row as `env`/`cell`.
+  Rows for pairs absent from the network `gp` list are dropped with a warning, never invented.
+  Melanoma only (+340 KB); other datasets emit nothing and degrade silently.
+  (2) **`BetaPanel`**: a per-cell-type heatmap — rows = directed pairs (`environment → cell`),
+  columns = the 4 target genes (CD3E/CD4/ENTPD1/IL2RA), one block per cell type with a picker for
+  All vs one. Color = sign (`--val-*`, the reserved diverging pair, finally used), tint depth =
+  log magnitude on **one scale shared across every block** so cell types are comparable, and the
+  number is printed in every cell so color never carries the value alone. Small-n cell types get
+  the same word-tag `thin` treatment as the nbhd bars.
+  (3) **The scale is the interesting part** (`src/data/betaScale.ts`, A15/A16). Betas span ~6
+  decades and are signed; naive `sign(x)·log10|x|` maps −1e−7 to +7, flipping and inflating.
+  Magnitude and sign therefore ride separate channels, and the floor is anchored a fixed 4
+  decades below the view max rather than at the view min — so a near-zero coefficient renders
+  untinted and labelled `≈0` instead of getting a visible pedestal that would read as a small
+  real effect.
+  (4) **View renamed Neighborhoods → Environment**, enabled on `hasNbhd || hasBeta`, so a dataset
+  with only one of the two still works.
+  (5) **Verified**: 1,555/1,555 Tier3 rows round-trip CSV→bundle; a DOM-vs-bundle diff of 125
+  rendered cells found 0 mismatches in value, sign, hue or floor; both directions of a
+  bidirectional pair kept; tier/dataset/kind switching, empty states, and a no-beta dataset all
+  behave; contrast of the strongest tint vs its text ≥6.8:1 in both themes; no clipping or
+  horizontal overflow down to a 1100px viewport; 0 console errors.
 - 2026-07-18: **Multi-dataset source, neighborhood-scores view, selection memory + cross-links.**
   (1) **Ingest** (`scripts/ingest.mjs`, schemaVersion 2): walks `Results/<project>/<dataset>/`,
   tags each dataset with its project, prettifies ids ("Human_Lung" → "Human Lung"), and never

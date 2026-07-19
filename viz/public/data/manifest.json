@@ -1,6 +1,6 @@
 {
   "generatedAt": null,
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "datasets": [
     {
       "id": "Human_Lung",
@@ -17,6 +17,7 @@
         "Tier3"
       ],
       "hasNbhd": true,
+      "hasBeta": false,
       "available": true
     },
     {
@@ -34,6 +35,7 @@
         "Tier3"
       ],
       "hasNbhd": true,
+      "hasBeta": false,
       "available": true
     },
     {
@@ -51,6 +53,7 @@
         "Tier3"
       ],
       "hasNbhd": true,
+      "hasBeta": true,
       "available": true
     },
     {
@@ -61,6 +64,7 @@
       "entityKinds": [],
       "tierIds": [],
       "hasNbhd": false,
+      "hasBeta": false,
       "available": false,
       "unavailableReason": "no tier outputs — the harreman run for \"Human_Breast\" is incomplete"
     },
@@ -72,6 +76,7 @@
       "entityKinds": [],
       "tierIds": [],
       "hasNbhd": false,
+      "hasBeta": false,
       "available": false,
       "unavailableReason": "no tier outputs — the harreman run for \"Human_Cervical_Cancer\" is incomplete"
     }

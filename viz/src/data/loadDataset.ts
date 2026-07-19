@@ -1,5 +1,5 @@
 /** Fetch helpers for the generated data contract (public/data/…). */
-import type { Dataset, EdgeBundle, EntityKind, Manifest, NbhdBundle } from './types';
+import type { BetaBundle, Dataset, EdgeBundle, EntityKind, Manifest, NbhdBundle } from './types';
 
 const base = import.meta.env.BASE_URL; // './' by config -> relative to current path
 
@@ -18,3 +18,6 @@ export const fetchEdgeBundle = (id: string, tier: string, kind: EntityKind) =>
 
 export const fetchNbhdBundle = (id: string, tier: string) =>
   getJson<NbhdBundle>(`${id}/nbhd/${tier}.json`);
+
+export const fetchBetaBundle = (id: string, tier: string) =>
+  getJson<BetaBundle>(`${id}/beta/${tier}.json`);

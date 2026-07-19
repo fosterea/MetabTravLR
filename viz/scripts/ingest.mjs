@@ -29,12 +29,14 @@
  *   <out>/<id>/dataset.json
  *   <out>/<id>/edges/<Tier>.<entityKind>.json
  *   <out>/<id>/nbhd/<Tier>.json            (neighborhood scores; omitted if the run lacks them)
+ *   <out>/<id>/beta/<Tier>.json            (SpaceTravLR coefficients; omitted if the run lacks them)
  */
 import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync, statSync } from 'node:fs';
 import { join, basename, resolve } from 'node:path';
 import Papa from 'papaparse';
 
-const SCHEMA_VERSION = 2; // 2: manifest datasets carry project/available/hasNbhd; +nbhd bundles
+const SCHEMA_VERSION = 3; // 3: +beta bundles (SpaceTravLR gene-pair coefficients) / hasBeta
+// 2: manifest datasets carry project/available/hasNbhd; +nbhd bundles
 
 // ---------- tiny helpers ----------
 const isDir = (p) => existsSync(p) && statSync(p).isDirectory();
@@ -68,9 +70,20 @@ const F = {
   // the per-cell interacting-cell scores. NOT the ct interface statistic — see buildNbhd().
   nbhdM: '[nbhd_scores][summary_m].csv',
   nbhdGp: '[nbhd_scores][summary_gp].csv',
+  // SpaceTravLR (MetabTravLR) learned coefficients, a SIBLING of harreman_outputs/ inside
+  // easy_download/. Per (target gene, directed transporter pair, cell type) mean beta.
+  betaDir: 'metabtravlr_outputs',
+  betaGp: 'gene_pairs.csv',
 };
 
 const gpId = (g1, g2) => `${g1}__${g2}`;
+/**
+ * Order-INDEPENDENT key for the beta tables. The harreman `gp` list is not sorted and may hold a
+ * pair in both orders, so a directed beta row (export,import) cannot be attributed to one `gpId`
+ * unambiguously. Betas are therefore keyed on the sorted pair, and the app looks them up the same
+ * way — the direction survives inside each row as `env`/`cell`, where it actually means something.
+ */
+const betaKey = (g1, g2) => (g1 <= g2 ? `${g1}__${g2}` : `${g2}__${g1}`);
 
 /** "Human_Prostate_Adenocarcinoma" -> "Human Prostate Adenocarcinoma". */
 const prettyName = (s) => s.replace(/[_-]+/g, ' ').trim();
@@ -204,10 +217,16 @@ function buildDataset(id, root, nameOverride, project) {
   const gpBySingleUnderscore = {};
   for (const [a, b] of network.gp || []) gpBySingleUnderscore[`${a}_${b}`] = gpId(a, b);
 
+  // Every unordered pair harreman knows about, so a beta row for a pair outside the network can
+  // be dropped rather than silently creating an entity the rest of the app has never heard of.
+  const knownBetaKeys = new Set((network.gp || []).map(([a, b]) => betaKey(a, b)));
+
   // ---- edges per (tier, entityKind) ----
+  const betaRoot = findBetaRoot(root);
   const tiers = [];
   const edgeBundles = []; // {filename, bundle}
   const nbhdBundles = []; // {filename, bundle}
+  const betaBundles = []; // {filename, bundle}
   tierIds.forEach((t, i) => {
     const tdir = join(root, t);
     const mRows = existsSync(join(tdir, F.tierM)) ? readCsv(join(tdir, F.tierM)) : [];
@@ -237,6 +256,9 @@ function buildDataset(id, root, nameOverride, project) {
 
     const nbhd = buildNbhd(t, tdir, gpBySingleUnderscore);
     if (nbhd) nbhdBundles.push({ file: `${t}.json`, bundle: nbhd });
+
+    const beta = betaRoot ? buildBeta(t, join(betaRoot, t), knownBetaKeys) : null;
+    if (beta) betaBundles.push({ file: `${t}.json`, bundle: beta });
   });
 
   const dataset = {
@@ -246,6 +268,7 @@ function buildDataset(id, root, nameOverride, project) {
     source: 'harreman',
     entityKinds: ['metabolite', 'gene_pair'],
     hasNbhd: nbhdBundles.length > 0,
+    hasBeta: betaBundles.length > 0,
     tiers,
     entities: {
       metabolite: metaboliteEntities,
@@ -253,7 +276,77 @@ function buildDataset(id, root, nameOverride, project) {
     },
   };
 
-  return { dataset, edgeBundles, nbhdBundles };
+  return { dataset, edgeBundles, nbhdBundles, betaBundles };
+}
+
+/** `metabtravlr_outputs/` sits beside `harreman_outputs/` inside `easy_download/`. */
+function findBetaRoot(harremanRoot) {
+  for (const cand of [
+    join(harremanRoot, '..', F.betaDir), // root = <easy_download>/harreman_outputs
+    join(harremanRoot, F.betaDir), // root = <easy_download> (network JSON sat directly there)
+  ]) {
+    if (isDir(cand)) return cand;
+  }
+  return null;
+}
+
+/**
+ * SpaceTravLR learned coefficients for one tier (`metabtravlr_outputs/<Tier>/gene_pairs.csv`).
+ *
+ * A row is one (target gene, DIRECTED transporter pair, cell type) mean beta: how much the
+ * modelled interaction between an environment-expressed transporter and a cell-expressed
+ * transporter moves that target gene, averaged over the cells of that type.
+ *
+ * Direction is real here, unlike everything else in this app: `export` is the gene expressed by
+ * the ENVIRONMENT (neighboring cells), `import` the gene expressed by THE CELL itself. So
+ * `A -> B` and `B -> A` are two different coefficients and must never be merged. They are stored
+ * as sibling rows under one order-independent `betaKey`, each keeping its own `env`/`cell`.
+ *
+ * Returns null when this dataset/tier has no SpaceTravLR run.
+ */
+function buildBeta(tier, tdir, knownBetaKeys) {
+  const path = join(tdir, F.betaGp);
+  if (!existsSync(path)) return null;
+
+  const byPair = {};
+  let dropped = 0;
+  for (const r of readCsv(path)) {
+    const env = r.export;
+    const cell = r.import;
+    const gene = r.gene;
+    const ct = r.cell_type;
+    if (!env || !cell || !gene || !ct) continue;
+    const key = betaKey(env, cell);
+    // A pair the harreman network doesn't list has no entity in the app to hang off.
+    if (!knownBetaKeys.has(key)) {
+      dropped++;
+      continue;
+    }
+    (byPair[key] ||= []).push({
+      env,
+      cell,
+      gene,
+      cellType: ct,
+      mean: num(r.mean),
+      std: num(r.std),
+      n: num(r.n),
+    });
+  }
+  if (!Object.keys(byPair).length) return null;
+
+  const all = Object.values(byPair).flat();
+  // Strongest |beta| first, so the app's default read is the biggest effect.
+  for (const rows of Object.values(byPair)) {
+    rows.sort((a, b) => Math.abs(b.mean ?? 0) - Math.abs(a.mean ?? 0));
+  }
+  if (dropped) console.warn(`  ! ${tier}: dropped ${dropped} beta row(s) for pairs not in the network`);
+
+  return {
+    tier,
+    cellTypes: uniq(all.map((r) => r.cellType)),
+    targetGenes: uniq(all.map((r) => r.gene)).sort(),
+    byPair,
+  };
 }
 
 /**
@@ -342,7 +435,7 @@ const uniq = (a) => [...new Set(a)];
 const emptyToNull = (v) => (v === '' || v == null ? null : v);
 
 // ---------- write ----------
-function writeDataset(outDir, { dataset, edgeBundles, nbhdBundles }) {
+function writeDataset(outDir, { dataset, edgeBundles, nbhdBundles, betaBundles }) {
   const dsDir = join(outDir, dataset.id);
   mkdirSync(join(dsDir, 'edges'), { recursive: true });
   writeFileSync(join(dsDir, 'dataset.json'), JSON.stringify(dataset));
@@ -355,11 +448,18 @@ function writeDataset(outDir, { dataset, edgeBundles, nbhdBundles }) {
       writeFileSync(join(dsDir, 'nbhd', file), JSON.stringify(bundle));
     }
   }
+  if (betaBundles.length) {
+    mkdirSync(join(dsDir, 'beta'), { recursive: true });
+    for (const { file, bundle } of betaBundles) {
+      writeFileSync(join(dsDir, 'beta', file), JSON.stringify(bundle));
+    }
+  }
   const nMetab = dataset.entities.metabolite?.length ?? 0;
   const nGp = dataset.entities.gene_pair?.length ?? 0;
   console.log(
     `  wrote dataset.json (${nMetab} metabolites, ${nGp} gene pairs) + ${edgeBundles.length} edge files` +
-      (nbhdBundles.length ? ` + ${nbhdBundles.length} nbhd files` : ' (no nbhd scores)'),
+      (nbhdBundles.length ? ` + ${nbhdBundles.length} nbhd files` : ' (no nbhd scores)') +
+      (betaBundles.length ? ` + ${betaBundles.length} beta files` : ''),
   );
 }
 
@@ -405,6 +505,7 @@ function main() {
         entityKinds: [],
         tierIds: [],
         hasNbhd: false,
+        hasBeta: false,
         available: false,
         unavailableReason: built.unavailable,
       });
@@ -419,6 +520,7 @@ function main() {
       entityKinds: built.dataset.entityKinds,
       tierIds: built.dataset.tiers.map((t) => t.id),
       hasNbhd: built.dataset.hasNbhd,
+      hasBeta: built.dataset.hasBeta,
       available: true,
     });
   }

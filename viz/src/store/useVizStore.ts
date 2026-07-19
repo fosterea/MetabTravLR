@@ -6,6 +6,7 @@
  */
 import { create } from 'zustand';
 import type {
+  BetaBundle,
   Dataset,
   EdgeBundle,
   EntityKind,
@@ -13,7 +14,13 @@ import type {
   NbhdBundle,
   Tier,
 } from '@/data/types';
-import { fetchDataset, fetchEdgeBundle, fetchManifest, fetchNbhdBundle } from '@/data/loadDataset';
+import {
+  fetchBetaBundle,
+  fetchDataset,
+  fetchEdgeBundle,
+  fetchManifest,
+  fetchNbhdBundle,
+} from '@/data/loadDataset';
 
 type Status = 'idle' | 'loading' | 'ready' | 'error';
 
@@ -68,6 +75,8 @@ interface VizState {
   gpBundle?: EdgeBundle;
   /** Neighborhood scores for the current (datasetId, tierId) — kind-independent. */
   nbhdBundle?: NbhdBundle;
+  /** SpaceTravLR coefficients for the current (datasetId, tierId) — kind-independent. */
+  betaBundle?: BetaBundle;
   bundleLoading: boolean;
 
   init: () => Promise<void>;
@@ -137,11 +146,13 @@ export const useVizStore = create<VizState>((set, get) => ({
         edgeBundle: undefined,
         gpBundle: undefined,
         nbhdBundle: undefined,
+        betaBundle: undefined,
         gpTab: undefined,
         pinnedGp: undefined,
         hoverGp: undefined,
-        // A dataset without neighborhood scores can't show that view.
-        view: dataset.hasNbhd ? get().view : 'graph',
+        // A dataset with neither neighborhood scores nor SpaceTravLR betas has nothing to put
+        // in that view.
+        view: hasEnvView(dataset) ? get().view : 'graph',
       });
       if (tierId) await loadBundle(set, get);
     } catch (e) {
@@ -158,6 +169,7 @@ export const useVizStore = create<VizState>((set, get) => ({
         edgeBundle: undefined,
         gpBundle: undefined,
         nbhdBundle: undefined,
+        betaBundle: undefined,
         gpTab: undefined,
         pinnedGp: undefined,
         hoverGp: undefined,
@@ -241,7 +253,7 @@ async function loadBundle(set: (partial: Partial<VizState>) => void, get: () => 
   try {
     // In metabolite mode also load the same-tier gene_pair bundle so a metabolite edge can be
     // expanded into its contributing transporter pairs (client-side; no extra ingest).
-    const [edgeBundle, gpBundle, nbhdBundle] = await Promise.all([
+    const [edgeBundle, gpBundle, nbhdBundle, betaBundle] = await Promise.all([
       fetchEdgeBundle(datasetId, tierId, entityKind),
       entityKind === 'metabolite'
         ? fetchEdgeBundle(datasetId, tierId, 'gene_pair')
@@ -251,9 +263,13 @@ async function loadBundle(set: (partial: Partial<VizState>) => void, get: () => 
       dataset?.hasNbhd && get().nbhdBundle?.tier !== tierId
         ? fetchNbhdBundle(datasetId, tierId)
         : Promise.resolve(get().nbhdBundle),
+      // Same deal for the SpaceTravLR coefficients: keyed on (dataset, tier) only.
+      dataset?.hasBeta && get().betaBundle?.tier !== tierId
+        ? fetchBetaBundle(datasetId, tierId)
+        : Promise.resolve(get().betaBundle),
     ]);
     if (matchesRequest()) {
-      set({ edgeBundle, gpBundle, nbhdBundle, bundleLoading: false });
+      set({ edgeBundle, gpBundle, nbhdBundle, betaBundle, bundleLoading: false });
     } else {
       // Lost the race to a newer selection; still clear our flag so it can't stick true.
       set({ bundleLoading: false });
@@ -266,6 +282,13 @@ async function loadBundle(set: (partial: Partial<VizState>) => void, get: () => 
     }
   }
 }
+
+/**
+ * Does this dataset have anything to show in the environment view? Either harreman neighborhood
+ * scores or SpaceTravLR coefficients is enough — the view renders whichever sections it has.
+ */
+export const hasEnvView = (d: Dataset | { hasNbhd: boolean; hasBeta: boolean } | undefined) =>
+  Boolean(d && (d.hasNbhd || d.hasBeta));
 
 /** Selector: the gene pair to highlight — a live hover preview wins over the pinned choice. */
 export const selectFocusedGp = (s: VizState): string | undefined => s.hoverGp ?? s.pinnedGp;

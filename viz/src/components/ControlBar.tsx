@@ -1,6 +1,6 @@
 /** Top control bar: dataset, tier, view, entity-kind, and the show-non-significant toggle. */
 import { Fragment, useMemo } from 'react';
-import { useVizStore } from '@/store/useVizStore';
+import { useVizStore, hasEnvView } from '@/store/useVizStore';
 import type { DatasetRef } from '@/data/types';
 
 export default function ControlBar() {
@@ -94,9 +94,10 @@ export default function ControlBar() {
         </select>
       </div>
 
-      {/* Graph = harreman's cell-type INTERFACE statistic. Neighborhoods = the per-cell scores
-          bucketed by each cell's own type — a different question, hence a different view rather
-          than another encoding on the same graph. */}
+      {/* Graph = harreman's cell-type INTERFACE statistic. Environment = everything measured on a
+          cell against its own label rather than an interface: the per-cell neighborhood scores and
+          the SpaceTravLR coefficients. A different question, hence a different view rather than
+          another encoding on the same graph. */}
       <div className="field">
         <label>View</label>
         <div className="segmented" role="group" aria-label="View">
@@ -106,14 +107,14 @@ export default function ControlBar() {
           <button
             aria-pressed={view === 'nbhd'}
             onClick={() => setView('nbhd')}
-            disabled={!dataset?.hasNbhd}
+            disabled={!hasEnvView(dataset)}
             title={
-              dataset?.hasNbhd
-                ? 'Which cell types sit in high-scoring neighborhoods for the selected entity'
-                : 'This dataset has no neighborhood scores'
+              hasEnvView(dataset)
+                ? 'Neighborhood scores and SpaceTravLR coefficients for the selected entity'
+                : 'This dataset has neither neighborhood scores nor SpaceTravLR coefficients'
             }
           >
-            Neighborhoods
+            Environment
           </button>
         </div>
       </div>

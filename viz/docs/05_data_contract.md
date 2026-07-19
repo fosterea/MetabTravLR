@@ -11,9 +11,12 @@ manifest.json                         # { generatedAt, schemaVersion, datasets: 
 <id>/dataset.json                     # Dataset: tiers + entities (+ ranking metrics)
 <id>/edges/<Tier>.<entityKind>.json   # EdgeBundle: { tier, entityKind, cellTypes, byEntity }
 <id>/nbhd/<Tier>.json                 # NbhdBundle: neighborhood scores (omitted if absent)
+<id>/beta/<Tier>.json                 # BetaBundle: SpaceTravLR coefficients (omitted if absent)
 ```
 `byEntity` maps `entityId -> EntityEdge[]` so selecting an entity is an O(1) lookup.
-`schemaVersion` is **2** (v2 added `nbhd/`, and `project`/`hasNbhd`/`available` on `DatasetRef`).
+`schemaVersion` is **3** (v3 added `beta/` + `hasBeta`; v2 added `nbhd/`, and
+`project`/`hasNbhd`/`available` on `DatasetRef`). Both bumps are **additive** — an older app
+reading a newer bundle just ignores the new keys.
 
 ## Multiple datasets, and incomplete ones
 The input path may be a single `harreman_outputs/`, a `<root>/<dataset>/easy_download/…` tree,
@@ -45,7 +48,7 @@ empty dataset.
   (`nSigPairs`, `tcellInvolved`, `withinTcell`, `tcellInterfaces`, `interactions`).
 - **GenePairEntity** = `{ id: "GENE1__GENE2", genes, kind, metabolites }`. `metabolites` is the
   **many-to-many** set of metabolites this pair serves.
-- **Dataset** = `{ id, name, project, source, entityKinds, hasNbhd, tiers,
+- **Dataset** = `{ id, name, project, source, entityKinds, hasNbhd, hasBeta, tiers,
   entities:{ metabolite?, gene_pair? } }`.
 - **NbhdRow** = `{ cellType, nCells, fracSig, meanCs, meanCsSig, meanNegLog10P, log2Enrichment }`;
   **NbhdBundle** = `{ tier, cellTypes, byEntity: { metabolite, gene_pair } }`.
@@ -54,6 +57,22 @@ empty dataset.
   "X exchanges E with Y", and it carries no direction. It must never be folded into `EntityEdge`.
   `log2Enrichment` is unstable for small `nCells` (parent doc 05 §5a), so `nCells` travels with
   every row and the UI flags rows under 25 significant cells as "thin".
+- **BetaRow** = `{ env, cell, gene, cellType, mean, std, n }`;
+  **BetaBundle** = `{ tier, cellTypes, targetGenes, byPair }`.
+  One SpaceTravLR learned coefficient: how much a **directed** transporter pair moves one target
+  gene, averaged over the cells of one cell type.
+  ⚠️ **Direction is real here** — the one place in this app where it is. `env` is the transporter
+  expressed by the *environment* (harreman's "export" column), `cell` the one expressed by *the
+  cell* ("import"). `env→cell` and `cell→env` are independent coefficients and must never be
+  merged, averaged, or drawn as one row; 70 of the 107 directed pairs in the melanoma run have
+  both orders present.
+  ⚠️ `mean` is **signed**, and the sign is the biological claim (raises vs lowers the target
+  gene). Any encoding must keep magnitude and sign on separate channels — see `betaScale.ts`.
+  No significance test is applied anywhere in this path; `std`/`n` travel with every row.
+  **Keying:** `byPair` is keyed by an order-INDEPENDENT sorted `A__B` key (`betaKey`), *not* by
+  `GenePairEntity.id` — the network lists some pairs in both orders, so a directed row cannot be
+  attributed to a single entity id. Look up with `betaKey(...entity.genes)`. Rows for pairs
+  absent from the network `gp` list are dropped, never invented.
 
 ## Source → contract mapping (harreman adapter)
 | Contract field | Source |
@@ -67,6 +86,7 @@ empty dataset.
 | tier `cellTypes` | distinct `Cell Type 1/2` in the tier CSVs |
 | tier `parentTier` | coarse→fine ordering of `Tier*` dirs |
 | neighborhood scores | `Tier*/[nbhd_scores][summary_{m,gp}].csv` |
+| SpaceTravLR coefficients | `../metabtravlr_outputs/Tier*/gene_pairs.csv` (sibling of `harreman_outputs/`) |
 
 Notes / gotchas the adapter handles:
 - Metabolite names contain commas → must be parsed with a real CSV parser (Papa Parse), never
@@ -77,10 +97,17 @@ Notes / gotchas the adapter handles:
 - The nbhd tables key gene pairs as `GENE1_GENE2` (**single** underscore), which can't be split
   unambiguously — the adapter resolves them through the network's own `gp` list instead of
   guessing, and drops rows it can't resolve rather than mis-attributing them.
+- `metabtravlr_outputs/` is a **sibling** of `harreman_outputs/` inside `easy_download/`, and is
+  optional — only datasets with a SpaceTravLR run have it (today: Primary Dermal Melanoma).
+  Its `gene_pairs.csv` columns are `gene,export,import,pair,cell_type,mean,std,n`, where `gene`
+  is the *target* gene and `export`/`import` are the environment/cell transporters. Its `pair`
+  column (`export@import`) is ignored in favour of the two gene columns.
 
-## Adding a new source (e.g. SpaceTravLR)
-Write a sibling adapter that emits **this same contract**. Populate `EntityEdge.value`/`sign`
-for signed coefficients and set `Dataset.source='spacetravlr'`,
-`entityKinds` including `'gene'`/`'gene_set'`. Bump `schemaVersion` only on a breaking change and
-note it here + in `04_decisions_and_state.md`. The app should not need changes beyond new
-encodings/legends.
+## Adding a new source (e.g. more SpaceTravLR outputs)
+Write a sibling adapter that emits **this same contract**. For per-(cell type, entity) tables
+that are not interface statistics, follow the `nbhd/` and `beta/` precedent: a new
+`<id>/<thing>/<Tier>.json` bundle plus a `has<Thing>` flag on `Dataset`/`DatasetRef`, loaded in
+`loadBundle`'s `Promise.all` gated on that flag and on the tier having changed. For genuinely
+*directed, signed edge* data, populate the still-reserved `EntityEdge.value`/`sign` and set
+`Dataset.source='spacetravlr'`. Bump `schemaVersion` (additive bumps are fine) and note it here
++ in `04_decisions_and_state.md`.
