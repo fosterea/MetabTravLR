@@ -1,4 +1,5 @@
-XENIUM_DATA_DIR = '/global/scratch/users/fosterangus/MetabTravLR/Data/Xenium'
+from metab_processing.metab_travlr_config import PROJECT_DATA_DIR
+XENIUM_DATA_DIR = PROJECT_DATA_DIR
 
 import harreman
 import numpy as np

@@ -1,6 +1,8 @@
 import shutil
 from pathlib import Path
 
+from metab_processing.metab_travlr_config import PROJECT_DATA_DIR
+
 def copy_easy_download(src_dir, dest_dir):
     src = Path(src_dir)
     dest = Path(dest_dir)
@@ -13,7 +15,7 @@ def copy_easy_download(src_dir, dest_dir):
                 shutil.copytree(easy_down, target, dirs_exist_ok=True)
 
 def save_easy_downloads(
-    DATA_DIR='/global/scratch/users/fosterangus/MetabTravLR/Data/Xenium',
+    DATA_DIR=PROJECT_DATA_DIR,
     SAVE_DIR='/global/home/users/fosterangus/Projects/MetabTravLR/SpaceTravLR/Results', 
     DATA_SET_NAME='Xenium_Tcell_Dataset'):
 
