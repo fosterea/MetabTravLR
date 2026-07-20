@@ -1,5 +1,16 @@
 import shutil
+import sys
 from pathlib import Path
+
+# Make the repo root importable regardless of CWD or machine: walk up from this
+# file until we hit a repo marker, then put that dir on sys.path.
+_root = next(
+    (p for p in Path(__file__).resolve().parents
+     if (p / ".git").exists() or (p / "setup.py").exists()),
+    Path(__file__).resolve().parent,
+)
+if str(_root) not in sys.path:
+    sys.path.insert(0, str(_root))
 
 from metab_processing.metab_travlr_config import PROJECT_DATA_DIR
 
