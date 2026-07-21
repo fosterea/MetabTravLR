@@ -8,7 +8,7 @@ The scores are cell-type-independent, so every tier is a groupby over the same m
 import numpy as np
 import pandas as pd
 
-from interacting_cell_scores_lowmem import compute_interacting_cell_scores_lowmem
+from cell_communication_lowmem import compute_interacting_cell_scores_lowmem
 
 GRAIN_COL = {'m': 'metabolite', 'gp': 'gene_pair'}
 

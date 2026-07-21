@@ -29,6 +29,7 @@ labeled gene sets to rank metabolites by effect (e.g. ↑T-cell activity / ↓ex
 | D6 | 2026-07-10 | Metabolites are their **own new modulator group** (a 5th group), **not** folded into the L–R `extra_lr` group. | Separate group-lasso group + **distinct betadata separator** (e.g. `@`, since `$`/`#` are taken) so metabolite β's are independently identifiable. See `01_pipeline_deep_dive.md`. |
 | D7 | 2026-07-10 | **Keep TF + L–R modulators, but optional** (default keep). | Metabolite β estimated controlling for known regulation. Likely **skip COMMOT** (harreman is our prior). |
 | D8 | 2026-07-16 | **Fix the received-ligand kernel: hard cutoff at `radius` + narrow σ; row-chunk.** Committed `793c096`. | Auto mode, **verified against the paper's actual methods text** (Foster's prompt to check). Finding: the paper *mandates a hard cutoff* — "spatial neighbors n as all locations i within a circle … with a predefined radius r", summing over only in-radius neighbors — so the old "fast" kernel (`σ=radius`, **no cutoff**, sum over all cells) genuinely **violates the paper** (real bug; OOM'd at 57 GB @100k). The paper does **NOT** specify σ (defers to CytoSignal); `σ=radius/3.72` is the codebase's own `gaussian_kernel_2d` convention (makes the Gaussian ≈0 at the cutoff) and is what the original slow `compute_radius_weights` uses. So the fix = align fast path to `gaussian_kernel_2d`: cutoff = paper-mandated, σ = code-convention. → ~1.34 GB @20k, matches narrow reference to ~2e-16, chunk-invariant. **CHANGES results vs old wide kernel — intended.** Old wide fns kept as `*_wide_deprecated`. Paper refs: Methods "Spatially informed signaling inference" (p17); σ nuance in `05`/agent trace. |
+| D9 | 2026-07-20 | **Harreman aggregate CCC OOM → gene-pair chunking (bit-identical), NOT lowering M.** The `HarremanRunner` OOM at Xenium scale is in `compute_{,ct_}cell_communication`'s dense `(n_cells × n_gp)` matmul intermediates — a *different* problem from the per-cell §5 OOM (already fixed via `nbhd_scores`→`compute_interacting_cell_scores_lowmem`). Their permutation null is already cell-reduced, so `M` is irrelevant to their memory. | Chunk the **gene-pair** axis (provably bit-identical: score sums over cells; column slicing + per-row DANB standardize don't reorder). Simplest fix that solves it at any scale; "chunk matmul only" was rejected once we verified `standardize_counts` is per-row (→ chunk `counts_1/2` too). Adaptive default chunk `= max(1, 50M//n_cells)`. Reproduced two stock float32 quirks for exactness. See `05` §5c; drop-ins in `cell_communication_lowmem.py` (CU-A–D). |
 
 ## Leaning / proposed (not final)
 - Signed gene-set score: `mean_{positive} β̄ − mean_{negative/exhaustion} β̄`.
@@ -238,6 +239,33 @@ CSVs if wanted). New `metab_processing/SpaceTravLR/beta_analysis.py`, ~150 lines
   4 tests, known-answer). Verified on pandas **2.3.3** (`spacetravlr_env`) **and 3.0.0**, no
   FutureWarnings. Note real betadata parquets live on Savio — local `tmp/.../betadata` is empty
   and `Results/.../metabtravler_outputs/pair_summary.csv` is old-format output from the dead code.
+
+## Session 2026-07-20 — harreman aggregate CCC memory fix (gene-pair chunking), CU-A–D
+Fixed the OOM Foster hit **running `HarremanRunner`** at Xenium scale (decision **D9**; full
+technical writeup in `05` **§5c**). Root cause: the two aggregate functions'
+dense `(n_cells × n_gene_pairs)` matmul intermediates — *not* the per-cell `(cells, pairs, M)`
+blowup of `05` §5 (that one was already handled via `nbhd_scores`), and **not** `M`-dependent.
+Fix = gene-pair chunking, proven **bit-for-bit identical** to stock.
+
+- **`metab_processing/Harreman/interacting_cell_scores_lowmem.py` → `cell_communication_lowmem.py`**
+  (renamed; refs updated). Now holds **three** annotated-`# STOCK:`-diff drop-ins:
+  `compute_interacting_cell_scores_lowmem` (CU-A, reformatted + replicated stock's float32 pval
+  cast for exactness), `compute_cell_communication_lowmem` (CU-B), `compute_ct_cell_communication_lowmem`
+  (CU-C). `harreman_funcs.py` calls all three (CU-D); `HarremanRunner(gene_pair_chunk_size=None)`
+  auto-sizes (~50M-elem budget).
+- **Two stock quirks reproduced for bit-identity** (report upstream): float32 pval cast (cell-indep);
+  dtype-omitted `torch.zeros` → float32 `cs_gp` (ct). Both look like bugs.
+- **Dev/review loop** (metab-dev + Opus metab-review per CU): every CU adversarially reviewed;
+  CU-B stress-tested 600 configs, CU-C 120 — `cs` + entire non-parametric path (`pval`/`FDR`/`perm_cs`,
+  the production-gating outputs) **exactly** bit-identical across all chunk sizes/seeds; parametric
+  `Z` ≤ ~2 ULP float64 reduction noise (off the gating path). All local proof is **CPU**; a GPU/real-
+  data gate `validate_lowmem_savio.py` must be run on Savio before production (reduction kernels
+  could add ULP drift on CUDA — measure-zero exceedance-flip risk).
+- **Tests** (all in `spacetravlr_env`, no real harreman — `tests/fixtures/fake_harreman/` vendors
+  the real code byte-identically): `test_cell_communication_lowmem.py`, `test_cell_communication_agg_lowmem.py`,
+  `test_cell_communication_ct_lowmem.py` (incl. a ct-specific-mask regression), `test_harreman_funcs_wiring.py`
+  (AST guard against reverting to the OOM stock calls). Full suite 219 pass / 1 known-unrelated
+  (`test_spawn_worker`, stale after the Savio SLURM refactor — left ignored per Foster).
 
 ## Local assets for dev/testing
 - Demo data in `data/`: `Slidetags_human_tonsil.h5ad`, `Slidetags_human_melanoma.h5ad`,

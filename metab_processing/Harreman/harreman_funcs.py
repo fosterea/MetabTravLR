@@ -28,15 +28,26 @@ warnings.filterwarnings("ignore")
 from pathlib import Path
 
 import nbhd_scores
+# Memory-safe drop-ins for harreman's two aggregate CCC functions: gene-pair-chunked so
+# the dense (n_cells x n_gene_pairs) matmul intermediates don't OOM at Xenium scale.
+# Output is identical to harreman.tl.compute_{,ct_}cell_communication (see
+# cell_communication_lowmem.py + tests). The per-cell OOM twin is already handled via
+# nbhd_scores -> compute_interacting_cell_scores_lowmem.
+from cell_communication_lowmem import (
+    compute_cell_communication_lowmem,
+    compute_ct_cell_communication_lowmem,
+)
 
 
 class HarremanRunner():
 
-    def __init__(self, data_path, compute_nbhd_scores=True):
+    def __init__(self, data_path, compute_nbhd_scores=True, gene_pair_chunk_size=None):
         self.easy_download_path = f'{data_path}/easy_download/harreman_outputs'
         self.data_path = data_path
         self.adata_path = f'{data_path}/adata.h5ad'
         self.compute_nbhd_scores = compute_nbhd_scores
+        # None -> the drop-ins auto-size the chunk (~50M-element budget per chunk).
+        self.gene_pair_chunk_size = gene_pair_chunk_size
 
     def load_adata(self):
         self.adata = sc.read_h5ad(self.adata_path)
@@ -160,14 +171,16 @@ class HarremanRunner():
         harreman.tl.compute_gene_pairs(adata, ct_specific=False, verbose=True)
         print(f"Gene pairs to test: {len(adata.uns.get('gene_pairs', []))}")
 
-        # Run communication
-        harreman.tl.compute_cell_communication(
+        # Run communication (memory-safe drop-in; identical output to
+        # harreman.tl.compute_cell_communication)
+        compute_cell_communication_lowmem(
             adata,
             model='danb',
             M=n_permutations,
             test='both',
             layer_key_p_test='counts',
             layer_key_np_test='log_norm',
+            gene_pair_chunk_size=self.gene_pair_chunk_size,
             verbose=True
         )
 
@@ -202,8 +215,9 @@ class HarremanRunner():
         # Compute cell-type-specific gene pairs
         harreman.tl.compute_gene_pairs(adata, cell_type_key=cell_type_col, verbose=True)
 
-        # Run Test 8 — cell-type-specific metabolite crosstalk
-        harreman.tl.compute_ct_cell_communication(
+        # Run Test 8 — cell-type-specific metabolite crosstalk (memory-safe drop-in;
+        # identical output to harreman.tl.compute_ct_cell_communication)
+        compute_ct_cell_communication_lowmem(
             adata,
             model='danb',
             cell_type_key=cell_type_col,
@@ -213,6 +227,7 @@ class HarremanRunner():
             layer_key_np_test='log_norm',
             subset_gene_pairs=gene_pairs_filt,
             fix_gp=False,
+            gene_pair_chunk_size=self.gene_pair_chunk_size,
             verbose=True
         )
 

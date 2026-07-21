@@ -197,7 +197,9 @@ a per-cell axis**, on GPU:
 If we ever need per-cell metabolite scores at Xenium scale, option (1) is the surgical fix.
 (Also relevant to the tractability analysis in `02_metab_integration_notes.md`.)
 
-**Implemented (2026-07-16):** `metab_processing/Harreman/interacting_cell_scores_lowmem.py` is a
+**Implemented (2026-07-16):** `metab_processing/Harreman/cell_communication_lowmem.py`
+(renamed 2026-07-20, CU-A — was `interacting_cell_scores_lowmem.py`; the module now also holds
+low-mem drop-ins for the **two aggregate** functions — see **§5c**) is a
 drop-in `compute_interacting_cell_scores_lowmem` applying fix (1) — it accumulates the
 exceedance counters per permutation instead of storing the `(cells, pairs, M)` arrays, and
 no longer writes the raw `perm_cs_*` to `uns`. It reuses harreman's own helpers (imported
@@ -246,6 +248,55 @@ Loops datasets under the Xenium data dir → runs harreman on whichever of Tier1
 `metabolite_selection.yaml`. Per-dataset `try/except` so a failure (no adata, no annotations)
 skips and retries next run. A `.dataset_name` marker is written to `easy_download/` **only on
 full success** and is what the skip check reads.
+
+### 5c. Aggregate CCC memory fix — gene-pair chunking (CU-A–D, 2026-07-20) ⏳ validate on Savio
+The OOM that hit when **running `HarremanRunner` itself** (not the notebook per-cell scores of
+§5) is in the **two aggregate CCC functions**, and it is a *different* problem from §5's
+per-cell `(cells, pairs, M)` blowup. Key facts (verified against the harreman source):
+
+- **`compute_cell_communication` / `compute_ct_cell_communication` do NOT have the per-cell×M
+  OOM.** They reduce the score over the cell axis (`.sum(0)`) *before* building the permutation
+  null, so their `perm_cs_*` arrays are `(n_gp, M)` / `(n_ct_pairs, n_gp, M)` — megabytes, not
+  the 100+ GB of the per-cell functions. **Lowering `M` does not help them.** Their real cost is
+  the dense **`(n_cells × n_gene_pairs)` matmul intermediates** (`counts_1/2`, `WX2t`, `WtX2t`,
+  and the parametric `WX1t/WtX1t`) — a few GB *each* at ~1M cells, several live at once → OOM.
+- **Fix = gene-pair chunking.** The score `(counts_1.T · WX2t).sum(0)` sums over *cells*; slicing
+  the *gene-pair* columns into blocks is **provably bit-identical** (each pair still sums over all
+  cells; `sparse.mm` computes each column independently). Chunking `counts_1/2` rows is also safe
+  because harreman's `standardize_counts` → `danb_model_torch` is strictly per-gene-row (uses only
+  that row + the global `num_umi`). So only `(chunk × n_cells)` ever exists; peak memory drops from
+  ~20 GB to ~1–2 GB at 1M cells. The permutation loop is restructured **outer-chunk / inner-M with
+  `torch.manual_seed(seed)` re-issued per chunk**, which replays the identical `idx` sequence so the
+  small `(n_gp, M)` null is reconstructed exactly.
+
+**Two real stock quirks we had to reproduce for bit-identity** (both look like bugs; flag to the
+harreman authors): (1) the cell-indep pval divide casts the exceedance count to **float32**
+(`(x+1).float()/(M+1)`); (2) the **ct** function allocates `cs_gp = torch.zeros((n_ct_pairs, …))`
+with **no dtype → float32**, silently truncating `cs`/`EG2`/the metabolite sum while everything
+else is float64. The drop-ins replicate both.
+
+**Where it lives:** `metab_processing/Harreman/cell_communication_lowmem.py` now holds **all three**
+drop-ins (annotated `# STOCK:` diff style so a harreman maintainer can see exactly what changed):
+`compute_interacting_cell_scores_lowmem` (§5, per-cell, CU-A), `compute_cell_communication_lowmem`
+(CU-B), `compute_ct_cell_communication_lowmem` (CU-C). `harreman_funcs.py` calls all three
+(CU-D): the two aggregates directly, the per-cell one via `nbhd_scores.py`. Chunk size is
+`gene_pair_chunk_size` on `HarremanRunner` — `None` (default) auto-sizes to a ~50M-element budget
+(`max(1, 50_000_000 // n_cells)`); identical output for any chunk size.
+
+**Testing:** exhaustive local equivalence vs **vendored** stock harreman (byte-identical to the
+`../Harreman` clone), in `tests/test_cell_communication_{,agg_,ct_}lowmem.py` + `test_harreman_funcs_wiring.py`
+(run in `spacetravlr_env`; no real harreman needed — `tests/fixtures/fake_harreman/`). `cs` and the
+**entire non-parametric path** (`pval`/`FDR`/`perm_cs` — what `select_significant_interactions`
+gates on) are **exactly bit-identical** across all chunk sizes and 100s of seeds; parametric `Z`
+wobbles ≤ ~2 ULP (float64 reduction-order noise from chunking, off the production-gating path).
+
+⚠️ **GPU caveat + Savio gate.** All local proof is on **CPU**. On CUDA, reduction kernels can
+reorder sums by tensor width, so even `cs`/`perm_cs` *could* pick up ULP drift (a perm value within
+a ULP of the observed score could flip one integer exceedance — measure-zero, but possible). Run
+`metab_processing/Harreman/validate_lowmem_savio.py --adata … --cell-type-col … --chunk-size 8`
+on Savio (real harreman + GPU) as the final gate before a production run; it prints max per-key diff
+for all three functions. **Tractability:** chunking adds ~`n_chunks×` more `sparse.mm` launches (total
+FLOPs unchanged) — budget wall-clock accordingly, but stock OOMs outright at this scale.
 
 ---
 
