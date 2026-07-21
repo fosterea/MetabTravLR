@@ -290,13 +290,26 @@ drop-ins (annotated `# STOCK:` diff style so a harreman maintainer can see exact
 gates on) are **exactly bit-identical** across all chunk sizes and 100s of seeds; parametric `Z`
 wobbles ≤ ~2 ULP (float64 reduction-order noise from chunking, off the production-gating path).
 
-⚠️ **GPU caveat + Savio gate.** All local proof is on **CPU**. On CUDA, reduction kernels can
-reorder sums by tensor width, so even `cs`/`perm_cs` *could* pick up ULP drift (a perm value within
-a ULP of the observed score could flip one integer exceedance — measure-zero, but possible). Run
-`metab_processing/Harreman/validate_lowmem_savio.py --adata … --cell-type-col … --chunk-size 8`
-on Savio (real harreman + GPU) as the final gate before a production run; it prints max per-key diff
-for all three functions. **Tractability:** chunking adds ~`n_chunks×` more `sparse.mm` launches (total
-FLOPs unchanged) — budget wall-clock accordingly, but stock OOMs outright at this scale.
+**GPU behaviour — CONFIRMED on Savio (2026-07-20, Primary_Dermal_Melanoma, 4k & 20k cells).**
+Local proof is CPU (all-exact). On the real GPU, `validate_lowmem_savio.py` showed:
+- **Non-parametric path exactly bit-identical (maxdiff `0.0`)** for `pval`/`FDR` on all three
+  functions, and per-cell `cs` too — this is the production-gating path. ✅
+- **Parametric `cs`/`Z` drift by ~1e-13–1e-12 abs (float64 ULP)** for the *cell-independent*
+  function only — CUDA `.sum(dim=0)` reorders accumulation by tensor width, so the chunked
+  parametric score isn't bit-exact vs stock's full-width sum. Off the gating path, scientifically
+  irrelevant. The **ct** function was fully exact (its `cs` is the float32 quirk, computed
+  identically in both). So on GPU: non-parametric = exact, parametric = ULP-tolerant.
+- **The OOM is real and fixed:** stock `compute_interacting_cell_scores` OOM'd at 20k cells ×
+  M=1000 (tried **14.6 GiB** on a 10.57 GiB GPU — the §5 `perm_cs` line); the lowmem version ran.
+
+`validate_lowmem_savio.py` encodes exactly this contract (non-parametric EXACT, parametric
+ULP-tolerant) and catches a stock OOM as "fix demonstrated". Run it before a production run:
+`--adata … --cell-type-col … --n-cells 8000 --M 200 --chunk-size 8` (keep n_cells/M small enough
+that *stock* fits, so equivalence is actually checkable). **Tractability:** chunking adds ~`n_chunks×`
+more `sparse.mm` launches (total FLOPs unchanged) — but stock OOMs outright at scale.
+Note: the melanoma `adata.X` is already log-normalised, so the script's `counts` layer isn't raw
+counts — harmless for the equivalence check (stock and lowmem see identical input), but pass a
+raw-count adata for a fully realistic parametric run.
 
 ---
 
