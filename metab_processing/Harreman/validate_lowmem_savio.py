@@ -8,6 +8,12 @@ a real (subsampled) adata, on the real device (GPU on Savio), and compares outpu
     python validate_lowmem_savio.py --adata /path/to/adata.h5ad --cell-type-col Tier1 \
         --n-cells 8000 --M 200 --chunk-size 8
 
+The per-cell nbhd path (section [3/3]) chunks TWO axes (gene-pair + metabolite, CU-E); both
+default to --chunk-size but can be forced independently via --nbhd-gp-chunk-size /
+--nbhd-m-chunk-size. Its non-parametric cs/pval/FDR (both grains) must be EXACT vs stock; to
+truly exercise the ≥600k-cell OOM fix, run with a large --n-cells (and small nbhd chunks) so
+STOCK OOMs while the chunked drop-in survives (reported as "fix demonstrated").
+
 EXACTNESS CONTRACT (this is the important part -- read before reacting to a "DIFF"):
   * NON-PARAMETRIC path (`pval`/`FDR`, and per-cell `cs`): must be EXACTLY bit-identical
     (maxdiff 0.0). This is what `select_significant_interactions(test='non-parametric')`
@@ -134,7 +140,16 @@ def main():
     ap.add_argument("--M", type=int, default=200)
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--chunk-size", type=int, default=8, help="force small so chunking is exercised")
+    # CU-E: the per-cell nbhd path (section 3) chunks TWO axes (gene-pair + metabolite),
+    # independently of the aggregate functions' single --chunk-size. Default both to
+    # --chunk-size so a plain invocation already exercises the chunked per-cell path on GPU.
+    ap.add_argument("--nbhd-gp-chunk-size", type=int, default=None,
+                    help="per-cell nbhd gene-pair chunk (default: --chunk-size)")
+    ap.add_argument("--nbhd-m-chunk-size", type=int, default=None,
+                    help="per-cell nbhd metabolite chunk (default: --chunk-size)")
     args = ap.parse_args()
+    nbhd_gp_chunk = args.chunk_size if args.nbhd_gp_chunk_size is None else args.nbhd_gp_chunk_size
+    nbhd_m_chunk = args.chunk_size if args.nbhd_m_chunk_size is None else args.nbhd_m_chunk_size
 
     print(f"device: {'cuda' if torch.cuda.is_available() else 'cpu'} | chunk_size={args.chunk_size} | M={args.M}")
     print("(non-parametric keys checked EXACT; parametric cs/Z checked ULP-tolerant -- see module docstring)")
@@ -198,7 +213,13 @@ def main():
         ics_kw = dict(test="non-parametric", restrict_significance="both",
                       compute_significance="non-parametric", M=args.M, seed=args.seed)
         stock_ics_ok = _run_stock_guarded(harreman.tl.compute_interacting_cell_scores, "compute_interacting_cell_scores", c_stock, **ics_kw)
-        compute_interacting_cell_scores_lowmem(c_low, **ics_kw)
+        # CU-E: force small chunks on BOTH nbhd axes so the two-pass chunked per-cell path is
+        # actually exercised on GPU (else it runs one adaptive chunk and the memory fix is
+        # untested). Non-parametric cs/pval/FDR must still be EXACT vs stock (both grains).
+        print(f"  [nbhd] gene_pair_chunk_size={nbhd_gp_chunk} metabolite_chunk_size={nbhd_m_chunk}")
+        compute_interacting_cell_scores_lowmem(
+            c_low, gene_pair_chunk_size=nbhd_gp_chunk, metabolite_chunk_size=nbhd_m_chunk, **ics_kw
+        )
         if stock_ics_ok:
             ok = True
             for grain in ("gp", "m"):

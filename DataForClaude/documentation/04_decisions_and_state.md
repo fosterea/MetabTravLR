@@ -30,6 +30,7 @@ labeled gene sets to rank metabolites by effect (e.g. ↑T-cell activity / ↓ex
 | D7 | 2026-07-10 | **Keep TF + L–R modulators, but optional** (default keep). | Metabolite β estimated controlling for known regulation. Likely **skip COMMOT** (harreman is our prior). |
 | D8 | 2026-07-16 | **Fix the received-ligand kernel: hard cutoff at `radius` + narrow σ; row-chunk.** Committed `793c096`. | Auto mode, **verified against the paper's actual methods text** (Foster's prompt to check). Finding: the paper *mandates a hard cutoff* — "spatial neighbors n as all locations i within a circle … with a predefined radius r", summing over only in-radius neighbors — so the old "fast" kernel (`σ=radius`, **no cutoff**, sum over all cells) genuinely **violates the paper** (real bug; OOM'd at 57 GB @100k). The paper does **NOT** specify σ (defers to CytoSignal); `σ=radius/3.72` is the codebase's own `gaussian_kernel_2d` convention (makes the Gaussian ≈0 at the cutoff) and is what the original slow `compute_radius_weights` uses. So the fix = align fast path to `gaussian_kernel_2d`: cutoff = paper-mandated, σ = code-convention. → ~1.34 GB @20k, matches narrow reference to ~2e-16, chunk-invariant. **CHANGES results vs old wide kernel — intended.** Old wide fns kept as `*_wide_deprecated`. Paper refs: Methods "Spatially informed signaling inference" (p17); σ nuance in `05`/agent trace. |
 | D9 | 2026-07-20 | **Harreman aggregate CCC OOM → gene-pair chunking (bit-identical), NOT lowering M.** The `HarremanRunner` OOM at Xenium scale is in `compute_{,ct_}cell_communication`'s dense `(n_cells × n_gp)` matmul intermediates — a *different* problem from the per-cell §5 OOM (already fixed via `nbhd_scores`→`compute_interacting_cell_scores_lowmem`). Their permutation null is already cell-reduced, so `M` is irrelevant to their memory. | Chunk the **gene-pair** axis (provably bit-identical: score sums over cells; column slicing + per-row DANB standardize don't reorder). Simplest fix that solves it at any scale; "chunk matmul only" was rejected once we verified `standardize_counts` is per-row (→ chunk `counts_1/2` too). Adaptive default chunk `= max(1, 50M//n_cells)`. Reproduced two stock float32 quirks for exactness. See `05` §5c; drop-ins in `cell_communication_lowmem.py` (CU-A–D). |
+| D10 | 2026-07-21 | **Per-cell nbhd OOM (≥600k cells) → Option B: two-pass gene-pair + metabolite chunking, preserve the exact `uns` contract.** Foster chose **B over A** (stream-to-summary): our wall is **GPU** memory, not RAM, and B is simpler (no `summarize_nbhd_scores` refactor). B bounds GPU to `(n_cells, chunk)` but still stores the full `(n_cells, n_gp)`/`(n_cells, n_m)` matrices on **CPU** — accepted. | CU-E in `compute_interacting_cell_scores_lowmem`'s `np` branch. Params `gene_pair_chunk_size`/`metabolite_chunk_size` threaded through `nbhd_scores.compute_nbhd_scores` **only** (not `HarremanRunner`). Metabolite pass recomputes union gene-pair scores (~2× perm matmuls, sanctioned). **Review-caught bug:** observed `cs_m` must be reduced on the **same device** (GPU) as the perm scores — a CPU-side `.sum(dim=1)` over ≥3 pairs can ULP-differ from CUDA → flip an exceedance; CPU tests can't see it. See `07` §10, `05` §5. |
 
 ## Leaning / proposed (not final)
 - Signed gene-set score: `mean_{positive} β̄ − mean_{negative/exhaustion} β̄`.
@@ -266,6 +267,35 @@ Fix = gene-pair chunking, proven **bit-for-bit identical** to stock.
   `test_cell_communication_ct_lowmem.py` (incl. a ct-specific-mask regression), `test_harreman_funcs_wiring.py`
   (AST guard against reverting to the OOM stock calls). Full suite 219 pass / 1 known-unrelated
   (`test_spawn_worker`, stale after the Savio SLURM refactor — left ignored per Foster).
+
+## Session 2026-07-21 — per-cell nbhd GPU chunking (CU-E, Option B)
+Implemented the last harreman GPU-memory bottleneck (decision **D10**; full writeup in `07` §10,
+warning updated in `05` §5). The per-cell "neighborhood" `np` path OOM'd the Savio GPU at ≥600k
+cells even after CU-A removed the `×M` axis, because it still held several dense `(n_cells × n_gp)`
+float64 tensors at once.
+
+- **CU-E = Option B, two-pass chunking** in `compute_interacting_cell_scores_lowmem`'s `np` branch
+  (old block commented `# OLD:`, new `# NEW (CU-E ...)`, git-record style per Foster): Pass 1
+  chunks the **gene-pair** axis (re-seed-per-chunk RNG replay, the proven CU-B/C trick), Pass 2
+  chunks the **metabolite** axis (gather each chunk's union of gene pairs, remapped `sub_dict`,
+  ~2× perm matmuls — sanctioned). GPU bounded to `(n_cells, chunk)`; full matrices assembled/stored
+  on **CPU** (exact `uns` contract kept). BH run **once** over each full flattened p-value matrix.
+- **Params:** `gene_pair_chunk_size` + `metabolite_chunk_size` (adaptive default `max(1,50M//n_cells)`)
+  on the drop-in, threaded through `nbhd_scores.compute_nbhd_scores` **only** — `HarremanRunner`/
+  `harreman_funcs.py` untouched (Foster's call on param surface).
+- **Dev/review loop, Opus reviewer** (numeric+structural, per `07` §8). Review caught one **MAJOR**:
+  a CPU/GPU **device seam** — observed `cs_m` was CPU-reduced while perm `cs_m` was GPU-reduced, so
+  on CUDA a ≥3-pair metabolite's `.sum(dim=1)` could ULP-differ and flip an `x_m` exceedance
+  (invisible to CPU tests). Fixed: observed `cs_m` now computed on `device` for both the stored
+  value and the threshold; `use_p_shortcut` copies the parametric `cs_m` like stock. Two test/guard
+  gaps also fixed (center=True sweep; `sparse.mm`-width memory guard + positive control).
+- **Tests:** `tests/test_cell_communication_lowmem.py` sweeps `gp_chunk ∈ {1,2,n_gp,None}` ×
+  `m_chunk ∈ {1,2,n_m,None}` vs **true stock**, incl. metabolite-spanning-chunks, shared-pair,
+  ≥3-pair-metabolite, and centered paths. Full comm suite **60 pass / 636 subtests** (`spacetravlr_env`,
+  fake harreman). All local proof is **CPU-exact**; **GPU exactness still to be confirmed on Savio**
+  via `validate_lowmem_savio.py` (section [3/3] now forces small nbhd chunks with
+  `--nbhd-gp-chunk-size`/`--nbhd-m-chunk-size`) at ≥600k cells — the CUDA reduction-order ULP caveat
+  (`07` §6) can only be closed there. **Not yet committed.**
 
 ## Local assets for dev/testing
 - Demo data in `data/`: `Slidetags_human_tonsil.h5ad`, `Slidetags_human_melanoma.h5ad`,

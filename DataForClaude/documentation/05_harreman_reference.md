@@ -197,6 +197,16 @@ a per-cell axis**, on GPU:
 If we ever need per-cell metabolite scores at Xenium scale, option (1) is the surgical fix.
 (Also relevant to the tractability analysis in `02_metab_integration_notes.md`.)
 
+> **⚠️→✅ ≥600k-cell OOM fixed 2026-07-21 (CU-E, Option B).** Fix (1) removed the `×M` axis but
+> the per-cell `np` path still held several dense `(n_cells × n_gp)` float64 tensors → OOM'd the
+> 10.57 GiB Savio GPU at ~600k cells. **CU-E** adds two-pass **gene-pair + metabolite chunking**
+> so the GPU only ever holds `(n_cells, chunk)`; the full `(n_cells, n_gp)`/`(n_cells, n_m)`
+> `cs`/`pval`/`FDR`/`cs_sig_*` matrices are still assembled/stored on **CPU** (exact `uns`
+> contract preserved — Option B, chosen because our wall is GPU not RAM). Bit-for-bit identical
+> to stock on CPU across all chunk sizes; **GPU exactness still to be confirmed on Savio** via
+> `validate_lowmem_savio.py`. Full writeup + the review-caught CPU/GPU device-seam bug: see
+> **`07_nbhd_percell_chunking_plan.md` §10**.
+
 **Implemented (2026-07-16):** `metab_processing/Harreman/cell_communication_lowmem.py`
 (renamed 2026-07-20, CU-A — was `interacting_cell_scores_lowmem.py`; the module now also holds
 low-mem drop-ins for the **two aggregate** functions — see **§5c**) is a

@@ -13,8 +13,14 @@ from cell_communication_lowmem import compute_interacting_cell_scores_lowmem
 GRAIN_COL = {'m': 'metabolite', 'gp': 'gene_pair'}
 
 
-def compute_nbhd_scores(adata, M=1000, seed=42, verbose=False):
-    """Store per-cell scores in adata.uns['interacting_cell_results']['np']."""
+def compute_nbhd_scores(adata, M=1000, seed=42, verbose=False,
+                         gene_pair_chunk_size=None, metabolite_chunk_size=None):
+    """Store per-cell scores in adata.uns['interacting_cell_results']['np'].
+
+    ``gene_pair_chunk_size``/``metabolite_chunk_size`` are forwarded to
+    `compute_interacting_cell_scores_lowmem` (CU-E, Option B chunking); both default to
+    ``None`` (adaptive sizing), matching prior behavior byte-for-byte.
+    """
     compute_interacting_cell_scores_lowmem(
         adata,
         test='non-parametric',
@@ -23,6 +29,8 @@ def compute_nbhd_scores(adata, M=1000, seed=42, verbose=False):
         M=M,
         seed=seed,
         verbose=verbose,
+        gene_pair_chunk_size=gene_pair_chunk_size,
+        metabolite_chunk_size=metabolite_chunk_size,
     )
 
 

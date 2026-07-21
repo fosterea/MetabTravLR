@@ -53,6 +53,109 @@ and the permutation p-values replicate stock's float32 cast of the exceedance co
 bit-for-bit equal to stock. See `tests/test_cell_communication_lowmem.py`.
 
 ------------------------------------------------------------------------------------
+CU-E: per-cell (`np`) gene-pair + metabolite chunking (Option B, 2026-07-21)
+------------------------------------------------------------------------------------
+WHY: the CU-A fix above removed the `(cells, pairs, M)` permutation-null axis, but the
+`np` branch still built the observed `cs`/exceedance-counter arrays as FULL, persistent
+`(n_cells, n_gp)` / `(n_cells, n_m)` GPU tensors. At Xenium scale (>=~600k cells) those
+alone OOM the GPU (see `05_harreman_reference.md` sec.5, diagnosed further in
+`07_nbhd_percell_chunking_plan.md`). Unlike CU-B/C (whose aggregate score reduces over
+the cell axis, `.sum(0)` -> a tiny `(n_gp,)` vector), here the **per-cell axis is the
+output** -- `(n_cells, n_gp)` can't be reduced away, and a metabolite's gene pairs are
+**many-to-many** (a pair can serve >1 metabolite) and can span multiple gene-pair chunks,
+so a metabolite's exceedance count can't be finished from one arbitrary chunk alone. Per
+Foster's decision, this implements **Option B** (`07_nbhd_percell_chunking_plan.md` sec.5B):
+bound GPU memory to `(n_cells, chunk)` while still assembling and storing the exact same
+full `(n_cells, n_gp)` / `(n_cells, n_m)` arrays in `uns` on CPU -- the `uns` contract is
+unchanged; only GPU memory is bounded, not CPU RAM (intentional -- the wall is GPU).
+
+WHAT CHANGED (see the `# OLD:` / `# NEW (CU-E...)` markers in the `np` branch): the
+single-pass, full-array code is commented out wholesale (`# OLD:`) and replaced by a
+**two-pass, chunked** implementation, mirroring the proven CU-B re-seed-per-chunk pattern:
+
+  * **Pass 1 (gene-pair chunks).** Outer loop over gene-pair chunks (`gene_pair_chunk_size`,
+    same adaptive-default convention as CU-B/C: `max(1, 50_000_000 // n_cells)`), inner
+    loop over the `M` permutations, with `torch.manual_seed(seed)` re-issued at the START
+    of each chunk. Only `torch.randperm` consumes RNG in the loop body, so re-seeding per
+    chunk replays the *identical* `idx_0..idx_{M-1}` sequence every chunk would have drawn
+    in one pass -- the same argument CU-B/C already proved. Each chunk's observed `cs` and
+    exceedance counters (`x_gp_a`/`x_gp_b`, accumulated in float64 -- exact for integer
+    counts) are computed as `(n_cells, chunk)` tensors and moved to CPU into pre-allocated
+    full `(n_cells, n_gp)` numpy arrays; GPU never holds more than one chunk's worth.
+  * **Pass 2 (metabolite chunks).** Outer loop over metabolite chunks
+    (`metabolite_chunk_size`, same adaptive default), re-seeded per chunk identically to
+    Pass 1. For each chunk, the UNION of gene-pair indices needed by that chunk's
+    metabolites is gathered (handles many-to-many: a pair used by 2+ metabolites in the
+    same chunk is only computed once), a remapped `sub_dict {metab: [positions within the
+    union]}` is built, and that union's per-permutation gene-pair scores are RECOMPUTED
+    (not read back from Pass 1 -- a metabolite's pairs may span >1 gene-pair chunk, so no
+    single Pass-1 chunk has the full picture) via the identical arm-a/arm-b formula, then
+    summed into per-metabolite scores with `compute_metabolite_cs(..., sub_dict, ...)`.
+    This is a SANCTIONED ~2x recompute of gene-pair scores (plan sec.5) -- the alternative
+    (holding a per-permutation `(n_cells, n_gp)` array to defer the metabolite sum, as
+    CU-B does for its tiny `(n_gp, M)` case) is exactly the OOM this fix removes. GPU is
+    bounded to `(n_cells, metabolite_chunk)` + `(n_cells, |union|)`.
+  * **Observed `cs_m` is computed INSIDE Pass 2, per chunk, ON `device`** (fixed after
+    review -- see below), structured exactly like Pass 1's observed `cs_gp_c`: build the
+    union's observed gene-pair scores on `device` with NO permutation
+    (`(counts_1u.T*WX2t_u)+(counts_1u.T*WtX2t_u)`, `same_gene_union` halving applied), then
+    reduce with `compute_metabolite_cs(..., sub_dict, ...)` -- also on `device`. That same
+    on-device `cs_m_c` tensor is used BOTH as the stored observed value (moved to CPU into
+    the assembled `(n_cells, n_m)` array) AND as the exceedance threshold for the
+    permutation arms immediately below it, so the comparison `cs_m_a_chunk > cs_m_c` always
+    happens between two device-resident tensors produced by the identical reduction kernel.
+    **Why this matters (bug found in review, fixed):** an earlier version of this pass
+    computed the FULL `cs_m` ONCE via a CPU-side `compute_metabolite_cs` call (reusing the
+    assembled CPU `cs_gp`) and used that CPU value as the threshold against the
+    GPU-computed permutation scores. On CPU that is harmless (both sides reduce on CPU in
+    this local/CI environment), but on a real CUDA `device` it reintroduces exactly the
+    kind of device asymmetry CU-B's docs warn about: `.sum(dim=1)` over a metabolite's
+    gene-pair columns can round differently between a CPU and a CUDA reduction kernel for
+    >= 3 pairs (real metabolites go up to 91), which would (a) make the stored `cs_m` not
+    bit-identical to stock on GPU, and (b) risk an `x_m` exceedance flip whenever a
+    permutation score lands within 1 ULP of the threshold. Computing `cs_m_c` on `device`
+    for both roles removes that seam entirely -- single-chunk now reduces to stock's GPU
+    computation for the `m` grain exactly as it already did for the `gp` grain.
+  * **`center_counts_for_np_test and test == "both"` (the "p"-shortcut) copies, for BOTH
+    grains.** Stock's shortcut sets `np_gp['cs']`/`np_m['cs']` to a COPY of the already-
+    computed parametric ('p') `cs`, not a re-derivation from the (possibly re-standardized)
+    'np' counts. Pass 1 already reproduced this for `gp`; Pass 2 mirrors it for `m`
+    (`cs_m_cpu[...] = np.asarray(adata.uns[...]['p']['m']['cs'])`), and when significance is
+    also wanted, the per-chunk threshold `cs_m_c` is sliced from that COPIED array (moved to
+    `device`), not recomputed from `counts_1u`/`counts_2u` -- matching stock's behavior in
+    this combination bit-for-bit.
+  * **Bit-identity argument (why this is provably exact, not merely close):** each output
+    column of `sparse.mm(weights, X)` depends only on that column of `X` -- proven in the
+    CU-B section above -- so slicing the gene-pair axis into ANY subset (a contiguous
+    Pass-1 chunk, or the arbitrary Pass-2 union) reproduces bit-identical per-column values
+    to a full-width computation, given the identical permutation `idx` (guaranteed by the
+    re-seed). `compute_metabolite_cs` itself always gathers the relevant columns into a new
+    tensor before `.sum(dim=1)` (`cs_gp[:, idx_tensor].sum(dim=1)`), so the reduction width
+    for a given metabolite is the SAME (its own gene-pair count) whether that gather comes
+    from a full `(n_cells, n_gp)` tensor or a chunk/union subset -- no reduction-order
+    sensitivity is introduced (contrast CU-B's float64 `.sum(dim=0)`-over-the-cell-axis ULP
+    caveat, which does not apply here since nothing sums over the cell axis in this branch),
+    PROVIDED (as fixed above) both sides of every `>` comparison are produced by the same
+    device's reduction kernel -- there is no longer any CPU/GPU seam in either grain.
+  * **BH is run ONCE over each full flattened CPU p-value matrix** (`pval_gp`/`pval_m`),
+    never per-chunk -- required for correct FDR (plan sec.6).
+  * Single-chunk (`gene_pair_chunk_size >= n_gp` and `metabolite_chunk_size >= n_m`)
+    executes the exact same code path as any other chunk count -- there is no separate
+    "unchunked" special case, so it is bit-identical by construction, not by a fallback,
+    for BOTH grains.
+
+Tests: `tests/test_cell_communication_lowmem.py`'s chunked-equivalence test class sweeps
+`gene_pair_chunk_size` x `metabolite_chunk_size` (incl. 1, 2, `n_gp`/`n_m`, and `None`)
+against **stock** `harreman.tools.compute_interacting_cell_scores` directly (not just the
+unchunked lowmem), asserting `cs`/`pval`/`FDR`/`cs_sig_pval`/`cs_sig_FDR` are bit-for-bit
+identical (`np.testing.assert_array_equal`) in every configuration, using fixtures that
+exercise a metabolite whose gene pairs land in different chunks and a gene pair shared by
+>=2 metabolites (many-to-many). A dedicated sweep also covers
+`center_counts_for_np_test=True, test='both'` (the shortcut-copy path for both grains,
+plus the chunked `standardize_counts` calls), which the adaptive-default-only fixtures
+never previously exercised.
+
+------------------------------------------------------------------------------------
 CU-B: `compute_cell_communication_lowmem`
 ------------------------------------------------------------------------------------
 WHY: stock's `run_cell_communication_analysis` (the analysis body behind
@@ -312,11 +415,30 @@ def compute_interacting_cell_scores_lowmem(
     check_analytic_null: bool = False,
     device=torch.device("cuda" if torch.cuda.is_available() else "cpu"),
     verbose: bool = False,
+    gene_pair_chunk_size: int = None,
+    metabolite_chunk_size: int = None,
 ):
     """Memory-safe equivalent of ``harreman.tools.compute_interacting_cell_scores``.
 
-    Same signature and same ``adata.uns['interacting_cell_results']`` outputs, minus the
-    raw permutation arrays. See module docstring for the (small) list of differences.
+    Same signature (plus ``gene_pair_chunk_size``/``metabolite_chunk_size``) and same
+    ``adata.uns['interacting_cell_results']`` outputs, minus the raw permutation arrays.
+    See module docstring for the (small) list of differences.
+
+    Parameters
+    ----------
+    gene_pair_chunk_size : int, optional
+        Number of gene pairs processed per chunk in the non-parametric ('np') branch's
+        gene-pair pass (CU-E, Option B). Never materializes more than
+        ``(n_cells, gene_pair_chunk_size)`` tensors on GPU. ``None`` (default) picks an
+        adaptive size ``max(1, 50_000_000 // n_cells)``. A value ``>= n_gp`` reproduces
+        the single-chunk (bit-identical) behavior.
+    metabolite_chunk_size : int, optional
+        Number of metabolites processed per chunk in the non-parametric branch's
+        metabolite pass (CU-E). Never materializes more than
+        ``(n_cells, metabolite_chunk_size)`` + ``(n_cells, |union of that chunk's gene
+        pairs|)`` tensors on GPU. ``None`` (default) picks the same adaptive size as
+        ``gene_pair_chunk_size``. A value ``>= n_m`` reproduces the single-chunk
+        (bit-identical) behavior.
     """
     start = time.time()
     if verbose:
@@ -493,7 +615,215 @@ def compute_interacting_cell_scores_lowmem(
             print("[lowmem] Parametric test finished.")
 
     # ============================ non-parametric ('np') ==============================
-    # THE MEMORY FIX LIVES HERE.
+    # THE MEMORY FIX LIVES HERE (see also the module docstring's new CU-E section above).
+    #
+    # OLD (pre-Option-B, CU-A, 2026-07-20): the block below (commented out) computed the
+    # observed cs_gp/cs_m and the permutation exceedance counters as FULL (n_cells, n_gp)
+    # / (n_cells, n_m) tensors kept on GPU for the whole M-permutation loop. That removed
+    # the (..., M) axis (CU-A's fix vs raw stock) but is still an O(n_cells * n_gp) /
+    # O(n_cells * n_m) peak GPU allocation -- the "next bottleneck" documented in
+    # 05_harreman_reference.md sec.5 and diagnosed in 07_nbhd_percell_chunking_plan.md.
+    # Kept here, fully commented out, for reference / diffing against the prior version --
+    # superseded by the CU-E two-pass chunked block that follows it.
+    #
+    # OLD: # ============================ non-parametric ('np') ==============================
+    # OLD: # THE MEMORY FIX LIVES HERE.
+    # OLD: if test in ["non-parametric", "both"]:
+    # OLD: if verbose:
+    # OLD: print("[lowmem] Running the non-parametric test...")
+    # OLD: adata.uns["interacting_cell_results"]["np"] = {"gp": {}, "m": {}}
+    #
+    # OLD: counts = counts_from_anndata(adata[cells, genes], layer_key_np_test, dense=True)
+    # OLD: counts = torch.tensor(counts, dtype=torch.float64, device=device)
+    #
+    # OLD: counts_1, counts_2 = _prep_counts_1_2(counts, gene_pairs_sig_ind, mean)
+    #
+    # OLD: if center_counts_for_np_test:
+    # OLD: num_umi = counts.sum(dim=0)
+    # OLD: counts_1 = standardize_counts(adata, counts_1, model, num_umi, sample_specific)
+    # OLD: counts_2 = standardize_counts(adata, counts_2, model, num_umi, sample_specific)
+    #
+    # OLD: n_cells = counts_1.shape[1]
+    # OLD: n_gp = counts_1.shape[0]
+    # OLD: same_gene_mask = torch.tensor([g1 == g2 for g1, g2 in gene_pairs_sig], device=device)
+    #
+    # OLD: if center_counts_for_np_test and test == "both":
+    # OLD: adata.uns["interacting_cell_results"]["np"]["gp"]["cs"] = np.array(adata.uns["interacting_cell_results"]["p"]["gp"]["cs"])
+    # OLD: adata.uns["interacting_cell_results"]["np"]["m"]["cs"] = np.array(adata.uns["interacting_cell_results"]["p"]["m"]["cs"])
+    # OLD: else:
+    # OLD: WX2t = torch.sparse.mm(weights, counts_2.T)
+    # OLD: WtX2t = torch.sparse.mm(weights.transpose(0, 1), counts_2.T)
+    # OLD: cs_gp = (counts_1.T * WX2t) + (counts_1.T * WtX2t)
+    # OLD: cs_gp[:, same_gene_mask] = cs_gp[:, same_gene_mask] / 2
+    # OLD: adata.uns["interacting_cell_results"]["np"]["gp"]["cs"] = cs_gp.detach().cpu().numpy()
+    # OLD: cs_m = compute_metabolite_cs(cs_gp, gene_pair_dict, interacting_cell_scores=True)
+    # OLD: adata.uns["interacting_cell_results"]["np"]["m"]["cs"] = cs_m.detach().cpu().numpy()
+    #
+    # OLD: if compute_significance in ["non-parametric", "both"]:
+    # OLD: # observed scores as tensors (robust to either branch above)
+    # OLD: cs_gp = torch.as_tensor(
+    # OLD: np.asarray(adata.uns["interacting_cell_results"]["np"]["gp"]["cs"]), dtype=torch.float64, device=device
+    # OLD: )
+    # OLD: cs_m = torch.as_tensor(
+    # OLD: np.asarray(adata.uns["interacting_cell_results"]["np"]["m"]["cs"]), dtype=torch.float64, device=device
+    # OLD: )
+    # OLD: n_m = cs_m.shape[1]
+    #
+    # OLD: # ---------------------------------------------------------------------------
+    # OLD: # STOCK (harreman's compute_interacting_cell_scores, lines ~1792-1873): builds
+    # OLD: # the *entire* permutation null as dense (n_cells, n_pairs, M) tensors, fills
+    # OLD: # them one permutation at a time, then derives the exceedance counts (x_*) and
+    # OLD: # p-values from those materialized arrays afterwards. This is the OOM site --
+    # OLD: # kept verbatim below (commented) for reference / diffing against upstream.
+    # OLD: #
+    # OLD: # STOCK: perm_cs_gp_a = torch.zeros((n_cells, counts_1.shape[0], M), dtype=torch.float64, device=device)
+    # OLD: # STOCK: perm_cs_gp_b = torch.zeros_like(perm_cs_gp_a)
+    # OLD: # STOCK: perm_cs_m_a = torch.zeros((n_cells, len(gene_pair_dict), M), dtype=torch.float64, device=device)
+    # OLD: # STOCK: perm_cs_m_b = torch.zeros_like(perm_cs_m_a)
+    # OLD: # STOCK:
+    # OLD: # STOCK: if check_analytic_null:
+    # OLD: # STOCK:     gp_zs_perm_array = torch.zeros_like(perm_cs_gp_a)
+    # OLD: # STOCK:     gp_pvals_perm_array = torch.zeros_like(perm_cs_gp_a)
+    # OLD: # STOCK:     m_zs_perm_array = torch.zeros_like(perm_cs_m_a)
+    # OLD: # STOCK:     m_pvals_perm_array = torch.zeros_like(perm_cs_m_a)
+    # OLD: # STOCK:
+    # OLD: # STOCK: torch.manual_seed(seed)
+    # OLD: # STOCK: for i in tqdm(range(M), desc="Permutation test"):
+    # OLD: # STOCK:     idx = torch.randperm(n_cells, device=device)
+    # OLD: # STOCK:
+    # OLD: # STOCK:     c1_perm_a = counts_1.clone()
+    # OLD: # STOCK:     c2_perm_a = counts_2[:, idx]
+    # OLD: # STOCK:     c1_perm_a[same_gene_mask] = counts_1[same_gene_mask, :][:, idx]
+    # OLD: # STOCK:
+    # OLD: # STOCK:     WX2t_a = torch.sparse.mm(weights, c2_perm_a.T)
+    # OLD: # STOCK:     WtX2t_a = torch.sparse.mm(weights.transpose(0, 1), c2_perm_a.T)
+    # OLD: # STOCK:     cs_a = (c1_perm_a.T * WX2t_a) + (c1_perm_a.T * WtX2t_a)
+    # OLD: # STOCK:     cs_a[:, same_gene_mask] = cs_a[:, same_gene_mask] / 2
+    # OLD: # STOCK:     perm_cs_gp_a[:, :, i] = cs_a
+    # OLD: # STOCK:
+    # OLD: # STOCK:     cs_m_a = compute_metabolite_cs(cs_a, gene_pair_dict, interacting_cell_scores=True)
+    # OLD: # STOCK:     perm_cs_m_a[:, :, i] = cs_m_a
+    # OLD: # STOCK:
+    # OLD: # STOCK:     c2_perm_b = counts_2.clone()
+    # OLD: # STOCK:     c1_perm_b = counts_1[:, idx]
+    # OLD: # STOCK:     c2_perm_b[same_gene_mask] = counts_2[same_gene_mask, :][:, idx]
+    # OLD: # STOCK:
+    # OLD: # STOCK:     WX2t_b = torch.sparse.mm(weights, c2_perm_b.T)
+    # OLD: # STOCK:     WtX2t_b = torch.sparse.mm(weights.transpose(0, 1), c2_perm_b.T)
+    # OLD: # STOCK:     cs_b = (c1_perm_b.T * WX2t_b) + (c1_perm_b.T * WtX2t_b)
+    # OLD: # STOCK:     cs_b[:, same_gene_mask] = cs_b[:, same_gene_mask] / 2
+    # OLD: # STOCK:     perm_cs_gp_b[:, :, i] = cs_b
+    # OLD: # STOCK:
+    # OLD: # STOCK:     cs_m_b = compute_metabolite_cs(cs_b, gene_pair_dict, interacting_cell_scores=True)
+    # OLD: # STOCK:     perm_cs_m_b[:, :, i] = cs_m_b
+    # OLD: # STOCK:
+    # OLD: # STOCK:     if check_analytic_null:
+    # OLD: # STOCK:         Z_gp_perm, Z_m_perm = compute_p_results((cs_a, cs_b), (cs_m_a, cs_m_b), gene_pairs_ind, Wtot2, eg2s_gp, gene_pair_dict)
+    # OLD: # STOCK:         gp_zs_perm_array[:, :, i] = Z_gp_perm
+    # OLD: # STOCK:         gp_pvals_perm_array[:, :, i] = torch.tensor(norm.sf(Z_gp_perm.cpu().numpy()), device=device)
+    # OLD: # STOCK:         m_zs_perm_array[:, :, i] = Z_m_perm
+    # OLD: # STOCK:         m_pvals_perm_array[:, :, i] = torch.tensor(norm.sf(Z_m_perm.cpu().numpy()), device=device)
+    # OLD: # STOCK:
+    # OLD: # STOCK: adata.uns['interacting_cell_results']['np']['gp']['perm_cs_a'] = perm_cs_gp_a.detach().cpu().numpy()
+    # OLD: # STOCK: adata.uns['interacting_cell_results']['np']['gp']['perm_cs_b'] = perm_cs_gp_b.detach().cpu().numpy()
+    # OLD: # STOCK: adata.uns['interacting_cell_results']['np']['m']['perm_cs_a'] = perm_cs_m_a.detach().cpu().numpy()
+    # OLD: # STOCK: adata.uns['interacting_cell_results']['np']['m']['perm_cs_b'] = perm_cs_m_b.detach().cpu().numpy()
+    # OLD: # STOCK:
+    # OLD: # STOCK: x_gp_a = (perm_cs_gp_a > cs_gp[:, :, None]).sum(dim=2)
+    # OLD: # STOCK: x_gp_b = (perm_cs_gp_b > cs_gp[:, :, None]).sum(dim=2)
+    # OLD: # STOCK: x_m_a = (perm_cs_m_a > cs_m[:, :, None]).sum(dim=2)
+    # OLD: # STOCK: x_m_b = (perm_cs_m_b > cs_m[:, :, None]).sum(dim=2)
+    # OLD: # STOCK:
+    # OLD: # STOCK: pvals_gp_a = (x_gp_a + 1).float() / (M + 1)
+    # OLD: # STOCK: pvals_gp_b = (x_gp_b + 1).float() / (M + 1)
+    # OLD: # STOCK: pvals_m_a = (x_m_a + 1).float() / (M + 1)
+    # OLD: # STOCK: pvals_m_b = (x_m_b + 1).float() / (M + 1)
+    # OLD: # STOCK:
+    # OLD: # STOCK: pvals_gp = torch.where(pvals_gp_a > pvals_gp_b, pvals_gp_a, pvals_gp_b)
+    # OLD: # STOCK: pvals_m = torch.where(pvals_m_a > pvals_m_b, pvals_m_a, pvals_m_b)
+    # OLD: # STOCK:
+    # OLD: # STOCK: pvals_gp = pvals_gp.cpu().numpy()
+    # OLD: # STOCK: pvals_m = pvals_m.cpu().numpy()
+    # OLD: # STOCK:
+    # OLD: # STOCK: if check_analytic_null:
+    # OLD: # STOCK:     adata.uns['interacting_cell_results']['np']['analytic_null'] = {
+    # OLD: # STOCK:         'gp_zs_perm': gp_zs_perm_array.detach().cpu().numpy(),
+    # OLD: # STOCK:         'gp_pvals_perm': gp_pvals_perm_array.detach().cpu().numpy(),
+    # OLD: # STOCK:         'm_zs_perm': m_zs_perm_array.detach().cpu().numpy(),
+    # OLD: # STOCK:         'm_pvals_perm': m_pvals_perm_array.detach().cpu().numpy(),
+    # OLD: # STOCK:     }
+    # OLD: #
+    # OLD: # LOWMEM REPLACEMENT: never materialize perm_cs_*; accumulate the exceedance
+    # OLD: # counters (x_gp_a/b, x_m_a/b) incrementally inside the permutation loop
+    # OLD: # instead. This is the O(n_cells*n_pairs*M) -> O(n_cells*n_pairs) memory fix
+    # OLD: # (05_harreman_reference.md sec.5). check_analytic_null=True is rejected at
+    # OLD: # the top of this function (it needs the removed arrays), so the
+    # OLD: # check_analytic_null branches in the STOCK block above are permanently dead
+    # OLD: # here and kept only for reference.
+    # OLD: #
+    # OLD: # NOTE (float precision): we accumulate the exceedance counter in float64
+    # OLD: # (exact for integer counts <= M+1) but replicate stock's float32 cast at the
+    # OLD: # divide below ("(x + 1).float() / (M + 1)"), so pval/FDR are bit-for-bit
+    # OLD: # identical to stock for the same seed.
+    # OLD: # ---------------------------------------------------------------------------
+    # OLD: x_gp_a = torch.zeros((n_cells, n_gp), dtype=torch.float64, device=device)
+    # OLD: x_gp_b = torch.zeros_like(x_gp_a)
+    # OLD: x_m_a = torch.zeros((n_cells, n_m), dtype=torch.float64, device=device)
+    # OLD: x_m_b = torch.zeros_like(x_m_a)
+    #
+    # OLD: torch.manual_seed(seed)
+    # OLD: for _ in tqdm(range(M), desc="[lowmem] Permutation test", disable=not verbose):
+    # OLD: idx = torch.randperm(n_cells, device=device)
+    #
+    # OLD: # permute the "receiver" (counts_2), keep "sender" (counts_1) — arm a
+    # OLD: c1_perm_a = counts_1.clone()
+    # OLD: c2_perm_a = counts_2[:, idx]
+    # OLD: c1_perm_a[same_gene_mask] = counts_1[same_gene_mask, :][:, idx]
+    # OLD: WX2t_a = torch.sparse.mm(weights, c2_perm_a.T)
+    # OLD: WtX2t_a = torch.sparse.mm(weights.transpose(0, 1), c2_perm_a.T)
+    # OLD: cs_a = (c1_perm_a.T * WX2t_a) + (c1_perm_a.T * WtX2t_a)
+    # OLD: cs_a[:, same_gene_mask] = cs_a[:, same_gene_mask] / 2
+    # OLD: cs_m_a = compute_metabolite_cs(cs_a, gene_pair_dict, interacting_cell_scores=True)
+    # OLD: x_gp_a += (cs_a > cs_gp).to(torch.float64)
+    # OLD: x_m_a += (cs_m_a > cs_m).to(torch.float64)
+    #
+    # OLD: # permute the "sender" (counts_1), keep "receiver" (counts_2) — arm b
+    # OLD: c2_perm_b = counts_2.clone()
+    # OLD: c1_perm_b = counts_1[:, idx]
+    # OLD: c2_perm_b[same_gene_mask] = counts_2[same_gene_mask, :][:, idx]
+    # OLD: WX2t_b = torch.sparse.mm(weights, c2_perm_b.T)
+    # OLD: WtX2t_b = torch.sparse.mm(weights.transpose(0, 1), c2_perm_b.T)
+    # OLD: cs_b = (c1_perm_b.T * WX2t_b) + (c1_perm_b.T * WtX2t_b)
+    # OLD: cs_b[:, same_gene_mask] = cs_b[:, same_gene_mask] / 2
+    # OLD: cs_m_b = compute_metabolite_cs(cs_b, gene_pair_dict, interacting_cell_scores=True)
+    # OLD: x_gp_b += (cs_b > cs_gp).to(torch.float64)
+    # OLD: x_m_b += (cs_m_b > cs_m).to(torch.float64)
+    #
+    # OLD: # replicate stock's float32 cast (`(x + 1).float() / (M + 1)`) so pval/FDR
+    # OLD: # match stock bit-for-bit; x_* hold integer counts <= M+1, exact in float32.
+    # OLD: pvals_gp_a = (x_gp_a + 1).to(torch.float32) / (M + 1)
+    # OLD: pvals_gp_b = (x_gp_b + 1).to(torch.float32) / (M + 1)
+    # OLD: pvals_m_a = (x_m_a + 1).to(torch.float32) / (M + 1)
+    # OLD: pvals_m_b = (x_m_b + 1).to(torch.float32) / (M + 1)
+    #
+    # OLD: pvals_gp = torch.where(pvals_gp_a > pvals_gp_b, pvals_gp_a, pvals_gp_b).cpu().numpy()
+    # OLD: pvals_m = torch.where(pvals_m_a > pvals_m_b, pvals_m_a, pvals_m_b).cpu().numpy()
+    #
+    # OLD: np_gp = adata.uns["interacting_cell_results"]["np"]["gp"]
+    # OLD: np_m = adata.uns["interacting_cell_results"]["np"]["m"]
+    # OLD: np_gp["pval"] = pvals_gp
+    # OLD: np_gp["FDR"] = multipletests(pvals_gp.flatten(), method="fdr_bh")[1].reshape(pvals_gp.shape)
+    # OLD: np_m["pval"] = pvals_m
+    # OLD: np_m["FDR"] = multipletests(pvals_m.flatten(), method="fdr_bh")[1].reshape(pvals_m.shape)
+    #
+    # OLD: _write_sig_masks(np_gp, np_m, pvals_gp, pvals_m, np_gp["FDR"], np_m["FDR"])
+    #
+    # OLD: if verbose:
+    # OLD: print("[lowmem] Non-parametric test finished.")
+    #
+    # NEW (CU-E, Option B two-pass chunking): see the module docstring's CU-E section for
+    # the full derivation. Bounds GPU to (n_cells, chunk) while still assembling and
+    # storing the exact same full (n_cells, n_gp) / (n_cells, n_m) arrays in `uns`.
     if test in ["non-parametric", "both"]:
         if verbose:
             print("[lowmem] Running the non-parametric test...")
@@ -502,179 +832,206 @@ def compute_interacting_cell_scores_lowmem(
         counts = counts_from_anndata(adata[cells, genes], layer_key_np_test, dense=True)
         counts = torch.tensor(counts, dtype=torch.float64, device=device)
 
-        counts_1, counts_2 = _prep_counts_1_2(counts, gene_pairs_sig_ind, mean)
+        n_cells = counts.shape[1]
+        n_gp = len(gene_pairs_sig_ind)
+        n_m = len(gene_pair_dict)
+        same_gene_mask_full = torch.tensor([g1 == g2 for g1, g2 in gene_pairs_sig], device=device)
 
-        if center_counts_for_np_test:
-            num_umi = counts.sum(dim=0)
-            counts_1 = standardize_counts(adata, counts_1, model, num_umi, sample_specific)
-            counts_2 = standardize_counts(adata, counts_2, model, num_umi, sample_specific)
+        num_umi = counts.sum(dim=0) if center_counts_for_np_test else None  # GLOBAL, unchunked
 
-        n_cells = counts_1.shape[1]
-        n_gp = counts_1.shape[0]
-        same_gene_mask = torch.tensor([g1 == g2 for g1, g2 in gene_pairs_sig], device=device)
+        use_p_shortcut = center_counts_for_np_test and test == "both"
+        want_significance = compute_significance in ["non-parametric", "both"]
 
-        if center_counts_for_np_test and test == "both":
-            adata.uns["interacting_cell_results"]["np"]["gp"]["cs"] = np.array(adata.uns["interacting_cell_results"]["p"]["gp"]["cs"])
-            adata.uns["interacting_cell_results"]["np"]["m"]["cs"] = np.array(adata.uns["interacting_cell_results"]["p"]["m"]["cs"])
-        else:
-            WX2t = torch.sparse.mm(weights, counts_2.T)
-            WtX2t = torch.sparse.mm(weights.transpose(0, 1), counts_2.T)
-            cs_gp = (counts_1.T * WX2t) + (counts_1.T * WtX2t)
-            cs_gp[:, same_gene_mask] = cs_gp[:, same_gene_mask] / 2
-            adata.uns["interacting_cell_results"]["np"]["gp"]["cs"] = cs_gp.detach().cpu().numpy()
-            cs_m = compute_metabolite_cs(cs_gp, gene_pair_dict, interacting_cell_scores=True)
-            adata.uns["interacting_cell_results"]["np"]["m"]["cs"] = cs_m.detach().cpu().numpy()
+        # Adaptive chunk sizes: bound n_cells * chunk to ~50M elements (CU-B/C convention),
+        # independently for the gene-pair axis and the metabolite axis.
+        gp_chunk = max(1, 50_000_000 // max(n_cells, 1)) if gene_pair_chunk_size is None else max(1, int(gene_pair_chunk_size))
+        m_chunk = max(1, 50_000_000 // max(n_cells, 1)) if metabolite_chunk_size is None else max(1, int(metabolite_chunk_size))
 
-        if compute_significance in ["non-parametric", "both"]:
-            # observed scores as tensors (robust to either branch above)
-            cs_gp = torch.as_tensor(
-                np.asarray(adata.uns["interacting_cell_results"]["np"]["gp"]["cs"]), dtype=torch.float64, device=device
-            )
-            cs_m = torch.as_tensor(
-                np.asarray(adata.uns["interacting_cell_results"]["np"]["m"]["cs"]), dtype=torch.float64, device=device
-            )
-            n_m = cs_m.shape[1]
+        # --------------------------- Pass 1: gene-pair chunks ------------------------------
+        # Outer loop over gene-pair chunks, inner loop over the M permutations, with
+        # `torch.manual_seed(seed)` re-issued at the START of each chunk -- the proven CU-B/C
+        # RNG-replay trick: only `torch.randperm` consumes RNG in the loop body, so re-seeding
+        # per chunk reproduces the exact idx_0..idx_{M-1} sequence stock draws once for all
+        # gene pairs. GPU only ever holds (n_cells, chunk)-shaped tensors; the full
+        # (n_cells, n_gp) `cs`/exceedance-counter arrays are assembled on CPU.
+        cs_gp_cpu = np.empty((n_cells, n_gp), dtype=np.float64)
+        if use_p_shortcut:
+            # STOCK quirk, reproduced verbatim: when centering AND both tests ran, the 'np'
+            # observed score is just a copy of the already-computed 'p' score (no recompute).
+            cs_gp_cpu[...] = np.asarray(adata.uns["interacting_cell_results"]["p"]["gp"]["cs"])
+        if want_significance:
+            x_gp_a_cpu = np.zeros((n_cells, n_gp), dtype=np.float64)
+            x_gp_b_cpu = np.zeros((n_cells, n_gp), dtype=np.float64)
 
-            # ---------------------------------------------------------------------------
-            # STOCK (harreman's compute_interacting_cell_scores, lines ~1792-1873): builds
-            # the *entire* permutation null as dense (n_cells, n_pairs, M) tensors, fills
-            # them one permutation at a time, then derives the exceedance counts (x_*) and
-            # p-values from those materialized arrays afterwards. This is the OOM site --
-            # kept verbatim below (commented) for reference / diffing against upstream.
-            #
-            # STOCK: perm_cs_gp_a = torch.zeros((n_cells, counts_1.shape[0], M), dtype=torch.float64, device=device)
-            # STOCK: perm_cs_gp_b = torch.zeros_like(perm_cs_gp_a)
-            # STOCK: perm_cs_m_a = torch.zeros((n_cells, len(gene_pair_dict), M), dtype=torch.float64, device=device)
-            # STOCK: perm_cs_m_b = torch.zeros_like(perm_cs_m_a)
-            # STOCK:
-            # STOCK: if check_analytic_null:
-            # STOCK:     gp_zs_perm_array = torch.zeros_like(perm_cs_gp_a)
-            # STOCK:     gp_pvals_perm_array = torch.zeros_like(perm_cs_gp_a)
-            # STOCK:     m_zs_perm_array = torch.zeros_like(perm_cs_m_a)
-            # STOCK:     m_pvals_perm_array = torch.zeros_like(perm_cs_m_a)
-            # STOCK:
-            # STOCK: torch.manual_seed(seed)
-            # STOCK: for i in tqdm(range(M), desc="Permutation test"):
-            # STOCK:     idx = torch.randperm(n_cells, device=device)
-            # STOCK:
-            # STOCK:     c1_perm_a = counts_1.clone()
-            # STOCK:     c2_perm_a = counts_2[:, idx]
-            # STOCK:     c1_perm_a[same_gene_mask] = counts_1[same_gene_mask, :][:, idx]
-            # STOCK:
-            # STOCK:     WX2t_a = torch.sparse.mm(weights, c2_perm_a.T)
-            # STOCK:     WtX2t_a = torch.sparse.mm(weights.transpose(0, 1), c2_perm_a.T)
-            # STOCK:     cs_a = (c1_perm_a.T * WX2t_a) + (c1_perm_a.T * WtX2t_a)
-            # STOCK:     cs_a[:, same_gene_mask] = cs_a[:, same_gene_mask] / 2
-            # STOCK:     perm_cs_gp_a[:, :, i] = cs_a
-            # STOCK:
-            # STOCK:     cs_m_a = compute_metabolite_cs(cs_a, gene_pair_dict, interacting_cell_scores=True)
-            # STOCK:     perm_cs_m_a[:, :, i] = cs_m_a
-            # STOCK:
-            # STOCK:     c2_perm_b = counts_2.clone()
-            # STOCK:     c1_perm_b = counts_1[:, idx]
-            # STOCK:     c2_perm_b[same_gene_mask] = counts_2[same_gene_mask, :][:, idx]
-            # STOCK:
-            # STOCK:     WX2t_b = torch.sparse.mm(weights, c2_perm_b.T)
-            # STOCK:     WtX2t_b = torch.sparse.mm(weights.transpose(0, 1), c2_perm_b.T)
-            # STOCK:     cs_b = (c1_perm_b.T * WX2t_b) + (c1_perm_b.T * WtX2t_b)
-            # STOCK:     cs_b[:, same_gene_mask] = cs_b[:, same_gene_mask] / 2
-            # STOCK:     perm_cs_gp_b[:, :, i] = cs_b
-            # STOCK:
-            # STOCK:     cs_m_b = compute_metabolite_cs(cs_b, gene_pair_dict, interacting_cell_scores=True)
-            # STOCK:     perm_cs_m_b[:, :, i] = cs_m_b
-            # STOCK:
-            # STOCK:     if check_analytic_null:
-            # STOCK:         Z_gp_perm, Z_m_perm = compute_p_results((cs_a, cs_b), (cs_m_a, cs_m_b), gene_pairs_ind, Wtot2, eg2s_gp, gene_pair_dict)
-            # STOCK:         gp_zs_perm_array[:, :, i] = Z_gp_perm
-            # STOCK:         gp_pvals_perm_array[:, :, i] = torch.tensor(norm.sf(Z_gp_perm.cpu().numpy()), device=device)
-            # STOCK:         m_zs_perm_array[:, :, i] = Z_m_perm
-            # STOCK:         m_pvals_perm_array[:, :, i] = torch.tensor(norm.sf(Z_m_perm.cpu().numpy()), device=device)
-            # STOCK:
-            # STOCK: adata.uns['interacting_cell_results']['np']['gp']['perm_cs_a'] = perm_cs_gp_a.detach().cpu().numpy()
-            # STOCK: adata.uns['interacting_cell_results']['np']['gp']['perm_cs_b'] = perm_cs_gp_b.detach().cpu().numpy()
-            # STOCK: adata.uns['interacting_cell_results']['np']['m']['perm_cs_a'] = perm_cs_m_a.detach().cpu().numpy()
-            # STOCK: adata.uns['interacting_cell_results']['np']['m']['perm_cs_b'] = perm_cs_m_b.detach().cpu().numpy()
-            # STOCK:
-            # STOCK: x_gp_a = (perm_cs_gp_a > cs_gp[:, :, None]).sum(dim=2)
-            # STOCK: x_gp_b = (perm_cs_gp_b > cs_gp[:, :, None]).sum(dim=2)
-            # STOCK: x_m_a = (perm_cs_m_a > cs_m[:, :, None]).sum(dim=2)
-            # STOCK: x_m_b = (perm_cs_m_b > cs_m[:, :, None]).sum(dim=2)
-            # STOCK:
-            # STOCK: pvals_gp_a = (x_gp_a + 1).float() / (M + 1)
-            # STOCK: pvals_gp_b = (x_gp_b + 1).float() / (M + 1)
-            # STOCK: pvals_m_a = (x_m_a + 1).float() / (M + 1)
-            # STOCK: pvals_m_b = (x_m_b + 1).float() / (M + 1)
-            # STOCK:
-            # STOCK: pvals_gp = torch.where(pvals_gp_a > pvals_gp_b, pvals_gp_a, pvals_gp_b)
-            # STOCK: pvals_m = torch.where(pvals_m_a > pvals_m_b, pvals_m_a, pvals_m_b)
-            # STOCK:
-            # STOCK: pvals_gp = pvals_gp.cpu().numpy()
-            # STOCK: pvals_m = pvals_m.cpu().numpy()
-            # STOCK:
-            # STOCK: if check_analytic_null:
-            # STOCK:     adata.uns['interacting_cell_results']['np']['analytic_null'] = {
-            # STOCK:         'gp_zs_perm': gp_zs_perm_array.detach().cpu().numpy(),
-            # STOCK:         'gp_pvals_perm': gp_pvals_perm_array.detach().cpu().numpy(),
-            # STOCK:         'm_zs_perm': m_zs_perm_array.detach().cpu().numpy(),
-            # STOCK:         'm_pvals_perm': m_pvals_perm_array.detach().cpu().numpy(),
-            # STOCK:     }
-            #
-            # LOWMEM REPLACEMENT: never materialize perm_cs_*; accumulate the exceedance
-            # counters (x_gp_a/b, x_m_a/b) incrementally inside the permutation loop
-            # instead. This is the O(n_cells*n_pairs*M) -> O(n_cells*n_pairs) memory fix
-            # (05_harreman_reference.md sec.5). check_analytic_null=True is rejected at
-            # the top of this function (it needs the removed arrays), so the
-            # check_analytic_null branches in the STOCK block above are permanently dead
-            # here and kept only for reference.
-            #
-            # NOTE (float precision): we accumulate the exceedance counter in float64
-            # (exact for integer counts <= M+1) but replicate stock's float32 cast at the
-            # divide below ("(x + 1).float() / (M + 1)"), so pval/FDR are bit-for-bit
-            # identical to stock for the same seed.
-            # ---------------------------------------------------------------------------
-            x_gp_a = torch.zeros((n_cells, n_gp), dtype=torch.float64, device=device)
-            x_gp_b = torch.zeros_like(x_gp_a)
-            x_m_a = torch.zeros((n_cells, n_m), dtype=torch.float64, device=device)
-            x_m_b = torch.zeros_like(x_m_a)
+        if (not use_p_shortcut) or want_significance:
+            for i0 in range(0, n_gp, gp_chunk):
+                sl = slice(i0, min(i0 + gp_chunk, n_gp))
+                gp_ind_chunk = gene_pairs_sig_ind[sl]
+                same_gene_chunk = same_gene_mask_full[sl]
 
-            torch.manual_seed(seed)
-            for _ in tqdm(range(M), desc="[lowmem] Permutation test", disable=not verbose):
-                idx = torch.randperm(n_cells, device=device)
+                counts_1c, counts_2c = _prep_counts_1_2(counts, gp_ind_chunk, mean)
+                if center_counts_for_np_test:
+                    counts_1c = standardize_counts(adata, counts_1c, model, num_umi, sample_specific)
+                    counts_2c = standardize_counts(adata, counts_2c, model, num_umi, sample_specific)
 
-                # permute the "receiver" (counts_2), keep "sender" (counts_1) — arm a
-                c1_perm_a = counts_1.clone()
-                c2_perm_a = counts_2[:, idx]
-                c1_perm_a[same_gene_mask] = counts_1[same_gene_mask, :][:, idx]
-                WX2t_a = torch.sparse.mm(weights, c2_perm_a.T)
-                WtX2t_a = torch.sparse.mm(weights.transpose(0, 1), c2_perm_a.T)
-                cs_a = (c1_perm_a.T * WX2t_a) + (c1_perm_a.T * WtX2t_a)
-                cs_a[:, same_gene_mask] = cs_a[:, same_gene_mask] / 2
-                cs_m_a = compute_metabolite_cs(cs_a, gene_pair_dict, interacting_cell_scores=True)
-                x_gp_a += (cs_a > cs_gp).to(torch.float64)
-                x_m_a += (cs_m_a > cs_m).to(torch.float64)
+                if use_p_shortcut:
+                    cs_gp_c = torch.as_tensor(cs_gp_cpu[:, sl], dtype=torch.float64, device=device)
+                else:
+                    WX2t_c = torch.sparse.mm(weights, counts_2c.T)
+                    WtX2t_c = torch.sparse.mm(weights.transpose(0, 1), counts_2c.T)
+                    cs_gp_c = (counts_1c.T * WX2t_c) + (counts_1c.T * WtX2t_c)
+                    cs_gp_c[:, same_gene_chunk] = cs_gp_c[:, same_gene_chunk] / 2
+                    cs_gp_cpu[:, sl] = cs_gp_c.detach().cpu().numpy()
 
-                # permute the "sender" (counts_1), keep "receiver" (counts_2) — arm b
-                c2_perm_b = counts_2.clone()
-                c1_perm_b = counts_1[:, idx]
-                c2_perm_b[same_gene_mask] = counts_2[same_gene_mask, :][:, idx]
-                WX2t_b = torch.sparse.mm(weights, c2_perm_b.T)
-                WtX2t_b = torch.sparse.mm(weights.transpose(0, 1), c2_perm_b.T)
-                cs_b = (c1_perm_b.T * WX2t_b) + (c1_perm_b.T * WtX2t_b)
-                cs_b[:, same_gene_mask] = cs_b[:, same_gene_mask] / 2
-                cs_m_b = compute_metabolite_cs(cs_b, gene_pair_dict, interacting_cell_scores=True)
-                x_gp_b += (cs_b > cs_gp).to(torch.float64)
-                x_m_b += (cs_m_b > cs_m).to(torch.float64)
+                if want_significance:
+                    x_gp_a_c = torch.zeros((n_cells, sl.stop - sl.start), dtype=torch.float64, device=device)
+                    x_gp_b_c = torch.zeros_like(x_gp_a_c)
 
-            # replicate stock's float32 cast (`(x + 1).float() / (M + 1)`) so pval/FDR
-            # match stock bit-for-bit; x_* hold integer counts <= M+1, exact in float32.
-            pvals_gp_a = (x_gp_a + 1).to(torch.float32) / (M + 1)
-            pvals_gp_b = (x_gp_b + 1).to(torch.float32) / (M + 1)
-            pvals_m_a = (x_m_a + 1).to(torch.float32) / (M + 1)
-            pvals_m_b = (x_m_b + 1).to(torch.float32) / (M + 1)
+                    torch.manual_seed(seed)  # reseed EVERY chunk -> replays idx_0..idx_{M-1} identically
+                    for _ in tqdm(range(M), desc="[lowmem] Permutation test (gene-pair chunk)", disable=not verbose):
+                        idx = torch.randperm(n_cells, device=device)
 
-            pvals_gp = torch.where(pvals_gp_a > pvals_gp_b, pvals_gp_a, pvals_gp_b).cpu().numpy()
-            pvals_m = torch.where(pvals_m_a > pvals_m_b, pvals_m_a, pvals_m_b).cpu().numpy()
+                        # permute the "receiver" (counts_2), keep "sender" (counts_1) -- arm a
+                        c1_perm_a = counts_1c.clone()
+                        c2_perm_a = counts_2c[:, idx]
+                        c1_perm_a[same_gene_chunk] = counts_1c[same_gene_chunk, :][:, idx]
+                        WX2t_a = torch.sparse.mm(weights, c2_perm_a.T)
+                        WtX2t_a = torch.sparse.mm(weights.transpose(0, 1), c2_perm_a.T)
+                        cs_a = (c1_perm_a.T * WX2t_a) + (c1_perm_a.T * WtX2t_a)
+                        cs_a[:, same_gene_chunk] = cs_a[:, same_gene_chunk] / 2
+                        x_gp_a_c += (cs_a > cs_gp_c).to(torch.float64)
 
+                        # permute the "sender" (counts_1), keep "receiver" (counts_2) -- arm b
+                        c2_perm_b = counts_2c.clone()
+                        c1_perm_b = counts_1c[:, idx]
+                        c2_perm_b[same_gene_chunk] = counts_2c[same_gene_chunk, :][:, idx]
+                        WX2t_b = torch.sparse.mm(weights, c2_perm_b.T)
+                        WtX2t_b = torch.sparse.mm(weights.transpose(0, 1), c2_perm_b.T)
+                        cs_b = (c1_perm_b.T * WX2t_b) + (c1_perm_b.T * WtX2t_b)
+                        cs_b[:, same_gene_chunk] = cs_b[:, same_gene_chunk] / 2
+                        x_gp_b_c += (cs_b > cs_gp_c).to(torch.float64)
+
+                    x_gp_a_cpu[:, sl] = x_gp_a_c.detach().cpu().numpy()
+                    x_gp_b_cpu[:, sl] = x_gp_b_c.detach().cpu().numpy()
+
+        adata.uns["interacting_cell_results"]["np"]["gp"]["cs"] = cs_gp_cpu
+
+        # --------------------------- Pass 2: metabolite chunks -----------------------------
+        # Outer loop over metabolite chunks, re-seeded per chunk exactly like Pass 1, inner
+        # loop over the M permutations. For each metabolite chunk, gather the UNION of gene
+        # pairs across that chunk's metabolites (many-to-many: a gene pair may serve several
+        # metabolites), recompute only that union's per-permutation gene-pair scores, and sum
+        # them into per-metabolite scores via a remapped sub-dict. This recomputes gene-pair
+        # scores a second time (~2x total sparse.mm cost) but bounds the GPU to
+        # (n_cells, metabolite_chunk) + (n_cells, |union|) -- sanctioned by the plan (sec.5)
+        # as the only way to finish a metabolite without ever holding the full (n_cells, n_gp)
+        # tensor on GPU (a metabolite's gene pairs can span multiple gene-pair chunks).
+        #
+        # IMPORTANT (device parity, fixed after review): the OBSERVED cs_m is computed HERE,
+        # per metabolite chunk, ON THE SAME DEVICE as the permutation scores it is compared
+        # against (mirrors Pass 1's structure exactly: build the union's observed gene-pair
+        # `cs` on `device` -- no permutation -- then reduce with `compute_metabolite_cs` on
+        # `device`). A prior version of this fix computed the FULL cs_m once via a CPU-side
+        # `compute_metabolite_cs` call and used that CPU value as the exceedance threshold
+        # for the GPU-computed permutation scores below -- for GPU runs, `.sum(dim=1)` over
+        # >= 3 gene pairs can round differently between a CPU and a CUDA reduction kernel
+        # (measure-zero ULP drift), which both corrupts the stored `cs` (no longer bit-exact
+        # vs stock) and can flip an `x_m` exceedance count when a permutation score sits
+        # within 1 ULP of the threshold. Computing cs_m_c on `device` for both roles removes
+        # that CPU/GPU reduction seam entirely -- see the module docstring's CU-E section.
+        cs_m_cpu = np.empty((n_cells, n_m), dtype=np.float64)
+        if use_p_shortcut:
+            # STOCK quirk, reproduced verbatim (mirrors the `gp`-grain shortcut above): when
+            # centering AND both tests ran, the 'np' observed metabolite score is just a copy
+            # of the already-computed 'p' score (no recompute) -- NOT a re-derivation from the
+            # (possibly re-standardized) 'np' counts.
+            cs_m_cpu[...] = np.asarray(adata.uns["interacting_cell_results"]["p"]["m"]["cs"])
+        if want_significance:
+            x_m_a_cpu = np.zeros((n_cells, n_m), dtype=np.float64)
+            x_m_b_cpu = np.zeros((n_cells, n_m), dtype=np.float64)
+
+        if (not use_p_shortcut) or want_significance:
+            for m0 in range(0, n_m, m_chunk):
+                sl_m = slice(m0, min(m0 + m_chunk, n_m))
+                metabs_chunk = metabolites[sl_m]
+
+                union_indices = sorted(set().union(*(set(gene_pair_dict[m]) for m in metabs_chunk)))
+                local_pos = {gp_idx: i for i, gp_idx in enumerate(union_indices)}
+                sub_dict = {m: [local_pos[gp_idx] for gp_idx in gene_pair_dict[m]] for m in metabs_chunk}
+                gp_ind_union = [gene_pairs_sig_ind[i] for i in union_indices]
+                union_idx_t = torch.tensor(union_indices, device=device, dtype=torch.long)
+                same_gene_union = same_gene_mask_full[union_idx_t]
+
+                counts_1u, counts_2u = _prep_counts_1_2(counts, gp_ind_union, mean)
+                if center_counts_for_np_test:
+                    counts_1u = standardize_counts(adata, counts_1u, model, num_umi, sample_specific)
+                    counts_2u = standardize_counts(adata, counts_2u, model, num_umi, sample_specific)
+
+                if use_p_shortcut:
+                    cs_m_c = torch.as_tensor(cs_m_cpu[:, sl_m], dtype=torch.float64, device=device)
+                else:
+                    # Observed union gene-pair scores, ON DEVICE, no permutation -- identical
+                    # formula to Pass 1's observed `cs_gp_c` (and to stock's `cs_gp`), restricted
+                    # to this chunk's union of gene pairs. Bit-identical per-column to stock's
+                    # full-width `cs_gp` (sparse.mm columns are independent of one another --
+                    # same argument as Pass 1 / CU-B).
+                    WX2t_u = torch.sparse.mm(weights, counts_2u.T)
+                    WtX2t_u = torch.sparse.mm(weights.transpose(0, 1), counts_2u.T)
+                    cs_union = (counts_1u.T * WX2t_u) + (counts_1u.T * WtX2t_u)
+                    cs_union[:, same_gene_union] = cs_union[:, same_gene_union] / 2
+                    cs_m_c = compute_metabolite_cs(cs_union, sub_dict, interacting_cell_scores=True)
+                    cs_m_cpu[:, sl_m] = cs_m_c.detach().cpu().numpy()
+
+                if want_significance:
+                    x_m_a_c = torch.zeros((n_cells, sl_m.stop - sl_m.start), dtype=torch.float64, device=device)
+                    x_m_b_c = torch.zeros_like(x_m_a_c)
+
+                    torch.manual_seed(seed)  # reseed EVERY chunk -> replays idx_0..idx_{M-1} identically
+                    for _ in tqdm(range(M), desc="[lowmem] Permutation test (metabolite chunk)", disable=not verbose):
+                        idx = torch.randperm(n_cells, device=device)
+
+                        # arm a: permute the "receiver" (counts_2), keep "sender" (counts_1) --
+                        # structurally identical to Pass 1's arm a, restricted to this chunk's union.
+                        c1_perm_a = counts_1u.clone()
+                        c2_perm_a = counts_2u[:, idx]
+                        c1_perm_a[same_gene_union] = counts_1u[same_gene_union, :][:, idx]
+                        WX2t_a = torch.sparse.mm(weights, c2_perm_a.T)
+                        WtX2t_a = torch.sparse.mm(weights.transpose(0, 1), c2_perm_a.T)
+                        cs_a_union = (c1_perm_a.T * WX2t_a) + (c1_perm_a.T * WtX2t_a)
+                        cs_a_union[:, same_gene_union] = cs_a_union[:, same_gene_union] / 2
+                        cs_m_a_chunk = compute_metabolite_cs(cs_a_union, sub_dict, interacting_cell_scores=True)
+                        x_m_a_c += (cs_m_a_chunk > cs_m_c).to(torch.float64)
+
+                        # arm b: permute the "sender" (counts_1), keep "receiver" (counts_2)
+                        c2_perm_b = counts_2u.clone()
+                        c1_perm_b = counts_1u[:, idx]
+                        c2_perm_b[same_gene_union] = counts_2u[same_gene_union, :][:, idx]
+                        WX2t_b = torch.sparse.mm(weights, c2_perm_b.T)
+                        WtX2t_b = torch.sparse.mm(weights.transpose(0, 1), c2_perm_b.T)
+                        cs_b_union = (c1_perm_b.T * WX2t_b) + (c1_perm_b.T * WtX2t_b)
+                        cs_b_union[:, same_gene_union] = cs_b_union[:, same_gene_union] / 2
+                        cs_m_b_chunk = compute_metabolite_cs(cs_b_union, sub_dict, interacting_cell_scores=True)
+                        x_m_b_c += (cs_m_b_chunk > cs_m_c).to(torch.float64)
+
+                    x_m_a_cpu[:, sl_m] = x_m_a_c.detach().cpu().numpy()
+                    x_m_b_cpu[:, sl_m] = x_m_b_c.detach().cpu().numpy()
+
+        adata.uns["interacting_cell_results"]["np"]["m"]["cs"] = cs_m_cpu
+
+        if want_significance:
+            # Replicate stock's float32 cast (`(x + 1).float() / (M + 1)`) so pval/FDR match
+            # stock bit-for-bit; x_* hold integer counts <= M+1, exact in float64, cast once
+            # here. This elementwise cast/divide is device-independent (no reduction), so
+            # doing it on CPU (as here) vs GPU (as stock/CU-A did) makes no numeric difference.
+            pvals_gp_a = (torch.as_tensor(x_gp_a_cpu, dtype=torch.float64) + 1).to(torch.float32) / (M + 1)
+            pvals_gp_b = (torch.as_tensor(x_gp_b_cpu, dtype=torch.float64) + 1).to(torch.float32) / (M + 1)
+            pvals_m_a = (torch.as_tensor(x_m_a_cpu, dtype=torch.float64) + 1).to(torch.float32) / (M + 1)
+            pvals_m_b = (torch.as_tensor(x_m_b_cpu, dtype=torch.float64) + 1).to(torch.float32) / (M + 1)
+
+            pvals_gp = torch.where(pvals_gp_a > pvals_gp_b, pvals_gp_a, pvals_gp_b).numpy()
+            pvals_m = torch.where(pvals_m_a > pvals_m_b, pvals_m_a, pvals_m_b).numpy()
+
+            # BH ONCE over each FULL flattened p-value matrix -- never per-chunk.
             np_gp = adata.uns["interacting_cell_results"]["np"]["gp"]
             np_m = adata.uns["interacting_cell_results"]["np"]["m"]
             np_gp["pval"] = pvals_gp

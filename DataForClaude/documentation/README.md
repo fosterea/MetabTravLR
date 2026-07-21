@@ -25,6 +25,10 @@ memory; the root `../../CLAUDE.md` points here).
   where the big tensors are, what scales with cells vs modulators, the efficiency improvements
   made + still to make, and answers to "what would metabolite-only training save?" and "how does
   the CNN-over-a-grid scale?". Read to reason about large-dataset performance.
+- `07_nbhd_percell_chunking_plan.md` — **DIAGNOSED-not-implemented plan** for the next harreman
+  memory bottleneck: the **per-cell "neighborhood" analysis OOMs at ≥600k cells** (the aggregate
+  CU-A–D fix doesn't cover it). Root cause + three fix options + testing, written for a future
+  agent. Read alongside `05` §5.
 - `05_harreman_reference.md` — **what harreman actually does**, read from its source: the
   pipeline, output tables, the **`CT1→CT2` "arrow" is NOT a direction** (undirected interface;
   sorted-label artifact), and the **per-cell "neighborhood" analysis + its GPU-OOM** and fix
