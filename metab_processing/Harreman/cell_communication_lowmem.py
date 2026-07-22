@@ -168,6 +168,60 @@ single-pass, full-array code is commented out wholesale (`# OLD:`) and replaced 
     "unchunked" special case, so it is bit-identical by construction, not by a fallback,
     for BOTH grains.
 
+CU-F (retrofit, real Savio Pass-2 OOM): after the fixes above, Savio still OOM'd -- NOT in
+Pass 1, but at the START of Pass 2, with ~9 GiB already resident. Root cause: Pass 2 was
+sized by METABOLITE COUNT (`element_budget // n_cells` metabolites per chunk), not by its
+actual GPU footprint `(n_cells, |union of that chunk's gene pairs|)`; since pair<->
+metabolite is many-to-many, a chunk of ~60 metabolites could reference nearly the full
+`n_gp`, silently rebuilding the very `(n_cells, n_gp)`-scale tensors Pass 1 chunks to
+avoid. Four fixes, all preserving bit-identity (only chunk BOUNDARIES move, never any
+stored value -- see the bit-identity argument above, which applies unchanged to Pass 2's
+now-variable-width, greedy grouping):
+  * **Pass 2 is now sized by gene-pair-UNION footprint**, via `_greedy_metabolite_chunks`
+    (module-level, unit-tested in isolation): a chunk grows by adding consecutive
+    metabolites while the RUNNING UNION of their gene-pair indices stays
+    `<= max_pairs_per_chunk` (the same value Pass 1's `gp_chunk` uses, both derived from
+    the single `element_budget` param). A lone metabolite whose own union already exceeds
+    the budget still gets its own (over-budget) chunk -- unavoidable, its pairs can't be
+    split; bounded by the largest real metabolite's pair count (~91, see
+    05_harreman_reference.md sec.4a).
+  * **BOTH axes are bounded (review hardening pass, defense-in-depth).** The union-budget
+    fix above only bounds the gene-pair axis; if many metabolites each reference just a
+    FEW (possibly disjoint) pairs, the metabolite-COUNT axis of `x_m_*_c`/`cs_m_c`
+    `(n_cells, |metabs in chunk|)` could still grow unboundedly (worst case all `n_m` in
+    one chunk) while the union stayed tiny -- and OOM-halving can't rescue that case, since
+    the union was never the problem. Fix: `metabolite_chunk_size=None` (the fully-automatic
+    default) now passes an IMPLICIT `hard_cap=max_pairs_per_chunk` to `_greedy_metabolite_
+    chunks`, so a chunk also closes at `max_pairs_per_chunk` METABOLITES, whichever of the
+    two limits hits first -- both axes track the same, halvable `element_budget`.
+  * **Explicit overrides are clamped, not taken verbatim**, so OOM-halving still helps even
+    when a caller pins `gene_pair_chunk_size`/`metabolite_chunk_size`: each attempt
+    recomputes `gp_chunk = min(explicit, max_pairs_per_chunk)` and `metab_count_cap =
+    min(explicit, max_pairs_per_chunk)` against the CURRENT (possibly already-halved)
+    budget. A no-op when the override is already <= the (typically huge, default-budget)
+    `max_pairs_per_chunk`, i.e. it changes nothing for the small explicit chunk sizes used
+    throughout the test suite -- it only ever shrinks the effective chunk, never grows it.
+  * **Inter-pass GPU cleanup**: Pass 1's lingering last-chunk locals are reassigned to
+    `None` (Python has no block scoping, so they'd otherwise stay resident for the rest of
+    the closure's frame) and `torch.cuda.empty_cache()` is called before Pass 2 starts --
+    this alone measured ~9 GiB freed on Savio before Pass 2 had allocated anything.
+  * **Automatic OOM-halving retry**: the whole 'np' branch is a nested closure
+    (`_run_non_parametric_pass`, re-initializing `adata.uns['interacting_cell_results']
+    ['np']` at its top so a retry never sees stale state from a failed attempt) called in a
+    loop that catches a CUDA OOM (`_is_oom`, same style as `validate_lowmem_savio.py`),
+    frees the cache, halves `element_budget`, and retries -- up to `effective_max_retries =
+    max(1, max_oom_retries)` total attempts (review hardening pass: `max_oom_retries=0`
+    must still mean "one attempt", not "zero attempts, `np` never populated" -- a bare
+    `range(max_oom_retries)` would silently skip the branch entirely and leave `uns[...]
+    ['np']` absent, breaking any downstream reader like `summarize_nbhd_scores` with a
+    KeyError far from the real cause). Non-OOM exceptions are never caught. `element_
+    budget=None` (a nit: a direct caller could pass this) is coalesced to the same
+    50,000,000 default as the signature, so it can't `TypeError` on the first `//`.
+  * Foster's batch driver (`run_harr_all.py`) runs many datasets unattended, so this is
+    designed to degrade gracefully with NO per-dataset hand-tuning required -- the wired
+    callers (`nbhd_scores.compute_nbhd_scores`, `HarremanRunner`) all default every new
+    knob to `None`/automatic.
+
 Tests: `tests/test_cell_communication_lowmem.py`'s chunked-equivalence test class sweeps
 `gene_pair_chunk_size` x `metabolite_chunk_size` (incl. 1, 2, `n_gp`/`n_m`, and `None`)
 against **stock** `harreman.tools.compute_interacting_cell_scores` directly (not just the
@@ -440,6 +494,74 @@ compute_ct_p_results = _need("compute_ct_p_results")
 get_ct_cell_communication_results = _need("get_ct_cell_communication_results")
 
 
+# --- CU-F: automatic OOM-halving retry (per-cell np branch only) ----------------------
+# Same style as `validate_lowmem_savio.py`'s `_is_oom`: OOM exception type varies by torch
+# version (torch.OutOfMemoryError / torch.cuda.OutOfMemoryError, both subclass
+# RuntimeError); fall back to a message check for older torch that doesn't have either.
+_OOM_TYPES = tuple(t for t in (getattr(torch, "OutOfMemoryError", None),
+                               getattr(getattr(torch, "cuda", None), "OutOfMemoryError", None))
+                   if isinstance(t, type))
+
+
+def _is_oom(exc):
+    if _OOM_TYPES and isinstance(exc, _OOM_TYPES):
+        return True
+    return isinstance(exc, RuntimeError) and "out of memory" in str(exc).lower()
+
+
+def _greedy_metabolite_chunks(metabolites, gene_pair_dict, max_pairs_per_chunk, hard_cap=None):
+    """CU-F: group ``metabolites`` (a list, processed in order) into chunks such that the
+    RUNNING UNION of each chunk's gene-pair indices (``gene_pair_dict[m]`` for each ``m``
+    in the chunk) never exceeds ``max_pairs_per_chunk`` -- this is what actually bounds
+    Pass 2's GPU footprint (``(n_cells, |union|)``), NOT the number of metabolites in a
+    chunk (sizing by metabolite count alone can reference nearly the full ``n_gp`` when
+    pair<->metabolite is many-to-many -- the OOM this fix addresses).
+
+    A chunk closes just BEFORE a metabolite would push the running union over the budget.
+    A single metabolite whose OWN pair-union already exceeds the budget still gets its own
+    (over-budget) chunk -- its pairs cannot be split (``compute_metabolite_cs`` needs all
+    of them to produce that metabolite's ``cs_m`` column), so this is unavoidable; the
+    worst case is bounded by the largest real metabolite's pair count (up to ~91, see
+    05_harreman_reference.md sec.4a -- (n_cells, 91) is fine).
+
+    ``hard_cap``, if given, is an ADDITIONAL cap on metabolites-per-chunk applied on top of
+    the union budget -- a chunk also closes at ``hard_cap`` metabolites, whichever limit is
+    hit first. ``None`` here means the union budget is this function's ONLY limit -- but
+    the caller (see ``metab_count_cap`` in the 'np' branch) always passes a concrete value
+    in the fully-automatic path, defaulting to ``max_pairs_per_chunk`` itself when the
+    public ``metabolite_chunk_size`` API param is ``None`` -- an explicit ``hard_cap=None``
+    here (as this default suggests) is for direct/unit-test use of this function only; it
+    is never how the drop-in itself calls it (review hardening pass: an unbounded
+    metabolite-COUNT axis, even with a small gene-pair union, can still blow up
+    ``(n_cells, |metabs in chunk|)`` when many metabolites share few pairs).
+
+    Yields ``slice`` objects indexing into ``metabolites`` (so callers can reuse them
+    directly against ``cs_m_cpu[:, sl_m]``/``pvals_m_cpu[:, sl_m]`` etc., exactly like the
+    old fixed-width ``slice(m0, m0 + m_chunk)``). Metabolite order and coverage are
+    preserved: every metabolite appears in exactly one, contiguous chunk.
+
+    Bit-identity is unaffected by chunk boundaries: each metabolite's ``cs_m`` is derived
+    from the union of ONLY its own pairs via a remapped ``sub_dict`` (see the caller), so
+    which OTHER metabolites happen to share its chunk never changes its value -- moving
+    chunk boundaries only changes memory/compute grouping, never any stored output.
+    """
+    n = len(metabolites)
+    start = 0
+    while start < n:
+        union = set(gene_pair_dict[metabolites[start]])
+        stop = start + 1
+        while stop < n:
+            if hard_cap is not None and (stop - start) >= hard_cap:
+                break
+            candidate_union = union | set(gene_pair_dict[metabolites[stop]])
+            if len(candidate_union) > max_pairs_per_chunk:
+                break
+            union = candidate_union
+            stop += 1
+        yield slice(start, stop)
+        start = stop
+
+
 def compute_interacting_cell_scores_lowmem(
     adata,
     center_counts_for_np_test: bool = False,
@@ -453,10 +575,13 @@ def compute_interacting_cell_scores_lowmem(
     verbose: bool = False,
     gene_pair_chunk_size: int = None,
     metabolite_chunk_size: int = None,
+    element_budget: int = 50_000_000,
+    max_oom_retries: int = 4,
 ):
     """Memory-safe equivalent of ``harreman.tools.compute_interacting_cell_scores``.
 
-    Same signature (plus ``gene_pair_chunk_size``/``metabolite_chunk_size``) and same
+    Same signature (plus ``gene_pair_chunk_size``/``metabolite_chunk_size``/
+    ``element_budget``/``max_oom_retries``) and same
     ``adata.uns['interacting_cell_results']`` outputs, minus the raw permutation arrays.
     See module docstring for the (small) list of differences.
 
@@ -465,16 +590,47 @@ def compute_interacting_cell_scores_lowmem(
     gene_pair_chunk_size : int, optional
         Number of gene pairs processed per chunk in the non-parametric ('np') branch's
         gene-pair pass (CU-E, Option B). Never materializes more than
-        ``(n_cells, gene_pair_chunk_size)`` tensors on GPU. ``None`` (default) picks an
-        adaptive size ``max(1, 50_000_000 // n_cells)``. A value ``>= n_gp`` reproduces
-        the single-chunk (bit-identical) behavior.
+        ``(n_cells, gene_pair_chunk_size)`` tensors on GPU. ``None`` (default) picks the
+        adaptive size ``max(1, element_budget // n_cells)``. A value ``>= n_gp``
+        reproduces the single-chunk (bit-identical) behavior. On each OOM-retry attempt
+        (see ``max_oom_retries``) the EFFECTIVE chunk width is
+        ``min(gene_pair_chunk_size, max_pairs_per_chunk)`` against that attempt's
+        (possibly already-halved) budget, so a pinned value still benefits from halving
+        instead of re-OOMing identically every attempt.
     metabolite_chunk_size : int, optional
-        Number of metabolites processed per chunk in the non-parametric branch's
-        metabolite pass (CU-E). Never materializes more than
-        ``(n_cells, metabolite_chunk_size)`` + ``(n_cells, |union of that chunk's gene
-        pairs|)`` tensors on GPU. ``None`` (default) picks the same adaptive size as
-        ``gene_pair_chunk_size``. A value ``>= n_m`` reproduces the single-chunk
-        (bit-identical) behavior.
+        HARD CAP on metabolites processed per chunk in the non-parametric branch's
+        metabolite pass (CU-E/CU-F), applied ON TOP OF the gene-pair-union budget below --
+        a chunk closes at whichever limit is hit first. ``None`` (default, the fully
+        automatic path) means an IMPLICIT cap of ``max_pairs_per_chunk`` metabolites
+        applies (bounding the metabolite-COUNT axis to the same element budget as the
+        gene-pair-union axis -- CU-F hardening: without this, many metabolites sharing few
+        pairs could keep the union small while the metabolite count in a chunk grew
+        unboundedly). An explicit value is clamped the same way as ``gene_pair_chunk_size``
+        on each OOM-retry attempt. Regardless of value, every configuration reproduces the
+        same bit-identical per-metabolite output (see ``_greedy_metabolite_chunks``) --
+        only chunk boundaries change, never any stored value.
+    element_budget : int, default 50_000_000
+        Element budget (``n_cells * pairs``) driving the automatic chunk sizing for BOTH
+        passes and BOTH of Pass 2's axes: ``max_pairs_per_chunk = max(1, element_budget //
+        n_cells)`` bounds Pass 1's gene-pair chunk width, Pass 2's gene-pair-UNION
+        footprint per metabolite chunk, AND (when ``metabolite_chunk_size`` is ``None``)
+        Pass 2's metabolite-count-per-chunk (CU-F -- sizing Pass 2 by metabolite COUNT
+        alone can reference nearly the full ``n_gp`` when pair<->metabolite is
+        many-to-many, which is what caused a real Savio OOM in Pass 2 even though Pass 1
+        was already correctly bounded). ``None`` is coalesced to the same 50,000,000
+        default as this parameter's own default (robust to a direct caller passing
+        ``element_budget=None`` explicitly). Halved automatically on a caught CUDA OOM
+        (see ``max_oom_retries``) -- Foster's batch driver (``run_harr_all.py``) never
+        needs to hand-tune this per dataset.
+    max_oom_retries : int, default 4
+        On a caught CUDA out-of-memory error in the non-parametric branch, ``element_
+        budget`` is halved and the WHOLE non-parametric branch is retried (cheap: it only
+        triggers on OOM, which should be rare once Pass 2 is union-bounded), up to
+        ``max(1, max_oom_retries)`` total attempts, then the error is re-raised (a value
+        ``<= 0`` still means exactly one attempt -- it does NOT mean "skip the branch",
+        which would silently leave ``uns['interacting_cell_results']['np']`` unpopulated).
+        No effect on CPU (no CUDA OOM to catch, so the loop always succeeds on the first
+        attempt).
     """
     start = time.time()
     if verbose:
@@ -857,256 +1013,368 @@ def compute_interacting_cell_scores_lowmem(
     # OLD: if verbose:
     # OLD: print("[lowmem] Non-parametric test finished.")
     #
-    # NEW (CU-E, Option B two-pass chunking): see the module docstring's CU-E section for
-    # the full derivation. Bounds GPU to (n_cells, chunk) while still assembling and
-    # storing the exact same full (n_cells, n_gp) / (n_cells, n_m) arrays in `uns`.
+    # NEW (CU-E, Option B two-pass chunking; CU-F retrofit: Pass 2 sized by gene-pair-UNION
+    # footprint, inter-pass GPU cleanup, automatic OOM-halving retry): see the module
+    # docstring's CU-E section for the full derivation. Bounds GPU to (n_cells, chunk) in
+    # BOTH passes while still assembling and storing the exact same full (n_cells, n_gp) /
+    # (n_cells, n_m) arrays in `uns`.
     if test in ["non-parametric", "both"]:
         if verbose:
             print("[lowmem] Running the non-parametric test...")
-        adata.uns["interacting_cell_results"]["np"] = {"gp": {}, "m": {}}
 
-        counts = counts_from_anndata(adata[cells, genes], layer_key_np_test, dense=True)
-        counts = torch.tensor(counts, dtype=torch.float64, device=device)
+        def _run_non_parametric_pass(cur_element_budget):
+            """One full attempt at the 'np' branch at a given element budget. Re-
+            initializes `adata.uns['interacting_cell_results']['np']` at the start so a
+            retry after a caught OOM (see the retry loop below) leaves no stale state from
+            a partial failed attempt."""
+            adata.uns["interacting_cell_results"]["np"] = {"gp": {}, "m": {}}
 
-        n_cells = counts.shape[1]
-        n_gp = len(gene_pairs_sig_ind)
-        n_m = len(gene_pair_dict)
-        same_gene_mask_full = torch.tensor([g1 == g2 for g1, g2 in gene_pairs_sig], device=device)
+            counts = counts_from_anndata(adata[cells, genes], layer_key_np_test, dense=True)
+            counts = torch.tensor(counts, dtype=torch.float64, device=device)
 
-        num_umi = counts.sum(dim=0) if center_counts_for_np_test else None  # GLOBAL, unchunked
+            n_cells = counts.shape[1]
+            n_gp = len(gene_pairs_sig_ind)
+            n_m = len(gene_pair_dict)
+            same_gene_mask_full = torch.tensor([g1 == g2 for g1, g2 in gene_pairs_sig], device=device)
 
-        use_p_shortcut = center_counts_for_np_test and test == "both"
-        want_significance = compute_significance in ["non-parametric", "both"]
+            num_umi = counts.sum(dim=0) if center_counts_for_np_test else None  # GLOBAL, unchunked
 
-        # Adaptive chunk sizes: bound n_cells * chunk to ~50M elements (CU-B/C convention),
-        # independently for the gene-pair axis and the metabolite axis.
-        gp_chunk = max(1, 50_000_000 // max(n_cells, 1)) if gene_pair_chunk_size is None else max(1, int(gene_pair_chunk_size))
-        m_chunk = max(1, 50_000_000 // max(n_cells, 1)) if metabolite_chunk_size is None else max(1, int(metabolite_chunk_size))
+            use_p_shortcut = center_counts_for_np_test and test == "both"
+            want_significance = compute_significance in ["non-parametric", "both"]
 
-        # --------------------------- Pass 1: gene-pair chunks ------------------------------
-        # Outer loop over gene-pair chunks, inner loop over the M permutations, with
-        # `torch.manual_seed(seed)` re-issued at the START of each chunk -- the proven CU-B/C
-        # RNG-replay trick: only `torch.randperm` consumes RNG in the loop body, so re-seeding
-        # per chunk reproduces the exact idx_0..idx_{M-1} sequence stock draws once for all
-        # gene pairs. GPU only ever holds (n_cells, chunk)-shaped tensors; the full
-        # (n_cells, n_gp) `cs`/exceedance-counter arrays are assembled on CPU.
-        cs_gp_cpu = np.empty((n_cells, n_gp), dtype=np.float64)
-        if use_p_shortcut:
-            # STOCK quirk, reproduced verbatim: when centering AND both tests ran, the 'np'
-            # observed score is just a copy of the already-computed 'p' score (no recompute).
-            cs_gp_cpu[...] = np.asarray(adata.uns["interacting_cell_results"]["p"]["gp"]["cs"])
-        if want_significance:
-            # Assembled directly as p-values (float32, stock's stored dtype), NOT as raw
-            # exceedance counts -- see the "device parity, take 2" note below the Pass-2
-            # block for why the cast+divide+where must happen on `device`, per chunk, not
-            # on CPU after assembling the counts.
-            pvals_gp_cpu = np.empty((n_cells, n_gp), dtype=np.float32)
+            # Single element budget drives BOTH passes' automatic chunk sizing (CU-F).
+            # `max_pairs_per_chunk` bounds Pass 1's gene-pair chunk width AND Pass 2's
+            # gene-pair-UNION footprint per metabolite chunk (below) -- sizing Pass 2 by
+            # metabolite COUNT alone can reference nearly the full n_gp when pair<->
+            # metabolite is many-to-many, which is what caused a real Savio OOM in Pass 2
+            # even though Pass 1 was already correctly bounded (07_nbhd_percell_chunking_
+            # plan.md sec.5B; see the module docstring's CU-E section for the full note).
+            #
+            # Explicit overrides (`gene_pair_chunk_size`/`metabolite_chunk_size`) are
+            # clamped to `max_pairs_per_chunk` via `min(...)`, NOT taken verbatim (review
+            # hardening pass): a pinned override that itself OOMs would otherwise re-OOM
+            # identically on every retry, since only `element_budget` shrinks across
+            # attempts -- clamping means a halved budget actually shrinks the EFFECTIVE
+            # chunk width even on the override path, so OOM-halving still helps. This is a
+            # no-op for any override already <= the (typically huge, default-budget)
+            # max_pairs_per_chunk, i.e. it changes nothing for existing small explicit
+            # chunk sizes used in tests/production -- it only ever makes the effective
+            # chunk SMALLER, never larger, so it cannot introduce a new OOM.
+            max_pairs_per_chunk = max(1, cur_element_budget // max(n_cells, 1))
+            gp_chunk = max_pairs_per_chunk if gene_pair_chunk_size is None else min(max(1, int(gene_pair_chunk_size)), max_pairs_per_chunk)
+            # Metabolite-COUNT axis (review hardening pass, defense-in-depth): with
+            # `metabolite_chunk_size=None`, `_greedy_metabolite_chunks` alone only bounds
+            # the gene-pair UNION per chunk -- it places NO cap on how many metabolites can
+            # share a chunk. If many metabolites each reference only a FEW (possibly
+            # disjoint or heavily-overlapping) gene pairs, the union can stay small while
+            # the metabolite COUNT in that chunk grows unboundedly (worst case all n_m
+            # metabolites in one chunk), making `x_m_*_c`/`cs_m_c` `(n_cells, |metabs in
+            # chunk|)` unbounded -- and OOM-halving can't rescue this, since the union
+            # (what `max_pairs_per_chunk` bounds) was never the problem. Fix: an IMPLICIT
+            # metabolite-count cap of `max_pairs_per_chunk` applies whenever `metabolite_
+            # chunk_size` is `None`, bounding BOTH axes to the same element budget (so
+            # halving `element_budget` shrinks both). An explicit `metabolite_chunk_size`
+            # still overrides, clamped the same way as `gp_chunk` above.
+            metab_count_cap = max_pairs_per_chunk if metabolite_chunk_size is None else min(max(1, int(metabolite_chunk_size)), max_pairs_per_chunk)
 
-        if (not use_p_shortcut) or want_significance:
-            for i0 in range(0, n_gp, gp_chunk):
-                sl = slice(i0, min(i0 + gp_chunk, n_gp))
-                gp_ind_chunk = gene_pairs_sig_ind[sl]
-                same_gene_chunk = same_gene_mask_full[sl]
+            # --------------------------- Pass 1: gene-pair chunks --------------------------
+            # Outer loop over gene-pair chunks, inner loop over the M permutations, with
+            # `torch.manual_seed(seed)` re-issued at the START of each chunk -- the proven
+            # CU-B/C RNG-replay trick: only `torch.randperm` consumes RNG in the loop body,
+            # so re-seeding per chunk reproduces the exact idx_0..idx_{M-1} sequence stock
+            # draws once for all gene pairs. GPU only ever holds (n_cells, chunk)-shaped
+            # tensors; the full (n_cells, n_gp) `cs`/pval arrays are assembled on CPU.
+            cs_gp_cpu = np.empty((n_cells, n_gp), dtype=np.float64)
+            if use_p_shortcut:
+                # STOCK quirk, reproduced verbatim: when centering AND both tests ran, the
+                # 'np' observed score is just a copy of the already-computed 'p' score.
+                cs_gp_cpu[...] = np.asarray(adata.uns["interacting_cell_results"]["p"]["gp"]["cs"])
+            if want_significance:
+                # Assembled directly as p-values (float32, stock's stored dtype), NOT raw
+                # exceedance counts -- see the "DEVICE PARITY, TAKE 2" note below Pass 2 for
+                # why the cast+divide+where must happen on `device`, per chunk.
+                pvals_gp_cpu = np.empty((n_cells, n_gp), dtype=np.float32)
 
-                counts_1c, counts_2c = _prep_counts_1_2(counts, gp_ind_chunk, mean)
-                if center_counts_for_np_test:
-                    counts_1c = standardize_counts(adata, counts_1c, model, num_umi, sample_specific)
-                    counts_2c = standardize_counts(adata, counts_2c, model, num_umi, sample_specific)
+            if (not use_p_shortcut) or want_significance:
+                for i0 in range(0, n_gp, gp_chunk):
+                    sl = slice(i0, min(i0 + gp_chunk, n_gp))
+                    gp_ind_chunk = gene_pairs_sig_ind[sl]
+                    same_gene_chunk = same_gene_mask_full[sl]
 
-                if use_p_shortcut:
-                    cs_gp_c = torch.as_tensor(cs_gp_cpu[:, sl], dtype=torch.float64, device=device)
-                else:
-                    WX2t_c = torch.sparse.mm(weights, counts_2c.T)
-                    WtX2t_c = torch.sparse.mm(weights.transpose(0, 1), counts_2c.T)
-                    cs_gp_c = (counts_1c.T * WX2t_c) + (counts_1c.T * WtX2t_c)
-                    cs_gp_c[:, same_gene_chunk] = cs_gp_c[:, same_gene_chunk] / 2
-                    cs_gp_cpu[:, sl] = cs_gp_c.detach().cpu().numpy()
+                    counts_1c, counts_2c = _prep_counts_1_2(counts, gp_ind_chunk, mean)
+                    if center_counts_for_np_test:
+                        counts_1c = standardize_counts(adata, counts_1c, model, num_umi, sample_specific)
+                        counts_2c = standardize_counts(adata, counts_2c, model, num_umi, sample_specific)
 
-                if want_significance:
-                    x_gp_a_c = torch.zeros((n_cells, sl.stop - sl.start), dtype=torch.float64, device=device)
-                    x_gp_b_c = torch.zeros_like(x_gp_a_c)
+                    if use_p_shortcut:
+                        cs_gp_c = torch.as_tensor(cs_gp_cpu[:, sl], dtype=torch.float64, device=device)
+                    else:
+                        WX2t_c = torch.sparse.mm(weights, counts_2c.T)
+                        WtX2t_c = torch.sparse.mm(weights.transpose(0, 1), counts_2c.T)
+                        cs_gp_c = (counts_1c.T * WX2t_c) + (counts_1c.T * WtX2t_c)
+                        cs_gp_c[:, same_gene_chunk] = cs_gp_c[:, same_gene_chunk] / 2
+                        cs_gp_cpu[:, sl] = cs_gp_c.detach().cpu().numpy()
 
-                    torch.manual_seed(seed)  # reseed EVERY chunk -> replays idx_0..idx_{M-1} identically
-                    for _ in tqdm(range(M), desc="[lowmem] Permutation test (gene-pair chunk)", disable=not verbose):
-                        idx = torch.randperm(n_cells, device=device)
+                    if want_significance:
+                        x_gp_a_c = torch.zeros((n_cells, sl.stop - sl.start), dtype=torch.float64, device=device)
+                        x_gp_b_c = torch.zeros_like(x_gp_a_c)
 
-                        # permute the "receiver" (counts_2), keep "sender" (counts_1) -- arm a
-                        c1_perm_a = counts_1c.clone()
-                        c2_perm_a = counts_2c[:, idx]
-                        c1_perm_a[same_gene_chunk] = counts_1c[same_gene_chunk, :][:, idx]
-                        WX2t_a = torch.sparse.mm(weights, c2_perm_a.T)
-                        WtX2t_a = torch.sparse.mm(weights.transpose(0, 1), c2_perm_a.T)
-                        cs_a = (c1_perm_a.T * WX2t_a) + (c1_perm_a.T * WtX2t_a)
-                        cs_a[:, same_gene_chunk] = cs_a[:, same_gene_chunk] / 2
-                        x_gp_a_c += (cs_a > cs_gp_c).to(torch.float64)
+                        torch.manual_seed(seed)  # reseed EVERY chunk -> replays idx_0..idx_{M-1} identically
+                        for _ in tqdm(range(M), desc="[lowmem] Permutation test (gene-pair chunk)", disable=not verbose):
+                            idx = torch.randperm(n_cells, device=device)
 
-                        # permute the "sender" (counts_1), keep "receiver" (counts_2) -- arm b
-                        c2_perm_b = counts_2c.clone()
-                        c1_perm_b = counts_1c[:, idx]
-                        c2_perm_b[same_gene_chunk] = counts_2c[same_gene_chunk, :][:, idx]
-                        WX2t_b = torch.sparse.mm(weights, c2_perm_b.T)
-                        WtX2t_b = torch.sparse.mm(weights.transpose(0, 1), c2_perm_b.T)
-                        cs_b = (c1_perm_b.T * WX2t_b) + (c1_perm_b.T * WtX2t_b)
-                        cs_b[:, same_gene_chunk] = cs_b[:, same_gene_chunk] / 2
-                        x_gp_b_c += (cs_b > cs_gp_c).to(torch.float64)
+                            # permute the "receiver" (counts_2), keep "sender" (counts_1) -- arm a
+                            c1_perm_a = counts_1c.clone()
+                            c2_perm_a = counts_2c[:, idx]
+                            c1_perm_a[same_gene_chunk] = counts_1c[same_gene_chunk, :][:, idx]
+                            WX2t_a = torch.sparse.mm(weights, c2_perm_a.T)
+                            WtX2t_a = torch.sparse.mm(weights.transpose(0, 1), c2_perm_a.T)
+                            cs_a = (c1_perm_a.T * WX2t_a) + (c1_perm_a.T * WtX2t_a)
+                            cs_a[:, same_gene_chunk] = cs_a[:, same_gene_chunk] / 2
+                            x_gp_a_c += (cs_a > cs_gp_c).to(torch.float64)
 
-                    # p-value cast+divide+where computed HERE, ON `device`, at chunk width
-                    # -- see the device-parity note below Pass 2 for why (float32 division
-                    # is not device-independent; this must run on the same device as stock).
-                    pvals_gp_a_c = (x_gp_a_c + 1).to(torch.float32) / (M + 1)
-                    pvals_gp_b_c = (x_gp_b_c + 1).to(torch.float32) / (M + 1)
-                    pvals_gp_c = torch.where(pvals_gp_a_c > pvals_gp_b_c, pvals_gp_a_c, pvals_gp_b_c)
-                    pvals_gp_cpu[:, sl] = pvals_gp_c.detach().cpu().numpy()
+                            # permute the "sender" (counts_1), keep "receiver" (counts_2) -- arm b
+                            c2_perm_b = counts_2c.clone()
+                            c1_perm_b = counts_1c[:, idx]
+                            c2_perm_b[same_gene_chunk] = counts_2c[same_gene_chunk, :][:, idx]
+                            WX2t_b = torch.sparse.mm(weights, c2_perm_b.T)
+                            WtX2t_b = torch.sparse.mm(weights.transpose(0, 1), c2_perm_b.T)
+                            cs_b = (c1_perm_b.T * WX2t_b) + (c1_perm_b.T * WtX2t_b)
+                            cs_b[:, same_gene_chunk] = cs_b[:, same_gene_chunk] / 2
+                            x_gp_b_c += (cs_b > cs_gp_c).to(torch.float64)
 
-        adata.uns["interacting_cell_results"]["np"]["gp"]["cs"] = cs_gp_cpu
+                        # p-value cast+divide+where computed HERE, ON `device`, at chunk
+                        # width -- see the DEVICE PARITY note below Pass 2 for why (float32
+                        # division is not device-independent; must match stock's device).
+                        pvals_gp_a_c = (x_gp_a_c + 1).to(torch.float32) / (M + 1)
+                        pvals_gp_b_c = (x_gp_b_c + 1).to(torch.float32) / (M + 1)
+                        pvals_gp_c = torch.where(pvals_gp_a_c > pvals_gp_b_c, pvals_gp_a_c, pvals_gp_b_c)
+                        pvals_gp_cpu[:, sl] = pvals_gp_c.detach().cpu().numpy()
 
-        # --------------------------- Pass 2: metabolite chunks -----------------------------
-        # Outer loop over metabolite chunks, re-seeded per chunk exactly like Pass 1, inner
-        # loop over the M permutations. For each metabolite chunk, gather the UNION of gene
-        # pairs across that chunk's metabolites (many-to-many: a gene pair may serve several
-        # metabolites), recompute only that union's per-permutation gene-pair scores, and sum
-        # them into per-metabolite scores via a remapped sub-dict. This recomputes gene-pair
-        # scores a second time (~2x total sparse.mm cost) but bounds the GPU to
-        # (n_cells, metabolite_chunk) + (n_cells, |union|) -- sanctioned by the plan (sec.5)
-        # as the only way to finish a metabolite without ever holding the full (n_cells, n_gp)
-        # tensor on GPU (a metabolite's gene pairs can span multiple gene-pair chunks).
+            adata.uns["interacting_cell_results"]["np"]["gp"]["cs"] = cs_gp_cpu
+
+            # CU-F: free Pass 1's lingering LAST-CHUNK GPU tensors + empty the allocator
+            # cache before Pass 2 starts. Python has no block scoping, so these per-chunk
+            # locals stay bound to this closure's frame (keeping their GPU memory alive)
+            # until reassigned or the closure returns -- after the loop above, the LAST
+            # chunk's tensors are still resident. On Savio this alone measured ~9 GiB still
+            # allocated when Pass 2 began, before Pass 2 had allocated anything of its own.
+            # Reassigning to `None` (rather than `del`, which would raise if a name was
+            # never bound in this particular call -- e.g. n_gp==0, or want_significance=
+            # False so the permutation-only names were never created) is branch-safe: a
+            # plain assignment is always legal Python regardless of prior binding state.
+            counts_1c = counts_2c = WX2t_c = WtX2t_c = cs_gp_c = None
+            x_gp_a_c = x_gp_b_c = None
+            c1_perm_a = c2_perm_a = WX2t_a = WtX2t_a = cs_a = None
+            c2_perm_b = c1_perm_b = WX2t_b = WtX2t_b = cs_b = None
+            pvals_gp_a_c = pvals_gp_b_c = pvals_gp_c = None
+            idx = same_gene_chunk = gp_ind_chunk = None
+            if torch.cuda.is_available():
+                torch.cuda.empty_cache()
+
+            # --------------------------- Pass 2: metabolite chunks -------------------------
+            # Outer loop over metabolite CHUNKS SIZED BY GENE-PAIR-UNION FOOTPRINT (CU-F,
+            # via `_greedy_metabolite_chunks` -- NOT a fixed metabolite count: because
+            # pair<->metabolite is many-to-many, a fixed-count chunk of ~60 metabolites can
+            # reference nearly the FULL n_gp, silently rebuilding the very (n_cells, n_gp)
+            # -scale tensors Pass 1 chunks to avoid -- this is the real Savio OOM this
+            # retrofit fixes). `metabolite_chunk_size`, if given, is an ADDITIONAL hard cap
+            # on metabolites-per-chunk on top of the union budget (see
+            # `_greedy_metabolite_chunks`'s docstring). Re-seeded per chunk exactly like
+            # Pass 1, inner loop over the M permutations. For each chunk, gather the UNION
+            # of gene pairs across that chunk's metabolites (a shared pair used by 2+
+            # metabolites in the same chunk is only computed once), recompute only that
+            # union's per-permutation gene-pair scores, and sum them into per-metabolite
+            # scores via a remapped sub-dict. This recomputes gene-pair scores a second
+            # time (~2x total sparse.mm cost) but bounds the GPU to
+            # (n_cells, <=max_pairs_per_chunk) -- sanctioned by the plan (sec.5) as the only
+            # way to finish a metabolite without ever holding the full (n_cells, n_gp)
+            # tensor on GPU (a metabolite's gene pairs can span multiple gene-pair chunks).
+            #
+            # IMPORTANT (device parity, fixed after review): the OBSERVED cs_m is computed
+            # HERE, per metabolite chunk, ON THE SAME DEVICE as the permutation scores it is
+            # compared against (mirrors Pass 1's structure exactly: build the union's
+            # observed gene-pair `cs` on `device` -- no permutation -- then reduce with
+            # `compute_metabolite_cs` on `device`). A prior version of this fix computed the
+            # FULL cs_m once via a CPU-side `compute_metabolite_cs` call and used that CPU
+            # value as the exceedance threshold for the GPU-computed permutation scores
+            # below -- for GPU runs, `.sum(dim=1)` over >= 3 gene pairs can round
+            # differently between a CPU and a CUDA reduction kernel (measure-zero ULP
+            # drift), which both corrupts the stored `cs` (no longer bit-exact vs stock)
+            # and can flip an `x_m` exceedance count when a permutation score sits within 1
+            # ULP of the threshold. Computing cs_m_c on `device` for both roles removes that
+            # CPU/GPU reduction seam entirely -- see the module docstring's CU-E section.
+            cs_m_cpu = np.empty((n_cells, n_m), dtype=np.float64)
+            if use_p_shortcut:
+                # STOCK quirk, reproduced verbatim (mirrors the `gp`-grain shortcut above):
+                # when centering AND both tests ran, the 'np' observed metabolite score is
+                # just a copy of the already-computed 'p' score (no recompute) -- NOT a
+                # re-derivation from the (possibly re-standardized) 'np' counts.
+                cs_m_cpu[...] = np.asarray(adata.uns["interacting_cell_results"]["p"]["m"]["cs"])
+            if want_significance:
+                pvals_m_cpu = np.empty((n_cells, n_m), dtype=np.float32)  # see DEVICE PARITY note below
+
+            if (not use_p_shortcut) or want_significance:
+                for sl_m in _greedy_metabolite_chunks(metabolites, gene_pair_dict, max_pairs_per_chunk, metab_count_cap):
+                    metabs_chunk = metabolites[sl_m]
+
+                    union_indices = sorted(set().union(*(set(gene_pair_dict[m]) for m in metabs_chunk)))
+                    local_pos = {gp_idx: i for i, gp_idx in enumerate(union_indices)}
+                    sub_dict = {m: [local_pos[gp_idx] for gp_idx in gene_pair_dict[m]] for m in metabs_chunk}
+                    gp_ind_union = [gene_pairs_sig_ind[i] for i in union_indices]
+                    union_idx_t = torch.tensor(union_indices, device=device, dtype=torch.long)
+                    same_gene_union = same_gene_mask_full[union_idx_t]
+
+                    counts_1u, counts_2u = _prep_counts_1_2(counts, gp_ind_union, mean)
+                    if center_counts_for_np_test:
+                        counts_1u = standardize_counts(adata, counts_1u, model, num_umi, sample_specific)
+                        counts_2u = standardize_counts(adata, counts_2u, model, num_umi, sample_specific)
+
+                    if use_p_shortcut:
+                        cs_m_c = torch.as_tensor(cs_m_cpu[:, sl_m], dtype=torch.float64, device=device)
+                    else:
+                        # Observed union gene-pair scores, ON DEVICE, no permutation --
+                        # identical formula to Pass 1's observed `cs_gp_c` (and to stock's
+                        # `cs_gp`), restricted to this chunk's union of gene pairs.
+                        # Bit-identical per-column to stock's full-width `cs_gp`
+                        # (sparse.mm columns are independent of one another -- same
+                        # argument as Pass 1 / CU-B, and it holds for ANY subset, not just
+                        # a contiguous one -- see the module docstring CU-E section).
+                        WX2t_u = torch.sparse.mm(weights, counts_2u.T)
+                        WtX2t_u = torch.sparse.mm(weights.transpose(0, 1), counts_2u.T)
+                        cs_union = (counts_1u.T * WX2t_u) + (counts_1u.T * WtX2t_u)
+                        cs_union[:, same_gene_union] = cs_union[:, same_gene_union] / 2
+                        cs_m_c = compute_metabolite_cs(cs_union, sub_dict, interacting_cell_scores=True)
+                        cs_m_cpu[:, sl_m] = cs_m_c.detach().cpu().numpy()
+
+                    if want_significance:
+                        x_m_a_c = torch.zeros((n_cells, sl_m.stop - sl_m.start), dtype=torch.float64, device=device)
+                        x_m_b_c = torch.zeros_like(x_m_a_c)
+
+                        torch.manual_seed(seed)  # reseed EVERY chunk -> replays idx_0..idx_{M-1} identically
+                        for _ in tqdm(range(M), desc="[lowmem] Permutation test (metabolite chunk)", disable=not verbose):
+                            idx = torch.randperm(n_cells, device=device)
+
+                            # arm a: permute the "receiver" (counts_2), keep "sender"
+                            # (counts_1) -- structurally identical to Pass 1's arm a,
+                            # restricted to this chunk's union.
+                            c1_perm_a = counts_1u.clone()
+                            c2_perm_a = counts_2u[:, idx]
+                            c1_perm_a[same_gene_union] = counts_1u[same_gene_union, :][:, idx]
+                            WX2t_a = torch.sparse.mm(weights, c2_perm_a.T)
+                            WtX2t_a = torch.sparse.mm(weights.transpose(0, 1), c2_perm_a.T)
+                            cs_a_union = (c1_perm_a.T * WX2t_a) + (c1_perm_a.T * WtX2t_a)
+                            cs_a_union[:, same_gene_union] = cs_a_union[:, same_gene_union] / 2
+                            cs_m_a_chunk = compute_metabolite_cs(cs_a_union, sub_dict, interacting_cell_scores=True)
+                            x_m_a_c += (cs_m_a_chunk > cs_m_c).to(torch.float64)
+
+                            # arm b: permute the "sender" (counts_1), keep "receiver" (counts_2)
+                            c2_perm_b = counts_2u.clone()
+                            c1_perm_b = counts_1u[:, idx]
+                            c2_perm_b[same_gene_union] = counts_2u[same_gene_union, :][:, idx]
+                            WX2t_b = torch.sparse.mm(weights, c2_perm_b.T)
+                            WtX2t_b = torch.sparse.mm(weights.transpose(0, 1), c2_perm_b.T)
+                            cs_b_union = (c1_perm_b.T * WX2t_b) + (c1_perm_b.T * WtX2t_b)
+                            cs_b_union[:, same_gene_union] = cs_b_union[:, same_gene_union] / 2
+                            cs_m_b_chunk = compute_metabolite_cs(cs_b_union, sub_dict, interacting_cell_scores=True)
+                            x_m_b_c += (cs_m_b_chunk > cs_m_c).to(torch.float64)
+
+                        # p-value cast+divide+where computed HERE, ON `device`, at chunk
+                        # width -- see the DEVICE PARITY note immediately below for why.
+                        pvals_m_a_c = (x_m_a_c + 1).to(torch.float32) / (M + 1)
+                        pvals_m_b_c = (x_m_b_c + 1).to(torch.float32) / (M + 1)
+                        pvals_m_c = torch.where(pvals_m_a_c > pvals_m_b_c, pvals_m_a_c, pvals_m_b_c)
+                        pvals_m_cpu[:, sl_m] = pvals_m_c.detach().cpu().numpy()
+
+            adata.uns["interacting_cell_results"]["np"]["m"]["cs"] = cs_m_cpu
+
+            # ---------------------------------------------------------------------------
+            # DEVICE PARITY, TAKE 2 (Savio GPU validation finding, corrects an earlier
+            # wrong comment in this file): the float32 p-value CAST+DIVIDE (`(x + 1).float
+            # () / (M + 1)`) must run on the SAME DEVICE as stock, and is now done
+            # per-chunk INSIDE Pass 1/Pass 2 above (`pvals_gp_c`/`pvals_m_c`), not here. An
+            # earlier version of this function moved the raw integer exceedance counts
+            # `x_gp_a/b`, `x_m_a/b` to CPU first and did the cast+divide+`torch.where`
+            # there, reasoning (WRONGLY) that an elementwise op is "device-independent". It
+            # is not, for float32 division specifically: Savio GPU validation showed `cs`
+            # exactly bit-identical (0.0 diff, both grains -- the reductions ARE
+            # device-independent, as documented above) but `pval`/`FDR` off by exactly
+            # 5.96e-08 = 2^-24 = 0.5 float32-ULP at magnitude ~1.0, in BOTH grains. The
+            # integer exceedance counts `x` themselves were confirmed identical (a 1-count
+            # flip would be ~1/(M+1), e.g. ~0.005 for M=200 -- three+ orders of magnitude
+            # larger than the observed 6e-8), which isolates the cause to the float32
+            # DIVISION `(x+1)/(M+1)` itself: CUDA and x86 float32 division do not always
+            # round identically for values in [0.5, 1.0) (they can disagree by up to 1
+            # ULP), even though both correctly implement IEEE 754 and even though `+`,
+            # `.to(float32)`, and `torch.where` are genuinely elementwise/device-invariant
+            # here. Elementwise != device-independent for float32 divide specifically --
+            # the earlier comment's blanket claim was the bug. The fix: do the divide on
+            # `device` (matching stock, which computes pvals on GPU then only
+            # `.cpu().numpy()`s the RESULT), at chunk width (bit-identical to stock's
+            # full-width GPU division since division has no reduction/accumulation order
+            # to vary with width -- only WHICH device performs the rounding matters). BH is
+            # still done ONCE over the full flattened CPU arrays below -- stock itself does
+            # BH on CPU (numpy `multipletests`), so that part was never the issue.
+            # ---------------------------------------------------------------------------
+            if want_significance:
+                # BH ONCE over each FULL flattened p-value matrix -- never per-chunk.
+                # Matches stock's own order: pvals computed on GPU -> `.cpu().numpy()` ->
+                # `multipletests` on CPU (see the vendored/cloned
+                # `compute_interacting_cell_scores`).
+                np_gp = adata.uns["interacting_cell_results"]["np"]["gp"]
+                np_m = adata.uns["interacting_cell_results"]["np"]["m"]
+                np_gp["pval"] = pvals_gp_cpu
+                np_gp["FDR"] = multipletests(pvals_gp_cpu.flatten(), method="fdr_bh")[1].reshape(pvals_gp_cpu.shape)
+                np_m["pval"] = pvals_m_cpu
+                np_m["FDR"] = multipletests(pvals_m_cpu.flatten(), method="fdr_bh")[1].reshape(pvals_m_cpu.shape)
+
+                _write_sig_masks(np_gp, np_m, pvals_gp_cpu, pvals_m_cpu, np_gp["FDR"], np_m["FDR"])
+
+            if verbose:
+                print("[lowmem] Non-parametric test finished.")
+
+        # --------------------- CU-F: automatic OOM-halving retry ---------------------------
+        # Foster's batch driver (`run_harr_all.py`) runs many datasets unattended, so the
+        # automatic default must degrade gracefully rather than need per-dataset hand-
+        # tuning. A caught CUDA OOM halves `element_budget`, frees the allocator cache, and
+        # retries the WHOLE non-parametric branch (cheap: this only triggers on OOM, which
+        # should be rare now that Pass 2 is union-bounded) up to `max_oom_retries` total
+        # attempts, then re-raises. Non-OOM exceptions are never caught. On CPU (no CUDA),
+        # `torch.cuda.OutOfMemoryError`/"out of memory" RuntimeErrors don't occur from this
+        # code path, so the loop always succeeds on the first attempt.
         #
-        # IMPORTANT (device parity, fixed after review): the OBSERVED cs_m is computed HERE,
-        # per metabolite chunk, ON THE SAME DEVICE as the permutation scores it is compared
-        # against (mirrors Pass 1's structure exactly: build the union's observed gene-pair
-        # `cs` on `device` -- no permutation -- then reduce with `compute_metabolite_cs` on
-        # `device`). A prior version of this fix computed the FULL cs_m once via a CPU-side
-        # `compute_metabolite_cs` call and used that CPU value as the exceedance threshold
-        # for the GPU-computed permutation scores below -- for GPU runs, `.sum(dim=1)` over
-        # >= 3 gene pairs can round differently between a CPU and a CUDA reduction kernel
-        # (measure-zero ULP drift), which both corrupts the stored `cs` (no longer bit-exact
-        # vs stock) and can flip an `x_m` exceedance count when a permutation score sits
-        # within 1 ULP of the threshold. Computing cs_m_c on `device` for both roles removes
-        # that CPU/GPU reduction seam entirely -- see the module docstring's CU-E section.
-        cs_m_cpu = np.empty((n_cells, n_m), dtype=np.float64)
-        if use_p_shortcut:
-            # STOCK quirk, reproduced verbatim (mirrors the `gp`-grain shortcut above): when
-            # centering AND both tests ran, the 'np' observed metabolite score is just a copy
-            # of the already-computed 'p' score (no recompute) -- NOT a re-derivation from the
-            # (possibly re-standardized) 'np' counts.
-            cs_m_cpu[...] = np.asarray(adata.uns["interacting_cell_results"]["p"]["m"]["cs"])
-        if want_significance:
-            pvals_m_cpu = np.empty((n_cells, n_m), dtype=np.float32)  # see device-parity note below
-
-        if (not use_p_shortcut) or want_significance:
-            for m0 in range(0, n_m, m_chunk):
-                sl_m = slice(m0, min(m0 + m_chunk, n_m))
-                metabs_chunk = metabolites[sl_m]
-
-                union_indices = sorted(set().union(*(set(gene_pair_dict[m]) for m in metabs_chunk)))
-                local_pos = {gp_idx: i for i, gp_idx in enumerate(union_indices)}
-                sub_dict = {m: [local_pos[gp_idx] for gp_idx in gene_pair_dict[m]] for m in metabs_chunk}
-                gp_ind_union = [gene_pairs_sig_ind[i] for i in union_indices]
-                union_idx_t = torch.tensor(union_indices, device=device, dtype=torch.long)
-                same_gene_union = same_gene_mask_full[union_idx_t]
-
-                counts_1u, counts_2u = _prep_counts_1_2(counts, gp_ind_union, mean)
-                if center_counts_for_np_test:
-                    counts_1u = standardize_counts(adata, counts_1u, model, num_umi, sample_specific)
-                    counts_2u = standardize_counts(adata, counts_2u, model, num_umi, sample_specific)
-
-                if use_p_shortcut:
-                    cs_m_c = torch.as_tensor(cs_m_cpu[:, sl_m], dtype=torch.float64, device=device)
-                else:
-                    # Observed union gene-pair scores, ON DEVICE, no permutation -- identical
-                    # formula to Pass 1's observed `cs_gp_c` (and to stock's `cs_gp`), restricted
-                    # to this chunk's union of gene pairs. Bit-identical per-column to stock's
-                    # full-width `cs_gp` (sparse.mm columns are independent of one another --
-                    # same argument as Pass 1 / CU-B).
-                    WX2t_u = torch.sparse.mm(weights, counts_2u.T)
-                    WtX2t_u = torch.sparse.mm(weights.transpose(0, 1), counts_2u.T)
-                    cs_union = (counts_1u.T * WX2t_u) + (counts_1u.T * WtX2t_u)
-                    cs_union[:, same_gene_union] = cs_union[:, same_gene_union] / 2
-                    cs_m_c = compute_metabolite_cs(cs_union, sub_dict, interacting_cell_scores=True)
-                    cs_m_cpu[:, sl_m] = cs_m_c.detach().cpu().numpy()
-
-                if want_significance:
-                    x_m_a_c = torch.zeros((n_cells, sl_m.stop - sl_m.start), dtype=torch.float64, device=device)
-                    x_m_b_c = torch.zeros_like(x_m_a_c)
-
-                    torch.manual_seed(seed)  # reseed EVERY chunk -> replays idx_0..idx_{M-1} identically
-                    for _ in tqdm(range(M), desc="[lowmem] Permutation test (metabolite chunk)", disable=not verbose):
-                        idx = torch.randperm(n_cells, device=device)
-
-                        # arm a: permute the "receiver" (counts_2), keep "sender" (counts_1) --
-                        # structurally identical to Pass 1's arm a, restricted to this chunk's union.
-                        c1_perm_a = counts_1u.clone()
-                        c2_perm_a = counts_2u[:, idx]
-                        c1_perm_a[same_gene_union] = counts_1u[same_gene_union, :][:, idx]
-                        WX2t_a = torch.sparse.mm(weights, c2_perm_a.T)
-                        WtX2t_a = torch.sparse.mm(weights.transpose(0, 1), c2_perm_a.T)
-                        cs_a_union = (c1_perm_a.T * WX2t_a) + (c1_perm_a.T * WtX2t_a)
-                        cs_a_union[:, same_gene_union] = cs_a_union[:, same_gene_union] / 2
-                        cs_m_a_chunk = compute_metabolite_cs(cs_a_union, sub_dict, interacting_cell_scores=True)
-                        x_m_a_c += (cs_m_a_chunk > cs_m_c).to(torch.float64)
-
-                        # arm b: permute the "sender" (counts_1), keep "receiver" (counts_2)
-                        c2_perm_b = counts_2u.clone()
-                        c1_perm_b = counts_1u[:, idx]
-                        c2_perm_b[same_gene_union] = counts_2u[same_gene_union, :][:, idx]
-                        WX2t_b = torch.sparse.mm(weights, c2_perm_b.T)
-                        WtX2t_b = torch.sparse.mm(weights.transpose(0, 1), c2_perm_b.T)
-                        cs_b_union = (c1_perm_b.T * WX2t_b) + (c1_perm_b.T * WtX2t_b)
-                        cs_b_union[:, same_gene_union] = cs_b_union[:, same_gene_union] / 2
-                        cs_m_b_chunk = compute_metabolite_cs(cs_b_union, sub_dict, interacting_cell_scores=True)
-                        x_m_b_c += (cs_m_b_chunk > cs_m_c).to(torch.float64)
-
-                    # p-value cast+divide+where computed HERE, ON `device`, at chunk width
-                    # -- see the device-parity note immediately below for why.
-                    pvals_m_a_c = (x_m_a_c + 1).to(torch.float32) / (M + 1)
-                    pvals_m_b_c = (x_m_b_c + 1).to(torch.float32) / (M + 1)
-                    pvals_m_c = torch.where(pvals_m_a_c > pvals_m_b_c, pvals_m_a_c, pvals_m_b_c)
-                    pvals_m_cpu[:, sl_m] = pvals_m_c.detach().cpu().numpy()
-
-        adata.uns["interacting_cell_results"]["np"]["m"]["cs"] = cs_m_cpu
-
-        # ---------------------------------------------------------------------------------
-        # DEVICE PARITY, TAKE 2 (Savio GPU validation finding, corrects an earlier wrong
-        # comment in this file): the float32 p-value CAST+DIVIDE (`(x + 1).float() / (M +
-        # 1)`) must run on the SAME DEVICE as stock, and is now done per-chunk INSIDE Pass
-        # 1/Pass 2 above (`pvals_gp_c`/`pvals_m_c`), not here. An earlier version of this
-        # function moved the raw integer exceedance counts `x_gp_a/b`, `x_m_a/b` to CPU
-        # first and did the cast+divide+`torch.where` there, reasoning (WRONGLY) that an
-        # elementwise op is "device-independent". It is not, for float32 division
-        # specifically: Savio GPU validation showed `cs` exactly bit-identical (0.0 diff,
-        # both grains -- the reductions ARE device-independent, as documented above) but
-        # `pval`/`FDR` off by exactly 5.96e-08 = 2^-24 = 0.5 float32-ULP at magnitude ~1.0,
-        # in BOTH grains. The integer exceedance counts `x` themselves were confirmed
-        # identical (a 1-count flip would be ~1/(M+1), e.g. ~0.005 for M=200 -- three+
-        # orders of magnitude larger than the observed 6e-8), which isolates the cause to
-        # the float32 DIVISION `(x+1)/(M+1)` itself: CUDA and x86 float32 division do not
-        # always round identically for values in [0.5, 1.0) (they can disagree by up to 1
-        # ULP), even though both correctly implement IEEE 754 and even though `+`, `.to
-        # (float32)`, and `torch.where` are genuinely elementwise/device-invariant here.
-        # Elementwise != device-independent for float32 divide specifically -- the earlier
-        # comment's blanket claim was the bug. The fix: do the divide on `device` (matching
-        # stock, which computes pvals on GPU then only `.cpu().numpy()`s the RESULT), at
-        # chunk width (bit-identical to stock's full-width GPU division since division has
-        # no reduction/accumulation order to vary with width -- only WHICH device performs
-        # the rounding matters). BH is still done ONCE over the full flattened CPU arrays
-        # below -- stock itself does BH on CPU (numpy `multipletests`), so that part was
-        # never the issue.
-        # ---------------------------------------------------------------------------------
-        if want_significance:
-            # BH ONCE over each FULL flattened p-value matrix -- never per-chunk. Matches
-            # stock's own order: pvals computed on GPU -> `.cpu().numpy()` -> `multipletests`
-            # on CPU (see the vendored/cloned `compute_interacting_cell_scores`).
-            np_gp = adata.uns["interacting_cell_results"]["np"]["gp"]
-            np_m = adata.uns["interacting_cell_results"]["np"]["m"]
-            np_gp["pval"] = pvals_gp_cpu
-            np_gp["FDR"] = multipletests(pvals_gp_cpu.flatten(), method="fdr_bh")[1].reshape(pvals_gp_cpu.shape)
-            np_m["pval"] = pvals_m_cpu
-            np_m["FDR"] = multipletests(pvals_m_cpu.flatten(), method="fdr_bh")[1].reshape(pvals_m_cpu.shape)
-
-            _write_sig_masks(np_gp, np_m, pvals_gp_cpu, pvals_m_cpu, np_gp["FDR"], np_m["FDR"])
-
-        if verbose:
-            print("[lowmem] Non-parametric test finished.")
+        # `effective_max_retries = max(1, max_oom_retries)` (review hardening pass): a
+        # caller passing `max_oom_retries=0` (or a negative value) must still get ONE
+        # attempt -- `range(0)` runs zero times, which would skip `_run_non_parametric_
+        # pass` entirely and leave `adata.uns['interacting_cell_results']['np']` never
+        # populated (a silent KeyError downstream in `summarize_nbhd_scores`, not a loud
+        # failure here). `max_oom_retries=0`/`1` both mean "exactly one attempt, no retry".
+        #
+        # `element_budget` is coalesced to the same default as the signature (review nit):
+        # a direct caller passing `element_budget=None` would otherwise hit `TypeError` at
+        # `cur_element_budget // n_cells` inside `_run_non_parametric_pass` -- the two
+        # wired callers (`nbhd_scores.py`, `HarremanRunner`) already guard this themselves,
+        # but the drop-in should be robust regardless of caller.
+        effective_max_retries = max(1, max_oom_retries)
+        cur_element_budget = element_budget if element_budget is not None else 50_000_000
+        for _attempt in range(effective_max_retries):
+            try:
+                _run_non_parametric_pass(cur_element_budget)
+                break
+            except Exception as exc:
+                if not _is_oom(exc):
+                    raise
+                if _attempt == effective_max_retries - 1:
+                    raise
+                if torch.cuda.is_available():
+                    torch.cuda.empty_cache()
+                new_budget = max(1, cur_element_budget // 2)
+                print(
+                    f"[lowmem] CUDA OOM at element_budget={cur_element_budget} -> "
+                    f"retrying at element_budget={new_budget} "
+                    f"(attempt {_attempt + 2}/{effective_max_retries})"
+                )
+                cur_element_budget = new_budget
 
     if verbose:
         print("[lowmem] Finished in %.3f seconds" % (time.time() - start))

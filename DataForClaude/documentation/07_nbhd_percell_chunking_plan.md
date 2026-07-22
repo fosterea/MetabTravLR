@@ -228,3 +228,55 @@ above, now **fixed in code**. Local suite still 60-green (the fix is a no-op on 
 Savio gate to confirm the per-cell `pval`/`FDR` are now EXACT**, then a ≥600k-cell run for the OOM
 proof (stock OOMs, chunked drop-in survives). Until that re-run lands, GPU exactness of the per-cell
 path is *expected but not yet demonstrated*.
+
+## 11. CU-F — Pass 2 OOM'd at Xenium scale; union-footprint sizing + auto OOM fallback (2026-07-21)
+After the CU-E division fix, a real `run_harr_all.py` run (Human_Breast, ~Xenium scale) OOM'd — but
+in **Pass 2 (metabolite chunks)**, not Pass 1. Root cause: Pass 2 sized its chunk by metabolite
+**count** (`50M // n_cells` metabolites), but its true GPU footprint is `(n_cells, |union of that
+chunk's gene pairs|)`, and pair↔metabolite is **many-to-many** (139/416 pairs serve >1 metabolite,
+§4a) — so a chunk of ~60 metabolites referenced nearly the **full `n_gp`**, silently rebuilding the
+`(n_cells, n_gp)`-scale tensors Pass 1 chunks to avoid. Pass 2 was effectively unbounded. (Foster runs
+all datasets through `run_harr_all.py` with **no per-dataset hand-tuning**, so the automatic default
+had to bound this itself.)
+
+**Fix (bit-identity untouched — only chunk boundaries move):**
+- **`_greedy_metabolite_chunks`** groups consecutive metabolites so their running gene-pair **union**
+  ≤ `max_pairs_per_chunk = max(1, element_budget // n_cells)` — the SAME per-chunk pair budget Pass 1
+  uses, so Pass 2 is now memory-symmetric with Pass 1 (if Pass 1 fits, Pass 2 fits). A lone metabolite
+  whose own union exceeds the budget still gets its own chunk (its pairs can't be split; worst case
+  ~91 pairs → `(n_cells, 91)`, fine). Bit-identical because each metabolite's `cs_m` sums only its own
+  pairs via `sub_dict`, independent of chunk composition.
+- **New `element_budget` param** (default `50_000_000`) replaces the two hardcoded literals and drives
+  both passes. `metabolite_chunk_size` re-semantic'd: now an optional *hard cap* on metabolites/chunk
+  **on top of** the union budget (`None` = fully automatic).
+- **Both Pass-2 axes bounded** (review hardening): besides the gene-pair *union* (the `(n_cells,|union|)`
+  tensors), the metabolite-*count* axis (`x_m_*`/`cs_m_*` = `(n_cells,|metabs in chunk|)`) is also
+  capped — when `metabolite_chunk_size=None` an implicit `hard_cap = max_pairs_per_chunk` is applied, so
+  a heavy-sharing dataset (many metabolites, tiny shared pair set — union stays small but metab count
+  grows) can't reach `(n_cells, n_m)`. Both caps derive from `max_pairs_per_chunk`, so the OOM-halving
+  retry shrinks both. Explicit `gene_pair_chunk_size`/`metabolite_chunk_size` overrides are now
+  **clamped** to `max_pairs_per_chunk` (recomputed per retry) so a pinned chunk still benefits from the
+  halving; `element_budget=None` coalesces to the default; `max_oom_retries<=0` still runs exactly once.
+- **Inter-pass cleanup:** null Pass-1 last-chunk GPU locals + `torch.cuda.empty_cache()` so Pass 2
+  doesn't start on a nearly-full card (the OOM showed 9 GiB still resident at Pass 2 entry).
+- **Automatic OOM fallback (the "no hand-tuning across datasets" piece):** the np body is a closure
+  `_run_non_parametric_pass(cur_element_budget)` that fully re-inits `uns['…']['np']`; a retry loop
+  catches a CUDA OOM, `empty_cache()`s, **halves `element_budget`**, and retries up to `max_oom_retries`
+  (4) before re-raising. Non-OOM exceptions propagate. So a too-big dataset auto-shrinks instead of
+  failing the batch.
+- **Knobs threaded onto `HarremanRunner`** (`gene_pair_chunk_size`/`metabolite_chunk_size`/`element_budget`,
+  all default `None` → automatic) → `compute_nbhd_scores` → drop-in — a manual escape hatch that
+  Foster shouldn't need. (This closed a pre-existing gap: `HarremanRunner` never forwarded chunk sizes
+  to the nbhd path at all.)
+
+**Testing:** target comm-test file **31 passed** (from 24), full comm+wiring+agg+ct **77 passed / 649
+subtests**; full repo suite **241 passed** (only the known-unrelated `test_spawn_worker` red). New:
+tiny-`element_budget` bit-identity sweeps vs **true stock** forcing multi-metabolite greedy chunks with
+spanning/shared pairs AND a `make_heavy_sharing_test_adata` (10 metabolites, 1 shared pair — proves the
+metabolite-count-axis bound); a deterministic `_greedy_metabolite_chunks` unit-test class; `sparse.mm`-
+width + metabolite-count memory guards (non-vacuous, positive controls); and OOM-fallback tests
+(Pass-1 AND Pass-2-surfacing OOM, multi-halving-then-success, `max_oom_retries∈{0,1}` still populates,
+pinned-`gene_pair_chunk_size` clamp, non-OOM propagates, exhaustion re-raises). Ad hoc sweep: **25,600
+checks vs stock, 0 mismatches** (Opus review added 480 more + 2000 greedy-fuzz cases, also clean).
+**Opus-reviewed: no blockers/majors.** **Savio re-run still pending** — the same gate confirms both the
+CU-E division fix (per-cell `pval`/`FDR` EXACT) and that CU-F no longer OOMs at ≥600k cells.

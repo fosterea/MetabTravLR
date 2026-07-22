@@ -14,15 +14,16 @@ GRAIN_COL = {'m': 'metabolite', 'gp': 'gene_pair'}
 
 
 def compute_nbhd_scores(adata, M=1000, seed=42, verbose=False,
-                         gene_pair_chunk_size=None, metabolite_chunk_size=None):
+                         gene_pair_chunk_size=None, metabolite_chunk_size=None,
+                         element_budget=None):
     """Store per-cell scores in adata.uns['interacting_cell_results']['np'].
 
-    ``gene_pair_chunk_size``/``metabolite_chunk_size`` are forwarded to
-    `compute_interacting_cell_scores_lowmem` (CU-E, Option B chunking); both default to
-    ``None`` (adaptive sizing), matching prior behavior byte-for-byte.
+    ``gene_pair_chunk_size``/``metabolite_chunk_size``/``element_budget`` are forwarded to
+    `compute_interacting_cell_scores_lowmem` (CU-E/CU-F chunking); all default to ``None``
+    (fully automatic union-budget sizing -- ``element_budget=None`` falls back to that
+    function's own default of 50,000,000).
     """
-    compute_interacting_cell_scores_lowmem(
-        adata,
+    kwargs = dict(
         test='non-parametric',
         restrict_significance='both',
         compute_significance='non-parametric',
@@ -32,6 +33,9 @@ def compute_nbhd_scores(adata, M=1000, seed=42, verbose=False,
         gene_pair_chunk_size=gene_pair_chunk_size,
         metabolite_chunk_size=metabolite_chunk_size,
     )
+    if element_budget is not None:
+        kwargs['element_budget'] = element_budget
+    compute_interacting_cell_scores_lowmem(adata, **kwargs)
 
 
 def summarize_nbhd_scores(adata, cell_type_col, grain='m', alpha=0.05):

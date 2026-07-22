@@ -41,13 +41,22 @@ from cell_communication_lowmem import (
 
 class HarremanRunner():
 
-    def __init__(self, data_path, compute_nbhd_scores=True, gene_pair_chunk_size=None):
+    def __init__(self, data_path, compute_nbhd_scores=True, gene_pair_chunk_size=None,
+                 metabolite_chunk_size=None, element_budget=None):
         self.easy_download_path = f'{data_path}/easy_download/harreman_outputs'
         self.data_path = data_path
         self.adata_path = f'{data_path}/adata.h5ad'
         self.compute_nbhd_scores = compute_nbhd_scores
-        # None -> the drop-ins auto-size the chunk (~50M-element budget per chunk).
+        # None -> the drop-ins auto-size the chunk (~50M-element budget per chunk). This
+        # is an escape hatch for a stubborn dataset -- the default (fully automatic,
+        # union-budget-sized Pass 2 + OOM-halving retry, see cell_communication_lowmem.py
+        # CU-F) should not need hand-tuning across `run_harr_all.py`'s batch of datasets.
         self.gene_pair_chunk_size = gene_pair_chunk_size
+        # Per-cell (nbhd_scores) path only -- forwarded to compute_nbhd_scores below, NOT
+        # to the two aggregate compute_{,ct_}cell_communication_lowmem calls (they have no
+        # metabolite-chunking concept; their metabolite scores are cheap (n_m,) vectors).
+        self.metabolite_chunk_size = metabolite_chunk_size
+        self.element_budget = element_budget
 
     def load_adata(self):
         self.adata = sc.read_h5ad(self.adata_path)
@@ -188,7 +197,14 @@ class HarremanRunner():
 
         if self.compute_nbhd_scores:
             print('computing neighborhood scores')
-            nbhd_scores.compute_nbhd_scores(adata, M=n_permutations, verbose=True)
+            nbhd_scores.compute_nbhd_scores(
+                adata,
+                M=n_permutations,
+                verbose=True,
+                gene_pair_chunk_size=self.gene_pair_chunk_size,
+                metabolite_chunk_size=self.metabolite_chunk_size,
+                element_budget=self.element_budget,
+            )
 
     def run_cell_aware(self, cell_type_col, n_permutations=1000, fdr_threshold=0.05):
 

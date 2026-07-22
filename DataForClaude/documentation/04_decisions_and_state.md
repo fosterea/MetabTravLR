@@ -304,8 +304,18 @@ float64 tensors at once.
   float64/float32 *dtype* mismatch (stale reference?) — checking **installed harreman v0.1.4** showed
   its per-cell pval also uses `.float()`, ruling that out. Lesson: "same device" covers float32
   **division**, not just reductions; verify a fingerprint against the *installed* package. See `07` §10.
-- **Status: fixed in code, Savio re-validation pending** (expect per-cell `pval`/`FDR` EXACT); then a
-  ≥600k-cell OOM-proof run. **Not yet committed.**
+- **CU-F — Pass 2 OOM at Xenium scale, fixed (2026-07-21).** A real `run_harr_all.py` run OOM'd in
+  **Pass 2** (metabolite chunks): Pass 2 was sized by metabolite *count* but its footprint is
+  `(n_cells, |gene-pair union|)`, and many-to-many pairs made a chunk's union ≈ full `n_gp` → the
+  `(n_cells, n_gp)` tensor we chunk to avoid. Fix (bit-identity untouched — only chunk boundaries
+  move): `_greedy_metabolite_chunks` bounds each chunk's gene-pair **union** to `element_budget //
+  n_cells` (symmetric with Pass 1); inter-pass GPU cleanup + `empty_cache`; and an **automatic OOM
+  fallback** (catch CUDA OOM → halve `element_budget` → retry ≤4×) so the batch self-tunes with NO
+  per-dataset knobs (Foster's ask). Threaded `gene_pair_chunk_size`/`metabolite_chunk_size`/
+  `element_budget` onto `HarremanRunner` (default None → automatic) as a manual escape hatch. Comm
+  suite 70 pass; 21,888-check stress sweep vs stock, 0 mismatches. See `07` §11.
+- **Status: CU-E + CU-F fixed in code, Savio re-validation pending** (expect per-cell `pval`/`FDR`
+  EXACT and no Pass-2 OOM at ≥600k cells). **Not yet committed.**
 
 ## Local assets for dev/testing
 - Demo data in `data/`: `Slidetags_human_tonsil.h5ad`, `Slidetags_human_melanoma.h5ad`,
