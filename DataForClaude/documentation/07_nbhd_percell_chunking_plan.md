@@ -193,11 +193,38 @@ stored value and the threshold — no CPU↔GPU reduction boundary anywhere on t
 **Lesson for the next CUDA-numerics unit:** bit-identity requires not just the same *math* but the
 same *device+reduction*; a CPU-only test suite cannot see a CPU-vs-GPU reduction-order divergence.
 
+**Second device-parity bug — caught by the real Savio GPU run, not the review (2026-07-21).** The
+first Savio validation showed per-cell `cs` **exactly** bit-identical (0.0, both grains) but
+`pval`/`FDR` off by **exactly `5.96e-08 = 2⁻²⁴`** (0.5 float32-ULP at magnitude ~1.0), both grains;
+the two aggregates were exact. Fingerprint analysis (not a guess): a 1-count exceedance flip would
+move a p-value by `1/(M+1)` (~5e-3 at M=200), *five orders larger* than observed — so the integer
+counts `x` were identical, isolating the cause to the float32 **division** `(x+1).float()/(M+1)`.
+The chunked code accumulated `x` to CPU and did the cast+divide **on CPU**, under an explicit (wrong)
+comment that "elementwise cast/divide is device-independent." It is not: **CUDA and x86 float32
+division can disagree by up to 1 ULP** for values in `[0.5,1.0)` (both IEEE-754-correct; PyTorch folds
+`/201` differently per backend). `+`, `.to(float32)`, and `torch.where` *are* device-invariant — only
+`/` is not. Fix: do the p-value divide **on `device`, per chunk** (elementwise → chunk-width GPU
+division is bit-identical to stock's full-width GPU division; only *which device rounds* matters),
+then move the finished p-value chunk to CPU; BH stays once on CPU (stock does BH on CPU too). Note the
+**mis-diagnosis worth remembering**: the `2⁻²⁴` fingerprint first read as a float64-vs-float32 *dtype*
+mismatch (was our vendored reference stale vs installed harreman?) — checking installed harreman
+(v0.1.4) showed its per-cell pval uses `.float()` too, *ruling that out* and pointing to the
+CPU-vs-GPU division. **Broadened lesson:** "same device" applies to float32 **division**, not just
+reductions — and confirm a numeric fingerprint against the *installed* package before assuming a
+reference is stale.
+
 **Testing (Tier-0, `spacetravlr_env`, no real harreman — fake fixture):** `tests/test_cell_
 communication_lowmem.py` now sweeps `gene_pair_chunk_size ∈ {1,2,n_gp,None}` × `metabolite_chunk_
 size ∈ {1,2,n_m,None}` vs **true stock**, incl. a metabolite spanning gene-pair chunks, a pair
 shared by ≥2 metabolites, a ≥3-pair metabolite, and a `center=True` (shortcut + standardize) sweep;
 plus a `sparse.mm`-width memory-shape guard with a positive control. Full comm suite: **60 passed /
 636 subtests**. Ad hoc dev sweep: 23,040 checks vs stock, 0 mismatches (all CPU). **GPU exactness
-unproven locally** — the `validate_lowmem_savio.py` gate (section [3/3], now forces small nbhd
-chunks via `--nbhd-gp-chunk-size`/`--nbhd-m-chunk-size`) must be run on Savio at ≥600k cells.
+can't be proven by the CPU suite** — the `validate_lowmem_savio.py` gate (section [3/3], now forces
+small nbhd chunks via `--nbhd-gp-chunk-size`/`--nbhd-m-chunk-size`) is the real proof.
+
+**Savio validation status (2026-07-21):** first GPU run (8k cells, M=200) — aggregates non-parametric
+EXACT; per-cell `cs` EXACT but `pval`/`FDR` off by 0.5 float32-ULP → the CPU-vs-GPU **division** bug
+above, now **fixed in code**. Local suite still 60-green (the fix is a no-op on CPU). **Re-run the
+Savio gate to confirm the per-cell `pval`/`FDR` are now EXACT**, then a ≥600k-cell run for the OOM
+proof (stock OOMs, chunked drop-in survives). Until that re-run lands, GPU exactness of the per-cell
+path is *expected but not yet demonstrated*.

@@ -137,6 +137,30 @@ single-pass, full-array code is commented out wholesale (`# OLD:`) and replaced 
     caveat, which does not apply here since nothing sums over the cell axis in this branch),
     PROVIDED (as fixed above) both sides of every `>` comparison are produced by the same
     device's reduction kernel -- there is no longer any CPU/GPU seam in either grain.
+  * **The float32 p-value CAST+DIVIDE also runs on `device`, per chunk (2nd bug found, on
+    real Savio GPU hardware -- corrects an earlier wrong comment in this file).** An
+    earlier version of this function moved the raw integer exceedance counts (`x_gp_a/b`,
+    `x_m_a/b`) to CPU and did `(x + 1).to(torch.float32) / (M + 1)` plus `torch.where`
+    there, with a comment claiming "this elementwise cast/divide is device-independent...
+    doing it on CPU vs GPU makes no numeric difference." **That claim was wrong.** Savio
+    validation showed `cs` exactly bit-identical (0.0 diff, both grains -- confirming the
+    *reductions* really are device-independent, as argued above) but `pval`/`FDR` off by
+    exactly `5.96e-08 = 2^-24` = 0.5 float32-ULP at magnitude ~1.0, in both grains. The
+    integer counts `x` themselves were confirmed identical (a 1-count flip would be
+    `~1/(M+1)`, orders of magnitude larger than 6e-8), isolating the cause to the float32
+    **division** itself: CUDA and x86 float32 division do not always round identically for
+    values in `[0.5, 1.0)` (can differ by up to 1 ULP), even though `+`, `.to(float32)`,
+    and `torch.where` genuinely are elementwise/device-invariant here. **Elementwise !=
+    device-independent for float32 divide specifically.** Fix: the cast+divide+`where` now
+    happens on `device`, inside each Pass-1/Pass-2 chunk's loop (right after that chunk's
+    `x_*_c` accumulators finish their M-loop), producing `pvals_gp_c`/`pvals_m_c` at chunk
+    width -- bit-identical to stock's full-width GPU division because division has no
+    accumulation/reduction order to vary with tensor width (unlike a `.sum()`), so only
+    WHICH device performs the rounding matters, and that is now pinned to `device` exactly
+    like stock. Only the CPU-assembled RESULT (`pvals_gp_cpu`/`pvals_m_cpu`, one float32
+    numpy array per grain) and the subsequent BH step differ from a same-device-throughout
+    computation -- matching stock's own order exactly (stock computes pvals on GPU, THEN
+    `.cpu().numpy()`s them, THEN runs `multipletests` on CPU/numpy).
   * **BH is run ONCE over each full flattened CPU p-value matrix** (`pval_gp`/`pval_m`),
     never per-chunk -- required for correct FDR (plan sec.6).
   * Single-chunk (`gene_pair_chunk_size >= n_gp` and `metabolite_chunk_size >= n_m`)
@@ -154,6 +178,18 @@ exercise a metabolite whose gene pairs land in different chunks and a gene pair 
 `center_counts_for_np_test=True, test='both'` (the shortcut-copy path for both grains,
 plus the chunked `standardize_counts` calls), which the adaptive-default-only fixtures
 never previously exercised.
+
+**Both device-parity bugs above (the `cs_m` reduction seam and the p-value division seam)
+were GPU-only and invisible to this CPU-only local/CI suite** -- with `device=torch.device
+("cpu")` (the default when no CUDA is available), "on `device`" and "on CPU" are the same
+thing, so a same-device-throughout bug and a moved-to-CPU-then-computed bug produce
+identical results locally; `assert_array_equal` against CPU stock cannot distinguish them.
+Both were only caught by running the actual GPU path on Savio and diffing against real
+stock there (`validate_lowmem_savio.py`). This is a structural limitation of the local
+suite, not a gap in these particular tests -- flag any future "should be device-
+independent" reasoning in this file for the same scrutiny, especially anything involving
+float32 (division in particular; float64 reductions have their own, different, ULP-order
+caveat documented in the CU-B section above).
 
 ------------------------------------------------------------------------------------
 CU-B: `compute_cell_communication_lowmem`
@@ -860,8 +896,11 @@ def compute_interacting_cell_scores_lowmem(
             # observed score is just a copy of the already-computed 'p' score (no recompute).
             cs_gp_cpu[...] = np.asarray(adata.uns["interacting_cell_results"]["p"]["gp"]["cs"])
         if want_significance:
-            x_gp_a_cpu = np.zeros((n_cells, n_gp), dtype=np.float64)
-            x_gp_b_cpu = np.zeros((n_cells, n_gp), dtype=np.float64)
+            # Assembled directly as p-values (float32, stock's stored dtype), NOT as raw
+            # exceedance counts -- see the "device parity, take 2" note below the Pass-2
+            # block for why the cast+divide+where must happen on `device`, per chunk, not
+            # on CPU after assembling the counts.
+            pvals_gp_cpu = np.empty((n_cells, n_gp), dtype=np.float32)
 
         if (not use_p_shortcut) or want_significance:
             for i0 in range(0, n_gp, gp_chunk):
@@ -911,8 +950,13 @@ def compute_interacting_cell_scores_lowmem(
                         cs_b[:, same_gene_chunk] = cs_b[:, same_gene_chunk] / 2
                         x_gp_b_c += (cs_b > cs_gp_c).to(torch.float64)
 
-                    x_gp_a_cpu[:, sl] = x_gp_a_c.detach().cpu().numpy()
-                    x_gp_b_cpu[:, sl] = x_gp_b_c.detach().cpu().numpy()
+                    # p-value cast+divide+where computed HERE, ON `device`, at chunk width
+                    # -- see the device-parity note below Pass 2 for why (float32 division
+                    # is not device-independent; this must run on the same device as stock).
+                    pvals_gp_a_c = (x_gp_a_c + 1).to(torch.float32) / (M + 1)
+                    pvals_gp_b_c = (x_gp_b_c + 1).to(torch.float32) / (M + 1)
+                    pvals_gp_c = torch.where(pvals_gp_a_c > pvals_gp_b_c, pvals_gp_a_c, pvals_gp_b_c)
+                    pvals_gp_cpu[:, sl] = pvals_gp_c.detach().cpu().numpy()
 
         adata.uns["interacting_cell_results"]["np"]["gp"]["cs"] = cs_gp_cpu
 
@@ -947,8 +991,7 @@ def compute_interacting_cell_scores_lowmem(
             # (possibly re-standardized) 'np' counts.
             cs_m_cpu[...] = np.asarray(adata.uns["interacting_cell_results"]["p"]["m"]["cs"])
         if want_significance:
-            x_m_a_cpu = np.zeros((n_cells, n_m), dtype=np.float64)
-            x_m_b_cpu = np.zeros((n_cells, n_m), dtype=np.float64)
+            pvals_m_cpu = np.empty((n_cells, n_m), dtype=np.float32)  # see device-parity note below
 
         if (not use_p_shortcut) or want_significance:
             for m0 in range(0, n_m, m_chunk):
@@ -1013,33 +1056,54 @@ def compute_interacting_cell_scores_lowmem(
                         cs_m_b_chunk = compute_metabolite_cs(cs_b_union, sub_dict, interacting_cell_scores=True)
                         x_m_b_c += (cs_m_b_chunk > cs_m_c).to(torch.float64)
 
-                    x_m_a_cpu[:, sl_m] = x_m_a_c.detach().cpu().numpy()
-                    x_m_b_cpu[:, sl_m] = x_m_b_c.detach().cpu().numpy()
+                    # p-value cast+divide+where computed HERE, ON `device`, at chunk width
+                    # -- see the device-parity note immediately below for why.
+                    pvals_m_a_c = (x_m_a_c + 1).to(torch.float32) / (M + 1)
+                    pvals_m_b_c = (x_m_b_c + 1).to(torch.float32) / (M + 1)
+                    pvals_m_c = torch.where(pvals_m_a_c > pvals_m_b_c, pvals_m_a_c, pvals_m_b_c)
+                    pvals_m_cpu[:, sl_m] = pvals_m_c.detach().cpu().numpy()
 
         adata.uns["interacting_cell_results"]["np"]["m"]["cs"] = cs_m_cpu
 
+        # ---------------------------------------------------------------------------------
+        # DEVICE PARITY, TAKE 2 (Savio GPU validation finding, corrects an earlier wrong
+        # comment in this file): the float32 p-value CAST+DIVIDE (`(x + 1).float() / (M +
+        # 1)`) must run on the SAME DEVICE as stock, and is now done per-chunk INSIDE Pass
+        # 1/Pass 2 above (`pvals_gp_c`/`pvals_m_c`), not here. An earlier version of this
+        # function moved the raw integer exceedance counts `x_gp_a/b`, `x_m_a/b` to CPU
+        # first and did the cast+divide+`torch.where` there, reasoning (WRONGLY) that an
+        # elementwise op is "device-independent". It is not, for float32 division
+        # specifically: Savio GPU validation showed `cs` exactly bit-identical (0.0 diff,
+        # both grains -- the reductions ARE device-independent, as documented above) but
+        # `pval`/`FDR` off by exactly 5.96e-08 = 2^-24 = 0.5 float32-ULP at magnitude ~1.0,
+        # in BOTH grains. The integer exceedance counts `x` themselves were confirmed
+        # identical (a 1-count flip would be ~1/(M+1), e.g. ~0.005 for M=200 -- three+
+        # orders of magnitude larger than the observed 6e-8), which isolates the cause to
+        # the float32 DIVISION `(x+1)/(M+1)` itself: CUDA and x86 float32 division do not
+        # always round identically for values in [0.5, 1.0) (they can disagree by up to 1
+        # ULP), even though both correctly implement IEEE 754 and even though `+`, `.to
+        # (float32)`, and `torch.where` are genuinely elementwise/device-invariant here.
+        # Elementwise != device-independent for float32 divide specifically -- the earlier
+        # comment's blanket claim was the bug. The fix: do the divide on `device` (matching
+        # stock, which computes pvals on GPU then only `.cpu().numpy()`s the RESULT), at
+        # chunk width (bit-identical to stock's full-width GPU division since division has
+        # no reduction/accumulation order to vary with width -- only WHICH device performs
+        # the rounding matters). BH is still done ONCE over the full flattened CPU arrays
+        # below -- stock itself does BH on CPU (numpy `multipletests`), so that part was
+        # never the issue.
+        # ---------------------------------------------------------------------------------
         if want_significance:
-            # Replicate stock's float32 cast (`(x + 1).float() / (M + 1)`) so pval/FDR match
-            # stock bit-for-bit; x_* hold integer counts <= M+1, exact in float64, cast once
-            # here. This elementwise cast/divide is device-independent (no reduction), so
-            # doing it on CPU (as here) vs GPU (as stock/CU-A did) makes no numeric difference.
-            pvals_gp_a = (torch.as_tensor(x_gp_a_cpu, dtype=torch.float64) + 1).to(torch.float32) / (M + 1)
-            pvals_gp_b = (torch.as_tensor(x_gp_b_cpu, dtype=torch.float64) + 1).to(torch.float32) / (M + 1)
-            pvals_m_a = (torch.as_tensor(x_m_a_cpu, dtype=torch.float64) + 1).to(torch.float32) / (M + 1)
-            pvals_m_b = (torch.as_tensor(x_m_b_cpu, dtype=torch.float64) + 1).to(torch.float32) / (M + 1)
-
-            pvals_gp = torch.where(pvals_gp_a > pvals_gp_b, pvals_gp_a, pvals_gp_b).numpy()
-            pvals_m = torch.where(pvals_m_a > pvals_m_b, pvals_m_a, pvals_m_b).numpy()
-
-            # BH ONCE over each FULL flattened p-value matrix -- never per-chunk.
+            # BH ONCE over each FULL flattened p-value matrix -- never per-chunk. Matches
+            # stock's own order: pvals computed on GPU -> `.cpu().numpy()` -> `multipletests`
+            # on CPU (see the vendored/cloned `compute_interacting_cell_scores`).
             np_gp = adata.uns["interacting_cell_results"]["np"]["gp"]
             np_m = adata.uns["interacting_cell_results"]["np"]["m"]
-            np_gp["pval"] = pvals_gp
-            np_gp["FDR"] = multipletests(pvals_gp.flatten(), method="fdr_bh")[1].reshape(pvals_gp.shape)
-            np_m["pval"] = pvals_m
-            np_m["FDR"] = multipletests(pvals_m.flatten(), method="fdr_bh")[1].reshape(pvals_m.shape)
+            np_gp["pval"] = pvals_gp_cpu
+            np_gp["FDR"] = multipletests(pvals_gp_cpu.flatten(), method="fdr_bh")[1].reshape(pvals_gp_cpu.shape)
+            np_m["pval"] = pvals_m_cpu
+            np_m["FDR"] = multipletests(pvals_m_cpu.flatten(), method="fdr_bh")[1].reshape(pvals_m_cpu.shape)
 
-            _write_sig_masks(np_gp, np_m, pvals_gp, pvals_m, np_gp["FDR"], np_m["FDR"])
+            _write_sig_masks(np_gp, np_m, pvals_gp_cpu, pvals_m_cpu, np_gp["FDR"], np_m["FDR"])
 
         if verbose:
             print("[lowmem] Non-parametric test finished.")

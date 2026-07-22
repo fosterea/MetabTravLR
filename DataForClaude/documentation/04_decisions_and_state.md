@@ -292,10 +292,20 @@ float64 tensors at once.
 - **Tests:** `tests/test_cell_communication_lowmem.py` sweeps `gp_chunk ∈ {1,2,n_gp,None}` ×
   `m_chunk ∈ {1,2,n_m,None}` vs **true stock**, incl. metabolite-spanning-chunks, shared-pair,
   ≥3-pair-metabolite, and centered paths. Full comm suite **60 pass / 636 subtests** (`spacetravlr_env`,
-  fake harreman). All local proof is **CPU-exact**; **GPU exactness still to be confirmed on Savio**
-  via `validate_lowmem_savio.py` (section [3/3] now forces small nbhd chunks with
-  `--nbhd-gp-chunk-size`/`--nbhd-m-chunk-size`) at ≥600k cells — the CUDA reduction-order ULP caveat
-  (`07` §6) can only be closed there. **Not yet committed.**
+  fake harreman). All local proof is **CPU-exact**; GPU exactness is proven only on Savio via
+  `validate_lowmem_savio.py` (section [3/3] now forces small nbhd chunks with
+  `--nbhd-gp-chunk-size`/`--nbhd-m-chunk-size`).
+- **Second device-parity bug — found by the real Savio run, fixed (2026-07-21).** First GPU run:
+  aggregates non-parametric EXACT, per-cell `cs` EXACT, but per-cell `pval`/`FDR` off by exactly
+  `2⁻²⁴` (0.5 float32-ULP). Fingerprint ⇒ integer exceedance counts identical; cause = the float32
+  **division** `(x+1).float()/(M+1)` was done on **CPU** while stock does it on **GPU** (CUDA vs x86
+  float32 divide disagree ≤1 ULP in `[0.5,1)`). Fixed: divide on `device` per chunk (elementwise ⇒
+  chunk-invariant ⇒ still GPU-bounded), BH stays once on CPU. I first mis-read the fingerprint as a
+  float64/float32 *dtype* mismatch (stale reference?) — checking **installed harreman v0.1.4** showed
+  its per-cell pval also uses `.float()`, ruling that out. Lesson: "same device" covers float32
+  **division**, not just reductions; verify a fingerprint against the *installed* package. See `07` §10.
+- **Status: fixed in code, Savio re-validation pending** (expect per-cell `pval`/`FDR` EXACT); then a
+  ≥600k-cell OOM-proof run. **Not yet committed.**
 
 ## Local assets for dev/testing
 - Demo data in `data/`: `Slidetags_human_tonsil.h5ad`, `Slidetags_human_melanoma.h5ad`,
