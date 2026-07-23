@@ -3,6 +3,60 @@
   "schemaVersion": 3,
   "datasets": [
     {
+      "id": "FFPE_Human_Ovarian_Cancer",
+      "name": "FFPE Human Ovarian Cancer",
+      "project": "Xenium Tcell Dataset",
+      "source": "harreman",
+      "entityKinds": [
+        "metabolite",
+        "gene_pair"
+      ],
+      "tierIds": [
+        "Tier1",
+        "Tier2",
+        "Tier3"
+      ],
+      "hasNbhd": true,
+      "hasBeta": false,
+      "available": true
+    },
+    {
+      "id": "Human_Breast",
+      "name": "Human Breast",
+      "project": "Xenium Tcell Dataset",
+      "source": "harreman",
+      "entityKinds": [
+        "metabolite",
+        "gene_pair"
+      ],
+      "tierIds": [
+        "Tier1",
+        "Tier2",
+        "Tier3"
+      ],
+      "hasNbhd": true,
+      "hasBeta": false,
+      "available": true
+    },
+    {
+      "id": "Human_Cervical_Cancer",
+      "name": "Human Cervical Cancer",
+      "project": "Xenium Tcell Dataset",
+      "source": "harreman",
+      "entityKinds": [
+        "metabolite",
+        "gene_pair"
+      ],
+      "tierIds": [
+        "Tier1",
+        "Tier2",
+        "Tier3"
+      ],
+      "hasNbhd": true,
+      "hasBeta": false,
+      "available": true
+    },
+    {
       "id": "Human_Lung",
       "name": "Human Lung",
       "project": "Xenium Tcell Dataset",
@@ -57,8 +111,8 @@
       "available": true
     },
     {
-      "id": "Human_Breast",
-      "name": "Human Breast",
+      "id": "FF_Human_Ovarian_Adenocarcinoma",
+      "name": "FF Human Ovarian Adenocarcinoma",
       "project": "Xenium Tcell Dataset",
       "source": "harreman",
       "entityKinds": [],
@@ -66,19 +120,7 @@
       "hasNbhd": false,
       "hasBeta": false,
       "available": false,
-      "unavailableReason": "no tier outputs — the harreman run for \"Human_Breast\" is incomplete"
-    },
-    {
-      "id": "Human_Cervical_Cancer",
-      "name": "Human Cervical Cancer",
-      "project": "Xenium Tcell Dataset",
-      "source": "harreman",
-      "entityKinds": [],
-      "tierIds": [],
-      "hasNbhd": false,
-      "hasBeta": false,
-      "available": false,
-      "unavailableReason": "no tier outputs — the harreman run for \"Human_Cervical_Cancer\" is incomplete"
+      "unavailableReason": "no tier outputs — the harreman run for \"FF_Human_Ovarian_Adenocarcinoma\" is incomplete"
     }
   ]
 }
