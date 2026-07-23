@@ -4,6 +4,25 @@
 restart. Dates are absolute (project "today" was 2026-07-16 at kickoff).
 
 ## Current state
+- **2026-07-23 — Fixed: the FDR slider did nothing on the gene-pair drill-down paths. Playwright-verified.**
+  - Foster hit it by picking a gene-pair **tab** in the metabolite view: the graph froze at the
+    0.05 edge set no matter where the slider went.
+  - Root cause (one assumption, four call sites): the gene-pair helpers in `data/genePairs.ts`
+    treated **"present in the gp bundle" as "significant"**, which is only true at harreman's own
+    0.05. So `gpEdgesInTier` / `metaboliteSigPairsAtTier` / `genePairsAtInterface` never looked at
+    FDR_np, and every consumer of them ignored the cutoff: the GraphView `gpTab` branch (which
+    early-returns *before* the metabolite filter), the matching EdgeDetails `gpTab` branch, the tab
+    strip's counts, and the on-graph fan-out + panel pair list.
+  - Fix: all three helpers now take a `threshold` (defaulted to `DEFAULT_FDR`) and filter with
+    `isSelected`; GraphView, EdgeDetails and GenePairTabs pass the live `fdrThreshold`. Tightening
+    can now empty a pair, so GenePairTabs also **releases a stale `gpTab` back to "All"** rather
+    than stranding you on a tab it no longer renders (guarded on the bundle being loaded, so it
+    can't fire during load when `pairs` is legitimately `[]`).
+  - Verified: with a tab active, edges now track the cutoff **0/9/10/13/14/14/14** across the stops
+    (was pinned at 14), matching an independent bundle computation exactly, and the tab counts
+    follow; fan-out gp sub-edges go 0/25/25/28/32/32/32. 0 console errors; tsc+lint+build clean.
+  - Lesson worth keeping: "significant-only table" is a property of *how it was generated*, not an
+    invariant the UI may lean on once significance became adjustable. See A19.
 - **2026-07-22 — Adjustable FDR significance cutoff (slider) on both graph views. Playwright-verified.**
   - A discrete slider in the control bar sets the FDR_np cutoff that calls an interface
     "significant". Stops `[0.001, 0.005, 0.01, 0.025, 0.05, 0.1, 0.2]` (log-ish; FDR_np is itself
@@ -151,11 +170,22 @@ restart. Dates are absolute (project "today" was 2026-07-16 at kickoff).
     counts. Dragging left tightens (fewer/no significant edges); dragging right loosens for
     metabolites but never exceeds the gene-pair bundle's significant-only set. Legend + EntityDetails
     counts track it. Absent in the Environment view.
+12c. FDR slider vs the gene-pair drill-downs (the 2026-07-23 regression — re-check all four):
+    with a **gene-pair tab** active the graph must re-filter as you drag (not freeze at the 0.05
+    set), the tab **counts** must change, the **on-graph fan-out** sub-edge count must change, and
+    the EdgeDetails **"Carried by N significant pairs"** list must shrink. Tighten until a pair has
+    no interfaces left: its tab disappears and the selection falls back to "All", never a dead tab.
 12. Beta correctness (worth re-running after any scale change — this is where the bugs are):
     in the console, diff the DOM against `beta/<Tier>.json` and assert, per cell, that the label
     matches source, a negative never renders `+`, hue matches sign, and `≈0` cells carry no tint.
 
 ## Changelog
+- 2026-07-23: **Fix — FDR slider was a no-op on every gene-pair drill-down path.** `gpEdgesInTier`,
+  `metaboliteSigPairsAtTier` and `genePairsAtInterface` (`data/genePairs.ts`) all equated "in the gp
+  bundle" with "significant" and now take a `threshold` (default `DEFAULT_FDR`), filtering with
+  `isSelected`. Callers updated: GraphView (`gpTab` branch + fan-out), EdgeDetails (`gpTab` resolve
+  + pair breakdown), GenePairTabs (tab list/counts). GenePairTabs additionally clears a `gpTab` that
+  the cutoff has emptied, falling back to "All". No ingest/schema/contract change.
 - 2026-07-22: **Adjustable FDR significance cutoff (slider).** Added `isSelected(scores, thr)` to
   `src/data/scales.ts` (harreman's `FDR_np < thr AND C_np > 0`, `DEFAULT_FDR = 0.05`) and a
   `fdrThreshold` store field + `setFdrThreshold`. A discrete `<input type=range>` over log-ish

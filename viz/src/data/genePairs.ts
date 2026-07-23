@@ -2,9 +2,14 @@
  *  details-panel breakdown. A metabolite's per-interface communication is the sum of its
  *  gene pairs' scores (harreman `compute_metabolite_cs`); this recovers which of those pairs
  *  are individually significant at a given cell-type interface, from the same-tier gene_pair
- *  bundle (which is significant-only, see docs/05_data_contract.md). No source/ingest change. */
+ *  bundle (which is significant-only, see docs/05_data_contract.md). No source/ingest change.
+ *
+ *  Every entry point takes the UI's FDR cutoff. The bundle being "significant-only" is only true
+ *  at harreman's own 0.05 — under a tightened cutoff some of its rows are NOT significant, so
+ *  "present in the bundle" must never stand in for "significant" (that assumption is exactly what
+ *  made the FDR slider a no-op in the gene-pair tab / fan-out paths). */
 import type { EdgeBundle, EntityEdge, MetaboliteEntity, Tier } from './types';
-import { sameInterface } from './scales';
+import { DEFAULT_FDR, isSelected, sameInterface } from './scales';
 
 export interface GpContribution {
   id: string; // "GENE1__GENE2"
@@ -19,16 +24,20 @@ export const reverseGpId = (id: string): string => {
   return i < 0 ? id : `${id.slice(i + 2)}__${id.slice(0, i)}`;
 };
 
-/** Edges of a gene pair (id order-tolerant) whose endpoints are both in the tier. */
+/** Edges of a gene pair (id order-tolerant) whose endpoints are both in the tier AND which are
+ *  significant at `threshold`. */
 export function gpEdgesInTier(
   gpBundle: EdgeBundle | undefined,
   id: string,
   cellTypes: string[],
+  threshold: number = DEFAULT_FDR,
 ): EntityEdge[] {
   if (!gpBundle) return [];
   const present = new Set(cellTypes);
   const rows = gpBundle.byEntity[id] ?? gpBundle.byEntity[reverseGpId(id)] ?? [];
-  return rows.filter((e) => present.has(e.source) && present.has(e.target));
+  return rows.filter(
+    (e) => present.has(e.source) && present.has(e.target) && isSelected(e.scores, threshold),
+  );
 }
 
 export interface MetaboliteGpAtTier {
@@ -47,6 +56,7 @@ export function metaboliteSigPairsAtTier(
   metab: MetaboliteEntity | undefined,
   gpBundle: EdgeBundle | undefined,
   tier: Tier | undefined,
+  threshold: number = DEFAULT_FDR,
 ): MetaboliteGpAtTier[] {
   if (!metab || !gpBundle || !tier) return [];
   const seen = new Set<string>();
@@ -56,7 +66,8 @@ export function metaboliteSigPairsAtTier(
     if (seen.has(canon)) continue;
     seen.add(canon);
     const id = `${a}__${b}`;
-    const edges = gpEdgesInTier(gpBundle, id, tier.cellTypes);
+    // Pairs left with no significant interface at this cutoff get no tab at all.
+    const edges = gpEdgesInTier(gpBundle, id, tier.cellTypes, threshold);
     if (!edges.length) continue;
     out.push({
       id,
@@ -79,6 +90,7 @@ export function genePairsAtInterface(
   metab: MetaboliteEntity,
   gpBundle: EdgeBundle | undefined,
   iface: { source: string; target: string },
+  threshold: number = DEFAULT_FDR,
 ): GpContribution[] {
   if (!gpBundle) return [];
   const out: GpContribution[] = [];
@@ -93,7 +105,9 @@ export function genePairsAtInterface(
     // The pair id order in the network vs the tier CSV should agree, but check both to be safe.
     const edges = gpBundle.byEntity[id] ?? gpBundle.byEntity[`${b}__${a}`] ?? [];
     const at = edges.find((e) => sameInterface(e, iface));
-    if (at) out.push({ id, genes: [a, b], label: `${a} – ${b}`, edge: at });
+    if (at && isSelected(at.scores, threshold)) {
+      out.push({ id, genes: [a, b], label: `${a} – ${b}`, edge: at });
+    }
   }
   out.sort((x, y) => y.edge.scores.C_np - x.edge.scores.C_np);
   return out;

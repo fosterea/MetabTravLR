@@ -2,7 +2,7 @@
  *  that is significant at the current tier, plus an "All" tab (the metabolite itself). Picking
  *  a pair tab isolates that single pair's interfaces on the graph — a per-pair drill-down that
  *  complements the on-graph fan-out and the panel list. Hidden for gene-pair view / no metab. */
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useVizStore, selectCurrentTier } from '@/store/useVizStore';
 import { metaboliteSigPairsAtTier } from '@/data/genePairs';
 import { formatStrength } from '@/data/format';
@@ -16,6 +16,7 @@ export default function GenePairTabs() {
   const gpBundle = useVizStore((s) => s.gpBundle);
   const gpTab = useVizStore((s) => s.gpTab);
   const setGpTab = useVizStore((s) => s.setGpTab);
+  const fdrThreshold = useVizStore((s) => s.fdrThreshold);
 
   const metab = useMemo(
     () =>
@@ -28,9 +29,18 @@ export default function GenePairTabs() {
   // This metabolite's gene pairs significant at the current tier, with their stable color slot
   // (shared with the on-graph fan-out so a pair's color matches its tab swatch).
   const pairs = useMemo(
-    () => metaboliteSigPairsAtTier(metab, gpBundle, tier),
-    [metab, gpBundle, tier],
+    () => metaboliteSigPairsAtTier(metab, gpBundle, tier, fdrThreshold),
+    [metab, gpBundle, tier, fdrThreshold],
   );
+
+  // Tightening the FDR cutoff can drop the isolated pair's last significant interface, removing
+  // its tab. Release the selection back to "All" rather than stranding the user on a tab that is
+  // no longer rendered (no tab would read as active, and the graph would sit empty). Guarded on
+  // the bundle being loaded so this never fires during the load, when `pairs` is legitimately [].
+  useEffect(() => {
+    if (!gpTab || !metab || !gpBundle || !tier) return;
+    if (!pairs.some((p) => p.id === gpTab)) setGpTab(undefined);
+  }, [gpTab, pairs, metab, gpBundle, tier, setGpTab]);
 
   if (!metab || pairs.length === 0) return null;
 

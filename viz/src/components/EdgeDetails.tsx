@@ -34,7 +34,7 @@ export default function EdgeDetails() {
   const edge = useMemo(() => {
     if (!selectedEdge || !tier) return undefined;
     if (gpTab && gpBundle) {
-      return gpEdgesInTier(gpBundle, gpTab, tier.cellTypes).find((e) =>
+      return gpEdgesInTier(gpBundle, gpTab, tier.cellTypes, fdrThreshold).find((e) =>
         sameInterface(e, selectedEdge),
       );
     }
@@ -67,8 +67,8 @@ export default function EdgeDetails() {
   // adds the fan-out, it doesn't replace the list (the list is where the numbers and the links
   // live). Empty in the gene-pair view, or when a single pair tab is already isolated.
   const gps = useMemo(
-    () => (edge && metab && !gpTab ? genePairsAtInterface(metab, gpBundle, edge) : []),
-    [edge, metab, gpBundle, gpTab],
+    () => (edge && metab && !gpTab ? genePairsAtInterface(metab, gpBundle, edge, fdrThreshold) : []),
+    [edge, metab, gpBundle, gpTab, fdrThreshold],
   );
 
   if (!edge) return null;
