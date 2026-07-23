@@ -17,6 +17,7 @@ export default function EntityPanel() {
   const entityKind = useVizStore((s) => s.entityKind);
   const entityId = useVizStore((s) => s.entityId);
   const edgeBundle = useVizStore((s) => s.edgeBundle);
+  const fdrThreshold = useVizStore((s) => s.fdrThreshold);
   const selectEntity = useVizStore((s) => s.selectEntity);
   const [query, setQuery] = useState('');
 
@@ -25,10 +26,10 @@ export default function EntityPanel() {
   const ranked: RankedEntity[] = useMemo(() => {
     if (!dataset) return [];
     if (entityKind === 'metabolite') {
-      return rankMetabolites(dataset.entities.metabolite ?? [], tierId ?? '', byEntity);
+      return rankMetabolites(dataset.entities.metabolite ?? [], tierId ?? '', byEntity, fdrThreshold);
     }
-    return rankGenePairs(dataset.entities.gene_pair ?? [], byEntity);
-  }, [dataset, tierId, entityKind, byEntity]);
+    return rankGenePairs(dataset.entities.gene_pair ?? [], byEntity, fdrThreshold);
+  }, [dataset, tierId, entityKind, byEntity, fdrThreshold]);
 
   const dividerLabel =
     entityKind === 'metabolite'

@@ -5,6 +5,7 @@ import styles from './Legend.module.css';
 export default function Legend() {
   const entityKind = useVizStore((s) => s.entityKind);
   const gpExpandMode = useVizStore((s) => s.gpExpandMode);
+  const fdrThreshold = useVizStore((s) => s.fdrThreshold);
   const showGpNote = entityKind === 'metabolite' && gpExpandMode === 'graph';
   return (
     <div className={styles.legend} aria-label="Legend">
@@ -14,7 +15,7 @@ export default function Legend() {
       </div>
       <div className={styles.row}>
         <span className={`${styles.swatch} ${styles.sig}`} />
-        significant interface
+        significant interface (FDR &lt; {fdrThreshold})
       </div>
       <div className={styles.row}>
         <span className={`${styles.swatch} ${styles.nonsig}`} />

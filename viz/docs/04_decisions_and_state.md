@@ -4,6 +4,26 @@
 restart. Dates are absolute (project "today" was 2026-07-16 at kickoff).
 
 ## Current state
+- **2026-07-22 — Adjustable FDR significance cutoff (slider) on both graph views. Playwright-verified.**
+  - A discrete slider in the control bar sets the FDR_np cutoff that calls an interface
+    "significant". Stops `[0.001, 0.005, 0.01, 0.025, 0.05, 0.1, 0.2]` (log-ish; FDR_np is itself
+    discrete with a ~0.003 floor), default **0.05**. Shown only in the Graph view, for **both**
+    metabolite and gene-pair kinds.
+  - No ingest/schema change: FDR_np was already on every edge. Significance is now derived at
+    render time via `isSelected(scores, threshold)` (harreman's own `FDR_np < thr AND C_np > 0`),
+    replacing reads of the baked-in `scores.selected`. At 0.05 the two are **identical** — verified
+    across all 20,658 ingested edges (0 mismatches) — so the default is a true no-op. See A19.
+  - Threading: `fdrThreshold` in the store (a global preference, NOT reset on dataset/tier/kind).
+    Used by the graph filter+styling, EdgeDetails (resolve + label), EntityDetails counts, the
+    panel ranking *hints* (metabolite SORT stays on the summary field, so order/auto-select are
+    unchanged), and the Legend ("significant interface (FDR < X)").
+  - Because harreman's per-tier gene-pair tables are significant-only (FDR < 0.05), the slider can
+    only **tighten** gene-pair edges below 0.05; stops above 0.05 reveal nothing new (correct — no
+    such rows exist). Metabolite tables carry the full FDR range, so it works both ways there.
+  - `tsc` + `lint` + `build` clean; 0 console errors. Numerically verified: graph edge counts
+    match an independent bundle computation at every stop (metabolite 0/3/4/4/5/5/5; gene-pair
+    caps at 5); the non-sig toggle composes with the cutoff (0.2 + show-non-sig → 5 sig/5 non-sig,
+    tighten to 0.01 → 4 sig/6 non-sig, all 10 still drawn); slider absent in the Environment view.
 - **2026-07-19 — SpaceTravLR gene-pair coefficients in the Environment view. Playwright-verified.**
   - Ingest (schemaVersion **3**) now also reads `easy_download/metabtravlr_outputs/<Tier>/
     gene_pairs.csv` — a sibling of `harreman_outputs/` — into `<id>/beta/<Tier>.json`, with
@@ -72,6 +92,7 @@ restart. Dates are absolute (project "today" was 2026-07-16 at kickoff).
 | A16 | Anything below the floor renders **untinted + labelled `≈0`**, with no minimum bar | Foster: "some things can be almost zero and that should be communicable." A min-anchored scale gives the view's smallest value a visible pedestal, so negligible reads as "weak but real". Absence of color is the honest encoding for absence of effect. |
 | A17 | Both directions of a pair are **separate rows**, never merged | `env→cell` and `cell→env` are independent coefficients (70 of 107 pairs have both). Merging would invent a symmetry the model doesn't claim. This is the one place in the app where direction is real — hence the explicit "environment → cell" column header. |
 | A18 | The view is renamed **Environment** and enabled when `hasNbhd \|\| hasBeta` | It now holds two different per-cell measurements, both about a cell's surroundings rather than an interface. "Neighborhoods" named only the first one. |
+| A19 | Significance is **derived from FDR_np at a UI-set threshold** (`isSelected(scores, thr)`), not read from the baked-in `scores.selected` | Lets a slider control the cutoff with no ingest change. Reproduces `selected` exactly at the 0.05 default (0/20,658 mismatches), so it's a safe drop-in. `scores.selected` stays in the contract as harreman's own 0.05 call, but the app no longer reads it for graph significance. Slider stops are discrete because FDR_np is discrete with a low floor; ranking SORT deliberately does NOT depend on the threshold, so moving it never re-sorts the panel or changes auto-selection. |
 
 ## Open questions / needs Foster
 - **Dataset naming**: ids/names now come straight from the `Results/` folder names
@@ -126,11 +147,25 @@ restart. Dates are absolute (project "today" was 2026-07-16 at kickoff).
     heatmap. Cell-type picker narrows to one block and rescales the ramp. A bidirectional pair
     (e.g. SLC16A4 – SLCO2B1) shows **two** rows. A pair with no betas shows the "no coefficients"
     message, not an empty grid. On Human Lung the beta section is absent but the bars still render.
+12b. FDR slider (Graph view): default reads "FDR < 0.05" and matches the old `selected`-based
+    counts. Dragging left tightens (fewer/no significant edges); dragging right loosens for
+    metabolites but never exceeds the gene-pair bundle's significant-only set. Legend + EntityDetails
+    counts track it. Absent in the Environment view.
 12. Beta correctness (worth re-running after any scale change — this is where the bugs are):
     in the console, diff the DOM against `beta/<Tier>.json` and assert, per cell, that the label
     matches source, a negative never renders `+`, hue matches sign, and `≈0` cells carry no tint.
 
 ## Changelog
+- 2026-07-22: **Adjustable FDR significance cutoff (slider).** Added `isSelected(scores, thr)` to
+  `src/data/scales.ts` (harreman's `FDR_np < thr AND C_np > 0`, `DEFAULT_FDR = 0.05`) and a
+  `fdrThreshold` store field + `setFdrThreshold`. A discrete `<input type=range>` over log-ish
+  stops (`FDR_STOPS`, default 0.05) in `ControlBar`, shown in the Graph view for both kinds.
+  Replaced every graph-significance read of `scores.selected` (GraphView filter + edge class,
+  EdgeDetails resolve + label, EntityDetails counts, ranking hints) with `isSelected(…, threshold)`;
+  Legend now prints the live cutoff. Metabolite ranking sort stays on the summary field (stable
+  order/auto-select); gene-pair sort follows the cutoff but is bounded by the significant-only
+  bundle. No ingest/schema change. Playwright-verified numerically (see Current state); tsc+lint+
+  build clean, 0 console errors. See A19.
 - 2026-07-19: **SpaceTravLR gene-pair coefficients in the Environment view.**
   (1) **Ingest** (schemaVersion 3): `buildBeta()` reads the `metabtravlr_outputs/` sibling of
   `harreman_outputs/` and emits `<id>/beta/<Tier>.json` = `{ tier, cellTypes, targetGenes,

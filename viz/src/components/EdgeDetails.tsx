@@ -5,7 +5,7 @@
  *  Each pair is a link to its own gene-pair view. Cleared by clicking empty canvas or the × . */
 import { useMemo } from 'react';
 import { useVizStore, selectCurrentTier, selectFocusedGp } from '@/store/useVizStore';
-import { sameInterface, isSelfEdge } from '@/data/scales';
+import { sameInterface, isSelfEdge, isSelected } from '@/data/scales';
 import { genePairsAtInterface, gpEdgesInTier } from '@/data/genePairs';
 import { formatStrength, formatFdr } from '@/data/format';
 import styles from './EdgeDetails.module.css';
@@ -18,6 +18,7 @@ export default function EdgeDetails() {
   const edgeBundle = useVizStore((s) => s.edgeBundle);
   const gpBundle = useVizStore((s) => s.gpBundle);
   const showNonSignificant = useVizStore((s) => s.showNonSignificant);
+  const fdrThreshold = useVizStore((s) => s.fdrThreshold);
   const gpExpandMode = useVizStore((s) => s.gpExpandMode);
   const gpTab = useVizStore((s) => s.gpTab);
   const selectedEdge = useVizStore((s) => s.selectedEdge);
@@ -43,10 +44,10 @@ export default function EdgeDetails() {
       (e) =>
         present.has(e.source) &&
         present.has(e.target) &&
-        (showNonSignificant || e.scores.selected),
+        (showNonSignificant || isSelected(e.scores, fdrThreshold)),
     );
     return visible.find((e) => sameInterface(e, selectedEdge));
-  }, [selectedEdge, entityId, edgeBundle, gpTab, gpBundle, tier, showNonSignificant]);
+  }, [selectedEdge, entityId, edgeBundle, gpTab, gpBundle, tier, showNonSignificant, fdrThreshold]);
 
   const gpTabLabel = useMemo(() => {
     if (!gpTab) return undefined;
@@ -112,7 +113,7 @@ export default function EdgeDetails() {
         <div className={styles.row}>
           <dt>Significance</dt>
           <dd>
-            {s.selected ? (
+            {isSelected(s, fdrThreshold) ? (
               <span className={styles.sig}>significant</span>
             ) : (
               <span className="muted">not significant</span>

@@ -3,6 +3,7 @@
  *  without hard-coding T cells — it uses the tier's own T-cell-involvement summary field). */
 import type { Entity, EntityEdge, GenePairEntity, MetaboliteEntity } from './types';
 import { reverseGpId } from './genePairs';
+import { DEFAULT_FDR, isSelected } from './scales';
 
 /** entityId -> its edges at the current (tier, kind), i.e. `EdgeBundle.byEntity`. */
 type ByEntity = Record<string, EntityEdge[]> | undefined;
@@ -37,15 +38,19 @@ export function rankMetabolites(
   list: MetaboliteEntity[],
   tierId: string,
   byEntity?: ByEntity,
+  threshold: number = DEFAULT_FDR,
 ): RankedEntity[] {
   const scored = list.map((m) => {
     const t = m.perTier[tierId];
     const involved = t?.tcellInvolved === true;
     const eliminated = !metaboliteInvolvedAnywhere(m);
     // # significant cell-type interfaces for this metabolite at the current tier (from the
-    // loaded bundle), shown in the hint. Ranking stays on the summary sig-pair count so the
-    // order is stable regardless of bundle-load timing (keeps App's auto-select in agreement).
-    const nSigInt = byEntity ? (byEntity[m.id] ?? []).filter((e) => e.scores.selected).length : null;
+    // loaded bundle), shown in the hint, honoring the current FDR cutoff so the panel label
+    // agrees with the graph. Ranking stays on the summary sig-pair count so the order is stable
+    // regardless of the cutoff or bundle-load timing (keeps App's auto-select in agreement).
+    const nSigInt = byEntity
+      ? (byEntity[m.id] ?? []).filter((e) => isSelected(e.scores, threshold)).length
+      : null;
     const nForRank = t?.nSigPairs ?? 0;
     const rank =
       (involved ? 1_000_000 : 0) +
@@ -84,14 +89,20 @@ export function rankMetabolites(
   }));
 }
 
-export function rankGenePairs(list: GenePairEntity[], byEntity?: ByEntity): RankedEntity[] {
+export function rankGenePairs(
+  list: GenePairEntity[],
+  byEntity?: ByEntity,
+  threshold: number = DEFAULT_FDR,
+): RankedEntity[] {
   const scored = list.map((g) => {
-    // The gene_pair bundle is significant-only, so its edge count IS the number of significant
-    // interactions at this tier. Pairs absent from the bundle have none (greyed, like eliminated
-    // metabolites) — but all network pairs stay listed so the full support is visible. Id lookup
-    // is order-tolerant to match the graph/panel paths.
+    // The gene_pair bundle is significant-only (FDR 0.05), so at the default cutoff its edge count
+    // IS the number of significant interactions at this tier; a tightened cutoff drops some, so
+    // count with `isSelected` rather than the raw length. Pairs absent from the bundle have none
+    // (greyed, like eliminated metabolites) — but all network pairs stay listed so the full
+    // support is visible. Id lookup is order-tolerant to match the graph/panel paths.
+    const gpEdges = byEntity ? (byEntity[g.id] ?? byEntity[reverseGpId(g.id)]) : undefined;
     const nSigInt = byEntity
-      ? (byEntity[g.id] ?? byEntity[reverseGpId(g.id)])?.length ?? 0
+      ? (gpEdges ?? []).filter((e) => isSelected(e.scores, threshold)).length
       : null;
     const nMetab = g.metabolites.length;
     const eliminated = nSigInt === 0;

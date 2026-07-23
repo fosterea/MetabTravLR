@@ -40,6 +40,10 @@ interface VizState {
   entityKind: EntityKind;
   entityId?: string;
   showNonSignificant: boolean;
+  /** FDR_np cutoff for calling an interface significant. Default 0.05 (harreman's own default,
+   *  which reproduces `scores.selected`). A global exploration preference — NOT reset on
+   *  dataset/tier/kind change, exactly like `showNonSignificant`. */
+  fdrThreshold: number;
   view: View;
 
   /**
@@ -95,6 +99,7 @@ interface VizState {
   /** Preview a gene pair (hover); undefined ends the preview. */
   setHoverGp: (id: string | undefined) => void;
   toggleNonSignificant: () => void;
+  setFdrThreshold: (threshold: number) => void;
   setView: (view: View) => void;
 }
 
@@ -102,6 +107,7 @@ export const useVizStore = create<VizState>((set, get) => ({
   status: 'idle',
   entityKind: 'metabolite',
   showNonSignificant: false,
+  fdrThreshold: 0.05,
   gpExpandMode: 'panel',
   gpExpandAll: false,
   bundleLoading: false,
@@ -237,6 +243,8 @@ export const useVizStore = create<VizState>((set, get) => ({
   setHoverGp: (hoverGp) => set({ hoverGp }),
 
   toggleNonSignificant: () => set((s) => ({ showNonSignificant: !s.showNonSignificant })),
+
+  setFdrThreshold: (fdrThreshold) => set({ fdrThreshold }),
 
   setView: (view) => set({ view }),
 }));

@@ -5,9 +5,24 @@
  * range is used across the actual spread — otherwise everything hugs the floor and
  * the differences read as tiny (see docs/02_style_and_conventions.md).
  */
-import type { EntityEdge } from './types';
+import type { EdgeScores, EntityEdge } from './types';
 
 export const EDGE_WIDTH_PX = { min: 2, max: 15 } as const;
+
+/** harreman's own default significance threshold (FDR_np). The ingested `scores.selected`
+ *  bakes this in; `isSelected(scores, DEFAULT_FDR)` reproduces it exactly. */
+export const DEFAULT_FDR = 0.05;
+
+/**
+ * Is this edge significant at a given FDR_np cutoff? This is harreman's own rule
+ * (`FDR_np < thr AND C_np > 0`), just with the threshold made adjustable instead of the fixed
+ * 0.05 baked into `scores.selected`. At `DEFAULT_FDR` it is identical to `scores.selected`, so a
+ * 0.05-defaulted control is a no-op — verified across every ingested edge. Because harreman's
+ * per-tier gene-pair tables are significant-only (FDR_np < 0.05), raising the cutoff above 0.05
+ * cannot add gene-pair edges that were never emitted; it can only tighten below 0.05.
+ */
+export const isSelected = (s: EdgeScores, threshold: number = DEFAULT_FDR): boolean =>
+  s.FDR_np != null && s.FDR_np < threshold && s.C_np > 0;
 
 export interface EdgeWidthScale {
   (value: number): number;

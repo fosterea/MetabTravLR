@@ -1,6 +1,7 @@
 /** Canvas overlay: details for the selected entity + a summary of the edges in view. */
 import { useMemo } from 'react';
 import { useVizStore, selectCurrentTier } from '@/store/useVizStore';
+import { isSelected } from '@/data/scales';
 import styles from './EntityDetails.module.css';
 
 export default function EntityDetails() {
@@ -9,6 +10,7 @@ export default function EntityDetails() {
   const entityKind = useVizStore((s) => s.entityKind);
   const entityId = useVizStore((s) => s.entityId);
   const edgeBundle = useVizStore((s) => s.edgeBundle);
+  const fdrThreshold = useVizStore((s) => s.fdrThreshold);
   const goToEntity = useVizStore((s) => s.goToEntity);
 
   const entity = useMemo(() => {
@@ -19,7 +21,7 @@ export default function EntityDetails() {
   }, [dataset, entityId, entityKind]);
 
   const edges = (entityId && edgeBundle?.byEntity[entityId]) || [];
-  const nSig = edges.filter((e) => e.scores.selected).length;
+  const nSig = edges.filter((e) => isSelected(e.scores, fdrThreshold)).length;
 
   if (!entity) return null;
 
@@ -77,10 +79,11 @@ export default function EntityDetails() {
       )}
       <div className={styles.summary}>
         {entity.kind === 'gene_pair' ? (
-          // Gene-pair edges are significant-only (harreman _gp_sig), so no sig/total split.
+          // Gene-pair edges are significant-only (harreman _gp_sig) at FDR 0.05, so no sig/total
+          // split — but a tightened cutoff can still drop some below significance, so count `nSig`.
           <>
-            <strong>{edges.length}</strong> significant interface
-            {edges.length === 1 ? '' : 's'} at {tier?.label}
+            <strong>{nSig}</strong> significant interface
+            {nSig === 1 ? '' : 's'} at {tier?.label}
           </>
         ) : (
           <>
