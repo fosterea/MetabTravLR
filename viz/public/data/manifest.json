@@ -3,6 +3,24 @@
   "schemaVersion": 3,
   "datasets": [
     {
+      "id": "FF_Human_Ovarian_Adenocarcinoma",
+      "name": "FF Human Ovarian Adenocarcinoma",
+      "project": "Xenium Tcell Dataset",
+      "source": "harreman",
+      "entityKinds": [
+        "metabolite",
+        "gene_pair"
+      ],
+      "tierIds": [
+        "Tier1",
+        "Tier2",
+        "Tier3"
+      ],
+      "hasNbhd": true,
+      "hasBeta": false,
+      "available": true
+    },
+    {
       "id": "FFPE_Human_Ovarian_Cancer",
       "name": "FFPE Human Ovarian Cancer",
       "project": "Xenium Tcell Dataset",
@@ -109,18 +127,6 @@
       "hasNbhd": true,
       "hasBeta": true,
       "available": true
-    },
-    {
-      "id": "FF_Human_Ovarian_Adenocarcinoma",
-      "name": "FF Human Ovarian Adenocarcinoma",
-      "project": "Xenium Tcell Dataset",
-      "source": "harreman",
-      "entityKinds": [],
-      "tierIds": [],
-      "hasNbhd": false,
-      "hasBeta": false,
-      "available": false,
-      "unavailableReason": "no tier outputs — the harreman run for \"FF_Human_Ovarian_Adenocarcinoma\" is incomplete"
     }
   ]
 }
