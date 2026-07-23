@@ -1,0 +1,1059 @@
+sample_id,tier,cell_type_1,cell_type_2,gene1,gene2,tcell_involvement,metabolites,FDR_np,pval_np,C_np
+Human_Breast,Tier1,T Cell,other,SLC2A3,SLC2A3,Tcell_interface,D-Galactose | D-Glucose | D-Maltose | D-Mannose | D-Xylose | Dehydroascorbic acid | Docosahexaenoic acid,0.0034229729661201,0.0009990009990009,83441.18
+Human_Breast,Tier1,T Cell,other,SLC1A5,SLC38A7,Tcell_interface,L-Glutamine,0.0034229729661201,0.0009990009990009,1078.3502
+Human_Breast,Tier1,T Cell,other,SLC1A5,SLC3A2,Tcell_interface,L-Glutamate | L-Glutamine | L-Leucine | L-Serine,0.0034229729661201,0.0009990009990009,1935.0847
+Human_Breast,Tier1,T Cell,other,SLC43A2,SLC43A2,Tcell_interface,L-Cysteine | L-Isoleucine | L-Leucine | L-Methionine | L-Phenylalanine | L-Valine,0.0034229729661201,0.0009990009990009,922.89417
+Human_Breast,Tier1,T Cell,other,SLC16A1,SLCO2A1,Tcell_interface,Pyruvate,0.0034229729661201,0.0009990009990009,4278.548
+Human_Breast,Tier1,T Cell,other,SLCO2B1,SLCO2B1,Tcell_interface,Acetate | Citric acid | Estradiol | Nicotinate | Oxalic acid | Taurocholic acid,0.0034229729661201,0.0009990009990009,3113.4932
+Human_Breast,Tier1,T Cell,other,SLC16A1,SLCO2B1,Tcell_interface,Acetate | Nicotinate | Taurocholic acid,0.0034229729661201,0.0009990009990009,1019.6143
+Human_Breast,Tier1,T Cell,other,SLC1A1,SLC3A2,Tcell_interface,L-Glutamate,0.0034229729661201,0.0009990009990009,167.66068
+Human_Breast,Tier1,T Cell,other,CUBN,SLC40A1,Tcell_interface,Iron,0.0034229729661201,0.0009990009990009,1030.8712
+Human_Breast,Tier1,T Cell,other,CUBN,SLC3A2,Tcell_interface,Iron,0.0034229729661201,0.0009990009990009,47469.81
+Human_Breast,Tier1,T Cell,other,SLC40A1,SLC40A1,Tcell_interface,Iron,0.0034229729661201,0.0009990009990009,7823.4316
+Human_Breast,Tier1,T Cell,other,SLC22A5,SLC5A3,Tcell_interface,Sodium,0.0034229729661201,0.0009990009990009,604.23676
+Human_Breast,Tier1,T Cell,other,SLC29A1,SLC5A3,Tcell_interface,Sodium,0.0034229729661201,0.0009990009990009,1108.6045
+Human_Breast,Tier1,T Cell,other,MSR1,MSR1,Tcell_interface,Fatty acid,0.0034229729661201,0.0009990009990009,2582.0305
+Human_Breast,Tier1,T Cell,other,CD36,CD36,Tcell_interface,Cholesterol | Fatty acid | Vitamin D3,0.0034229729661201,0.0009990009990009,1130.6768
+Human_Breast,Tier1,T Cell,other,ABCA1,ABCA1,Tcell_interface,25-Hydroxycholesterol,0.0034229729661201,0.0009990009990009,7590.747
+Human_Breast,Tier1,T Cell,other,ABCC4,ABCC4,Tcell_interface,4'-Hydroxydiclofenac | Cholic acid | Cyclic AMP | Folic acid | Folinic acid | Glutathione | Hydroxycelecoxib | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0034229729661201,0.0009990009990009,254.52641
+Human_Breast,Tier1,T Cell,other,LRP1,LRP1,Tcell_interface,Heme,0.0034229729661201,0.0009990009990009,1904.4194
+Human_Breast,Tier1,T Cell,other,SLC29A3,SLC29A3,Tcell_interface,Adenine,0.0034229729661201,0.0009990009990009,706.04736
+Human_Breast,Tier1,T Cell,other,LRP2,LRP2,Tcell_interface,Calcidiol,0.0034229729661201,0.0009990009990009,193.90213
+Human_Breast,Tier1,T Cell,other,CD38,CD38,Tcell_interface,Adenosine diphosphate ribose,0.0034229729661201,0.0009990009990009,2578.009
+Human_Breast,Tier1,T Cell,other,SLC12A6,SLC12A6,Tcell_interface,Chloride ion,0.0034229729661201,0.0009990009990009,732.93945
+Human_Breast,Tier1,T Cell,other,ABCC1,SLCO2B1,Tcell_interface,Taurocholic acid,0.0034229729661201,0.0009990009990009,7178.463
+Human_Breast,Tier1,T Cell,other,TAP1,TAP1,Tcell_interface,Adenosine triphosphate,0.0034229729661201,0.0009990009990009,21093.453
+Human_Breast,Tier1,T Cell,other,AQP9,AQP9,Tcell_interface,Water,0.0034229729661201,0.0009990009990009,151.4273
+Human_Breast,Tier1,T Cell,other,AQP8,AQP8,Tcell_interface,Water,0.0034229729661201,0.0009990009990009,14229.619
+Human_Breast,Tier1,T Cell,other,SLC22A5,SLC5A1,Tcell_interface,Sodium,0.0064528772662743,0.0019980019980019,145.29768
+Human_Breast,Tier1,T Cell,other,ORAI3,ORAI3,Tcell_interface,Calcium release-activated calcium transport,0.0064528772662743,0.0019980019980019,1922.5996
+Human_Breast,Tier1,T Cell,other,SLC1A3,SLC1A3,Tcell_interface,D-Aspartate | L-Aspartate | L-Glutamate | Malic acid,0.0090716458429462,0.0029970029970029,438.41083
+Human_Breast,Tier1,T Cell,other,SLC39A8,SLC39A8,Tcell_interface,Cadmium | Manganese | Zinc,0.0090716458429462,0.0029970029970029,988.67096
+Human_Breast,Tier1,T Cell,other,ABCC1,SLC16A1,Tcell_interface,Taurocholic acid,0.0090716458429462,0.0029970029970029,1477.7727
+Human_Breast,Tier1,T Cell,other,SLC6A9,SLC6A9,Tcell_interface,Neurotransmitter,0.0090716458429462,0.0029970029970029,268.4911
+Human_Breast,Tier1,T Cell,other,ATP7A,TAP1,Tcell_interface,Adenosine triphosphate,0.0144086682548221,0.0049950049950049,2733.2666
+Human_Breast,Tier1,T Cell,other,FOLR2,FOLR2,Tcell_interface,Folic acid,0.0167881910620499,0.0059940059940059,284.3122
+Human_Breast,Tier1,T Cell,other,NPC1L1,NPC1L1,Tcell_interface,alpha-Tocopherol,0.0167881910620499,0.0059940059940059,505.50217
+Human_Breast,Tier1,T Cell,other,ABCG2,SLCO2B1,Tcell_interface,Estradiol | Taurocholic acid,0.0167881910620499,0.0059940059940059,208.34442
+Human_Breast,Tier1,T Cell,other,SLC6A3,SLC6A3,Tcell_interface,Dopamine,0.0239878698376722,0.0089910089910089,105.5815
+Human_Breast,Tier1,T Cell,other,SLC10A1,SLC10A1,Tcell_interface,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 17a-Ethynylestradiol | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Deoxycholic acid | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | Progesterone | Sodium | Sulfolithocholic acid | Taurocholic acid | Testosterone | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0358956632720891,0.0139860139860139,47.94087
+Human_Breast,Tier1,T Cell,other,CD36,MSR1,Tcell_interface,Fatty acid,0.0358956632720891,0.0139860139860139,502.95007
+Human_Breast,Tier1,T Cell,T Cell,SLC2A3,SLC2A3,within_Tcell,D-Galactose | D-Glucose | D-Maltose | D-Mannose | D-Xylose | Dehydroascorbic acid | Docosahexaenoic acid,0.0034229729661201,0.0009990009990009,82718.87
+Human_Breast,Tier1,T Cell,T Cell,CUBN,SLC3A2,within_Tcell,Iron,0.0034229729661201,0.0009990009990009,36481.535
+Human_Breast,Tier1,T Cell,T Cell,SLC40A1,SLC40A1,within_Tcell,Iron,0.0034229729661201,0.0009990009990009,6005.6396
+Human_Breast,Tier1,T Cell,T Cell,CD38,CD38,within_Tcell,Adenosine diphosphate ribose,0.0034229729661201,0.0009990009990009,1606.2167
+Human_Breast,Tier1,T Cell,T Cell,ABCC1,ABCC1,within_Tcell,4'-Hydroxydiclofenac | Cholic acid | Glutathione | Leukotriene C4 | O-Desmethylverapamil (D-702) | Progesterone | Taurocholic acid,0.0034229729661201,0.0009990009990009,14187.339
+Human_Breast,Tier1,T Cell,T Cell,TAP1,TAP1,within_Tcell,Adenosine triphosphate,0.0034229729661201,0.0009990009990009,13722.95
+Human_Breast,Tier1,T Cell,T Cell,AQP8,AQP8,within_Tcell,Water,0.0034229729661201,0.0009990009990009,2050.5945
+Human_Breast,Tier1,T Cell,T Cell,ATP7A,TAP1,within_Tcell,Adenosine triphosphate,0.0064528772662743,0.0019980019980019,2371.792
+Human_Breast,Tier1,T Cell,T Cell,SLC43A2,SLC43A2,within_Tcell,L-Cysteine | L-Isoleucine | L-Leucine | L-Methionine | L-Phenylalanine | L-Valine,0.0118823907370162,0.0039960039960039,378.9677
+Human_Breast,Tier1,T Cell,T Cell,ABCC3,SLCO1B3,within_Tcell,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Deoxycholic acid | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | Sulfolithocholic acid | Taurocholic acid | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0144086682548221,0.0049950049950049,50.119343
+Human_Breast,Tier1,T Cell,T Cell,LRP1,LRP1,within_Tcell,Heme,0.0167881910620499,0.0059940059940059,422.54697
+Human_Breast,Tier1,T Cell,T Cell,ABCC4,ABCC4,within_Tcell,4'-Hydroxydiclofenac | Cholic acid | Cyclic AMP | Folic acid | Folinic acid | Glutathione | Hydroxycelecoxib | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0192664478378764,0.0069930069930069,187.90509
+Human_Breast,Tier1,T Cell,T Cell,SLC22A1,SLC6A2,within_Tcell,Norepinephrine,0.0214924517713362,0.0079920079920079,29.906754
+Human_Breast,Tier1,T Cell,T Cell,AQP8,ATP7B,within_Tcell,Water,0.0239878698376722,0.0089910089910089,89.60234
+Human_Breast,Tier1,T Cell,T Cell,SLC11A2,SLC40A1,within_Tcell,Iron,0.0263408466533466,0.0099900099900099,178.105
+Human_Breast,Tier1,T Cell,T Cell,SLCO2B1,SLCO2B1,within_Tcell,Acetate | Citric acid | Estradiol | Nicotinate | Oxalic acid | Taurocholic acid,0.0337162837162837,0.0129870129870129,714.3839
+Human_Breast,Tier1,T Cell,T Cell,SLC3A2,SLC7A5,within_Tcell,L-Glutamine | L-Leucine,0.0427743897893151,0.0169830169830169,1180.9012
+Human_Breast,Tier1,T Cell,T Cell,SLC16A1,SLCO2A1,within_Tcell,Pyruvate,0.0427743897893151,0.0169830169830169,267.72577
+Human_Breast,Tier1,T Cell,T Cell,SLC38A7,SLC7A5,within_Tcell,L-Glutamine,0.044789159180303,0.0179820179820179,261.11545
+Human_Breast,Tier1,other,other,SLC2A1,SLC2A1,within_other,D-Galactose | D-Glucose | D-Mannose | Dehydroascorbic acid | Docosahexaenoic acid | Glucosamine,0.0034229729661201,0.0009990009990009,160699.12
+Human_Breast,Tier1,other,other,SLC2A9,SLC2A9,within_other,D-Glucose,0.0034229729661201,0.0009990009990009,3641.9966
+Human_Breast,Tier1,other,other,SLC2A2,SLC2A9,within_other,D-Glucose,0.0034229729661201,0.0009990009990009,8124.645
+Human_Breast,Tier1,other,other,SLC2A1,SLC2A2,within_other,D-Galactose | D-Glucose | D-Mannose | Glucosamine,0.0034229729661201,0.0009990009990009,1019.6183
+Human_Breast,Tier1,other,other,SLC2A3,SLC2A3,within_other,D-Galactose | D-Glucose | D-Maltose | D-Mannose | D-Xylose | Dehydroascorbic acid | Docosahexaenoic acid,0.0034229729661201,0.0009990009990009,334914.25
+Human_Breast,Tier1,other,other,SLC3A2,SLC3A2,within_other,Iron | L-Cystine | L-Glutamate | L-Glutamine | L-Leucine | L-Serine,0.0034229729661201,0.0009990009990009,140826.27
+Human_Breast,Tier1,other,other,SLC1A5,SLC1A5,within_other,L-Alanine | L-Asparagine | L-Cysteine | L-Glutamate | L-Glutamine | L-Leucine | L-Serine | L-Threonine | Sodium,0.0034229729661201,0.0009990009990009,15322.344
+Human_Breast,Tier1,other,other,SLC38A7,SLC38A7,within_other,L-Glutamine,0.0034229729661201,0.0009990009990009,52876.297
+Human_Breast,Tier1,other,other,SLC7A7,SLC7A7,within_other,L-Glutamine,0.0034229729661201,0.0009990009990009,27193.342
+Human_Breast,Tier1,other,other,SLC1A5,SLC7A5,within_other,L-Glutamine | L-Leucine,0.0034229729661201,0.0009990009990009,80787.44
+Human_Breast,Tier1,other,other,SLC7A5,SLC7A5,within_other,L-Arginine | L-Glutamine | L-Histidine | L-Leucine | L-Methionine | L-Phenylalanine | L-Tyrosine,0.0034229729661201,0.0009990009990009,435690.88
+Human_Breast,Tier1,other,other,SLC3A2,SLC7A5,within_other,L-Glutamine | L-Leucine,0.0034229729661201,0.0009990009990009,141037.17
+Human_Breast,Tier1,other,other,SLC38A7,SLC3A2,within_other,L-Glutamine,0.0034229729661201,0.0009990009990009,1858.6268
+Human_Breast,Tier1,other,other,SLC1A5,SLC38A7,within_other,L-Glutamine,0.0034229729661201,0.0009990009990009,11722.113
+Human_Breast,Tier1,other,other,SLC3A2,SLC7A7,within_other,L-Glutamine,0.0034229729661201,0.0009990009990009,226585.05
+Human_Breast,Tier1,other,other,SLC38A7,SLC7A5,within_other,L-Glutamine,0.0034229729661201,0.0009990009990009,10562.489
+Human_Breast,Tier1,other,other,SLC1A5,SLC7A11,within_other,L-Cysteine | L-Glutamate,0.0034229729661201,0.0009990009990009,6259.745
+Human_Breast,Tier1,other,other,SLC43A2,SLC43A2,within_other,L-Cysteine | L-Isoleucine | L-Leucine | L-Methionine | L-Phenylalanine | L-Valine,0.0034229729661201,0.0009990009990009,9890.064
+Human_Breast,Tier1,other,other,SLC16A4,SLC16A4,within_other,Acetate | L-Lactate,0.0034229729661201,0.0009990009990009,12100.975
+Human_Breast,Tier1,other,other,SLC16A1,SLCO2A1,within_other,Pyruvate,0.0034229729661201,0.0009990009990009,118433.06
+Human_Breast,Tier1,other,other,SLCO2A1,SLCO2A1,within_other,Arachidonic acid | Eicosanoid | Prostaglandins | Pyruvate,0.0034229729661201,0.0009990009990009,4213.076
+Human_Breast,Tier1,other,other,SLCO2B1,SLCO2B1,within_other,Acetate | Citric acid | Estradiol | Nicotinate | Oxalic acid | Taurocholic acid,0.0034229729661201,0.0009990009990009,18837.713
+Human_Breast,Tier1,other,other,SLC16A1,SLCO2B1,within_other,Acetate | Nicotinate | Taurocholic acid,0.0034229729661201,0.0009990009990009,2618.7698
+Human_Breast,Tier1,other,other,SLC22A5,SLC22A5,within_other,4-ene-Valproic acid | Acetyl-L-Carnitine | Choline | Creatine | Dopamine | Histamine | L-Carnitine | Nicotinate | Norepinephrine | O-Desmethylverapamil (D-702) | Sodium,0.0034229729661201,0.0009990009990009,20315.1
+Human_Breast,Tier1,other,other,SLC1A2,SLC3A2,within_other,L-Glutamate,0.0034229729661201,0.0009990009990009,5074.383
+Human_Breast,Tier1,other,other,SLC1A2,SLC1A2,within_other,D-Aspartate | L-Aspartate | L-Glutamate,0.0034229729661201,0.0009990009990009,2167.9697
+Human_Breast,Tier1,other,other,SLC1A2,SLC7A11,within_other,L-Glutamate,0.0034229729661201,0.0009990009990009,33205.492
+Human_Breast,Tier1,other,other,SLC1A3,SLC1A3,within_other,D-Aspartate | L-Aspartate | L-Glutamate | Malic acid,0.0034229729661201,0.0009990009990009,33864.06
+Human_Breast,Tier1,other,other,SLC1A1,SLC1A5,within_other,L-Glutamate,0.0034229729661201,0.0009990009990009,1198.5653
+Human_Breast,Tier1,other,other,SLC3A2,SLC7A11,within_other,L-Cystine | L-Glutamate,0.0034229729661201,0.0009990009990009,94718.51
+Human_Breast,Tier1,other,other,SLC1A2,SLC1A5,within_other,L-Glutamate,0.0034229729661201,0.0009990009990009,1935.8657
+Human_Breast,Tier1,other,other,SLC1A1,SLC3A2,within_other,L-Glutamate,0.0034229729661201,0.0009990009990009,1332.674
+Human_Breast,Tier1,other,other,SLC3A1,SLC3A2,within_other,L-Cystine,0.0034229729661201,0.0009990009990009,2251.689
+Human_Breast,Tier1,other,other,SLC30A8,SLC30A8,within_other,Zinc,0.0034229729661201,0.0009990009990009,874.15204
+Human_Breast,Tier1,other,other,SLC39A8,SLC39A8,within_other,Cadmium | Manganese | Zinc,0.0034229729661201,0.0009990009990009,2669.6687
+Human_Breast,Tier1,other,other,CUBN,SLC11A2,within_other,Iron,0.0034229729661201,0.0009990009990009,65140.664
+Human_Breast,Tier1,other,other,CUBN,SLC3A2,within_other,Iron,0.0034229729661201,0.0009990009990009,129133.15
+Human_Breast,Tier1,other,other,SLC11A1,SLC11A2,within_other,Iron,0.0034229729661201,0.0009990009990009,90970.84
+Human_Breast,Tier1,other,other,SLC22A5,SLC22A8,within_other,Acetyl-L-Carnitine | L-Carnitine,0.0034229729661201,0.0009990009990009,1214.2894
+Human_Breast,Tier1,other,other,SLC16A9,SLC22A5,within_other,L-Carnitine,0.0034229729661201,0.0009990009990009,661.20026
+Human_Breast,Tier1,other,other,SLC22A4,SLC22A4,within_other,L-Carnitine | O-Desmethylverapamil (D-702) | Putrescine | Sodium | Spermine | Testosterone,0.0034229729661201,0.0009990009990009,2446.448
+Human_Breast,Tier1,other,other,SLC16A9,SLC16A9,within_other,L-Carnitine,0.0034229729661201,0.0009990009990009,1063.8568
+Human_Breast,Tier1,other,other,SLC22A5,SLCO1B1,within_other,L-Carnitine | O-Desmethylverapamil (D-702),0.0034229729661201,0.0009990009990009,2236.7256
+Human_Breast,Tier1,other,other,SLC22A4,SLC22A5,within_other,L-Carnitine | O-Desmethylverapamil (D-702) | Sodium,0.0034229729661201,0.0009990009990009,4871.8604
+Human_Breast,Tier1,other,other,SLC22A5,SLC6A4,within_other,O-Desmethylverapamil (D-702) | Sodium,0.0034229729661201,0.0009990009990009,2295.329
+Human_Breast,Tier1,other,other,SLC1A5,SLC5A7,within_other,Sodium,0.0034229729661201,0.0009990009990009,6384.533
+Human_Breast,Tier1,other,other,SLC1A5,SLC5A5,within_other,Sodium,0.0034229729661201,0.0009990009990009,11732.906
+Human_Breast,Tier1,other,other,SLC29A1,SLC29A1,within_other,Adenosine | Cytidine | Ethanol | Guanosine | Inosine | Sodium | Thymidine | Uridine,0.0034229729661201,0.0009990009990009,193943.33
+Human_Breast,Tier1,other,other,SLC22A5,SLC5A3,within_other,Sodium,0.0034229729661201,0.0009990009990009,15459.815
+Human_Breast,Tier1,other,other,SLC22A4,SLC5A3,within_other,Sodium,0.0034229729661201,0.0009990009990009,5239.4434
+Human_Breast,Tier1,other,other,SLC5A7,SLC5A7,within_other,Chloride ion | Choline | Sodium,0.0034229729661201,0.0009990009990009,316.19247
+Human_Breast,Tier1,other,other,SLC29A1,SLC6A4,within_other,Sodium,0.0034229729661201,0.0009990009990009,6884.267
+Human_Breast,Tier1,other,other,SLC1A5,SLC22A4,within_other,Sodium,0.0034229729661201,0.0009990009990009,23291.213
+Human_Breast,Tier1,other,other,SLC29A1,SLC5A3,within_other,Sodium,0.0034229729661201,0.0009990009990009,49555.727
+Human_Breast,Tier1,other,other,SLC12A2,SLC12A2,within_other,Chloride ion | Sodium,0.0034229729661201,0.0009990009990009,17805.352
+Human_Breast,Tier1,other,other,SLC5A3,SLC5A5,within_other,Sodium,0.0034229729661201,0.0009990009990009,2369.8347
+Human_Breast,Tier1,other,other,SLC29A1,SLC5A1,within_other,Sodium,0.0034229729661201,0.0009990009990009,5052.3735
+Human_Breast,Tier1,other,other,SLC5A5,SLC6A4,within_other,Sodium,0.0034229729661201,0.0009990009990009,489.7675
+Human_Breast,Tier1,other,other,SLC10A1,SLC12A2,within_other,Sodium,0.0034229729661201,0.0009990009990009,835.9964
+Human_Breast,Tier1,other,other,SLC12A2,SLC6A4,within_other,Sodium,0.0034229729661201,0.0009990009990009,1831.9476
+Human_Breast,Tier1,other,other,SLC12A2,SLC5A3,within_other,Sodium,0.0034229729661201,0.0009990009990009,12331.298
+Human_Breast,Tier1,other,other,SLC10A1,SLC29A1,within_other,Sodium,0.0034229729661201,0.0009990009990009,2862.128
+Human_Breast,Tier1,other,other,SLC22A5,SLC6A2,within_other,Norepinephrine | Sodium,0.0034229729661201,0.0009990009990009,1502.8416
+Human_Breast,Tier1,other,other,SLC22A4,SLC6A2,within_other,Sodium,0.0034229729661201,0.0009990009990009,628.38556
+Human_Breast,Tier1,other,other,SLC22A5,SLC5A1,within_other,Sodium,0.0034229729661201,0.0009990009990009,1837.2126
+Human_Breast,Tier1,other,other,SLC5A3,SLC6A4,within_other,Sodium,0.0034229729661201,0.0009990009990009,2695.901
+Human_Breast,Tier1,other,other,SLC29A1,SLC6A2,within_other,Sodium,0.0034229729661201,0.0009990009990009,4468.3184
+Human_Breast,Tier1,other,other,SLC22A5,SLC5A7,within_other,Choline | Sodium,0.0034229729661201,0.0009990009990009,1353.6997
+Human_Breast,Tier1,other,other,SLC12A2,SLC29A1,within_other,Sodium,0.0034229729661201,0.0009990009990009,39336.67
+Human_Breast,Tier1,other,other,SLC1A5,SLC29A1,within_other,Sodium,0.0034229729661201,0.0009990009990009,265475.5
+Human_Breast,Tier1,other,other,SLC22A5,SLC5A5,within_other,Sodium,0.0034229729661201,0.0009990009990009,2982.0173
+Human_Breast,Tier1,other,other,SLC1A5,SLC6A4,within_other,Sodium,0.0034229729661201,0.0009990009990009,11597.433
+Human_Breast,Tier1,other,other,SLC29A1,SLC5A7,within_other,Sodium,0.0034229729661201,0.0009990009990009,4065.8267
+Human_Breast,Tier1,other,other,SLC29A1,SLC5A5,within_other,Sodium,0.0034229729661201,0.0009990009990009,8221.796
+Human_Breast,Tier1,other,other,SLC1A5,SLC5A3,within_other,Sodium,0.0034229729661201,0.0009990009990009,76216.94
+Human_Breast,Tier1,other,other,SLC10A1,SLC1A5,within_other,Sodium,0.0034229729661201,0.0009990009990009,4216.015
+Human_Breast,Tier1,other,other,SLC5A7,SLC6A4,within_other,Sodium,0.0034229729661201,0.0009990009990009,358.51776
+Human_Breast,Tier1,other,other,SLC12A2,SLC6A2,within_other,Sodium,0.0034229729661201,0.0009990009990009,1241.0094
+Human_Breast,Tier1,other,other,SLC12A2,SLC5A1,within_other,Sodium,0.0034229729661201,0.0009990009990009,1414.41
+Human_Breast,Tier1,other,other,SLC1A5,SLC5A1,within_other,Sodium,0.0034229729661201,0.0009990009990009,7238.941
+Human_Breast,Tier1,other,other,SLC5A5,SLC5A7,within_other,Sodium,0.0034229729661201,0.0009990009990009,323.1843
+Human_Breast,Tier1,other,other,SLC5A5,SLC5A5,within_other,Sodium | Urea,0.0034229729661201,0.0009990009990009,905.28125
+Human_Breast,Tier1,other,other,SLC5A3,SLC5A3,within_other,Sodium,0.0034229729661201,0.0009990009990009,18766.982
+Human_Breast,Tier1,other,other,SLC12A2,SLC1A5,within_other,Sodium,0.0034229729661201,0.0009990009990009,56059.727
+Human_Breast,Tier1,other,other,SLC10A1,SLC22A5,within_other,Sodium,0.0034229729661201,0.0009990009990009,973.2546
+Human_Breast,Tier1,other,other,SLC12A2,SLC22A4,within_other,Sodium,0.0034229729661201,0.0009990009990009,3892.2068
+Human_Breast,Tier1,other,other,SLC1A5,SLC6A2,within_other,Sodium,0.0034229729661201,0.0009990009990009,7110.6196
+Human_Breast,Tier1,other,other,SLC22A5,SLC29A1,within_other,Sodium,0.0034229729661201,0.0009990009990009,54058.184
+Human_Breast,Tier1,other,other,SLC12A2,SLC22A5,within_other,Sodium,0.0034229729661201,0.0009990009990009,11550.662
+Human_Breast,Tier1,other,other,SLC1A5,SLC22A5,within_other,Sodium,0.0034229729661201,0.0009990009990009,85362.945
+Human_Breast,Tier1,other,other,SLC22A4,SLC29A1,within_other,Sodium,0.0034229729661201,0.0009990009990009,15619.892
+Human_Breast,Tier1,other,other,SLC3A1,SLC7A5,within_other,L-Arginine,0.0034229729661201,0.0009990009990009,3327.961
+Human_Breast,Tier1,other,other,MSR1,MSR1,within_other,Fatty acid,0.0034229729661201,0.0009990009990009,36493.203
+Human_Breast,Tier1,other,other,CPT1A,CPT1A,within_other,Fatty acid,0.0034229729661201,0.0009990009990009,97023.16
+Human_Breast,Tier1,other,other,CD36,MSR1,within_other,Fatty acid,0.0034229729661201,0.0009990009990009,11294.572
+Human_Breast,Tier1,other,other,CD36,CD36,within_other,Cholesterol | Fatty acid | Vitamin D3,0.0034229729661201,0.0009990009990009,36413.844
+Human_Breast,Tier1,other,other,SLC6A12,SLC6A12,within_other,Betaine | GABA,0.0034229729661201,0.0009990009990009,527.1021
+Human_Breast,Tier1,other,other,SLCO1C1,SLCO1C1,within_other,"3',4'-Dihydrodiol | 4'-Hydroxydiclofenac | Estrone sulfate | Taurocholic acid | Thyroxine",0.0034229729661201,0.0009990009990009,430.62494
+Human_Breast,Tier1,other,other,ABCA1,ABCA1,within_other,25-Hydroxycholesterol,0.0034229729661201,0.0009990009990009,113027.516
+Human_Breast,Tier1,other,other,SLC22A5,SLC6A3,within_other,Dopamine,0.0034229729661201,0.0009990009990009,1938.4098
+Human_Breast,Tier1,other,other,ATP7A,SLC20A2,within_other,Phosphate,0.0034229729661201,0.0009990009990009,6384.615
+Human_Breast,Tier1,other,other,ATP7A,ATP7B,within_other,ADP | Adenosine triphosphate | Phosphate | Water,0.0034229729661201,0.0009990009990009,1858.7656
+Human_Breast,Tier1,other,other,ATP7A,ATP7A,within_other,ADP | Adenosine triphosphate | Phosphate | Water,0.0034229729661201,0.0009990009990009,2426.6235
+Human_Breast,Tier1,other,other,ATP7B,SLC20A2,within_other,Phosphate,0.0034229729661201,0.0009990009990009,5959.712
+Human_Breast,Tier1,other,other,ATP7B,ATP7B,within_other,ADP | Adenosine triphosphate | Phosphate | Water,0.0034229729661201,0.0009990009990009,2707.5598
+Human_Breast,Tier1,other,other,SLC20A2,SLC20A2,within_other,Phosphate,0.0034229729661201,0.0009990009990009,22613.91
+Human_Breast,Tier1,other,other,SLC19A1,SLC19A1,within_other,Folic acid | Thiamine,0.0034229729661201,0.0009990009990009,2464.02
+Human_Breast,Tier1,other,other,CHRNA5,CHRNA5,within_other,Ethanol,0.0034229729661201,0.0009990009990009,571.64087
+Human_Breast,Tier1,other,other,CHRNA5,SLC29A1,within_other,Ethanol,0.0034229729661201,0.0009990009990009,6553.7246
+Human_Breast,Tier1,other,other,ABCC3,ABCC3,within_other,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | 5-Hydroxyomeprazole | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Deoxycholic acid | Folic acid | Folinic acid | Glutathione | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | O-Desmethylverapamil (D-702) | Sulfolithocholic acid | Taurocholic acid | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0034229729661201,0.0009990009990009,1556.6632
+Human_Breast,Tier1,other,other,ABCC4,ABCC4,within_other,4'-Hydroxydiclofenac | Cholic acid | Cyclic AMP | Folic acid | Folinic acid | Glutathione | Hydroxycelecoxib | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0034229729661201,0.0009990009990009,1063.973
+Human_Breast,Tier1,other,other,ABCC3,SLC19A1,within_other,Folic acid,0.0034229729661201,0.0009990009990009,1501.5287
+Human_Breast,Tier1,other,other,FOLR2,FOLR2,within_other,Folic acid,0.0034229729661201,0.0009990009990009,1502.3116
+Human_Breast,Tier1,other,other,LRP1,LRP1,within_other,Heme,0.0034229729661201,0.0009990009990009,28225.863
+Human_Breast,Tier1,other,other,SLC29A3,SLC29A3,within_other,Adenine,0.0034229729661201,0.0009990009990009,16352.328
+Human_Breast,Tier1,other,other,LRP2,LRP2,within_other,Calcidiol,0.0034229729661201,0.0009990009990009,31014.682
+Human_Breast,Tier1,other,other,CD38,CD38,within_other,Adenosine diphosphate ribose,0.0034229729661201,0.0009990009990009,13887.588
+Human_Breast,Tier1,other,other,ABCC8,ABCC8,within_other,Potassium,0.0034229729661201,0.0009990009990009,1366.1543
+Human_Breast,Tier1,other,other,NPC1L1,NPC1L1,within_other,alpha-Tocopherol,0.0034229729661201,0.0009990009990009,29918.104
+Human_Breast,Tier1,other,other,SCARB1,SCARB1,within_other,alpha-Tocopherol,0.0034229729661201,0.0009990009990009,2450.3823
+Human_Breast,Tier1,other,other,ABCC4,SLCO2B1,within_other,Taurocholic acid,0.0034229729661201,0.0009990009990009,2695.0825
+Human_Breast,Tier1,other,other,ABCC2,SLCO1C1,within_other,"3',4'-Dihydrodiol | Taurocholic acid",0.0034229729661201,0.0009990009990009,493.14865
+Human_Breast,Tier1,other,other,ABCC1,ABCC1,within_other,4'-Hydroxydiclofenac | Cholic acid | Glutathione | Leukotriene C4 | O-Desmethylverapamil (D-702) | Progesterone | Taurocholic acid,0.0034229729661201,0.0009990009990009,44310.465
+Human_Breast,Tier1,other,other,SLCO1B3,SLCO1B3,within_other,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | 4-Hydroxyvalsartan | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Dehydroepiandrosterone | Deoxycholic acid | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | Sulfolithocholic acid | Taurocholic acid | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0034229729661201,0.0009990009990009,583.9361
+Human_Breast,Tier1,other,other,ABCC1,ABCC3,within_other,Cholic acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0034229729661201,0.0009990009990009,6056.602
+Human_Breast,Tier1,other,other,ABCC2,ABCC2,within_other,"17a-Ethynylestradiol | 3',4'-Dihydrodiol | Bilirubin | Cholic acid | Folinic acid | Fusidic Acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid",0.0034229729661201,0.0009990009990009,906.5898
+Human_Breast,Tier1,other,other,ABCC1,ABCC2,within_other,Cholic acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0034229729661201,0.0009990009990009,4267.2085
+Human_Breast,Tier1,other,other,ABCC1,SLC10A1,within_other,Cholic acid | Progesterone | Taurocholic acid,0.0034229729661201,0.0009990009990009,1678.9398
+Human_Breast,Tier1,other,other,TAP1,TAP1,within_other,Adenosine triphosphate,0.0034229729661201,0.0009990009990009,144360.0
+Human_Breast,Tier1,other,other,ATP7A,TAP1,within_other,Adenosine triphosphate,0.0034229729661201,0.0009990009990009,14897.652
+Human_Breast,Tier1,other,other,ATP7B,TAP1,within_other,Adenosine triphosphate,0.0034229729661201,0.0009990009990009,12709.007
+Human_Breast,Tier1,other,other,AQP7,ATP7A,within_other,Water,0.0034229729661201,0.0009990009990009,3038.0288
+Human_Breast,Tier1,other,other,AQP9,AQP9,within_other,Water,0.0034229729661201,0.0009990009990009,1585.6176
+Human_Breast,Tier1,other,other,AQP7,ATP7B,within_other,Water,0.0034229729661201,0.0009990009990009,579.1073
+Human_Breast,Tier1,other,other,AQP5,AQP7,within_other,Water,0.0034229729661201,0.0009990009990009,2749.0662
+Human_Breast,Tier1,other,other,AQP8,AQP8,within_other,Water,0.0034229729661201,0.0009990009990009,438477.34
+Human_Breast,Tier1,other,other,AQP5,ATP7B,within_other,Water,0.0034229729661201,0.0009990009990009,9830.308
+Human_Breast,Tier1,other,other,AQP7,AQP7,within_other,Water,0.0034229729661201,0.0009990009990009,28143.28
+Human_Breast,Tier1,other,other,ABCC1,SLC6A4,within_other,O-Desmethylverapamil (D-702),0.0034229729661201,0.0009990009990009,2338.742
+Human_Breast,Tier1,other,other,ABCC2,SLC22A4,within_other,O-Desmethylverapamil (D-702),0.0034229729661201,0.0009990009990009,24059.473
+Human_Breast,Tier1,other,other,ABCC2,SLC6A4,within_other,O-Desmethylverapamil (D-702),0.0034229729661201,0.0009990009990009,3556.9883
+Human_Breast,Tier1,other,other,ABCC3,SLC22A4,within_other,O-Desmethylverapamil (D-702),0.0034229729661201,0.0009990009990009,1038.7946
+Human_Breast,Tier1,other,other,ABCC3,SLC22A5,within_other,O-Desmethylverapamil (D-702),0.0034229729661201,0.0009990009990009,3465.2776
+Human_Breast,Tier1,other,other,ABCC1,SLC22A4,within_other,O-Desmethylverapamil (D-702),0.0034229729661201,0.0009990009990009,8115.9204
+Human_Breast,Tier1,other,other,ABCC3,SLC6A4,within_other,O-Desmethylverapamil (D-702),0.0034229729661201,0.0009990009990009,639.2509
+Human_Breast,Tier1,other,other,SLC4A1,SLC4A1,within_other,Chloride_bicarbonate anion exchange,0.0034229729661201,0.0009990009990009,1028.0356
+Human_Breast,Tier1,other,other,SLC24A1,SLC24A1,within_other,Sodium_calcium_potassium exchange,0.0034229729661201,0.0009990009990009,3910.8298
+Human_Breast,Tier1,other,other,CLCN3,CLCN3,within_other,Chloride,0.0034229729661201,0.0009990009990009,52651.508
+Human_Breast,Tier1,other,other,CLCN5,CLCN5,within_other,Chloride,0.0034229729661201,0.0009990009990009,821.7753
+Human_Breast,Tier1,other,other,CLCN3,CLCN4,within_other,Chloride,0.0034229729661201,0.0009990009990009,2557.405
+Human_Breast,Tier1,other,other,CLCN3,CLCN5,within_other,Chloride,0.0034229729661201,0.0009990009990009,3963.6506
+Human_Breast,Tier1,other,other,SLC9A1,SLC9A3,within_other,Sodium_hydrogen exchange,0.0034229729661201,0.0009990009990009,8938.424
+Human_Breast,Tier1,other,other,SLC9A1,SLC9A1,within_other,Sodium_hydrogen exchange,0.0034229729661201,0.0009990009990009,1493.9425
+Human_Breast,Tier1,other,other,SLC9A3,SLC9A3,within_other,Sodium_hydrogen exchange,0.0034229729661201,0.0009990009990009,2865.9272
+Human_Breast,Tier1,other,other,SLC6A5,SLC6A9,within_other,Neurotransmitter,0.0034229729661201,0.0009990009990009,672.9089
+Human_Breast,Tier1,other,other,SLC6A9,SLC6A9,within_other,Neurotransmitter,0.0034229729661201,0.0009990009990009,29689.553
+Human_Breast,Tier1,other,other,SLC6A17,SLC6A17,within_other,Neurotransmitter,0.0034229729661201,0.0009990009990009,1034.4985
+Human_Breast,Tier1,other,other,ORAI3,ORAI3,within_other,Calcium release-activated calcium transport,0.0034229729661201,0.0009990009990009,16070.35
+Human_Breast,Tier1,other,other,ORAI2,ORAI2,within_other,Calcium release-activated calcium transport,0.0034229729661201,0.0009990009990009,16896.88
+Human_Breast,Tier1,other,other,ORAI2,ORAI3,within_other,Calcium release-activated calcium transport,0.0034229729661201,0.0009990009990009,27247.143
+Human_Breast,Tier1,other,other,SCNN1A,SCNN1A,within_other,Amiloride-sensitive sodium transport,0.0034229729661201,0.0009990009990009,25233.293
+Human_Breast,Tier1,other,other,SCNN1G,SCNN1G,within_other,Amiloride-sensitive sodium transport,0.0034229729661201,0.0009990009990009,886.2577
+Human_Breast,Tier1,other,other,SCNN1A,SCNN1G,within_other,Amiloride-sensitive sodium transport,0.0034229729661201,0.0009990009990009,3680.1204
+Human_Breast,Tier1,other,other,SLC23A2,SLC23A2,within_other,Vitamin C,0.0034229729661201,0.0009990009990009,3458.4958
+Human_Breast,Tier1,other,other,SLC7A11,SLC7A11,within_other,L-Cysteine | L-Cystine | L-Glutamate,0.0064528772662743,0.0019980019980019,351.0816
+Human_Breast,Tier1,other,other,SLC11A1,SLC11A1,within_other,Iron | Manganese,0.0064528772662743,0.0019980019980019,3101.1025
+Human_Breast,Tier1,other,other,SLC6A2,SLC6A4,within_other,Sodium,0.0064528772662743,0.0019980019980019,342.37988
+Human_Breast,Tier1,other,other,SLC6A4,SLC6A4,within_other,N-Desmethylcitalopram | O-Desmethylverapamil (D-702) | Serotonin | Sodium,0.0064528772662743,0.0019980019980019,491.53674
+Human_Breast,Tier1,other,other,SLC12A2,SLC5A7,within_other,Chloride ion | Sodium,0.0064528772662743,0.0019980019980019,1057.4127
+Human_Breast,Tier1,other,other,SLC12A2,SLC5A5,within_other,Sodium,0.0064528772662743,0.0019980019980019,1666.7471
+Human_Breast,Tier1,other,other,ABCG2,CD36,within_other,Cholesterol,0.0064528772662743,0.0019980019980019,1578.2241
+Human_Breast,Tier1,other,other,SLC6A3,SLC6A3,within_other,Dopamine,0.0064528772662743,0.0019980019980019,474.68198
+Human_Breast,Tier1,other,other,FOLR1,SLC19A1,within_other,Folic acid,0.0064528772662743,0.0019980019980019,566.0113
+Human_Breast,Tier1,other,other,SLC2A1,SLC2A9,within_other,D-Glucose,0.0090716458429462,0.0029970029970029,361.65515
+Human_Breast,Tier1,other,other,SLC3A1,SLC3A1,within_other,L-Arginine | L-Cystine | L-Lysine | L-Ornithine,0.0090716458429462,0.0029970029970029,292.2491
+Human_Breast,Tier1,other,other,SLC11A2,SLC11A2,within_other,Iron,0.0090716458429462,0.0029970029970029,2315.1213
+Human_Breast,Tier1,other,other,SLC16A9,SLC22A4,within_other,L-Carnitine,0.0090716458429462,0.0029970029970029,617.05475
+Human_Breast,Tier1,other,other,SLC10A1,SLC10A1,within_other,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 17a-Ethynylestradiol | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Deoxycholic acid | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | Progesterone | Sodium | Sulfolithocholic acid | Taurocholic acid | Testosterone | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0090716458429462,0.0029970029970029,208.30789
+Human_Breast,Tier1,other,other,SLC22A1,SLC22A2,within_other,Choline | Dopamine | Estradiol | N-desmethylimatinib | Norepinephrine | Progesterone | Prostaglandins | Serotonin,0.0090716458429462,0.0029970029970029,172.50926
+Human_Breast,Tier1,other,other,SLC6A1,SLC6A1,within_other,GABA,0.0090716458429462,0.0029970029970029,255.075
+Human_Breast,Tier1,other,other,SLCO1B1,SLCO1B3,within_other,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | 4-Hydroxyvalsartan | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Dehydroepiandrosterone | Deoxycholic acid | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | Sulfolithocholic acid | Taurocholic acid | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0090716458429462,0.0029970029970029,172.17442
+Human_Breast,Tier1,other,other,ABCC2,SLC10A1,within_other,17a-Ethynylestradiol | Cholic acid | Taurocholic acid,0.0090716458429462,0.0029970029970029,269.00995
+Human_Breast,Tier1,other,other,ABCG2,SLC22A5,within_other,O-Desmethylverapamil (D-702),0.0090716458429462,0.0029970029970029,1317.0054
+Human_Breast,Tier1,other,other,SLC43A2,SLC7A5,within_other,L-Leucine | L-Methionine | L-Phenylalanine,0.0118823907370162,0.0039960039960039,17522.21
+Human_Breast,Tier1,other,other,SLC22A1,SLC6A2,within_other,Norepinephrine,0.0118823907370162,0.0039960039960039,190.2741
+Human_Breast,Tier1,other,other,AQP1,AQP1,within_other,Water,0.0118823907370162,0.0039960039960039,278.62482
+Human_Breast,Tier1,other,other,SLC5A1,SLC5A5,within_other,Sodium | Urea,0.0144086682548221,0.0049950049950049,357.48145
+Human_Breast,Tier1,other,other,ABCB1,CD36,within_other,Cholesterol,0.0144086682548221,0.0049950049950049,2043.4572
+Human_Breast,Tier1,other,other,NPC1L1,SCARB1,within_other,alpha-Tocopherol,0.0144086682548221,0.0049950049950049,458.54376
+Human_Breast,Tier1,other,other,SLC26A2,SLC26A2,within_other,Anion exchange,0.0144086682548221,0.0049950049950049,2468.9434
+Human_Breast,Tier1,other,other,SLC5A2,SLC5A2,within_other,Sodium_D-Glucose cotransport,0.0144086682548221,0.0049950049950049,330.90817
+Human_Breast,Tier1,other,other,SLC11A2,SLC3A2,within_other,Iron,0.0167881910620499,0.0059940059940059,4751.968
+Human_Breast,Tier1,other,other,SLC22A4,SLC5A5,within_other,Sodium,0.0167881910620499,0.0059940059940059,797.34845
+Human_Breast,Tier1,other,other,ABCC1,SLCO1B1,within_other,Cholic acid | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0167881910620499,0.0059940059940059,1635.3928
+Human_Breast,Tier1,other,other,CPT1A,MSR1,within_other,Fatty acid,0.0192664478378764,0.0069930069930069,20200.785
+Human_Breast,Tier1,other,other,ABCB1,ABCB1,within_other,"17a-Ethynylestradiol | 2-Hydroxychlorpropamide | 3',4'-Dihydrodiol | 4'-Hydroxydiclofenac | 4-Hydroxycyclophosphamide | 5-Hydroxyomeprazole | 8-Hydroxycarvedilol | Cholesterol | Cholic acid | Cortisol | E-3179 | Estradiol | Estriol | Glycerol | Hydroxylansoprazole | N-Desmethylcitalopram | N-Desmethyleletriptan | N-Desmethyltamoxifen | N-desmethylimatinib | O-Deethylated candesartan | O-Desmethylverapamil (D-702) | Progesterone | Taurocholic acid | Testosterone",0.0192664478378764,0.0069930069930069,663.8753
+Human_Breast,Tier1,other,other,ABCC2,ABCC3,within_other,Cholic acid | Folinic acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0192664478378764,0.0069930069930069,641.3743
+Human_Breast,Tier1,other,other,SLC22A4,SLCO1B1,within_other,L-Carnitine | O-Desmethylverapamil (D-702),0.0214924517713362,0.0079920079920079,441.4612
+Human_Breast,Tier1,other,other,SLC5A1,SLC6A4,within_other,Sodium,0.0214924517713362,0.0079920079920079,333.23166
+Human_Breast,Tier1,other,other,ABCC2,SLC22A5,within_other,O-Desmethylverapamil (D-702),0.0214924517713362,0.0079920079920079,439.60693
+Human_Breast,Tier1,other,other,SLC6A17,SLC6A9,within_other,Neurotransmitter,0.0214924517713362,0.0079920079920079,1131.8739
+Human_Breast,Tier1,other,other,ABCC3,ABCG2,within_other,5-Hydroxyomeprazole | Folic acid | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0263408466533466,0.0099900099900099,449.77423
+Human_Breast,Tier1,other,other,SLC6A5,SLC6A5,within_other,Neurotransmitter,0.0263408466533466,0.0099900099900099,116.232056
+Human_Breast,Tier1,other,other,SLC40A1,SLC40A1,within_other,Iron,0.0313639848523569,0.0119880119880119,50453.035
+Human_Breast,Tier1,other,other,SLC22A2,SLC5A7,within_other,Choline,0.0313639848523569,0.0119880119880119,151.59589
+Human_Breast,Tier1,other,other,SLC5A7,SLC6A2,within_other,Sodium,0.0337162837162837,0.0129870129870129,180.74252
+Human_Breast,Tier1,other,other,AQP1,AQP7,within_other,Water,0.0383139587685042,0.0149850149850149,101.9465
+Human_Breast,Tier1,other,other,ABCG2,SLC16A1,within_other,Taurocholic acid,0.0405609428165819,0.0159840159840159,416.38953
+Human_Breast,Tier1,other,other,AQP8,ATP7B,within_other,Water,0.0405609428165819,0.0159840159840159,843.38824
+Human_Breast,Tier1,other,other,SLC16A1,SLC16A1,within_other,4-ene-Valproic acid | Acetate | Butyrate | D-Lactate | Ketone bodies | L-Glutamate | L-Lactate | Nicotinate | Pyruvate | Taurocholic acid | alpha-Ketoisovaleric acid,0.044789159180303,0.0179820179820179,704.51746
+Human_Breast,Tier1,other,other,ABCG2,SLCO2B1,within_other,Estradiol | Taurocholic acid,0.044789159180303,0.0179820179820179,1461.5327
+Human_Breast,Tier1,other,other,SLC22A4,SLC6A4,within_other,O-Desmethylverapamil (D-702) | Sodium,0.0469310908871348,0.0189810189810189,702.8959
+Human_Breast,Tier1,other,other,SLC10A1,SLC22A1,within_other,Progesterone | Taurocholic acid | Testosterone,0.0492208521405601,0.0199800199800199,129.34813
+Human_Breast,Tier2,CD8 T Cell,other,SLC2A3,SLC2A3,Tcell_interface,D-Galactose | D-Glucose | D-Maltose | D-Mannose | D-Xylose | Dehydroascorbic acid | Docosahexaenoic acid,0.0034229729661201,0.0009990009990009,83441.18
+Human_Breast,Tier2,CD8 T Cell,other,SLC1A5,SLC38A7,Tcell_interface,L-Glutamine,0.0034229729661201,0.0009990009990009,1078.3502
+Human_Breast,Tier2,CD8 T Cell,other,SLC1A5,SLC3A2,Tcell_interface,L-Glutamate | L-Glutamine | L-Leucine | L-Serine,0.0034229729661201,0.0009990009990009,1935.0847
+Human_Breast,Tier2,CD8 T Cell,other,SLC43A2,SLC43A2,Tcell_interface,L-Cysteine | L-Isoleucine | L-Leucine | L-Methionine | L-Phenylalanine | L-Valine,0.0034229729661201,0.0009990009990009,922.89417
+Human_Breast,Tier2,CD8 T Cell,other,SLC16A1,SLCO2A1,Tcell_interface,Pyruvate,0.0034229729661201,0.0009990009990009,4278.548
+Human_Breast,Tier2,CD8 T Cell,other,SLCO2B1,SLCO2B1,Tcell_interface,Acetate | Citric acid | Estradiol | Nicotinate | Oxalic acid | Taurocholic acid,0.0034229729661201,0.0009990009990009,3113.4932
+Human_Breast,Tier2,CD8 T Cell,other,SLC16A1,SLCO2B1,Tcell_interface,Acetate | Nicotinate | Taurocholic acid,0.0034229729661201,0.0009990009990009,1019.6143
+Human_Breast,Tier2,CD8 T Cell,other,SLC1A1,SLC3A2,Tcell_interface,L-Glutamate,0.0034229729661201,0.0009990009990009,167.66068
+Human_Breast,Tier2,CD8 T Cell,other,CUBN,SLC40A1,Tcell_interface,Iron,0.0034229729661201,0.0009990009990009,1030.8712
+Human_Breast,Tier2,CD8 T Cell,other,CUBN,SLC3A2,Tcell_interface,Iron,0.0034229729661201,0.0009990009990009,47469.81
+Human_Breast,Tier2,CD8 T Cell,other,SLC40A1,SLC40A1,Tcell_interface,Iron,0.0034229729661201,0.0009990009990009,7823.4316
+Human_Breast,Tier2,CD8 T Cell,other,SLC22A5,SLC5A3,Tcell_interface,Sodium,0.0034229729661201,0.0009990009990009,604.23676
+Human_Breast,Tier2,CD8 T Cell,other,SLC29A1,SLC5A3,Tcell_interface,Sodium,0.0034229729661201,0.0009990009990009,1108.6045
+Human_Breast,Tier2,CD8 T Cell,other,MSR1,MSR1,Tcell_interface,Fatty acid,0.0034229729661201,0.0009990009990009,2582.0305
+Human_Breast,Tier2,CD8 T Cell,other,CD36,CD36,Tcell_interface,Cholesterol | Fatty acid | Vitamin D3,0.0034229729661201,0.0009990009990009,1130.6768
+Human_Breast,Tier2,CD8 T Cell,other,ABCA1,ABCA1,Tcell_interface,25-Hydroxycholesterol,0.0034229729661201,0.0009990009990009,7590.747
+Human_Breast,Tier2,CD8 T Cell,other,ABCC4,ABCC4,Tcell_interface,4'-Hydroxydiclofenac | Cholic acid | Cyclic AMP | Folic acid | Folinic acid | Glutathione | Hydroxycelecoxib | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0034229729661201,0.0009990009990009,254.52641
+Human_Breast,Tier2,CD8 T Cell,other,LRP1,LRP1,Tcell_interface,Heme,0.0034229729661201,0.0009990009990009,1904.4194
+Human_Breast,Tier2,CD8 T Cell,other,SLC29A3,SLC29A3,Tcell_interface,Adenine,0.0034229729661201,0.0009990009990009,706.04736
+Human_Breast,Tier2,CD8 T Cell,other,LRP2,LRP2,Tcell_interface,Calcidiol,0.0034229729661201,0.0009990009990009,193.90213
+Human_Breast,Tier2,CD8 T Cell,other,CD38,CD38,Tcell_interface,Adenosine diphosphate ribose,0.0034229729661201,0.0009990009990009,2578.009
+Human_Breast,Tier2,CD8 T Cell,other,SLC12A6,SLC12A6,Tcell_interface,Chloride ion,0.0034229729661201,0.0009990009990009,732.93945
+Human_Breast,Tier2,CD8 T Cell,other,ABCC1,SLCO2B1,Tcell_interface,Taurocholic acid,0.0034229729661201,0.0009990009990009,7178.463
+Human_Breast,Tier2,CD8 T Cell,other,TAP1,TAP1,Tcell_interface,Adenosine triphosphate,0.0034229729661201,0.0009990009990009,21093.453
+Human_Breast,Tier2,CD8 T Cell,other,AQP9,AQP9,Tcell_interface,Water,0.0034229729661201,0.0009990009990009,151.4273
+Human_Breast,Tier2,CD8 T Cell,other,AQP8,AQP8,Tcell_interface,Water,0.0034229729661201,0.0009990009990009,14229.619
+Human_Breast,Tier2,CD8 T Cell,other,SLC22A5,SLC5A1,Tcell_interface,Sodium,0.0064528772662743,0.0019980019980019,145.29768
+Human_Breast,Tier2,CD8 T Cell,other,ORAI3,ORAI3,Tcell_interface,Calcium release-activated calcium transport,0.0064528772662743,0.0019980019980019,1922.5996
+Human_Breast,Tier2,CD8 T Cell,other,SLC1A3,SLC1A3,Tcell_interface,D-Aspartate | L-Aspartate | L-Glutamate | Malic acid,0.0090716458429462,0.0029970029970029,438.41083
+Human_Breast,Tier2,CD8 T Cell,other,SLC39A8,SLC39A8,Tcell_interface,Cadmium | Manganese | Zinc,0.0090716458429462,0.0029970029970029,988.67096
+Human_Breast,Tier2,CD8 T Cell,other,ABCC1,SLC16A1,Tcell_interface,Taurocholic acid,0.0090716458429462,0.0029970029970029,1477.7727
+Human_Breast,Tier2,CD8 T Cell,other,SLC6A9,SLC6A9,Tcell_interface,Neurotransmitter,0.0090716458429462,0.0029970029970029,268.4911
+Human_Breast,Tier2,CD8 T Cell,other,ATP7A,TAP1,Tcell_interface,Adenosine triphosphate,0.0144086682548221,0.0049950049950049,2733.2666
+Human_Breast,Tier2,CD8 T Cell,other,FOLR2,FOLR2,Tcell_interface,Folic acid,0.0167881910620499,0.0059940059940059,284.3122
+Human_Breast,Tier2,CD8 T Cell,other,NPC1L1,NPC1L1,Tcell_interface,alpha-Tocopherol,0.0167881910620499,0.0059940059940059,505.50217
+Human_Breast,Tier2,CD8 T Cell,other,ABCG2,SLCO2B1,Tcell_interface,Estradiol | Taurocholic acid,0.0167881910620499,0.0059940059940059,208.34442
+Human_Breast,Tier2,CD8 T Cell,other,SLC6A3,SLC6A3,Tcell_interface,Dopamine,0.0239878698376722,0.0089910089910089,105.5815
+Human_Breast,Tier2,CD8 T Cell,other,SLC10A1,SLC10A1,Tcell_interface,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 17a-Ethynylestradiol | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Deoxycholic acid | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | Progesterone | Sodium | Sulfolithocholic acid | Taurocholic acid | Testosterone | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0358956632720891,0.0139860139860139,47.94087
+Human_Breast,Tier2,CD8 T Cell,other,CD36,MSR1,Tcell_interface,Fatty acid,0.0358956632720891,0.0139860139860139,502.95007
+Human_Breast,Tier2,CD8 T Cell,CD8 T Cell,SLC2A3,SLC2A3,within_Tcell,D-Galactose | D-Glucose | D-Maltose | D-Mannose | D-Xylose | Dehydroascorbic acid | Docosahexaenoic acid,0.0034229729661201,0.0009990009990009,82718.87
+Human_Breast,Tier2,CD8 T Cell,CD8 T Cell,CUBN,SLC3A2,within_Tcell,Iron,0.0034229729661201,0.0009990009990009,36481.535
+Human_Breast,Tier2,CD8 T Cell,CD8 T Cell,SLC40A1,SLC40A1,within_Tcell,Iron,0.0034229729661201,0.0009990009990009,6005.6396
+Human_Breast,Tier2,CD8 T Cell,CD8 T Cell,CD38,CD38,within_Tcell,Adenosine diphosphate ribose,0.0034229729661201,0.0009990009990009,1606.2167
+Human_Breast,Tier2,CD8 T Cell,CD8 T Cell,ABCC1,ABCC1,within_Tcell,4'-Hydroxydiclofenac | Cholic acid | Glutathione | Leukotriene C4 | O-Desmethylverapamil (D-702) | Progesterone | Taurocholic acid,0.0034229729661201,0.0009990009990009,14187.339
+Human_Breast,Tier2,CD8 T Cell,CD8 T Cell,TAP1,TAP1,within_Tcell,Adenosine triphosphate,0.0034229729661201,0.0009990009990009,13722.95
+Human_Breast,Tier2,CD8 T Cell,CD8 T Cell,AQP8,AQP8,within_Tcell,Water,0.0034229729661201,0.0009990009990009,2050.5945
+Human_Breast,Tier2,CD8 T Cell,CD8 T Cell,ATP7A,TAP1,within_Tcell,Adenosine triphosphate,0.0064528772662743,0.0019980019980019,2371.792
+Human_Breast,Tier2,CD8 T Cell,CD8 T Cell,SLC43A2,SLC43A2,within_Tcell,L-Cysteine | L-Isoleucine | L-Leucine | L-Methionine | L-Phenylalanine | L-Valine,0.0118823907370162,0.0039960039960039,378.9677
+Human_Breast,Tier2,CD8 T Cell,CD8 T Cell,ABCC3,SLCO1B3,within_Tcell,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Deoxycholic acid | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | Sulfolithocholic acid | Taurocholic acid | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0144086682548221,0.0049950049950049,50.119343
+Human_Breast,Tier2,CD8 T Cell,CD8 T Cell,LRP1,LRP1,within_Tcell,Heme,0.0167881910620499,0.0059940059940059,422.54697
+Human_Breast,Tier2,CD8 T Cell,CD8 T Cell,ABCC4,ABCC4,within_Tcell,4'-Hydroxydiclofenac | Cholic acid | Cyclic AMP | Folic acid | Folinic acid | Glutathione | Hydroxycelecoxib | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0192664478378764,0.0069930069930069,187.90509
+Human_Breast,Tier2,CD8 T Cell,CD8 T Cell,SLC22A1,SLC6A2,within_Tcell,Norepinephrine,0.0214924517713362,0.0079920079920079,29.906754
+Human_Breast,Tier2,CD8 T Cell,CD8 T Cell,AQP8,ATP7B,within_Tcell,Water,0.0239878698376722,0.0089910089910089,89.60234
+Human_Breast,Tier2,CD8 T Cell,CD8 T Cell,SLC11A2,SLC40A1,within_Tcell,Iron,0.0263408466533466,0.0099900099900099,178.105
+Human_Breast,Tier2,CD8 T Cell,CD8 T Cell,SLCO2B1,SLCO2B1,within_Tcell,Acetate | Citric acid | Estradiol | Nicotinate | Oxalic acid | Taurocholic acid,0.0337162837162837,0.0129870129870129,714.3839
+Human_Breast,Tier2,CD8 T Cell,CD8 T Cell,SLC3A2,SLC7A5,within_Tcell,L-Glutamine | L-Leucine,0.0427743897893151,0.0169830169830169,1180.9012
+Human_Breast,Tier2,CD8 T Cell,CD8 T Cell,SLC16A1,SLCO2A1,within_Tcell,Pyruvate,0.0427743897893151,0.0169830169830169,267.72577
+Human_Breast,Tier2,CD8 T Cell,CD8 T Cell,SLC38A7,SLC7A5,within_Tcell,L-Glutamine,0.044789159180303,0.0179820179820179,261.11545
+Human_Breast,Tier2,other,other,SLC2A1,SLC2A1,within_other,D-Galactose | D-Glucose | D-Mannose | Dehydroascorbic acid | Docosahexaenoic acid | Glucosamine,0.0034229729661201,0.0009990009990009,160699.12
+Human_Breast,Tier2,other,other,SLC2A9,SLC2A9,within_other,D-Glucose,0.0034229729661201,0.0009990009990009,3641.9966
+Human_Breast,Tier2,other,other,SLC2A2,SLC2A9,within_other,D-Glucose,0.0034229729661201,0.0009990009990009,8124.645
+Human_Breast,Tier2,other,other,SLC2A1,SLC2A2,within_other,D-Galactose | D-Glucose | D-Mannose | Glucosamine,0.0034229729661201,0.0009990009990009,1019.6183
+Human_Breast,Tier2,other,other,SLC2A3,SLC2A3,within_other,D-Galactose | D-Glucose | D-Maltose | D-Mannose | D-Xylose | Dehydroascorbic acid | Docosahexaenoic acid,0.0034229729661201,0.0009990009990009,334914.25
+Human_Breast,Tier2,other,other,SLC3A2,SLC3A2,within_other,Iron | L-Cystine | L-Glutamate | L-Glutamine | L-Leucine | L-Serine,0.0034229729661201,0.0009990009990009,140826.27
+Human_Breast,Tier2,other,other,SLC1A5,SLC1A5,within_other,L-Alanine | L-Asparagine | L-Cysteine | L-Glutamate | L-Glutamine | L-Leucine | L-Serine | L-Threonine | Sodium,0.0034229729661201,0.0009990009990009,15322.344
+Human_Breast,Tier2,other,other,SLC38A7,SLC38A7,within_other,L-Glutamine,0.0034229729661201,0.0009990009990009,52876.297
+Human_Breast,Tier2,other,other,SLC7A7,SLC7A7,within_other,L-Glutamine,0.0034229729661201,0.0009990009990009,27193.342
+Human_Breast,Tier2,other,other,SLC1A5,SLC7A5,within_other,L-Glutamine | L-Leucine,0.0034229729661201,0.0009990009990009,80787.44
+Human_Breast,Tier2,other,other,SLC7A5,SLC7A5,within_other,L-Arginine | L-Glutamine | L-Histidine | L-Leucine | L-Methionine | L-Phenylalanine | L-Tyrosine,0.0034229729661201,0.0009990009990009,435690.88
+Human_Breast,Tier2,other,other,SLC3A2,SLC7A5,within_other,L-Glutamine | L-Leucine,0.0034229729661201,0.0009990009990009,141037.17
+Human_Breast,Tier2,other,other,SLC38A7,SLC3A2,within_other,L-Glutamine,0.0034229729661201,0.0009990009990009,1858.6268
+Human_Breast,Tier2,other,other,SLC1A5,SLC38A7,within_other,L-Glutamine,0.0034229729661201,0.0009990009990009,11722.113
+Human_Breast,Tier2,other,other,SLC3A2,SLC7A7,within_other,L-Glutamine,0.0034229729661201,0.0009990009990009,226585.05
+Human_Breast,Tier2,other,other,SLC38A7,SLC7A5,within_other,L-Glutamine,0.0034229729661201,0.0009990009990009,10562.489
+Human_Breast,Tier2,other,other,SLC1A5,SLC7A11,within_other,L-Cysteine | L-Glutamate,0.0034229729661201,0.0009990009990009,6259.745
+Human_Breast,Tier2,other,other,SLC43A2,SLC43A2,within_other,L-Cysteine | L-Isoleucine | L-Leucine | L-Methionine | L-Phenylalanine | L-Valine,0.0034229729661201,0.0009990009990009,9890.064
+Human_Breast,Tier2,other,other,SLC16A4,SLC16A4,within_other,Acetate | L-Lactate,0.0034229729661201,0.0009990009990009,12100.975
+Human_Breast,Tier2,other,other,SLC16A1,SLCO2A1,within_other,Pyruvate,0.0034229729661201,0.0009990009990009,118433.06
+Human_Breast,Tier2,other,other,SLCO2A1,SLCO2A1,within_other,Arachidonic acid | Eicosanoid | Prostaglandins | Pyruvate,0.0034229729661201,0.0009990009990009,4213.076
+Human_Breast,Tier2,other,other,SLCO2B1,SLCO2B1,within_other,Acetate | Citric acid | Estradiol | Nicotinate | Oxalic acid | Taurocholic acid,0.0034229729661201,0.0009990009990009,18837.713
+Human_Breast,Tier2,other,other,SLC16A1,SLCO2B1,within_other,Acetate | Nicotinate | Taurocholic acid,0.0034229729661201,0.0009990009990009,2618.7698
+Human_Breast,Tier2,other,other,SLC22A5,SLC22A5,within_other,4-ene-Valproic acid | Acetyl-L-Carnitine | Choline | Creatine | Dopamine | Histamine | L-Carnitine | Nicotinate | Norepinephrine | O-Desmethylverapamil (D-702) | Sodium,0.0034229729661201,0.0009990009990009,20315.1
+Human_Breast,Tier2,other,other,SLC1A2,SLC3A2,within_other,L-Glutamate,0.0034229729661201,0.0009990009990009,5074.383
+Human_Breast,Tier2,other,other,SLC1A2,SLC1A2,within_other,D-Aspartate | L-Aspartate | L-Glutamate,0.0034229729661201,0.0009990009990009,2167.9697
+Human_Breast,Tier2,other,other,SLC1A2,SLC7A11,within_other,L-Glutamate,0.0034229729661201,0.0009990009990009,33205.492
+Human_Breast,Tier2,other,other,SLC1A3,SLC1A3,within_other,D-Aspartate | L-Aspartate | L-Glutamate | Malic acid,0.0034229729661201,0.0009990009990009,33864.06
+Human_Breast,Tier2,other,other,SLC1A1,SLC1A5,within_other,L-Glutamate,0.0034229729661201,0.0009990009990009,1198.5653
+Human_Breast,Tier2,other,other,SLC3A2,SLC7A11,within_other,L-Cystine | L-Glutamate,0.0034229729661201,0.0009990009990009,94718.51
+Human_Breast,Tier2,other,other,SLC1A2,SLC1A5,within_other,L-Glutamate,0.0034229729661201,0.0009990009990009,1935.8657
+Human_Breast,Tier2,other,other,SLC1A1,SLC3A2,within_other,L-Glutamate,0.0034229729661201,0.0009990009990009,1332.674
+Human_Breast,Tier2,other,other,SLC3A1,SLC3A2,within_other,L-Cystine,0.0034229729661201,0.0009990009990009,2251.689
+Human_Breast,Tier2,other,other,SLC30A8,SLC30A8,within_other,Zinc,0.0034229729661201,0.0009990009990009,874.15204
+Human_Breast,Tier2,other,other,SLC39A8,SLC39A8,within_other,Cadmium | Manganese | Zinc,0.0034229729661201,0.0009990009990009,2669.6687
+Human_Breast,Tier2,other,other,CUBN,SLC11A2,within_other,Iron,0.0034229729661201,0.0009990009990009,65140.664
+Human_Breast,Tier2,other,other,CUBN,SLC3A2,within_other,Iron,0.0034229729661201,0.0009990009990009,129133.15
+Human_Breast,Tier2,other,other,SLC11A1,SLC11A2,within_other,Iron,0.0034229729661201,0.0009990009990009,90970.84
+Human_Breast,Tier2,other,other,SLC22A5,SLC22A8,within_other,Acetyl-L-Carnitine | L-Carnitine,0.0034229729661201,0.0009990009990009,1214.2894
+Human_Breast,Tier2,other,other,SLC16A9,SLC22A5,within_other,L-Carnitine,0.0034229729661201,0.0009990009990009,661.20026
+Human_Breast,Tier2,other,other,SLC22A4,SLC22A4,within_other,L-Carnitine | O-Desmethylverapamil (D-702) | Putrescine | Sodium | Spermine | Testosterone,0.0034229729661201,0.0009990009990009,2446.448
+Human_Breast,Tier2,other,other,SLC16A9,SLC16A9,within_other,L-Carnitine,0.0034229729661201,0.0009990009990009,1063.8568
+Human_Breast,Tier2,other,other,SLC22A5,SLCO1B1,within_other,L-Carnitine | O-Desmethylverapamil (D-702),0.0034229729661201,0.0009990009990009,2236.7256
+Human_Breast,Tier2,other,other,SLC22A4,SLC22A5,within_other,L-Carnitine | O-Desmethylverapamil (D-702) | Sodium,0.0034229729661201,0.0009990009990009,4871.8604
+Human_Breast,Tier2,other,other,SLC22A5,SLC6A4,within_other,O-Desmethylverapamil (D-702) | Sodium,0.0034229729661201,0.0009990009990009,2295.329
+Human_Breast,Tier2,other,other,SLC1A5,SLC5A7,within_other,Sodium,0.0034229729661201,0.0009990009990009,6384.533
+Human_Breast,Tier2,other,other,SLC1A5,SLC5A5,within_other,Sodium,0.0034229729661201,0.0009990009990009,11732.906
+Human_Breast,Tier2,other,other,SLC29A1,SLC29A1,within_other,Adenosine | Cytidine | Ethanol | Guanosine | Inosine | Sodium | Thymidine | Uridine,0.0034229729661201,0.0009990009990009,193943.33
+Human_Breast,Tier2,other,other,SLC22A5,SLC5A3,within_other,Sodium,0.0034229729661201,0.0009990009990009,15459.815
+Human_Breast,Tier2,other,other,SLC22A4,SLC5A3,within_other,Sodium,0.0034229729661201,0.0009990009990009,5239.4434
+Human_Breast,Tier2,other,other,SLC5A7,SLC5A7,within_other,Chloride ion | Choline | Sodium,0.0034229729661201,0.0009990009990009,316.19247
+Human_Breast,Tier2,other,other,SLC29A1,SLC6A4,within_other,Sodium,0.0034229729661201,0.0009990009990009,6884.267
+Human_Breast,Tier2,other,other,SLC1A5,SLC22A4,within_other,Sodium,0.0034229729661201,0.0009990009990009,23291.213
+Human_Breast,Tier2,other,other,SLC29A1,SLC5A3,within_other,Sodium,0.0034229729661201,0.0009990009990009,49555.727
+Human_Breast,Tier2,other,other,SLC12A2,SLC12A2,within_other,Chloride ion | Sodium,0.0034229729661201,0.0009990009990009,17805.352
+Human_Breast,Tier2,other,other,SLC5A3,SLC5A5,within_other,Sodium,0.0034229729661201,0.0009990009990009,2369.8347
+Human_Breast,Tier2,other,other,SLC29A1,SLC5A1,within_other,Sodium,0.0034229729661201,0.0009990009990009,5052.3735
+Human_Breast,Tier2,other,other,SLC5A5,SLC6A4,within_other,Sodium,0.0034229729661201,0.0009990009990009,489.7675
+Human_Breast,Tier2,other,other,SLC10A1,SLC12A2,within_other,Sodium,0.0034229729661201,0.0009990009990009,835.9964
+Human_Breast,Tier2,other,other,SLC12A2,SLC6A4,within_other,Sodium,0.0034229729661201,0.0009990009990009,1831.9476
+Human_Breast,Tier2,other,other,SLC12A2,SLC5A3,within_other,Sodium,0.0034229729661201,0.0009990009990009,12331.298
+Human_Breast,Tier2,other,other,SLC10A1,SLC29A1,within_other,Sodium,0.0034229729661201,0.0009990009990009,2862.128
+Human_Breast,Tier2,other,other,SLC22A5,SLC6A2,within_other,Norepinephrine | Sodium,0.0034229729661201,0.0009990009990009,1502.8416
+Human_Breast,Tier2,other,other,SLC22A4,SLC6A2,within_other,Sodium,0.0034229729661201,0.0009990009990009,628.38556
+Human_Breast,Tier2,other,other,SLC22A5,SLC5A1,within_other,Sodium,0.0034229729661201,0.0009990009990009,1837.2126
+Human_Breast,Tier2,other,other,SLC5A3,SLC6A4,within_other,Sodium,0.0034229729661201,0.0009990009990009,2695.901
+Human_Breast,Tier2,other,other,SLC29A1,SLC6A2,within_other,Sodium,0.0034229729661201,0.0009990009990009,4468.3184
+Human_Breast,Tier2,other,other,SLC22A5,SLC5A7,within_other,Choline | Sodium,0.0034229729661201,0.0009990009990009,1353.6997
+Human_Breast,Tier2,other,other,SLC12A2,SLC29A1,within_other,Sodium,0.0034229729661201,0.0009990009990009,39336.67
+Human_Breast,Tier2,other,other,SLC1A5,SLC29A1,within_other,Sodium,0.0034229729661201,0.0009990009990009,265475.5
+Human_Breast,Tier2,other,other,SLC22A5,SLC5A5,within_other,Sodium,0.0034229729661201,0.0009990009990009,2982.0173
+Human_Breast,Tier2,other,other,SLC1A5,SLC6A4,within_other,Sodium,0.0034229729661201,0.0009990009990009,11597.433
+Human_Breast,Tier2,other,other,SLC29A1,SLC5A7,within_other,Sodium,0.0034229729661201,0.0009990009990009,4065.8267
+Human_Breast,Tier2,other,other,SLC29A1,SLC5A5,within_other,Sodium,0.0034229729661201,0.0009990009990009,8221.796
+Human_Breast,Tier2,other,other,SLC1A5,SLC5A3,within_other,Sodium,0.0034229729661201,0.0009990009990009,76216.94
+Human_Breast,Tier2,other,other,SLC10A1,SLC1A5,within_other,Sodium,0.0034229729661201,0.0009990009990009,4216.015
+Human_Breast,Tier2,other,other,SLC5A7,SLC6A4,within_other,Sodium,0.0034229729661201,0.0009990009990009,358.51776
+Human_Breast,Tier2,other,other,SLC12A2,SLC6A2,within_other,Sodium,0.0034229729661201,0.0009990009990009,1241.0094
+Human_Breast,Tier2,other,other,SLC12A2,SLC5A1,within_other,Sodium,0.0034229729661201,0.0009990009990009,1414.41
+Human_Breast,Tier2,other,other,SLC1A5,SLC5A1,within_other,Sodium,0.0034229729661201,0.0009990009990009,7238.941
+Human_Breast,Tier2,other,other,SLC5A5,SLC5A7,within_other,Sodium,0.0034229729661201,0.0009990009990009,323.1843
+Human_Breast,Tier2,other,other,SLC5A5,SLC5A5,within_other,Sodium | Urea,0.0034229729661201,0.0009990009990009,905.28125
+Human_Breast,Tier2,other,other,SLC5A3,SLC5A3,within_other,Sodium,0.0034229729661201,0.0009990009990009,18766.982
+Human_Breast,Tier2,other,other,SLC12A2,SLC1A5,within_other,Sodium,0.0034229729661201,0.0009990009990009,56059.727
+Human_Breast,Tier2,other,other,SLC10A1,SLC22A5,within_other,Sodium,0.0034229729661201,0.0009990009990009,973.2546
+Human_Breast,Tier2,other,other,SLC12A2,SLC22A4,within_other,Sodium,0.0034229729661201,0.0009990009990009,3892.2068
+Human_Breast,Tier2,other,other,SLC1A5,SLC6A2,within_other,Sodium,0.0034229729661201,0.0009990009990009,7110.6196
+Human_Breast,Tier2,other,other,SLC22A5,SLC29A1,within_other,Sodium,0.0034229729661201,0.0009990009990009,54058.184
+Human_Breast,Tier2,other,other,SLC12A2,SLC22A5,within_other,Sodium,0.0034229729661201,0.0009990009990009,11550.662
+Human_Breast,Tier2,other,other,SLC1A5,SLC22A5,within_other,Sodium,0.0034229729661201,0.0009990009990009,85362.945
+Human_Breast,Tier2,other,other,SLC22A4,SLC29A1,within_other,Sodium,0.0034229729661201,0.0009990009990009,15619.892
+Human_Breast,Tier2,other,other,SLC3A1,SLC7A5,within_other,L-Arginine,0.0034229729661201,0.0009990009990009,3327.961
+Human_Breast,Tier2,other,other,MSR1,MSR1,within_other,Fatty acid,0.0034229729661201,0.0009990009990009,36493.203
+Human_Breast,Tier2,other,other,CPT1A,CPT1A,within_other,Fatty acid,0.0034229729661201,0.0009990009990009,97023.16
+Human_Breast,Tier2,other,other,CD36,MSR1,within_other,Fatty acid,0.0034229729661201,0.0009990009990009,11294.572
+Human_Breast,Tier2,other,other,CD36,CD36,within_other,Cholesterol | Fatty acid | Vitamin D3,0.0034229729661201,0.0009990009990009,36413.844
+Human_Breast,Tier2,other,other,SLC6A12,SLC6A12,within_other,Betaine | GABA,0.0034229729661201,0.0009990009990009,527.1021
+Human_Breast,Tier2,other,other,SLCO1C1,SLCO1C1,within_other,"3',4'-Dihydrodiol | 4'-Hydroxydiclofenac | Estrone sulfate | Taurocholic acid | Thyroxine",0.0034229729661201,0.0009990009990009,430.62494
+Human_Breast,Tier2,other,other,ABCA1,ABCA1,within_other,25-Hydroxycholesterol,0.0034229729661201,0.0009990009990009,113027.516
+Human_Breast,Tier2,other,other,SLC22A5,SLC6A3,within_other,Dopamine,0.0034229729661201,0.0009990009990009,1938.4098
+Human_Breast,Tier2,other,other,ATP7A,SLC20A2,within_other,Phosphate,0.0034229729661201,0.0009990009990009,6384.615
+Human_Breast,Tier2,other,other,ATP7A,ATP7B,within_other,ADP | Adenosine triphosphate | Phosphate | Water,0.0034229729661201,0.0009990009990009,1858.7656
+Human_Breast,Tier2,other,other,ATP7A,ATP7A,within_other,ADP | Adenosine triphosphate | Phosphate | Water,0.0034229729661201,0.0009990009990009,2426.6235
+Human_Breast,Tier2,other,other,ATP7B,SLC20A2,within_other,Phosphate,0.0034229729661201,0.0009990009990009,5959.712
+Human_Breast,Tier2,other,other,ATP7B,ATP7B,within_other,ADP | Adenosine triphosphate | Phosphate | Water,0.0034229729661201,0.0009990009990009,2707.5598
+Human_Breast,Tier2,other,other,SLC20A2,SLC20A2,within_other,Phosphate,0.0034229729661201,0.0009990009990009,22613.91
+Human_Breast,Tier2,other,other,SLC19A1,SLC19A1,within_other,Folic acid | Thiamine,0.0034229729661201,0.0009990009990009,2464.02
+Human_Breast,Tier2,other,other,CHRNA5,CHRNA5,within_other,Ethanol,0.0034229729661201,0.0009990009990009,571.64087
+Human_Breast,Tier2,other,other,CHRNA5,SLC29A1,within_other,Ethanol,0.0034229729661201,0.0009990009990009,6553.7246
+Human_Breast,Tier2,other,other,ABCC3,ABCC3,within_other,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | 5-Hydroxyomeprazole | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Deoxycholic acid | Folic acid | Folinic acid | Glutathione | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | O-Desmethylverapamil (D-702) | Sulfolithocholic acid | Taurocholic acid | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0034229729661201,0.0009990009990009,1556.6632
+Human_Breast,Tier2,other,other,ABCC4,ABCC4,within_other,4'-Hydroxydiclofenac | Cholic acid | Cyclic AMP | Folic acid | Folinic acid | Glutathione | Hydroxycelecoxib | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0034229729661201,0.0009990009990009,1063.973
+Human_Breast,Tier2,other,other,ABCC3,SLC19A1,within_other,Folic acid,0.0034229729661201,0.0009990009990009,1501.5287
+Human_Breast,Tier2,other,other,FOLR2,FOLR2,within_other,Folic acid,0.0034229729661201,0.0009990009990009,1502.3116
+Human_Breast,Tier2,other,other,LRP1,LRP1,within_other,Heme,0.0034229729661201,0.0009990009990009,28225.863
+Human_Breast,Tier2,other,other,SLC29A3,SLC29A3,within_other,Adenine,0.0034229729661201,0.0009990009990009,16352.328
+Human_Breast,Tier2,other,other,LRP2,LRP2,within_other,Calcidiol,0.0034229729661201,0.0009990009990009,31014.682
+Human_Breast,Tier2,other,other,CD38,CD38,within_other,Adenosine diphosphate ribose,0.0034229729661201,0.0009990009990009,13887.588
+Human_Breast,Tier2,other,other,ABCC8,ABCC8,within_other,Potassium,0.0034229729661201,0.0009990009990009,1366.1543
+Human_Breast,Tier2,other,other,NPC1L1,NPC1L1,within_other,alpha-Tocopherol,0.0034229729661201,0.0009990009990009,29918.104
+Human_Breast,Tier2,other,other,SCARB1,SCARB1,within_other,alpha-Tocopherol,0.0034229729661201,0.0009990009990009,2450.3823
+Human_Breast,Tier2,other,other,ABCC4,SLCO2B1,within_other,Taurocholic acid,0.0034229729661201,0.0009990009990009,2695.0825
+Human_Breast,Tier2,other,other,ABCC2,SLCO1C1,within_other,"3',4'-Dihydrodiol | Taurocholic acid",0.0034229729661201,0.0009990009990009,493.14865
+Human_Breast,Tier2,other,other,ABCC1,ABCC1,within_other,4'-Hydroxydiclofenac | Cholic acid | Glutathione | Leukotriene C4 | O-Desmethylverapamil (D-702) | Progesterone | Taurocholic acid,0.0034229729661201,0.0009990009990009,44310.465
+Human_Breast,Tier2,other,other,SLCO1B3,SLCO1B3,within_other,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | 4-Hydroxyvalsartan | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Dehydroepiandrosterone | Deoxycholic acid | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | Sulfolithocholic acid | Taurocholic acid | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0034229729661201,0.0009990009990009,583.9361
+Human_Breast,Tier2,other,other,ABCC1,ABCC3,within_other,Cholic acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0034229729661201,0.0009990009990009,6056.602
+Human_Breast,Tier2,other,other,ABCC2,ABCC2,within_other,"17a-Ethynylestradiol | 3',4'-Dihydrodiol | Bilirubin | Cholic acid | Folinic acid | Fusidic Acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid",0.0034229729661201,0.0009990009990009,906.5898
+Human_Breast,Tier2,other,other,ABCC1,ABCC2,within_other,Cholic acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0034229729661201,0.0009990009990009,4267.2085
+Human_Breast,Tier2,other,other,ABCC1,SLC10A1,within_other,Cholic acid | Progesterone | Taurocholic acid,0.0034229729661201,0.0009990009990009,1678.9398
+Human_Breast,Tier2,other,other,TAP1,TAP1,within_other,Adenosine triphosphate,0.0034229729661201,0.0009990009990009,144360.0
+Human_Breast,Tier2,other,other,ATP7A,TAP1,within_other,Adenosine triphosphate,0.0034229729661201,0.0009990009990009,14897.652
+Human_Breast,Tier2,other,other,ATP7B,TAP1,within_other,Adenosine triphosphate,0.0034229729661201,0.0009990009990009,12709.007
+Human_Breast,Tier2,other,other,AQP7,ATP7A,within_other,Water,0.0034229729661201,0.0009990009990009,3038.0288
+Human_Breast,Tier2,other,other,AQP9,AQP9,within_other,Water,0.0034229729661201,0.0009990009990009,1585.6176
+Human_Breast,Tier2,other,other,AQP7,ATP7B,within_other,Water,0.0034229729661201,0.0009990009990009,579.1073
+Human_Breast,Tier2,other,other,AQP5,AQP7,within_other,Water,0.0034229729661201,0.0009990009990009,2749.0662
+Human_Breast,Tier2,other,other,AQP8,AQP8,within_other,Water,0.0034229729661201,0.0009990009990009,438477.34
+Human_Breast,Tier2,other,other,AQP5,ATP7B,within_other,Water,0.0034229729661201,0.0009990009990009,9830.308
+Human_Breast,Tier2,other,other,AQP7,AQP7,within_other,Water,0.0034229729661201,0.0009990009990009,28143.28
+Human_Breast,Tier2,other,other,ABCC1,SLC6A4,within_other,O-Desmethylverapamil (D-702),0.0034229729661201,0.0009990009990009,2338.742
+Human_Breast,Tier2,other,other,ABCC2,SLC22A4,within_other,O-Desmethylverapamil (D-702),0.0034229729661201,0.0009990009990009,24059.473
+Human_Breast,Tier2,other,other,ABCC2,SLC6A4,within_other,O-Desmethylverapamil (D-702),0.0034229729661201,0.0009990009990009,3556.9883
+Human_Breast,Tier2,other,other,ABCC3,SLC22A4,within_other,O-Desmethylverapamil (D-702),0.0034229729661201,0.0009990009990009,1038.7946
+Human_Breast,Tier2,other,other,ABCC3,SLC22A5,within_other,O-Desmethylverapamil (D-702),0.0034229729661201,0.0009990009990009,3465.2776
+Human_Breast,Tier2,other,other,ABCC1,SLC22A4,within_other,O-Desmethylverapamil (D-702),0.0034229729661201,0.0009990009990009,8115.9204
+Human_Breast,Tier2,other,other,ABCC3,SLC6A4,within_other,O-Desmethylverapamil (D-702),0.0034229729661201,0.0009990009990009,639.2509
+Human_Breast,Tier2,other,other,SLC4A1,SLC4A1,within_other,Chloride_bicarbonate anion exchange,0.0034229729661201,0.0009990009990009,1028.0356
+Human_Breast,Tier2,other,other,SLC24A1,SLC24A1,within_other,Sodium_calcium_potassium exchange,0.0034229729661201,0.0009990009990009,3910.8298
+Human_Breast,Tier2,other,other,CLCN3,CLCN3,within_other,Chloride,0.0034229729661201,0.0009990009990009,52651.508
+Human_Breast,Tier2,other,other,CLCN5,CLCN5,within_other,Chloride,0.0034229729661201,0.0009990009990009,821.7753
+Human_Breast,Tier2,other,other,CLCN3,CLCN4,within_other,Chloride,0.0034229729661201,0.0009990009990009,2557.405
+Human_Breast,Tier2,other,other,CLCN3,CLCN5,within_other,Chloride,0.0034229729661201,0.0009990009990009,3963.6506
+Human_Breast,Tier2,other,other,SLC9A1,SLC9A3,within_other,Sodium_hydrogen exchange,0.0034229729661201,0.0009990009990009,8938.424
+Human_Breast,Tier2,other,other,SLC9A1,SLC9A1,within_other,Sodium_hydrogen exchange,0.0034229729661201,0.0009990009990009,1493.9425
+Human_Breast,Tier2,other,other,SLC9A3,SLC9A3,within_other,Sodium_hydrogen exchange,0.0034229729661201,0.0009990009990009,2865.9272
+Human_Breast,Tier2,other,other,SLC6A5,SLC6A9,within_other,Neurotransmitter,0.0034229729661201,0.0009990009990009,672.9089
+Human_Breast,Tier2,other,other,SLC6A9,SLC6A9,within_other,Neurotransmitter,0.0034229729661201,0.0009990009990009,29689.553
+Human_Breast,Tier2,other,other,SLC6A17,SLC6A17,within_other,Neurotransmitter,0.0034229729661201,0.0009990009990009,1034.4985
+Human_Breast,Tier2,other,other,ORAI3,ORAI3,within_other,Calcium release-activated calcium transport,0.0034229729661201,0.0009990009990009,16070.35
+Human_Breast,Tier2,other,other,ORAI2,ORAI2,within_other,Calcium release-activated calcium transport,0.0034229729661201,0.0009990009990009,16896.88
+Human_Breast,Tier2,other,other,ORAI2,ORAI3,within_other,Calcium release-activated calcium transport,0.0034229729661201,0.0009990009990009,27247.143
+Human_Breast,Tier2,other,other,SCNN1A,SCNN1A,within_other,Amiloride-sensitive sodium transport,0.0034229729661201,0.0009990009990009,25233.293
+Human_Breast,Tier2,other,other,SCNN1G,SCNN1G,within_other,Amiloride-sensitive sodium transport,0.0034229729661201,0.0009990009990009,886.2577
+Human_Breast,Tier2,other,other,SCNN1A,SCNN1G,within_other,Amiloride-sensitive sodium transport,0.0034229729661201,0.0009990009990009,3680.1204
+Human_Breast,Tier2,other,other,SLC23A2,SLC23A2,within_other,Vitamin C,0.0034229729661201,0.0009990009990009,3458.4958
+Human_Breast,Tier2,other,other,SLC7A11,SLC7A11,within_other,L-Cysteine | L-Cystine | L-Glutamate,0.0064528772662743,0.0019980019980019,351.0816
+Human_Breast,Tier2,other,other,SLC11A1,SLC11A1,within_other,Iron | Manganese,0.0064528772662743,0.0019980019980019,3101.1025
+Human_Breast,Tier2,other,other,SLC6A2,SLC6A4,within_other,Sodium,0.0064528772662743,0.0019980019980019,342.37988
+Human_Breast,Tier2,other,other,SLC6A4,SLC6A4,within_other,N-Desmethylcitalopram | O-Desmethylverapamil (D-702) | Serotonin | Sodium,0.0064528772662743,0.0019980019980019,491.53674
+Human_Breast,Tier2,other,other,SLC12A2,SLC5A7,within_other,Chloride ion | Sodium,0.0064528772662743,0.0019980019980019,1057.4127
+Human_Breast,Tier2,other,other,SLC12A2,SLC5A5,within_other,Sodium,0.0064528772662743,0.0019980019980019,1666.7471
+Human_Breast,Tier2,other,other,ABCG2,CD36,within_other,Cholesterol,0.0064528772662743,0.0019980019980019,1578.2241
+Human_Breast,Tier2,other,other,SLC6A3,SLC6A3,within_other,Dopamine,0.0064528772662743,0.0019980019980019,474.68198
+Human_Breast,Tier2,other,other,FOLR1,SLC19A1,within_other,Folic acid,0.0064528772662743,0.0019980019980019,566.0113
+Human_Breast,Tier2,other,other,SLC2A1,SLC2A9,within_other,D-Glucose,0.0090716458429462,0.0029970029970029,361.65515
+Human_Breast,Tier2,other,other,SLC3A1,SLC3A1,within_other,L-Arginine | L-Cystine | L-Lysine | L-Ornithine,0.0090716458429462,0.0029970029970029,292.2491
+Human_Breast,Tier2,other,other,SLC11A2,SLC11A2,within_other,Iron,0.0090716458429462,0.0029970029970029,2315.1213
+Human_Breast,Tier2,other,other,SLC16A9,SLC22A4,within_other,L-Carnitine,0.0090716458429462,0.0029970029970029,617.05475
+Human_Breast,Tier2,other,other,SLC10A1,SLC10A1,within_other,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 17a-Ethynylestradiol | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Deoxycholic acid | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | Progesterone | Sodium | Sulfolithocholic acid | Taurocholic acid | Testosterone | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0090716458429462,0.0029970029970029,208.30789
+Human_Breast,Tier2,other,other,SLC22A1,SLC22A2,within_other,Choline | Dopamine | Estradiol | N-desmethylimatinib | Norepinephrine | Progesterone | Prostaglandins | Serotonin,0.0090716458429462,0.0029970029970029,172.50926
+Human_Breast,Tier2,other,other,SLC6A1,SLC6A1,within_other,GABA,0.0090716458429462,0.0029970029970029,255.075
+Human_Breast,Tier2,other,other,SLCO1B1,SLCO1B3,within_other,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | 4-Hydroxyvalsartan | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Dehydroepiandrosterone | Deoxycholic acid | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | Sulfolithocholic acid | Taurocholic acid | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0090716458429462,0.0029970029970029,172.17442
+Human_Breast,Tier2,other,other,ABCC2,SLC10A1,within_other,17a-Ethynylestradiol | Cholic acid | Taurocholic acid,0.0090716458429462,0.0029970029970029,269.00995
+Human_Breast,Tier2,other,other,ABCG2,SLC22A5,within_other,O-Desmethylverapamil (D-702),0.0090716458429462,0.0029970029970029,1317.0054
+Human_Breast,Tier2,other,other,SLC43A2,SLC7A5,within_other,L-Leucine | L-Methionine | L-Phenylalanine,0.0118823907370162,0.0039960039960039,17522.21
+Human_Breast,Tier2,other,other,SLC22A1,SLC6A2,within_other,Norepinephrine,0.0118823907370162,0.0039960039960039,190.2741
+Human_Breast,Tier2,other,other,AQP1,AQP1,within_other,Water,0.0118823907370162,0.0039960039960039,278.62482
+Human_Breast,Tier2,other,other,SLC5A1,SLC5A5,within_other,Sodium | Urea,0.0144086682548221,0.0049950049950049,357.48145
+Human_Breast,Tier2,other,other,ABCB1,CD36,within_other,Cholesterol,0.0144086682548221,0.0049950049950049,2043.4572
+Human_Breast,Tier2,other,other,NPC1L1,SCARB1,within_other,alpha-Tocopherol,0.0144086682548221,0.0049950049950049,458.54376
+Human_Breast,Tier2,other,other,SLC26A2,SLC26A2,within_other,Anion exchange,0.0144086682548221,0.0049950049950049,2468.9434
+Human_Breast,Tier2,other,other,SLC5A2,SLC5A2,within_other,Sodium_D-Glucose cotransport,0.0144086682548221,0.0049950049950049,330.90817
+Human_Breast,Tier2,other,other,SLC11A2,SLC3A2,within_other,Iron,0.0167881910620499,0.0059940059940059,4751.968
+Human_Breast,Tier2,other,other,SLC22A4,SLC5A5,within_other,Sodium,0.0167881910620499,0.0059940059940059,797.34845
+Human_Breast,Tier2,other,other,ABCC1,SLCO1B1,within_other,Cholic acid | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0167881910620499,0.0059940059940059,1635.3928
+Human_Breast,Tier2,other,other,CPT1A,MSR1,within_other,Fatty acid,0.0192664478378764,0.0069930069930069,20200.785
+Human_Breast,Tier2,other,other,ABCB1,ABCB1,within_other,"17a-Ethynylestradiol | 2-Hydroxychlorpropamide | 3',4'-Dihydrodiol | 4'-Hydroxydiclofenac | 4-Hydroxycyclophosphamide | 5-Hydroxyomeprazole | 8-Hydroxycarvedilol | Cholesterol | Cholic acid | Cortisol | E-3179 | Estradiol | Estriol | Glycerol | Hydroxylansoprazole | N-Desmethylcitalopram | N-Desmethyleletriptan | N-Desmethyltamoxifen | N-desmethylimatinib | O-Deethylated candesartan | O-Desmethylverapamil (D-702) | Progesterone | Taurocholic acid | Testosterone",0.0192664478378764,0.0069930069930069,663.8753
+Human_Breast,Tier2,other,other,ABCC2,ABCC3,within_other,Cholic acid | Folinic acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0192664478378764,0.0069930069930069,641.3743
+Human_Breast,Tier2,other,other,SLC22A4,SLCO1B1,within_other,L-Carnitine | O-Desmethylverapamil (D-702),0.0214924517713362,0.0079920079920079,441.4612
+Human_Breast,Tier2,other,other,SLC5A1,SLC6A4,within_other,Sodium,0.0214924517713362,0.0079920079920079,333.23166
+Human_Breast,Tier2,other,other,ABCC2,SLC22A5,within_other,O-Desmethylverapamil (D-702),0.0214924517713362,0.0079920079920079,439.60693
+Human_Breast,Tier2,other,other,SLC6A17,SLC6A9,within_other,Neurotransmitter,0.0214924517713362,0.0079920079920079,1131.8739
+Human_Breast,Tier2,other,other,ABCC3,ABCG2,within_other,5-Hydroxyomeprazole | Folic acid | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0263408466533466,0.0099900099900099,449.77423
+Human_Breast,Tier2,other,other,SLC6A5,SLC6A5,within_other,Neurotransmitter,0.0263408466533466,0.0099900099900099,116.232056
+Human_Breast,Tier2,other,other,SLC40A1,SLC40A1,within_other,Iron,0.0313639848523569,0.0119880119880119,50453.035
+Human_Breast,Tier2,other,other,SLC22A2,SLC5A7,within_other,Choline,0.0313639848523569,0.0119880119880119,151.59589
+Human_Breast,Tier2,other,other,SLC5A7,SLC6A2,within_other,Sodium,0.0337162837162837,0.0129870129870129,180.74252
+Human_Breast,Tier2,other,other,AQP1,AQP7,within_other,Water,0.0383139587685042,0.0149850149850149,101.9465
+Human_Breast,Tier2,other,other,ABCG2,SLC16A1,within_other,Taurocholic acid,0.0405609428165819,0.0159840159840159,416.38953
+Human_Breast,Tier2,other,other,AQP8,ATP7B,within_other,Water,0.0405609428165819,0.0159840159840159,843.38824
+Human_Breast,Tier2,other,other,SLC16A1,SLC16A1,within_other,4-ene-Valproic acid | Acetate | Butyrate | D-Lactate | Ketone bodies | L-Glutamate | L-Lactate | Nicotinate | Pyruvate | Taurocholic acid | alpha-Ketoisovaleric acid,0.044789159180303,0.0179820179820179,704.51746
+Human_Breast,Tier2,other,other,ABCG2,SLCO2B1,within_other,Estradiol | Taurocholic acid,0.044789159180303,0.0179820179820179,1461.5327
+Human_Breast,Tier2,other,other,SLC22A4,SLC6A4,within_other,O-Desmethylverapamil (D-702) | Sodium,0.0469310908871348,0.0189810189810189,702.8959
+Human_Breast,Tier2,other,other,SLC10A1,SLC22A1,within_other,Progesterone | Taurocholic acid | Testosterone,0.0492208521405601,0.0199800199800199,129.34813
+Human_Breast,Tier3,Exhausted CD8 T cell,other,SLC2A3,SLC2A3,Tcell_interface,D-Galactose | D-Glucose | D-Maltose | D-Mannose | D-Xylose | Dehydroascorbic acid | Docosahexaenoic acid,0.0026444144091202,0.0009990009990009,83361.516
+Human_Breast,Tier3,Exhausted CD8 T cell,other,SLC1A5,SLC38A7,Tcell_interface,L-Glutamine,0.0026444144091202,0.0009990009990009,1062.4768
+Human_Breast,Tier3,Exhausted CD8 T cell,other,SLC1A5,SLC3A2,Tcell_interface,L-Glutamate | L-Glutamine | L-Leucine | L-Serine,0.0026444144091202,0.0009990009990009,1935.0847
+Human_Breast,Tier3,Exhausted CD8 T cell,other,SLC43A2,SLC43A2,Tcell_interface,L-Cysteine | L-Isoleucine | L-Leucine | L-Methionine | L-Phenylalanine | L-Valine,0.0026444144091202,0.0009990009990009,908.9383
+Human_Breast,Tier3,Exhausted CD8 T cell,other,SLC16A1,SLCO2A1,Tcell_interface,Pyruvate,0.0026444144091202,0.0009990009990009,4265.68
+Human_Breast,Tier3,Exhausted CD8 T cell,other,SLCO2B1,SLCO2B1,Tcell_interface,Acetate | Citric acid | Estradiol | Nicotinate | Oxalic acid | Taurocholic acid,0.0026444144091202,0.0009990009990009,3103.989
+Human_Breast,Tier3,Exhausted CD8 T cell,other,SLC16A1,SLCO2B1,Tcell_interface,Acetate | Nicotinate | Taurocholic acid,0.0026444144091202,0.0009990009990009,1006.9684
+Human_Breast,Tier3,Exhausted CD8 T cell,other,SLC1A3,SLC1A3,Tcell_interface,D-Aspartate | L-Aspartate | L-Glutamate | Malic acid,0.0026444144091202,0.0009990009990009,438.41083
+Human_Breast,Tier3,Exhausted CD8 T cell,other,SLC1A1,SLC3A2,Tcell_interface,L-Glutamate,0.0026444144091202,0.0009990009990009,167.66068
+Human_Breast,Tier3,Exhausted CD8 T cell,other,CUBN,SLC3A2,Tcell_interface,Iron,0.0026444144091202,0.0009990009990009,47417.44
+Human_Breast,Tier3,Exhausted CD8 T cell,other,SLC40A1,SLC40A1,Tcell_interface,Iron,0.0026444144091202,0.0009990009990009,7780.249
+Human_Breast,Tier3,Exhausted CD8 T cell,other,SLC22A5,SLC5A3,Tcell_interface,Sodium,0.0026444144091202,0.0009990009990009,604.23676
+Human_Breast,Tier3,Exhausted CD8 T cell,other,SLC29A1,SLC5A3,Tcell_interface,Sodium,0.0026444144091202,0.0009990009990009,1094.3479
+Human_Breast,Tier3,Exhausted CD8 T cell,other,MSR1,MSR1,Tcell_interface,Fatty acid,0.0026444144091202,0.0009990009990009,2582.0305
+Human_Breast,Tier3,Exhausted CD8 T cell,other,CD36,CD36,Tcell_interface,Cholesterol | Fatty acid | Vitamin D3,0.0026444144091202,0.0009990009990009,1130.6768
+Human_Breast,Tier3,Exhausted CD8 T cell,other,ABCA1,ABCA1,Tcell_interface,25-Hydroxycholesterol,0.0026444144091202,0.0009990009990009,7547.457
+Human_Breast,Tier3,Exhausted CD8 T cell,other,ABCC4,ABCC4,Tcell_interface,4'-Hydroxydiclofenac | Cholic acid | Cyclic AMP | Folic acid | Folinic acid | Glutathione | Hydroxycelecoxib | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0026444144091202,0.0009990009990009,254.52641
+Human_Breast,Tier3,Exhausted CD8 T cell,other,LRP1,LRP1,Tcell_interface,Heme,0.0026444144091202,0.0009990009990009,1904.4194
+Human_Breast,Tier3,Exhausted CD8 T cell,other,SLC29A3,SLC29A3,Tcell_interface,Adenine,0.0026444144091202,0.0009990009990009,706.04736
+Human_Breast,Tier3,Exhausted CD8 T cell,other,LRP2,LRP2,Tcell_interface,Calcidiol,0.0026444144091202,0.0009990009990009,193.90213
+Human_Breast,Tier3,Exhausted CD8 T cell,other,CD38,CD38,Tcell_interface,Adenosine diphosphate ribose,0.0026444144091202,0.0009990009990009,2578.009
+Human_Breast,Tier3,Exhausted CD8 T cell,other,ABCC1,SLCO2B1,Tcell_interface,Taurocholic acid,0.0026444144091202,0.0009990009990009,7178.463
+Human_Breast,Tier3,Exhausted CD8 T cell,other,TAP1,TAP1,Tcell_interface,Adenosine triphosphate,0.0026444144091202,0.0009990009990009,20975.713
+Human_Breast,Tier3,Exhausted CD8 T cell,other,ATP7A,TAP1,Tcell_interface,Adenosine triphosphate,0.0026444144091202,0.0009990009990009,2733.2666
+Human_Breast,Tier3,Exhausted CD8 T cell,other,AQP9,AQP9,Tcell_interface,Water,0.0026444144091202,0.0009990009990009,151.4273
+Human_Breast,Tier3,Exhausted CD8 T cell,other,AQP8,AQP8,Tcell_interface,Water,0.0026444144091202,0.0009990009990009,14229.619
+Human_Breast,Tier3,Exhausted CD8 T cell,other,ORAI3,ORAI3,Tcell_interface,Calcium release-activated calcium transport,0.0026444144091202,0.0009990009990009,1922.5996
+Human_Breast,Tier3,Proliferating CD8 T cell,other,ATP7B,TAP1,Tcell_interface,Adenosine triphosphate,0.0026444144091202,0.0009990009990009,58.844162
+Human_Breast,Tier3,Exhausted CD8 T cell,other,SLC39A8,SLC39A8,Tcell_interface,Cadmium | Manganese | Zinc,0.0050416872846779,0.0019980019980019,988.67096
+Human_Breast,Tier3,Exhausted CD8 T cell,other,CUBN,SLC40A1,Tcell_interface,Iron,0.0050416872846779,0.0019980019980019,1030.8712
+Human_Breast,Tier3,Exhausted CD8 T cell,other,SLC12A6,SLC12A6,Tcell_interface,Chloride ion,0.0050416872846779,0.0019980019980019,732.93945
+Human_Breast,Tier3,Exhausted CD8 T cell,other,ABCC1,SLC16A1,Tcell_interface,Taurocholic acid,0.0050416872846779,0.0019980019980019,1465.6621
+Human_Breast,Tier3,Proliferating CD8 T cell,other,ABCA1,ABCA1,Tcell_interface,25-Hydroxycholesterol,0.0050416872846779,0.0019980019980019,43.29017
+Human_Breast,Tier3,Exhausted CD8 T cell,Proliferating CD8 T cell,SLC22A5,SLC5A3,Tcell_interface,Sodium,0.0072638313212819,0.0029970029970029,32.259197
+Human_Breast,Tier3,Exhausted CD8 T cell,Proliferating CD8 T cell,TAP1,TAP1,Tcell_interface,Adenosine triphosphate,0.0092690814340298,0.0039960039960039,172.47726
+Human_Breast,Tier3,Exhausted CD8 T cell,other,SLC22A5,SLC5A1,Tcell_interface,Sodium,0.0092690814340298,0.0039960039960039,145.29768
+Human_Breast,Tier3,Exhausted CD8 T cell,other,NPC1L1,NPC1L1,Tcell_interface,alpha-Tocopherol,0.0113332046105155,0.0049950049950049,493.2971
+Human_Breast,Tier3,Exhausted CD8 T cell,other,SLC6A9,SLC6A9,Tcell_interface,Neurotransmitter,0.0133529836500133,0.0059940059940059,268.4911
+Human_Breast,Tier3,Exhausted CD8 T cell,other,ABCG2,SLCO2B1,Tcell_interface,Estradiol | Taurocholic acid,0.0152513076584158,0.0069930069930069,208.34442
+Human_Breast,Tier3,Exhausted CD8 T cell,other,SLC6A3,SLC6A3,Tcell_interface,Dopamine,0.0171257314114456,0.0079920079920079,105.5815
+Human_Breast,Tier3,Proliferating CD8 T cell,other,CUBN,SLC3A2,Tcell_interface,Iron,0.0188769240091168,0.0089910089910089,52.368473
+Human_Breast,Tier3,Exhausted CD8 T cell,Proliferating CD8 T cell,CPT1A,CPT1A,Tcell_interface,Fatty acid,0.0241910555811901,0.0119880119880119,47.49702
+Human_Breast,Tier3,Exhausted CD8 T cell,other,CD36,MSR1,Tcell_interface,Fatty acid,0.0259356028586797,0.0129870129870129,502.95007
+Human_Breast,Tier3,Exhausted CD8 T cell,other,FOLR2,FOLR2,Tcell_interface,Folic acid,0.0259356028586797,0.0129870129870129,284.3122
+Human_Breast,Tier3,Exhausted CD8 T cell,other,SLC10A1,SLC10A1,Tcell_interface,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 17a-Ethynylestradiol | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Deoxycholic acid | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | Progesterone | Sodium | Sulfolithocholic acid | Taurocholic acid | Testosterone | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0344825628916538,0.0179820179820179,47.94087
+Human_Breast,Tier3,Exhausted CD8 T cell,other,SLC11A2,SLC40A1,Tcell_interface,Iron,0.0361415735181602,0.0189810189810189,151.27258
+Human_Breast,Tier3,Exhausted CD8 T cell,Proliferating CD8 T cell,ATP7A,TAP1,Tcell_interface,Adenosine triphosphate,0.0378303323604866,0.0199800199800199,49.83738
+Human_Breast,Tier3,Exhausted CD8 T cell,Proliferating CD8 T cell,ATP7A,SLC20A2,Tcell_interface,Phosphate,0.0456241998867168,0.0249750249750249,14.7026415
+Human_Breast,Tier3,Exhausted CD8 T cell,other,SLC3A2,SLC43A2,Tcell_interface,L-Leucine,0.0456241998867168,0.0249750249750249,1254.4503
+Human_Breast,Tier3,Proliferating CD8 T cell,other,SLC5A3,SLC6A4,Tcell_interface,Sodium,0.0471937214871266,0.0259740259740259,15.847785
+Human_Breast,Tier3,Exhausted CD8 T cell,Exhausted CD8 T cell,SLC2A3,SLC2A3,within_Tcell,D-Galactose | D-Glucose | D-Maltose | D-Mannose | D-Xylose | Dehydroascorbic acid | Docosahexaenoic acid,0.0026444144091202,0.0009990009990009,82388.445
+Human_Breast,Tier3,Exhausted CD8 T cell,Exhausted CD8 T cell,CUBN,SLC3A2,within_Tcell,Iron,0.0026444144091202,0.0009990009990009,36420.992
+Human_Breast,Tier3,Exhausted CD8 T cell,Exhausted CD8 T cell,SLC40A1,SLC40A1,within_Tcell,Iron,0.0026444144091202,0.0009990009990009,5988.855
+Human_Breast,Tier3,Exhausted CD8 T cell,Exhausted CD8 T cell,CD38,CD38,within_Tcell,Adenosine diphosphate ribose,0.0026444144091202,0.0009990009990009,1606.2167
+Human_Breast,Tier3,Exhausted CD8 T cell,Exhausted CD8 T cell,ABCC1,ABCC1,within_Tcell,4'-Hydroxydiclofenac | Cholic acid | Glutathione | Leukotriene C4 | O-Desmethylverapamil (D-702) | Progesterone | Taurocholic acid,0.0026444144091202,0.0009990009990009,14187.339
+Human_Breast,Tier3,Exhausted CD8 T cell,Exhausted CD8 T cell,TAP1,TAP1,within_Tcell,Adenosine triphosphate,0.0026444144091202,0.0009990009990009,13300.394
+Human_Breast,Tier3,Exhausted CD8 T cell,Exhausted CD8 T cell,AQP8,AQP8,within_Tcell,Water,0.0026444144091202,0.0009990009990009,2050.5945
+Human_Breast,Tier3,Proliferating CD8 T cell,Proliferating CD8 T cell,SLC23A2,SLC23A2,within_Tcell,Vitamin C,0.0050416872846779,0.0019980019980019,21.67685
+Human_Breast,Tier3,Exhausted CD8 T cell,Exhausted CD8 T cell,ABCC3,SLCO1B3,within_Tcell,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Deoxycholic acid | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | Sulfolithocholic acid | Taurocholic acid | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0072638313212819,0.0029970029970029,50.119343
+Human_Breast,Tier3,Exhausted CD8 T cell,Exhausted CD8 T cell,SLC43A2,SLC43A2,within_Tcell,L-Cysteine | L-Isoleucine | L-Leucine | L-Methionine | L-Phenylalanine | L-Valine,0.0092690814340298,0.0039960039960039,378.9677
+Human_Breast,Tier3,Exhausted CD8 T cell,Exhausted CD8 T cell,ATP7A,TAP1,within_Tcell,Adenosine triphosphate,0.0092690814340298,0.0039960039960039,2321.9546
+Human_Breast,Tier3,Exhausted CD8 T cell,Exhausted CD8 T cell,ABCC4,ABCC4,within_Tcell,4'-Hydroxydiclofenac | Cholic acid | Cyclic AMP | Folic acid | Folinic acid | Glutathione | Hydroxycelecoxib | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0188769240091168,0.0089910089910089,187.90509
+Human_Breast,Tier3,Exhausted CD8 T cell,Exhausted CD8 T cell,LRP1,LRP1,within_Tcell,Heme,0.0188769240091168,0.0089910089910089,422.54697
+Human_Breast,Tier3,Exhausted CD8 T cell,Exhausted CD8 T cell,SLC16A1,SLCO2A1,within_Tcell,Pyruvate,0.0241910555811901,0.0119880119880119,267.72577
+Human_Breast,Tier3,Exhausted CD8 T cell,Exhausted CD8 T cell,SLCO2B1,SLCO2B1,within_Tcell,Acetate | Citric acid | Estradiol | Nicotinate | Oxalic acid | Taurocholic acid,0.0241910555811901,0.0119880119880119,714.3839
+Human_Breast,Tier3,Exhausted CD8 T cell,Exhausted CD8 T cell,SLC22A1,SLC6A2,within_Tcell,Norepinephrine,0.0241910555811901,0.0119880119880119,29.906754
+Human_Breast,Tier3,Proliferating CD8 T cell,Proliferating CD8 T cell,SLC3A2,SLC7A5,within_Tcell,L-Glutamine | L-Leucine,0.0259356028586797,0.0129870129870129,31.907808
+Human_Breast,Tier3,Exhausted CD8 T cell,Exhausted CD8 T cell,SLC11A2,SLC40A1,within_Tcell,Iron,0.027603974972396,0.0139860139860139,178.105
+Human_Breast,Tier3,Exhausted CD8 T cell,Exhausted CD8 T cell,AQP8,ATP7B,within_Tcell,Water,0.027603974972396,0.0139860139860139,89.60234
+Human_Breast,Tier3,Exhausted CD8 T cell,Exhausted CD8 T cell,SLC16A9,SLC22A5,within_Tcell,L-Carnitine,0.0293610598400148,0.0149850149850149,44.04447
+Human_Breast,Tier3,Exhausted CD8 T cell,Exhausted CD8 T cell,CHRNA5,CHRNA5,within_Tcell,Ethanol,0.0293610598400148,0.0149850149850149,61.476223
+Human_Breast,Tier3,Exhausted CD8 T cell,Exhausted CD8 T cell,SLC38A7,SLC7A5,within_Tcell,L-Glutamine,0.0329411967343001,0.0169830169830169,261.11545
+Human_Breast,Tier3,Exhausted CD8 T cell,Exhausted CD8 T cell,ABCC3,ABCC3,within_Tcell,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | 5-Hydroxyomeprazole | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Deoxycholic acid | Folic acid | Folinic acid | Glutathione | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | O-Desmethylverapamil (D-702) | Sulfolithocholic acid | Taurocholic acid | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0329411967343001,0.0169830169830169,47.172344
+Human_Breast,Tier3,Exhausted CD8 T cell,Exhausted CD8 T cell,FOLR2,FOLR2,within_Tcell,Folic acid,0.0378303323604866,0.0199800199800199,265.64386
+Human_Breast,Tier3,Exhausted CD8 T cell,Exhausted CD8 T cell,ABCC1,SLC6A4,within_Tcell,O-Desmethylverapamil (D-702),0.0427258691721501,0.0229770229770229,73.76678
+Human_Breast,Tier3,Exhausted CD8 T cell,Exhausted CD8 T cell,SLC5A3,SLC5A3,within_Tcell,Sodium,0.0456241998867168,0.0249750249750249,3363.669
+Human_Breast,Tier3,other,other,SLC2A1,SLC2A1,within_other,D-Galactose | D-Glucose | D-Mannose | Dehydroascorbic acid | Docosahexaenoic acid | Glucosamine,0.0026444144091202,0.0009990009990009,160699.12
+Human_Breast,Tier3,other,other,SLC2A9,SLC2A9,within_other,D-Glucose,0.0026444144091202,0.0009990009990009,3641.9966
+Human_Breast,Tier3,other,other,SLC2A2,SLC2A9,within_other,D-Glucose,0.0026444144091202,0.0009990009990009,8124.645
+Human_Breast,Tier3,other,other,SLC2A1,SLC2A2,within_other,D-Galactose | D-Glucose | D-Mannose | Glucosamine,0.0026444144091202,0.0009990009990009,1019.6183
+Human_Breast,Tier3,other,other,SLC2A3,SLC2A3,within_other,D-Galactose | D-Glucose | D-Maltose | D-Mannose | D-Xylose | Dehydroascorbic acid | Docosahexaenoic acid,0.0026444144091202,0.0009990009990009,334914.25
+Human_Breast,Tier3,other,other,SLC3A2,SLC3A2,within_other,Iron | L-Cystine | L-Glutamate | L-Glutamine | L-Leucine | L-Serine,0.0026444144091202,0.0009990009990009,140826.27
+Human_Breast,Tier3,other,other,SLC1A5,SLC1A5,within_other,L-Alanine | L-Asparagine | L-Cysteine | L-Glutamate | L-Glutamine | L-Leucine | L-Serine | L-Threonine | Sodium,0.0026444144091202,0.0009990009990009,15322.344
+Human_Breast,Tier3,other,other,SLC38A7,SLC38A7,within_other,L-Glutamine,0.0026444144091202,0.0009990009990009,52876.297
+Human_Breast,Tier3,other,other,SLC7A7,SLC7A7,within_other,L-Glutamine,0.0026444144091202,0.0009990009990009,27193.342
+Human_Breast,Tier3,other,other,SLC1A5,SLC7A5,within_other,L-Glutamine | L-Leucine,0.0026444144091202,0.0009990009990009,80787.44
+Human_Breast,Tier3,other,other,SLC7A5,SLC7A5,within_other,L-Arginine | L-Glutamine | L-Histidine | L-Leucine | L-Methionine | L-Phenylalanine | L-Tyrosine,0.0026444144091202,0.0009990009990009,435690.88
+Human_Breast,Tier3,other,other,SLC3A2,SLC7A5,within_other,L-Glutamine | L-Leucine,0.0026444144091202,0.0009990009990009,141037.17
+Human_Breast,Tier3,other,other,SLC38A7,SLC3A2,within_other,L-Glutamine,0.0026444144091202,0.0009990009990009,1858.6268
+Human_Breast,Tier3,other,other,SLC1A5,SLC38A7,within_other,L-Glutamine,0.0026444144091202,0.0009990009990009,11722.113
+Human_Breast,Tier3,other,other,SLC3A2,SLC7A7,within_other,L-Glutamine,0.0026444144091202,0.0009990009990009,226585.05
+Human_Breast,Tier3,other,other,SLC38A7,SLC7A5,within_other,L-Glutamine,0.0026444144091202,0.0009990009990009,10562.489
+Human_Breast,Tier3,other,other,SLC1A5,SLC7A11,within_other,L-Cysteine | L-Glutamate,0.0026444144091202,0.0009990009990009,6259.745
+Human_Breast,Tier3,other,other,SLC43A2,SLC43A2,within_other,L-Cysteine | L-Isoleucine | L-Leucine | L-Methionine | L-Phenylalanine | L-Valine,0.0026444144091202,0.0009990009990009,9890.064
+Human_Breast,Tier3,other,other,SLC16A4,SLC16A4,within_other,Acetate | L-Lactate,0.0026444144091202,0.0009990009990009,12100.975
+Human_Breast,Tier3,other,other,SLC16A1,SLCO2A1,within_other,Pyruvate,0.0026444144091202,0.0009990009990009,118433.06
+Human_Breast,Tier3,other,other,SLCO2A1,SLCO2A1,within_other,Arachidonic acid | Eicosanoid | Prostaglandins | Pyruvate,0.0026444144091202,0.0009990009990009,4213.076
+Human_Breast,Tier3,other,other,SLCO2B1,SLCO2B1,within_other,Acetate | Citric acid | Estradiol | Nicotinate | Oxalic acid | Taurocholic acid,0.0026444144091202,0.0009990009990009,18837.713
+Human_Breast,Tier3,other,other,SLC16A1,SLCO2B1,within_other,Acetate | Nicotinate | Taurocholic acid,0.0026444144091202,0.0009990009990009,2618.7698
+Human_Breast,Tier3,other,other,SLC22A5,SLC22A5,within_other,4-ene-Valproic acid | Acetyl-L-Carnitine | Choline | Creatine | Dopamine | Histamine | L-Carnitine | Nicotinate | Norepinephrine | O-Desmethylverapamil (D-702) | Sodium,0.0026444144091202,0.0009990009990009,20315.1
+Human_Breast,Tier3,other,other,SLC1A2,SLC3A2,within_other,L-Glutamate,0.0026444144091202,0.0009990009990009,5074.383
+Human_Breast,Tier3,other,other,SLC1A2,SLC1A2,within_other,D-Aspartate | L-Aspartate | L-Glutamate,0.0026444144091202,0.0009990009990009,2167.9697
+Human_Breast,Tier3,other,other,SLC1A2,SLC7A11,within_other,L-Glutamate,0.0026444144091202,0.0009990009990009,33205.492
+Human_Breast,Tier3,other,other,SLC1A3,SLC1A3,within_other,D-Aspartate | L-Aspartate | L-Glutamate | Malic acid,0.0026444144091202,0.0009990009990009,33864.06
+Human_Breast,Tier3,other,other,SLC3A2,SLC7A11,within_other,L-Cystine | L-Glutamate,0.0026444144091202,0.0009990009990009,94718.51
+Human_Breast,Tier3,other,other,SLC1A1,SLC3A2,within_other,L-Glutamate,0.0026444144091202,0.0009990009990009,1332.674
+Human_Breast,Tier3,other,other,SLC3A1,SLC3A1,within_other,L-Arginine | L-Cystine | L-Lysine | L-Ornithine,0.0026444144091202,0.0009990009990009,292.2491
+Human_Breast,Tier3,other,other,SLC3A1,SLC3A2,within_other,L-Cystine,0.0026444144091202,0.0009990009990009,2251.689
+Human_Breast,Tier3,other,other,SLC30A8,SLC30A8,within_other,Zinc,0.0026444144091202,0.0009990009990009,874.15204
+Human_Breast,Tier3,other,other,CUBN,SLC11A2,within_other,Iron,0.0026444144091202,0.0009990009990009,65140.664
+Human_Breast,Tier3,other,other,CUBN,SLC3A2,within_other,Iron,0.0026444144091202,0.0009990009990009,129133.15
+Human_Breast,Tier3,other,other,SLC11A1,SLC11A2,within_other,Iron,0.0026444144091202,0.0009990009990009,90970.84
+Human_Breast,Tier3,other,other,SLC22A5,SLC22A8,within_other,Acetyl-L-Carnitine | L-Carnitine,0.0026444144091202,0.0009990009990009,1214.2894
+Human_Breast,Tier3,other,other,SLC16A9,SLC22A5,within_other,L-Carnitine,0.0026444144091202,0.0009990009990009,661.20026
+Human_Breast,Tier3,other,other,SLC22A4,SLC22A4,within_other,L-Carnitine | O-Desmethylverapamil (D-702) | Putrescine | Sodium | Spermine | Testosterone,0.0026444144091202,0.0009990009990009,2446.448
+Human_Breast,Tier3,other,other,SLC16A9,SLC16A9,within_other,L-Carnitine,0.0026444144091202,0.0009990009990009,1063.8568
+Human_Breast,Tier3,other,other,SLC22A5,SLCO1B1,within_other,L-Carnitine | O-Desmethylverapamil (D-702),0.0026444144091202,0.0009990009990009,2236.7256
+Human_Breast,Tier3,other,other,SLC22A4,SLC22A5,within_other,L-Carnitine | O-Desmethylverapamil (D-702) | Sodium,0.0026444144091202,0.0009990009990009,4871.8604
+Human_Breast,Tier3,other,other,SLC22A5,SLC6A4,within_other,O-Desmethylverapamil (D-702) | Sodium,0.0026444144091202,0.0009990009990009,2295.329
+Human_Breast,Tier3,other,other,SLC1A5,SLC5A7,within_other,Sodium,0.0026444144091202,0.0009990009990009,6384.533
+Human_Breast,Tier3,other,other,SLC1A5,SLC5A5,within_other,Sodium,0.0026444144091202,0.0009990009990009,11732.906
+Human_Breast,Tier3,other,other,SLC29A1,SLC29A1,within_other,Adenosine | Cytidine | Ethanol | Guanosine | Inosine | Sodium | Thymidine | Uridine,0.0026444144091202,0.0009990009990009,193943.33
+Human_Breast,Tier3,other,other,SLC22A5,SLC5A3,within_other,Sodium,0.0026444144091202,0.0009990009990009,15459.815
+Human_Breast,Tier3,other,other,SLC22A4,SLC5A3,within_other,Sodium,0.0026444144091202,0.0009990009990009,5239.4434
+Human_Breast,Tier3,other,other,SLC5A7,SLC5A7,within_other,Chloride ion | Choline | Sodium,0.0026444144091202,0.0009990009990009,316.19247
+Human_Breast,Tier3,other,other,SLC29A1,SLC6A4,within_other,Sodium,0.0026444144091202,0.0009990009990009,6884.267
+Human_Breast,Tier3,other,other,SLC1A5,SLC22A4,within_other,Sodium,0.0026444144091202,0.0009990009990009,23291.213
+Human_Breast,Tier3,other,other,SLC29A1,SLC5A3,within_other,Sodium,0.0026444144091202,0.0009990009990009,49555.727
+Human_Breast,Tier3,other,other,SLC12A2,SLC12A2,within_other,Chloride ion | Sodium,0.0026444144091202,0.0009990009990009,17805.352
+Human_Breast,Tier3,other,other,SLC5A3,SLC5A5,within_other,Sodium,0.0026444144091202,0.0009990009990009,2369.8347
+Human_Breast,Tier3,other,other,SLC29A1,SLC5A1,within_other,Sodium,0.0026444144091202,0.0009990009990009,5052.3735
+Human_Breast,Tier3,other,other,SLC5A5,SLC6A4,within_other,Sodium,0.0026444144091202,0.0009990009990009,489.7675
+Human_Breast,Tier3,other,other,SLC12A2,SLC6A4,within_other,Sodium,0.0026444144091202,0.0009990009990009,1831.9476
+Human_Breast,Tier3,other,other,SLC12A2,SLC5A3,within_other,Sodium,0.0026444144091202,0.0009990009990009,12331.298
+Human_Breast,Tier3,other,other,SLC10A1,SLC29A1,within_other,Sodium,0.0026444144091202,0.0009990009990009,2862.128
+Human_Breast,Tier3,other,other,SLC22A5,SLC6A2,within_other,Norepinephrine | Sodium,0.0026444144091202,0.0009990009990009,1502.8416
+Human_Breast,Tier3,other,other,SLC22A4,SLC6A2,within_other,Sodium,0.0026444144091202,0.0009990009990009,628.38556
+Human_Breast,Tier3,other,other,SLC22A5,SLC5A1,within_other,Sodium,0.0026444144091202,0.0009990009990009,1837.2126
+Human_Breast,Tier3,other,other,SLC5A3,SLC6A4,within_other,Sodium,0.0026444144091202,0.0009990009990009,2695.901
+Human_Breast,Tier3,other,other,SLC29A1,SLC6A2,within_other,Sodium,0.0026444144091202,0.0009990009990009,4468.3184
+Human_Breast,Tier3,other,other,SLC22A5,SLC5A7,within_other,Choline | Sodium,0.0026444144091202,0.0009990009990009,1353.6997
+Human_Breast,Tier3,other,other,SLC12A2,SLC29A1,within_other,Sodium,0.0026444144091202,0.0009990009990009,39336.67
+Human_Breast,Tier3,other,other,SLC1A5,SLC29A1,within_other,Sodium,0.0026444144091202,0.0009990009990009,265475.5
+Human_Breast,Tier3,other,other,SLC22A5,SLC5A5,within_other,Sodium,0.0026444144091202,0.0009990009990009,2982.0173
+Human_Breast,Tier3,other,other,SLC1A5,SLC6A4,within_other,Sodium,0.0026444144091202,0.0009990009990009,11597.433
+Human_Breast,Tier3,other,other,SLC29A1,SLC5A7,within_other,Sodium,0.0026444144091202,0.0009990009990009,4065.8267
+Human_Breast,Tier3,other,other,SLC29A1,SLC5A5,within_other,Sodium,0.0026444144091202,0.0009990009990009,8221.796
+Human_Breast,Tier3,other,other,SLC1A5,SLC5A3,within_other,Sodium,0.0026444144091202,0.0009990009990009,76216.94
+Human_Breast,Tier3,other,other,SLC10A1,SLC1A5,within_other,Sodium,0.0026444144091202,0.0009990009990009,4216.015
+Human_Breast,Tier3,other,other,SLC5A7,SLC6A4,within_other,Sodium,0.0026444144091202,0.0009990009990009,358.51776
+Human_Breast,Tier3,other,other,SLC12A2,SLC6A2,within_other,Sodium,0.0026444144091202,0.0009990009990009,1241.0094
+Human_Breast,Tier3,other,other,SLC12A2,SLC5A1,within_other,Sodium,0.0026444144091202,0.0009990009990009,1414.41
+Human_Breast,Tier3,other,other,SLC1A5,SLC5A1,within_other,Sodium,0.0026444144091202,0.0009990009990009,7238.941
+Human_Breast,Tier3,other,other,SLC5A5,SLC5A5,within_other,Sodium | Urea,0.0026444144091202,0.0009990009990009,905.28125
+Human_Breast,Tier3,other,other,SLC5A3,SLC5A3,within_other,Sodium,0.0026444144091202,0.0009990009990009,18766.982
+Human_Breast,Tier3,other,other,SLC6A2,SLC6A4,within_other,Sodium,0.0026444144091202,0.0009990009990009,342.37988
+Human_Breast,Tier3,other,other,SLC12A2,SLC1A5,within_other,Sodium,0.0026444144091202,0.0009990009990009,56059.727
+Human_Breast,Tier3,other,other,SLC12A2,SLC5A5,within_other,Sodium,0.0026444144091202,0.0009990009990009,1666.7471
+Human_Breast,Tier3,other,other,SLC10A1,SLC22A5,within_other,Sodium,0.0026444144091202,0.0009990009990009,973.2546
+Human_Breast,Tier3,other,other,SLC12A2,SLC22A4,within_other,Sodium,0.0026444144091202,0.0009990009990009,3892.2068
+Human_Breast,Tier3,other,other,SLC1A5,SLC6A2,within_other,Sodium,0.0026444144091202,0.0009990009990009,7110.6196
+Human_Breast,Tier3,other,other,SLC22A5,SLC29A1,within_other,Sodium,0.0026444144091202,0.0009990009990009,54058.184
+Human_Breast,Tier3,other,other,SLC12A2,SLC22A5,within_other,Sodium,0.0026444144091202,0.0009990009990009,11550.662
+Human_Breast,Tier3,other,other,SLC1A5,SLC22A5,within_other,Sodium,0.0026444144091202,0.0009990009990009,85362.945
+Human_Breast,Tier3,other,other,SLC22A4,SLC29A1,within_other,Sodium,0.0026444144091202,0.0009990009990009,15619.892
+Human_Breast,Tier3,other,other,SLC3A1,SLC7A5,within_other,L-Arginine,0.0026444144091202,0.0009990009990009,3327.961
+Human_Breast,Tier3,other,other,MSR1,MSR1,within_other,Fatty acid,0.0026444144091202,0.0009990009990009,36493.203
+Human_Breast,Tier3,other,other,CPT1A,CPT1A,within_other,Fatty acid,0.0026444144091202,0.0009990009990009,97023.16
+Human_Breast,Tier3,other,other,CD36,MSR1,within_other,Fatty acid,0.0026444144091202,0.0009990009990009,11294.572
+Human_Breast,Tier3,other,other,CD36,CD36,within_other,Cholesterol | Fatty acid | Vitamin D3,0.0026444144091202,0.0009990009990009,36413.844
+Human_Breast,Tier3,other,other,SLC6A12,SLC6A12,within_other,Betaine | GABA,0.0026444144091202,0.0009990009990009,527.1021
+Human_Breast,Tier3,other,other,ABCA1,ABCA1,within_other,25-Hydroxycholesterol,0.0026444144091202,0.0009990009990009,113027.516
+Human_Breast,Tier3,other,other,ABCG2,CD36,within_other,Cholesterol,0.0026444144091202,0.0009990009990009,1578.2241
+Human_Breast,Tier3,other,other,SLC22A5,SLC6A3,within_other,Dopamine,0.0026444144091202,0.0009990009990009,1938.4098
+Human_Breast,Tier3,other,other,ATP7A,SLC20A2,within_other,Phosphate,0.0026444144091202,0.0009990009990009,6384.615
+Human_Breast,Tier3,other,other,ATP7A,ATP7B,within_other,ADP | Adenosine triphosphate | Phosphate | Water,0.0026444144091202,0.0009990009990009,1858.7656
+Human_Breast,Tier3,other,other,ATP7A,ATP7A,within_other,ADP | Adenosine triphosphate | Phosphate | Water,0.0026444144091202,0.0009990009990009,2426.6235
+Human_Breast,Tier3,other,other,ATP7B,SLC20A2,within_other,Phosphate,0.0026444144091202,0.0009990009990009,5959.712
+Human_Breast,Tier3,other,other,ATP7B,ATP7B,within_other,ADP | Adenosine triphosphate | Phosphate | Water,0.0026444144091202,0.0009990009990009,2707.5598
+Human_Breast,Tier3,other,other,SLC20A2,SLC20A2,within_other,Phosphate,0.0026444144091202,0.0009990009990009,22613.91
+Human_Breast,Tier3,other,other,SLC19A1,SLC19A1,within_other,Folic acid | Thiamine,0.0026444144091202,0.0009990009990009,2464.02
+Human_Breast,Tier3,other,other,CHRNA5,CHRNA5,within_other,Ethanol,0.0026444144091202,0.0009990009990009,571.64087
+Human_Breast,Tier3,other,other,CHRNA5,SLC29A1,within_other,Ethanol,0.0026444144091202,0.0009990009990009,6553.7246
+Human_Breast,Tier3,other,other,ABCC3,ABCC3,within_other,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | 5-Hydroxyomeprazole | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Deoxycholic acid | Folic acid | Folinic acid | Glutathione | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | O-Desmethylverapamil (D-702) | Sulfolithocholic acid | Taurocholic acid | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0026444144091202,0.0009990009990009,1556.6632
+Human_Breast,Tier3,other,other,FOLR1,SLC19A1,within_other,Folic acid,0.0026444144091202,0.0009990009990009,566.0113
+Human_Breast,Tier3,other,other,ABCC4,ABCC4,within_other,4'-Hydroxydiclofenac | Cholic acid | Cyclic AMP | Folic acid | Folinic acid | Glutathione | Hydroxycelecoxib | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0026444144091202,0.0009990009990009,1063.973
+Human_Breast,Tier3,other,other,ABCC3,SLC19A1,within_other,Folic acid,0.0026444144091202,0.0009990009990009,1501.5287
+Human_Breast,Tier3,other,other,LRP1,LRP1,within_other,Heme,0.0026444144091202,0.0009990009990009,28225.863
+Human_Breast,Tier3,other,other,SLC29A3,SLC29A3,within_other,Adenine,0.0026444144091202,0.0009990009990009,16352.328
+Human_Breast,Tier3,other,other,LRP2,LRP2,within_other,Calcidiol,0.0026444144091202,0.0009990009990009,31014.682
+Human_Breast,Tier3,other,other,CD38,CD38,within_other,Adenosine diphosphate ribose,0.0026444144091202,0.0009990009990009,13887.588
+Human_Breast,Tier3,other,other,ABCC8,ABCC8,within_other,Potassium,0.0026444144091202,0.0009990009990009,1366.1543
+Human_Breast,Tier3,other,other,NPC1L1,NPC1L1,within_other,alpha-Tocopherol,0.0026444144091202,0.0009990009990009,29918.104
+Human_Breast,Tier3,other,other,SCARB1,SCARB1,within_other,alpha-Tocopherol,0.0026444144091202,0.0009990009990009,2450.3823
+Human_Breast,Tier3,other,other,ABCC2,SLCO1C1,within_other,"3',4'-Dihydrodiol | Taurocholic acid",0.0026444144091202,0.0009990009990009,493.14865
+Human_Breast,Tier3,other,other,ABCC1,ABCC1,within_other,4'-Hydroxydiclofenac | Cholic acid | Glutathione | Leukotriene C4 | O-Desmethylverapamil (D-702) | Progesterone | Taurocholic acid,0.0026444144091202,0.0009990009990009,44310.465
+Human_Breast,Tier3,other,other,SLCO1B3,SLCO1B3,within_other,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | 4-Hydroxyvalsartan | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Dehydroepiandrosterone | Deoxycholic acid | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | Sulfolithocholic acid | Taurocholic acid | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0026444144091202,0.0009990009990009,583.9361
+Human_Breast,Tier3,other,other,ABCC1,ABCC3,within_other,Cholic acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0026444144091202,0.0009990009990009,6056.602
+Human_Breast,Tier3,other,other,ABCC2,ABCC2,within_other,"17a-Ethynylestradiol | 3',4'-Dihydrodiol | Bilirubin | Cholic acid | Folinic acid | Fusidic Acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid",0.0026444144091202,0.0009990009990009,906.5898
+Human_Breast,Tier3,other,other,ABCC1,ABCC2,within_other,Cholic acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0026444144091202,0.0009990009990009,4267.2085
+Human_Breast,Tier3,other,other,ABCC1,SLC10A1,within_other,Cholic acid | Progesterone | Taurocholic acid,0.0026444144091202,0.0009990009990009,1678.9398
+Human_Breast,Tier3,other,other,TAP1,TAP1,within_other,Adenosine triphosphate,0.0026444144091202,0.0009990009990009,144360.0
+Human_Breast,Tier3,other,other,ATP7A,TAP1,within_other,Adenosine triphosphate,0.0026444144091202,0.0009990009990009,14897.652
+Human_Breast,Tier3,other,other,ATP7B,TAP1,within_other,Adenosine triphosphate,0.0026444144091202,0.0009990009990009,12709.007
+Human_Breast,Tier3,other,other,AQP7,ATP7A,within_other,Water,0.0026444144091202,0.0009990009990009,3038.0288
+Human_Breast,Tier3,other,other,AQP9,AQP9,within_other,Water,0.0026444144091202,0.0009990009990009,1585.6176
+Human_Breast,Tier3,other,other,AQP7,ATP7B,within_other,Water,0.0026444144091202,0.0009990009990009,579.1073
+Human_Breast,Tier3,other,other,AQP5,AQP7,within_other,Water,0.0026444144091202,0.0009990009990009,2749.0662
+Human_Breast,Tier3,other,other,AQP8,AQP8,within_other,Water,0.0026444144091202,0.0009990009990009,438477.34
+Human_Breast,Tier3,other,other,AQP5,ATP7B,within_other,Water,0.0026444144091202,0.0009990009990009,9830.308
+Human_Breast,Tier3,other,other,AQP7,AQP7,within_other,Water,0.0026444144091202,0.0009990009990009,28143.28
+Human_Breast,Tier3,other,other,ABCC1,SLC6A4,within_other,O-Desmethylverapamil (D-702),0.0026444144091202,0.0009990009990009,2338.742
+Human_Breast,Tier3,other,other,ABCC2,SLC22A4,within_other,O-Desmethylverapamil (D-702),0.0026444144091202,0.0009990009990009,24059.473
+Human_Breast,Tier3,other,other,ABCC2,SLC6A4,within_other,O-Desmethylverapamil (D-702),0.0026444144091202,0.0009990009990009,3556.9883
+Human_Breast,Tier3,other,other,ABCC3,SLC22A4,within_other,O-Desmethylverapamil (D-702),0.0026444144091202,0.0009990009990009,1038.7946
+Human_Breast,Tier3,other,other,ABCC3,SLC22A5,within_other,O-Desmethylverapamil (D-702),0.0026444144091202,0.0009990009990009,3465.2776
+Human_Breast,Tier3,other,other,ABCC1,SLC22A4,within_other,O-Desmethylverapamil (D-702),0.0026444144091202,0.0009990009990009,8115.9204
+Human_Breast,Tier3,other,other,ABCC3,SLC6A4,within_other,O-Desmethylverapamil (D-702),0.0026444144091202,0.0009990009990009,639.2509
+Human_Breast,Tier3,other,other,ABCG2,SLC22A5,within_other,O-Desmethylverapamil (D-702),0.0026444144091202,0.0009990009990009,1317.0054
+Human_Breast,Tier3,other,other,SLC4A1,SLC4A1,within_other,Chloride_bicarbonate anion exchange,0.0026444144091202,0.0009990009990009,1028.0356
+Human_Breast,Tier3,other,other,SLC24A1,SLC24A1,within_other,Sodium_calcium_potassium exchange,0.0026444144091202,0.0009990009990009,3910.8298
+Human_Breast,Tier3,other,other,CLCN3,CLCN3,within_other,Chloride,0.0026444144091202,0.0009990009990009,52651.508
+Human_Breast,Tier3,other,other,CLCN5,CLCN5,within_other,Chloride,0.0026444144091202,0.0009990009990009,821.7753
+Human_Breast,Tier3,other,other,CLCN3,CLCN4,within_other,Chloride,0.0026444144091202,0.0009990009990009,2557.405
+Human_Breast,Tier3,other,other,CLCN3,CLCN5,within_other,Chloride,0.0026444144091202,0.0009990009990009,3963.6506
+Human_Breast,Tier3,other,other,SLC9A1,SLC9A3,within_other,Sodium_hydrogen exchange,0.0026444144091202,0.0009990009990009,8938.424
+Human_Breast,Tier3,other,other,SLC9A1,SLC9A1,within_other,Sodium_hydrogen exchange,0.0026444144091202,0.0009990009990009,1493.9425
+Human_Breast,Tier3,other,other,SLC9A3,SLC9A3,within_other,Sodium_hydrogen exchange,0.0026444144091202,0.0009990009990009,2865.9272
+Human_Breast,Tier3,other,other,SLC6A5,SLC6A9,within_other,Neurotransmitter,0.0026444144091202,0.0009990009990009,672.9089
+Human_Breast,Tier3,other,other,SLC6A9,SLC6A9,within_other,Neurotransmitter,0.0026444144091202,0.0009990009990009,29689.553
+Human_Breast,Tier3,other,other,SLC6A17,SLC6A17,within_other,Neurotransmitter,0.0026444144091202,0.0009990009990009,1034.4985
+Human_Breast,Tier3,other,other,ORAI3,ORAI3,within_other,Calcium release-activated calcium transport,0.0026444144091202,0.0009990009990009,16070.35
+Human_Breast,Tier3,other,other,ORAI2,ORAI2,within_other,Calcium release-activated calcium transport,0.0026444144091202,0.0009990009990009,16896.88
+Human_Breast,Tier3,other,other,ORAI2,ORAI3,within_other,Calcium release-activated calcium transport,0.0026444144091202,0.0009990009990009,27247.143
+Human_Breast,Tier3,other,other,SCNN1A,SCNN1A,within_other,Amiloride-sensitive sodium transport,0.0026444144091202,0.0009990009990009,25233.293
+Human_Breast,Tier3,other,other,SCNN1G,SCNN1G,within_other,Amiloride-sensitive sodium transport,0.0026444144091202,0.0009990009990009,886.2577
+Human_Breast,Tier3,other,other,SCNN1A,SCNN1G,within_other,Amiloride-sensitive sodium transport,0.0026444144091202,0.0009990009990009,3680.1204
+Human_Breast,Tier3,other,other,SLC23A2,SLC23A2,within_other,Vitamin C,0.0026444144091202,0.0009990009990009,3458.4958
+Human_Breast,Tier3,other,other,SLC1A2,SLC1A5,within_other,L-Glutamate,0.0050416872846779,0.0019980019980019,1935.8657
+Human_Breast,Tier3,other,other,SLC39A8,SLC39A8,within_other,Cadmium | Manganese | Zinc,0.0050416872846779,0.0019980019980019,2669.6687
+Human_Breast,Tier3,other,other,SLC11A2,SLC11A2,within_other,Iron,0.0050416872846779,0.0019980019980019,2315.1213
+Human_Breast,Tier3,other,other,SLC16A9,SLC22A4,within_other,L-Carnitine,0.0050416872846779,0.0019980019980019,617.05475
+Human_Breast,Tier3,other,other,SLC10A1,SLC12A2,within_other,Sodium,0.0050416872846779,0.0019980019980019,835.9964
+Human_Breast,Tier3,other,other,SLC5A5,SLC5A7,within_other,Sodium,0.0050416872846779,0.0019980019980019,323.1843
+Human_Breast,Tier3,other,other,FOLR2,FOLR2,within_other,Folic acid,0.0050416872846779,0.0019980019980019,1502.3116
+Human_Breast,Tier3,other,other,AQP1,AQP1,within_other,Water,0.0050416872846779,0.0019980019980019,278.62482
+Human_Breast,Tier3,other,other,SLC7A11,SLC7A11,within_other,L-Cysteine | L-Cystine | L-Glutamate,0.0072638313212819,0.0029970029970029,351.0816
+Human_Breast,Tier3,other,other,SLC40A1,SLC40A1,within_other,Iron,0.0072638313212819,0.0029970029970029,50453.035
+Human_Breast,Tier3,other,other,SLC11A1,SLC11A1,within_other,Iron | Manganese,0.0072638313212819,0.0029970029970029,3101.1025
+Human_Breast,Tier3,other,other,SLC6A4,SLC6A4,within_other,N-Desmethylcitalopram | O-Desmethylverapamil (D-702) | Serotonin | Sodium,0.0072638313212819,0.0029970029970029,491.53674
+Human_Breast,Tier3,other,other,SLC22A1,SLC22A2,within_other,Choline | Dopamine | Estradiol | N-desmethylimatinib | Norepinephrine | Progesterone | Prostaglandins | Serotonin,0.0072638313212819,0.0029970029970029,172.50926
+Human_Breast,Tier3,other,other,ABCC4,SLCO2B1,within_other,Taurocholic acid,0.0072638313212819,0.0029970029970029,2695.0825
+Human_Breast,Tier3,other,other,SLC43A2,SLC7A5,within_other,L-Leucine | L-Methionine | L-Phenylalanine,0.0092690814340298,0.0039960039960039,17522.21
+Human_Breast,Tier3,other,other,SLC1A1,SLC1A5,within_other,L-Glutamate,0.0092690814340298,0.0039960039960039,1198.5653
+Human_Breast,Tier3,other,other,SLC12A2,SLC5A7,within_other,Chloride ion | Sodium,0.0092690814340298,0.0039960039960039,1057.4127
+Human_Breast,Tier3,other,other,SLCO1C1,SLCO1C1,within_other,"3',4'-Dihydrodiol | 4'-Hydroxydiclofenac | Estrone sulfate | Taurocholic acid | Thyroxine",0.0092690814340298,0.0039960039960039,430.62494
+Human_Breast,Tier3,other,other,SLC22A1,SLC6A2,within_other,Norepinephrine,0.0092690814340298,0.0039960039960039,190.2741
+Human_Breast,Tier3,other,other,SLC6A3,SLC6A3,within_other,Dopamine,0.0113332046105155,0.0049950049950049,474.68198
+Human_Breast,Tier3,other,other,SLC6A5,SLC6A5,within_other,Neurotransmitter,0.0113332046105155,0.0049950049950049,116.232056
+Human_Breast,Tier3,other,other,SLC5A2,SLC5A2,within_other,Sodium_D-Glucose cotransport,0.0113332046105155,0.0049950049950049,330.90817
+Human_Breast,Tier3,other,other,SLC22A2,SLC5A7,within_other,Choline,0.0133529836500133,0.0059940059940059,151.59589
+Human_Breast,Tier3,other,other,ABCB1,CD36,within_other,Cholesterol,0.0133529836500133,0.0059940059940059,2043.4572
+Human_Breast,Tier3,other,other,ABCB1,ABCB1,within_other,"17a-Ethynylestradiol | 2-Hydroxychlorpropamide | 3',4'-Dihydrodiol | 4'-Hydroxydiclofenac | 4-Hydroxycyclophosphamide | 5-Hydroxyomeprazole | 8-Hydroxycarvedilol | Cholesterol | Cholic acid | Cortisol | E-3179 | Estradiol | Estriol | Glycerol | Hydroxylansoprazole | N-Desmethylcitalopram | N-Desmethyleletriptan | N-Desmethyltamoxifen | N-desmethylimatinib | O-Deethylated candesartan | O-Desmethylverapamil (D-702) | Progesterone | Taurocholic acid | Testosterone",0.0133529836500133,0.0059940059940059,663.8753
+Human_Breast,Tier3,other,other,ABCC2,SLC10A1,within_other,17a-Ethynylestradiol | Cholic acid | Taurocholic acid,0.0133529836500133,0.0059940059940059,269.00995
+Human_Breast,Tier3,other,other,SLC2A1,SLC2A9,within_other,D-Glucose,0.0152513076584158,0.0069930069930069,361.65515
+Human_Breast,Tier3,other,other,SLC10A1,SLC10A1,within_other,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 17a-Ethynylestradiol | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Deoxycholic acid | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | Progesterone | Sodium | Sulfolithocholic acid | Taurocholic acid | Testosterone | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0152513076584158,0.0069930069930069,208.30789
+Human_Breast,Tier3,other,other,SLC5A1,SLC5A5,within_other,Sodium | Urea,0.0152513076584158,0.0069930069930069,357.48145
+Human_Breast,Tier3,other,other,CPT1A,MSR1,within_other,Fatty acid,0.0152513076584158,0.0069930069930069,20200.785
+Human_Breast,Tier3,other,other,SLC6A1,SLC6A1,within_other,GABA,0.0152513076584158,0.0069930069930069,255.075
+Human_Breast,Tier3,other,other,SLCO1B1,SLCO1B3,within_other,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | 4-Hydroxyvalsartan | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Dehydroepiandrosterone | Deoxycholic acid | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | Sulfolithocholic acid | Taurocholic acid | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0152513076584158,0.0069930069930069,172.17442
+Human_Breast,Tier3,other,other,SLC26A2,SLC26A2,within_other,Anion exchange,0.0152513076584158,0.0069930069930069,2468.9434
+Human_Breast,Tier3,other,other,SLC11A2,SLC3A2,within_other,Iron,0.0171257314114456,0.0079920079920079,4751.968
+Human_Breast,Tier3,other,other,SLC22A4,SLC5A5,within_other,Sodium,0.0171257314114456,0.0079920079920079,797.34845
+Human_Breast,Tier3,other,other,NPC1L1,SCARB1,within_other,alpha-Tocopherol,0.0171257314114456,0.0079920079920079,458.54376
+Human_Breast,Tier3,other,other,ABCC2,ABCC3,within_other,Cholic acid | Folinic acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0171257314114456,0.0079920079920079,641.3743
+Human_Breast,Tier3,other,other,SLC5A1,SLC6A4,within_other,Sodium,0.0188769240091168,0.0089910089910089,333.23166
+Human_Breast,Tier3,other,other,ABCC1,SLCO1B1,within_other,Cholic acid | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0227184760109721,0.0109890109890109,1635.3928
+Human_Breast,Tier3,other,other,ABCC3,ABCG2,within_other,5-Hydroxyomeprazole | Folic acid | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0241910555811901,0.0119880119880119,449.77423
+Human_Breast,Tier3,other,other,ABCC2,SLC22A5,within_other,O-Desmethylverapamil (D-702),0.0241910555811901,0.0119880119880119,439.60693
+Human_Breast,Tier3,other,other,SLC16A1,SLC16A1,within_other,4-ene-Valproic acid | Acetate | Butyrate | D-Lactate | Ketone bodies | L-Glutamate | L-Lactate | Nicotinate | Pyruvate | Taurocholic acid | alpha-Ketoisovaleric acid,0.0259356028586797,0.0129870129870129,704.51746
+Human_Breast,Tier3,other,other,SLC5A7,SLC6A2,within_other,Sodium,0.0259356028586797,0.0129870129870129,180.74252
+Human_Breast,Tier3,other,other,SLC22A4,SLCO1B1,within_other,L-Carnitine | O-Desmethylverapamil (D-702),0.027603974972396,0.0139860139860139,441.4612
+Human_Breast,Tier3,other,other,SLC6A17,SLC6A9,within_other,Neurotransmitter,0.027603974972396,0.0139860139860139,1131.8739
+Human_Breast,Tier3,other,other,ABCG2,SLCO2B1,within_other,Estradiol | Taurocholic acid,0.0329411967343001,0.0169830169830169,1461.5327
+Human_Breast,Tier3,other,other,AQP1,AQP7,within_other,Water,0.0329411967343001,0.0169830169830169,101.9465
+Human_Breast,Tier3,other,other,ABCG2,SLC16A1,within_other,Taurocholic acid,0.0344825628916538,0.0179820179820179,416.38953
+Human_Breast,Tier3,other,other,SLC10A1,SLC22A1,within_other,Progesterone | Taurocholic acid | Testosterone,0.0344825628916538,0.0179820179820179,129.34813
+Human_Breast,Tier3,other,other,ABCC1,SLC22A5,within_other,O-Desmethylverapamil (D-702),0.0344825628916538,0.0179820179820179,1061.1816
+Human_Breast,Tier3,other,other,AQP8,ATP7B,within_other,Water,0.0361415735181602,0.0189810189810189,843.38824
+Human_Breast,Tier3,other,other,SLC22A4,SLC6A4,within_other,O-Desmethylverapamil (D-702) | Sodium,0.0442785668503862,0.0239760239760239,702.8959
+Human_Breast,Tier3,other,other,SLC10A1,SLCO1C1,within_other,Taurocholic acid,0.0442785668503862,0.0239760239760239,172.87682
+Human_Breast,global,,,SLC2A1,SLC2A1,cell_type_independent,D-Galactose | D-Glucose | D-Mannose | Dehydroascorbic acid | Docosahexaenoic acid | Glucosamine,0.0028382213022991,0.000999001,165034.44754212868
+Human_Breast,global,,,SLC2A1,SLC2A2,cell_type_independent,D-Galactose | D-Glucose | D-Mannose | Glucosamine,0.0028382213022991,0.000999001,7372.73514421451
+Human_Breast,global,,,SLC2A1,SLC2A9,cell_type_independent,D-Glucose,0.0028382213022991,0.000999001,16915.013044117986
+Human_Breast,global,,,SLC2A9,SLC2A9,cell_type_independent,D-Glucose,0.0028382213022991,0.000999001,1104.242923042262
+Human_Breast,global,,,SLC2A3,SLC2A3,cell_type_independent,D-Galactose | D-Glucose | D-Maltose | D-Mannose | D-Xylose | Dehydroascorbic acid | Docosahexaenoic acid,0.0028382213022991,0.000999001,589476.3057166296
+Human_Breast,global,,,SLC7A5,SLC7A5,cell_type_independent,L-Arginine | L-Glutamine | L-Histidine | L-Leucine | L-Methionine | L-Phenylalanine | L-Tyrosine,0.0028382213022991,0.000999001,151585.74923109164
+Human_Breast,global,,,SLC38A7,SLC7A5,cell_type_independent,L-Glutamine,0.0028382213022991,0.000999001,32402.713240714493
+Human_Breast,global,,,SLC3A2,SLC3A2,cell_type_independent,Iron | L-Cystine | L-Glutamate | L-Glutamine | L-Leucine | L-Serine,0.0028382213022991,0.000999001,57281.45264677448
+Human_Breast,global,,,SLC1A5,SLC38A7,cell_type_independent,L-Glutamine,0.0028382213022991,0.000999001,56774.28923206646
+Human_Breast,global,,,SLC3A2,SLC7A5,cell_type_independent,L-Glutamine | L-Leucine,0.0028382213022991,0.000999001,174195.17941235154
+Human_Breast,global,,,SLC1A5,SLC1A5,cell_type_independent,L-Alanine | L-Asparagine | L-Cysteine | L-Glutamate | L-Glutamine | L-Leucine | L-Serine | L-Threonine | Sodium,0.0028382213022991,0.000999001,448971.89288799895
+Human_Breast,global,,,SLC1A5,SLC3A2,cell_type_independent,L-Glutamate | L-Glutamine | L-Leucine | L-Serine,0.0028382213022991,0.000999001,295959.1286354939
+Human_Breast,global,,,SLC38A7,SLC38A7,cell_type_independent,L-Glutamine,0.0028382213022991,0.000999001,2168.1905678946664
+Human_Breast,global,,,SLC7A7,SLC7A7,cell_type_independent,L-Glutamine,0.0028382213022991,0.000999001,14102.315053905568
+Human_Breast,global,,,SLC1A5,SLC7A5,cell_type_independent,L-Glutamine | L-Leucine,0.0028382213022991,0.000999001,473287.93289892975
+Human_Breast,global,,,SLC38A7,SLC3A2,cell_type_independent,L-Glutamine,0.0028382213022991,0.000999001,22621.884110942752
+Human_Breast,global,,,SLC1A5,SLC7A11,cell_type_independent,L-Cysteine | L-Glutamate,0.0028382213022991,0.000999001,12976.178085871172
+Human_Breast,global,,,SLC43A2,SLC43A2,cell_type_independent,L-Cysteine | L-Isoleucine | L-Leucine | L-Methionine | L-Phenylalanine | L-Valine,0.0028382213022991,0.000999001,12160.354265547265
+Human_Breast,global,,,SLC16A4,SLC16A4,cell_type_independent,Acetate | L-Lactate,0.0028382213022991,0.000999001,12699.67609065065
+Human_Breast,global,,,SLCO2A1,SLCO2A1,cell_type_independent,Arachidonic acid | Eicosanoid | Prostaglandins | Pyruvate,0.0028382213022991,0.000999001,127581.76460565013
+Human_Breast,global,,,SLC16A1,SLCO2A1,cell_type_independent,Pyruvate,0.0028382213022991,0.000999001,10639.564706869309
+Human_Breast,global,,,SLCO2B1,SLCO2B1,cell_type_independent,Acetate | Citric acid | Estradiol | Nicotinate | Oxalic acid | Taurocholic acid,0.0028382213022991,0.000999001,25903.639321932016
+Human_Breast,global,,,SLC16A1,SLCO2B1,cell_type_independent,Acetate | Nicotinate | Taurocholic acid,0.0028382213022991,0.000999001,8251.45355053903
+Human_Breast,global,,,SLC22A5,SLC22A5,cell_type_independent,4-ene-Valproic acid | Acetyl-L-Carnitine | Choline | Creatine | Dopamine | Histamine | L-Carnitine | Nicotinate | Norepinephrine | O-Desmethylverapamil (D-702) | Sodium,0.0028382213022991,0.000999001,20901.24968499346
+Human_Breast,global,,,SLC1A1,SLC1A5,cell_type_independent,L-Glutamate,0.0028382213022991,0.000999001,11187.25008771973
+Human_Breast,global,,,SLC3A2,SLC7A11,cell_type_independent,L-Cystine | L-Glutamate,0.0028382213022991,0.000999001,4734.542154380864
+Human_Breast,global,,,SLC1A2,SLC3A2,cell_type_independent,L-Glutamate,0.0028382213022991,0.000999001,69252.61793364762
+Human_Breast,global,,,SLC1A2,SLC1A2,cell_type_independent,D-Aspartate | L-Aspartate | L-Glutamate,0.0028382213022991,0.000999001,34744.91425078173
+Human_Breast,global,,,SLC1A2,SLC7A11,cell_type_independent,L-Glutamate,0.0028382213022991,0.000999001,2482.8685034670107
+Human_Breast,global,,,SLC1A2,SLC1A5,cell_type_independent,L-Glutamate,0.0028382213022991,0.000999001,193788.78645130532
+Human_Breast,global,,,SLC1A3,SLC1A3,cell_type_independent,D-Aspartate | L-Aspartate | L-Glutamate | Malic acid,0.0028382213022991,0.000999001,1718.8494763082977
+Human_Breast,global,,,SLC3A1,SLC3A2,cell_type_independent,L-Cystine,0.0028382213022991,0.000999001,4930.624467105245
+Human_Breast,global,,,SLC30A8,SLC30A8,cell_type_independent,Zinc,0.0028382213022991,0.000999001,913.342714435052
+Human_Breast,global,,,SLC39A8,SLC39A8,cell_type_independent,Cadmium | Manganese | Zinc,0.0028382213022991,0.000999001,5935.823507068697
+Human_Breast,global,,,SLC11A2,SLC3A2,cell_type_independent,Iron,0.0028382213022991,0.000999001,142765.7522132032
+Human_Breast,global,,,SLC40A1,SLC40A1,cell_type_independent,Iron,0.0028382213022991,0.000999001,262092.73123102405
+Human_Breast,global,,,SLC11A2,SLC40A1,cell_type_independent,Iron,0.0028382213022991,0.000999001,149988.52914161922
+Human_Breast,global,,,SLC11A2,SLC11A2,cell_type_independent,Iron,0.0028382213022991,0.000999001,100878.50801789697
+Human_Breast,global,,,SLC22A5,SLC22A8,cell_type_independent,Acetyl-L-Carnitine | L-Carnitine,0.0028382213022991,0.000999001,2551.4661982619045
+Human_Breast,global,,,SLC16A9,SLC16A9,cell_type_independent,L-Carnitine,0.0028382213022991,0.000999001,723.526505755828
+Human_Breast,global,,,SLC22A4,SLC22A4,cell_type_independent,L-Carnitine | O-Desmethylverapamil (D-702) | Putrescine | Sodium | Spermine | Testosterone,0.0028382213022991,0.000999001,2562.9198182380587
+Human_Breast,global,,,SLC22A5,SLCO1B1,cell_type_independent,L-Carnitine | O-Desmethylverapamil (D-702),0.0028382213022991,0.000999001,2197.8437312157125
+Human_Breast,global,,,SLC16A9,SLC22A5,cell_type_independent,L-Carnitine,0.0028382213022991,0.000999001,4529.177999290954
+Human_Breast,global,,,SLC22A4,SLC22A5,cell_type_independent,L-Carnitine | O-Desmethylverapamil (D-702) | Sodium,0.0028382213022991,0.000999001,9956.638152916836
+Human_Breast,global,,,SLC22A5,SLC6A4,cell_type_independent,O-Desmethylverapamil (D-702) | Sodium,0.0028382213022991,0.000999001,4863.424321409077
+Human_Breast,global,,,SLC1A5,SLC5A7,cell_type_independent,Sodium,0.0028382213022991,0.000999001,13024.142277283638
+Human_Breast,global,,,SLC1A5,SLC5A5,cell_type_independent,Sodium,0.0028382213022991,0.000999001,25107.479516424457
+Human_Breast,global,,,SLC29A1,SLC29A1,cell_type_independent,Adenosine | Cytidine | Ethanol | Guanosine | Inosine | Sodium | Thymidine | Uridine,0.0028382213022991,0.000999001,198049.2600980311
+Human_Breast,global,,,SLC22A5,SLC5A3,cell_type_independent,Sodium,0.0028382213022991,0.000999001,34699.02965004137
+Human_Breast,global,,,SLC22A4,SLC5A3,cell_type_independent,Sodium,0.0028382213022991,0.000999001,12676.300069510093
+Human_Breast,global,,,SLC29A1,SLC6A4,cell_type_independent,Sodium,0.0028382213022991,0.000999001,13938.502258121704
+Human_Breast,global,,,SLC1A5,SLC22A4,cell_type_independent,Sodium,0.0028382213022991,0.000999001,49405.1856103426
+Human_Breast,global,,,SLC29A1,SLC5A3,cell_type_independent,Sodium,0.0028382213022991,0.000999001,107938.68737866652
+Human_Breast,global,,,SLC12A2,SLC12A2,cell_type_independent,Chloride ion | Sodium,0.0028382213022991,0.000999001,19595.18363530965
+Human_Breast,global,,,SLC5A3,SLC5A5,cell_type_independent,Sodium,0.0028382213022991,0.000999001,6309.759536620968
+Human_Breast,global,,,SLC29A1,SLC5A1,cell_type_independent,Sodium,0.0028382213022991,0.000999001,10766.186502378
+Human_Breast,global,,,SLC12A2,SLC5A3,cell_type_independent,Sodium,0.0028382213022991,0.000999001,30988.024579634228
+Human_Breast,global,,,SLC10A1,SLC29A1,cell_type_independent,Sodium,0.0028382213022991,0.000999001,6313.139824097607
+Human_Breast,global,,,SLC22A5,SLC6A2,cell_type_independent,Norepinephrine | Sodium,0.0028382213022991,0.000999001,3133.993978254762
+Human_Breast,global,,,SLC22A4,SLC6A2,cell_type_independent,Sodium,0.0028382213022991,0.000999001,1324.4843037048308
+Human_Breast,global,,,SLC22A5,SLC5A1,cell_type_independent,Sodium,0.0028382213022991,0.000999001,4095.220760288608
+Human_Breast,global,,,SLC5A3,SLC6A4,cell_type_independent,Sodium,0.0028382213022991,0.000999001,6640.699837650023
+Human_Breast,global,,,SLC29A1,SLC6A2,cell_type_independent,Sodium,0.0028382213022991,0.000999001,9139.321561419803
+Human_Breast,global,,,SLC22A5,SLC5A7,cell_type_independent,Choline | Sodium,0.0028382213022991,0.000999001,2753.972553695663
+Human_Breast,global,,,SLC12A2,SLC29A1,cell_type_independent,Sodium,0.0028382213022991,0.000999001,83192.44069351806
+Human_Breast,global,,,SLC1A5,SLC29A1,cell_type_independent,Sodium,0.0028382213022991,0.000999001,546008.6790539683
+Human_Breast,global,,,SLC22A5,SLC5A5,cell_type_independent,Sodium,0.0028382213022991,0.000999001,6000.130500994986
+Human_Breast,global,,,SLC1A5,SLC6A4,cell_type_independent,Sodium,0.0028382213022991,0.000999001,24307.687669939085
+Human_Breast,global,,,SLC29A1,SLC5A7,cell_type_independent,Sodium,0.0028382213022991,0.000999001,8105.320710766411
+Human_Breast,global,,,SLC29A1,SLC5A5,cell_type_independent,Sodium,0.0028382213022991,0.000999001,16895.97740779863
+Human_Breast,global,,,SLC1A5,SLC5A3,cell_type_independent,Sodium,0.0028382213022991,0.000999001,169492.5918230431
+Human_Breast,global,,,SLC10A1,SLC1A5,cell_type_independent,Sodium,0.0028382213022991,0.000999001,9237.021748326391
+Human_Breast,global,,,SLC1A5,SLC5A1,cell_type_independent,Sodium,0.0028382213022991,0.000999001,15602.79371493363
+Human_Breast,global,,,SLC5A5,SLC5A5,cell_type_independent,Sodium | Urea,0.0028382213022991,0.000999001,936.042760171102
+Human_Breast,global,,,SLC5A3,SLC5A3,cell_type_independent,Sodium,0.0028382213022991,0.000999001,28332.36925215347
+Human_Breast,global,,,SLC6A2,SLC6A4,cell_type_independent,Sodium,0.0028382213022991,0.000999001,690.7699943996674
+Human_Breast,global,,,SLC12A2,SLC1A5,cell_type_independent,Sodium,0.0028382213022991,0.000999001,119102.30580129998
+Human_Breast,global,,,SLC10A1,SLC22A5,cell_type_independent,Sodium,0.0028382213022991,0.000999001,2107.4893137148456
+Human_Breast,global,,,SLC12A2,SLC22A4,cell_type_independent,Sodium,0.0028382213022991,0.000999001,8383.901384555247
+Human_Breast,global,,,SLC1A5,SLC6A2,cell_type_independent,Sodium,0.0028382213022991,0.000999001,14506.813696520134
+Human_Breast,global,,,SLC22A5,SLC29A1,cell_type_independent,Sodium,0.0028382213022991,0.000999001,111404.21039446222
+Human_Breast,global,,,SLC12A2,SLC22A5,cell_type_independent,Sodium,0.0028382213022991,0.000999001,23980.70860771088
+Human_Breast,global,,,SLC1A5,SLC22A5,cell_type_independent,Sodium,0.0028382213022991,0.000999001,175624.7840793815
+Human_Breast,global,,,SLC22A4,SLC29A1,cell_type_independent,Sodium,0.0028382213022991,0.000999001,32378.548474963045
+Human_Breast,global,,,SLC3A1,SLC7A5,cell_type_independent,L-Arginine,0.0028382213022991,0.000999001,7247.0434886569155
+Human_Breast,global,,,MSR1,MSR1,cell_type_independent,Fatty acid,0.0028382213022991,0.000999001,42039.05719736272
+Human_Breast,global,,,CPT1A,CPT1A,cell_type_independent,Fatty acid,0.0028382213022991,0.000999001,102358.19193315436
+Human_Breast,global,,,CD36,MSR1,cell_type_independent,Fatty acid,0.0028382213022991,0.000999001,25733.691553274468
+Human_Breast,global,,,CD36,CD36,cell_type_independent,Cholesterol | Fatty acid | Vitamin D3,0.0028382213022991,0.000999001,38829.31122342655
+Human_Breast,global,,,CPT1A,MSR1,cell_type_independent,Fatty acid,0.0028382213022991,0.000999001,47739.6596112324
+Human_Breast,global,,,ABCA1,ABCA1,cell_type_independent,25-Hydroxycholesterol,0.0028382213022991,0.000999001,129883.5425938376
+Human_Breast,global,,,ABCG2,CD36,cell_type_independent,Cholesterol,0.0028382213022991,0.000999001,3448.4153333783192
+Human_Breast,global,,,SLC6A3,SLC6A3,cell_type_independent,Dopamine,0.0028382213022991,0.000999001,645.278511973849
+Human_Breast,global,,,SLC22A5,SLC6A3,cell_type_independent,Dopamine,0.0028382213022991,0.000999001,3903.971115352215
+Human_Breast,global,,,ATP7A,SLC20A2,cell_type_independent,Phosphate,0.0028382213022991,0.000999001,14130.162625603032
+Human_Breast,global,,,ATP7A,ATP7B,cell_type_independent,ADP | Adenosine triphosphate | Phosphate | Water,0.0028382213022991,0.000999001,4304.8148353092665
+Human_Breast,global,,,ATP7A,ATP7A,cell_type_independent,ADP | Adenosine triphosphate | Phosphate | Water,0.0028382213022991,0.000999001,3337.5623099481263
+Human_Breast,global,,,ATP7B,SLC20A2,cell_type_independent,Phosphate,0.0028382213022991,0.000999001,12428.74442805032
+Human_Breast,global,,,ATP7B,ATP7B,cell_type_independent,ADP | Adenosine triphosphate | Phosphate | Water,0.0028382213022991,0.000999001,2850.3226835196483
+Human_Breast,global,,,SLC20A2,SLC20A2,cell_type_independent,Phosphate,0.0028382213022991,0.000999001,23563.65980137737
+Human_Breast,global,,,SLC19A1,SLC19A1,cell_type_independent,Folic acid | Thiamine,0.0028382213022991,0.000999001,2535.319574709206
+Human_Breast,global,,,CHRNA5,CHRNA5,cell_type_independent,Ethanol,0.0028382213022991,0.000999001,700.3562602169982
+Human_Breast,global,,,CHRNA5,SLC29A1,cell_type_independent,Ethanol,0.0028382213022991,0.000999001,13718.896700849102
+Human_Breast,global,,,ABCC3,ABCC3,cell_type_independent,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | 5-Hydroxyomeprazole | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Deoxycholic acid | Folic acid | Folinic acid | Glutathione | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | O-Desmethylverapamil (D-702) | Sulfolithocholic acid | Taurocholic acid | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0028382213022991,0.000999001,1672.346278403916
+Human_Breast,global,,,ABCC4,ABCC4,cell_type_independent,4'-Hydroxydiclofenac | Cholic acid | Cyclic AMP | Folic acid | Folinic acid | Glutathione | Hydroxycelecoxib | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0028382213022991,0.000999001,1738.458811219091
+Human_Breast,global,,,ABCC3,SLC19A1,cell_type_independent,Folic acid,0.0028382213022991,0.000999001,3231.19979860313
+Human_Breast,global,,,FOLR2,FOLR2,cell_type_independent,Folic acid,0.0028382213022991,0.000999001,2329.5933372599643
+Human_Breast,global,,,LRP1,LRP1,cell_type_independent,Heme,0.0028382213022991,0.000999001,32474.21266227463
+Human_Breast,global,,,SLC29A3,SLC29A3,cell_type_independent,Adenine,0.0028382213022991,0.000999001,17870.203515458026
+Human_Breast,global,,,LRP2,LRP2,cell_type_independent,Calcidiol,0.0028382213022991,0.000999001,31403.86142388246
+Human_Breast,global,,,CD38,CD38,cell_type_independent,Adenosine diphosphate ribose,0.0028382213022991,0.000999001,20558.36568159898
+Human_Breast,global,,,ABCC8,ABCC8,cell_type_independent,Potassium,0.0028382213022991,0.000999001,1366.154284222599
+Human_Breast,global,,,SCARB1,SCARB1,cell_type_independent,alpha-Tocopherol,0.0028382213022991,0.000999001,31103.00157439972
+Human_Breast,global,,,NPC1L1,SCARB1,cell_type_independent,alpha-Tocopherol,0.0028382213022991,0.000999001,5344.783076235621
+Human_Breast,global,,,ABCC1,SLCO2B1,cell_type_independent,Taurocholic acid,0.0028382213022991,0.000999001,54275.92121162631
+Human_Breast,global,,,ABCC1,ABCC1,cell_type_independent,4'-Hydroxydiclofenac | Cholic acid | Glutathione | Leukotriene C4 | O-Desmethylverapamil (D-702) | Progesterone | Taurocholic acid,0.0028382213022991,0.000999001,76105.84174184097
+Human_Breast,global,,,SLCO1B3,SLCO1B3,cell_type_independent,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | 4-Hydroxyvalsartan | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Dehydroepiandrosterone | Deoxycholic acid | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | Sulfolithocholic acid | Taurocholic acid | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0028382213022991,0.000999001,583.936066538236
+Human_Breast,global,,,ABCC1,ABCC3,cell_type_independent,Cholic acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0028382213022991,0.000999001,14210.297430247212
+Human_Breast,global,,,ABCC2,ABCC2,cell_type_independent,"17a-Ethynylestradiol | 3',4'-Dihydrodiol | Bilirubin | Cholic acid | Folinic acid | Fusidic Acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid",0.0028382213022991,0.000999001,998.9993347161716
+Human_Breast,global,,,TAP1,TAP1,cell_type_independent,Adenosine triphosphate,0.0028382213022991,0.000999001,201404.79611681472
+Human_Breast,global,,,ATP7A,TAP1,cell_type_independent,Adenosine triphosphate,0.0028382213022991,0.000999001,43164.30512545147
+Human_Breast,global,,,ATP7B,TAP1,cell_type_independent,Adenosine triphosphate,0.0028382213022991,0.000999001,28889.27405551463
+Human_Breast,global,,,AQP9,AQP9,cell_type_independent,Water,0.0028382213022991,0.000999001,1888.472217664292
+Human_Breast,global,,,AQP5,ATP7B,cell_type_independent,Water,0.0028382213022991,0.000999001,1284.7344817501294
+Human_Breast,global,,,AQP7,ATP7B,cell_type_independent,Water,0.0028382213022991,0.000999001,5956.962486187927
+Human_Breast,global,,,AQP1,AQP1,cell_type_independent,Water,0.0028382213022991,0.000999001,469714.9071560069
+Human_Breast,global,,,AQP7,AQP7,cell_type_independent,Water,0.0028382213022991,0.000999001,10502.035810020589
+Human_Breast,global,,,AQP1,AQP7,cell_type_independent,Water,0.0028382213022991,0.000999001,59884.72701283046
+Human_Breast,global,,,ABCC2,SLC22A5,cell_type_independent,O-Desmethylverapamil (D-702),0.0028382213022991,0.000999001,5101.299861757123
+Human_Breast,global,,,ABCC1,SLC22A5,cell_type_independent,O-Desmethylverapamil (D-702),0.0028382213022991,0.000999001,52760.160112717
+Human_Breast,global,,,ABCC1,SLC6A4,cell_type_independent,O-Desmethylverapamil (D-702),0.0028382213022991,0.000999001,9218.809836321136
+Human_Breast,global,,,ABCC3,SLC22A5,cell_type_independent,O-Desmethylverapamil (D-702),0.0028382213022991,0.000999001,7445.276794682801
+Human_Breast,global,,,ABCC1,SLC22A4,cell_type_independent,O-Desmethylverapamil (D-702),0.0028382213022991,0.000999001,20676.68470692692
+Human_Breast,global,,,SLC4A1,SLC4A1,cell_type_independent,Chloride_bicarbonate anion exchange,0.0028382213022991,0.000999001,1028.0355975200175
+Human_Breast,global,,,SLC24A1,SLC24A1,cell_type_independent,Sodium_calcium_potassium exchange,0.0028382213022991,0.000999001,4292.030010467162
+Human_Breast,global,,,CLCN3,CLCN3,cell_type_independent,Chloride,0.0028382213022991,0.000999001,55226.75447291709
+Human_Breast,global,,,CLCN5,CLCN5,cell_type_independent,Chloride,0.0028382213022991,0.000999001,921.0875383322052
+Human_Breast,global,,,CLCN3,CLCN5,cell_type_independent,Chloride,0.0028382213022991,0.000999001,8745.703949186518
+Human_Breast,global,,,SLC9A1,SLC9A1,cell_type_independent,Sodium_hydrogen exchange,0.0028382213022991,0.000999001,9615.80818920432
+Human_Breast,global,,,SLC9A3,SLC9A3,cell_type_independent,Sodium_hydrogen exchange,0.0028382213022991,0.000999001,1707.774011397901
+Human_Breast,global,,,SLC9A1,SLC9A3,cell_type_independent,Sodium_hydrogen exchange,0.0028382213022991,0.000999001,6392.870331355216
+Human_Breast,global,,,SLC6A5,SLC6A9,cell_type_independent,Neurotransmitter,0.0028382213022991,0.000999001,1347.5164084505784
+Human_Breast,global,,,SLC6A9,SLC6A9,cell_type_independent,Neurotransmitter,0.0028382213022991,0.000999001,30335.347840982628
+Human_Breast,global,,,SLC6A17,SLC6A17,cell_type_independent,Neurotransmitter,0.0028382213022991,0.000999001,1034.498476749906
+Human_Breast,global,,,ORAI2,ORAI2,cell_type_independent,Calcium release-activated calcium transport,0.0028382213022991,0.000999001,20544.08578074737
+Human_Breast,global,,,ORAI2,ORAI3,cell_type_independent,Calcium release-activated calcium transport,0.0028382213022991,0.000999001,40539.117841088366
+Human_Breast,global,,,ORAI3,ORAI3,cell_type_independent,Calcium release-activated calcium transport,0.0028382213022991,0.000999001,30418.67975528029
+Human_Breast,global,,,SCNN1A,SCNN1A,cell_type_independent,Amiloride-sensitive sodium transport,0.0028382213022991,0.000999001,25669.824111745824
+Human_Breast,global,,,SCNN1G,SCNN1G,cell_type_independent,Amiloride-sensitive sodium transport,0.0028382213022991,0.000999001,969.6691477361768
+Human_Breast,global,,,SCNN1A,SCNN1G,cell_type_independent,Amiloride-sensitive sodium transport,0.0028382213022991,0.000999001,7280.066994230241
+Human_Breast,global,,,SLC23A2,SLC23A2,cell_type_independent,Vitamin C,0.0028382213022991,0.000999001,4353.086395194274
+Human_Breast,global,,,SLC7A11,SLC7A11,cell_type_independent,L-Cysteine | L-Cystine | L-Glutamate,0.0050718510845819,0.001998002,376.4964265725741
+Human_Breast,global,,,SLC43A2,SLC7A5,cell_type_independent,L-Leucine | L-Methionine | L-Phenylalanine,0.0050718510845819,0.001998002,41711.91951281419
+Human_Breast,global,,,SLC3A1,SLC3A1,cell_type_independent,L-Arginine | L-Cystine | L-Lysine | L-Ornithine,0.0050718510845819,0.001998002,353.8018420424378
+Human_Breast,global,,,SLC11A1,SLC11A1,cell_type_independent,Iron | Manganese,0.0050718510845819,0.001998002,1006.4804962071736
+Human_Breast,global,,,SLC5A7,SLC5A7,cell_type_independent,Chloride ion | Choline | Sodium,0.0050718510845819,0.001998002,316.1924664053121
+Human_Breast,global,,,SLC12A2,SLC6A4,cell_type_independent,Sodium,0.0050718510845819,0.001998002,3891.660392403779
+Human_Breast,global,,,SLC10A1,SLC10A1,cell_type_independent,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 17a-Ethynylestradiol | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Deoxycholic acid | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | Progesterone | Sodium | Sulfolithocholic acid | Taurocholic acid | Testosterone | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0050718510845819,0.001998002,304.18963931431017
+Human_Breast,global,,,SLC5A7,SLC6A4,cell_type_independent,Sodium,0.0050718510845819,0.001998002,713.8605814769733
+Human_Breast,global,,,SLC12A2,SLC6A2,cell_type_independent,Sodium,0.0050718510845819,0.001998002,2499.6325755225425
+Human_Breast,global,,,SLC12A6,SLC12A6,cell_type_independent,Chloride ion,0.0050718510845819,0.001998002,4222.099503596883
+Human_Breast,global,,,NPC1L1,NPC1L1,cell_type_independent,alpha-Tocopherol,0.0050718510845819,0.001998002,552.6845531113368
+Human_Breast,global,,,ABCC1,SLC16A1,cell_type_independent,Taurocholic acid,0.0050718510845819,0.001998002,14619.18989269308
+Human_Breast,global,,,ABCC4,SLCO2B1,cell_type_independent,Taurocholic acid,0.0050718510845819,0.001998002,6818.642751384554
+Human_Breast,global,,,ABCC2,SLCO1C1,cell_type_independent,"3',4'-Dihydrodiol | Taurocholic acid",0.0050718510845819,0.001998002,1020.2363590022908
+Human_Breast,global,,,ABCC1,ABCC2,cell_type_independent,Cholic acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0050718510845819,0.001998002,11040.292003383924
+Human_Breast,global,,,AQP5,AQP7,cell_type_independent,Water,0.0050718510845819,0.001998002,2322.5331157688474
+Human_Breast,global,,,ABCC2,SLC22A4,cell_type_independent,O-Desmethylverapamil (D-702),0.0050718510845819,0.001998002,2241.088865966953
+Human_Breast,global,,,CLCN3,CLCN4,cell_type_independent,Chloride,0.0050718510845819,0.001998002,5175.767592871907
+Human_Breast,global,,,SLC11A1,SLC11A2,cell_type_independent,Iron,0.0071827614518642,0.002997003,12408.416607228752
+Human_Breast,global,,,SLC5A5,SLC6A4,cell_type_independent,Sodium,0.0071827614518642,0.002997003,1076.52006749212
+Human_Breast,global,,,SLC6A4,SLC6A4,cell_type_independent,N-Desmethylcitalopram | O-Desmethylverapamil (D-702) | Serotonin | Sodium,0.0071827614518642,0.002997003,555.7070554978554
+Human_Breast,global,,,SLC3A2,SLC43A2,cell_type_independent,L-Leucine,0.0071827614518642,0.002997003,29306.427822232134
+Human_Breast,global,,,SLC6A12,SLC6A12,cell_type_independent,Betaine | GABA,0.0071827614518642,0.002997003,527.1021149234598
+Human_Breast,global,,,SLCO1C1,SLCO1C1,cell_type_independent,"3',4'-Dihydrodiol | 4'-Hydroxydiclofenac | Estrone sulfate | Taurocholic acid | Thyroxine",0.0071827614518642,0.002997003,487.1234068133675
+Human_Breast,global,,,ABCC1,SLC10A1,cell_type_independent,Cholic acid | Progesterone | Taurocholic acid,0.0071827614518642,0.002997003,5071.903501311535
+Human_Breast,global,,,AQP8,ATP7B,cell_type_independent,Water,0.0071827614518642,0.002997003,678.3267523979619
+Human_Breast,global,,,ABCC3,SLC6A4,cell_type_independent,O-Desmethylverapamil (D-702),0.0071827614518642,0.002997003,1210.5071383577
+Human_Breast,global,,,SLC26A2,SLC26A2,cell_type_independent,Anion exchange,0.0071827614518642,0.002997003,3215.3080157601007
+Human_Breast,global,,,SLC16A1,SLC16A1,cell_type_independent,4-ene-Valproic acid | Acetate | Butyrate | D-Lactate | Ketone bodies | L-Glutamate | L-Lactate | Nicotinate | Pyruvate | Taurocholic acid | alpha-Ketoisovaleric acid,0.0092165896053155,0.003996004,1192.1414353984092
+Human_Breast,global,,,SLC16A9,SLC22A4,cell_type_independent,L-Carnitine,0.0092165896053155,0.003996004,1358.3864926437736
+Human_Breast,global,,,SLC12A2,SLC5A1,cell_type_independent,Sodium,0.0092165896053155,0.003996004,3134.3620576989742
+Human_Breast,global,,,SLC22A1,SLC22A2,cell_type_independent,Choline | Dopamine | Estradiol | N-desmethylimatinib | Norepinephrine | Progesterone | Prostaglandins | Serotonin,0.0092165896053155,0.003996004,369.3417282227948
+Human_Breast,global,,,FOLR1,SLC19A1,cell_type_independent,Folic acid,0.0092165896053155,0.003996004,1213.8323285104716
+Human_Breast,global,,,SLCO1B1,SLCO1B3,cell_type_independent,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | 4-Hydroxyvalsartan | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Dehydroepiandrosterone | Deoxycholic acid | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | Sulfolithocholic acid | Taurocholic acid | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0092165896053155,0.003996004,408.5550322003752
+Human_Breast,global,,,ABCG2,SLC16A1,cell_type_independent,Taurocholic acid,0.0092165896053155,0.003996004,1213.3868281629325
+Human_Breast,global,,,CUBN,SLC11A2,cell_type_independent,Iron,0.011398175709009,0.0049950047,8311.59293729772
+Human_Breast,global,,,SLC22A1,SLC6A2,cell_type_independent,Norepinephrine,0.011398175709009,0.0049950047,400.6339924313666
+Human_Breast,global,,,SLC5A1,SLC6A4,cell_type_independent,Sodium,0.0133928572904551,0.005994006,750.9590970939477
+Human_Breast,global,,,SLC12A2,SLC5A7,cell_type_independent,Chloride ion | Sodium,0.0133928572904551,0.005994006,2292.889398486873
+Human_Breast,global,,,SLC12A2,SLC5A5,cell_type_independent,Sodium,0.0133928572904551,0.005994006,3779.4535163161127
+Human_Breast,global,,,ABCG2,SLC22A5,cell_type_independent,O-Desmethylverapamil (D-702),0.0133928572904551,0.005994006,2805.502906347282
+Human_Breast,global,,,CUBN,SLC3A2,cell_type_independent,Iron,0.0153846152126789,0.006993007,6114.437823038956
+Human_Breast,global,,,SLC10A1,SLCO1C1,cell_type_independent,Taurocholic acid,0.0153846152126789,0.006993007,493.8934841545714
+Human_Breast,global,,,ABCC3,SLC22A4,cell_type_independent,O-Desmethylverapamil (D-702),0.0153846152126789,0.006993007,2354.402976857369
+Human_Breast,global,,,SLC22A4,SLCO1B1,cell_type_independent,L-Carnitine | O-Desmethylverapamil (D-702),0.0172290016742582,0.007992008,982.7877021869152
+Human_Breast,global,,,SLC5A7,SLC6A2,cell_type_independent,Sodium,0.0172290016742582,0.007992008,389.45322090994006
+Human_Breast,global,,,SLC5A1,SLC5A5,cell_type_independent,Sodium | Urea,0.0172290016742582,0.007992008,822.5253567981172
+Human_Breast,global,,,SLC6A1,SLC6A1,cell_type_independent,GABA,0.0172290016742582,0.007992008,255.07500443983488
+Human_Breast,global,,,CUBN,SLC40A1,cell_type_independent,Iron,0.0191897646760317,0.008991009,10552.906934098792
+Human_Breast,global,,,SLC6A17,SLC6A9,cell_type_independent,Neurotransmitter,0.0191897646760317,0.008991009,2546.67293530441
+Human_Breast,global,,,ABCC3,ABCG2,cell_type_independent,5-Hydroxyomeprazole | Folic acid | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0232230809521792,0.01098901,1009.4600285228662
+Human_Breast,global,,,ABCC2,ABCC3,cell_type_independent,Cholic acid | Folinic acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0232230809521792,0.01098901,1394.767013102652
+Human_Breast,global,,,ABCC2,SLC10A1,cell_type_independent,17a-Ethynylestradiol | Cholic acid | Taurocholic acid,0.0252100843114449,0.011988012,605.644305370111
+Human_Breast,global,,,SLC5A5,SLC5A7,cell_type_independent,Sodium,0.0269151138465689,0.012987013,601.7557913480529
+Human_Breast,global,,,SLC22A2,SLC5A7,cell_type_independent,Choline,0.0269151138465689,0.012987013,329.89654181079027
+Human_Breast,global,,,AQP7,ATP7A,cell_type_independent,Water,0.0269151138465689,0.012987013,7186.447393129636
+Human_Breast,global,,,ABCB1,ABCB1,cell_type_independent,"17a-Ethynylestradiol | 2-Hydroxychlorpropamide | 3',4'-Dihydrodiol | 4'-Hydroxydiclofenac | 4-Hydroxycyclophosphamide | 5-Hydroxyomeprazole | 8-Hydroxycarvedilol | Cholesterol | Cholic acid | Cortisol | E-3179 | Estradiol | Estriol | Glycerol | Hydroxylansoprazole | N-Desmethylcitalopram | N-Desmethyleletriptan | N-Desmethyltamoxifen | N-desmethylimatinib | O-Deethylated candesartan | O-Desmethylverapamil (D-702) | Progesterone | Taurocholic acid | Testosterone",0.0306122442840465,0.014985015,1043.102165800717
+Human_Breast,global,,,ABCG2,SLCO2B1,cell_type_independent,Estradiol | Taurocholic acid,0.0306122442840465,0.014985015,3483.5033275867127
+Human_Breast,global,,,SLC6A5,SLC6A5,cell_type_independent,Neurotransmitter,0.0306122442840465,0.014985015,116.23205282786876
+Human_Breast,global,,,SLC10A1,SLC22A1,cell_type_independent,Progesterone | Taurocholic acid | Testosterone,0.032498306475615,0.015984016,327.9429573285107
+Human_Breast,global,,,AQP8,AQP8,cell_type_independent,Water,0.0342052320779209,0.016983017,115.28340936826942
+Human_Breast,global,,,SLC5A2,SLC5A2,cell_type_independent,Sodium_D-Glucose cotransport,0.0342052320779209,0.016983017,376.2576040942032
+Human_Breast,global,,,SLC2A2,SLC2A9,cell_type_independent,D-Glucose,0.0358803972082082,0.017982017,717.6302214697145
+Human_Breast,global,,,ABCC3,SLCO1B3,cell_type_independent,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Deoxycholic acid | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | Sulfolithocholic acid | Taurocholic acid | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0358803972082082,0.017982017,697.7427273622047
+Human_Breast,global,,,SLC3A2,SLC7A7,cell_type_independent,L-Glutamine,0.0375246874009546,0.018981019,27708.410484925167
+Human_Breast,global,,,ABCB1,CD36,cell_type_independent,Cholesterol,0.0375246874009546,0.018981019,5401.313009466185
+Human_Breast,global,,,SLC10A1,SLC12A2,cell_type_independent,Sodium,0.0391389412473734,0.019980019,1892.076260249175
+Human_Breast,global,,,ABCC2,SLC6A4,cell_type_independent,O-Desmethylverapamil (D-702),0.0391389412473734,0.019980019,946.6520457690364
+Human_Breast,global,,,SLC1A1,SLC3A2,cell_type_independent,L-Glutamate,0.0444015433911133,0.022977022,4393.264149134484
+Human_Breast,global,,,SLC22A4,SLC6A4,cell_type_independent,O-Desmethylverapamil (D-702) | Sodium,0.0444015433911133,0.022977022,1561.8121050887346
+Human_Breast,global,,,ABCC1,SLCO1B1,cell_type_independent,Cholic acid | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0444015433911133,0.022977022,4484.524037508179
+Human_Breast,global,,,CLCN4,CLCN4,cell_type_independent,Chloride,0.0480461227185523,0.024975024,386.81763546578543
+Human_Breast,global,,,SLC22A4,SLC5A5,cell_type_independent,Sodium,0.0495238094776868,0.025974026,1698.8943570135252
+Human_Breast,global,,,ABCG2,FOLR1,cell_type_independent,Folic acid,0.0495238094776868,0.025974026,531.507306334036

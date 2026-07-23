@@ -1,0 +1,921 @@
+sample_id,tier,cell_type_1,cell_type_2,gene1,gene2,tcell_involvement,metabolites,FDR_np,pval_np,C_np
+FFPE_Human_Ovarian_Cancer,Tier1,T Cell,other,SLC2A3,SLC2A3,Tcell_interface,D-Galactose | D-Glucose | D-Maltose | D-Mannose | D-Xylose | Dehydroascorbic acid | Docosahexaenoic acid,0.0033966033966033,0.0009990009990009,4133.85
+FFPE_Human_Ovarian_Cancer,Tier1,T Cell,other,SLCO2A1,SLCO2A1,Tcell_interface,Arachidonic acid | Eicosanoid | Prostaglandins | Pyruvate,0.0033966033966033,0.0009990009990009,383.6649
+FFPE_Human_Ovarian_Cancer,Tier1,T Cell,other,SLCO2B1,SLCO2B1,Tcell_interface,Acetate | Citric acid | Estradiol | Nicotinate | Oxalic acid | Taurocholic acid,0.0033966033966033,0.0009990009990009,325.98254
+FFPE_Human_Ovarian_Cancer,Tier1,T Cell,other,SLC39A8,SLC39A8,Tcell_interface,Cadmium | Manganese | Zinc,0.0033966033966033,0.0009990009990009,518.2574
+FFPE_Human_Ovarian_Cancer,Tier1,T Cell,other,SLC11A2,SLC11A2,Tcell_interface,Iron,0.0033966033966033,0.0009990009990009,2985.768
+FFPE_Human_Ovarian_Cancer,Tier1,T Cell,other,CUBN,SLC40A1,Tcell_interface,Iron,0.0033966033966033,0.0009990009990009,1392.646
+FFPE_Human_Ovarian_Cancer,Tier1,T Cell,other,MSR1,MSR1,Tcell_interface,Fatty acid,0.0033966033966033,0.0009990009990009,688.6214
+FFPE_Human_Ovarian_Cancer,Tier1,T Cell,other,CPT1A,MSR1,Tcell_interface,Fatty acid,0.0033966033966033,0.0009990009990009,996.5027
+FFPE_Human_Ovarian_Cancer,Tier1,T Cell,other,CD38,CD38,Tcell_interface,Adenosine diphosphate ribose,0.0033966033966033,0.0009990009990009,309.25046
+FFPE_Human_Ovarian_Cancer,Tier1,T Cell,other,ABCB1,SLCO2B1,Tcell_interface,Estradiol | Taurocholic acid,0.0033966033966033,0.0009990009990009,539.2332
+FFPE_Human_Ovarian_Cancer,Tier1,T Cell,other,TAP1,TAP1,Tcell_interface,Adenosine triphosphate,0.0033966033966033,0.0009990009990009,875.16095
+FFPE_Human_Ovarian_Cancer,Tier1,T Cell,other,AQP7,AQP7,Tcell_interface,Water,0.0033966033966033,0.0009990009990009,2492.5444
+FFPE_Human_Ovarian_Cancer,Tier1,T Cell,other,SCNN1A,SCNN1G,Tcell_interface,Amiloride-sensitive sodium transport,0.0033966033966033,0.0009990009990009,296.3691
+FFPE_Human_Ovarian_Cancer,Tier1,T Cell,other,TRPV6,TRPV6,Tcell_interface,Heme,0.0062069909785645,0.0019980019980019,616.5064
+FFPE_Human_Ovarian_Cancer,Tier1,T Cell,other,SLC3A2,SLC7A5,Tcell_interface,L-Glutamine | L-Leucine,0.0109176537747966,0.0039960039960039,169.1133
+FFPE_Human_Ovarian_Cancer,Tier1,T Cell,other,SLC16A4,SLCO2B1,Tcell_interface,Acetate,0.0109176537747966,0.0039960039960039,145.57729
+FFPE_Human_Ovarian_Cancer,Tier1,T Cell,other,ABCC4,SLCO1B1,Tcell_interface,Cholic acid | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0109176537747966,0.0039960039960039,41.82883
+FFPE_Human_Ovarian_Cancer,Tier1,T Cell,other,ABCB1,CD36,Tcell_interface,Cholesterol,0.0174682460396746,0.0069930069930069,185.52574
+FFPE_Human_Ovarian_Cancer,Tier1,T Cell,other,SLC1A5,SLC38A7,Tcell_interface,L-Glutamine,0.0253783951897159,0.0109890109890109,137.76782
+FFPE_Human_Ovarian_Cancer,Tier1,T Cell,other,SLC5A1,SLC5A1,Tcell_interface,Sodium | Urea,0.0342035586790831,0.0159840159840159,23.081165
+FFPE_Human_Ovarian_Cancer,Tier1,T Cell,other,CPT1A,CPT1A,Tcell_interface,Fatty acid,0.0342035586790831,0.0159840159840159,866.9576
+FFPE_Human_Ovarian_Cancer,Tier1,T Cell,other,SLC43A2,SLC43A2,Tcell_interface,L-Cysteine | L-Isoleucine | L-Leucine | L-Methionine | L-Phenylalanine | L-Valine,0.0454410454410454,0.0219780219780219,85.832985
+FFPE_Human_Ovarian_Cancer,Tier1,T Cell,T Cell,SLC38A7,SLC38A7,within_Tcell,L-Glutamine,0.0174682460396746,0.0069930069930069,32.57094
+FFPE_Human_Ovarian_Cancer,Tier1,T Cell,T Cell,CD36,MSR1,within_Tcell,Fatty acid,0.0195644355644355,0.0079920079920079,29.115128
+FFPE_Human_Ovarian_Cancer,Tier1,T Cell,T Cell,SLC1A2,SLC1A5,within_Tcell,L-Glutamate,0.0217490019861561,0.0089910089910089,21.098719
+FFPE_Human_Ovarian_Cancer,Tier1,T Cell,T Cell,SLC29A1,SLC29A1,within_Tcell,Adenosine | Cytidine | Ethanol | Guanosine | Inosine | Sodium | Thymidine | Uridine,0.0253783951897159,0.0109890109890109,50.85147
+FFPE_Human_Ovarian_Cancer,Tier1,T Cell,T Cell,ABCC4,SLC19A1,within_Tcell,Folic acid,0.0253783951897159,0.0109890109890109,21.790855
+FFPE_Human_Ovarian_Cancer,Tier1,T Cell,T Cell,SLC9A1,SLC9A3,within_Tcell,Sodium_hydrogen exchange,0.0271728271728271,0.0119880119880119,22.690874
+FFPE_Human_Ovarian_Cancer,Tier1,T Cell,T Cell,SLC38A7,SLC3A2,within_Tcell,L-Glutamine,0.0342035586790831,0.0159840159840159,63.512394
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC2A2,SLC2A2,within_other,D-Fructose | D-Galactose | D-Glucose | D-Mannose | Glucosamine,0.0033966033966033,0.0009990009990009,576.337
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC2A4,SLC2A4,within_other,D-Glucose | Dehydroascorbic acid | Docosahexaenoic acid | Glucosamine,0.0033966033966033,0.0009990009990009,9024.143
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC2A3,SLC2A3,within_other,D-Galactose | D-Glucose | D-Maltose | D-Mannose | D-Xylose | Dehydroascorbic acid | Docosahexaenoic acid,0.0033966033966033,0.0009990009990009,338873.56
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC2A1,SLC2A2,within_other,D-Galactose | D-Glucose | D-Mannose | Glucosamine,0.0033966033966033,0.0009990009990009,9456.102
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC2A1,SLC2A1,within_other,D-Galactose | D-Glucose | D-Mannose | Dehydroascorbic acid | Docosahexaenoic acid | Glucosamine,0.0033966033966033,0.0009990009990009,624028.6
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC7A7,SLC7A7,within_other,L-Glutamine,0.0033966033966033,0.0009990009990009,13964.038
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC38A7,SLC3A2,within_other,L-Glutamine,0.0033966033966033,0.0009990009990009,52352.75
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC7A5,SLC7A5,within_other,L-Arginine | L-Glutamine | L-Histidine | L-Leucine | L-Methionine | L-Phenylalanine | L-Tyrosine,0.0033966033966033,0.0009990009990009,51873.918
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC7A5,SLC7A7,within_other,L-Glutamine,0.0033966033966033,0.0009990009990009,35863.13
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC38A7,SLC38A7,within_other,L-Glutamine,0.0033966033966033,0.0009990009990009,5295.926
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC1A5,SLC3A2,within_other,L-Glutamate | L-Glutamine | L-Leucine | L-Serine,0.0033966033966033,0.0009990009990009,8851.13
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC3A2,SLC3A2,within_other,Iron | L-Cystine | L-Glutamate | L-Glutamine | L-Leucine | L-Serine,0.0033966033966033,0.0009990009990009,18782.217
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC1A5,SLC38A7,within_other,L-Glutamine,0.0033966033966033,0.0009990009990009,6204.829
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC38A7,SLC7A5,within_other,L-Glutamine,0.0033966033966033,0.0009990009990009,387424.62
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC1A5,SLC1A5,within_other,L-Alanine | L-Asparagine | L-Cysteine | L-Glutamate | L-Glutamine | L-Leucine | L-Serine | L-Threonine | Sodium,0.0033966033966033,0.0009990009990009,4099.5293
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC1A5,SLC7A5,within_other,L-Glutamine | L-Leucine,0.0033966033966033,0.0009990009990009,121132.39
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC3A2,SLC7A7,within_other,L-Glutamine,0.0033966033966033,0.0009990009990009,13334.246
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC1A5,SLC7A11,within_other,L-Cysteine | L-Glutamate,0.0033966033966033,0.0009990009990009,14163.495
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC7A11,SLC7A11,within_other,L-Cysteine | L-Cystine | L-Glutamate,0.0033966033966033,0.0009990009990009,941.73474
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC43A2,SLC43A2,within_other,L-Cysteine | L-Isoleucine | L-Leucine | L-Methionine | L-Phenylalanine | L-Valine,0.0033966033966033,0.0009990009990009,16286.845
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC1A5,SLC43A2,within_other,L-Cysteine | L-Leucine,0.0033966033966033,0.0009990009990009,59292.39
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC16A1,SLC16A4,within_other,Acetate | L-Lactate,0.0033966033966033,0.0009990009990009,7632.7236
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC16A4,SLC16A4,within_other,Acetate | L-Lactate,0.0033966033966033,0.0009990009990009,5559.1367
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC16A1,SLC16A1,within_other,4-ene-Valproic acid | Acetate | Butyrate | D-Lactate | Ketone bodies | L-Glutamate | L-Lactate | Nicotinate | Pyruvate | Taurocholic acid | alpha-Ketoisovaleric acid,0.0033966033966033,0.0009990009990009,25723.15
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLCO2A1,SLCO2A1,within_other,Arachidonic acid | Eicosanoid | Prostaglandins | Pyruvate,0.0033966033966033,0.0009990009990009,140578.89
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLCO2B1,SLCO2B1,within_other,Acetate | Citric acid | Estradiol | Nicotinate | Oxalic acid | Taurocholic acid,0.0033966033966033,0.0009990009990009,53035.527
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC16A1,SLC22A5,within_other,4-ene-Valproic acid | Nicotinate,0.0033966033966033,0.0009990009990009,7194.2383
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC1A3,SLC1A5,within_other,L-Glutamate,0.0033966033966033,0.0009990009990009,58141.15
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC16A1,SLC1A5,within_other,L-Glutamate,0.0033966033966033,0.0009990009990009,3220.3408
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC1A1,SLC1A5,within_other,L-Glutamate,0.0033966033966033,0.0009990009990009,4437.589
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC1A3,SLC1A3,within_other,D-Aspartate | L-Aspartate | L-Glutamate | Malic acid,0.0033966033966033,0.0009990009990009,80636.21
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC16A1,SLC3A2,within_other,L-Glutamate,0.0033966033966033,0.0009990009990009,12007.846
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC1A1,SLC1A1,within_other,L-Glutamate,0.0033966033966033,0.0009990009990009,13933.547
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC16A1,SLC7A11,within_other,L-Glutamate,0.0033966033966033,0.0009990009990009,4470.255
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC1A1,SLC3A2,within_other,L-Glutamate,0.0033966033966033,0.0009990009990009,13690.33
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC1A2,SLC1A5,within_other,L-Glutamate,0.0033966033966033,0.0009990009990009,2787.855
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC3A2,SLC7A11,within_other,L-Cystine | L-Glutamate,0.0033966033966033,0.0009990009990009,20303.879
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC1A3,SLC3A2,within_other,L-Glutamate,0.0033966033966033,0.0009990009990009,2047.106
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC1A1,SLC1A3,within_other,L-Glutamate,0.0033966033966033,0.0009990009990009,28716.656
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC3A1,SLC3A2,within_other,L-Cystine,0.0033966033966033,0.0009990009990009,3052.6023
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC30A8,SLC30A8,within_other,Zinc,0.0033966033966033,0.0009990009990009,242.2506
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC39A8,SLC39A8,within_other,Cadmium | Manganese | Zinc,0.0033966033966033,0.0009990009990009,115549.12
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC40A1,SLC40A1,within_other,Iron,0.0033966033966033,0.0009990009990009,13272.138
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC11A1,SLC3A2,within_other,Iron,0.0033966033966033,0.0009990009990009,4702.446
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC11A2,SLC3A2,within_other,Iron,0.0033966033966033,0.0009990009990009,11679.14
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC11A2,SLC40A1,within_other,Iron,0.0033966033966033,0.0009990009990009,518377.5
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC11A1,SLC11A2,within_other,Iron,0.0033966033966033,0.0009990009990009,141946.92
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC11A2,SLC11A2,within_other,Iron,0.0033966033966033,0.0009990009990009,597249.94
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,CUBN,SLC40A1,within_other,Iron,0.0033966033966033,0.0009990009990009,358484.25
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC11A1,SLC39A8,within_other,Manganese,0.0033966033966033,0.0009990009990009,4730.3887
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC16A9,SLC16A9,within_other,L-Carnitine,0.0033966033966033,0.0009990009990009,277.63788
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLCO1B1,SLCO1B1,within_other,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | 4-Hydroxyvalsartan | Bilirubin | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Dehydroepiandrosterone | Deoxycholic acid | Digoxin | Estradiol | Estrone | Estrone sulfate | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | L-Carnitine | Lithocholic acid | O-Desmethylverapamil (D-702) | Prostaglandins | Sulfolithocholic acid | Taurocholic acid | Thyroxine | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0033966033966033,0.0009990009990009,1547.3435
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC16A9,SLC22A5,within_other,L-Carnitine,0.0033966033966033,0.0009990009990009,5060.96
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC5A3,SLC5A5,within_other,Sodium,0.0033966033966033,0.0009990009990009,12492.192
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC1A5,SLC5A7,within_other,Sodium,0.0033966033966033,0.0009990009990009,5172.3623
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC12A2,SLC12A2,within_other,Chloride ion | Sodium,0.0033966033966033,0.0009990009990009,122560.85
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC22A5,SLC5A3,within_other,Sodium,0.0033966033966033,0.0009990009990009,36610.348
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC5A1,SLC5A1,within_other,Sodium | Urea,0.0033966033966033,0.0009990009990009,1145.2058
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC22A5,SLC29A1,within_other,Sodium,0.0033966033966033,0.0009990009990009,10713.407
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC1A5,SLC22A5,within_other,Sodium,0.0033966033966033,0.0009990009990009,29021.496
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC5A3,SLC6A4,within_other,Sodium,0.0033966033966033,0.0009990009990009,10076.135
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC12A2,SLC5A3,within_other,Sodium,0.0033966033966033,0.0009990009990009,216152.75
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC5A3,SLC5A7,within_other,Sodium,0.0033966033966033,0.0009990009990009,6783.691
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC12A2,SLC29A1,within_other,Sodium,0.0033966033966033,0.0009990009990009,56112.656
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC22A4,SLC5A3,within_other,Sodium,0.0033966033966033,0.0009990009990009,18173.35
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC29A1,SLC5A3,within_other,Sodium,0.0033966033966033,0.0009990009990009,145768.0
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC12A2,SLC5A5,within_other,Sodium,0.0033966033966033,0.0009990009990009,5199.771
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC12A2,SLC5A7,within_other,Chloride ion | Sodium,0.0033966033966033,0.0009990009990009,2605.943
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC5A1,SLC5A3,within_other,Sodium,0.0033966033966033,0.0009990009990009,16274.682
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC5A3,SLC5A3,within_other,Sodium,0.0033966033966033,0.0009990009990009,609528.5
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC1A5,SLC5A3,within_other,Sodium,0.0033966033966033,0.0009990009990009,454088.38
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC1A5,SLC29A1,within_other,Sodium,0.0033966033966033,0.0009990009990009,119701.1
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC12A2,SLC22A5,within_other,Sodium,0.0033966033966033,0.0009990009990009,12302.602
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC12A2,SLC5A1,within_other,Sodium,0.0033966033966033,0.0009990009990009,5404.5674
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC29A1,SLC29A1,within_other,Adenosine | Cytidine | Ethanol | Guanosine | Inosine | Sodium | Thymidine | Uridine,0.0033966033966033,0.0009990009990009,51305.79
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC1A5,SLC5A5,within_other,Sodium,0.0033966033966033,0.0009990009990009,9437.61
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC1A5,SLC22A4,within_other,Sodium,0.0033966033966033,0.0009990009990009,15240.954
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC1A5,SLC5A1,within_other,Sodium,0.0033966033966033,0.0009990009990009,11882.81
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC5A7,SLC6A4,within_other,Sodium,0.0033966033966033,0.0009990009990009,289.12283
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC6A2,SLC6A2,within_other,Norepinephrine | Sodium,0.0033966033966033,0.0009990009990009,202.59674
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC1A5,SLC6A4,within_other,Sodium,0.0033966033966033,0.0009990009990009,7710.4727
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC12A2,SLC1A5,within_other,Sodium,0.0033966033966033,0.0009990009990009,171420.42
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC29A1,SLC5A1,within_other,Sodium,0.0033966033966033,0.0009990009990009,4235.3984
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC3A2,SLC43A2,within_other,L-Leucine,0.0033966033966033,0.0009990009990009,21353.451
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,CPT1A,CPT1A,within_other,Fatty acid,0.0033966033966033,0.0009990009990009,68362.65
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,MSR1,MSR1,within_other,Fatty acid,0.0033966033966033,0.0009990009990009,97350.3
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,CD36,CPT1A,within_other,Fatty acid,0.0033966033966033,0.0009990009990009,18730.65
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,CD36,CD36,within_other,Cholesterol | Fatty acid | Vitamin D3,0.0033966033966033,0.0009990009990009,23999.742
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,CD36,MSR1,within_other,Fatty acid,0.0033966033966033,0.0009990009990009,14908.447
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC6A1,SLC6A1,within_other,GABA,0.0033966033966033,0.0009990009990009,1253.9567
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,ABCA1,ABCA1,within_other,25-Hydroxycholesterol,0.0033966033966033,0.0009990009990009,185246.47
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,ABCB1,ABCB1,within_other,"17a-Ethynylestradiol | 2-Hydroxychlorpropamide | 3',4'-Dihydrodiol | 4'-Hydroxydiclofenac | 4-Hydroxycyclophosphamide | 5-Hydroxyomeprazole | 8-Hydroxycarvedilol | Cholesterol | Cholic acid | Cortisol | E-3179 | Estradiol | Estriol | Glycerol | Hydroxylansoprazole | N-Desmethylcitalopram | N-Desmethyleletriptan | N-Desmethyltamoxifen | N-desmethylimatinib | O-Deethylated candesartan | O-Desmethylverapamil (D-702) | Progesterone | Taurocholic acid | Testosterone",0.0033966033966033,0.0009990009990009,2696.2207
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,ABCB1,CD36,within_other,Cholesterol,0.0033966033966033,0.0009990009990009,3689.619
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,ABCG2,CD36,within_other,Cholesterol,0.0033966033966033,0.0009990009990009,2105.7625
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,ABCB1,ABCG2,within_other,5-Hydroxyomeprazole | Cholesterol | Cortisol | Estradiol | Hydroxylansoprazole | N-Desmethyltamoxifen | N-desmethylimatinib | O-Desmethylverapamil (D-702) | Taurocholic acid | Testosterone,0.0033966033966033,0.0009990009990009,1306.0894
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,ABCG2,ABCG2,within_other,5-Hydroxyomeprazole | Cholesterol | Cortisol | Estradiol | Folic acid | Hydroxylansoprazole | N-Desmethyltamoxifen | N-desmethylimatinib | O-Desmethylverapamil (D-702) | Taurocholic acid | Testosterone,0.0033966033966033,0.0009990009990009,1183.8035
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC20A2,SLC20A2,within_other,Phosphate,0.0033966033966033,0.0009990009990009,7987.9297
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,ATP7A,SLC20A2,within_other,Phosphate,0.0033966033966033,0.0009990009990009,4577.5967
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,ATP7B,ATP7B,within_other,ADP | Adenosine triphosphate | Phosphate | Water,0.0033966033966033,0.0009990009990009,2845.3584
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC19A1,SLC19A1,within_other,Folic acid | Thiamine,0.0033966033966033,0.0009990009990009,11310.767
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,CHRNA5,SLC29A1,within_other,Ethanol,0.0033966033966033,0.0009990009990009,4312.1924
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,CHRNA5,CHRNA5,within_other,Ethanol,0.0033966033966033,0.0009990009990009,12308.588
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,FOLR2,FOLR2,within_other,Folic acid,0.0033966033966033,0.0009990009990009,4709.793
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,ABCC4,FOLR1,within_other,Folic acid,0.0033966033966033,0.0009990009990009,86112.3
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,ABCC4,ABCC4,within_other,4'-Hydroxydiclofenac | Cholic acid | Cyclic AMP | Folic acid | Folinic acid | Glutathione | Hydroxycelecoxib | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0033966033966033,0.0009990009990009,130908.22
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,FOLR1,SLC19A1,within_other,Folic acid,0.0033966033966033,0.0009990009990009,26621.867
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,ABCC3,SLC19A1,within_other,Folic acid,0.0033966033966033,0.0009990009990009,1888.8076
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,ABCC4,SLC19A1,within_other,Folic acid,0.0033966033966033,0.0009990009990009,33280.67
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,FOLR1,FOLR1,within_other,5-Methyltetrahydrofolic acid | Folic acid,0.0033966033966033,0.0009990009990009,81537.29
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,TRPV6,TRPV6,within_other,Heme,0.0033966033966033,0.0009990009990009,276860.03
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC29A3,SLC29A3,within_other,Adenine,0.0033966033966033,0.0009990009990009,9908.971
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,LRP2,LRP2,within_other,Calcidiol,0.0033966033966033,0.0009990009990009,10655.247
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,CD38,CD38,within_other,Adenosine diphosphate ribose,0.0033966033966033,0.0009990009990009,3275.865
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC12A2,SLC12A6,within_other,Chloride ion,0.0033966033966033,0.0009990009990009,17339.088
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC12A6,SLC12A6,within_other,Chloride ion,0.0033966033966033,0.0009990009990009,5634.033
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SCARB1,SCARB1,within_other,alpha-Tocopherol,0.0033966033966033,0.0009990009990009,13267.526
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,ABCC1,SLC16A1,within_other,Taurocholic acid,0.0033966033966033,0.0009990009990009,41154.65
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,ABCC4,SLC16A1,within_other,Taurocholic acid,0.0033966033966033,0.0009990009990009,38725.21
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,ABCC1,ABCC2,within_other,Cholic acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0033966033966033,0.0009990009990009,6270.8755
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,ABCC1,SLCO1C1,within_other,4'-Hydroxydiclofenac | Taurocholic acid,0.0033966033966033,0.0009990009990009,5111.622
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,ABCC1,ABCC1,within_other,4'-Hydroxydiclofenac | Cholic acid | Glutathione | Leukotriene C4 | O-Desmethylverapamil (D-702) | Progesterone | Taurocholic acid,0.0033966033966033,0.0009990009990009,98296.38
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLCO1B3,SLCO1B3,within_other,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | 4-Hydroxyvalsartan | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Dehydroepiandrosterone | Deoxycholic acid | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | Sulfolithocholic acid | Taurocholic acid | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0033966033966033,0.0009990009990009,1190.2244
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,ABCC2,ABCC4,within_other,Cholic acid | Folinic acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0033966033966033,0.0009990009990009,6227.648
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,ABCC2,SLCO1B3,within_other,Cholic acid | Taurocholic acid,0.0033966033966033,0.0009990009990009,762.4333
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,ABCC1,ABCC4,within_other,4'-Hydroxydiclofenac | Cholic acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0033966033966033,0.0009990009990009,101971.59
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,ABCC1,SLCO1B3,within_other,Cholic acid | Taurocholic acid,0.0033966033966033,0.0009990009990009,8478.1045
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,ABCC4,SLCO1B3,within_other,Cholic acid | Taurocholic acid,0.0033966033966033,0.0009990009990009,8433.257
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC16A1,SLCO1B3,within_other,Taurocholic acid,0.0033966033966033,0.0009990009990009,3499.3862
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,ABCC4,SLCO1C1,within_other,4'-Hydroxydiclofenac | Taurocholic acid,0.0033966033966033,0.0009990009990009,4744.708
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,TAP1,TAP1,within_other,Adenosine triphosphate,0.0033966033966033,0.0009990009990009,32066.113
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,ABCC1,SLC22A2,within_other,Progesterone,0.0033966033966033,0.0009990009990009,3849.208
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,AQP9,AQP9,within_other,Water,0.0033966033966033,0.0009990009990009,1520.9211
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,AQP5,AQP7,within_other,Water,0.0033966033966033,0.0009990009990009,3596.8215
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,AQP5,AQP5,within_other,Water,0.0033966033966033,0.0009990009990009,9315.399
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,AQP9,ATP7B,within_other,Water,0.0033966033966033,0.0009990009990009,1982.6649
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,AQP1,AQP1,within_other,Water,0.0033966033966033,0.0009990009990009,1252.6615
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,AQP1,AQP9,within_other,Water,0.0033966033966033,0.0009990009990009,11722.5
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,AQP7,AQP7,within_other,Water,0.0033966033966033,0.0009990009990009,868904.75
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,ABCC4,SLC22A5,within_other,O-Desmethylverapamil (D-702),0.0033966033966033,0.0009990009990009,7741.0454
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,ABCC1,SLC6A4,within_other,O-Desmethylverapamil (D-702),0.0033966033966033,0.0009990009990009,14303.392
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,ABCC1,SLC22A5,within_other,O-Desmethylverapamil (D-702),0.0033966033966033,0.0009990009990009,14659.086
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC24A1,SLC24A1,within_other,Sodium_calcium_potassium exchange,0.0033966033966033,0.0009990009990009,8227.066
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,CLCN5,CLCN5,within_other,Chloride,0.0033966033966033,0.0009990009990009,1595.9476
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,CLCN3,CLCN3,within_other,Chloride,0.0033966033966033,0.0009990009990009,71969.87
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,CLCN3,CLCN4,within_other,Chloride,0.0033966033966033,0.0009990009990009,12123.722
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,CLCN4,CLCN4,within_other,Chloride,0.0033966033966033,0.0009990009990009,2794.31
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC6A9,SLC6A9,within_other,Neurotransmitter,0.0033966033966033,0.0009990009990009,7313.7383
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC26A2,SLC26A2,within_other,Anion exchange,0.0033966033966033,0.0009990009990009,13499.545
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,ORAI3,ORAI3,within_other,Calcium release-activated calcium transport,0.0033966033966033,0.0009990009990009,22255.514
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,ORAI2,ORAI2,within_other,Calcium release-activated calcium transport,0.0033966033966033,0.0009990009990009,33882.27
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,ORAI2,ORAI3,within_other,Calcium release-activated calcium transport,0.0033966033966033,0.0009990009990009,22556.27
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SCNN1A,SCNN1G,within_other,Amiloride-sensitive sodium transport,0.0033966033966033,0.0009990009990009,290319.84
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SCNN1A,SCNN1A,within_other,Amiloride-sensitive sodium transport,0.0033966033966033,0.0009990009990009,4219.351
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC23A2,SLC23A2,within_other,Vitamin C,0.0033966033966033,0.0009990009990009,20966.363
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC43A2,SLC7A5,within_other,L-Leucine | L-Methionine | L-Phenylalanine,0.0062069909785645,0.0019980019980019,8480.501
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC5A1,SLC6A2,within_other,Sodium,0.0062069909785645,0.0019980019980019,275.5243
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC12A2,SLC22A4,within_other,Sodium,0.0062069909785645,0.0019980019980019,7114.026
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC16A4,SLCO2B1,within_other,Acetate,0.0062069909785645,0.0019980019980019,8622.988
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,ABCB1,SLCO2B1,within_other,Estradiol | Taurocholic acid,0.0062069909785645,0.0019980019980019,4234.627
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,ATP7B,TAP1,within_other,Adenosine triphosphate,0.0062069909785645,0.0019980019980019,4864.4873
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,ABCC1,SLC22A4,within_other,O-Desmethylverapamil (D-702),0.0062069909785645,0.0019980019980019,7872.5254
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC2A3,SLC2A9,within_other,D-Glucose,0.0087341230198373,0.0029970029970029,13166.546
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC2A1,SLC2A4,within_other,D-Glucose | Dehydroascorbic acid | Docosahexaenoic acid | Glucosamine,0.0087341230198373,0.0029970029970029,530.73663
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC5A5,SLC6A4,within_other,Sodium,0.0087341230198373,0.0029970029970029,382.6405
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC12A2,SLC6A2,within_other,Sodium,0.0087341230198373,0.0029970029970029,1898.7134
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC22A1,SLC29A1,within_other,Thymidine,0.0087341230198373,0.0029970029970029,2066.9456
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,ABCC4,SLCO1B1,within_other,Cholic acid | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0087341230198373,0.0029970029970029,2572.557
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC16A1,SLC22A1,within_other,Taurocholic acid,0.0087341230198373,0.0029970029970029,1346.4492
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,ABCC4,SLC6A4,within_other,O-Desmethylverapamil (D-702),0.0087341230198373,0.0029970029970029,3960.4812
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC9A1,SLC9A3,within_other,Sodium_hydrogen exchange,0.0087341230198373,0.0029970029970029,2086.6199
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC38A7,SLC7A7,within_other,L-Glutamine,0.0109176537747966,0.0039960039960039,4707.1045
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC10A1,SLC10A1,within_other,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 17a-Ethynylestradiol | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Deoxycholic acid | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | Progesterone | Sodium | Sulfolithocholic acid | Taurocholic acid | Testosterone | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0109176537747966,0.0039960039960039,132.3569
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC5A5,SLC6A2,within_other,Sodium,0.0109176537747966,0.0039960039960039,216.65915
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC29A1,SLC5A5,within_other,Sodium,0.0109176537747966,0.0039960039960039,3396.1604
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC5A5,SLC5A5,within_other,Sodium | Urea,0.0109176537747966,0.0039960039960039,449.1668
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC16A1,SLC1A3,within_other,L-Glutamate,0.0134076449865923,0.0049950049950049,1999.6217
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC16A1,SLC1A1,within_other,L-Glutamate,0.0155437782556426,0.0059940059940059,6592.069
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC22A2,SLCO1B1,within_other,Estradiol | Prostaglandins,0.0155437782556426,0.0059940059940059,226.66399
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,LRP1,LRP1,within_other,Heme,0.0155437782556426,0.0059940059940059,228.69391
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC11A1,SLC11A1,within_other,Iron | Manganese,0.0174682460396746,0.0069930069930069,635.9954
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC29A1,SLC6A4,within_other,Sodium,0.0174682460396746,0.0069930069930069,3007.825
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC1A3,SLC7A11,within_other,L-Glutamate,0.0195644355644355,0.0079920079920079,605.3413
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC22A5,SLC5A1,within_other,Sodium,0.0195644355644355,0.0079920079920079,1145.832
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC1A5,SLC6A2,within_other,Sodium,0.0217490019861561,0.0089910089910089,3597.0364
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC5A5,SLC5A7,within_other,Sodium,0.0253783951897159,0.0109890109890109,243.76399
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,ABCC3,ABCC3,within_other,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | 5-Hydroxyomeprazole | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Deoxycholic acid | Folic acid | Folinic acid | Glutathione | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | O-Desmethylverapamil (D-702) | Sulfolithocholic acid | Taurocholic acid | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0253783951897159,0.0109890109890109,605.99524
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC16A1,SLCO1C1,within_other,Taurocholic acid,0.0253783951897159,0.0109890109890109,2278.433
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC22A4,SLC22A4,within_other,L-Carnitine | O-Desmethylverapamil (D-702) | Putrescine | Sodium | Spermine | Testosterone,0.0271728271728271,0.0119880119880119,2794.7026
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC22A4,SLC29A1,within_other,Sodium,0.0271728271728271,0.0119880119880119,5907.901
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC22A2,SLC22A5,within_other,Choline | Dopamine | Histamine | Norepinephrine,0.0271728271728271,0.0119880119880119,739.10474
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC9A1,SLC9A1,within_other,Sodium_hydrogen exchange,0.0271728271728271,0.0119880119880119,4600.834
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC22A5,SLC22A5,within_other,4-ene-Valproic acid | Acetyl-L-Carnitine | Choline | Creatine | Dopamine | Histamine | L-Carnitine | Nicotinate | Norepinephrine | O-Desmethylverapamil (D-702) | Sodium,0.0291137433994576,0.0129870129870129,2813.5232
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,ABCC1,ABCC3,within_other,Cholic acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0309005074348034,0.0139860139860139,5465.945
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SCNN1G,SCNN1G,within_other,Amiloride-sensitive sodium transport,0.0309005074348034,0.0139860139860139,182.30421
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,ABCC3,SLCO1B3,within_other,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Deoxycholic acid | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | Sulfolithocholic acid | Taurocholic acid | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0328703554510006,0.0149850149850149,569.58105
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLC3A2,SLC7A5,within_other,L-Glutamine | L-Leucine,0.0399188440425553,0.0189810189810189,14783.224
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,ABCC4,SLC22A4,within_other,O-Desmethylverapamil (D-702),0.0399188440425553,0.0189810189810189,3767.5608
+FFPE_Human_Ovarian_Cancer,Tier1,other,other,SLCO1B1,SLCO1B3,within_other,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | 4-Hydroxyvalsartan | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Dehydroepiandrosterone | Deoxycholic acid | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | Sulfolithocholic acid | Taurocholic acid | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0490746711482497,0.0239760239760239,286.20065
+FFPE_Human_Ovarian_Cancer,Tier2,CD8 T Cell,other,SLC2A3,SLC2A3,Tcell_interface,D-Galactose | D-Glucose | D-Maltose | D-Mannose | D-Xylose | Dehydroascorbic acid | Docosahexaenoic acid,0.0033966033966033,0.0009990009990009,4133.85
+FFPE_Human_Ovarian_Cancer,Tier2,CD8 T Cell,other,SLCO2A1,SLCO2A1,Tcell_interface,Arachidonic acid | Eicosanoid | Prostaglandins | Pyruvate,0.0033966033966033,0.0009990009990009,383.6649
+FFPE_Human_Ovarian_Cancer,Tier2,CD8 T Cell,other,SLCO2B1,SLCO2B1,Tcell_interface,Acetate | Citric acid | Estradiol | Nicotinate | Oxalic acid | Taurocholic acid,0.0033966033966033,0.0009990009990009,325.98254
+FFPE_Human_Ovarian_Cancer,Tier2,CD8 T Cell,other,SLC39A8,SLC39A8,Tcell_interface,Cadmium | Manganese | Zinc,0.0033966033966033,0.0009990009990009,518.2574
+FFPE_Human_Ovarian_Cancer,Tier2,CD8 T Cell,other,SLC11A2,SLC11A2,Tcell_interface,Iron,0.0033966033966033,0.0009990009990009,2985.768
+FFPE_Human_Ovarian_Cancer,Tier2,CD8 T Cell,other,CUBN,SLC40A1,Tcell_interface,Iron,0.0033966033966033,0.0009990009990009,1392.646
+FFPE_Human_Ovarian_Cancer,Tier2,CD8 T Cell,other,MSR1,MSR1,Tcell_interface,Fatty acid,0.0033966033966033,0.0009990009990009,688.6214
+FFPE_Human_Ovarian_Cancer,Tier2,CD8 T Cell,other,CPT1A,MSR1,Tcell_interface,Fatty acid,0.0033966033966033,0.0009990009990009,996.5027
+FFPE_Human_Ovarian_Cancer,Tier2,CD8 T Cell,other,CD38,CD38,Tcell_interface,Adenosine diphosphate ribose,0.0033966033966033,0.0009990009990009,309.25046
+FFPE_Human_Ovarian_Cancer,Tier2,CD8 T Cell,other,ABCB1,SLCO2B1,Tcell_interface,Estradiol | Taurocholic acid,0.0033966033966033,0.0009990009990009,539.2332
+FFPE_Human_Ovarian_Cancer,Tier2,CD8 T Cell,other,TAP1,TAP1,Tcell_interface,Adenosine triphosphate,0.0033966033966033,0.0009990009990009,875.16095
+FFPE_Human_Ovarian_Cancer,Tier2,CD8 T Cell,other,AQP7,AQP7,Tcell_interface,Water,0.0033966033966033,0.0009990009990009,2492.5444
+FFPE_Human_Ovarian_Cancer,Tier2,CD8 T Cell,other,SCNN1A,SCNN1G,Tcell_interface,Amiloride-sensitive sodium transport,0.0033966033966033,0.0009990009990009,296.3691
+FFPE_Human_Ovarian_Cancer,Tier2,CD8 T Cell,other,TRPV6,TRPV6,Tcell_interface,Heme,0.0062069909785645,0.0019980019980019,616.5064
+FFPE_Human_Ovarian_Cancer,Tier2,CD8 T Cell,other,SLC3A2,SLC7A5,Tcell_interface,L-Glutamine | L-Leucine,0.0109176537747966,0.0039960039960039,169.1133
+FFPE_Human_Ovarian_Cancer,Tier2,CD8 T Cell,other,SLC16A4,SLCO2B1,Tcell_interface,Acetate,0.0109176537747966,0.0039960039960039,145.57729
+FFPE_Human_Ovarian_Cancer,Tier2,CD8 T Cell,other,ABCC4,SLCO1B1,Tcell_interface,Cholic acid | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0109176537747966,0.0039960039960039,41.82883
+FFPE_Human_Ovarian_Cancer,Tier2,CD8 T Cell,other,ABCB1,CD36,Tcell_interface,Cholesterol,0.0174682460396746,0.0069930069930069,185.52574
+FFPE_Human_Ovarian_Cancer,Tier2,CD8 T Cell,other,SLC1A5,SLC38A7,Tcell_interface,L-Glutamine,0.0253783951897159,0.0109890109890109,137.76782
+FFPE_Human_Ovarian_Cancer,Tier2,CD8 T Cell,other,SLC5A1,SLC5A1,Tcell_interface,Sodium | Urea,0.0342035586790831,0.0159840159840159,23.081165
+FFPE_Human_Ovarian_Cancer,Tier2,CD8 T Cell,other,CPT1A,CPT1A,Tcell_interface,Fatty acid,0.0342035586790831,0.0159840159840159,866.9576
+FFPE_Human_Ovarian_Cancer,Tier2,CD8 T Cell,other,SLC43A2,SLC43A2,Tcell_interface,L-Cysteine | L-Isoleucine | L-Leucine | L-Methionine | L-Phenylalanine | L-Valine,0.0454410454410454,0.0219780219780219,85.832985
+FFPE_Human_Ovarian_Cancer,Tier2,CD8 T Cell,CD8 T Cell,SLC38A7,SLC38A7,within_Tcell,L-Glutamine,0.0174682460396746,0.0069930069930069,32.57094
+FFPE_Human_Ovarian_Cancer,Tier2,CD8 T Cell,CD8 T Cell,CD36,MSR1,within_Tcell,Fatty acid,0.0195644355644355,0.0079920079920079,29.115128
+FFPE_Human_Ovarian_Cancer,Tier2,CD8 T Cell,CD8 T Cell,SLC1A2,SLC1A5,within_Tcell,L-Glutamate,0.0217490019861561,0.0089910089910089,21.098719
+FFPE_Human_Ovarian_Cancer,Tier2,CD8 T Cell,CD8 T Cell,SLC29A1,SLC29A1,within_Tcell,Adenosine | Cytidine | Ethanol | Guanosine | Inosine | Sodium | Thymidine | Uridine,0.0253783951897159,0.0109890109890109,50.85147
+FFPE_Human_Ovarian_Cancer,Tier2,CD8 T Cell,CD8 T Cell,ABCC4,SLC19A1,within_Tcell,Folic acid,0.0253783951897159,0.0109890109890109,21.790855
+FFPE_Human_Ovarian_Cancer,Tier2,CD8 T Cell,CD8 T Cell,SLC9A1,SLC9A3,within_Tcell,Sodium_hydrogen exchange,0.0271728271728271,0.0119880119880119,22.690874
+FFPE_Human_Ovarian_Cancer,Tier2,CD8 T Cell,CD8 T Cell,SLC38A7,SLC3A2,within_Tcell,L-Glutamine,0.0342035586790831,0.0159840159840159,63.512394
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC2A2,SLC2A2,within_other,D-Fructose | D-Galactose | D-Glucose | D-Mannose | Glucosamine,0.0033966033966033,0.0009990009990009,576.337
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC2A4,SLC2A4,within_other,D-Glucose | Dehydroascorbic acid | Docosahexaenoic acid | Glucosamine,0.0033966033966033,0.0009990009990009,9024.143
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC2A3,SLC2A3,within_other,D-Galactose | D-Glucose | D-Maltose | D-Mannose | D-Xylose | Dehydroascorbic acid | Docosahexaenoic acid,0.0033966033966033,0.0009990009990009,338873.56
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC2A1,SLC2A2,within_other,D-Galactose | D-Glucose | D-Mannose | Glucosamine,0.0033966033966033,0.0009990009990009,9456.102
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC2A1,SLC2A1,within_other,D-Galactose | D-Glucose | D-Mannose | Dehydroascorbic acid | Docosahexaenoic acid | Glucosamine,0.0033966033966033,0.0009990009990009,624028.6
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC7A7,SLC7A7,within_other,L-Glutamine,0.0033966033966033,0.0009990009990009,13964.038
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC38A7,SLC3A2,within_other,L-Glutamine,0.0033966033966033,0.0009990009990009,52352.75
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC7A5,SLC7A5,within_other,L-Arginine | L-Glutamine | L-Histidine | L-Leucine | L-Methionine | L-Phenylalanine | L-Tyrosine,0.0033966033966033,0.0009990009990009,51873.918
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC7A5,SLC7A7,within_other,L-Glutamine,0.0033966033966033,0.0009990009990009,35863.13
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC38A7,SLC38A7,within_other,L-Glutamine,0.0033966033966033,0.0009990009990009,5295.926
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC1A5,SLC3A2,within_other,L-Glutamate | L-Glutamine | L-Leucine | L-Serine,0.0033966033966033,0.0009990009990009,8851.13
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC3A2,SLC3A2,within_other,Iron | L-Cystine | L-Glutamate | L-Glutamine | L-Leucine | L-Serine,0.0033966033966033,0.0009990009990009,18782.217
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC1A5,SLC38A7,within_other,L-Glutamine,0.0033966033966033,0.0009990009990009,6204.829
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC38A7,SLC7A5,within_other,L-Glutamine,0.0033966033966033,0.0009990009990009,387424.62
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC1A5,SLC1A5,within_other,L-Alanine | L-Asparagine | L-Cysteine | L-Glutamate | L-Glutamine | L-Leucine | L-Serine | L-Threonine | Sodium,0.0033966033966033,0.0009990009990009,4099.5293
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC1A5,SLC7A5,within_other,L-Glutamine | L-Leucine,0.0033966033966033,0.0009990009990009,121132.39
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC3A2,SLC7A7,within_other,L-Glutamine,0.0033966033966033,0.0009990009990009,13334.246
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC1A5,SLC7A11,within_other,L-Cysteine | L-Glutamate,0.0033966033966033,0.0009990009990009,14163.495
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC7A11,SLC7A11,within_other,L-Cysteine | L-Cystine | L-Glutamate,0.0033966033966033,0.0009990009990009,941.73474
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC43A2,SLC43A2,within_other,L-Cysteine | L-Isoleucine | L-Leucine | L-Methionine | L-Phenylalanine | L-Valine,0.0033966033966033,0.0009990009990009,16286.845
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC1A5,SLC43A2,within_other,L-Cysteine | L-Leucine,0.0033966033966033,0.0009990009990009,59292.39
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC16A1,SLC16A4,within_other,Acetate | L-Lactate,0.0033966033966033,0.0009990009990009,7632.7236
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC16A4,SLC16A4,within_other,Acetate | L-Lactate,0.0033966033966033,0.0009990009990009,5559.1367
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC16A1,SLC16A1,within_other,4-ene-Valproic acid | Acetate | Butyrate | D-Lactate | Ketone bodies | L-Glutamate | L-Lactate | Nicotinate | Pyruvate | Taurocholic acid | alpha-Ketoisovaleric acid,0.0033966033966033,0.0009990009990009,25723.15
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLCO2A1,SLCO2A1,within_other,Arachidonic acid | Eicosanoid | Prostaglandins | Pyruvate,0.0033966033966033,0.0009990009990009,140578.89
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLCO2B1,SLCO2B1,within_other,Acetate | Citric acid | Estradiol | Nicotinate | Oxalic acid | Taurocholic acid,0.0033966033966033,0.0009990009990009,53035.527
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC16A1,SLC22A5,within_other,4-ene-Valproic acid | Nicotinate,0.0033966033966033,0.0009990009990009,7194.2383
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC1A3,SLC1A5,within_other,L-Glutamate,0.0033966033966033,0.0009990009990009,58141.15
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC16A1,SLC1A5,within_other,L-Glutamate,0.0033966033966033,0.0009990009990009,3220.3408
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC1A1,SLC1A5,within_other,L-Glutamate,0.0033966033966033,0.0009990009990009,4437.589
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC1A3,SLC1A3,within_other,D-Aspartate | L-Aspartate | L-Glutamate | Malic acid,0.0033966033966033,0.0009990009990009,80636.21
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC16A1,SLC3A2,within_other,L-Glutamate,0.0033966033966033,0.0009990009990009,12007.846
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC1A1,SLC1A1,within_other,L-Glutamate,0.0033966033966033,0.0009990009990009,13933.547
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC16A1,SLC7A11,within_other,L-Glutamate,0.0033966033966033,0.0009990009990009,4470.255
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC1A1,SLC3A2,within_other,L-Glutamate,0.0033966033966033,0.0009990009990009,13690.33
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC1A2,SLC1A5,within_other,L-Glutamate,0.0033966033966033,0.0009990009990009,2787.855
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC3A2,SLC7A11,within_other,L-Cystine | L-Glutamate,0.0033966033966033,0.0009990009990009,20303.879
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC1A3,SLC3A2,within_other,L-Glutamate,0.0033966033966033,0.0009990009990009,2047.106
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC1A1,SLC1A3,within_other,L-Glutamate,0.0033966033966033,0.0009990009990009,28716.656
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC3A1,SLC3A2,within_other,L-Cystine,0.0033966033966033,0.0009990009990009,3052.6023
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC30A8,SLC30A8,within_other,Zinc,0.0033966033966033,0.0009990009990009,242.2506
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC39A8,SLC39A8,within_other,Cadmium | Manganese | Zinc,0.0033966033966033,0.0009990009990009,115549.12
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC40A1,SLC40A1,within_other,Iron,0.0033966033966033,0.0009990009990009,13272.138
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC11A1,SLC3A2,within_other,Iron,0.0033966033966033,0.0009990009990009,4702.446
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC11A2,SLC3A2,within_other,Iron,0.0033966033966033,0.0009990009990009,11679.14
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC11A2,SLC40A1,within_other,Iron,0.0033966033966033,0.0009990009990009,518377.5
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC11A1,SLC11A2,within_other,Iron,0.0033966033966033,0.0009990009990009,141946.92
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC11A2,SLC11A2,within_other,Iron,0.0033966033966033,0.0009990009990009,597249.94
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,CUBN,SLC40A1,within_other,Iron,0.0033966033966033,0.0009990009990009,358484.25
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC11A1,SLC39A8,within_other,Manganese,0.0033966033966033,0.0009990009990009,4730.3887
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC16A9,SLC16A9,within_other,L-Carnitine,0.0033966033966033,0.0009990009990009,277.63788
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLCO1B1,SLCO1B1,within_other,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | 4-Hydroxyvalsartan | Bilirubin | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Dehydroepiandrosterone | Deoxycholic acid | Digoxin | Estradiol | Estrone | Estrone sulfate | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | L-Carnitine | Lithocholic acid | O-Desmethylverapamil (D-702) | Prostaglandins | Sulfolithocholic acid | Taurocholic acid | Thyroxine | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0033966033966033,0.0009990009990009,1547.3435
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC16A9,SLC22A5,within_other,L-Carnitine,0.0033966033966033,0.0009990009990009,5060.96
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC5A3,SLC5A5,within_other,Sodium,0.0033966033966033,0.0009990009990009,12492.192
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC1A5,SLC5A7,within_other,Sodium,0.0033966033966033,0.0009990009990009,5172.3623
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC12A2,SLC12A2,within_other,Chloride ion | Sodium,0.0033966033966033,0.0009990009990009,122560.85
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC22A5,SLC5A3,within_other,Sodium,0.0033966033966033,0.0009990009990009,36610.348
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC5A1,SLC5A1,within_other,Sodium | Urea,0.0033966033966033,0.0009990009990009,1145.2058
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC22A5,SLC29A1,within_other,Sodium,0.0033966033966033,0.0009990009990009,10713.407
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC1A5,SLC22A5,within_other,Sodium,0.0033966033966033,0.0009990009990009,29021.496
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC5A3,SLC6A4,within_other,Sodium,0.0033966033966033,0.0009990009990009,10076.135
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC12A2,SLC5A3,within_other,Sodium,0.0033966033966033,0.0009990009990009,216152.75
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC5A3,SLC5A7,within_other,Sodium,0.0033966033966033,0.0009990009990009,6783.691
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC12A2,SLC29A1,within_other,Sodium,0.0033966033966033,0.0009990009990009,56112.656
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC22A4,SLC5A3,within_other,Sodium,0.0033966033966033,0.0009990009990009,18173.35
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC29A1,SLC5A3,within_other,Sodium,0.0033966033966033,0.0009990009990009,145768.0
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC12A2,SLC5A5,within_other,Sodium,0.0033966033966033,0.0009990009990009,5199.771
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC12A2,SLC5A7,within_other,Chloride ion | Sodium,0.0033966033966033,0.0009990009990009,2605.943
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC5A1,SLC5A3,within_other,Sodium,0.0033966033966033,0.0009990009990009,16274.682
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC5A3,SLC5A3,within_other,Sodium,0.0033966033966033,0.0009990009990009,609528.5
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC1A5,SLC5A3,within_other,Sodium,0.0033966033966033,0.0009990009990009,454088.38
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC1A5,SLC29A1,within_other,Sodium,0.0033966033966033,0.0009990009990009,119701.1
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC12A2,SLC22A5,within_other,Sodium,0.0033966033966033,0.0009990009990009,12302.602
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC12A2,SLC5A1,within_other,Sodium,0.0033966033966033,0.0009990009990009,5404.5674
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC29A1,SLC29A1,within_other,Adenosine | Cytidine | Ethanol | Guanosine | Inosine | Sodium | Thymidine | Uridine,0.0033966033966033,0.0009990009990009,51305.79
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC1A5,SLC5A5,within_other,Sodium,0.0033966033966033,0.0009990009990009,9437.61
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC1A5,SLC22A4,within_other,Sodium,0.0033966033966033,0.0009990009990009,15240.954
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC1A5,SLC5A1,within_other,Sodium,0.0033966033966033,0.0009990009990009,11882.81
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC5A7,SLC6A4,within_other,Sodium,0.0033966033966033,0.0009990009990009,289.12283
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC6A2,SLC6A2,within_other,Norepinephrine | Sodium,0.0033966033966033,0.0009990009990009,202.59674
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC1A5,SLC6A4,within_other,Sodium,0.0033966033966033,0.0009990009990009,7710.4727
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC12A2,SLC1A5,within_other,Sodium,0.0033966033966033,0.0009990009990009,171420.42
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC29A1,SLC5A1,within_other,Sodium,0.0033966033966033,0.0009990009990009,4235.3984
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC3A2,SLC43A2,within_other,L-Leucine,0.0033966033966033,0.0009990009990009,21353.451
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,CPT1A,CPT1A,within_other,Fatty acid,0.0033966033966033,0.0009990009990009,68362.65
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,MSR1,MSR1,within_other,Fatty acid,0.0033966033966033,0.0009990009990009,97350.3
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,CD36,CPT1A,within_other,Fatty acid,0.0033966033966033,0.0009990009990009,18730.65
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,CD36,CD36,within_other,Cholesterol | Fatty acid | Vitamin D3,0.0033966033966033,0.0009990009990009,23999.742
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,CD36,MSR1,within_other,Fatty acid,0.0033966033966033,0.0009990009990009,14908.447
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC6A1,SLC6A1,within_other,GABA,0.0033966033966033,0.0009990009990009,1253.9567
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,ABCA1,ABCA1,within_other,25-Hydroxycholesterol,0.0033966033966033,0.0009990009990009,185246.47
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,ABCB1,ABCB1,within_other,"17a-Ethynylestradiol | 2-Hydroxychlorpropamide | 3',4'-Dihydrodiol | 4'-Hydroxydiclofenac | 4-Hydroxycyclophosphamide | 5-Hydroxyomeprazole | 8-Hydroxycarvedilol | Cholesterol | Cholic acid | Cortisol | E-3179 | Estradiol | Estriol | Glycerol | Hydroxylansoprazole | N-Desmethylcitalopram | N-Desmethyleletriptan | N-Desmethyltamoxifen | N-desmethylimatinib | O-Deethylated candesartan | O-Desmethylverapamil (D-702) | Progesterone | Taurocholic acid | Testosterone",0.0033966033966033,0.0009990009990009,2696.2207
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,ABCB1,CD36,within_other,Cholesterol,0.0033966033966033,0.0009990009990009,3689.619
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,ABCG2,CD36,within_other,Cholesterol,0.0033966033966033,0.0009990009990009,2105.7625
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,ABCB1,ABCG2,within_other,5-Hydroxyomeprazole | Cholesterol | Cortisol | Estradiol | Hydroxylansoprazole | N-Desmethyltamoxifen | N-desmethylimatinib | O-Desmethylverapamil (D-702) | Taurocholic acid | Testosterone,0.0033966033966033,0.0009990009990009,1306.0894
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,ABCG2,ABCG2,within_other,5-Hydroxyomeprazole | Cholesterol | Cortisol | Estradiol | Folic acid | Hydroxylansoprazole | N-Desmethyltamoxifen | N-desmethylimatinib | O-Desmethylverapamil (D-702) | Taurocholic acid | Testosterone,0.0033966033966033,0.0009990009990009,1183.8035
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC20A2,SLC20A2,within_other,Phosphate,0.0033966033966033,0.0009990009990009,7987.9297
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,ATP7A,SLC20A2,within_other,Phosphate,0.0033966033966033,0.0009990009990009,4577.5967
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,ATP7B,ATP7B,within_other,ADP | Adenosine triphosphate | Phosphate | Water,0.0033966033966033,0.0009990009990009,2845.3584
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC19A1,SLC19A1,within_other,Folic acid | Thiamine,0.0033966033966033,0.0009990009990009,11310.767
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,CHRNA5,SLC29A1,within_other,Ethanol,0.0033966033966033,0.0009990009990009,4312.1924
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,CHRNA5,CHRNA5,within_other,Ethanol,0.0033966033966033,0.0009990009990009,12308.588
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,FOLR2,FOLR2,within_other,Folic acid,0.0033966033966033,0.0009990009990009,4709.793
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,ABCC4,FOLR1,within_other,Folic acid,0.0033966033966033,0.0009990009990009,86112.3
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,ABCC4,ABCC4,within_other,4'-Hydroxydiclofenac | Cholic acid | Cyclic AMP | Folic acid | Folinic acid | Glutathione | Hydroxycelecoxib | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0033966033966033,0.0009990009990009,130908.22
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,FOLR1,SLC19A1,within_other,Folic acid,0.0033966033966033,0.0009990009990009,26621.867
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,ABCC3,SLC19A1,within_other,Folic acid,0.0033966033966033,0.0009990009990009,1888.8076
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,ABCC4,SLC19A1,within_other,Folic acid,0.0033966033966033,0.0009990009990009,33280.67
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,FOLR1,FOLR1,within_other,5-Methyltetrahydrofolic acid | Folic acid,0.0033966033966033,0.0009990009990009,81537.29
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,TRPV6,TRPV6,within_other,Heme,0.0033966033966033,0.0009990009990009,276860.03
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC29A3,SLC29A3,within_other,Adenine,0.0033966033966033,0.0009990009990009,9908.971
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,LRP2,LRP2,within_other,Calcidiol,0.0033966033966033,0.0009990009990009,10655.247
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,CD38,CD38,within_other,Adenosine diphosphate ribose,0.0033966033966033,0.0009990009990009,3275.865
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC12A2,SLC12A6,within_other,Chloride ion,0.0033966033966033,0.0009990009990009,17339.088
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC12A6,SLC12A6,within_other,Chloride ion,0.0033966033966033,0.0009990009990009,5634.033
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SCARB1,SCARB1,within_other,alpha-Tocopherol,0.0033966033966033,0.0009990009990009,13267.526
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,ABCC1,SLC16A1,within_other,Taurocholic acid,0.0033966033966033,0.0009990009990009,41154.65
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,ABCC4,SLC16A1,within_other,Taurocholic acid,0.0033966033966033,0.0009990009990009,38725.21
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,ABCC1,ABCC2,within_other,Cholic acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0033966033966033,0.0009990009990009,6270.8755
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,ABCC1,SLCO1C1,within_other,4'-Hydroxydiclofenac | Taurocholic acid,0.0033966033966033,0.0009990009990009,5111.622
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,ABCC1,ABCC1,within_other,4'-Hydroxydiclofenac | Cholic acid | Glutathione | Leukotriene C4 | O-Desmethylverapamil (D-702) | Progesterone | Taurocholic acid,0.0033966033966033,0.0009990009990009,98296.38
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLCO1B3,SLCO1B3,within_other,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | 4-Hydroxyvalsartan | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Dehydroepiandrosterone | Deoxycholic acid | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | Sulfolithocholic acid | Taurocholic acid | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0033966033966033,0.0009990009990009,1190.2244
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,ABCC2,ABCC4,within_other,Cholic acid | Folinic acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0033966033966033,0.0009990009990009,6227.648
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,ABCC2,SLCO1B3,within_other,Cholic acid | Taurocholic acid,0.0033966033966033,0.0009990009990009,762.4333
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,ABCC1,ABCC4,within_other,4'-Hydroxydiclofenac | Cholic acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0033966033966033,0.0009990009990009,101971.59
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,ABCC1,SLCO1B3,within_other,Cholic acid | Taurocholic acid,0.0033966033966033,0.0009990009990009,8478.1045
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,ABCC4,SLCO1B3,within_other,Cholic acid | Taurocholic acid,0.0033966033966033,0.0009990009990009,8433.257
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC16A1,SLCO1B3,within_other,Taurocholic acid,0.0033966033966033,0.0009990009990009,3499.3862
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,ABCC4,SLCO1C1,within_other,4'-Hydroxydiclofenac | Taurocholic acid,0.0033966033966033,0.0009990009990009,4744.708
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,TAP1,TAP1,within_other,Adenosine triphosphate,0.0033966033966033,0.0009990009990009,32066.113
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,ABCC1,SLC22A2,within_other,Progesterone,0.0033966033966033,0.0009990009990009,3849.208
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,AQP9,AQP9,within_other,Water,0.0033966033966033,0.0009990009990009,1520.9211
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,AQP5,AQP7,within_other,Water,0.0033966033966033,0.0009990009990009,3596.8215
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,AQP5,AQP5,within_other,Water,0.0033966033966033,0.0009990009990009,9315.399
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,AQP9,ATP7B,within_other,Water,0.0033966033966033,0.0009990009990009,1982.6649
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,AQP1,AQP1,within_other,Water,0.0033966033966033,0.0009990009990009,1252.6615
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,AQP1,AQP9,within_other,Water,0.0033966033966033,0.0009990009990009,11722.5
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,AQP7,AQP7,within_other,Water,0.0033966033966033,0.0009990009990009,868904.75
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,ABCC4,SLC22A5,within_other,O-Desmethylverapamil (D-702),0.0033966033966033,0.0009990009990009,7741.0454
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,ABCC1,SLC6A4,within_other,O-Desmethylverapamil (D-702),0.0033966033966033,0.0009990009990009,14303.392
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,ABCC1,SLC22A5,within_other,O-Desmethylverapamil (D-702),0.0033966033966033,0.0009990009990009,14659.086
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC24A1,SLC24A1,within_other,Sodium_calcium_potassium exchange,0.0033966033966033,0.0009990009990009,8227.066
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,CLCN5,CLCN5,within_other,Chloride,0.0033966033966033,0.0009990009990009,1595.9476
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,CLCN3,CLCN3,within_other,Chloride,0.0033966033966033,0.0009990009990009,71969.87
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,CLCN3,CLCN4,within_other,Chloride,0.0033966033966033,0.0009990009990009,12123.722
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,CLCN4,CLCN4,within_other,Chloride,0.0033966033966033,0.0009990009990009,2794.31
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC6A9,SLC6A9,within_other,Neurotransmitter,0.0033966033966033,0.0009990009990009,7313.7383
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC26A2,SLC26A2,within_other,Anion exchange,0.0033966033966033,0.0009990009990009,13499.545
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,ORAI3,ORAI3,within_other,Calcium release-activated calcium transport,0.0033966033966033,0.0009990009990009,22255.514
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,ORAI2,ORAI2,within_other,Calcium release-activated calcium transport,0.0033966033966033,0.0009990009990009,33882.27
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,ORAI2,ORAI3,within_other,Calcium release-activated calcium transport,0.0033966033966033,0.0009990009990009,22556.27
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SCNN1A,SCNN1G,within_other,Amiloride-sensitive sodium transport,0.0033966033966033,0.0009990009990009,290319.84
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SCNN1A,SCNN1A,within_other,Amiloride-sensitive sodium transport,0.0033966033966033,0.0009990009990009,4219.351
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC23A2,SLC23A2,within_other,Vitamin C,0.0033966033966033,0.0009990009990009,20966.363
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC43A2,SLC7A5,within_other,L-Leucine | L-Methionine | L-Phenylalanine,0.0062069909785645,0.0019980019980019,8480.501
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC5A1,SLC6A2,within_other,Sodium,0.0062069909785645,0.0019980019980019,275.5243
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC12A2,SLC22A4,within_other,Sodium,0.0062069909785645,0.0019980019980019,7114.026
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC16A4,SLCO2B1,within_other,Acetate,0.0062069909785645,0.0019980019980019,8622.988
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,ABCB1,SLCO2B1,within_other,Estradiol | Taurocholic acid,0.0062069909785645,0.0019980019980019,4234.627
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,ATP7B,TAP1,within_other,Adenosine triphosphate,0.0062069909785645,0.0019980019980019,4864.4873
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,ABCC1,SLC22A4,within_other,O-Desmethylverapamil (D-702),0.0062069909785645,0.0019980019980019,7872.5254
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC2A3,SLC2A9,within_other,D-Glucose,0.0087341230198373,0.0029970029970029,13166.546
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC2A1,SLC2A4,within_other,D-Glucose | Dehydroascorbic acid | Docosahexaenoic acid | Glucosamine,0.0087341230198373,0.0029970029970029,530.73663
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC5A5,SLC6A4,within_other,Sodium,0.0087341230198373,0.0029970029970029,382.6405
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC12A2,SLC6A2,within_other,Sodium,0.0087341230198373,0.0029970029970029,1898.7134
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC22A1,SLC29A1,within_other,Thymidine,0.0087341230198373,0.0029970029970029,2066.9456
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,ABCC4,SLCO1B1,within_other,Cholic acid | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0087341230198373,0.0029970029970029,2572.557
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC16A1,SLC22A1,within_other,Taurocholic acid,0.0087341230198373,0.0029970029970029,1346.4492
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,ABCC4,SLC6A4,within_other,O-Desmethylverapamil (D-702),0.0087341230198373,0.0029970029970029,3960.4812
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC9A1,SLC9A3,within_other,Sodium_hydrogen exchange,0.0087341230198373,0.0029970029970029,2086.6199
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC38A7,SLC7A7,within_other,L-Glutamine,0.0109176537747966,0.0039960039960039,4707.1045
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC10A1,SLC10A1,within_other,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 17a-Ethynylestradiol | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Deoxycholic acid | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | Progesterone | Sodium | Sulfolithocholic acid | Taurocholic acid | Testosterone | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0109176537747966,0.0039960039960039,132.3569
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC5A5,SLC6A2,within_other,Sodium,0.0109176537747966,0.0039960039960039,216.65915
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC29A1,SLC5A5,within_other,Sodium,0.0109176537747966,0.0039960039960039,3396.1604
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC5A5,SLC5A5,within_other,Sodium | Urea,0.0109176537747966,0.0039960039960039,449.1668
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC16A1,SLC1A3,within_other,L-Glutamate,0.0134076449865923,0.0049950049950049,1999.6217
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC16A1,SLC1A1,within_other,L-Glutamate,0.0155437782556426,0.0059940059940059,6592.069
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC22A2,SLCO1B1,within_other,Estradiol | Prostaglandins,0.0155437782556426,0.0059940059940059,226.66399
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,LRP1,LRP1,within_other,Heme,0.0155437782556426,0.0059940059940059,228.69391
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC11A1,SLC11A1,within_other,Iron | Manganese,0.0174682460396746,0.0069930069930069,635.9954
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC29A1,SLC6A4,within_other,Sodium,0.0174682460396746,0.0069930069930069,3007.825
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC1A3,SLC7A11,within_other,L-Glutamate,0.0195644355644355,0.0079920079920079,605.3413
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC22A5,SLC5A1,within_other,Sodium,0.0195644355644355,0.0079920079920079,1145.832
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC1A5,SLC6A2,within_other,Sodium,0.0217490019861561,0.0089910089910089,3597.0364
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC5A5,SLC5A7,within_other,Sodium,0.0253783951897159,0.0109890109890109,243.76399
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,ABCC3,ABCC3,within_other,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | 5-Hydroxyomeprazole | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Deoxycholic acid | Folic acid | Folinic acid | Glutathione | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | O-Desmethylverapamil (D-702) | Sulfolithocholic acid | Taurocholic acid | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0253783951897159,0.0109890109890109,605.99524
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC16A1,SLCO1C1,within_other,Taurocholic acid,0.0253783951897159,0.0109890109890109,2278.433
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC22A4,SLC22A4,within_other,L-Carnitine | O-Desmethylverapamil (D-702) | Putrescine | Sodium | Spermine | Testosterone,0.0271728271728271,0.0119880119880119,2794.7026
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC22A4,SLC29A1,within_other,Sodium,0.0271728271728271,0.0119880119880119,5907.901
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC22A2,SLC22A5,within_other,Choline | Dopamine | Histamine | Norepinephrine,0.0271728271728271,0.0119880119880119,739.10474
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC9A1,SLC9A1,within_other,Sodium_hydrogen exchange,0.0271728271728271,0.0119880119880119,4600.834
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC22A5,SLC22A5,within_other,4-ene-Valproic acid | Acetyl-L-Carnitine | Choline | Creatine | Dopamine | Histamine | L-Carnitine | Nicotinate | Norepinephrine | O-Desmethylverapamil (D-702) | Sodium,0.0291137433994576,0.0129870129870129,2813.5232
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,ABCC1,ABCC3,within_other,Cholic acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0309005074348034,0.0139860139860139,5465.945
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SCNN1G,SCNN1G,within_other,Amiloride-sensitive sodium transport,0.0309005074348034,0.0139860139860139,182.30421
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,ABCC3,SLCO1B3,within_other,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Deoxycholic acid | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | Sulfolithocholic acid | Taurocholic acid | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0328703554510006,0.0149850149850149,569.58105
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLC3A2,SLC7A5,within_other,L-Glutamine | L-Leucine,0.0399188440425553,0.0189810189810189,14783.224
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,ABCC4,SLC22A4,within_other,O-Desmethylverapamil (D-702),0.0399188440425553,0.0189810189810189,3767.5608
+FFPE_Human_Ovarian_Cancer,Tier2,other,other,SLCO1B1,SLCO1B3,within_other,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | 4-Hydroxyvalsartan | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Dehydroepiandrosterone | Deoxycholic acid | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | Sulfolithocholic acid | Taurocholic acid | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0490746711482497,0.0239760239760239,286.20065
+FFPE_Human_Ovarian_Cancer,Tier3,Cycling CD8 T cell,Cytotoxic effector CD8 T cell,SLC1A2,SLC1A5,Tcell_interface,L-Glutamate,0.0030014168453049,0.0009990009990009,21.098719
+FFPE_Human_Ovarian_Cancer,Tier3,Cycling CD8 T cell,other,SLC2A3,SLC2A3,Tcell_interface,D-Galactose | D-Glucose | D-Maltose | D-Mannose | D-Xylose | Dehydroascorbic acid | Docosahexaenoic acid,0.0030014168453049,0.0009990009990009,418.5728
+FFPE_Human_Ovarian_Cancer,Tier3,Cycling CD8 T cell,other,CD38,CD38,Tcell_interface,Adenosine diphosphate ribose,0.0030014168453049,0.0009990009990009,138.7541
+FFPE_Human_Ovarian_Cancer,Tier3,Cycling CD8 T cell,other,AQP7,AQP7,Tcell_interface,Water,0.0030014168453049,0.0009990009990009,81.40244
+FFPE_Human_Ovarian_Cancer,Tier3,Cytotoxic effector CD8 T cell,other,SLC2A3,SLC2A3,Tcell_interface,D-Galactose | D-Glucose | D-Maltose | D-Mannose | D-Xylose | Dehydroascorbic acid | Docosahexaenoic acid,0.0030014168453049,0.0009990009990009,1940.5992
+FFPE_Human_Ovarian_Cancer,Tier3,Cytotoxic effector CD8 T cell,other,SLCO2A1,SLCO2A1,Tcell_interface,Arachidonic acid | Eicosanoid | Prostaglandins | Pyruvate,0.0030014168453049,0.0009990009990009,347.22845
+FFPE_Human_Ovarian_Cancer,Tier3,Cytotoxic effector CD8 T cell,other,SLC11A2,SLC11A2,Tcell_interface,Iron,0.0030014168453049,0.0009990009990009,1856.2057
+FFPE_Human_Ovarian_Cancer,Tier3,Cytotoxic effector CD8 T cell,other,SLC16A4,SLCO2B1,Tcell_interface,Acetate,0.0030014168453049,0.0009990009990009,106.87006
+FFPE_Human_Ovarian_Cancer,Tier3,Cytotoxic effector CD8 T cell,other,MSR1,MSR1,Tcell_interface,Fatty acid,0.0030014168453049,0.0009990009990009,366.25674
+FFPE_Human_Ovarian_Cancer,Tier3,Cytotoxic effector CD8 T cell,other,CD38,CD38,Tcell_interface,Adenosine diphosphate ribose,0.0030014168453049,0.0009990009990009,170.49635
+FFPE_Human_Ovarian_Cancer,Tier3,Cytotoxic effector CD8 T cell,other,ABCB1,SLCO2B1,Tcell_interface,Estradiol | Taurocholic acid,0.0030014168453049,0.0009990009990009,311.11127
+FFPE_Human_Ovarian_Cancer,Tier3,Cytotoxic effector CD8 T cell,other,ABCC4,SLCO1B1,Tcell_interface,Cholic acid | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0030014168453049,0.0009990009990009,41.82883
+FFPE_Human_Ovarian_Cancer,Tier3,Cytotoxic effector CD8 T cell,other,TAP1,TAP1,Tcell_interface,Adenosine triphosphate,0.0030014168453049,0.0009990009990009,464.99548
+FFPE_Human_Ovarian_Cancer,Tier3,Cytotoxic effector CD8 T cell,other,AQP7,AQP7,Tcell_interface,Water,0.0030014168453049,0.0009990009990009,1702.9297
+FFPE_Human_Ovarian_Cancer,Tier3,Cytotoxic effector CD8 T cell,other,SCNN1A,SCNN1G,Tcell_interface,Amiloride-sensitive sodium transport,0.0030014168453049,0.0009990009990009,220.19543
+FFPE_Human_Ovarian_Cancer,Tier3,Memory-like CD8 T cell,other,SLC2A3,SLC2A3,Tcell_interface,D-Galactose | D-Glucose | D-Maltose | D-Mannose | D-Xylose | Dehydroascorbic acid | Docosahexaenoic acid,0.0030014168453049,0.0009990009990009,1774.6779
+FFPE_Human_Ovarian_Cancer,Tier3,Memory-like CD8 T cell,other,SLC39A8,SLC39A8,Tcell_interface,Cadmium | Manganese | Zinc,0.0030014168453049,0.0009990009990009,334.504
+FFPE_Human_Ovarian_Cancer,Tier3,Memory-like CD8 T cell,other,CPT1A,MSR1,Tcell_interface,Fatty acid,0.0030014168453049,0.0009990009990009,379.08685
+FFPE_Human_Ovarian_Cancer,Tier3,Memory-like CD8 T cell,other,TAP1,TAP1,Tcell_interface,Adenosine triphosphate,0.0030014168453049,0.0009990009990009,350.27374
+FFPE_Human_Ovarian_Cancer,Tier3,Memory-like CD8 T cell,other,AQP7,AQP7,Tcell_interface,Water,0.0030014168453049,0.0009990009990009,708.2123
+FFPE_Human_Ovarian_Cancer,Tier3,Cytotoxic effector CD8 T cell,other,CPT1A,MSR1,Tcell_interface,Fatty acid,0.0053141122241513,0.0019980019980019,533.5434
+FFPE_Human_Ovarian_Cancer,Tier3,Memory-like CD8 T cell,other,MSR1,MSR1,Tcell_interface,Fatty acid,0.0053141122241513,0.0019980019980019,237.05032
+FFPE_Human_Ovarian_Cancer,Tier3,Cytotoxic effector CD8 T cell,other,SLCO2B1,SLCO2B1,Tcell_interface,Acetate | Citric acid | Estradiol | Nicotinate | Oxalic acid | Taurocholic acid,0.0073307986977051,0.0029970029970029,211.42305
+FFPE_Human_Ovarian_Cancer,Tier3,Memory-like CD8 T cell,other,ABCB1,SLCO2B1,Tcell_interface,Estradiol | Taurocholic acid,0.0073307986977051,0.0029970029970029,210.78317
+FFPE_Human_Ovarian_Cancer,Tier3,Cycling CD8 T cell,other,MSR1,MSR1,Tcell_interface,Fatty acid,0.00924245822205,0.0039960039960039,85.314354
+FFPE_Human_Ovarian_Cancer,Tier3,Cytotoxic effector CD8 T cell,other,CUBN,SLC40A1,Tcell_interface,Iron,0.011016011016011,0.0049950049950049,751.83875
+FFPE_Human_Ovarian_Cancer,Tier3,Cycling CD8 T cell,Cytotoxic effector CD8 T cell,ABCA1,ABCA1,Tcell_interface,25-Hydroxycholesterol,0.0126450591807365,0.0059940059940059,20.456417
+FFPE_Human_Ovarian_Cancer,Tier3,Memory-like CD8 T cell,other,SLC11A2,SLC11A2,Tcell_interface,Iron,0.0140826596897672,0.0069930069930069,986.07196
+FFPE_Human_Ovarian_Cancer,Tier3,Memory-like CD8 T cell,other,SLC26A2,SLC26A3,Tcell_interface,Anion exchange,0.0140826596897672,0.0069930069930069,25.018763
+FFPE_Human_Ovarian_Cancer,Tier3,Cytotoxic effector CD8 T cell,other,SLC1A5,SLC38A7,Tcell_interface,L-Glutamine,0.0156465415582498,0.0079920079920079,90.7097
+FFPE_Human_Ovarian_Cancer,Tier3,Memory-like CD8 T cell,other,CUBN,SLC40A1,Tcell_interface,Iron,0.0156465415582498,0.0079920079920079,569.70044
+FFPE_Human_Ovarian_Cancer,Tier3,Cycling CD8 T cell,Cytotoxic effector CD8 T cell,SLC2A3,SLC2A3,Tcell_interface,D-Galactose | D-Glucose | D-Maltose | D-Mannose | D-Xylose | Dehydroascorbic acid | Docosahexaenoic acid,0.0172546174427641,0.0089910089910089,71.57686
+FFPE_Human_Ovarian_Cancer,Tier3,Memory-like CD8 T cell,other,SLC7A7,SLC7A7,Tcell_interface,L-Glutamine,0.0172546174427641,0.0089910089910089,62.170326
+FFPE_Human_Ovarian_Cancer,Tier3,Cycling CD8 T cell,other,TRPV6,TRPV6,Tcell_interface,Heme,0.021796385432749,0.0119880119880119,56.55072
+FFPE_Human_Ovarian_Cancer,Tier3,Memory-like CD8 T cell,other,SLCO2B1,SLCO2B1,Tcell_interface,Acetate | Citric acid | Estradiol | Nicotinate | Oxalic acid | Taurocholic acid,0.0231992175950144,0.0129870129870129,92.46362
+FFPE_Human_Ovarian_Cancer,Tier3,Cytotoxic effector CD8 T cell,other,SLC3A2,SLC7A5,Tcell_interface,L-Glutamine | L-Leucine,0.0244485591529293,0.0139860139860139,109.21903
+FFPE_Human_Ovarian_Cancer,Tier3,Cytotoxic effector CD8 T cell,other,ABCB1,CD36,Tcell_interface,Cholesterol,0.0244485591529293,0.0139860139860139,118.62512
+FFPE_Human_Ovarian_Cancer,Tier3,Memory-like CD8 T cell,other,TRPV6,TRPV6,Tcell_interface,Heme,0.0259062970927377,0.0149850149850149,245.51932
+FFPE_Human_Ovarian_Cancer,Tier3,Cytotoxic effector CD8 T cell,other,SLC43A2,SLC43A2,Tcell_interface,L-Cysteine | L-Isoleucine | L-Leucine | L-Methionine | L-Phenylalanine | L-Valine,0.02715020200449,0.0159840159840159,64.14465
+FFPE_Human_Ovarian_Cancer,Tier3,Cytotoxic effector CD8 T cell,other,SLC7A11,SLC7A11,Tcell_interface,L-Cysteine | L-Cystine | L-Glutamate,0.028632524500293,0.0169830169830169,12.981175
+FFPE_Human_Ovarian_Cancer,Tier3,Cycling CD8 T cell,other,SLC39A8,SLC39A8,Tcell_interface,Cadmium | Manganese | Zinc,0.0299945353093349,0.0179820179820179,45.111977
+FFPE_Human_Ovarian_Cancer,Tier3,Cytotoxic effector CD8 T cell,other,TRPV6,TRPV6,Tcell_interface,Heme,0.0299945353093349,0.0179820179820179,314.4364
+FFPE_Human_Ovarian_Cancer,Tier3,Cycling CD8 T cell,other,ATP7A,TAP1,Tcell_interface,Adenosine triphosphate,0.0313025697019229,0.0189810189810189,20.823141
+FFPE_Human_Ovarian_Cancer,Tier3,Cycling CD8 T cell,other,SLC11A2,SLC11A2,Tcell_interface,Iron,0.0383616383616383,0.0239760239760239,143.49045
+FFPE_Human_Ovarian_Cancer,Tier3,Cycling CD8 T cell,other,SLC29A1,SLC5A5,Tcell_interface,Sodium,0.0383616383616383,0.0239760239760239,12.901238
+FFPE_Human_Ovarian_Cancer,Tier3,Cytotoxic effector CD8 T cell,other,ATP7A,TAP1,Tcell_interface,Adenosine triphosphate,0.044773408409772,0.0289710289710289,114.37081
+FFPE_Human_Ovarian_Cancer,Tier3,Cytotoxic effector CD8 T cell,other,SLC12A2,SLC12A6,Tcell_interface,Chloride ion,0.0470766193567981,0.0309690309690309,69.22497
+FFPE_Human_Ovarian_Cancer,Tier3,Cycling CD8 T cell,Cycling CD8 T cell,SLC29A1,SLC29A1,within_Tcell,Adenosine | Cytidine | Ethanol | Guanosine | Inosine | Sodium | Thymidine | Uridine,0.0073307986977051,0.0029970029970029,29.663677
+FFPE_Human_Ovarian_Cancer,Tier3,Cycling CD8 T cell,Cycling CD8 T cell,ABCC1,ABCC3,within_Tcell,Cholic acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid,0.00924245822205,0.0039960039960039,10.336431
+FFPE_Human_Ovarian_Cancer,Tier3,Memory-like CD8 T cell,Memory-like CD8 T cell,ABCC1,SLC16A1,within_Tcell,Taurocholic acid,0.00924245822205,0.0039960039960039,46.088528
+FFPE_Human_Ovarian_Cancer,Tier3,Cytotoxic effector CD8 T cell,Cytotoxic effector CD8 T cell,SLC43A2,SLC7A5,within_Tcell,L-Leucine | L-Methionine | L-Phenylalanine,0.011016011016011,0.0049950049950049,22.401499
+FFPE_Human_Ovarian_Cancer,Tier3,Cytotoxic effector CD8 T cell,Cytotoxic effector CD8 T cell,ABCC4,SLC19A1,within_Tcell,Folic acid,0.011016011016011,0.0049950049950049,21.790855
+FFPE_Human_Ovarian_Cancer,Tier3,Memory-like CD8 T cell,Memory-like CD8 T cell,SLC38A7,SLC38A7,within_Tcell,L-Glutamine,0.011016011016011,0.0049950049950049,32.57094
+FFPE_Human_Ovarian_Cancer,Tier3,Memory-like CD8 T cell,Memory-like CD8 T cell,CLCN3,CLCN4,within_Tcell,Chloride,0.011016011016011,0.0049950049950049,18.035843
+FFPE_Human_Ovarian_Cancer,Tier3,Cytotoxic effector CD8 T cell,Cytotoxic effector CD8 T cell,ABCC1,ABCC2,within_Tcell,Cholic acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0140826596897672,0.0069930069930069,23.318287
+FFPE_Human_Ovarian_Cancer,Tier3,Memory-like CD8 T cell,Memory-like CD8 T cell,SLC38A7,SLC3A2,within_Tcell,L-Glutamine,0.0188351389830132,0.0099900099900099,32.57094
+FFPE_Human_Ovarian_Cancer,Tier3,Cytotoxic effector CD8 T cell,Cytotoxic effector CD8 T cell,SLC29A1,SLC29A1,within_Tcell,Adenosine | Cytidine | Ethanol | Guanosine | Inosine | Sodium | Thymidine | Uridine,0.0231992175950144,0.0129870129870129,21.187792
+FFPE_Human_Ovarian_Cancer,Tier3,Memory-like CD8 T cell,Memory-like CD8 T cell,SLC1A5,SLC43A2,within_Tcell,L-Cysteine | L-Leucine,0.0231992175950144,0.0129870129870129,26.105474
+FFPE_Human_Ovarian_Cancer,Tier3,Cycling CD8 T cell,Cycling CD8 T cell,SLC29A1,SLC5A3,within_Tcell,Sodium,0.02715020200449,0.0159840159840159,17.356548
+FFPE_Human_Ovarian_Cancer,Tier3,Memory-like CD8 T cell,Memory-like CD8 T cell,SLC11A2,SLC11A2,within_Tcell,Iron,0.0328174241217719,0.0199800199800199,127.38687
+FFPE_Human_Ovarian_Cancer,Tier3,Cytotoxic effector CD8 T cell,Cytotoxic effector CD8 T cell,SLC3A2,SLC7A5,within_Tcell,L-Glutamine | L-Leucine,0.0496330238027655,0.0329670329670329,17.792841
+FFPE_Human_Ovarian_Cancer,Tier3,Memory-like CD8 T cell,Memory-like CD8 T cell,ABCC1,ABCC4,within_Tcell,4'-Hydroxydiclofenac | Cholic acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0496330238027655,0.0329670329670329,24.403952
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC2A2,SLC2A2,within_other,D-Fructose | D-Galactose | D-Glucose | D-Mannose | Glucosamine,0.0030014168453049,0.0009990009990009,576.337
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC2A4,SLC2A4,within_other,D-Glucose | Dehydroascorbic acid | Docosahexaenoic acid | Glucosamine,0.0030014168453049,0.0009990009990009,9024.143
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC2A3,SLC2A3,within_other,D-Galactose | D-Glucose | D-Maltose | D-Mannose | D-Xylose | Dehydroascorbic acid | Docosahexaenoic acid,0.0030014168453049,0.0009990009990009,338873.56
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC2A1,SLC2A2,within_other,D-Galactose | D-Glucose | D-Mannose | Glucosamine,0.0030014168453049,0.0009990009990009,9456.102
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC2A1,SLC2A1,within_other,D-Galactose | D-Glucose | D-Mannose | Dehydroascorbic acid | Docosahexaenoic acid | Glucosamine,0.0030014168453049,0.0009990009990009,624028.6
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC7A7,SLC7A7,within_other,L-Glutamine,0.0030014168453049,0.0009990009990009,13964.038
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC38A7,SLC3A2,within_other,L-Glutamine,0.0030014168453049,0.0009990009990009,52352.75
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC7A5,SLC7A5,within_other,L-Arginine | L-Glutamine | L-Histidine | L-Leucine | L-Methionine | L-Phenylalanine | L-Tyrosine,0.0030014168453049,0.0009990009990009,51873.918
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC7A5,SLC7A7,within_other,L-Glutamine,0.0030014168453049,0.0009990009990009,35863.13
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC38A7,SLC38A7,within_other,L-Glutamine,0.0030014168453049,0.0009990009990009,5295.926
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC1A5,SLC3A2,within_other,L-Glutamate | L-Glutamine | L-Leucine | L-Serine,0.0030014168453049,0.0009990009990009,8851.13
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC3A2,SLC3A2,within_other,Iron | L-Cystine | L-Glutamate | L-Glutamine | L-Leucine | L-Serine,0.0030014168453049,0.0009990009990009,18782.217
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC1A5,SLC38A7,within_other,L-Glutamine,0.0030014168453049,0.0009990009990009,6204.829
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC38A7,SLC7A5,within_other,L-Glutamine,0.0030014168453049,0.0009990009990009,387424.62
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC1A5,SLC1A5,within_other,L-Alanine | L-Asparagine | L-Cysteine | L-Glutamate | L-Glutamine | L-Leucine | L-Serine | L-Threonine | Sodium,0.0030014168453049,0.0009990009990009,4099.5293
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC1A5,SLC7A5,within_other,L-Glutamine | L-Leucine,0.0030014168453049,0.0009990009990009,121132.39
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC3A2,SLC7A7,within_other,L-Glutamine,0.0030014168453049,0.0009990009990009,13334.246
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC1A5,SLC7A11,within_other,L-Cysteine | L-Glutamate,0.0030014168453049,0.0009990009990009,14163.495
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC7A11,SLC7A11,within_other,L-Cysteine | L-Cystine | L-Glutamate,0.0030014168453049,0.0009990009990009,941.73474
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC43A2,SLC43A2,within_other,L-Cysteine | L-Isoleucine | L-Leucine | L-Methionine | L-Phenylalanine | L-Valine,0.0030014168453049,0.0009990009990009,16286.845
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC1A5,SLC43A2,within_other,L-Cysteine | L-Leucine,0.0030014168453049,0.0009990009990009,59292.39
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC43A2,SLC7A5,within_other,L-Leucine | L-Methionine | L-Phenylalanine,0.0030014168453049,0.0009990009990009,8480.501
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC16A1,SLC16A4,within_other,Acetate | L-Lactate,0.0030014168453049,0.0009990009990009,7632.7236
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC16A4,SLC16A4,within_other,Acetate | L-Lactate,0.0030014168453049,0.0009990009990009,5559.1367
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC16A1,SLC16A1,within_other,4-ene-Valproic acid | Acetate | Butyrate | D-Lactate | Ketone bodies | L-Glutamate | L-Lactate | Nicotinate | Pyruvate | Taurocholic acid | alpha-Ketoisovaleric acid,0.0030014168453049,0.0009990009990009,25723.15
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLCO2A1,SLCO2A1,within_other,Arachidonic acid | Eicosanoid | Prostaglandins | Pyruvate,0.0030014168453049,0.0009990009990009,140578.89
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLCO2B1,SLCO2B1,within_other,Acetate | Citric acid | Estradiol | Nicotinate | Oxalic acid | Taurocholic acid,0.0030014168453049,0.0009990009990009,53035.527
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC16A1,SLC22A5,within_other,4-ene-Valproic acid | Nicotinate,0.0030014168453049,0.0009990009990009,7194.2383
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC1A3,SLC1A5,within_other,L-Glutamate,0.0030014168453049,0.0009990009990009,58141.15
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC16A1,SLC1A5,within_other,L-Glutamate,0.0030014168453049,0.0009990009990009,3220.3408
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC1A1,SLC1A5,within_other,L-Glutamate,0.0030014168453049,0.0009990009990009,4437.589
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC1A3,SLC1A3,within_other,D-Aspartate | L-Aspartate | L-Glutamate | Malic acid,0.0030014168453049,0.0009990009990009,80636.21
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC16A1,SLC3A2,within_other,L-Glutamate,0.0030014168453049,0.0009990009990009,12007.846
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC1A1,SLC1A1,within_other,L-Glutamate,0.0030014168453049,0.0009990009990009,13933.547
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC16A1,SLC7A11,within_other,L-Glutamate,0.0030014168453049,0.0009990009990009,4470.255
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC1A1,SLC3A2,within_other,L-Glutamate,0.0030014168453049,0.0009990009990009,13690.33
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC3A2,SLC7A11,within_other,L-Cystine | L-Glutamate,0.0030014168453049,0.0009990009990009,20303.879
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC1A3,SLC3A2,within_other,L-Glutamate,0.0030014168453049,0.0009990009990009,2047.106
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC1A1,SLC1A3,within_other,L-Glutamate,0.0030014168453049,0.0009990009990009,28716.656
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC3A1,SLC3A2,within_other,L-Cystine,0.0030014168453049,0.0009990009990009,3052.6023
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC30A8,SLC30A8,within_other,Zinc,0.0030014168453049,0.0009990009990009,242.2506
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC39A8,SLC39A8,within_other,Cadmium | Manganese | Zinc,0.0030014168453049,0.0009990009990009,115549.12
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC40A1,SLC40A1,within_other,Iron,0.0030014168453049,0.0009990009990009,13272.138
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC11A1,SLC3A2,within_other,Iron,0.0030014168453049,0.0009990009990009,4702.446
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC11A2,SLC3A2,within_other,Iron,0.0030014168453049,0.0009990009990009,11679.14
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC11A2,SLC40A1,within_other,Iron,0.0030014168453049,0.0009990009990009,518377.5
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC11A1,SLC11A2,within_other,Iron,0.0030014168453049,0.0009990009990009,141946.92
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC11A2,SLC11A2,within_other,Iron,0.0030014168453049,0.0009990009990009,597249.94
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,CUBN,SLC40A1,within_other,Iron,0.0030014168453049,0.0009990009990009,358484.25
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC11A1,SLC39A8,within_other,Manganese,0.0030014168453049,0.0009990009990009,4730.3887
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC16A9,SLC16A9,within_other,L-Carnitine,0.0030014168453049,0.0009990009990009,277.63788
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLCO1B1,SLCO1B1,within_other,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | 4-Hydroxyvalsartan | Bilirubin | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Dehydroepiandrosterone | Deoxycholic acid | Digoxin | Estradiol | Estrone | Estrone sulfate | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | L-Carnitine | Lithocholic acid | O-Desmethylverapamil (D-702) | Prostaglandins | Sulfolithocholic acid | Taurocholic acid | Thyroxine | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0030014168453049,0.0009990009990009,1547.3435
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC16A9,SLC22A5,within_other,L-Carnitine,0.0030014168453049,0.0009990009990009,5060.96
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC5A3,SLC5A5,within_other,Sodium,0.0030014168453049,0.0009990009990009,12492.192
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC1A5,SLC5A7,within_other,Sodium,0.0030014168453049,0.0009990009990009,5172.3623
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC12A2,SLC12A2,within_other,Chloride ion | Sodium,0.0030014168453049,0.0009990009990009,122560.85
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC22A5,SLC5A3,within_other,Sodium,0.0030014168453049,0.0009990009990009,36610.348
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC5A1,SLC5A1,within_other,Sodium | Urea,0.0030014168453049,0.0009990009990009,1145.2058
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC22A5,SLC29A1,within_other,Sodium,0.0030014168453049,0.0009990009990009,10713.407
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC1A5,SLC22A5,within_other,Sodium,0.0030014168453049,0.0009990009990009,29021.496
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC5A3,SLC6A4,within_other,Sodium,0.0030014168453049,0.0009990009990009,10076.135
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC12A2,SLC5A3,within_other,Sodium,0.0030014168453049,0.0009990009990009,216152.75
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC5A3,SLC5A7,within_other,Sodium,0.0030014168453049,0.0009990009990009,6783.691
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC12A2,SLC29A1,within_other,Sodium,0.0030014168453049,0.0009990009990009,56112.656
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC22A4,SLC5A3,within_other,Sodium,0.0030014168453049,0.0009990009990009,18173.35
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC29A1,SLC5A3,within_other,Sodium,0.0030014168453049,0.0009990009990009,145768.0
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC12A2,SLC5A5,within_other,Sodium,0.0030014168453049,0.0009990009990009,5199.771
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC5A1,SLC5A3,within_other,Sodium,0.0030014168453049,0.0009990009990009,16274.682
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC5A3,SLC5A3,within_other,Sodium,0.0030014168453049,0.0009990009990009,609528.5
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC1A5,SLC5A3,within_other,Sodium,0.0030014168453049,0.0009990009990009,454088.38
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC1A5,SLC29A1,within_other,Sodium,0.0030014168453049,0.0009990009990009,119701.1
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC12A2,SLC22A5,within_other,Sodium,0.0030014168453049,0.0009990009990009,12302.602
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC12A2,SLC5A1,within_other,Sodium,0.0030014168453049,0.0009990009990009,5404.5674
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC29A1,SLC29A1,within_other,Adenosine | Cytidine | Ethanol | Guanosine | Inosine | Sodium | Thymidine | Uridine,0.0030014168453049,0.0009990009990009,51305.79
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC1A5,SLC5A5,within_other,Sodium,0.0030014168453049,0.0009990009990009,9437.61
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC1A5,SLC22A4,within_other,Sodium,0.0030014168453049,0.0009990009990009,15240.954
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC1A5,SLC5A1,within_other,Sodium,0.0030014168453049,0.0009990009990009,11882.81
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC5A7,SLC6A4,within_other,Sodium,0.0030014168453049,0.0009990009990009,289.12283
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC1A5,SLC6A4,within_other,Sodium,0.0030014168453049,0.0009990009990009,7710.4727
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC12A2,SLC1A5,within_other,Sodium,0.0030014168453049,0.0009990009990009,171420.42
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC3A2,SLC43A2,within_other,L-Leucine,0.0030014168453049,0.0009990009990009,21353.451
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,CPT1A,CPT1A,within_other,Fatty acid,0.0030014168453049,0.0009990009990009,68362.65
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,MSR1,MSR1,within_other,Fatty acid,0.0030014168453049,0.0009990009990009,97350.3
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,CD36,CPT1A,within_other,Fatty acid,0.0030014168453049,0.0009990009990009,18730.65
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,CD36,CD36,within_other,Cholesterol | Fatty acid | Vitamin D3,0.0030014168453049,0.0009990009990009,23999.742
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,CD36,MSR1,within_other,Fatty acid,0.0030014168453049,0.0009990009990009,14908.447
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC6A1,SLC6A1,within_other,GABA,0.0030014168453049,0.0009990009990009,1253.9567
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,ABCA1,ABCA1,within_other,25-Hydroxycholesterol,0.0030014168453049,0.0009990009990009,185246.47
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,ABCB1,ABCB1,within_other,"17a-Ethynylestradiol | 2-Hydroxychlorpropamide | 3',4'-Dihydrodiol | 4'-Hydroxydiclofenac | 4-Hydroxycyclophosphamide | 5-Hydroxyomeprazole | 8-Hydroxycarvedilol | Cholesterol | Cholic acid | Cortisol | E-3179 | Estradiol | Estriol | Glycerol | Hydroxylansoprazole | N-Desmethylcitalopram | N-Desmethyleletriptan | N-Desmethyltamoxifen | N-desmethylimatinib | O-Deethylated candesartan | O-Desmethylverapamil (D-702) | Progesterone | Taurocholic acid | Testosterone",0.0030014168453049,0.0009990009990009,2696.2207
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,ABCB1,CD36,within_other,Cholesterol,0.0030014168453049,0.0009990009990009,3689.619
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,ABCG2,CD36,within_other,Cholesterol,0.0030014168453049,0.0009990009990009,2105.7625
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,ABCB1,ABCG2,within_other,5-Hydroxyomeprazole | Cholesterol | Cortisol | Estradiol | Hydroxylansoprazole | N-Desmethyltamoxifen | N-desmethylimatinib | O-Desmethylverapamil (D-702) | Taurocholic acid | Testosterone,0.0030014168453049,0.0009990009990009,1306.0894
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,ABCG2,ABCG2,within_other,5-Hydroxyomeprazole | Cholesterol | Cortisol | Estradiol | Folic acid | Hydroxylansoprazole | N-Desmethyltamoxifen | N-desmethylimatinib | O-Desmethylverapamil (D-702) | Taurocholic acid | Testosterone,0.0030014168453049,0.0009990009990009,1183.8035
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC20A2,SLC20A2,within_other,Phosphate,0.0030014168453049,0.0009990009990009,7987.9297
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,ATP7B,ATP7B,within_other,ADP | Adenosine triphosphate | Phosphate | Water,0.0030014168453049,0.0009990009990009,2845.3584
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC19A1,SLC19A1,within_other,Folic acid | Thiamine,0.0030014168453049,0.0009990009990009,11310.767
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,CHRNA5,SLC29A1,within_other,Ethanol,0.0030014168453049,0.0009990009990009,4312.1924
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,CHRNA5,CHRNA5,within_other,Ethanol,0.0030014168453049,0.0009990009990009,12308.588
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,FOLR2,FOLR2,within_other,Folic acid,0.0030014168453049,0.0009990009990009,4709.793
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,ABCC4,FOLR1,within_other,Folic acid,0.0030014168453049,0.0009990009990009,86112.3
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,ABCC4,ABCC4,within_other,4'-Hydroxydiclofenac | Cholic acid | Cyclic AMP | Folic acid | Folinic acid | Glutathione | Hydroxycelecoxib | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0030014168453049,0.0009990009990009,130908.22
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,FOLR1,SLC19A1,within_other,Folic acid,0.0030014168453049,0.0009990009990009,26621.867
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,ABCC3,SLC19A1,within_other,Folic acid,0.0030014168453049,0.0009990009990009,1888.8076
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,ABCC4,SLC19A1,within_other,Folic acid,0.0030014168453049,0.0009990009990009,33280.67
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,FOLR1,FOLR1,within_other,5-Methyltetrahydrofolic acid | Folic acid,0.0030014168453049,0.0009990009990009,81537.29
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,TRPV6,TRPV6,within_other,Heme,0.0030014168453049,0.0009990009990009,276860.03
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC29A3,SLC29A3,within_other,Adenine,0.0030014168453049,0.0009990009990009,9908.971
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,LRP2,LRP2,within_other,Calcidiol,0.0030014168453049,0.0009990009990009,10655.247
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,CD38,CD38,within_other,Adenosine diphosphate ribose,0.0030014168453049,0.0009990009990009,3275.865
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC12A2,SLC12A6,within_other,Chloride ion,0.0030014168453049,0.0009990009990009,17339.088
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SCARB1,SCARB1,within_other,alpha-Tocopherol,0.0030014168453049,0.0009990009990009,13267.526
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,ABCC1,SLC16A1,within_other,Taurocholic acid,0.0030014168453049,0.0009990009990009,41154.65
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,ABCC4,SLC16A1,within_other,Taurocholic acid,0.0030014168453049,0.0009990009990009,38725.21
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,ABCC1,ABCC2,within_other,Cholic acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0030014168453049,0.0009990009990009,6270.8755
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,ABCC1,SLCO1C1,within_other,4'-Hydroxydiclofenac | Taurocholic acid,0.0030014168453049,0.0009990009990009,5111.622
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,ABCB1,SLCO2B1,within_other,Estradiol | Taurocholic acid,0.0030014168453049,0.0009990009990009,4234.627
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,ABCC1,ABCC1,within_other,4'-Hydroxydiclofenac | Cholic acid | Glutathione | Leukotriene C4 | O-Desmethylverapamil (D-702) | Progesterone | Taurocholic acid,0.0030014168453049,0.0009990009990009,98296.38
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLCO1B3,SLCO1B3,within_other,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | 4-Hydroxyvalsartan | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Dehydroepiandrosterone | Deoxycholic acid | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | Sulfolithocholic acid | Taurocholic acid | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0030014168453049,0.0009990009990009,1190.2244
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,ABCC2,ABCC4,within_other,Cholic acid | Folinic acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0030014168453049,0.0009990009990009,6227.648
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,ABCC2,SLCO1B3,within_other,Cholic acid | Taurocholic acid,0.0030014168453049,0.0009990009990009,762.4333
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,ABCC4,SLCO1B1,within_other,Cholic acid | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0030014168453049,0.0009990009990009,2572.557
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,ABCC1,ABCC4,within_other,4'-Hydroxydiclofenac | Cholic acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0030014168453049,0.0009990009990009,101971.59
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,ABCC1,SLCO1B3,within_other,Cholic acid | Taurocholic acid,0.0030014168453049,0.0009990009990009,8478.1045
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,ABCC4,SLCO1B3,within_other,Cholic acid | Taurocholic acid,0.0030014168453049,0.0009990009990009,8433.257
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC16A1,SLCO1B3,within_other,Taurocholic acid,0.0030014168453049,0.0009990009990009,3499.3862
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,ABCC4,SLCO1C1,within_other,4'-Hydroxydiclofenac | Taurocholic acid,0.0030014168453049,0.0009990009990009,4744.708
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,TAP1,TAP1,within_other,Adenosine triphosphate,0.0030014168453049,0.0009990009990009,32066.113
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,ABCC1,SLC22A2,within_other,Progesterone,0.0030014168453049,0.0009990009990009,3849.208
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,AQP9,AQP9,within_other,Water,0.0030014168453049,0.0009990009990009,1520.9211
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,AQP5,AQP7,within_other,Water,0.0030014168453049,0.0009990009990009,3596.8215
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,AQP5,AQP5,within_other,Water,0.0030014168453049,0.0009990009990009,9315.399
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,AQP9,ATP7B,within_other,Water,0.0030014168453049,0.0009990009990009,1982.6649
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,AQP1,AQP1,within_other,Water,0.0030014168453049,0.0009990009990009,1252.6615
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,AQP1,AQP9,within_other,Water,0.0030014168453049,0.0009990009990009,11722.5
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,AQP7,AQP7,within_other,Water,0.0030014168453049,0.0009990009990009,868904.75
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,ABCC4,SLC22A5,within_other,O-Desmethylverapamil (D-702),0.0030014168453049,0.0009990009990009,7741.0454
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,ABCC1,SLC6A4,within_other,O-Desmethylverapamil (D-702),0.0030014168453049,0.0009990009990009,14303.392
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,ABCC1,SLC22A5,within_other,O-Desmethylverapamil (D-702),0.0030014168453049,0.0009990009990009,14659.086
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,ABCC4,SLC6A4,within_other,O-Desmethylverapamil (D-702),0.0030014168453049,0.0009990009990009,3960.4812
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC24A1,SLC24A1,within_other,Sodium_calcium_potassium exchange,0.0030014168453049,0.0009990009990009,8227.066
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,CLCN5,CLCN5,within_other,Chloride,0.0030014168453049,0.0009990009990009,1595.9476
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,CLCN3,CLCN3,within_other,Chloride,0.0030014168453049,0.0009990009990009,71969.87
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,CLCN3,CLCN4,within_other,Chloride,0.0030014168453049,0.0009990009990009,12123.722
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,CLCN4,CLCN4,within_other,Chloride,0.0030014168453049,0.0009990009990009,2794.31
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC6A9,SLC6A9,within_other,Neurotransmitter,0.0030014168453049,0.0009990009990009,7313.7383
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC26A2,SLC26A2,within_other,Anion exchange,0.0030014168453049,0.0009990009990009,13499.545
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,ORAI3,ORAI3,within_other,Calcium release-activated calcium transport,0.0030014168453049,0.0009990009990009,22255.514
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,ORAI2,ORAI2,within_other,Calcium release-activated calcium transport,0.0030014168453049,0.0009990009990009,33882.27
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,ORAI2,ORAI3,within_other,Calcium release-activated calcium transport,0.0030014168453049,0.0009990009990009,22556.27
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SCNN1A,SCNN1G,within_other,Amiloride-sensitive sodium transport,0.0030014168453049,0.0009990009990009,290319.84
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SCNN1A,SCNN1A,within_other,Amiloride-sensitive sodium transport,0.0030014168453049,0.0009990009990009,4219.351
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC23A2,SLC23A2,within_other,Vitamin C,0.0030014168453049,0.0009990009990009,20966.363
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC2A1,SLC2A4,within_other,D-Glucose | Dehydroascorbic acid | Docosahexaenoic acid | Glucosamine,0.0053141122241513,0.0019980019980019,530.73663
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC16A1,SLC1A1,within_other,L-Glutamate,0.0053141122241513,0.0019980019980019,6592.069
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC16A1,SLC1A3,within_other,L-Glutamate,0.0053141122241513,0.0019980019980019,1999.6217
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC5A1,SLC6A2,within_other,Sodium,0.0053141122241513,0.0019980019980019,275.5243
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC12A2,SLC22A4,within_other,Sodium,0.0053141122241513,0.0019980019980019,7114.026
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC5A5,SLC6A2,within_other,Sodium,0.0053141122241513,0.0019980019980019,216.65915
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC12A2,SLC5A7,within_other,Chloride ion | Sodium,0.0053141122241513,0.0019980019980019,2605.943
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC5A5,SLC6A4,within_other,Sodium,0.0053141122241513,0.0019980019980019,382.6405
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC6A2,SLC6A2,within_other,Norepinephrine | Sodium,0.0053141122241513,0.0019980019980019,202.59674
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC29A1,SLC5A1,within_other,Sodium,0.0053141122241513,0.0019980019980019,4235.3984
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC12A6,SLC12A6,within_other,Chloride ion,0.0053141122241513,0.0019980019980019,5634.033
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC16A1,SLC22A1,within_other,Taurocholic acid,0.0053141122241513,0.0019980019980019,1346.4492
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC1A2,SLC1A5,within_other,L-Glutamate,0.0073307986977051,0.0029970029970029,2787.855
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC22A2,SLCO1B1,within_other,Estradiol | Prostaglandins,0.0073307986977051,0.0029970029970029,226.66399
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC16A4,SLCO2B1,within_other,Acetate,0.0073307986977051,0.0029970029970029,8622.988
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,ATP7A,SLC20A2,within_other,Phosphate,0.0073307986977051,0.0029970029970029,4577.5967
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC9A1,SLC9A3,within_other,Sodium_hydrogen exchange,0.0073307986977051,0.0029970029970029,2086.6199
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC29A1,SLC5A5,within_other,Sodium,0.00924245822205,0.0039960039960039,3396.1604
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC5A5,SLC5A5,within_other,Sodium | Urea,0.00924245822205,0.0039960039960039,449.1668
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,LRP1,LRP1,within_other,Heme,0.00924245822205,0.0039960039960039,228.69391
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC22A1,SLC29A1,within_other,Thymidine,0.00924245822205,0.0039960039960039,2066.9456
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC22A5,SLC5A1,within_other,Sodium,0.011016011016011,0.0049950049950049,1145.832
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC29A1,SLC6A4,within_other,Sodium,0.011016011016011,0.0049950049950049,3007.825
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC12A2,SLC6A2,within_other,Sodium,0.011016011016011,0.0049950049950049,1898.7134
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC2A3,SLC2A9,within_other,D-Glucose,0.0126450591807365,0.0059940059940059,13166.546
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,ABCC3,ABCC3,within_other,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | 5-Hydroxyomeprazole | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Deoxycholic acid | Folic acid | Folinic acid | Glutathione | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | O-Desmethylverapamil (D-702) | Sulfolithocholic acid | Taurocholic acid | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0126450591807365,0.0059940059940059,605.99524
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC11A1,SLC11A1,within_other,Iron | Manganese,0.0140826596897672,0.0069930069930069,635.9954
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,ABCC1,ABCC3,within_other,Cholic acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0140826596897672,0.0069930069930069,5465.945
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,ABCC1,SLC22A4,within_other,O-Desmethylverapamil (D-702),0.0140826596897672,0.0069930069930069,7872.5254
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC1A3,SLC7A11,within_other,L-Glutamate,0.0156465415582498,0.0079920079920079,605.3413
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,ATP7B,TAP1,within_other,Adenosine triphosphate,0.0156465415582498,0.0079920079920079,4864.4873
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC22A5,SLC22A5,within_other,4-ene-Valproic acid | Acetyl-L-Carnitine | Choline | Creatine | Dopamine | Histamine | L-Carnitine | Nicotinate | Norepinephrine | O-Desmethylverapamil (D-702) | Sodium,0.0172546174427641,0.0089910089910089,2813.5232
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC5A5,SLC5A7,within_other,Sodium,0.0172546174427641,0.0089910089910089,243.76399
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC38A7,SLC7A7,within_other,L-Glutamine,0.0188351389830132,0.0099900099900099,4707.1045
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC10A1,SLC10A1,within_other,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 17a-Ethynylestradiol | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Deoxycholic acid | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | Progesterone | Sodium | Sulfolithocholic acid | Taurocholic acid | Testosterone | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0188351389830132,0.0099900099900099,132.3569
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC22A2,SLC22A5,within_other,Choline | Dopamine | Histamine | Norepinephrine,0.021796385432749,0.0119880119880119,739.10474
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC1A5,SLC6A2,within_other,Sodium,0.0231992175950144,0.0129870129870129,3597.0364
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC22A4,SLC29A1,within_other,Sodium,0.0244485591529293,0.0139860139860139,5907.901
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC3A2,SLC7A5,within_other,L-Glutamine | L-Leucine,0.0259062970927377,0.0149850149850149,14783.224
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC22A4,SLC22A4,within_other,L-Carnitine | O-Desmethylverapamil (D-702) | Putrescine | Sodium | Spermine | Testosterone,0.0259062970927377,0.0149850149850149,2794.7026
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,ABCC3,SLCO1B3,within_other,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Deoxycholic acid | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | Sulfolithocholic acid | Taurocholic acid | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0259062970927377,0.0149850149850149,569.58105
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLCO1B1,SLCO1B3,within_other,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | 4-Hydroxyvalsartan | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Dehydroepiandrosterone | Deoxycholic acid | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | Sulfolithocholic acid | Taurocholic acid | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.028632524500293,0.0169830169830169,286.20065
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC9A1,SLC9A1,within_other,Sodium_hydrogen exchange,0.028632524500293,0.0169830169830169,4600.834
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC16A1,SLCO1C1,within_other,Taurocholic acid,0.0299945353093349,0.0179820179820179,2278.433
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SCNN1G,SCNN1G,within_other,Amiloride-sensitive sodium transport,0.0299945353093349,0.0179820179820179,182.30421
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,ABCC1,SLC22A1,within_other,O-Desmethylverapamil (D-702) | Progesterone | Taurocholic acid,0.0358108345328792,0.0219780219780219,2526.291
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,ABCC4,SLC22A4,within_other,O-Desmethylverapamil (D-702),0.0396490668864209,0.0249750249750249,3767.5608
+FFPE_Human_Ovarian_Cancer,Tier3,other,other,SLC10A1,SLC22A1,within_other,Progesterone | Taurocholic acid | Testosterone,0.0424248072667502,0.0269730269730269,106.276276
+FFPE_Human_Ovarian_Cancer,global,,,SLC2A2,SLC2A2,cell_type_independent,D-Fructose | D-Galactose | D-Glucose | D-Mannose | Glucosamine,0.0027649768815946,0.000999001,576.33700505768
+FFPE_Human_Ovarian_Cancer,global,,,SLC2A1,SLC2A2,cell_type_independent,D-Galactose | D-Glucose | D-Mannose | Glucosamine,0.0027649768815946,0.000999001,17931.090642558098
+FFPE_Human_Ovarian_Cancer,global,,,SLC2A3,SLC2A3,cell_type_independent,D-Galactose | D-Glucose | D-Maltose | D-Mannose | D-Xylose | Dehydroascorbic acid | Docosahexaenoic acid,0.0027649768815946,0.000999001,348042.7160960635
+FFPE_Human_Ovarian_Cancer,global,,,SLC2A1,SLC2A4,cell_type_independent,D-Glucose | Dehydroascorbic acid | Docosahexaenoic acid | Glucosamine,0.0027649768815946,0.000999001,18863.93394803176
+FFPE_Human_Ovarian_Cancer,global,,,SLC2A4,SLC2A4,cell_type_independent,D-Glucose | Dehydroascorbic acid | Docosahexaenoic acid | Glucosamine,0.0027649768815946,0.000999001,530.736605198542
+FFPE_Human_Ovarian_Cancer,global,,,SLC2A1,SLC2A1,cell_type_independent,D-Galactose | D-Glucose | D-Mannose | Dehydroascorbic acid | Docosahexaenoic acid | Glucosamine,0.0027649768815946,0.000999001,624259.6698590936
+FFPE_Human_Ovarian_Cancer,global,,,SLC7A7,SLC7A7,cell_type_independent,L-Glutamine,0.0027649768815946,0.000999001,14063.399557992878
+FFPE_Human_Ovarian_Cancer,global,,,SLC1A5,SLC7A5,cell_type_independent,L-Glutamine | L-Leucine,0.0027649768815946,0.000999001,105180.63801442954
+FFPE_Human_Ovarian_Cancer,global,,,SLC3A2,SLC3A2,cell_type_independent,Iron | L-Cystine | L-Glutamate | L-Glutamine | L-Leucine | L-Serine,0.0027649768815946,0.000999001,52216.175900800736
+FFPE_Human_Ovarian_Cancer,global,,,SLC1A5,SLC38A7,cell_type_independent,L-Glutamine,0.0027649768815946,0.000999001,72428.75627979096
+FFPE_Human_Ovarian_Cancer,global,,,SLC38A7,SLC7A5,cell_type_independent,L-Glutamine,0.0027649768815946,0.000999001,10610.127223318144
+FFPE_Human_Ovarian_Cancer,global,,,SLC7A5,SLC7A5,cell_type_independent,L-Arginine | L-Glutamine | L-Histidine | L-Leucine | L-Methionine | L-Phenylalanine | L-Tyrosine,0.0027649768815946,0.000999001,8923.876794489128
+FFPE_Human_Ovarian_Cancer,global,,,SLC3A2,SLC7A5,cell_type_independent,L-Glutamine | L-Leucine,0.0027649768815946,0.000999001,37459.14139709298
+FFPE_Human_Ovarian_Cancer,global,,,SLC7A5,SLC7A7,cell_type_independent,L-Glutamine,0.0027649768815946,0.000999001,12971.792483491625
+FFPE_Human_Ovarian_Cancer,global,,,SLC1A5,SLC1A5,cell_type_independent,L-Alanine | L-Asparagine | L-Cysteine | L-Glutamate | L-Glutamine | L-Leucine | L-Serine | L-Threonine | Sodium,0.0027649768815946,0.000999001,388596.1535759213
+FFPE_Human_Ovarian_Cancer,global,,,SLC38A7,SLC38A7,cell_type_independent,L-Glutamine,0.0027649768815946,0.000999001,4099.529298579123
+FFPE_Human_Ovarian_Cancer,global,,,SLC38A7,SLC7A7,cell_type_independent,L-Glutamine,0.0027649768815946,0.000999001,9799.06700898345
+FFPE_Human_Ovarian_Cancer,global,,,SLC1A5,SLC3A2,cell_type_independent,L-Glutamate | L-Glutamine | L-Leucine | L-Serine,0.0027649768815946,0.000999001,243340.28102491668
+FFPE_Human_Ovarian_Cancer,global,,,SLC38A7,SLC3A2,cell_type_independent,L-Glutamine,0.0027649768815946,0.000999001,26959.95337565134
+FFPE_Human_Ovarian_Cancer,global,,,SLC1A5,SLC7A11,cell_type_independent,L-Cysteine | L-Glutamate,0.0027649768815946,0.000999001,28499.44682094939
+FFPE_Human_Ovarian_Cancer,global,,,SLC7A11,SLC7A11,cell_type_independent,L-Cysteine | L-Cystine | L-Glutamate,0.0027649768815946,0.000999001,967.6971195595696
+FFPE_Human_Ovarian_Cancer,global,,,SLC43A2,SLC43A2,cell_type_independent,L-Cysteine | L-Isoleucine | L-Leucine | L-Methionine | L-Phenylalanine | L-Valine,0.0027649768815946,0.000999001,16461.16431956768
+FFPE_Human_Ovarian_Cancer,global,,,SLC1A5,SLC43A2,cell_type_independent,L-Cysteine | L-Leucine,0.0027649768815946,0.000999001,120080.47398772868
+FFPE_Human_Ovarian_Cancer,global,,,SLC43A2,SLC7A5,cell_type_independent,L-Leucine | L-Methionine | L-Phenylalanine,0.0027649768815946,0.000999001,17110.931168793897
+FFPE_Human_Ovarian_Cancer,global,,,SLC16A1,SLC16A4,cell_type_independent,Acetate | L-Lactate,0.0027649768815946,0.000999001,15404.814079936552
+FFPE_Human_Ovarian_Cancer,global,,,SLC16A4,SLC16A4,cell_type_independent,Acetate | L-Lactate,0.0027649768815946,0.000999001,5559.136614254036
+FFPE_Human_Ovarian_Cancer,global,,,SLC16A1,SLC16A1,cell_type_independent,4-ene-Valproic acid | Acetate | Butyrate | D-Lactate | Ketone bodies | L-Glutamate | L-Lactate | Nicotinate | Pyruvate | Taurocholic acid | alpha-Ketoisovaleric acid,0.0027649768815946,0.000999001,25845.73094249736
+FFPE_Human_Ovarian_Cancer,global,,,SLCO2A1,SLCO2A1,cell_type_independent,Arachidonic acid | Eicosanoid | Prostaglandins | Pyruvate,0.0027649768815946,0.000999001,141365.37632560992
+FFPE_Human_Ovarian_Cancer,global,,,SLCO2B1,SLCO2B1,cell_type_independent,Acetate | Citric acid | Estradiol | Nicotinate | Oxalic acid | Taurocholic acid,0.0027649768815946,0.000999001,53687.80306514903
+FFPE_Human_Ovarian_Cancer,global,,,SLC16A1,SLC22A5,cell_type_independent,4-ene-Valproic acid | Nicotinate,0.0027649768815946,0.000999001,14562.926580787507
+FFPE_Human_Ovarian_Cancer,global,,,SLC1A3,SLC1A5,cell_type_independent,L-Glutamate,0.0027649768815946,0.000999001,116059.55598420734
+FFPE_Human_Ovarian_Cancer,global,,,SLC16A1,SLC7A11,cell_type_independent,L-Glutamate,0.0027649768815946,0.000999001,6430.6772901705735
+FFPE_Human_Ovarian_Cancer,global,,,SLC1A1,SLC3A2,cell_type_independent,L-Glutamate,0.0027649768815946,0.000999001,9092.968036470753
+FFPE_Human_Ovarian_Cancer,global,,,SLC16A1,SLC1A5,cell_type_independent,L-Glutamate,0.0027649768815946,0.000999001,161404.44917218515
+FFPE_Human_Ovarian_Cancer,global,,,SLC1A1,SLC1A5,cell_type_independent,L-Glutamate,0.0027649768815946,0.000999001,24000.21535044805
+FFPE_Human_Ovarian_Cancer,global,,,SLC1A3,SLC1A3,cell_type_independent,D-Aspartate | L-Aspartate | L-Glutamate | Malic acid,0.0027649768815946,0.000999001,13972.319523072669
+FFPE_Human_Ovarian_Cancer,global,,,SLC3A2,SLC7A11,cell_type_independent,L-Cystine | L-Glutamate,0.0027649768815946,0.000999001,8911.358620524883
+FFPE_Human_Ovarian_Cancer,global,,,SLC16A1,SLC1A3,cell_type_independent,L-Glutamate,0.0027649768815946,0.000999001,27129.771617006736
+FFPE_Human_Ovarian_Cancer,global,,,SLC1A3,SLC3A2,cell_type_independent,L-Glutamate,0.0027649768815946,0.000999001,41187.34707427037
+FFPE_Human_Ovarian_Cancer,global,,,SLC1A3,SLC7A11,cell_type_independent,L-Glutamate,0.0027649768815946,0.000999001,4042.526217305608
+FFPE_Human_Ovarian_Cancer,global,,,SLC16A1,SLC3A2,cell_type_independent,L-Glutamate,0.0027649768815946,0.000999001,57867.98096776625
+FFPE_Human_Ovarian_Cancer,global,,,SLC3A1,SLC3A2,cell_type_independent,L-Cystine,0.0027649768815946,0.000999001,6300.010439965403
+FFPE_Human_Ovarian_Cancer,global,,,SLC30A8,SLC30A8,cell_type_independent,Zinc,0.0027649768815946,0.000999001,242.25060141301503
+FFPE_Human_Ovarian_Cancer,global,,,SLC39A8,SLC39A8,cell_type_independent,Cadmium | Manganese | Zinc,0.0027649768815946,0.000999001,116588.81681235286
+FFPE_Human_Ovarian_Cancer,global,,,SLC11A1,SLC11A2,cell_type_independent,Iron,0.0027649768815946,0.000999001,26225.37110509699
+FFPE_Human_Ovarian_Cancer,global,,,SLC11A1,SLC3A2,cell_type_independent,Iron,0.0027649768815946,0.000999001,9723.60585038875
+FFPE_Human_Ovarian_Cancer,global,,,CUBN,SLC40A1,cell_type_independent,Iron,0.0027649768815946,0.000999001,24146.704379234885
+FFPE_Human_Ovarian_Cancer,global,,,SLC11A2,SLC11A2,cell_type_independent,Iron,0.0027649768815946,0.000999001,519619.69278624543
+FFPE_Human_Ovarian_Cancer,global,,,SLC11A2,SLC3A2,cell_type_independent,Iron,0.0027649768815946,0.000999001,285802.88718122244
+FFPE_Human_Ovarian_Cancer,global,,,SLC40A1,SLC40A1,cell_type_independent,Iron,0.0027649768815946,0.000999001,603762.7845442737
+FFPE_Human_Ovarian_Cancer,global,,,SLC11A2,SLC40A1,cell_type_independent,Iron,0.0027649768815946,0.000999001,723802.234056595
+FFPE_Human_Ovarian_Cancer,global,,,SLC11A1,SLC39A8,cell_type_independent,Manganese,0.0027649768815946,0.000999001,9645.22343967722
+FFPE_Human_Ovarian_Cancer,global,,,SLC22A4,SLC22A4,cell_type_independent,L-Carnitine | O-Desmethylverapamil (D-702) | Putrescine | Sodium | Spermine | Testosterone,0.0027649768815946,0.000999001,1547.3435007483065
+FFPE_Human_Ovarian_Cancer,global,,,SLC16A9,SLC16A9,cell_type_independent,L-Carnitine,0.0027649768815946,0.000999001,5060.960045153661
+FFPE_Human_Ovarian_Cancer,global,,,SLC5A3,SLC5A5,cell_type_independent,Sodium,0.0027649768815946,0.000999001,25097.25422484428
+FFPE_Human_Ovarian_Cancer,global,,,SLC1A5,SLC5A7,cell_type_independent,Sodium,0.0027649768815946,0.000999001,10292.79954184626
+FFPE_Human_Ovarian_Cancer,global,,,SLC12A2,SLC12A2,cell_type_independent,Chloride ion | Sodium,0.0027649768815946,0.000999001,123029.9295966506
+FFPE_Human_Ovarian_Cancer,global,,,SLC22A5,SLC5A3,cell_type_independent,Sodium,0.0027649768815946,0.000999001,72744.54286708277
+FFPE_Human_Ovarian_Cancer,global,,,SLC5A1,SLC5A1,cell_type_independent,Sodium | Urea,0.0027649768815946,0.000999001,1191.3681496987997
+FFPE_Human_Ovarian_Cancer,global,,,SLC22A5,SLC29A1,cell_type_independent,Sodium,0.0027649768815946,0.000999001,21593.01666205641
+FFPE_Human_Ovarian_Cancer,global,,,SLC1A5,SLC22A5,cell_type_independent,Sodium,0.0027649768815946,0.000999001,58507.907507610624
+FFPE_Human_Ovarian_Cancer,global,,,SLC5A3,SLC6A4,cell_type_independent,Sodium,0.0027649768815946,0.000999001,20171.993904373383
+FFPE_Human_Ovarian_Cancer,global,,,SLC12A2,SLC5A3,cell_type_independent,Sodium,0.0027649768815946,0.000999001,432358.5710573803
+FFPE_Human_Ovarian_Cancer,global,,,SLC5A3,SLC5A7,cell_type_independent,Sodium,0.0027649768815946,0.000999001,13768.769465124466
+FFPE_Human_Ovarian_Cancer,global,,,SLC12A2,SLC29A1,cell_type_independent,Sodium,0.0027649768815946,0.000999001,112223.48249490798
+FFPE_Human_Ovarian_Cancer,global,,,SLC22A4,SLC5A3,cell_type_independent,Sodium,0.0027649768815946,0.000999001,36363.54814440859
+FFPE_Human_Ovarian_Cancer,global,,,SLC29A1,SLC5A3,cell_type_independent,Sodium,0.0027649768815946,0.000999001,291942.51615836524
+FFPE_Human_Ovarian_Cancer,global,,,SLC12A2,SLC5A5,cell_type_independent,Sodium,0.0027649768815946,0.000999001,10403.848792083158
+FFPE_Human_Ovarian_Cancer,global,,,SLC12A2,SLC5A7,cell_type_independent,Chloride ion | Sodium,0.0027649768815946,0.000999001,5201.809067537059
+FFPE_Human_Ovarian_Cancer,global,,,SLC5A1,SLC5A3,cell_type_independent,Sodium,0.0027649768815946,0.000999001,32555.7372751226
+FFPE_Human_Ovarian_Cancer,global,,,SLC5A3,SLC5A3,cell_type_independent,Sodium,0.0027649768815946,0.000999001,611712.3899774132
+FFPE_Human_Ovarian_Cancer,global,,,SLC1A5,SLC5A3,cell_type_independent,Sodium,0.0027649768815946,0.000999001,910798.8166673414
+FFPE_Human_Ovarian_Cancer,global,,,SLC1A5,SLC29A1,cell_type_independent,Sodium,0.0027649768815946,0.000999001,239638.53498092445
+FFPE_Human_Ovarian_Cancer,global,,,SLC12A2,SLC22A5,cell_type_independent,Sodium,0.0027649768815946,0.000999001,24507.58196209837
+FFPE_Human_Ovarian_Cancer,global,,,SLC12A2,SLC5A1,cell_type_independent,Sodium,0.0027649768815946,0.000999001,10800.212587007936
+FFPE_Human_Ovarian_Cancer,global,,,SLC29A1,SLC29A1,cell_type_independent,Adenosine | Cytidine | Ethanol | Guanosine | Inosine | Sodium | Thymidine | Uridine,0.0027649768815946,0.000999001,51635.18725218723
+FFPE_Human_Ovarian_Cancer,global,,,SLC1A5,SLC5A5,cell_type_independent,Sodium,0.0027649768815946,0.000999001,19302.242706910474
+FFPE_Human_Ovarian_Cancer,global,,,SLC1A5,SLC22A4,cell_type_independent,Sodium,0.0027649768815946,0.000999001,30028.259241555195
+FFPE_Human_Ovarian_Cancer,global,,,SLC1A5,SLC5A1,cell_type_independent,Sodium,0.0027649768815946,0.000999001,24023.786195962
+FFPE_Human_Ovarian_Cancer,global,,,SLC5A7,SLC6A4,cell_type_independent,Sodium,0.0027649768815946,0.000999001,535.3580288696852
+FFPE_Human_Ovarian_Cancer,global,,,SLC1A5,SLC6A4,cell_type_independent,Sodium,0.0027649768815946,0.000999001,15480.732801115428
+FFPE_Human_Ovarian_Cancer,global,,,SLC12A2,SLC1A5,cell_type_independent,Sodium,0.0027649768815946,0.000999001,343477.0687618304
+FFPE_Human_Ovarian_Cancer,global,,,SLC29A1,SLC5A1,cell_type_independent,Sodium,0.0027649768815946,0.000999001,8586.864798721104
+FFPE_Human_Ovarian_Cancer,global,,,SLC3A2,SLC43A2,cell_type_independent,L-Leucine,0.0027649768815946,0.000999001,43682.9686139
+FFPE_Human_Ovarian_Cancer,global,,,CPT1A,CPT1A,cell_type_independent,Fatty acid,0.0027649768815946,0.000999001,70112.43814050365
+FFPE_Human_Ovarian_Cancer,global,,,MSR1,MSR1,cell_type_independent,Fatty acid,0.0027649768815946,0.000999001,98851.86668505392
+FFPE_Human_Ovarian_Cancer,global,,,CD36,CPT1A,cell_type_independent,Fatty acid,0.0027649768815946,0.000999001,38534.41306789193
+FFPE_Human_Ovarian_Cancer,global,,,CD36,CD36,cell_type_independent,Cholesterol | Fatty acid | Vitamin D3,0.0027649768815946,0.000999001,24098.831509336167
+FFPE_Human_Ovarian_Cancer,global,,,CD36,MSR1,cell_type_independent,Fatty acid,0.0027649768815946,0.000999001,30423.033602935386
+FFPE_Human_Ovarian_Cancer,global,,,SLC6A1,SLC6A1,cell_type_independent,GABA,0.0027649768815946,0.000999001,1253.9566154748754
+FFPE_Human_Ovarian_Cancer,global,,,ABCA1,ABCA1,cell_type_independent,25-Hydroxycholesterol,0.0027649768815946,0.000999001,186037.06683086784
+FFPE_Human_Ovarian_Cancer,global,,,ABCB1,ABCB1,cell_type_independent,"17a-Ethynylestradiol | 2-Hydroxychlorpropamide | 3',4'-Dihydrodiol | 4'-Hydroxydiclofenac | 4-Hydroxycyclophosphamide | 5-Hydroxyomeprazole | 8-Hydroxycarvedilol | Cholesterol | Cholic acid | Cortisol | E-3179 | Estradiol | Estriol | Glycerol | Hydroxylansoprazole | N-Desmethylcitalopram | N-Desmethyleletriptan | N-Desmethyltamoxifen | N-desmethylimatinib | O-Deethylated candesartan | O-Desmethylverapamil (D-702) | Progesterone | Taurocholic acid | Testosterone",0.0027649768815946,0.000999001,2756.7449444023305
+FFPE_Human_Ovarian_Cancer,global,,,ABCB1,CD36,cell_type_independent,Cholesterol,0.0027649768815946,0.000999001,8126.0682059787505
+FFPE_Human_Ovarian_Cancer,global,,,ABCG2,CD36,cell_type_independent,Cholesterol,0.0027649768815946,0.000999001,4355.066072066213
+FFPE_Human_Ovarian_Cancer,global,,,ABCB1,ABCG2,cell_type_independent,5-Hydroxyomeprazole | Cholesterol | Cortisol | Estradiol | Hydroxylansoprazole | N-Desmethyltamoxifen | N-desmethylimatinib | O-Desmethylverapamil (D-702) | Taurocholic acid | Testosterone,0.0027649768815946,0.000999001,2672.2967390293134
+FFPE_Human_Ovarian_Cancer,global,,,ABCG2,ABCG2,cell_type_independent,5-Hydroxyomeprazole | Cholesterol | Cortisol | Estradiol | Folic acid | Hydroxylansoprazole | N-Desmethyltamoxifen | N-desmethylimatinib | O-Desmethylverapamil (D-702) | Taurocholic acid | Testosterone,0.0027649768815946,0.000999001,1183.8034907258989
+FFPE_Human_Ovarian_Cancer,global,,,SLC20A2,SLC20A2,cell_type_independent,Phosphate,0.0027649768815946,0.000999001,8029.21341198281
+FFPE_Human_Ovarian_Cancer,global,,,ATP7B,ATP7B,cell_type_independent,ADP | Adenosine triphosphate | Phosphate | Water,0.0027649768815946,0.000999001,2845.3584487220724
+FFPE_Human_Ovarian_Cancer,global,,,SLC19A1,SLC19A1,cell_type_independent,Folic acid | Thiamine,0.0027649768815946,0.000999001,11310.766800336174
+FFPE_Human_Ovarian_Cancer,global,,,CHRNA5,CHRNA5,cell_type_independent,Ethanol,0.0027649768815946,0.000999001,4312.192157536596
+FFPE_Human_Ovarian_Cancer,global,,,CHRNA5,SLC29A1,cell_type_independent,Ethanol,0.0027649768815946,0.000999001,24910.57185669151
+FFPE_Human_Ovarian_Cancer,global,,,FOLR2,FOLR2,cell_type_independent,Folic acid,0.0027649768815946,0.000999001,4709.792949044888
+FFPE_Human_Ovarian_Cancer,global,,,ABCC4,FOLR1,cell_type_independent,Folic acid,0.0027649768815946,0.000999001,172465.99796206906
+FFPE_Human_Ovarian_Cancer,global,,,ABCC4,ABCC4,cell_type_independent,4'-Hydroxydiclofenac | Cholic acid | Cyclic AMP | Folic acid | Folinic acid | Glutathione | Hydroxycelecoxib | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0027649768815946,0.000999001,131201.44913094267
+FFPE_Human_Ovarian_Cancer,global,,,FOLR1,SLC19A1,cell_type_independent,Folic acid,0.0027649768815946,0.000999001,53464.08402933979
+FFPE_Human_Ovarian_Cancer,global,,,ABCC4,SLC19A1,cell_type_independent,Folic acid,0.0027649768815946,0.000999001,66571.99931617349
+FFPE_Human_Ovarian_Cancer,global,,,FOLR1,FOLR1,cell_type_independent,5-Methyltetrahydrofolic acid | Folic acid,0.0027649768815946,0.000999001,81537.28531210462
+FFPE_Human_Ovarian_Cancer,global,,,LRP1,LRP1,cell_type_independent,Heme,0.0027649768815946,0.000999001,278055.3147986705
+FFPE_Human_Ovarian_Cancer,global,,,SLC29A3,SLC29A3,cell_type_independent,Adenine,0.0027649768815946,0.000999001,10031.338487426012
+FFPE_Human_Ovarian_Cancer,global,,,LRP2,LRP2,cell_type_independent,Calcidiol,0.0027649768815946,0.000999001,10672.4154827637
+FFPE_Human_Ovarian_Cancer,global,,,CD38,CD38,cell_type_independent,Adenosine diphosphate ribose,0.0027649768815946,0.000999001,3892.289332288705
+FFPE_Human_Ovarian_Cancer,global,,,SLC12A2,SLC12A6,cell_type_independent,Chloride ion,0.0027649768815946,0.000999001,34998.937176460066
+FFPE_Human_Ovarian_Cancer,global,,,SLC12A6,SLC12A6,cell_type_independent,Chloride ion,0.0027649768815946,0.000999001,5707.643627560432
+FFPE_Human_Ovarian_Cancer,global,,,SCARB1,SCARB1,cell_type_independent,alpha-Tocopherol,0.0027649768815946,0.000999001,13333.76109991367
+FFPE_Human_Ovarian_Cancer,global,,,ABCC1,SLC16A1,cell_type_independent,Taurocholic acid,0.0027649768815946,0.000999001,82936.69856625288
+FFPE_Human_Ovarian_Cancer,global,,,ABCC4,SLC16A1,cell_type_independent,Taurocholic acid,0.0027649768815946,0.000999001,78601.62595846185
+FFPE_Human_Ovarian_Cancer,global,,,ABCC1,ABCC2,cell_type_independent,Cholic acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0027649768815946,0.000999001,12894.185355284188
+FFPE_Human_Ovarian_Cancer,global,,,ABCC1,SLCO1C1,cell_type_independent,4'-Hydroxydiclofenac | Taurocholic acid,0.0027649768815946,0.000999001,10123.286348461075
+FFPE_Human_Ovarian_Cancer,global,,,ABCB1,SLCO2B1,cell_type_independent,Estradiol | Taurocholic acid,0.0027649768815946,0.000999001,9740.758347930165
+FFPE_Human_Ovarian_Cancer,global,,,ABCC1,ABCC1,cell_type_independent,4'-Hydroxydiclofenac | Cholic acid | Glutathione | Leukotriene C4 | O-Desmethylverapamil (D-702) | Progesterone | Taurocholic acid,0.0027649768815946,0.000999001,99164.16413981227
+FFPE_Human_Ovarian_Cancer,global,,,SLCO1B3,SLCO1B3,cell_type_independent,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | 4-Hydroxyvalsartan | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Dehydroepiandrosterone | Deoxycholic acid | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | Sulfolithocholic acid | Taurocholic acid | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0027649768815946,0.000999001,1190.2243488226763
+FFPE_Human_Ovarian_Cancer,global,,,ABCC2,ABCC4,cell_type_independent,Cholic acid | Folinic acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0027649768815946,0.000999001,12308.09890831334
+FFPE_Human_Ovarian_Cancer,global,,,ABCC2,SLCO1B3,cell_type_independent,Cholic acid | Taurocholic acid,0.0027649768815946,0.000999001,1535.6577227273908
+FFPE_Human_Ovarian_Cancer,global,,,ABCC4,SLCO1B1,cell_type_independent,Cholic acid | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0027649768815946,0.000999001,5421.494232055
+FFPE_Human_Ovarian_Cancer,global,,,ABCC1,ABCC4,cell_type_independent,4'-Hydroxydiclofenac | Cholic acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0027649768815946,0.000999001,204022.316771714
+FFPE_Human_Ovarian_Cancer,global,,,ABCC1,SLCO1B3,cell_type_independent,Cholic acid | Taurocholic acid,0.0027649768815946,0.000999001,16992.40447600954
+FFPE_Human_Ovarian_Cancer,global,,,ABCC4,SLCO1B3,cell_type_independent,Cholic acid | Taurocholic acid,0.0027649768815946,0.000999001,17048.35978264956
+FFPE_Human_Ovarian_Cancer,global,,,SLC16A1,SLCO1B3,cell_type_independent,Taurocholic acid,0.0027649768815946,0.000999001,7079.769290097674
+FFPE_Human_Ovarian_Cancer,global,,,ABCC4,SLCO1C1,cell_type_independent,4'-Hydroxydiclofenac | Taurocholic acid,0.0027649768815946,0.000999001,9575.765749221557
+FFPE_Human_Ovarian_Cancer,global,,,TAP1,TAP1,cell_type_independent,Adenosine triphosphate,0.0027649768815946,0.000999001,34061.42915004969
+FFPE_Human_Ovarian_Cancer,global,,,ABCC1,SLC22A2,cell_type_independent,Progesterone,0.0027649768815946,0.000999001,7588.22633137002
+FFPE_Human_Ovarian_Cancer,global,,,AQP9,AQP9,cell_type_independent,Water,0.0027649768815946,0.000999001,1520.9211314682434
+FFPE_Human_Ovarian_Cancer,global,,,AQP5,AQP7,cell_type_independent,Water,0.0027649768815946,0.000999001,7029.049954635531
+FFPE_Human_Ovarian_Cancer,global,,,AQP1,AQP9,cell_type_independent,Water,0.0027649768815946,0.000999001,18652.992130661278
+FFPE_Human_Ovarian_Cancer,global,,,AQP5,AQP5,cell_type_independent,Water,0.0027649768815946,0.000999001,1982.6649367768075
+FFPE_Human_Ovarian_Cancer,global,,,AQP9,ATP7B,cell_type_independent,Water,0.0027649768815946,0.000999001,2573.684885394526
+FFPE_Human_Ovarian_Cancer,global,,,AQP7,AQP7,cell_type_independent,Water,0.0027649768815946,0.000999001,11722.500161272834
+FFPE_Human_Ovarian_Cancer,global,,,AQP1,AQP1,cell_type_independent,Water,0.0027649768815946,0.000999001,874068.5094015327
+FFPE_Human_Ovarian_Cancer,global,,,ABCC4,SLC22A4,cell_type_independent,O-Desmethylverapamil (D-702),0.0027649768815946,0.000999001,15566.791388026477
+FFPE_Human_Ovarian_Cancer,global,,,ABCC1,SLC22A5,cell_type_independent,O-Desmethylverapamil (D-702),0.0027649768815946,0.000999001,29021.65438933945
+FFPE_Human_Ovarian_Cancer,global,,,ABCC4,SLC22A5,cell_type_independent,O-Desmethylverapamil (D-702),0.0027649768815946,0.000999001,29838.51537115151
+FFPE_Human_Ovarian_Cancer,global,,,ABCC4,SLC6A4,cell_type_independent,O-Desmethylverapamil (D-702),0.0027649768815946,0.000999001,7910.4522130824735
+FFPE_Human_Ovarian_Cancer,global,,,SLC24A1,SLC24A1,cell_type_independent,Sodium_calcium_potassium exchange,0.0027649768815946,0.000999001,8260.221640666878
+FFPE_Human_Ovarian_Cancer,global,,,CLCN5,CLCN5,cell_type_independent,Chloride,0.0027649768815946,0.000999001,1636.0450730946254
+FFPE_Human_Ovarian_Cancer,global,,,CLCN3,CLCN3,cell_type_independent,Chloride,0.0027649768815946,0.000999001,72174.35428640462
+FFPE_Human_Ovarian_Cancer,global,,,CLCN3,CLCN4,cell_type_independent,Chloride,0.0027649768815946,0.000999001,24097.974744227653
+FFPE_Human_Ovarian_Cancer,global,,,CLCN4,CLCN4,cell_type_independent,Chloride,0.0027649768815946,0.000999001,2805.025616307488
+FFPE_Human_Ovarian_Cancer,global,,,SLC6A9,SLC6A9,cell_type_independent,Neurotransmitter,0.0027649768815946,0.000999001,7333.10842880925
+FFPE_Human_Ovarian_Cancer,global,,,SLC26A2,SLC26A2,cell_type_independent,Anion exchange,0.0027649768815946,0.000999001,13566.360256446991
+FFPE_Human_Ovarian_Cancer,global,,,ORAI2,ORAI2,cell_type_independent,Calcium release-activated calcium transport,0.0027649768815946,0.000999001,22392.24830316574
+FFPE_Human_Ovarian_Cancer,global,,,ORAI3,ORAI3,cell_type_independent,Calcium release-activated calcium transport,0.0027649768815946,0.000999001,34225.51358967445
+FFPE_Human_Ovarian_Cancer,global,,,ORAI2,ORAI3,cell_type_independent,Calcium release-activated calcium transport,0.0027649768815946,0.000999001,45721.19491169586
+FFPE_Human_Ovarian_Cancer,global,,,SCNN1A,SCNN1A,cell_type_independent,Amiloride-sensitive sodium transport,0.0027649768815946,0.000999001,290950.0737881395
+FFPE_Human_Ovarian_Cancer,global,,,SCNN1A,SCNN1G,cell_type_independent,Amiloride-sensitive sodium transport,0.0027649768815946,0.000999001,8340.633494533658
+FFPE_Human_Ovarian_Cancer,global,,,SLC23A2,SLC23A2,cell_type_independent,Vitamin C,0.0027649768815946,0.000999001,21093.283383364876
+FFPE_Human_Ovarian_Cancer,global,,,SLC11A1,SLC11A1,cell_type_independent,Iron | Manganese,0.0053238685297785,0.001998002,635.9954461288271
+FFPE_Human_Ovarian_Cancer,global,,,SLCO1B1,SLCO1B1,cell_type_independent,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | 4-Hydroxyvalsartan | Bilirubin | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Dehydroepiandrosterone | Deoxycholic acid | Digoxin | Estradiol | Estrone | Estrone sulfate | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | L-Carnitine | Lithocholic acid | O-Desmethylverapamil (D-702) | Prostaglandins | Sulfolithocholic acid | Taurocholic acid | Thyroxine | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0053238685297785,0.001998002,277.63787047382016
+FFPE_Human_Ovarian_Cancer,global,,,SLC5A5,SLC6A4,cell_type_independent,Sodium,0.0053238685297785,0.001998002,778.0994032760424
+FFPE_Human_Ovarian_Cancer,global,,,SLC6A2,SLC6A2,cell_type_independent,Norepinephrine | Sodium,0.0053238685297785,0.001998002,202.59674777992257
+FFPE_Human_Ovarian_Cancer,global,,,ATP7A,SLC20A2,cell_type_independent,Phosphate,0.0053238685297785,0.001998002,9188.321952820175
+FFPE_Human_Ovarian_Cancer,global,,,ABCC1,SLC22A4,cell_type_independent,O-Desmethylverapamil (D-702),0.0053238685297785,0.001998002,15973.27482401008
+FFPE_Human_Ovarian_Cancer,global,,,SLC3A2,SLC7A7,cell_type_independent,L-Glutamine,0.0075630252934334,0.002997003,30533.893734556
+FFPE_Human_Ovarian_Cancer,global,,,SLC16A1,SLC1A1,cell_type_independent,L-Glutamate,0.0075630252934334,0.002997003,5565.270162838957
+FFPE_Human_Ovarian_Cancer,global,,,SLC12A2,SLC22A4,cell_type_independent,Sodium,0.0075630252934334,0.002997003,14353.109720491611
+FFPE_Human_Ovarian_Cancer,global,,,SLC5A5,SLC6A2,cell_type_independent,Sodium,0.0075630252934334,0.002997003,432.3426747251874
+FFPE_Human_Ovarian_Cancer,global,,,SLC5A5,SLC5A5,cell_type_independent,Sodium | Urea,0.0075630252934334,0.002997003,449.16680379897184
+FFPE_Human_Ovarian_Cancer,global,,,SLC16A4,SLCO2B1,cell_type_independent,Acetate,0.0075630252934334,0.002997003,17176.851821444114
+FFPE_Human_Ovarian_Cancer,global,,,ABCC3,SLC19A1,cell_type_independent,Folic acid,0.0075630252934334,0.002997003,3669.68721338186
+FFPE_Human_Ovarian_Cancer,global,,,ATP7B,TAP1,cell_type_independent,Adenosine triphosphate,0.0075630252934334,0.002997003,10235.261941268294
+FFPE_Human_Ovarian_Cancer,global,,,SLC9A1,SLC9A3,cell_type_independent,Sodium_hydrogen exchange,0.0075630252934334,0.002997003,4093.413712590117
+FFPE_Human_Ovarian_Cancer,global,,,SLC29A1,SLC5A5,cell_type_independent,Sodium,0.0099091657028248,0.003996004,6813.311429092185
+FFPE_Human_Ovarian_Cancer,global,,,SLC22A2,SLCO1B1,cell_type_independent,Estradiol | Prostaglandins,0.0099091657028248,0.003996004,424.1636474686039
+FFPE_Human_Ovarian_Cancer,global,,,CPT1A,MSR1,cell_type_independent,Fatty acid,0.0099091657028248,0.003996004,88028.50421507708
+FFPE_Human_Ovarian_Cancer,global,,,SLC5A1,SLC6A2,cell_type_independent,Sodium,0.0146938777129564,0.005994006,490.0311458858917
+FFPE_Human_Ovarian_Cancer,global,,,SLC29A1,SLC6A4,cell_type_independent,Sodium,0.0146938777129564,0.005994006,6038.330550531962
+FFPE_Human_Ovarian_Cancer,global,,,SLC2A3,SLC2A9,cell_type_independent,D-Glucose,0.0166666664804021,0.006993007,26499.915626758768
+FFPE_Human_Ovarian_Cancer,global,,,SLC22A5,SLC22A5,cell_type_independent,4-ene-Valproic acid | Acetyl-L-Carnitine | Choline | Creatine | Dopamine | Histamine | L-Carnitine | Nicotinate | Norepinephrine | O-Desmethylverapamil (D-702) | Sodium,0.0166666664804021,0.006993007,2841.4962441271487
+FFPE_Human_Ovarian_Cancer,global,,,TRPV6,TRPV6,cell_type_independent,Heme,0.0166666664804021,0.006993007,228.69390131072453
+FFPE_Human_Ovarian_Cancer,global,,,SLC16A1,SLC22A1,cell_type_independent,Taurocholic acid,0.0166666664804021,0.006993007,2636.228135939364
+FFPE_Human_Ovarian_Cancer,global,,,ATP7A,TAP1,cell_type_independent,Adenosine triphosphate,0.0166666664804021,0.006993007,14125.925701713604
+FFPE_Human_Ovarian_Cancer,global,,,SLC1A1,SLC1A1,cell_type_independent,L-Glutamate,0.0187353624763791,0.007992008,605.3413287904793
+FFPE_Human_Ovarian_Cancer,global,,,SLC22A4,SLC29A1,cell_type_independent,Sodium,0.0187353624763791,0.007992008,11896.69336214438
+FFPE_Human_Ovarian_Cancer,global,,,SLC22A5,SLC5A1,cell_type_independent,Sodium,0.0187353624763791,0.007992008,2300.037151962356
+FFPE_Human_Ovarian_Cancer,global,,,SLC1A1,SLC1A3,cell_type_independent,L-Glutamate,0.0208494199993642,0.008991009,3943.531484257538
+FFPE_Human_Ovarian_Cancer,global,,,SLC12A2,SLC6A2,cell_type_independent,Sodium,0.0208494199993642,0.008991009,3737.329444534078
+FFPE_Human_Ovarian_Cancer,global,,,SLC10A1,SLC10A1,cell_type_independent,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 17a-Ethynylestradiol | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Deoxycholic acid | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | Progesterone | Sodium | Sulfolithocholic acid | Taurocholic acid | Testosterone | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0226757358020496,0.0099900095,132.35690182758344
+FFPE_Human_Ovarian_Cancer,global,,,SLC5A5,SLC5A7,cell_type_independent,Sodium,0.0226757358020496,0.0099900095,485.1124498238613
+FFPE_Human_Ovarian_Cancer,global,,,ABCC1,ABCC3,cell_type_independent,Cholic acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0226757358020496,0.0099900095,11025.57315289862
+FFPE_Human_Ovarian_Cancer,global,,,SLC16A1,SLCO1C1,cell_type_independent,Taurocholic acid,0.0226757358020496,0.0099900095,4580.813524008199
+FFPE_Human_Ovarian_Cancer,global,,,ABCC3,SLCO1B3,cell_type_independent,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Deoxycholic acid | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | Sulfolithocholic acid | Taurocholic acid | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0248120285962757,0.01098901,1139.3479759777797
+FFPE_Human_Ovarian_Cancer,global,,,SLC22A2,SLC22A5,cell_type_independent,Choline | Dopamine | Histamine | Norepinephrine,0.0267857145809102,0.011988012,1508.5631803173023
+FFPE_Human_Ovarian_Cancer,global,,,SLC22A1,SLC29A1,cell_type_independent,Thymidine,0.0267857145809102,0.011988012,3957.3214013016586
+FFPE_Human_Ovarian_Cancer,global,,,ABCC3,ABCC3,cell_type_independent,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | 5-Hydroxyomeprazole | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Deoxycholic acid | Folic acid | Folinic acid | Glutathione | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | O-Desmethylverapamil (D-702) | Sulfolithocholic acid | Taurocholic acid | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0287187039496895,0.012987013,605.9952325459114
+FFPE_Human_Ovarian_Cancer,global,,,SCNN1G,SCNN1G,cell_type_independent,Amiloride-sensitive sodium transport,0.0287187039496895,0.012987013,182.30421732114175
+FFPE_Human_Ovarian_Cancer,global,,,SLC26A2,SLC26A3,cell_type_independent,Anion exchange,0.0329670323058962,0.014985015,1781.5143003616654
+FFPE_Human_Ovarian_Cancer,global,,,ABCC1,SLC22A1,cell_type_independent,O-Desmethylverapamil (D-702) | Progesterone | Taurocholic acid,0.034807830793679,0.015984016,5135.926989904304
+FFPE_Human_Ovarian_Cancer,global,,,SLC9A1,SLC9A1,cell_type_independent,Sodium_hydrogen exchange,0.034807830793679,0.015984016,4646.0888789585415
+FFPE_Human_Ovarian_Cancer,global,,,ATP7A,ATP7B,cell_type_independent,ADP | Adenosine triphosphate | Phosphate | Water,0.0367965375383694,0.016983017,4980.249090812432
+FFPE_Human_Ovarian_Cancer,global,,,SLC1A2,SLC1A5,cell_type_independent,L-Glutamate,0.0385714269988238,0.017982017,13099.028483378455
+FFPE_Human_Ovarian_Cancer,global,,,SLC1A5,SLC6A2,cell_type_independent,Sodium,0.0385714269988238,0.017982017,7221.704408689557
+FFPE_Human_Ovarian_Cancer,global,,,SLC16A9,SLC22A5,cell_type_independent,L-Carnitine,0.0403111740891443,0.018981019,5534.060178136788
+FFPE_Human_Ovarian_Cancer,global,,,ABCC1,SLC6A4,cell_type_independent,O-Desmethylverapamil (D-702),0.0403111740891443,0.018981019,7624.8661499877935
+FFPE_Human_Ovarian_Cancer,global,,,SLC10A1,SLC22A1,cell_type_independent,Progesterone | Taurocholic acid | Testosterone,0.0422237839072649,0.019980019,233.4449850480305
+FFPE_Human_Ovarian_Cancer,global,,,SLCO1B1,SLCO1B3,cell_type_independent,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | 4-Hydroxyvalsartan | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Dehydroepiandrosterone | Deoxycholic acid | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | Sulfolithocholic acid | Taurocholic acid | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0483193266315057,0.022977022,571.6931135415105

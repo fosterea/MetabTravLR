@@ -1,0 +1,657 @@
+sample_id,tier,cell_type_1,cell_type_2,gene1,gene2,tcell_involvement,metabolites,FDR_np,pval_np,C_np
+Human_Cervical_Cancer,Tier1,T Cell,other,SLC2A1,SLC2A2,Tcell_interface,D-Galactose | D-Glucose | D-Mannose | Glucosamine,0.0032674092824468,0.0009990009990009,5631.336
+Human_Cervical_Cancer,Tier1,T Cell,other,SLC2A3,SLC2A3,Tcell_interface,D-Galactose | D-Glucose | D-Maltose | D-Mannose | D-Xylose | Dehydroascorbic acid | Docosahexaenoic acid,0.0032674092824468,0.0009990009990009,15965.394
+Human_Cervical_Cancer,Tier1,T Cell,other,SLCO2A1,SLCO2A1,Tcell_interface,Arachidonic acid | Eicosanoid | Prostaglandins | Pyruvate,0.0032674092824468,0.0009990009990009,3160.983
+Human_Cervical_Cancer,Tier1,T Cell,other,SLCO2B1,SLCO2B1,Tcell_interface,Acetate | Citric acid | Estradiol | Nicotinate | Oxalic acid | Taurocholic acid,0.0032674092824468,0.0009990009990009,971.4343
+Human_Cervical_Cancer,Tier1,T Cell,other,CUBN,SLC40A1,Tcell_interface,Iron,0.0032674092824468,0.0009990009990009,6788.276
+Human_Cervical_Cancer,Tier1,T Cell,other,ABCA1,ABCA1,Tcell_interface,25-Hydroxycholesterol,0.0032674092824468,0.0009990009990009,1012.2787
+Human_Cervical_Cancer,Tier1,T Cell,other,FOLR2,FOLR2,Tcell_interface,Folic acid,0.0032674092824468,0.0009990009990009,176.63281
+Human_Cervical_Cancer,Tier1,T Cell,other,AQP7,AQP7,Tcell_interface,Water,0.0032674092824468,0.0009990009990009,3339.429
+Human_Cervical_Cancer,Tier1,T Cell,other,SLC40A1,SLC40A1,Tcell_interface,Iron,0.0089294267376459,0.0029970029970029,2127.7395
+Human_Cervical_Cancer,Tier1,T Cell,other,MSR1,MSR1,Tcell_interface,Fatty acid,0.0089294267376459,0.0029970029970029,434.8812
+Human_Cervical_Cancer,Tier1,T Cell,other,TAP1,TAP1,Tcell_interface,Adenosine triphosphate,0.0089294267376459,0.0029970029970029,3723.6636
+Human_Cervical_Cancer,Tier1,T Cell,other,SLC1A3,SLC1A3,Tcell_interface,D-Aspartate | L-Aspartate | L-Glutamate | Malic acid,0.0186623192758162,0.0069930069930069,62.185863
+Human_Cervical_Cancer,Tier1,T Cell,other,SLC1A5,SLC43A2,Tcell_interface,L-Cysteine | L-Leucine,0.0224775224775224,0.0089910089910089,490.26065
+Human_Cervical_Cancer,Tier1,T Cell,other,SLCO1C1,SLCO1C1,Tcell_interface,"3',4'-Dihydrodiol | 4'-Hydroxydiclofenac | Estrone sulfate | Taurocholic acid | Thyroxine",0.0224775224775224,0.0089910089910089,33.277172
+Human_Cervical_Cancer,Tier1,T Cell,other,SLC1A5,SLC5A1,Tcell_interface,Sodium,0.0245517194669737,0.0099900099900099,156.85925
+Human_Cervical_Cancer,Tier1,T Cell,other,SLC7A5,SLC7A5,Tcell_interface,L-Arginine | L-Glutamine | L-Histidine | L-Leucine | L-Methionine | L-Phenylalanine | L-Tyrosine,0.0356201175873307,0.0149850149850149,229.47693
+Human_Cervical_Cancer,Tier1,T Cell,other,ABCC4,ABCC4,Tcell_interface,4'-Hydroxydiclofenac | Cholic acid | Cyclic AMP | Folic acid | Folinic acid | Glutathione | Hydroxycelecoxib | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0388821704611178,0.0169830169830169,83.04994
+Human_Cervical_Cancer,Tier1,T Cell,other,CD38,CD38,Tcell_interface,Adenosine diphosphate ribose,0.0407405094905094,0.0179820179820179,200.84224
+Human_Cervical_Cancer,Tier1,T Cell,other,SLC39A8,SLC39A8,Tcell_interface,Cadmium | Manganese | Zinc,0.0497263930099751,0.0229770229770229,480.3931
+Human_Cervical_Cancer,Tier1,T Cell,T Cell,SLC2A3,SLC2A3,within_Tcell,D-Galactose | D-Glucose | D-Maltose | D-Mannose | D-Xylose | Dehydroascorbic acid | Docosahexaenoic acid,0.0032674092824468,0.0009990009990009,2954.4563
+Human_Cervical_Cancer,Tier1,T Cell,T Cell,CUBN,SLC40A1,within_Tcell,Iron,0.0032674092824468,0.0009990009990009,870.09656
+Human_Cervical_Cancer,Tier1,T Cell,T Cell,SLC22A4,SLC5A1,within_Tcell,Sodium,0.0186623192758162,0.0069930069930069,33.759533
+Human_Cervical_Cancer,Tier1,T Cell,T Cell,AQP7,AQP7,within_Tcell,Water,0.0371820692676307,0.0159840159840159,126.306595
+Human_Cervical_Cancer,Tier1,T Cell,T Cell,SLC24A1,SLC24A1,within_Tcell,Sodium_calcium_potassium exchange,0.0388821704611178,0.0169830169830169,68.39631
+Human_Cervical_Cancer,Tier1,other,other,SLC2A9,SLC2A9,within_other,D-Glucose,0.0032674092824468,0.0009990009990009,9241.5625
+Human_Cervical_Cancer,Tier1,other,other,SLC2A1,SLC2A2,within_other,D-Galactose | D-Glucose | D-Mannose | Glucosamine,0.0032674092824468,0.0009990009990009,3769724.8
+Human_Cervical_Cancer,Tier1,other,other,SLC2A1,SLC2A9,within_other,D-Glucose,0.0032674092824468,0.0009990009990009,108581.16
+Human_Cervical_Cancer,Tier1,other,other,SLC2A3,SLC2A3,within_other,D-Galactose | D-Glucose | D-Maltose | D-Mannose | D-Xylose | Dehydroascorbic acid | Docosahexaenoic acid,0.0032674092824468,0.0009990009990009,362700.22
+Human_Cervical_Cancer,Tier1,other,other,SLC2A1,SLC2A1,within_other,D-Galactose | D-Glucose | D-Mannose | Dehydroascorbic acid | Docosahexaenoic acid | Glucosamine,0.0032674092824468,0.0009990009990009,6847.12
+Human_Cervical_Cancer,Tier1,other,other,SLC1A5,SLC3A2,within_other,L-Glutamate | L-Glutamine | L-Leucine | L-Serine,0.0032674092824468,0.0009990009990009,31929.168
+Human_Cervical_Cancer,Tier1,other,other,SLC3A2,SLC3A2,within_other,Iron | L-Cystine | L-Glutamate | L-Glutamine | L-Leucine | L-Serine,0.0032674092824468,0.0009990009990009,110470.875
+Human_Cervical_Cancer,Tier1,other,other,SLC1A5,SLC1A5,within_other,L-Alanine | L-Asparagine | L-Cysteine | L-Glutamate | L-Glutamine | L-Leucine | L-Serine | L-Threonine | Sodium,0.0032674092824468,0.0009990009990009,31966.947
+Human_Cervical_Cancer,Tier1,other,other,SLC7A5,SLC7A5,within_other,L-Arginine | L-Glutamine | L-Histidine | L-Leucine | L-Methionine | L-Phenylalanine | L-Tyrosine,0.0032674092824468,0.0009990009990009,8284.191
+Human_Cervical_Cancer,Tier1,other,other,SLC1A5,SLC38A7,within_other,L-Glutamine,0.0032674092824468,0.0009990009990009,55947.387
+Human_Cervical_Cancer,Tier1,other,other,SLC1A5,SLC7A5,within_other,L-Glutamine | L-Leucine,0.0032674092824468,0.0009990009990009,14012.659
+Human_Cervical_Cancer,Tier1,other,other,SLC3A2,SLC7A5,within_other,L-Glutamine | L-Leucine,0.0032674092824468,0.0009990009990009,573772.56
+Human_Cervical_Cancer,Tier1,other,other,SLC43A2,SLC43A2,within_other,L-Cysteine | L-Isoleucine | L-Leucine | L-Methionine | L-Phenylalanine | L-Valine,0.0032674092824468,0.0009990009990009,6484.7383
+Human_Cervical_Cancer,Tier1,other,other,SLC1A5,SLC7A11,within_other,L-Cysteine | L-Glutamate,0.0032674092824468,0.0009990009990009,4611.814
+Human_Cervical_Cancer,Tier1,other,other,SLC1A5,SLC43A2,within_other,L-Cysteine | L-Leucine,0.0032674092824468,0.0009990009990009,36447.812
+Human_Cervical_Cancer,Tier1,other,other,SLC16A1,SLC16A1,within_other,4-ene-Valproic acid | Acetate | Butyrate | D-Lactate | Ketone bodies | L-Glutamate | L-Lactate | Nicotinate | Pyruvate | Taurocholic acid | alpha-Ketoisovaleric acid,0.0032674092824468,0.0009990009990009,12183.476
+Human_Cervical_Cancer,Tier1,other,other,SLCO2A1,SLCO2A1,within_other,Arachidonic acid | Eicosanoid | Prostaglandins | Pyruvate,0.0032674092824468,0.0009990009990009,638622.44
+Human_Cervical_Cancer,Tier1,other,other,SLC16A1,SLC22A5,within_other,4-ene-Valproic acid | Nicotinate,0.0032674092824468,0.0009990009990009,3910.3596
+Human_Cervical_Cancer,Tier1,other,other,SLC22A5,SLC22A5,within_other,4-ene-Valproic acid | Acetyl-L-Carnitine | Choline | Creatine | Dopamine | Histamine | L-Carnitine | Nicotinate | Norepinephrine | O-Desmethylverapamil (D-702) | Sodium,0.0032674092824468,0.0009990009990009,4106.806
+Human_Cervical_Cancer,Tier1,other,other,SLCO2B1,SLCO2B1,within_other,Acetate | Citric acid | Estradiol | Nicotinate | Oxalic acid | Taurocholic acid,0.0032674092824468,0.0009990009990009,21195.473
+Human_Cervical_Cancer,Tier1,other,other,SLC1A3,SLC1A3,within_other,D-Aspartate | L-Aspartate | L-Glutamate | Malic acid,0.0032674092824468,0.0009990009990009,1936.819
+Human_Cervical_Cancer,Tier1,other,other,SLC1A1,SLC1A1,within_other,L-Glutamate,0.0032674092824468,0.0009990009990009,13486.022
+Human_Cervical_Cancer,Tier1,other,other,SLC16A1,SLC1A3,within_other,L-Glutamate,0.0032674092824468,0.0009990009990009,7901.9023
+Human_Cervical_Cancer,Tier1,other,other,SLC1A3,SLC1A5,within_other,L-Glutamate,0.0032674092824468,0.0009990009990009,13738.116
+Human_Cervical_Cancer,Tier1,other,other,SLC1A2,SLC1A5,within_other,L-Glutamate,0.0032674092824468,0.0009990009990009,440.2886
+Human_Cervical_Cancer,Tier1,other,other,SLC16A1,SLC3A2,within_other,L-Glutamate,0.0032674092824468,0.0009990009990009,1735.2865
+Human_Cervical_Cancer,Tier1,other,other,SLC16A1,SLC1A5,within_other,L-Glutamate,0.0032674092824468,0.0009990009990009,60014.723
+Human_Cervical_Cancer,Tier1,other,other,SLC1A3,SLC3A2,within_other,L-Glutamate,0.0032674092824468,0.0009990009990009,3490.3674
+Human_Cervical_Cancer,Tier1,other,other,SLC1A2,SLC3A2,within_other,L-Glutamate,0.0032674092824468,0.0009990009990009,2643.206
+Human_Cervical_Cancer,Tier1,other,other,SLC39A8,SLC39A8,within_other,Cadmium | Manganese | Zinc,0.0032674092824468,0.0009990009990009,77636.875
+Human_Cervical_Cancer,Tier1,other,other,SLC11A2,SLC3A2,within_other,Iron,0.0032674092824468,0.0009990009990009,83059.38
+Human_Cervical_Cancer,Tier1,other,other,SLC11A2,SLC40A1,within_other,Iron,0.0032674092824468,0.0009990009990009,38425.45
+Human_Cervical_Cancer,Tier1,other,other,SLC3A2,SLC40A1,within_other,Iron,0.0032674092824468,0.0009990009990009,5088.853
+Human_Cervical_Cancer,Tier1,other,other,SLC40A1,SLC40A1,within_other,Iron,0.0032674092824468,0.0009990009990009,132198.66
+Human_Cervical_Cancer,Tier1,other,other,SLC11A2,SLC11A2,within_other,Iron,0.0032674092824468,0.0009990009990009,44008.887
+Human_Cervical_Cancer,Tier1,other,other,CUBN,SLC40A1,within_other,Iron,0.0032674092824468,0.0009990009990009,508796.1
+Human_Cervical_Cancer,Tier1,other,other,SLC16A9,SLC16A9,within_other,L-Carnitine,0.0032674092824468,0.0009990009990009,4779.288
+Human_Cervical_Cancer,Tier1,other,other,SLC1A5,SLC22A5,within_other,Sodium,0.0032674092824468,0.0009990009990009,34371.89
+Human_Cervical_Cancer,Tier1,other,other,SLC12A2,SLC5A5,within_other,Sodium,0.0032674092824468,0.0009990009990009,2325.5186
+Human_Cervical_Cancer,Tier1,other,other,SLC12A2,SLC29A1,within_other,Sodium,0.0032674092824468,0.0009990009990009,12326.364
+Human_Cervical_Cancer,Tier1,other,other,SLC12A2,SLC5A1,within_other,Sodium,0.0032674092824468,0.0009990009990009,2070.2642
+Human_Cervical_Cancer,Tier1,other,other,SLC22A5,SLC5A3,within_other,Sodium,0.0032674092824468,0.0009990009990009,6787.329
+Human_Cervical_Cancer,Tier1,other,other,SLC12A2,SLC12A2,within_other,Chloride ion | Sodium,0.0032674092824468,0.0009990009990009,17226.225
+Human_Cervical_Cancer,Tier1,other,other,SLC29A1,SLC5A3,within_other,Sodium,0.0032674092824468,0.0009990009990009,16630.514
+Human_Cervical_Cancer,Tier1,other,other,SLC12A2,SLC22A5,within_other,Sodium,0.0032674092824468,0.0009990009990009,6121.055
+Human_Cervical_Cancer,Tier1,other,other,SLC5A1,SLC5A5,within_other,Sodium | Urea,0.0032674092824468,0.0009990009990009,1133.2406
+Human_Cervical_Cancer,Tier1,other,other,SLC5A1,SLC5A1,within_other,Sodium | Urea,0.0032674092824468,0.0009990009990009,2469.7034
+Human_Cervical_Cancer,Tier1,other,other,SLC1A5,SLC5A3,within_other,Sodium,0.0032674092824468,0.0009990009990009,98253.09
+Human_Cervical_Cancer,Tier1,other,other,SLC5A3,SLC5A3,within_other,Sodium,0.0032674092824468,0.0009990009990009,34182.047
+Human_Cervical_Cancer,Tier1,other,other,SLC12A2,SLC5A3,within_other,Sodium,0.0032674092824468,0.0009990009990009,15000.384
+Human_Cervical_Cancer,Tier1,other,other,SLC22A5,SLC5A5,within_other,Sodium,0.0032674092824468,0.0009990009990009,1937.2695
+Human_Cervical_Cancer,Tier1,other,other,SLC22A5,SLC29A1,within_other,Sodium,0.0032674092824468,0.0009990009990009,4650.899
+Human_Cervical_Cancer,Tier1,other,other,SLC29A1,SLC29A1,within_other,Adenosine | Cytidine | Ethanol | Guanosine | Inosine | Sodium | Thymidine | Uridine,0.0032674092824468,0.0009990009990009,17352.97
+Human_Cervical_Cancer,Tier1,other,other,SLC1A5,SLC22A4,within_other,Sodium,0.0032674092824468,0.0009990009990009,15010.729
+Human_Cervical_Cancer,Tier1,other,other,SLC12A2,SLC1A5,within_other,Sodium,0.0032674092824468,0.0009990009990009,70377.914
+Human_Cervical_Cancer,Tier1,other,other,SLC22A5,SLC5A1,within_other,Sodium,0.0032674092824468,0.0009990009990009,1149.9376
+Human_Cervical_Cancer,Tier1,other,other,SLC1A5,SLC5A5,within_other,Sodium,0.0032674092824468,0.0009990009990009,7844.2354
+Human_Cervical_Cancer,Tier1,other,other,SLC1A5,SLC29A1,within_other,Sodium,0.0032674092824468,0.0009990009990009,64622.008
+Human_Cervical_Cancer,Tier1,other,other,SLC5A5,SLC5A5,within_other,Sodium | Urea,0.0032674092824468,0.0009990009990009,3432.514
+Human_Cervical_Cancer,Tier1,other,other,SLC1A5,SLC5A1,within_other,Sodium,0.0032674092824468,0.0009990009990009,8414.824
+Human_Cervical_Cancer,Tier1,other,other,SLC22A1,SLC22A1,within_other,Acetylcholine | Choline | Dopamine | Estradiol | N-desmethylimatinib | Norepinephrine | O-Desmethylverapamil (D-702) | Progesterone | Prostaglandins | Serotonin | Spermine | Taurocholic acid | Testosterone | Thymidine,0.0032674092824468,0.0009990009990009,453.10406
+Human_Cervical_Cancer,Tier1,other,other,MSR1,MSR1,within_other,Fatty acid,0.0032674092824468,0.0009990009990009,43438.414
+Human_Cervical_Cancer,Tier1,other,other,CD36,CD36,within_other,Cholesterol | Fatty acid | Vitamin D3,0.0032674092824468,0.0009990009990009,9538.101
+Human_Cervical_Cancer,Tier1,other,other,CPT1A,CPT1A,within_other,Fatty acid,0.0032674092824468,0.0009990009990009,42399.812
+Human_Cervical_Cancer,Tier1,other,other,CD36,MSR1,within_other,Fatty acid,0.0032674092824468,0.0009990009990009,9708.385
+Human_Cervical_Cancer,Tier1,other,other,SLC6A1,SLC6A1,within_other,GABA,0.0032674092824468,0.0009990009990009,883.72534
+Human_Cervical_Cancer,Tier1,other,other,ABCA1,ABCA1,within_other,25-Hydroxycholesterol,0.0032674092824468,0.0009990009990009,100446.555
+Human_Cervical_Cancer,Tier1,other,other,ABCB1,ABCG2,within_other,5-Hydroxyomeprazole | Cholesterol | Cortisol | Estradiol | Hydroxylansoprazole | N-Desmethyltamoxifen | N-desmethylimatinib | O-Desmethylverapamil (D-702) | Taurocholic acid | Testosterone,0.0032674092824468,0.0009990009990009,2388.823
+Human_Cervical_Cancer,Tier1,other,other,ABCG2,ABCG2,within_other,5-Hydroxyomeprazole | Cholesterol | Cortisol | Estradiol | Folic acid | Hydroxylansoprazole | N-Desmethyltamoxifen | N-desmethylimatinib | O-Desmethylverapamil (D-702) | Taurocholic acid | Testosterone,0.0032674092824468,0.0009990009990009,5195.3228
+Human_Cervical_Cancer,Tier1,other,other,ABCB1,ABCB1,within_other,"17a-Ethynylestradiol | 2-Hydroxychlorpropamide | 3',4'-Dihydrodiol | 4'-Hydroxydiclofenac | 4-Hydroxycyclophosphamide | 5-Hydroxyomeprazole | 8-Hydroxycarvedilol | Cholesterol | Cholic acid | Cortisol | E-3179 | Estradiol | Estriol | Glycerol | Hydroxylansoprazole | N-Desmethylcitalopram | N-Desmethyleletriptan | N-Desmethyltamoxifen | N-desmethylimatinib | O-Deethylated candesartan | O-Desmethylverapamil (D-702) | Progesterone | Taurocholic acid | Testosterone",0.0032674092824468,0.0009990009990009,2798.248
+Human_Cervical_Cancer,Tier1,other,other,SLC20A2,SLC20A2,within_other,Phosphate,0.0032674092824468,0.0009990009990009,15098.428
+Human_Cervical_Cancer,Tier1,other,other,ATP7A,ATP7A,within_other,ADP | Adenosine triphosphate | Phosphate | Water,0.0032674092824468,0.0009990009990009,6186.6997
+Human_Cervical_Cancer,Tier1,other,other,ATP7A,SLC20A2,within_other,Phosphate,0.0032674092824468,0.0009990009990009,7592.491
+Human_Cervical_Cancer,Tier1,other,other,CHRNA5,CHRNA5,within_other,Ethanol,0.0032674092824468,0.0009990009990009,2348.3176
+Human_Cervical_Cancer,Tier1,other,other,CHRNA5,SLC29A1,within_other,Ethanol,0.0032674092824468,0.0009990009990009,780.3719
+Human_Cervical_Cancer,Tier1,other,other,ABCC3,FOLR1,within_other,Folic acid,0.0032674092824468,0.0009990009990009,483.16406
+Human_Cervical_Cancer,Tier1,other,other,ABCC4,ABCC4,within_other,4'-Hydroxydiclofenac | Cholic acid | Cyclic AMP | Folic acid | Folinic acid | Glutathione | Hydroxycelecoxib | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0032674092824468,0.0009990009990009,2557.2588
+Human_Cervical_Cancer,Tier1,other,other,FOLR2,FOLR2,within_other,Folic acid,0.0032674092824468,0.0009990009990009,1087.0626
+Human_Cervical_Cancer,Tier1,other,other,FOLR1,FOLR1,within_other,5-Methyltetrahydrofolic acid | Folic acid,0.0032674092824468,0.0009990009990009,1881.6643
+Human_Cervical_Cancer,Tier1,other,other,TRPV6,TRPV6,within_other,Heme,0.0032674092824468,0.0009990009990009,555.9335
+Human_Cervical_Cancer,Tier1,other,other,LRP1,TRPV6,within_other,Heme,0.0032674092824468,0.0009990009990009,4789.7524
+Human_Cervical_Cancer,Tier1,other,other,LRP1,LRP1,within_other,Heme,0.0032674092824468,0.0009990009990009,164962.84
+Human_Cervical_Cancer,Tier1,other,other,SLC29A3,SLC29A3,within_other,Adenine,0.0032674092824468,0.0009990009990009,1688.4376
+Human_Cervical_Cancer,Tier1,other,other,SLC15A1,SLC15A1,within_other,2-Hydroxychlorpropamide | Glycyl-glycine | L-Dopa,0.0032674092824468,0.0009990009990009,606.7991
+Human_Cervical_Cancer,Tier1,other,other,CD38,CD38,within_other,Adenosine diphosphate ribose,0.0032674092824468,0.0009990009990009,3760.7002
+Human_Cervical_Cancer,Tier1,other,other,SLC12A2,SLC12A6,within_other,Chloride ion,0.0032674092824468,0.0009990009990009,10194.88
+Human_Cervical_Cancer,Tier1,other,other,SLC12A6,SLC12A6,within_other,Chloride ion,0.0032674092824468,0.0009990009990009,23600.514
+Human_Cervical_Cancer,Tier1,other,other,ABCB1,ABCC4,within_other,4'-Hydroxydiclofenac | Cholic acid | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0032674092824468,0.0009990009990009,1471.5005
+Human_Cervical_Cancer,Tier1,other,other,ABCC4,SLC16A1,within_other,Taurocholic acid,0.0032674092824468,0.0009990009990009,3378.3325
+Human_Cervical_Cancer,Tier1,other,other,ABCC1,SLCO1B3,within_other,Cholic acid | Taurocholic acid,0.0032674092824468,0.0009990009990009,5259.4375
+Human_Cervical_Cancer,Tier1,other,other,SLCO1B3,SLCO1B3,within_other,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | 4-Hydroxyvalsartan | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Dehydroepiandrosterone | Deoxycholic acid | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | Sulfolithocholic acid | Taurocholic acid | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0032674092824468,0.0009990009990009,5362.8115
+Human_Cervical_Cancer,Tier1,other,other,ABCC1,SLC16A1,within_other,Taurocholic acid,0.0032674092824468,0.0009990009990009,27818.545
+Human_Cervical_Cancer,Tier1,other,other,ABCC1,ABCC4,within_other,4'-Hydroxydiclofenac | Cholic acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0032674092824468,0.0009990009990009,12828.73
+Human_Cervical_Cancer,Tier1,other,other,ABCC1,ABCC1,within_other,4'-Hydroxydiclofenac | Cholic acid | Glutathione | Leukotriene C4 | O-Desmethylverapamil (D-702) | Progesterone | Taurocholic acid,0.0032674092824468,0.0009990009990009,114282.78
+Human_Cervical_Cancer,Tier1,other,other,ABCC1,ABCC3,within_other,Cholic acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0032674092824468,0.0009990009990009,5370.5176
+Human_Cervical_Cancer,Tier1,other,other,SLCO1B1,SLCO1B3,within_other,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | 4-Hydroxyvalsartan | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Dehydroepiandrosterone | Deoxycholic acid | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | Sulfolithocholic acid | Taurocholic acid | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0032674092824468,0.0009990009990009,333.03122
+Human_Cervical_Cancer,Tier1,other,other,TAP1,TAP1,within_other,Adenosine triphosphate,0.0032674092824468,0.0009990009990009,157115.75
+Human_Cervical_Cancer,Tier1,other,other,ATP7A,TAP1,within_other,Adenosine triphosphate,0.0032674092824468,0.0009990009990009,24070.14
+Human_Cervical_Cancer,Tier1,other,other,AQP7,AQP7,within_other,Water,0.0032674092824468,0.0009990009990009,639622.1
+Human_Cervical_Cancer,Tier1,other,other,AQP5,AQP5,within_other,Water,0.0032674092824468,0.0009990009990009,6426.2397
+Human_Cervical_Cancer,Tier1,other,other,AQP1,AQP1,within_other,Water,0.0032674092824468,0.0009990009990009,16549.707
+Human_Cervical_Cancer,Tier1,other,other,AQP1,ATP7B,within_other,Water,0.0032674092824468,0.0009990009990009,1804.2665
+Human_Cervical_Cancer,Tier1,other,other,AQP1,AQP7,within_other,Water,0.0032674092824468,0.0009990009990009,29111.932
+Human_Cervical_Cancer,Tier1,other,other,AQP9,AQP9,within_other,Water,0.0032674092824468,0.0009990009990009,2532.1265
+Human_Cervical_Cancer,Tier1,other,other,ABCC1,SLC22A4,within_other,O-Desmethylverapamil (D-702),0.0032674092824468,0.0009990009990009,9219.151
+Human_Cervical_Cancer,Tier1,other,other,ABCC4,SLC22A5,within_other,O-Desmethylverapamil (D-702),0.0032674092824468,0.0009990009990009,1814.1991
+Human_Cervical_Cancer,Tier1,other,other,ABCC1,SLC22A5,within_other,O-Desmethylverapamil (D-702),0.0032674092824468,0.0009990009990009,15185.97
+Human_Cervical_Cancer,Tier1,other,other,SLC24A1,SLC24A1,within_other,Sodium_calcium_potassium exchange,0.0032674092824468,0.0009990009990009,2508.2036
+Human_Cervical_Cancer,Tier1,other,other,CLCN4,CLCN5,within_other,Chloride,0.0032674092824468,0.0009990009990009,1154.3442
+Human_Cervical_Cancer,Tier1,other,other,CLCN3,CLCN3,within_other,Chloride,0.0032674092824468,0.0009990009990009,42546.047
+Human_Cervical_Cancer,Tier1,other,other,CLCN5,CLCN5,within_other,Chloride,0.0032674092824468,0.0009990009990009,5804.05
+Human_Cervical_Cancer,Tier1,other,other,CLCN3,CLCN5,within_other,Chloride,0.0032674092824468,0.0009990009990009,1214.5117
+Human_Cervical_Cancer,Tier1,other,other,CLCN4,CLCN4,within_other,Chloride,0.0032674092824468,0.0009990009990009,1530.0374
+Human_Cervical_Cancer,Tier1,other,other,CLCN3,CLCN4,within_other,Chloride,0.0032674092824468,0.0009990009990009,6022.844
+Human_Cervical_Cancer,Tier1,other,other,SLC9A1,SLC9A1,within_other,Sodium_hydrogen exchange,0.0032674092824468,0.0009990009990009,9230.1875
+Human_Cervical_Cancer,Tier1,other,other,SLC6A9,SLC6A9,within_other,Neurotransmitter,0.0032674092824468,0.0009990009990009,12982.879
+Human_Cervical_Cancer,Tier1,other,other,SLC26A2,SLC26A2,within_other,Anion exchange,0.0032674092824468,0.0009990009990009,9104.621
+Human_Cervical_Cancer,Tier1,other,other,ORAI3,ORAI3,within_other,Calcium release-activated calcium transport,0.0032674092824468,0.0009990009990009,56260.875
+Human_Cervical_Cancer,Tier1,other,other,SCNN1A,SCNN1G,within_other,Amiloride-sensitive sodium transport,0.0032674092824468,0.0009990009990009,7123.0835
+Human_Cervical_Cancer,Tier1,other,other,SCNN1G,SCNN1G,within_other,Amiloride-sensitive sodium transport,0.0032674092824468,0.0009990009990009,185756.44
+Human_Cervical_Cancer,Tier1,other,other,SCNN1A,SCNN1A,within_other,Amiloride-sensitive sodium transport,0.0032674092824468,0.0009990009990009,16945.6
+Human_Cervical_Cancer,Tier1,other,other,SLC23A2,SLC23A2,within_other,Vitamin C,0.0032674092824468,0.0009990009990009,4967.9785
+Human_Cervical_Cancer,Tier1,other,other,SLC38A7,SLC7A5,within_other,L-Glutamine,0.0062527400656897,0.0019980019980019,9477.135
+Human_Cervical_Cancer,Tier1,other,other,SLC16A4,SLC16A4,within_other,Acetate | L-Lactate,0.0062527400656897,0.0019980019980019,1884.24
+Human_Cervical_Cancer,Tier1,other,other,SLC22A4,SLC22A4,within_other,L-Carnitine | O-Desmethylverapamil (D-702) | Putrescine | Sodium | Spermine | Testosterone,0.0062527400656897,0.0019980019980019,1543.9767
+Human_Cervical_Cancer,Tier1,other,other,SLC22A4,SLC5A1,within_other,Sodium,0.0062527400656897,0.0019980019980019,763.0247
+Human_Cervical_Cancer,Tier1,other,other,SCARB1,SCARB1,within_other,alpha-Tocopherol,0.0062527400656897,0.0019980019980019,2508.2363
+Human_Cervical_Cancer,Tier1,other,other,SLC22A4,SLC29A1,within_other,Sodium,0.0089294267376459,0.0029970029970029,3585.1885
+Human_Cervical_Cancer,Tier1,other,other,AQP5,ATP7B,within_other,Water,0.0089294267376459,0.0029970029970029,427.81253
+Human_Cervical_Cancer,Tier1,other,other,ABCC3,FOLR2,within_other,Folic acid,0.011435932488564,0.0039960039960039,635.7368
+Human_Cervical_Cancer,Tier1,other,other,SLC26A3,SLC26A3,within_other,Anion exchange,0.011435932488564,0.0039960039960039,227.777
+Human_Cervical_Cancer,Tier1,other,other,ORAI2,ORAI2,within_other,Calcium release-activated calcium transport,0.011435932488564,0.0039960039960039,4096.0317
+Human_Cervical_Cancer,Tier1,other,other,SLC7A7,SLC7A7,within_other,L-Glutamine,0.0186623192758162,0.0069930069930069,1728.2212
+Human_Cervical_Cancer,Tier1,other,other,ABCB1,SLCO2B1,within_other,Estradiol | Taurocholic acid,0.0186623192758162,0.0069930069930069,2640.4905
+Human_Cervical_Cancer,Tier1,other,other,SLC12A2,SLC22A4,within_other,Sodium,0.0206935921221635,0.0079920079920079,3078.3684
+Human_Cervical_Cancer,Tier1,other,other,ABCC2,ABCC2,within_other,"17a-Ethynylestradiol | 3',4'-Dihydrodiol | Bilirubin | Cholic acid | Folinic acid | Fusidic Acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid",0.0206935921221635,0.0079920079920079,381.3553
+Human_Cervical_Cancer,Tier1,other,other,SLC3A2,SLC43A2,within_other,L-Leucine,0.0224775224775224,0.0089910089910089,10302.469
+Human_Cervical_Cancer,Tier1,other,other,ABCC3,SLCO2B1,within_other,Taurocholic acid,0.0224775224775224,0.0089910089910089,1891.5068
+Human_Cervical_Cancer,Tier1,other,other,SLC6A5,SLC6A9,within_other,Neurotransmitter,0.0224775224775224,0.0089910089910089,552.3497
+Human_Cervical_Cancer,Tier1,other,other,ABCC3,ABCC3,within_other,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | 5-Hydroxyomeprazole | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Deoxycholic acid | Folic acid | Folinic acid | Glutathione | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | O-Desmethylverapamil (D-702) | Sulfolithocholic acid | Taurocholic acid | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0245517194669737,0.0099900099900099,545.66595
+Human_Cervical_Cancer,Tier1,other,other,ABCC3,SLCO1B3,within_other,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Deoxycholic acid | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | Sulfolithocholic acid | Taurocholic acid | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0268551673046055,0.0109890109890109,457.3022
+Human_Cervical_Cancer,Tier1,other,other,SLC9A3,SLC9A3,within_other,Sodium_hydrogen exchange,0.0289710289710289,0.0119880119880119,660.97186
+Human_Cervical_Cancer,Tier1,other,other,SLC6A3,SLC6A3,within_other,Dopamine,0.0371820692676307,0.0159840159840159,338.25937
+Human_Cervical_Cancer,Tier2,CD8 T Cell,other,SLC2A1,SLC2A2,Tcell_interface,D-Galactose | D-Glucose | D-Mannose | Glucosamine,0.0032674092824468,0.0009990009990009,5631.336
+Human_Cervical_Cancer,Tier2,CD8 T Cell,other,SLC2A3,SLC2A3,Tcell_interface,D-Galactose | D-Glucose | D-Maltose | D-Mannose | D-Xylose | Dehydroascorbic acid | Docosahexaenoic acid,0.0032674092824468,0.0009990009990009,15965.394
+Human_Cervical_Cancer,Tier2,CD8 T Cell,other,SLCO2A1,SLCO2A1,Tcell_interface,Arachidonic acid | Eicosanoid | Prostaglandins | Pyruvate,0.0032674092824468,0.0009990009990009,3160.983
+Human_Cervical_Cancer,Tier2,CD8 T Cell,other,SLCO2B1,SLCO2B1,Tcell_interface,Acetate | Citric acid | Estradiol | Nicotinate | Oxalic acid | Taurocholic acid,0.0032674092824468,0.0009990009990009,971.4343
+Human_Cervical_Cancer,Tier2,CD8 T Cell,other,CUBN,SLC40A1,Tcell_interface,Iron,0.0032674092824468,0.0009990009990009,6788.276
+Human_Cervical_Cancer,Tier2,CD8 T Cell,other,ABCA1,ABCA1,Tcell_interface,25-Hydroxycholesterol,0.0032674092824468,0.0009990009990009,1012.2787
+Human_Cervical_Cancer,Tier2,CD8 T Cell,other,FOLR2,FOLR2,Tcell_interface,Folic acid,0.0032674092824468,0.0009990009990009,176.63281
+Human_Cervical_Cancer,Tier2,CD8 T Cell,other,AQP7,AQP7,Tcell_interface,Water,0.0032674092824468,0.0009990009990009,3339.429
+Human_Cervical_Cancer,Tier2,CD8 T Cell,other,SLC40A1,SLC40A1,Tcell_interface,Iron,0.0089294267376459,0.0029970029970029,2127.7395
+Human_Cervical_Cancer,Tier2,CD8 T Cell,other,MSR1,MSR1,Tcell_interface,Fatty acid,0.0089294267376459,0.0029970029970029,434.8812
+Human_Cervical_Cancer,Tier2,CD8 T Cell,other,TAP1,TAP1,Tcell_interface,Adenosine triphosphate,0.0089294267376459,0.0029970029970029,3723.6636
+Human_Cervical_Cancer,Tier2,CD8 T Cell,other,SLC1A3,SLC1A3,Tcell_interface,D-Aspartate | L-Aspartate | L-Glutamate | Malic acid,0.0186623192758162,0.0069930069930069,62.185863
+Human_Cervical_Cancer,Tier2,CD8 T Cell,other,SLC1A5,SLC43A2,Tcell_interface,L-Cysteine | L-Leucine,0.0224775224775224,0.0089910089910089,490.26065
+Human_Cervical_Cancer,Tier2,CD8 T Cell,other,SLCO1C1,SLCO1C1,Tcell_interface,"3',4'-Dihydrodiol | 4'-Hydroxydiclofenac | Estrone sulfate | Taurocholic acid | Thyroxine",0.0224775224775224,0.0089910089910089,33.277172
+Human_Cervical_Cancer,Tier2,CD8 T Cell,other,SLC1A5,SLC5A1,Tcell_interface,Sodium,0.0245517194669737,0.0099900099900099,156.85925
+Human_Cervical_Cancer,Tier2,CD8 T Cell,other,SLC7A5,SLC7A5,Tcell_interface,L-Arginine | L-Glutamine | L-Histidine | L-Leucine | L-Methionine | L-Phenylalanine | L-Tyrosine,0.0356201175873307,0.0149850149850149,229.47693
+Human_Cervical_Cancer,Tier2,CD8 T Cell,other,ABCC4,ABCC4,Tcell_interface,4'-Hydroxydiclofenac | Cholic acid | Cyclic AMP | Folic acid | Folinic acid | Glutathione | Hydroxycelecoxib | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0388821704611178,0.0169830169830169,83.04994
+Human_Cervical_Cancer,Tier2,CD8 T Cell,other,CD38,CD38,Tcell_interface,Adenosine diphosphate ribose,0.0407405094905094,0.0179820179820179,200.84224
+Human_Cervical_Cancer,Tier2,CD8 T Cell,other,SLC39A8,SLC39A8,Tcell_interface,Cadmium | Manganese | Zinc,0.0497263930099751,0.0229770229770229,480.3931
+Human_Cervical_Cancer,Tier2,CD8 T Cell,CD8 T Cell,SLC2A3,SLC2A3,within_Tcell,D-Galactose | D-Glucose | D-Maltose | D-Mannose | D-Xylose | Dehydroascorbic acid | Docosahexaenoic acid,0.0032674092824468,0.0009990009990009,2954.4563
+Human_Cervical_Cancer,Tier2,CD8 T Cell,CD8 T Cell,CUBN,SLC40A1,within_Tcell,Iron,0.0032674092824468,0.0009990009990009,870.09656
+Human_Cervical_Cancer,Tier2,CD8 T Cell,CD8 T Cell,SLC22A4,SLC5A1,within_Tcell,Sodium,0.0186623192758162,0.0069930069930069,33.759533
+Human_Cervical_Cancer,Tier2,CD8 T Cell,CD8 T Cell,AQP7,AQP7,within_Tcell,Water,0.0371820692676307,0.0159840159840159,126.306595
+Human_Cervical_Cancer,Tier2,CD8 T Cell,CD8 T Cell,SLC24A1,SLC24A1,within_Tcell,Sodium_calcium_potassium exchange,0.0388821704611178,0.0169830169830169,68.39631
+Human_Cervical_Cancer,Tier2,other,other,SLC2A9,SLC2A9,within_other,D-Glucose,0.0032674092824468,0.0009990009990009,9241.5625
+Human_Cervical_Cancer,Tier2,other,other,SLC2A1,SLC2A2,within_other,D-Galactose | D-Glucose | D-Mannose | Glucosamine,0.0032674092824468,0.0009990009990009,3769724.8
+Human_Cervical_Cancer,Tier2,other,other,SLC2A1,SLC2A9,within_other,D-Glucose,0.0032674092824468,0.0009990009990009,108581.16
+Human_Cervical_Cancer,Tier2,other,other,SLC2A3,SLC2A3,within_other,D-Galactose | D-Glucose | D-Maltose | D-Mannose | D-Xylose | Dehydroascorbic acid | Docosahexaenoic acid,0.0032674092824468,0.0009990009990009,362700.22
+Human_Cervical_Cancer,Tier2,other,other,SLC2A1,SLC2A1,within_other,D-Galactose | D-Glucose | D-Mannose | Dehydroascorbic acid | Docosahexaenoic acid | Glucosamine,0.0032674092824468,0.0009990009990009,6847.12
+Human_Cervical_Cancer,Tier2,other,other,SLC1A5,SLC3A2,within_other,L-Glutamate | L-Glutamine | L-Leucine | L-Serine,0.0032674092824468,0.0009990009990009,31929.168
+Human_Cervical_Cancer,Tier2,other,other,SLC3A2,SLC3A2,within_other,Iron | L-Cystine | L-Glutamate | L-Glutamine | L-Leucine | L-Serine,0.0032674092824468,0.0009990009990009,110470.875
+Human_Cervical_Cancer,Tier2,other,other,SLC1A5,SLC1A5,within_other,L-Alanine | L-Asparagine | L-Cysteine | L-Glutamate | L-Glutamine | L-Leucine | L-Serine | L-Threonine | Sodium,0.0032674092824468,0.0009990009990009,31966.947
+Human_Cervical_Cancer,Tier2,other,other,SLC7A5,SLC7A5,within_other,L-Arginine | L-Glutamine | L-Histidine | L-Leucine | L-Methionine | L-Phenylalanine | L-Tyrosine,0.0032674092824468,0.0009990009990009,8284.191
+Human_Cervical_Cancer,Tier2,other,other,SLC1A5,SLC38A7,within_other,L-Glutamine,0.0032674092824468,0.0009990009990009,55947.387
+Human_Cervical_Cancer,Tier2,other,other,SLC1A5,SLC7A5,within_other,L-Glutamine | L-Leucine,0.0032674092824468,0.0009990009990009,14012.659
+Human_Cervical_Cancer,Tier2,other,other,SLC3A2,SLC7A5,within_other,L-Glutamine | L-Leucine,0.0032674092824468,0.0009990009990009,573772.56
+Human_Cervical_Cancer,Tier2,other,other,SLC43A2,SLC43A2,within_other,L-Cysteine | L-Isoleucine | L-Leucine | L-Methionine | L-Phenylalanine | L-Valine,0.0032674092824468,0.0009990009990009,6484.7383
+Human_Cervical_Cancer,Tier2,other,other,SLC1A5,SLC7A11,within_other,L-Cysteine | L-Glutamate,0.0032674092824468,0.0009990009990009,4611.814
+Human_Cervical_Cancer,Tier2,other,other,SLC1A5,SLC43A2,within_other,L-Cysteine | L-Leucine,0.0032674092824468,0.0009990009990009,36447.812
+Human_Cervical_Cancer,Tier2,other,other,SLC16A1,SLC16A1,within_other,4-ene-Valproic acid | Acetate | Butyrate | D-Lactate | Ketone bodies | L-Glutamate | L-Lactate | Nicotinate | Pyruvate | Taurocholic acid | alpha-Ketoisovaleric acid,0.0032674092824468,0.0009990009990009,12183.476
+Human_Cervical_Cancer,Tier2,other,other,SLCO2A1,SLCO2A1,within_other,Arachidonic acid | Eicosanoid | Prostaglandins | Pyruvate,0.0032674092824468,0.0009990009990009,638622.44
+Human_Cervical_Cancer,Tier2,other,other,SLC16A1,SLC22A5,within_other,4-ene-Valproic acid | Nicotinate,0.0032674092824468,0.0009990009990009,3910.3596
+Human_Cervical_Cancer,Tier2,other,other,SLC22A5,SLC22A5,within_other,4-ene-Valproic acid | Acetyl-L-Carnitine | Choline | Creatine | Dopamine | Histamine | L-Carnitine | Nicotinate | Norepinephrine | O-Desmethylverapamil (D-702) | Sodium,0.0032674092824468,0.0009990009990009,4106.806
+Human_Cervical_Cancer,Tier2,other,other,SLCO2B1,SLCO2B1,within_other,Acetate | Citric acid | Estradiol | Nicotinate | Oxalic acid | Taurocholic acid,0.0032674092824468,0.0009990009990009,21195.473
+Human_Cervical_Cancer,Tier2,other,other,SLC1A3,SLC1A3,within_other,D-Aspartate | L-Aspartate | L-Glutamate | Malic acid,0.0032674092824468,0.0009990009990009,1936.819
+Human_Cervical_Cancer,Tier2,other,other,SLC1A1,SLC1A1,within_other,L-Glutamate,0.0032674092824468,0.0009990009990009,13486.022
+Human_Cervical_Cancer,Tier2,other,other,SLC16A1,SLC1A3,within_other,L-Glutamate,0.0032674092824468,0.0009990009990009,7901.9023
+Human_Cervical_Cancer,Tier2,other,other,SLC1A3,SLC1A5,within_other,L-Glutamate,0.0032674092824468,0.0009990009990009,13738.116
+Human_Cervical_Cancer,Tier2,other,other,SLC1A2,SLC1A5,within_other,L-Glutamate,0.0032674092824468,0.0009990009990009,440.2886
+Human_Cervical_Cancer,Tier2,other,other,SLC16A1,SLC3A2,within_other,L-Glutamate,0.0032674092824468,0.0009990009990009,1735.2865
+Human_Cervical_Cancer,Tier2,other,other,SLC16A1,SLC1A5,within_other,L-Glutamate,0.0032674092824468,0.0009990009990009,60014.723
+Human_Cervical_Cancer,Tier2,other,other,SLC1A3,SLC3A2,within_other,L-Glutamate,0.0032674092824468,0.0009990009990009,3490.3674
+Human_Cervical_Cancer,Tier2,other,other,SLC1A2,SLC3A2,within_other,L-Glutamate,0.0032674092824468,0.0009990009990009,2643.206
+Human_Cervical_Cancer,Tier2,other,other,SLC39A8,SLC39A8,within_other,Cadmium | Manganese | Zinc,0.0032674092824468,0.0009990009990009,77636.875
+Human_Cervical_Cancer,Tier2,other,other,SLC11A2,SLC3A2,within_other,Iron,0.0032674092824468,0.0009990009990009,83059.38
+Human_Cervical_Cancer,Tier2,other,other,SLC11A2,SLC40A1,within_other,Iron,0.0032674092824468,0.0009990009990009,38425.45
+Human_Cervical_Cancer,Tier2,other,other,SLC3A2,SLC40A1,within_other,Iron,0.0032674092824468,0.0009990009990009,5088.853
+Human_Cervical_Cancer,Tier2,other,other,SLC40A1,SLC40A1,within_other,Iron,0.0032674092824468,0.0009990009990009,132198.66
+Human_Cervical_Cancer,Tier2,other,other,SLC11A2,SLC11A2,within_other,Iron,0.0032674092824468,0.0009990009990009,44008.887
+Human_Cervical_Cancer,Tier2,other,other,CUBN,SLC40A1,within_other,Iron,0.0032674092824468,0.0009990009990009,508796.1
+Human_Cervical_Cancer,Tier2,other,other,SLC16A9,SLC16A9,within_other,L-Carnitine,0.0032674092824468,0.0009990009990009,4779.288
+Human_Cervical_Cancer,Tier2,other,other,SLC1A5,SLC22A5,within_other,Sodium,0.0032674092824468,0.0009990009990009,34371.89
+Human_Cervical_Cancer,Tier2,other,other,SLC12A2,SLC5A5,within_other,Sodium,0.0032674092824468,0.0009990009990009,2325.5186
+Human_Cervical_Cancer,Tier2,other,other,SLC12A2,SLC29A1,within_other,Sodium,0.0032674092824468,0.0009990009990009,12326.364
+Human_Cervical_Cancer,Tier2,other,other,SLC12A2,SLC5A1,within_other,Sodium,0.0032674092824468,0.0009990009990009,2070.2642
+Human_Cervical_Cancer,Tier2,other,other,SLC22A5,SLC5A3,within_other,Sodium,0.0032674092824468,0.0009990009990009,6787.329
+Human_Cervical_Cancer,Tier2,other,other,SLC12A2,SLC12A2,within_other,Chloride ion | Sodium,0.0032674092824468,0.0009990009990009,17226.225
+Human_Cervical_Cancer,Tier2,other,other,SLC29A1,SLC5A3,within_other,Sodium,0.0032674092824468,0.0009990009990009,16630.514
+Human_Cervical_Cancer,Tier2,other,other,SLC12A2,SLC22A5,within_other,Sodium,0.0032674092824468,0.0009990009990009,6121.055
+Human_Cervical_Cancer,Tier2,other,other,SLC5A1,SLC5A5,within_other,Sodium | Urea,0.0032674092824468,0.0009990009990009,1133.2406
+Human_Cervical_Cancer,Tier2,other,other,SLC5A1,SLC5A1,within_other,Sodium | Urea,0.0032674092824468,0.0009990009990009,2469.7034
+Human_Cervical_Cancer,Tier2,other,other,SLC1A5,SLC5A3,within_other,Sodium,0.0032674092824468,0.0009990009990009,98253.09
+Human_Cervical_Cancer,Tier2,other,other,SLC5A3,SLC5A3,within_other,Sodium,0.0032674092824468,0.0009990009990009,34182.047
+Human_Cervical_Cancer,Tier2,other,other,SLC12A2,SLC5A3,within_other,Sodium,0.0032674092824468,0.0009990009990009,15000.384
+Human_Cervical_Cancer,Tier2,other,other,SLC22A5,SLC5A5,within_other,Sodium,0.0032674092824468,0.0009990009990009,1937.2695
+Human_Cervical_Cancer,Tier2,other,other,SLC22A5,SLC29A1,within_other,Sodium,0.0032674092824468,0.0009990009990009,4650.899
+Human_Cervical_Cancer,Tier2,other,other,SLC29A1,SLC29A1,within_other,Adenosine | Cytidine | Ethanol | Guanosine | Inosine | Sodium | Thymidine | Uridine,0.0032674092824468,0.0009990009990009,17352.97
+Human_Cervical_Cancer,Tier2,other,other,SLC1A5,SLC22A4,within_other,Sodium,0.0032674092824468,0.0009990009990009,15010.729
+Human_Cervical_Cancer,Tier2,other,other,SLC12A2,SLC1A5,within_other,Sodium,0.0032674092824468,0.0009990009990009,70377.914
+Human_Cervical_Cancer,Tier2,other,other,SLC22A5,SLC5A1,within_other,Sodium,0.0032674092824468,0.0009990009990009,1149.9376
+Human_Cervical_Cancer,Tier2,other,other,SLC1A5,SLC5A5,within_other,Sodium,0.0032674092824468,0.0009990009990009,7844.2354
+Human_Cervical_Cancer,Tier2,other,other,SLC1A5,SLC29A1,within_other,Sodium,0.0032674092824468,0.0009990009990009,64622.008
+Human_Cervical_Cancer,Tier2,other,other,SLC5A5,SLC5A5,within_other,Sodium | Urea,0.0032674092824468,0.0009990009990009,3432.514
+Human_Cervical_Cancer,Tier2,other,other,SLC1A5,SLC5A1,within_other,Sodium,0.0032674092824468,0.0009990009990009,8414.824
+Human_Cervical_Cancer,Tier2,other,other,SLC22A1,SLC22A1,within_other,Acetylcholine | Choline | Dopamine | Estradiol | N-desmethylimatinib | Norepinephrine | O-Desmethylverapamil (D-702) | Progesterone | Prostaglandins | Serotonin | Spermine | Taurocholic acid | Testosterone | Thymidine,0.0032674092824468,0.0009990009990009,453.10406
+Human_Cervical_Cancer,Tier2,other,other,MSR1,MSR1,within_other,Fatty acid,0.0032674092824468,0.0009990009990009,43438.414
+Human_Cervical_Cancer,Tier2,other,other,CD36,CD36,within_other,Cholesterol | Fatty acid | Vitamin D3,0.0032674092824468,0.0009990009990009,9538.101
+Human_Cervical_Cancer,Tier2,other,other,CPT1A,CPT1A,within_other,Fatty acid,0.0032674092824468,0.0009990009990009,42399.812
+Human_Cervical_Cancer,Tier2,other,other,CD36,MSR1,within_other,Fatty acid,0.0032674092824468,0.0009990009990009,9708.385
+Human_Cervical_Cancer,Tier2,other,other,SLC6A1,SLC6A1,within_other,GABA,0.0032674092824468,0.0009990009990009,883.72534
+Human_Cervical_Cancer,Tier2,other,other,ABCA1,ABCA1,within_other,25-Hydroxycholesterol,0.0032674092824468,0.0009990009990009,100446.555
+Human_Cervical_Cancer,Tier2,other,other,ABCB1,ABCG2,within_other,5-Hydroxyomeprazole | Cholesterol | Cortisol | Estradiol | Hydroxylansoprazole | N-Desmethyltamoxifen | N-desmethylimatinib | O-Desmethylverapamil (D-702) | Taurocholic acid | Testosterone,0.0032674092824468,0.0009990009990009,2388.823
+Human_Cervical_Cancer,Tier2,other,other,ABCG2,ABCG2,within_other,5-Hydroxyomeprazole | Cholesterol | Cortisol | Estradiol | Folic acid | Hydroxylansoprazole | N-Desmethyltamoxifen | N-desmethylimatinib | O-Desmethylverapamil (D-702) | Taurocholic acid | Testosterone,0.0032674092824468,0.0009990009990009,5195.3228
+Human_Cervical_Cancer,Tier2,other,other,ABCB1,ABCB1,within_other,"17a-Ethynylestradiol | 2-Hydroxychlorpropamide | 3',4'-Dihydrodiol | 4'-Hydroxydiclofenac | 4-Hydroxycyclophosphamide | 5-Hydroxyomeprazole | 8-Hydroxycarvedilol | Cholesterol | Cholic acid | Cortisol | E-3179 | Estradiol | Estriol | Glycerol | Hydroxylansoprazole | N-Desmethylcitalopram | N-Desmethyleletriptan | N-Desmethyltamoxifen | N-desmethylimatinib | O-Deethylated candesartan | O-Desmethylverapamil (D-702) | Progesterone | Taurocholic acid | Testosterone",0.0032674092824468,0.0009990009990009,2798.248
+Human_Cervical_Cancer,Tier2,other,other,SLC20A2,SLC20A2,within_other,Phosphate,0.0032674092824468,0.0009990009990009,15098.428
+Human_Cervical_Cancer,Tier2,other,other,ATP7A,ATP7A,within_other,ADP | Adenosine triphosphate | Phosphate | Water,0.0032674092824468,0.0009990009990009,6186.6997
+Human_Cervical_Cancer,Tier2,other,other,ATP7A,SLC20A2,within_other,Phosphate,0.0032674092824468,0.0009990009990009,7592.491
+Human_Cervical_Cancer,Tier2,other,other,CHRNA5,CHRNA5,within_other,Ethanol,0.0032674092824468,0.0009990009990009,2348.3176
+Human_Cervical_Cancer,Tier2,other,other,CHRNA5,SLC29A1,within_other,Ethanol,0.0032674092824468,0.0009990009990009,780.3719
+Human_Cervical_Cancer,Tier2,other,other,ABCC3,FOLR1,within_other,Folic acid,0.0032674092824468,0.0009990009990009,483.16406
+Human_Cervical_Cancer,Tier2,other,other,ABCC4,ABCC4,within_other,4'-Hydroxydiclofenac | Cholic acid | Cyclic AMP | Folic acid | Folinic acid | Glutathione | Hydroxycelecoxib | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0032674092824468,0.0009990009990009,2557.2588
+Human_Cervical_Cancer,Tier2,other,other,FOLR2,FOLR2,within_other,Folic acid,0.0032674092824468,0.0009990009990009,1087.0626
+Human_Cervical_Cancer,Tier2,other,other,FOLR1,FOLR1,within_other,5-Methyltetrahydrofolic acid | Folic acid,0.0032674092824468,0.0009990009990009,1881.6643
+Human_Cervical_Cancer,Tier2,other,other,TRPV6,TRPV6,within_other,Heme,0.0032674092824468,0.0009990009990009,555.9335
+Human_Cervical_Cancer,Tier2,other,other,LRP1,TRPV6,within_other,Heme,0.0032674092824468,0.0009990009990009,4789.7524
+Human_Cervical_Cancer,Tier2,other,other,LRP1,LRP1,within_other,Heme,0.0032674092824468,0.0009990009990009,164962.84
+Human_Cervical_Cancer,Tier2,other,other,SLC29A3,SLC29A3,within_other,Adenine,0.0032674092824468,0.0009990009990009,1688.4376
+Human_Cervical_Cancer,Tier2,other,other,SLC15A1,SLC15A1,within_other,2-Hydroxychlorpropamide | Glycyl-glycine | L-Dopa,0.0032674092824468,0.0009990009990009,606.7991
+Human_Cervical_Cancer,Tier2,other,other,CD38,CD38,within_other,Adenosine diphosphate ribose,0.0032674092824468,0.0009990009990009,3760.7002
+Human_Cervical_Cancer,Tier2,other,other,SLC12A2,SLC12A6,within_other,Chloride ion,0.0032674092824468,0.0009990009990009,10194.88
+Human_Cervical_Cancer,Tier2,other,other,SLC12A6,SLC12A6,within_other,Chloride ion,0.0032674092824468,0.0009990009990009,23600.514
+Human_Cervical_Cancer,Tier2,other,other,ABCB1,ABCC4,within_other,4'-Hydroxydiclofenac | Cholic acid | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0032674092824468,0.0009990009990009,1471.5005
+Human_Cervical_Cancer,Tier2,other,other,ABCC4,SLC16A1,within_other,Taurocholic acid,0.0032674092824468,0.0009990009990009,3378.3325
+Human_Cervical_Cancer,Tier2,other,other,ABCC1,SLCO1B3,within_other,Cholic acid | Taurocholic acid,0.0032674092824468,0.0009990009990009,5259.4375
+Human_Cervical_Cancer,Tier2,other,other,SLCO1B3,SLCO1B3,within_other,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | 4-Hydroxyvalsartan | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Dehydroepiandrosterone | Deoxycholic acid | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | Sulfolithocholic acid | Taurocholic acid | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0032674092824468,0.0009990009990009,5362.8115
+Human_Cervical_Cancer,Tier2,other,other,ABCC1,SLC16A1,within_other,Taurocholic acid,0.0032674092824468,0.0009990009990009,27818.545
+Human_Cervical_Cancer,Tier2,other,other,ABCC1,ABCC4,within_other,4'-Hydroxydiclofenac | Cholic acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0032674092824468,0.0009990009990009,12828.73
+Human_Cervical_Cancer,Tier2,other,other,ABCC1,ABCC1,within_other,4'-Hydroxydiclofenac | Cholic acid | Glutathione | Leukotriene C4 | O-Desmethylverapamil (D-702) | Progesterone | Taurocholic acid,0.0032674092824468,0.0009990009990009,114282.78
+Human_Cervical_Cancer,Tier2,other,other,ABCC1,ABCC3,within_other,Cholic acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0032674092824468,0.0009990009990009,5370.5176
+Human_Cervical_Cancer,Tier2,other,other,SLCO1B1,SLCO1B3,within_other,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | 4-Hydroxyvalsartan | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Dehydroepiandrosterone | Deoxycholic acid | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | Sulfolithocholic acid | Taurocholic acid | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0032674092824468,0.0009990009990009,333.03122
+Human_Cervical_Cancer,Tier2,other,other,TAP1,TAP1,within_other,Adenosine triphosphate,0.0032674092824468,0.0009990009990009,157115.75
+Human_Cervical_Cancer,Tier2,other,other,ATP7A,TAP1,within_other,Adenosine triphosphate,0.0032674092824468,0.0009990009990009,24070.14
+Human_Cervical_Cancer,Tier2,other,other,AQP7,AQP7,within_other,Water,0.0032674092824468,0.0009990009990009,639622.1
+Human_Cervical_Cancer,Tier2,other,other,AQP5,AQP5,within_other,Water,0.0032674092824468,0.0009990009990009,6426.2397
+Human_Cervical_Cancer,Tier2,other,other,AQP1,AQP1,within_other,Water,0.0032674092824468,0.0009990009990009,16549.707
+Human_Cervical_Cancer,Tier2,other,other,AQP1,ATP7B,within_other,Water,0.0032674092824468,0.0009990009990009,1804.2665
+Human_Cervical_Cancer,Tier2,other,other,AQP1,AQP7,within_other,Water,0.0032674092824468,0.0009990009990009,29111.932
+Human_Cervical_Cancer,Tier2,other,other,AQP9,AQP9,within_other,Water,0.0032674092824468,0.0009990009990009,2532.1265
+Human_Cervical_Cancer,Tier2,other,other,ABCC1,SLC22A4,within_other,O-Desmethylverapamil (D-702),0.0032674092824468,0.0009990009990009,9219.151
+Human_Cervical_Cancer,Tier2,other,other,ABCC4,SLC22A5,within_other,O-Desmethylverapamil (D-702),0.0032674092824468,0.0009990009990009,1814.1991
+Human_Cervical_Cancer,Tier2,other,other,ABCC1,SLC22A5,within_other,O-Desmethylverapamil (D-702),0.0032674092824468,0.0009990009990009,15185.97
+Human_Cervical_Cancer,Tier2,other,other,SLC24A1,SLC24A1,within_other,Sodium_calcium_potassium exchange,0.0032674092824468,0.0009990009990009,2508.2036
+Human_Cervical_Cancer,Tier2,other,other,CLCN4,CLCN5,within_other,Chloride,0.0032674092824468,0.0009990009990009,1154.3442
+Human_Cervical_Cancer,Tier2,other,other,CLCN3,CLCN3,within_other,Chloride,0.0032674092824468,0.0009990009990009,42546.047
+Human_Cervical_Cancer,Tier2,other,other,CLCN5,CLCN5,within_other,Chloride,0.0032674092824468,0.0009990009990009,5804.05
+Human_Cervical_Cancer,Tier2,other,other,CLCN3,CLCN5,within_other,Chloride,0.0032674092824468,0.0009990009990009,1214.5117
+Human_Cervical_Cancer,Tier2,other,other,CLCN4,CLCN4,within_other,Chloride,0.0032674092824468,0.0009990009990009,1530.0374
+Human_Cervical_Cancer,Tier2,other,other,CLCN3,CLCN4,within_other,Chloride,0.0032674092824468,0.0009990009990009,6022.844
+Human_Cervical_Cancer,Tier2,other,other,SLC9A1,SLC9A1,within_other,Sodium_hydrogen exchange,0.0032674092824468,0.0009990009990009,9230.1875
+Human_Cervical_Cancer,Tier2,other,other,SLC6A9,SLC6A9,within_other,Neurotransmitter,0.0032674092824468,0.0009990009990009,12982.879
+Human_Cervical_Cancer,Tier2,other,other,SLC26A2,SLC26A2,within_other,Anion exchange,0.0032674092824468,0.0009990009990009,9104.621
+Human_Cervical_Cancer,Tier2,other,other,ORAI3,ORAI3,within_other,Calcium release-activated calcium transport,0.0032674092824468,0.0009990009990009,56260.875
+Human_Cervical_Cancer,Tier2,other,other,SCNN1A,SCNN1G,within_other,Amiloride-sensitive sodium transport,0.0032674092824468,0.0009990009990009,7123.0835
+Human_Cervical_Cancer,Tier2,other,other,SCNN1G,SCNN1G,within_other,Amiloride-sensitive sodium transport,0.0032674092824468,0.0009990009990009,185756.44
+Human_Cervical_Cancer,Tier2,other,other,SCNN1A,SCNN1A,within_other,Amiloride-sensitive sodium transport,0.0032674092824468,0.0009990009990009,16945.6
+Human_Cervical_Cancer,Tier2,other,other,SLC23A2,SLC23A2,within_other,Vitamin C,0.0032674092824468,0.0009990009990009,4967.9785
+Human_Cervical_Cancer,Tier2,other,other,SLC38A7,SLC7A5,within_other,L-Glutamine,0.0062527400656897,0.0019980019980019,9477.135
+Human_Cervical_Cancer,Tier2,other,other,SLC16A4,SLC16A4,within_other,Acetate | L-Lactate,0.0062527400656897,0.0019980019980019,1884.24
+Human_Cervical_Cancer,Tier2,other,other,SLC22A4,SLC22A4,within_other,L-Carnitine | O-Desmethylverapamil (D-702) | Putrescine | Sodium | Spermine | Testosterone,0.0062527400656897,0.0019980019980019,1543.9767
+Human_Cervical_Cancer,Tier2,other,other,SLC22A4,SLC5A1,within_other,Sodium,0.0062527400656897,0.0019980019980019,763.0247
+Human_Cervical_Cancer,Tier2,other,other,SCARB1,SCARB1,within_other,alpha-Tocopherol,0.0062527400656897,0.0019980019980019,2508.2363
+Human_Cervical_Cancer,Tier2,other,other,SLC22A4,SLC29A1,within_other,Sodium,0.0089294267376459,0.0029970029970029,3585.1885
+Human_Cervical_Cancer,Tier2,other,other,AQP5,ATP7B,within_other,Water,0.0089294267376459,0.0029970029970029,427.81253
+Human_Cervical_Cancer,Tier2,other,other,ABCC3,FOLR2,within_other,Folic acid,0.011435932488564,0.0039960039960039,635.7368
+Human_Cervical_Cancer,Tier2,other,other,SLC26A3,SLC26A3,within_other,Anion exchange,0.011435932488564,0.0039960039960039,227.777
+Human_Cervical_Cancer,Tier2,other,other,ORAI2,ORAI2,within_other,Calcium release-activated calcium transport,0.011435932488564,0.0039960039960039,4096.0317
+Human_Cervical_Cancer,Tier2,other,other,SLC7A7,SLC7A7,within_other,L-Glutamine,0.0186623192758162,0.0069930069930069,1728.2212
+Human_Cervical_Cancer,Tier2,other,other,ABCB1,SLCO2B1,within_other,Estradiol | Taurocholic acid,0.0186623192758162,0.0069930069930069,2640.4905
+Human_Cervical_Cancer,Tier2,other,other,SLC12A2,SLC22A4,within_other,Sodium,0.0206935921221635,0.0079920079920079,3078.3684
+Human_Cervical_Cancer,Tier2,other,other,ABCC2,ABCC2,within_other,"17a-Ethynylestradiol | 3',4'-Dihydrodiol | Bilirubin | Cholic acid | Folinic acid | Fusidic Acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid",0.0206935921221635,0.0079920079920079,381.3553
+Human_Cervical_Cancer,Tier2,other,other,SLC3A2,SLC43A2,within_other,L-Leucine,0.0224775224775224,0.0089910089910089,10302.469
+Human_Cervical_Cancer,Tier2,other,other,ABCC3,SLCO2B1,within_other,Taurocholic acid,0.0224775224775224,0.0089910089910089,1891.5068
+Human_Cervical_Cancer,Tier2,other,other,SLC6A5,SLC6A9,within_other,Neurotransmitter,0.0224775224775224,0.0089910089910089,552.3497
+Human_Cervical_Cancer,Tier2,other,other,ABCC3,ABCC3,within_other,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | 5-Hydroxyomeprazole | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Deoxycholic acid | Folic acid | Folinic acid | Glutathione | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | O-Desmethylverapamil (D-702) | Sulfolithocholic acid | Taurocholic acid | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0245517194669737,0.0099900099900099,545.66595
+Human_Cervical_Cancer,Tier2,other,other,ABCC3,SLCO1B3,within_other,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Deoxycholic acid | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | Sulfolithocholic acid | Taurocholic acid | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0268551673046055,0.0109890109890109,457.3022
+Human_Cervical_Cancer,Tier2,other,other,SLC9A3,SLC9A3,within_other,Sodium_hydrogen exchange,0.0289710289710289,0.0119880119880119,660.97186
+Human_Cervical_Cancer,Tier2,other,other,SLC6A3,SLC6A3,within_other,Dopamine,0.0371820692676307,0.0159840159840159,338.25937
+Human_Cervical_Cancer,Tier3,Exhausted/Activated CD8 T cell (CTLA4+),other,SLC2A1,SLC2A2,Tcell_interface,D-Galactose | D-Glucose | D-Mannose | Glucosamine,0.0057942057942057,0.0009990009990009,2597.8616
+Human_Cervical_Cancer,Tier3,Exhausted/Activated CD8 T cell (CTLA4+),other,SLC2A3,SLC2A3,Tcell_interface,D-Galactose | D-Glucose | D-Maltose | D-Mannose | D-Xylose | Dehydroascorbic acid | Docosahexaenoic acid,0.0057942057942057,0.0009990009990009,5294.7407
+Human_Cervical_Cancer,Tier3,Exhausted/Activated CD8 T cell (CTLA4+),other,SLCO2A1,SLCO2A1,Tcell_interface,Arachidonic acid | Eicosanoid | Prostaglandins | Pyruvate,0.0057942057942057,0.0009990009990009,994.42285
+Human_Cervical_Cancer,Tier3,Exhausted/Activated CD8 T cell (CTLA4+),other,SLCO2B1,SLCO2B1,Tcell_interface,Acetate | Citric acid | Estradiol | Nicotinate | Oxalic acid | Taurocholic acid,0.0057942057942057,0.0009990009990009,600.72955
+Human_Cervical_Cancer,Tier3,Exhausted/Activated CD8 T cell (CTLA4+),other,CUBN,SLC40A1,Tcell_interface,Iron,0.0057942057942057,0.0009990009990009,1656.9491
+Human_Cervical_Cancer,Tier3,Exhausted/Activated CD8 T cell (CTLA4+),other,AQP7,AQP7,Tcell_interface,Water,0.0057942057942057,0.0009990009990009,992.89935
+Human_Cervical_Cancer,Tier3,Memory CD8 T cell,other,SLC2A3,SLC2A3,Tcell_interface,D-Galactose | D-Glucose | D-Maltose | D-Mannose | D-Xylose | Dehydroascorbic acid | Docosahexaenoic acid,0.0057942057942057,0.0009990009990009,10670.652
+Human_Cervical_Cancer,Tier3,Memory CD8 T cell,other,SLCO2A1,SLCO2A1,Tcell_interface,Arachidonic acid | Eicosanoid | Prostaglandins | Pyruvate,0.0057942057942057,0.0009990009990009,2166.56
+Human_Cervical_Cancer,Tier3,Memory CD8 T cell,other,SLCO2B1,SLCO2B1,Tcell_interface,Acetate | Citric acid | Estradiol | Nicotinate | Oxalic acid | Taurocholic acid,0.0057942057942057,0.0009990009990009,370.70474
+Human_Cervical_Cancer,Tier3,Memory CD8 T cell,other,SLC1A3,SLC1A3,Tcell_interface,D-Aspartate | L-Aspartate | L-Glutamate | Malic acid,0.0057942057942057,0.0009990009990009,62.185863
+Human_Cervical_Cancer,Tier3,Memory CD8 T cell,other,SLC40A1,SLC40A1,Tcell_interface,Iron,0.0057942057942057,0.0009990009990009,1588.5109
+Human_Cervical_Cancer,Tier3,Memory CD8 T cell,other,CUBN,SLC40A1,Tcell_interface,Iron,0.0057942057942057,0.0009990009990009,5131.327
+Human_Cervical_Cancer,Tier3,Memory CD8 T cell,other,AQP7,AQP7,Tcell_interface,Water,0.0057942057942057,0.0009990009990009,2346.5295
+Human_Cervical_Cancer,Tier3,Memory CD8 T cell,other,MSR1,MSR1,Tcell_interface,Fatty acid,0.0091971520542949,0.0019980019980019,355.66306
+Human_Cervical_Cancer,Tier3,Memory CD8 T cell,other,TAP1,TAP1,Tcell_interface,Adenosine triphosphate,0.0091971520542949,0.0019980019980019,2228.8508
+Human_Cervical_Cancer,Tier3,Exhausted/Activated CD8 T cell (CTLA4+),Memory CD8 T cell,CUBN,SLC40A1,Tcell_interface,Iron,0.0124755627147971,0.0029970029970029,166.59503
+Human_Cervical_Cancer,Tier3,Memory CD8 T cell,other,ABCA1,ABCA1,Tcell_interface,25-Hydroxycholesterol,0.0149850149850149,0.0039960039960039,539.2447
+Human_Cervical_Cancer,Tier3,Exhausted/Activated CD8 T cell (CTLA4+),Memory CD8 T cell,SLC2A3,SLC2A3,Tcell_interface,D-Galactose | D-Glucose | D-Maltose | D-Mannose | D-Xylose | Dehydroascorbic acid | Docosahexaenoic acid,0.0175227997808643,0.0049950049950049,654.653
+Human_Cervical_Cancer,Tier3,Memory CD8 T cell,other,FOLR2,FOLR2,Tcell_interface,Folic acid,0.0199037603617756,0.0059940059940059,89.030106
+Human_Cervical_Cancer,Tier3,Exhausted/Activated CD8 T cell (CTLA4+),other,SLCO1C1,SLCO1C1,Tcell_interface,"3',4'-Dihydrodiol | 4'-Hydroxydiclofenac | Estrone sulfate | Taurocholic acid | Thyroxine",0.0225330225330225,0.0069930069930069,33.277172
+Human_Cervical_Cancer,Tier3,Exhausted/Activated CD8 T cell (CTLA4+),other,FOLR2,FOLR2,Tcell_interface,Folic acid,0.0225330225330225,0.0069930069930069,87.60271
+Human_Cervical_Cancer,Tier3,Memory CD8 T cell,other,SLC3A2,SLC40A1,Tcell_interface,Iron,0.0245690705054662,0.0079920079920079,360.59988
+Human_Cervical_Cancer,Tier3,Exhausted/Activated CD8 T cell (CTLA4+),other,ORAI2,ORAI2,Tcell_interface,Calcium release-activated calcium transport,0.0265158570243316,0.0089910089910089,131.41187
+Human_Cervical_Cancer,Tier3,Memory CD8 T cell,other,SLC7A5,SLC7A5,Tcell_interface,L-Arginine | L-Glutamine | L-Histidine | L-Leucine | L-Methionine | L-Phenylalanine | L-Tyrosine,0.0302545555710112,0.0109890109890109,179.02414
+Human_Cervical_Cancer,Tier3,Exhausted/Activated CD8 T cell (CTLA4+),other,SLC6A3,SLC6A3,Tcell_interface,Dopamine,0.0341350492407894,0.0129870129870129,33.874935
+Human_Cervical_Cancer,Tier3,Memory CD8 T cell,other,SCNN1A,SCNN1A,Tcell_interface,Amiloride-sensitive sodium transport,0.0444441921714649,0.0179820179820179,64.01158
+Human_Cervical_Cancer,Tier3,Exhausted/Activated CD8 T cell (CTLA4+),other,SLC16A4,SLC16A4,Tcell_interface,Acetate | L-Lactate,0.0482850482850482,0.0199800199800199,61.290337
+Human_Cervical_Cancer,Tier3,Exhausted/Activated CD8 T cell (CTLA4+),other,ABCB1,ABCB1,Tcell_interface,"17a-Ethynylestradiol | 2-Hydroxychlorpropamide | 3',4'-Dihydrodiol | 4'-Hydroxydiclofenac | 4-Hydroxycyclophosphamide | 5-Hydroxyomeprazole | 8-Hydroxycarvedilol | Cholesterol | Cholic acid | Cortisol | E-3179 | Estradiol | Estriol | Glycerol | Hydroxylansoprazole | N-Desmethylcitalopram | N-Desmethyleletriptan | N-Desmethyltamoxifen | N-desmethylimatinib | O-Deethylated candesartan | O-Desmethylverapamil (D-702) | Progesterone | Taurocholic acid | Testosterone",0.0498681646222629,0.0209790209790209,47.88289
+Human_Cervical_Cancer,Tier3,Memory CD8 T cell,Memory CD8 T cell,CUBN,SLC40A1,within_Tcell,Iron,0.0057942057942057,0.0009990009990009,510.25195
+Human_Cervical_Cancer,Tier3,Memory CD8 T cell,Memory CD8 T cell,SLC22A4,SLC5A1,within_Tcell,Sodium,0.0124755627147971,0.0029970029970029,33.759533
+Human_Cervical_Cancer,Tier3,Memory CD8 T cell,Memory CD8 T cell,SLC24A1,SLC24A1,within_Tcell,Sodium_calcium_potassium exchange,0.0175227997808643,0.0049950049950049,68.39631
+Human_Cervical_Cancer,Tier3,Exhausted/Activated CD8 T cell (CTLA4+),Exhausted/Activated CD8 T cell (CTLA4+),SLC2A3,SLC2A3,within_Tcell,D-Galactose | D-Glucose | D-Maltose | D-Mannose | D-Xylose | Dehydroascorbic acid | Docosahexaenoic acid,0.0199037603617756,0.0059940059940059,523.1701
+Human_Cervical_Cancer,Tier3,Exhausted/Activated CD8 T cell (CTLA4+),Exhausted/Activated CD8 T cell (CTLA4+),SLCO2A1,SLCO2A1,within_Tcell,Arachidonic acid | Eicosanoid | Prostaglandins | Pyruvate,0.0245690705054662,0.0079920079920079,62.257267
+Human_Cervical_Cancer,Tier3,Memory CD8 T cell,Memory CD8 T cell,SLC1A5,SLC22A4,within_Tcell,Sodium,0.0403075185683881,0.0159840159840159,38.484222
+Human_Cervical_Cancer,Tier3,other,other,SLC2A9,SLC2A9,within_other,D-Glucose,0.0057942057942057,0.0009990009990009,9241.5625
+Human_Cervical_Cancer,Tier3,other,other,SLC2A1,SLC2A2,within_other,D-Galactose | D-Glucose | D-Mannose | Glucosamine,0.0057942057942057,0.0009990009990009,3769724.8
+Human_Cervical_Cancer,Tier3,other,other,SLC2A1,SLC2A9,within_other,D-Glucose,0.0057942057942057,0.0009990009990009,108581.16
+Human_Cervical_Cancer,Tier3,other,other,SLC2A3,SLC2A3,within_other,D-Galactose | D-Glucose | D-Maltose | D-Mannose | D-Xylose | Dehydroascorbic acid | Docosahexaenoic acid,0.0057942057942057,0.0009990009990009,362700.22
+Human_Cervical_Cancer,Tier3,other,other,SLC2A1,SLC2A1,within_other,D-Galactose | D-Glucose | D-Mannose | Dehydroascorbic acid | Docosahexaenoic acid | Glucosamine,0.0057942057942057,0.0009990009990009,6847.12
+Human_Cervical_Cancer,Tier3,other,other,SLC1A5,SLC3A2,within_other,L-Glutamate | L-Glutamine | L-Leucine | L-Serine,0.0057942057942057,0.0009990009990009,31929.168
+Human_Cervical_Cancer,Tier3,other,other,SLC3A2,SLC3A2,within_other,Iron | L-Cystine | L-Glutamate | L-Glutamine | L-Leucine | L-Serine,0.0057942057942057,0.0009990009990009,110470.875
+Human_Cervical_Cancer,Tier3,other,other,SLC1A5,SLC1A5,within_other,L-Alanine | L-Asparagine | L-Cysteine | L-Glutamate | L-Glutamine | L-Leucine | L-Serine | L-Threonine | Sodium,0.0057942057942057,0.0009990009990009,31966.947
+Human_Cervical_Cancer,Tier3,other,other,SLC7A5,SLC7A5,within_other,L-Arginine | L-Glutamine | L-Histidine | L-Leucine | L-Methionine | L-Phenylalanine | L-Tyrosine,0.0057942057942057,0.0009990009990009,8284.191
+Human_Cervical_Cancer,Tier3,other,other,SLC1A5,SLC38A7,within_other,L-Glutamine,0.0057942057942057,0.0009990009990009,55947.387
+Human_Cervical_Cancer,Tier3,other,other,SLC1A5,SLC7A5,within_other,L-Glutamine | L-Leucine,0.0057942057942057,0.0009990009990009,14012.659
+Human_Cervical_Cancer,Tier3,other,other,SLC3A2,SLC7A5,within_other,L-Glutamine | L-Leucine,0.0057942057942057,0.0009990009990009,573772.56
+Human_Cervical_Cancer,Tier3,other,other,SLC43A2,SLC43A2,within_other,L-Cysteine | L-Isoleucine | L-Leucine | L-Methionine | L-Phenylalanine | L-Valine,0.0057942057942057,0.0009990009990009,6484.7383
+Human_Cervical_Cancer,Tier3,other,other,SLC1A5,SLC43A2,within_other,L-Cysteine | L-Leucine,0.0057942057942057,0.0009990009990009,36447.812
+Human_Cervical_Cancer,Tier3,other,other,SLC16A1,SLC16A1,within_other,4-ene-Valproic acid | Acetate | Butyrate | D-Lactate | Ketone bodies | L-Glutamate | L-Lactate | Nicotinate | Pyruvate | Taurocholic acid | alpha-Ketoisovaleric acid,0.0057942057942057,0.0009990009990009,12183.476
+Human_Cervical_Cancer,Tier3,other,other,SLC16A4,SLC16A4,within_other,Acetate | L-Lactate,0.0057942057942057,0.0009990009990009,1884.24
+Human_Cervical_Cancer,Tier3,other,other,SLCO2A1,SLCO2A1,within_other,Arachidonic acid | Eicosanoid | Prostaglandins | Pyruvate,0.0057942057942057,0.0009990009990009,638622.44
+Human_Cervical_Cancer,Tier3,other,other,SLC16A1,SLC22A5,within_other,4-ene-Valproic acid | Nicotinate,0.0057942057942057,0.0009990009990009,3910.3596
+Human_Cervical_Cancer,Tier3,other,other,SLC22A5,SLC22A5,within_other,4-ene-Valproic acid | Acetyl-L-Carnitine | Choline | Creatine | Dopamine | Histamine | L-Carnitine | Nicotinate | Norepinephrine | O-Desmethylverapamil (D-702) | Sodium,0.0057942057942057,0.0009990009990009,4106.806
+Human_Cervical_Cancer,Tier3,other,other,SLCO2B1,SLCO2B1,within_other,Acetate | Citric acid | Estradiol | Nicotinate | Oxalic acid | Taurocholic acid,0.0057942057942057,0.0009990009990009,21195.473
+Human_Cervical_Cancer,Tier3,other,other,SLC1A3,SLC1A3,within_other,D-Aspartate | L-Aspartate | L-Glutamate | Malic acid,0.0057942057942057,0.0009990009990009,1936.819
+Human_Cervical_Cancer,Tier3,other,other,SLC1A1,SLC1A1,within_other,L-Glutamate,0.0057942057942057,0.0009990009990009,13486.022
+Human_Cervical_Cancer,Tier3,other,other,SLC16A1,SLC1A3,within_other,L-Glutamate,0.0057942057942057,0.0009990009990009,7901.9023
+Human_Cervical_Cancer,Tier3,other,other,SLC1A3,SLC1A5,within_other,L-Glutamate,0.0057942057942057,0.0009990009990009,13738.116
+Human_Cervical_Cancer,Tier3,other,other,SLC16A1,SLC3A2,within_other,L-Glutamate,0.0057942057942057,0.0009990009990009,1735.2865
+Human_Cervical_Cancer,Tier3,other,other,SLC16A1,SLC1A5,within_other,L-Glutamate,0.0057942057942057,0.0009990009990009,60014.723
+Human_Cervical_Cancer,Tier3,other,other,SLC1A3,SLC3A2,within_other,L-Glutamate,0.0057942057942057,0.0009990009990009,3490.3674
+Human_Cervical_Cancer,Tier3,other,other,SLC39A8,SLC39A8,within_other,Cadmium | Manganese | Zinc,0.0057942057942057,0.0009990009990009,77636.875
+Human_Cervical_Cancer,Tier3,other,other,SLC11A2,SLC3A2,within_other,Iron,0.0057942057942057,0.0009990009990009,83059.38
+Human_Cervical_Cancer,Tier3,other,other,SLC11A2,SLC40A1,within_other,Iron,0.0057942057942057,0.0009990009990009,38425.45
+Human_Cervical_Cancer,Tier3,other,other,SLC3A2,SLC40A1,within_other,Iron,0.0057942057942057,0.0009990009990009,5088.853
+Human_Cervical_Cancer,Tier3,other,other,SLC40A1,SLC40A1,within_other,Iron,0.0057942057942057,0.0009990009990009,132198.66
+Human_Cervical_Cancer,Tier3,other,other,SLC11A2,SLC11A2,within_other,Iron,0.0057942057942057,0.0009990009990009,44008.887
+Human_Cervical_Cancer,Tier3,other,other,CUBN,SLC40A1,within_other,Iron,0.0057942057942057,0.0009990009990009,508796.1
+Human_Cervical_Cancer,Tier3,other,other,SLC22A4,SLC22A4,within_other,L-Carnitine | O-Desmethylverapamil (D-702) | Putrescine | Sodium | Spermine | Testosterone,0.0057942057942057,0.0009990009990009,1543.9767
+Human_Cervical_Cancer,Tier3,other,other,SLC16A9,SLC16A9,within_other,L-Carnitine,0.0057942057942057,0.0009990009990009,4779.288
+Human_Cervical_Cancer,Tier3,other,other,SLC1A5,SLC22A5,within_other,Sodium,0.0057942057942057,0.0009990009990009,34371.89
+Human_Cervical_Cancer,Tier3,other,other,SLC12A2,SLC5A5,within_other,Sodium,0.0057942057942057,0.0009990009990009,2325.5186
+Human_Cervical_Cancer,Tier3,other,other,SLC12A2,SLC29A1,within_other,Sodium,0.0057942057942057,0.0009990009990009,12326.364
+Human_Cervical_Cancer,Tier3,other,other,SLC12A2,SLC5A1,within_other,Sodium,0.0057942057942057,0.0009990009990009,2070.2642
+Human_Cervical_Cancer,Tier3,other,other,SLC12A2,SLC12A2,within_other,Chloride ion | Sodium,0.0057942057942057,0.0009990009990009,17226.225
+Human_Cervical_Cancer,Tier3,other,other,SLC29A1,SLC5A3,within_other,Sodium,0.0057942057942057,0.0009990009990009,16630.514
+Human_Cervical_Cancer,Tier3,other,other,SLC12A2,SLC22A5,within_other,Sodium,0.0057942057942057,0.0009990009990009,6121.055
+Human_Cervical_Cancer,Tier3,other,other,SLC5A1,SLC5A5,within_other,Sodium | Urea,0.0057942057942057,0.0009990009990009,1133.2406
+Human_Cervical_Cancer,Tier3,other,other,SLC5A1,SLC5A1,within_other,Sodium | Urea,0.0057942057942057,0.0009990009990009,2469.7034
+Human_Cervical_Cancer,Tier3,other,other,SLC1A5,SLC5A3,within_other,Sodium,0.0057942057942057,0.0009990009990009,98253.09
+Human_Cervical_Cancer,Tier3,other,other,SLC5A3,SLC5A3,within_other,Sodium,0.0057942057942057,0.0009990009990009,34182.047
+Human_Cervical_Cancer,Tier3,other,other,SLC12A2,SLC5A3,within_other,Sodium,0.0057942057942057,0.0009990009990009,15000.384
+Human_Cervical_Cancer,Tier3,other,other,SLC22A5,SLC5A5,within_other,Sodium,0.0057942057942057,0.0009990009990009,1937.2695
+Human_Cervical_Cancer,Tier3,other,other,SLC29A1,SLC29A1,within_other,Adenosine | Cytidine | Ethanol | Guanosine | Inosine | Sodium | Thymidine | Uridine,0.0057942057942057,0.0009990009990009,17352.97
+Human_Cervical_Cancer,Tier3,other,other,SLC1A5,SLC22A4,within_other,Sodium,0.0057942057942057,0.0009990009990009,15010.729
+Human_Cervical_Cancer,Tier3,other,other,SLC12A2,SLC1A5,within_other,Sodium,0.0057942057942057,0.0009990009990009,70377.914
+Human_Cervical_Cancer,Tier3,other,other,SLC22A5,SLC5A1,within_other,Sodium,0.0057942057942057,0.0009990009990009,1149.9376
+Human_Cervical_Cancer,Tier3,other,other,SLC1A5,SLC5A5,within_other,Sodium,0.0057942057942057,0.0009990009990009,7844.2354
+Human_Cervical_Cancer,Tier3,other,other,SLC1A5,SLC29A1,within_other,Sodium,0.0057942057942057,0.0009990009990009,64622.008
+Human_Cervical_Cancer,Tier3,other,other,SLC5A5,SLC5A5,within_other,Sodium | Urea,0.0057942057942057,0.0009990009990009,3432.514
+Human_Cervical_Cancer,Tier3,other,other,SLC1A5,SLC5A1,within_other,Sodium,0.0057942057942057,0.0009990009990009,8414.824
+Human_Cervical_Cancer,Tier3,other,other,SLC22A1,SLC22A1,within_other,Acetylcholine | Choline | Dopamine | Estradiol | N-desmethylimatinib | Norepinephrine | O-Desmethylverapamil (D-702) | Progesterone | Prostaglandins | Serotonin | Spermine | Taurocholic acid | Testosterone | Thymidine,0.0057942057942057,0.0009990009990009,453.10406
+Human_Cervical_Cancer,Tier3,other,other,MSR1,MSR1,within_other,Fatty acid,0.0057942057942057,0.0009990009990009,43438.414
+Human_Cervical_Cancer,Tier3,other,other,CD36,CD36,within_other,Cholesterol | Fatty acid | Vitamin D3,0.0057942057942057,0.0009990009990009,9538.101
+Human_Cervical_Cancer,Tier3,other,other,CPT1A,CPT1A,within_other,Fatty acid,0.0057942057942057,0.0009990009990009,42399.812
+Human_Cervical_Cancer,Tier3,other,other,CD36,MSR1,within_other,Fatty acid,0.0057942057942057,0.0009990009990009,9708.385
+Human_Cervical_Cancer,Tier3,other,other,SLC6A1,SLC6A1,within_other,GABA,0.0057942057942057,0.0009990009990009,883.72534
+Human_Cervical_Cancer,Tier3,other,other,ABCA1,ABCA1,within_other,25-Hydroxycholesterol,0.0057942057942057,0.0009990009990009,100446.555
+Human_Cervical_Cancer,Tier3,other,other,ABCB1,ABCG2,within_other,5-Hydroxyomeprazole | Cholesterol | Cortisol | Estradiol | Hydroxylansoprazole | N-Desmethyltamoxifen | N-desmethylimatinib | O-Desmethylverapamil (D-702) | Taurocholic acid | Testosterone,0.0057942057942057,0.0009990009990009,2388.823
+Human_Cervical_Cancer,Tier3,other,other,ABCG2,ABCG2,within_other,5-Hydroxyomeprazole | Cholesterol | Cortisol | Estradiol | Folic acid | Hydroxylansoprazole | N-Desmethyltamoxifen | N-desmethylimatinib | O-Desmethylverapamil (D-702) | Taurocholic acid | Testosterone,0.0057942057942057,0.0009990009990009,5195.3228
+Human_Cervical_Cancer,Tier3,other,other,ABCB1,ABCB1,within_other,"17a-Ethynylestradiol | 2-Hydroxychlorpropamide | 3',4'-Dihydrodiol | 4'-Hydroxydiclofenac | 4-Hydroxycyclophosphamide | 5-Hydroxyomeprazole | 8-Hydroxycarvedilol | Cholesterol | Cholic acid | Cortisol | E-3179 | Estradiol | Estriol | Glycerol | Hydroxylansoprazole | N-Desmethylcitalopram | N-Desmethyleletriptan | N-Desmethyltamoxifen | N-desmethylimatinib | O-Deethylated candesartan | O-Desmethylverapamil (D-702) | Progesterone | Taurocholic acid | Testosterone",0.0057942057942057,0.0009990009990009,2798.248
+Human_Cervical_Cancer,Tier3,other,other,SLC20A2,SLC20A2,within_other,Phosphate,0.0057942057942057,0.0009990009990009,15098.428
+Human_Cervical_Cancer,Tier3,other,other,ATP7A,ATP7A,within_other,ADP | Adenosine triphosphate | Phosphate | Water,0.0057942057942057,0.0009990009990009,6186.6997
+Human_Cervical_Cancer,Tier3,other,other,ATP7A,SLC20A2,within_other,Phosphate,0.0057942057942057,0.0009990009990009,7592.491
+Human_Cervical_Cancer,Tier3,other,other,CHRNA5,CHRNA5,within_other,Ethanol,0.0057942057942057,0.0009990009990009,2348.3176
+Human_Cervical_Cancer,Tier3,other,other,CHRNA5,SLC29A1,within_other,Ethanol,0.0057942057942057,0.0009990009990009,780.3719
+Human_Cervical_Cancer,Tier3,other,other,ABCC3,FOLR1,within_other,Folic acid,0.0057942057942057,0.0009990009990009,483.16406
+Human_Cervical_Cancer,Tier3,other,other,ABCC4,ABCC4,within_other,4'-Hydroxydiclofenac | Cholic acid | Cyclic AMP | Folic acid | Folinic acid | Glutathione | Hydroxycelecoxib | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0057942057942057,0.0009990009990009,2557.2588
+Human_Cervical_Cancer,Tier3,other,other,FOLR2,FOLR2,within_other,Folic acid,0.0057942057942057,0.0009990009990009,1087.0626
+Human_Cervical_Cancer,Tier3,other,other,FOLR1,FOLR1,within_other,5-Methyltetrahydrofolic acid | Folic acid,0.0057942057942057,0.0009990009990009,1881.6643
+Human_Cervical_Cancer,Tier3,other,other,TRPV6,TRPV6,within_other,Heme,0.0057942057942057,0.0009990009990009,555.9335
+Human_Cervical_Cancer,Tier3,other,other,LRP1,LRP1,within_other,Heme,0.0057942057942057,0.0009990009990009,164962.84
+Human_Cervical_Cancer,Tier3,other,other,SLC29A3,SLC29A3,within_other,Adenine,0.0057942057942057,0.0009990009990009,1688.4376
+Human_Cervical_Cancer,Tier3,other,other,SLC15A1,SLC15A1,within_other,2-Hydroxychlorpropamide | Glycyl-glycine | L-Dopa,0.0057942057942057,0.0009990009990009,606.7991
+Human_Cervical_Cancer,Tier3,other,other,CD38,CD38,within_other,Adenosine diphosphate ribose,0.0057942057942057,0.0009990009990009,3760.7002
+Human_Cervical_Cancer,Tier3,other,other,SLC12A2,SLC12A6,within_other,Chloride ion,0.0057942057942057,0.0009990009990009,10194.88
+Human_Cervical_Cancer,Tier3,other,other,SLC12A6,SLC12A6,within_other,Chloride ion,0.0057942057942057,0.0009990009990009,23600.514
+Human_Cervical_Cancer,Tier3,other,other,SCARB1,SCARB1,within_other,alpha-Tocopherol,0.0057942057942057,0.0009990009990009,2508.2363
+Human_Cervical_Cancer,Tier3,other,other,ABCB1,ABCC4,within_other,4'-Hydroxydiclofenac | Cholic acid | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0057942057942057,0.0009990009990009,1471.5005
+Human_Cervical_Cancer,Tier3,other,other,ABCC4,SLC16A1,within_other,Taurocholic acid,0.0057942057942057,0.0009990009990009,3378.3325
+Human_Cervical_Cancer,Tier3,other,other,ABCC1,SLCO1B3,within_other,Cholic acid | Taurocholic acid,0.0057942057942057,0.0009990009990009,5259.4375
+Human_Cervical_Cancer,Tier3,other,other,SLCO1B3,SLCO1B3,within_other,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | 4-Hydroxyvalsartan | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Dehydroepiandrosterone | Deoxycholic acid | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | Sulfolithocholic acid | Taurocholic acid | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0057942057942057,0.0009990009990009,5362.8115
+Human_Cervical_Cancer,Tier3,other,other,ABCB1,SLCO2B1,within_other,Estradiol | Taurocholic acid,0.0057942057942057,0.0009990009990009,2640.4905
+Human_Cervical_Cancer,Tier3,other,other,ABCC1,SLC16A1,within_other,Taurocholic acid,0.0057942057942057,0.0009990009990009,27818.545
+Human_Cervical_Cancer,Tier3,other,other,ABCC1,ABCC4,within_other,4'-Hydroxydiclofenac | Cholic acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0057942057942057,0.0009990009990009,12828.73
+Human_Cervical_Cancer,Tier3,other,other,ABCC1,ABCC1,within_other,4'-Hydroxydiclofenac | Cholic acid | Glutathione | Leukotriene C4 | O-Desmethylverapamil (D-702) | Progesterone | Taurocholic acid,0.0057942057942057,0.0009990009990009,114282.78
+Human_Cervical_Cancer,Tier3,other,other,ABCC1,ABCC3,within_other,Cholic acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0057942057942057,0.0009990009990009,5370.5176
+Human_Cervical_Cancer,Tier3,other,other,SLCO1B1,SLCO1B3,within_other,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | 4-Hydroxyvalsartan | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Dehydroepiandrosterone | Deoxycholic acid | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | Sulfolithocholic acid | Taurocholic acid | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0057942057942057,0.0009990009990009,333.03122
+Human_Cervical_Cancer,Tier3,other,other,TAP1,TAP1,within_other,Adenosine triphosphate,0.0057942057942057,0.0009990009990009,157115.75
+Human_Cervical_Cancer,Tier3,other,other,ATP7A,TAP1,within_other,Adenosine triphosphate,0.0057942057942057,0.0009990009990009,24070.14
+Human_Cervical_Cancer,Tier3,other,other,AQP7,AQP7,within_other,Water,0.0057942057942057,0.0009990009990009,639622.1
+Human_Cervical_Cancer,Tier3,other,other,AQP5,AQP5,within_other,Water,0.0057942057942057,0.0009990009990009,6426.2397
+Human_Cervical_Cancer,Tier3,other,other,AQP1,AQP1,within_other,Water,0.0057942057942057,0.0009990009990009,16549.707
+Human_Cervical_Cancer,Tier3,other,other,AQP1,ATP7B,within_other,Water,0.0057942057942057,0.0009990009990009,1804.2665
+Human_Cervical_Cancer,Tier3,other,other,AQP1,AQP7,within_other,Water,0.0057942057942057,0.0009990009990009,29111.932
+Human_Cervical_Cancer,Tier3,other,other,AQP9,AQP9,within_other,Water,0.0057942057942057,0.0009990009990009,2532.1265
+Human_Cervical_Cancer,Tier3,other,other,ABCC1,SLC22A4,within_other,O-Desmethylverapamil (D-702),0.0057942057942057,0.0009990009990009,9219.151
+Human_Cervical_Cancer,Tier3,other,other,ABCC1,SLC22A5,within_other,O-Desmethylverapamil (D-702),0.0057942057942057,0.0009990009990009,15185.97
+Human_Cervical_Cancer,Tier3,other,other,SLC24A1,SLC24A1,within_other,Sodium_calcium_potassium exchange,0.0057942057942057,0.0009990009990009,2508.2036
+Human_Cervical_Cancer,Tier3,other,other,CLCN4,CLCN5,within_other,Chloride,0.0057942057942057,0.0009990009990009,1154.3442
+Human_Cervical_Cancer,Tier3,other,other,CLCN3,CLCN3,within_other,Chloride,0.0057942057942057,0.0009990009990009,42546.047
+Human_Cervical_Cancer,Tier3,other,other,CLCN5,CLCN5,within_other,Chloride,0.0057942057942057,0.0009990009990009,5804.05
+Human_Cervical_Cancer,Tier3,other,other,CLCN3,CLCN5,within_other,Chloride,0.0057942057942057,0.0009990009990009,1214.5117
+Human_Cervical_Cancer,Tier3,other,other,CLCN4,CLCN4,within_other,Chloride,0.0057942057942057,0.0009990009990009,1530.0374
+Human_Cervical_Cancer,Tier3,other,other,CLCN3,CLCN4,within_other,Chloride,0.0057942057942057,0.0009990009990009,6022.844
+Human_Cervical_Cancer,Tier3,other,other,SLC9A1,SLC9A1,within_other,Sodium_hydrogen exchange,0.0057942057942057,0.0009990009990009,9230.1875
+Human_Cervical_Cancer,Tier3,other,other,SLC6A9,SLC6A9,within_other,Neurotransmitter,0.0057942057942057,0.0009990009990009,12982.879
+Human_Cervical_Cancer,Tier3,other,other,SLC26A2,SLC26A2,within_other,Anion exchange,0.0057942057942057,0.0009990009990009,9104.621
+Human_Cervical_Cancer,Tier3,other,other,ORAI3,ORAI3,within_other,Calcium release-activated calcium transport,0.0057942057942057,0.0009990009990009,56260.875
+Human_Cervical_Cancer,Tier3,other,other,SCNN1A,SCNN1G,within_other,Amiloride-sensitive sodium transport,0.0057942057942057,0.0009990009990009,7123.0835
+Human_Cervical_Cancer,Tier3,other,other,SCNN1G,SCNN1G,within_other,Amiloride-sensitive sodium transport,0.0057942057942057,0.0009990009990009,185756.44
+Human_Cervical_Cancer,Tier3,other,other,SCNN1A,SCNN1A,within_other,Amiloride-sensitive sodium transport,0.0057942057942057,0.0009990009990009,16945.6
+Human_Cervical_Cancer,Tier3,other,other,SLC23A2,SLC23A2,within_other,Vitamin C,0.0057942057942057,0.0009990009990009,4967.9785
+Human_Cervical_Cancer,Tier3,other,other,SLC38A7,SLC7A5,within_other,L-Glutamine,0.0091971520542949,0.0019980019980019,9477.135
+Human_Cervical_Cancer,Tier3,other,other,SLC1A2,SLC1A5,within_other,L-Glutamate,0.0091971520542949,0.0019980019980019,440.2886
+Human_Cervical_Cancer,Tier3,other,other,SLC1A2,SLC3A2,within_other,L-Glutamate,0.0091971520542949,0.0019980019980019,2643.206
+Human_Cervical_Cancer,Tier3,other,other,SLC22A5,SLC5A3,within_other,Sodium,0.0091971520542949,0.0019980019980019,6787.329
+Human_Cervical_Cancer,Tier3,other,other,ABCC3,FOLR2,within_other,Folic acid,0.0091971520542949,0.0019980019980019,635.7368
+Human_Cervical_Cancer,Tier3,other,other,LRP1,TRPV6,within_other,Heme,0.0091971520542949,0.0019980019980019,4789.7524
+Human_Cervical_Cancer,Tier3,other,other,SLC1A5,SLC7A11,within_other,L-Cysteine | L-Glutamate,0.0124755627147971,0.0029970029970029,4611.814
+Human_Cervical_Cancer,Tier3,other,other,SLC22A4,SLC29A1,within_other,Sodium,0.0124755627147971,0.0029970029970029,3585.1885
+Human_Cervical_Cancer,Tier3,other,other,SLC22A4,SLC5A1,within_other,Sodium,0.0124755627147971,0.0029970029970029,763.0247
+Human_Cervical_Cancer,Tier3,other,other,SLC22A5,SLC29A1,within_other,Sodium,0.0124755627147971,0.0029970029970029,4650.899
+Human_Cervical_Cancer,Tier3,other,other,AQP5,ATP7B,within_other,Water,0.0149850149850149,0.0039960039960039,427.81253
+Human_Cervical_Cancer,Tier3,other,other,ABCC4,SLC22A5,within_other,O-Desmethylverapamil (D-702),0.0149850149850149,0.0039960039960039,1814.1991
+Human_Cervical_Cancer,Tier3,other,other,SLC6A5,SLC6A9,within_other,Neurotransmitter,0.0149850149850149,0.0039960039960039,552.3497
+Human_Cervical_Cancer,Tier3,other,other,SLC26A3,SLC26A3,within_other,Anion exchange,0.0149850149850149,0.0039960039960039,227.777
+Human_Cervical_Cancer,Tier3,other,other,SLC3A2,SLC43A2,within_other,L-Leucine,0.0175227997808643,0.0049950049950049,10302.469
+Human_Cervical_Cancer,Tier3,other,other,ABCC3,SLCO1B3,within_other,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Deoxycholic acid | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | Sulfolithocholic acid | Taurocholic acid | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0175227997808643,0.0049950049950049,457.3022
+Human_Cervical_Cancer,Tier3,other,other,ABCC3,ABCC3,within_other,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | 5-Hydroxyomeprazole | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Deoxycholic acid | Folic acid | Folinic acid | Glutathione | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | O-Desmethylverapamil (D-702) | Sulfolithocholic acid | Taurocholic acid | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0199037603617756,0.0059940059940059,545.66595
+Human_Cervical_Cancer,Tier3,other,other,ABCC2,ABCC2,within_other,"17a-Ethynylestradiol | 3',4'-Dihydrodiol | Bilirubin | Cholic acid | Folinic acid | Fusidic Acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid",0.0199037603617756,0.0059940059940059,381.3553
+Human_Cervical_Cancer,Tier3,other,other,SLC12A2,SLC22A4,within_other,Sodium,0.0225330225330225,0.0069930069930069,3078.3684
+Human_Cervical_Cancer,Tier3,other,other,ABCC3,SLCO2B1,within_other,Taurocholic acid,0.0265158570243316,0.0089910089910089,1891.5068
+Human_Cervical_Cancer,Tier3,other,other,SLC7A7,SLC7A7,within_other,L-Glutamine,0.0284029695794401,0.0099900099900099,1728.2212
+Human_Cervical_Cancer,Tier3,other,other,SLC9A3,SLC9A3,within_other,Sodium_hydrogen exchange,0.0322896917324161,0.0119880119880119,660.97186
+Human_Cervical_Cancer,Tier3,other,other,ORAI2,ORAI2,within_other,Calcium release-activated calcium transport,0.0341350492407894,0.0129870129870129,4096.0317
+Human_Cervical_Cancer,Tier3,other,other,SLC6A3,SLC6A3,within_other,Dopamine,0.0359995034551247,0.0139860139860139,338.25937
+Human_Cervical_Cancer,global,,,SLC2A1,SLC2A1,cell_type_independent,D-Galactose | D-Glucose | D-Mannose | Dehydroascorbic acid | Docosahexaenoic acid | Glucosamine,0.0036945811779928,0.000999001,3781177.806317026
+Human_Cervical_Cancer,global,,,SLC2A1,SLC2A9,cell_type_independent,D-Glucose,0.0036945811779928,0.000999001,218216.55822532848
+Human_Cervical_Cancer,global,,,SLC2A3,SLC2A3,cell_type_independent,D-Galactose | D-Glucose | D-Maltose | D-Mannose | D-Xylose | Dehydroascorbic acid | Docosahexaenoic acid,0.0036945811779928,0.000999001,398174.2152971638
+Human_Cervical_Cancer,global,,,SLC2A9,SLC2A9,cell_type_independent,D-Glucose,0.0036945811779928,0.000999001,6876.210898151468
+Human_Cervical_Cancer,global,,,SLC7A5,SLC7A5,cell_type_independent,L-Arginine | L-Glutamine | L-Histidine | L-Leucine | L-Methionine | L-Phenylalanine | L-Tyrosine,0.0036945811779928,0.000999001,32655.128076008845
+Human_Cervical_Cancer,global,,,SLC1A5,SLC3A2,cell_type_independent,L-Glutamate | L-Glutamine | L-Leucine | L-Serine,0.0036945811779928,0.000999001,224090.57720802937
+Human_Cervical_Cancer,global,,,SLC3A2,SLC3A2,cell_type_independent,Iron | L-Cystine | L-Glutamate | L-Glutamine | L-Leucine | L-Serine,0.0036945811779928,0.000999001,32594.06973627629
+Human_Cervical_Cancer,global,,,SLC7A7,SLC7A7,cell_type_independent,L-Glutamine,0.0036945811779928,0.000999001,8722.351977365277
+Human_Cervical_Cancer,global,,,SLC1A5,SLC7A5,cell_type_independent,L-Glutamine | L-Leucine,0.0036945811779928,0.000999001,114456.3303504105
+Human_Cervical_Cancer,global,,,SLC3A2,SLC7A5,cell_type_independent,L-Glutamine | L-Leucine,0.0036945811779928,0.000999001,29118.70596128951
+Human_Cervical_Cancer,global,,,SLC1A5,SLC1A5,cell_type_independent,L-Alanine | L-Asparagine | L-Cysteine | L-Glutamate | L-Glutamine | L-Leucine | L-Serine | L-Threonine | Sodium,0.0036945811779928,0.000999001,577389.7920664195
+Human_Cervical_Cancer,global,,,SLC43A2,SLC43A2,cell_type_independent,L-Cysteine | L-Isoleucine | L-Leucine | L-Methionine | L-Phenylalanine | L-Valine,0.0036945811779928,0.000999001,6636.169777939598
+Human_Cervical_Cancer,global,,,SLC1A5,SLC43A2,cell_type_independent,L-Cysteine | L-Leucine,0.0036945811779928,0.000999001,74573.14146853524
+Human_Cervical_Cancer,global,,,SLC16A1,SLC16A1,cell_type_independent,4-ene-Valproic acid | Acetate | Butyrate | D-Lactate | Ketone bodies | L-Glutamate | L-Lactate | Nicotinate | Pyruvate | Taurocholic acid | alpha-Ketoisovaleric acid,0.0036945811779928,0.000999001,12328.077292704567
+Human_Cervical_Cancer,global,,,SLC16A4,SLC16A4,cell_type_independent,Acetate | L-Lactate,0.0036945811779928,0.000999001,2041.0173761046767
+Human_Cervical_Cancer,global,,,SLCO2A1,SLCO2A1,cell_type_independent,Arachidonic acid | Eicosanoid | Prostaglandins | Pyruvate,0.0036945811779928,0.000999001,645348.399279836
+Human_Cervical_Cancer,global,,,SLC16A1,SLC22A5,cell_type_independent,4-ene-Valproic acid | Nicotinate,0.0036945811779928,0.000999001,7611.309968592258
+Human_Cervical_Cancer,global,,,SLC22A5,SLC22A5,cell_type_independent,4-ene-Valproic acid | Acetyl-L-Carnitine | Choline | Creatine | Dopamine | Histamine | L-Carnitine | Nicotinate | Norepinephrine | O-Desmethylverapamil (D-702) | Sodium,0.0036945811779928,0.000999001,4142.9046602978
+Human_Cervical_Cancer,global,,,SLCO2B1,SLCO2B1,cell_type_independent,Acetate | Citric acid | Estradiol | Nicotinate | Oxalic acid | Taurocholic acid,0.0036945811779928,0.000999001,23083.08438838704
+Human_Cervical_Cancer,global,,,SLC1A3,SLC1A3,cell_type_independent,D-Aspartate | L-Aspartate | L-Glutamate | Malic acid,0.0036945811779928,0.000999001,2061.190680803676
+Human_Cervical_Cancer,global,,,SLC1A3,SLC1A5,cell_type_independent,L-Glutamate,0.0036945811779928,0.000999001,27559.06723490412
+Human_Cervical_Cancer,global,,,SLC16A1,SLC3A2,cell_type_independent,L-Glutamate,0.0036945811779928,0.000999001,28434.86029286573
+Human_Cervical_Cancer,global,,,SLC1A1,SLC1A1,cell_type_independent,L-Glutamate,0.0036945811779928,0.000999001,440.2886037962383
+Human_Cervical_Cancer,global,,,SLC16A1,SLC1A3,cell_type_independent,L-Glutamate,0.0036945811779928,0.000999001,3563.919579830504
+Human_Cervical_Cancer,global,,,SLC16A1,SLC1A5,cell_type_independent,L-Glutamate,0.0036945811779928,0.000999001,121339.48164964803
+Human_Cervical_Cancer,global,,,SLC1A3,SLC3A2,cell_type_independent,L-Glutamate,0.0036945811779928,0.000999001,7181.620944620604
+Human_Cervical_Cancer,global,,,SLC1A2,SLC3A2,cell_type_independent,L-Glutamate,0.0036945811779928,0.000999001,5808.705279618655
+Human_Cervical_Cancer,global,,,SLC39A8,SLC39A8,cell_type_independent,Cadmium | Manganese | Zinc,0.0036945811779928,0.000999001,78737.68473408016
+Human_Cervical_Cancer,global,,,SLC11A2,SLC11A2,cell_type_independent,Iron,0.0036945811779928,0.000999001,84946.0533316011
+Human_Cervical_Cancer,global,,,SLC11A2,SLC3A2,cell_type_independent,Iron,0.0036945811779928,0.000999001,78587.19767461099
+Human_Cervical_Cancer,global,,,CUBN,SLC40A1,cell_type_independent,Iron,0.0036945811779928,0.000999001,11295.205042811009
+Human_Cervical_Cancer,global,,,SLC11A2,SLC40A1,cell_type_independent,Iron,0.0036945811779928,0.000999001,272109.0352784365
+Human_Cervical_Cancer,global,,,SLC3A2,SLC40A1,cell_type_independent,Iron,0.0036945811779928,0.000999001,91442.23757874875
+Human_Cervical_Cancer,global,,,SLC40A1,SLC40A1,cell_type_independent,Iron,0.0036945811779928,0.000999001,523296.2834108376
+Human_Cervical_Cancer,global,,,SLC22A4,SLC22A4,cell_type_independent,L-Carnitine | O-Desmethylverapamil (D-702) | Putrescine | Sodium | Spermine | Testosterone,0.0036945811779928,0.000999001,1653.045572604326
+Human_Cervical_Cancer,global,,,SLC16A9,SLC16A9,cell_type_independent,L-Carnitine,0.0036945811779928,0.000999001,4801.448770325887
+Human_Cervical_Cancer,global,,,SLC1A5,SLC22A5,cell_type_independent,Sodium,0.0036945811779928,0.000999001,69163.90737723891
+Human_Cervical_Cancer,global,,,SLC12A2,SLC5A5,cell_type_independent,Sodium,0.0036945811779928,0.000999001,4539.19338942487
+Human_Cervical_Cancer,global,,,SLC12A2,SLC29A1,cell_type_independent,Sodium,0.0036945811779928,0.000999001,24941.887517863102
+Human_Cervical_Cancer,global,,,SLC22A5,SLC5A3,cell_type_independent,Sodium,0.0036945811779928,0.000999001,13976.435482785775
+Human_Cervical_Cancer,global,,,SLC12A2,SLC12A2,cell_type_independent,Chloride ion | Sodium,0.0036945811779928,0.000999001,17465.658479351816
+Human_Cervical_Cancer,global,,,SLC29A1,SLC5A3,cell_type_independent,Sodium,0.0036945811779928,0.000999001,34324.12796722437
+Human_Cervical_Cancer,global,,,SLC12A2,SLC22A5,cell_type_independent,Sodium,0.0036945811779928,0.000999001,12372.987775850434
+Human_Cervical_Cancer,global,,,SLC5A1,SLC5A5,cell_type_independent,Sodium | Urea,0.0036945811779928,0.000999001,2195.8575251353805
+Human_Cervical_Cancer,global,,,SLC5A1,SLC5A1,cell_type_independent,Sodium | Urea,0.0036945811779928,0.000999001,2469.7034395563032
+Human_Cervical_Cancer,global,,,SLC1A5,SLC5A3,cell_type_independent,Sodium,0.0036945811779928,0.000999001,199476.27479129884
+Human_Cervical_Cancer,global,,,SLC5A3,SLC5A3,cell_type_independent,Sodium,0.0036945811779928,0.000999001,34992.60101186625
+Human_Cervical_Cancer,global,,,SLC12A2,SLC5A3,cell_type_independent,Sodium,0.0036945811779928,0.000999001,31096.26059700597
+Human_Cervical_Cancer,global,,,SLC22A5,SLC5A5,cell_type_independent,Sodium,0.0036945811779928,0.000999001,3845.061976879325
+Human_Cervical_Cancer,global,,,SLC29A1,SLC29A1,cell_type_independent,Adenosine | Cytidine | Ethanol | Guanosine | Inosine | Sodium | Thymidine | Uridine,0.0036945811779928,0.000999001,17697.143418948297
+Human_Cervical_Cancer,global,,,SLC1A5,SLC22A4,cell_type_independent,Sodium,0.0036945811779928,0.000999001,30426.894427356463
+Human_Cervical_Cancer,global,,,SLC12A2,SLC1A5,cell_type_independent,Sodium,0.0036945811779928,0.000999001,142625.78431400677
+Human_Cervical_Cancer,global,,,SLC22A5,SLC5A1,cell_type_independent,Sodium,0.0036945811779928,0.000999001,2407.4206064575696
+Human_Cervical_Cancer,global,,,SLC1A5,SLC5A5,cell_type_independent,Sodium,0.0036945811779928,0.000999001,16314.523793080534
+Human_Cervical_Cancer,global,,,SLC1A5,SLC29A1,cell_type_independent,Sodium,0.0036945811779928,0.000999001,131620.45284597384
+Human_Cervical_Cancer,global,,,SLC5A5,SLC5A5,cell_type_independent,Sodium | Urea,0.0036945811779928,0.000999001,3432.5139380314854
+Human_Cervical_Cancer,global,,,SLC1A5,SLC5A1,cell_type_independent,Sodium,0.0036945811779928,0.000999001,17911.03106090358
+Human_Cervical_Cancer,global,,,SLC22A1,SLC22A1,cell_type_independent,Acetylcholine | Choline | Dopamine | Estradiol | N-desmethylimatinib | Norepinephrine | O-Desmethylverapamil (D-702) | Progesterone | Prostaglandins | Serotonin | Spermine | Taurocholic acid | Testosterone | Thymidine,0.0036945811779928,0.000999001,453.1040566706477
+Human_Cervical_Cancer,global,,,MSR1,MSR1,cell_type_independent,Fatty acid,0.0036945811779928,0.000999001,44379.78269053898
+Human_Cervical_Cancer,global,,,CD36,CD36,cell_type_independent,Cholesterol | Fatty acid | Vitamin D3,0.0036945811779928,0.000999001,9602.826371066978
+Human_Cervical_Cancer,global,,,CPT1A,CPT1A,cell_type_independent,Fatty acid,0.0036945811779928,0.000999001,43488.37390801028
+Human_Cervical_Cancer,global,,,CD36,MSR1,cell_type_independent,Fatty acid,0.0036945811779928,0.000999001,19676.581400116083
+Human_Cervical_Cancer,global,,,SLC6A1,SLC6A1,cell_type_independent,GABA,0.0036945811779928,0.000999001,883.7253250338076
+Human_Cervical_Cancer,global,,,ABCA1,ABCA1,cell_type_independent,25-Hydroxycholesterol,0.0036945811779928,0.000999001,102518.04596899266
+Human_Cervical_Cancer,global,,,ABCB1,ABCG2,cell_type_independent,5-Hydroxyomeprazole | Cholesterol | Cortisol | Estradiol | Hydroxylansoprazole | N-Desmethyltamoxifen | N-desmethylimatinib | O-Desmethylverapamil (D-702) | Taurocholic acid | Testosterone,0.0036945811779928,0.000999001,4841.95694485972
+Human_Cervical_Cancer,global,,,ABCG2,ABCG2,cell_type_independent,5-Hydroxyomeprazole | Cholesterol | Cortisol | Estradiol | Folic acid | Hydroxylansoprazole | N-Desmethyltamoxifen | N-desmethylimatinib | O-Desmethylverapamil (D-702) | Taurocholic acid | Testosterone,0.0036945811779928,0.000999001,5232.435494411658
+Human_Cervical_Cancer,global,,,ABCB1,ABCB1,cell_type_independent,"17a-Ethynylestradiol | 2-Hydroxychlorpropamide | 3',4'-Dihydrodiol | 4'-Hydroxydiclofenac | 4-Hydroxycyclophosphamide | 5-Hydroxyomeprazole | 8-Hydroxycarvedilol | Cholesterol | Cholic acid | Cortisol | E-3179 | Estradiol | Estriol | Glycerol | Hydroxylansoprazole | N-Desmethylcitalopram | N-Desmethyleletriptan | N-Desmethyltamoxifen | N-desmethylimatinib | O-Deethylated candesartan | O-Desmethylverapamil (D-702) | Progesterone | Taurocholic acid | Testosterone",0.0036945811779928,0.000999001,2987.09132211052
+Human_Cervical_Cancer,global,,,SLC20A2,SLC20A2,cell_type_independent,Phosphate,0.0036945811779928,0.000999001,15304.384411171068
+Human_Cervical_Cancer,global,,,ATP7A,ATP7A,cell_type_independent,ADP | Adenosine triphosphate | Phosphate | Water,0.0036945811779928,0.000999001,6429.881064615409
+Human_Cervical_Cancer,global,,,ATP7A,SLC20A2,cell_type_independent,Phosphate,0.0036945811779928,0.000999001,15064.380633594028
+Human_Cervical_Cancer,global,,,CHRNA5,SLC29A1,cell_type_independent,Ethanol,0.0036945811779928,0.000999001,4642.829657080107
+Human_Cervical_Cancer,global,,,CHRNA5,CHRNA5,cell_type_independent,Ethanol,0.0036945811779928,0.000999001,780.3718982235838
+Human_Cervical_Cancer,global,,,ABCC3,FOLR1,cell_type_independent,Folic acid,0.0036945811779928,0.000999001,1025.0103711764018
+Human_Cervical_Cancer,global,,,ABCC4,ABCC4,cell_type_independent,4'-Hydroxydiclofenac | Cholic acid | Cyclic AMP | Folic acid | Folinic acid | Glutathione | Hydroxycelecoxib | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0036945811779928,0.000999001,2695.51771719689
+Human_Cervical_Cancer,global,,,FOLR2,FOLR2,cell_type_independent,Folic acid,0.0036945811779928,0.000999001,1409.7727986817345
+Human_Cervical_Cancer,global,,,FOLR1,FOLR1,cell_type_independent,5-Methyltetrahydrofolic acid | Folic acid,0.0036945811779928,0.000999001,1931.60061829188
+Human_Cervical_Cancer,global,,,TRPV6,TRPV6,cell_type_independent,Heme,0.0036945811779928,0.000999001,555.9334421835915
+Human_Cervical_Cancer,global,,,LRP1,LRP1,cell_type_independent,Heme,0.0036945811779928,0.000999001,166214.2974501885
+Human_Cervical_Cancer,global,,,SLC29A3,SLC29A3,cell_type_independent,Adenine,0.0036945811779928,0.000999001,1788.7369039780326
+Human_Cervical_Cancer,global,,,SLC15A1,SLC15A1,cell_type_independent,2-Hydroxychlorpropamide | Glycyl-glycine | L-Dopa,0.0036945811779928,0.000999001,606.7990564621389
+Human_Cervical_Cancer,global,,,CD38,CD38,cell_type_independent,Adenosine diphosphate ribose,0.0036945811779928,0.000999001,4149.288470682202
+Human_Cervical_Cancer,global,,,SLC12A2,SLC12A6,cell_type_independent,Chloride ion,0.0036945811779928,0.000999001,21363.614246010853
+Human_Cervical_Cancer,global,,,SLC12A6,SLC12A6,cell_type_independent,Chloride ion,0.0036945811779928,0.000999001,24075.410770713886
+Human_Cervical_Cancer,global,,,SCARB1,SCARB1,cell_type_independent,alpha-Tocopherol,0.0036945811779928,0.000999001,2645.5265745502784
+Human_Cervical_Cancer,global,,,ABCB1,ABCC4,cell_type_independent,4'-Hydroxydiclofenac | Cholic acid | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0036945811779928,0.000999001,2981.209102526853
+Human_Cervical_Cancer,global,,,ABCC4,SLC16A1,cell_type_independent,Taurocholic acid,0.0036945811779928,0.000999001,6874.695950273574
+Human_Cervical_Cancer,global,,,SLCO1B3,SLCO1B3,cell_type_independent,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | 4-Hydroxyvalsartan | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Dehydroepiandrosterone | Deoxycholic acid | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | Sulfolithocholic acid | Taurocholic acid | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0036945811779928,0.000999001,5362.811603923959
+Human_Cervical_Cancer,global,,,ABCC1,SLC16A1,cell_type_independent,Taurocholic acid,0.0036945811779928,0.000999001,56778.5144251023
+Human_Cervical_Cancer,global,,,ABCC1,ABCC4,cell_type_independent,4'-Hydroxydiclofenac | Cholic acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0036945811779928,0.000999001,26730.60888614265
+Human_Cervical_Cancer,global,,,ABCC1,ABCC1,cell_type_independent,4'-Hydroxydiclofenac | Cholic acid | Glutathione | Leukotriene C4 | O-Desmethylverapamil (D-702) | Progesterone | Taurocholic acid,0.0036945811779928,0.000999001,117961.048917405
+Human_Cervical_Cancer,global,,,ABCC1,ABCC3,cell_type_independent,Cholic acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0036945811779928,0.000999001,11327.386227308
+Human_Cervical_Cancer,global,,,SLCO1B1,SLCO1B3,cell_type_independent,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | 4-Hydroxyvalsartan | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Dehydroepiandrosterone | Deoxycholic acid | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | Sulfolithocholic acid | Taurocholic acid | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0036945811779928,0.000999001,601.7714672792599
+Human_Cervical_Cancer,global,,,TAP1,TAP1,cell_type_independent,Adenosine triphosphate,0.0036945811779928,0.000999001,164917.23276361768
+Human_Cervical_Cancer,global,,,ATP7A,TAP1,cell_type_independent,Adenosine triphosphate,0.0036945811779928,0.000999001,49036.09498611341
+Human_Cervical_Cancer,global,,,AQP1,AQP1,cell_type_independent,Water,0.0036945811779928,0.000999001,646962.1975376455
+Human_Cervical_Cancer,global,,,AQP1,ATP7B,cell_type_independent,Water,0.0036945811779928,0.000999001,13307.091672309452
+Human_Cervical_Cancer,global,,,AQP7,AQP7,cell_type_independent,Water,0.0036945811779928,0.000999001,16840.674788550146
+Human_Cervical_Cancer,global,,,AQP5,AQP5,cell_type_independent,Water,0.0036945811779928,0.000999001,1844.302473963273
+Human_Cervical_Cancer,global,,,AQP1,AQP7,cell_type_independent,Water,0.0036945811779928,0.000999001,59786.35282426495
+Human_Cervical_Cancer,global,,,AQP9,AQP9,cell_type_independent,Water,0.0036945811779928,0.000999001,2552.398837966969
+Human_Cervical_Cancer,global,,,ABCC1,SLC22A4,cell_type_independent,O-Desmethylverapamil (D-702),0.0036945811779928,0.000999001,18897.754282883103
+Human_Cervical_Cancer,global,,,ABCC1,SLC22A5,cell_type_independent,O-Desmethylverapamil (D-702),0.0036945811779928,0.000999001,30936.499842992725
+Human_Cervical_Cancer,global,,,SLC24A1,SLC24A1,cell_type_independent,Sodium_calcium_potassium exchange,0.0036945811779928,0.000999001,2641.827553583544
+Human_Cervical_Cancer,global,,,CLCN4,CLCN5,cell_type_independent,Chloride,0.0036945811779928,0.000999001,2368.947764899849
+Human_Cervical_Cancer,global,,,CLCN3,CLCN3,cell_type_independent,Chloride,0.0036945811779928,0.000999001,42850.46496362727
+Human_Cervical_Cancer,global,,,CLCN3,CLCN5,cell_type_independent,Chloride,0.0036945811779928,0.000999001,11693.610444150949
+Human_Cervical_Cancer,global,,,CLCN4,CLCN4,cell_type_independent,Chloride,0.0036945811779928,0.000999001,1562.5657817789836
+Human_Cervical_Cancer,global,,,CLCN3,CLCN4,cell_type_independent,Chloride,0.0036945811779928,0.000999001,11980.024852435026
+Human_Cervical_Cancer,global,,,SLC9A1,SLC9A1,cell_type_independent,Sodium_hydrogen exchange,0.0036945811779928,0.000999001,9344.443218611725
+Human_Cervical_Cancer,global,,,SLC6A9,SLC6A9,cell_type_independent,Neurotransmitter,0.0036945811779928,0.000999001,13020.292547740908
+Human_Cervical_Cancer,global,,,SLC26A2,SLC26A2,cell_type_independent,Anion exchange,0.0036945811779928,0.000999001,9240.79897667198
+Human_Cervical_Cancer,global,,,ORAI3,ORAI3,cell_type_independent,Calcium release-activated calcium transport,0.0036945811779928,0.000999001,57102.58475240928
+Human_Cervical_Cancer,global,,,SCNN1G,SCNN1G,cell_type_independent,Amiloride-sensitive sodium transport,0.0036945811779928,0.000999001,7161.856670098934
+Human_Cervical_Cancer,global,,,SCNN1A,SCNN1A,cell_type_independent,Amiloride-sensitive sodium transport,0.0036945811779928,0.000999001,185976.18815670552
+Human_Cervical_Cancer,global,,,SCNN1A,SCNN1G,cell_type_independent,Amiloride-sensitive sodium transport,0.0036945811779928,0.000999001,33771.07814329469
+Human_Cervical_Cancer,global,,,SLC23A2,SLC23A2,cell_type_independent,Vitamin C,0.0036945811779928,0.000999001,5062.69080894563
+Human_Cervical_Cancer,global,,,SLC2A1,SLC2A2,cell_type_independent,D-Galactose | D-Glucose | D-Mannose | Glucosamine,0.0069686409210922,0.001998002,18639.52373318913
+Human_Cervical_Cancer,global,,,SLC1A5,SLC38A7,cell_type_independent,L-Glutamine,0.0069686409210922,0.001998002,19600.907004391323
+Human_Cervical_Cancer,global,,,SLC12A2,SLC5A1,cell_type_independent,Sodium,0.0069686409210922,0.001998002,4284.53809273301
+Human_Cervical_Cancer,global,,,SLC22A4,SLC29A1,cell_type_independent,Sodium,0.0069686409210922,0.001998002,7328.431784828914
+Human_Cervical_Cancer,global,,,SLC22A4,SLC5A1,cell_type_independent,Sodium,0.0069686409210922,0.001998002,1614.2256965672905
+Human_Cervical_Cancer,global,,,ABCC1,SLCO1B3,cell_type_independent,Cholic acid | Taurocholic acid,0.0069686409210922,0.001998002,10798.461376249015
+Human_Cervical_Cancer,global,,,CLCN5,CLCN5,cell_type_independent,Chloride,0.0069686409210922,0.001998002,1214.5117682242358
+Human_Cervical_Cancer,global,,,SLC38A7,SLC7A5,cell_type_independent,L-Glutamine,0.0102040817451086,0.002997003,3986.988626828704
+Human_Cervical_Cancer,global,,,LRP1,TRPV6,cell_type_independent,Heme,0.0102040817451086,0.002997003,9592.40966993857
+Human_Cervical_Cancer,global,,,ABCC3,SLCO2B1,cell_type_independent,Taurocholic acid,0.0102040817451086,0.002997003,4146.82523575997
+Human_Cervical_Cancer,global,,,ABCC4,SLC22A5,cell_type_independent,O-Desmethylverapamil (D-702),0.0133928567702241,0.003996004,3657.827641394016
+Human_Cervical_Cancer,global,,,SLC26A3,SLC26A3,cell_type_independent,Anion exchange,0.0133928567702241,0.003996004,227.7769987009715
+Human_Cervical_Cancer,global,,,ORAI2,ORAI2,cell_type_independent,Calcium release-activated calcium transport,0.016611294831734,0.0049950047,4547.916208919844
+Human_Cervical_Cancer,global,,,SLC1A2,SLC1A5,cell_type_independent,L-Glutamate,0.0230769228190183,0.006993007,16194.59669711464
+Human_Cervical_Cancer,global,,,SLC3A2,SLC43A2,cell_type_independent,L-Leucine,0.0253968246902028,0.007992008,21011.481471078983
+Human_Cervical_Cancer,global,,,SLCO1C1,SLCO1C1,cell_type_independent,"3',4'-Dihydrodiol | 4'-Hydroxydiclofenac | Estrone sulfate | Taurocholic acid | Thyroxine",0.0253968246902028,0.007992008,283.7984062160558
+Human_Cervical_Cancer,global,,,SLC6A3,SLC6A3,cell_type_independent,Dopamine,0.0253968246902028,0.007992008,406.0092376708486
+Human_Cervical_Cancer,global,,,ABCC3,FOLR2,cell_type_independent,Folic acid,0.0253968246902028,0.007992008,1210.895929181051
+Human_Cervical_Cancer,global,,,AQP5,ATP7B,cell_type_independent,Water,0.0253968246902028,0.007992008,817.0596126928367
+Human_Cervical_Cancer,global,,,SLC1A5,SLC7A11,cell_type_independent,L-Cysteine | L-Glutamate,0.0312825844276451,0.0099900095,9389.405771909853
+Human_Cervical_Cancer,global,,,ABCC3,SLCO1B3,cell_type_independent,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Deoxycholic acid | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | Sulfolithocholic acid | Taurocholic acid | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0312825844276451,0.0099900095,941.2291216989536
+Human_Cervical_Cancer,global,,,SLC22A5,SLC29A1,cell_type_independent,Sodium,0.0339157225416718,0.01098901,9249.705677859383
+Human_Cervical_Cancer,global,,,ABCC3,ABCC3,cell_type_independent,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | 5-Hydroxyomeprazole | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Deoxycholic acid | Folic acid | Folinic acid | Glutathione | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | O-Desmethylverapamil (D-702) | Sulfolithocholic acid | Taurocholic acid | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0339157225416718,0.01098901,545.6659629015421
+Human_Cervical_Cancer,global,,,SLC6A5,SLC6A9,cell_type_independent,Neurotransmitter,0.0397959183302841,0.012987013,1114.4727247707676
+Human_Cervical_Cancer,global,,,SLC12A2,SLC22A4,cell_type_independent,Sodium,0.0425531910137927,0.013986014,6211.770148313184
+Human_Cervical_Cancer,global,,,SLC1A1,SLC7A11,cell_type_independent,L-Glutamate,0.0443349744803432,0.014985015,441.8751220152253
+Human_Cervical_Cancer,global,,,ABCC2,ABCC2,cell_type_independent,"17a-Ethynylestradiol | 3',4'-Dihydrodiol | Bilirubin | Cholic acid | Folinic acid | Fusidic Acid | Glutathione | O-Desmethylverapamil (D-702) | Taurocholic acid",0.0443349744803432,0.014985015,381.35529944866994
+Human_Cervical_Cancer,global,,,ABCB1,SLCO2B1,cell_type_independent,Estradiol | Taurocholic acid,0.0443349744803432,0.014985015,5589.277205672666
+Human_Cervical_Cancer,global,,,SLC9A3,SLC9A3,cell_type_independent,Sodium_hydrogen exchange,0.0443349744803432,0.014985015,689.9173296104541
