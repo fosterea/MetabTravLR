@@ -4,6 +4,25 @@
 restart. Dates are absolute (project "today" was 2026-07-16 at kickoff).
 
 ## Current state
+- **2026-07-23 — Fixed: a selected gene-pair tab vanished when the cutoff emptied it. Playwright-verified.**
+  - Foster: dragging the FDR slider until the *selected* pair had no significant interface bounced
+    him back to the metabolite ("All") view and lost his place. Wanted behavior: tabs may appear and
+    disappear with the cutoff (already correct), but **a pair you picked stays picked** — flagged,
+    not removed — and only an explicit tab switch may release it.
+  - Root cause: the release-to-"All" `useEffect` added earlier the same day (a fix for "stranded on
+    a tab that no longer renders"). It solved the stranding by discarding the selection; the better
+    answer is to keep rendering the tab.
+  - Fix (all in `GenePairTabs`): the effect is gone. A `tabs` memo appends the selected `gpTab` back
+    onto `pairs` as an `nInterfaces: 0` entry when the cutoff has emptied it (guarded on the pair
+    really belonging to this metabolite); the tab renders dashed with the word-tag **"not
+    significant"** instead of a count, and the empty-strip guard now tests `tabs`, not `pairs`. An
+    active-tab `scrollIntoView` keeps it visible — the retained tab sorts last (maxC 0) in a strip
+    that overflows at ~16 tabs, and a selected-but-off-screen tab would recreate the same confusion.
+  - Verified across all 7 stops with a tab active: at 0.001 the pair is retained, selected, dashed,
+    "not significant", graph 0 edges; at 0.005–0.2 it returns to its real count (3) and the other
+    tabs' counts still track the cutoff (SLCO2B1–SLCO2B1 9/10/13/14). Survives unrelated re-renders;
+    cleared by switching tab and by a metabolite change; with 16 tabs overflowing, the active tab is
+    auto-scrolled into view at every stop. 0 console errors/warnings; tsc+lint+build clean.
 - **2026-07-23 — Fixed: the FDR slider did nothing on the gene-pair drill-down paths. Playwright-verified.**
   - Foster hit it by picking a gene-pair **tab** in the metabolite view: the graph froze at the
     0.05 edge set no matter where the slider went.
@@ -111,6 +130,7 @@ restart. Dates are absolute (project "today" was 2026-07-16 at kickoff).
 | A16 | Anything below the floor renders **untinted + labelled `≈0`**, with no minimum bar | Foster: "some things can be almost zero and that should be communicable." A min-anchored scale gives the view's smallest value a visible pedestal, so negligible reads as "weak but real". Absence of color is the honest encoding for absence of effect. |
 | A17 | Both directions of a pair are **separate rows**, never merged | `env→cell` and `cell→env` are independent coefficients (70 of 107 pairs have both). Merging would invent a symmetry the model doesn't claim. This is the one place in the app where direction is real — hence the explicit "environment → cell" column header. |
 | A18 | The view is renamed **Environment** and enabled when `hasNbhd \|\| hasBeta` | It now holds two different per-cell measurements, both about a cell's surroundings rather than an interface. "Neighborhoods" named only the first one. |
+| A20 | An **explicit selection outranks a filter**: a picked gene-pair tab is retained (flagged "not significant") when the FDR cutoff empties it, never auto-released | Foster: being forwarded back to the metabolite view mid-drag loses your place and reads as a bug. The cutoff is an *exploration* control — the user asking "is this pair still significant at 0.01?" needs the answer *in place*, and "no interfaces at this cutoff" is a real answer worth showing, not a reason to discard the question. Filters may add/remove things the user did NOT choose (unselected tabs still come and go); only the user retires their own selection. Generalizes beyond tabs: prefer flagging a chosen thing over silently dropping it. |
 | A19 | Significance is **derived from FDR_np at a UI-set threshold** (`isSelected(scores, thr)`), not read from the baked-in `scores.selected` | Lets a slider control the cutoff with no ingest change. Reproduces `selected` exactly at the 0.05 default (0/20,658 mismatches), so it's a safe drop-in. `scores.selected` stays in the contract as harreman's own 0.05 call, but the app no longer reads it for graph significance. Slider stops are discrete because FDR_np is discrete with a low floor; ranking SORT deliberately does NOT depend on the threshold, so moving it never re-sorts the panel or changes auto-selection. |
 
 ## Open questions / needs Foster
@@ -173,13 +193,27 @@ restart. Dates are absolute (project "today" was 2026-07-16 at kickoff).
 12c. FDR slider vs the gene-pair drill-downs (the 2026-07-23 regression — re-check all four):
     with a **gene-pair tab** active the graph must re-filter as you drag (not freeze at the 0.05
     set), the tab **counts** must change, the **on-graph fan-out** sub-edge count must change, and
-    the EdgeDetails **"Carried by N significant pairs"** list must shrink. Tighten until a pair has
-    no interfaces left: its tab disappears and the selection falls back to "All", never a dead tab.
+    the EdgeDetails **"Carried by N significant pairs"** list must shrink. Tighten until the
+    **selected** pair has no interfaces left: its tab **stays, stays selected, and reads "not
+    significant"** (dashed) with an empty graph — it must NOT fall back to "All" (see A20).
+    Unselected pairs that empty still drop out of the strip. Loosening restores its count; clicking
+    another tab, or changing metabolite/tier/dataset/kind, is the only thing that clears it.
 12. Beta correctness (worth re-running after any scale change — this is where the bugs are):
     in the console, diff the DOM against `beta/<Tier>.json` and assert, per cell, that the label
     matches source, a negative never renders `+`, hue matches sign, and `≈0` cells carry no tint.
 
 ## Changelog
+- 2026-07-23: **Fix — a selected gene-pair tab vanished (and forwarded you to "All") once the FDR
+  cutoff left it with no significant interface.** Removed the release-to-"All" `useEffect` added
+  earlier the same day and replaced it with retention: `GenePairTabs` now renders a `tabs` memo =
+  `pairs` plus, when the cutoff has emptied the selected `gpTab`, that pair re-appended as an
+  `nInterfaces: 0` entry (guarded on it belonging to the current metabolite; genes ordered to match
+  the id so the label is unchanged). The retained tab is dashed (`.emptied`) and reads "not
+  significant" in place of its count, with an explanatory `title`. The empty-strip guard now tests
+  `tabs` instead of `pairs`, and an active-tab `scrollIntoView` keeps the selection visible in the
+  overflowing strip. Unselected pairs that empty still disappear as before. No store, data, ingest
+  or contract change — `gpTab` is still cleared by tab switch / metabolite / tier / dataset / kind.
+  See A20; smoke item 12c updated.
 - 2026-07-23: **Fix — FDR slider was a no-op on every gene-pair drill-down path.** `gpEdgesInTier`,
   `metaboliteSigPairsAtTier` and `genePairsAtInterface` (`data/genePairs.ts`) all equated "in the gp
   bundle" with "significant" and now take a `threshold` (default `DEFAULT_FDR`), filtering with

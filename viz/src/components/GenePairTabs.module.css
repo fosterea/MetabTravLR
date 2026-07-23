@@ -50,3 +50,12 @@
   font-size: 10px;
   opacity: 0.75;
 }
+/* A pair the user picked that the current FDR cutoff has left with no significant interface.
+   It KEEPS its tab and stays selected (composes with .active — that sets colors, not
+   border-style); the dashed edge + italic word-tag flag it without removing the selection. */
+.emptied {
+  border-style: dashed;
+}
+.emptied .count {
+  font-style: italic;
+}
