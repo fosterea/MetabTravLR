@@ -63,6 +63,25 @@ def _log(msg):
     print(f'[{time.strftime("%H:%M:%S")}] {msg}', flush=True)
 
 
+def _isolate_cache_dir():
+    """Move this process's cache dir onto node-local disk, before celloracle is imported.
+
+    `import celloracle_tmp` (spaceship.py:264) pulls in genomepy, which AT IMPORT TIME opens a
+    diskcache SQLite database under `appdirs.user_cache_dir()` -- i.e. `~/.cache/genomepy/<ver>`,
+    which on Savio is NFS home. SQLite's locking is unreliable on NFS, so opening it raises
+    `sqlite3.OperationalError: locking protocol`; every job also shares that one file, so
+    concurrent jobs make it worse. diskcache only retries 'database is locked', not this.
+
+    `/tmp` on a compute node is local disk (unlike `$TMPDIR`, which on some clusters points at
+    network scratch and would have the same problem). The cache only memoizes genomepy provider
+    metadata, which nothing in our pipeline uses, so starting cold costs nothing.
+    """
+    default = f'/tmp/spacetravlr_cache_{os.environ.get("SLURM_JOB_ID", "local")}'
+    os.environ.setdefault('XDG_CACHE_HOME', default)
+    os.makedirs(os.environ['XDG_CACHE_HOME'], exist_ok=True)
+    _log(f'XDG_CACHE_HOME={os.environ["XDG_CACHE_HOME"]}')
+
+
 def _h5ad_is_readable(path) -> bool:
     """Cheap truncation check -- `write_h5ad` is not atomic, so a job killed mid-write
     (wall-time, OOM) leaves a file that exists but cannot be opened. Existence alone would
@@ -163,6 +182,7 @@ def run_dataset(dataset, stages=STAGES, overwrite=False, clear_betadata=False,
 
     _log(f'=== {dataset} | stages={list(stages)} | overwrite={overwrite} ===')
     _log(f'outdir: {paths["outdir"]}')
+    _isolate_cache_dir()
     if overwrite and 'setup' not in stages:
         raise ValueError('--overwrite redoes setup, so it needs the setup stage; '
                          'got --stage without it. Use --clear-betadata to drop trained genes.')

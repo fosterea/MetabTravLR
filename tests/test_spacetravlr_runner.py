@@ -194,6 +194,73 @@ class TestSetupIsComplete(unittest.TestCase):
                 os.chdir(cwd)
 
 
+class TestIsolateCacheDir(unittest.TestCase):
+    """genomepy opens a SQLite cache under `~/.cache` at import time; on Savio that is NFS,
+    where SQLite locking fails outright (`OperationalError: locking protocol`).
+    """
+
+    def test_points_at_a_job_unique_local_path_and_creates_it(self):
+        with mock.patch.dict(os.environ, {"SLURM_JOB_ID": "12345"}, clear=False):
+            os.environ.pop("XDG_CACHE_HOME", None)
+            with mock.patch.object(run_spacetravlr.os, "makedirs") as makedirs:
+                run_spacetravlr._isolate_cache_dir()
+            cache = os.environ["XDG_CACHE_HOME"]
+        self.assertEqual(cache, "/tmp/spacetravlr_cache_12345")
+        makedirs.assert_called_once_with(cache, exist_ok=True)
+
+    def test_two_jobs_get_different_cache_dirs(self):
+        seen = []
+        for job in ("111", "222"):
+            with mock.patch.dict(os.environ, {"SLURM_JOB_ID": job}, clear=False):
+                os.environ.pop("XDG_CACHE_HOME", None)
+                with mock.patch.object(run_spacetravlr.os, "makedirs"):
+                    run_spacetravlr._isolate_cache_dir()
+                seen.append(os.environ["XDG_CACHE_HOME"])
+        self.assertEqual(len(set(seen)), 2, seen)
+
+    def test_is_never_the_nfs_home_cache(self):
+        with mock.patch.dict(os.environ, {}, clear=False):
+            os.environ.pop("XDG_CACHE_HOME", None)
+            os.environ.pop("SLURM_JOB_ID", None)
+            with mock.patch.object(run_spacetravlr.os, "makedirs"):
+                run_spacetravlr._isolate_cache_dir()
+            cache = os.environ["XDG_CACHE_HOME"]
+        self.assertTrue(cache.startswith("/tmp/"), cache)
+        self.assertNotIn(str(Path.home()), cache)
+
+    def test_an_explicit_setting_is_respected(self):
+        with mock.patch.dict(os.environ, {"XDG_CACHE_HOME": "/somewhere/else"}, clear=False):
+            with mock.patch.object(run_spacetravlr.os, "makedirs"):
+                run_spacetravlr._isolate_cache_dir()
+            self.assertEqual(os.environ["XDG_CACHE_HOME"], "/somewhere/else")
+
+    def test_run_dataset_isolates_before_setup_imports_celloracle(self):
+        # Ordering is the whole point: SpaceShip.setup_ -> run_celloracle_ -> import
+        # celloracle_tmp -> genomepy opens the SQLite cache. Too late after that.
+        order = []
+
+        class OrderedShip:
+            def __init__(self, name=None, outdir=None, genes=None):
+                self.outdir = Path(outdir)
+
+            def setup_(self, adata, overwrite=False, run_commot=False):
+                order.append("setup_")
+                (self.outdir / "input_data").mkdir(parents=True, exist_ok=True)
+                write_tiny_h5ad(self.outdir / "input_data" / "_adata.h5ad")
+                for name in ("celloracle_links.pkl", "tflinks.parquet"):
+                    (self.outdir / "input_data" / name).write_text("x")
+
+        with tempfile.TemporaryDirectory() as tmp:
+            make_dataset_tree(tmp)
+            with mock.patch.object(run_spacetravlr, "_isolate_cache_dir",
+                                   side_effect=lambda: order.append("isolate")), \
+                 mock.patch.object(run_spacetravlr, "SpaceShip", OrderedShip), \
+                 mock.patch.object(run_spacetravlr, "_load_adata", lambda p, s: object()):
+                run_spacetravlr.run_dataset(DATASET, stages=["setup"], data_dir=tmp)
+
+        self.assertEqual(order, ["isolate", "setup_"])
+
+
 class TestProcessedVarNames(unittest.TestCase):
     def test_reads_var_names_from_a_real_h5ad_without_loading_it(self):
         import anndata as ad
