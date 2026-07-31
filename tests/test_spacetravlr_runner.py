@@ -261,6 +261,40 @@ class TestIsolateCacheDir(unittest.TestCase):
         self.assertEqual(order, ["isolate", "setup_"])
 
 
+class TestJobIsActive(unittest.TestCase):
+    """Decides whether a `.setup.lock` is genuinely held or was orphaned by a killed job.
+    Every uncertain case must come back True, so we never steal a live lock."""
+
+    def _squeue(self, stdout):
+        return mock.patch.object(run_spacetravlr.subprocess, "run",
+                                 return_value=mock.Mock(stdout=stdout))
+
+    def test_job_still_in_the_queue_is_active(self):
+        with self._squeue("36169480 savio3_gpu MetabTra fosteran R 0:28 1 n0264\n"):
+            self.assertTrue(run_spacetravlr._job_is_active("36169480"))
+
+    def test_job_absent_from_the_queue_is_not_active(self):
+        with self._squeue(""):
+            self.assertFalse(run_spacetravlr._job_is_active("36169480"))
+
+    def test_whitespace_only_output_is_not_active(self):
+        with self._squeue("\n  \n"):
+            self.assertFalse(run_spacetravlr._job_is_active("36169480"))
+
+    def test_a_hand_run_owner_is_assumed_active(self):
+        self.assertTrue(run_spacetravlr._job_is_active("local-12345"))
+        self.assertTrue(run_spacetravlr._job_is_active(""))
+
+    def test_missing_squeue_is_assumed_active(self):
+        with mock.patch.object(run_spacetravlr.subprocess, "run", side_effect=FileNotFoundError):
+            self.assertTrue(run_spacetravlr._job_is_active("36169480"))
+
+    def test_squeue_timeout_is_assumed_active(self):
+        with mock.patch.object(run_spacetravlr.subprocess, "run",
+                               side_effect=run_spacetravlr.subprocess.TimeoutExpired("squeue", 60)):
+            self.assertTrue(run_spacetravlr._job_is_active("36169480"))
+
+
 class TestProcessedVarNames(unittest.TestCase):
     def test_reads_var_names_from_a_real_h5ad_without_loading_it(self):
         import anndata as ad
@@ -400,13 +434,46 @@ class TestRunDatasetSetupStage(RunDatasetCase):
         with self.assertRaises(ValueError):
             self.run_it(stages=["fit"], overwrite=True)
 
-    def test_setup_lock_blocks_a_concurrent_setup(self):
-        paths = make_dataset_tree(self.root)
+    def _write_lock(self, owner):
+        paths = dataset_paths(DATASET, self.root)
         paths["outdir"].mkdir(parents=True, exist_ok=True)
-        (paths["outdir"] / ".setup.lock").write_text("pid 1")
-        with self.assertRaises(RuntimeError):
-            self.run_it(stages=["setup"])
+        lock = paths["outdir"] / ".setup.lock"
+        lock.write_text(f"{owner}\nstarted whenever\n")
+        return lock
+
+    def test_setup_lock_blocks_a_setup_whose_job_is_still_active(self):
+        make_dataset_tree(self.root)
+        self._write_lock("999")
+        with mock.patch.object(run_spacetravlr, "_job_is_active", return_value=True):
+            with self.assertRaises(RuntimeError):
+                self.run_it(stages=["setup"])
         self.assertEqual(self.setup_calls, [])
+
+    def test_a_lock_orphaned_by_a_dead_job_is_taken_over(self):
+        # OOM kill and scancel are SIGKILL, so the `finally` never runs. Without this,
+        # one OOM blocks every resubmit until the file is deleted by hand.
+        make_dataset_tree(self.root)
+        lock = self._write_lock("36169480")
+        with mock.patch.object(run_spacetravlr, "_job_is_active", return_value=False):
+            self.run_it(stages=["setup"])
+        self.assertEqual(len(self.setup_calls), 1)
+        self.assertFalse(lock.exists())
+
+    def test_the_lock_records_the_slurm_job_id(self):
+        make_dataset_tree(self.root)
+        paths = dataset_paths(DATASET, self.root)
+        seen = {}
+
+        def peek(*a, **kw):
+            # read the lock from inside the critical section
+            seen["owner"] = (paths["outdir"] / ".setup.lock").read_text().splitlines()[0]
+            return object()
+
+        with mock.patch.dict(os.environ, {"SLURM_JOB_ID": "424242"}, clear=False), \
+             mock.patch.object(run_spacetravlr, "_load_adata", side_effect=peek):
+            self.run_it(stages=["setup"])
+        self.assertEqual(seen["owner"], "424242",
+                         "the job id is what lets a later run test liveness")
 
     def test_setup_lock_is_released_afterwards(self):
         paths = make_dataset_tree(self.root)

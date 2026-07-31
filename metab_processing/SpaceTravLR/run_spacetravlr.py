@@ -37,6 +37,7 @@ import argparse
 import contextlib
 import os
 import shutil
+import subprocess
 import time
 
 import h5py
@@ -106,6 +107,33 @@ def setup_is_complete(outdir) -> bool:
     return _h5ad_is_readable(outdir / 'input_data' / '_adata.h5ad')
 
 
+def _job_is_active(job_id) -> bool:
+    """Is this SLURM job still queued or running?
+
+    Used to tell a live lock from one orphaned by a job that died without unwinding
+    (OOM kill and scancel are SIGKILL, so no `finally` runs).
+
+    Only "squeue ran and listed nothing" counts as gone -- squeue reports a finished job
+    as an invalid id, so we cannot also require exit status 0. A hand-run owner or an
+    unavailable squeue counts as active, so we never steal a lock we cannot ask about.
+    """
+    if not job_id.isdigit():
+        return True          # hand-run, not a job we can ask about
+    try:
+        done = subprocess.run(['squeue', '-h', '-j', job_id],
+                              capture_output=True, text=True, timeout=60)
+    except (OSError, subprocess.SubprocessError):
+        return True          # no squeue (off-cluster) -> assume alive
+    return bool(done.stdout.strip())
+
+
+def _read_lock_owner(lock) -> str:
+    try:
+        return lock.read_text().splitlines()[0].strip()
+    except (OSError, IndexError):
+        return ''
+
+
 @contextlib.contextmanager
 def _setup_lock(outdir):
     """Refuse to run two setups on the same dataset at once.
@@ -113,19 +141,35 @@ def _setup_lock(outdir):
     The fit stage is already safe for concurrent workers (`oracles.py`'s lock-based gene
     queue), but two setups would write `_adata.h5ad` and `celloracle_links.pkl` to the same
     paths simultaneously -- HDF5 has no support for that and the result is a corrupt file.
+
+    The lock records its owning job id, and a lock whose job is no longer in the queue is
+    taken over rather than honoured -- otherwise a single OOM kill would block every
+    resubmit until someone deleted the file by hand.
     """
     outdir = Path(outdir)
     outdir.mkdir(parents=True, exist_ok=True)
     lock = outdir / '.setup.lock'
+    owner = os.environ.get('SLURM_JOB_ID', f'local-{os.getpid()}')
+    flags = os.O_CREAT | os.O_EXCL | os.O_WRONLY
+
     try:
-        fd = os.open(lock, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
+        fd = os.open(lock, flags)
     except FileExistsError:
-        raise RuntimeError(
-            f'{lock} exists -- a setup job is already running for this dataset. '
-            f'Check `squeue`; if a previous job was killed, delete that file and resubmit.'
-        ) from None
+        previous = _read_lock_owner(lock)
+        if _job_is_active(previous):
+            raise RuntimeError(
+                f'{lock} is held by job {previous or "unknown"}, which is still active -- '
+                f'a setup is already running for this dataset. Check `squeue`.'
+            ) from None
+        _log(f'clearing stale {lock} (job {previous or "unknown"} is no longer in the queue)')
+        lock.unlink(missing_ok=True)
+        try:
+            fd = os.open(lock, flags)
+        except FileExistsError:
+            raise RuntimeError(f'{lock} was re-created concurrently; retry shortly') from None
+
     try:
-        os.write(fd, f'pid {os.getpid()} at {time.strftime("%Y-%m-%d %H:%M:%S")}\n'.encode())
+        os.write(fd, f'{owner}\nstarted {time.strftime("%Y-%m-%d %H:%M:%S")}\n'.encode())
         os.close(fd)
         yield
     finally:
