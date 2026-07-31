@@ -49,7 +49,7 @@ DEFAULTS = {
         'qos': 'a40_gpu3_normal',
         'gres': 'gpu:A40:1',
         'cpus_per_task': 8,
-        'time_hours': 15,
+        'time_hours': 24,
         'job_name': 'MetabTravLR',
         'python_path': '/global/home/users/fosterangus/.conda/envs/spacetravlr/bin/python',
     },
