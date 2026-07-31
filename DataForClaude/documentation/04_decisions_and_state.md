@@ -317,6 +317,49 @@ float64 tensors at once.
 - **Status: CU-E + CU-F fixed in code, Savio re-validation pending** (expect per-cell `pval`/`FDR`
   EXACT and no Pass-2 OOM at ≥600k cells). **Not yet committed.**
 
+## Session 2026-07-31 — SLURM driver for SpaceTravLR (`metab_processing/SpaceTravLR/`)
+Turned `quick_start_metab.ipynb` into a cluster job so whole datasets run unattended. **Four
+new files, zero changes to `src/SpaceTravLR/`** (`dataset_configs.py`, `run_spacetravlr.py`,
+`submit_spacetravlr.py`, `submit_spacetravlr.ipynb`; +58 tests in
+`tests/test_spacetravlr_runner.py`, suite 240 → 298).
+
+- **The bug that forced this.** `SpaceShip.spawn_worker` (`spaceship.py:556`) writes its sbatch
+  `--output` into `{outdir}/logs/`. SLURM opens that file **before** the job body runs, and on a
+  fresh dataset `spacetravlr_output/` doesn't exist yet — the job dies instantly, so *setup could
+  never run over SLURM*. Logs now go to `{METAB_DATA_DIR}/spacetravlr_logs/<DATASET>/`, a sibling
+  of `harreman_logs/`, created by the submitter. `spawn_worker` itself is left alone (unused by us).
+- **We did NOT rewrite setup**, despite Foster's opening suggestion. `setup_(overwrite=True)`
+  *deletes nothing* — it only bypasses the "directory exists" early-return (`spaceship.py:476`) —
+  so the runner owns the directory lifecycle and always passes `overwrite=True`. Forking
+  `process_adata_`/`run_celloracle_`/`get_nichenet_links_` would have bought nothing.
+- **Don't call `is_everything_ok()` from a job**: it asserts a CWD-relative `launch.py`
+  (`spaceship.py:735`). Our `setup_is_complete()` checks the three real artifacts *and* opens
+  `_adata.h5ad` with h5py (`write_h5ad` isn't atomic — a wall-time kill leaves a file that exists
+  but won't open, which existence-only checking would happily skip past and then crash inside `fit`).
+- **Foster's decisions this session:** (a) `overwrite=True` clears `input_data/` only and **keeps
+  `betadata/`** — separate `--clear-betadata` for a clean slate, and the log warns that kept betas
+  came from the previous preprocessing; (b) `betas_to_adata` uses **`group=None`** (tf+lr+ltf+metab)
+  — memory cost flagged and accepted, `beta_group` is a per-dataset knob; (c) **one job**, setup +
+  fit + artifacts, with `--stage` to run a subset; (d) SLURM defaults mirror `Harreman/submit_job.ipynb`
+  (savio3_gpu / A40 / 15h); (e) **target genes shared across datasets** by default
+  (`metab_travlr_config.FOCUS_GENES`), overridable per dataset — metab pairs stay per-dataset from
+  each dataset's own `metabolite_selection.yaml`.
+- **Config is one dict, not a `dataset_configs/` package** — a directory of per-dataset modules was
+  considered and rejected as machinery for the same expressiveness.
+- **Concurrency.** `fit` is already safe for multiple workers (`oracles.py`'s lock/parquet gene
+  queue), so resubmitting after a timeout resumes. `setup` is **not** — two of them would write
+  `_adata.h5ad` to the same path — so setup takes an `O_EXCL` `.setup.lock` in `outdir`.
+- **Review caught three real Majors** (Opus reviewer): `--clear-betadata` was dead unless `setup`
+  was in `--stage`; the artifacts guard checked "any parquet" instead of "a parquet for a *current*
+  target gene", so an artifacts-only rerun after `focus_genes` changed wrote header-only CSVs and
+  exited 0; and the missing setup interlock. All fixed. It also flagged that mocking `SpaceShip` +
+  `beta_analysis` out made the tests blind to signature drift → added a **zero-mock** artifacts test
+  running the real `beta_analysis` on real tiny parquets.
+- **`save_easy_downloads()` is deliberately not in the job** (it copies *every* dataset to
+  `Results/`, not just the one that ran) — it's a final notebook cell instead.
+- Pre-existing unrelated failure, untouched: `tests/test_spacetravlr.py::test_spawn_worker` passes
+  `clusters=`, which the Savio-style `spawn_worker` signature no longer takes.
+
 ## Local assets for dev/testing
 - Demo data in `data/`: `Slidetags_human_tonsil.h5ad`, `Slidetags_human_melanoma.h5ad`,
   `SlideSeqV2_mouse_lymphnode.h5ad`, `XYZeqV2_mouse_kidney_replicate_{1,2}.h5ad`,

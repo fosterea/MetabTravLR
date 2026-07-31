@@ -1,0 +1,96 @@
+"""Per-dataset settings for the SpaceTravLR SLURM runs.
+
+One dict keyed by dataset folder name under ``PROJECT_DATA_DIR``. Anything a dataset
+does not set falls back to ``DEFAULTS`` (``slurm`` merges key-by-key, so a dataset can
+override just ``time_hours``).
+
+Two things are deliberately *not* per-dataset by default:
+
+- **Target genes.** ``focus_genes`` defaults to ``metab_travlr_config.FOCUS_GENES`` so
+  every dataset trains the same targets and the results stay comparable. Override per
+  dataset only when you mean to.
+- **Metabolite pairs.** Never configured here -- they always come from that dataset's
+  own ``easy_download/harreman_outputs/metabolite_selection.yaml``, so each dataset
+  trains only the transporter pairs harreman found evidence for.
+"""
+from __future__ import annotations
+
+import copy
+from pathlib import Path
+
+from metab_processing.metab_travlr_config import FOCUS_GENES, PROJECT_DATA_DIR, DATA_DIR as METAB_DATA_DIR
+
+# Sibling of harreman_logs/ -- deliberately OUTSIDE the dataset's spacetravlr_output/,
+# which does not exist yet when a fresh setup job starts (SLURM opens the --output file
+# before the job runs, so its parent directory must already exist).
+LOG_ROOT = f'{METAB_DATA_DIR}/spacetravlr_logs'
+
+
+DEFAULTS = {
+    # --- data ---
+    'cell_type_src': 'leiden_scVI_res_0.5',   # adata.obs column copied to 'cell_type' for setup
+    'tiers': ['Tier1', 'Tier2', 'Tier3'],     # obs columns to summarize betas over (missing ones are skipped)
+    'focus_genes': list(FOCUS_GENES),         # target genes to train -- shared across datasets
+
+    # --- model ---
+    'run_commot': False,                      # harreman is our metabolite prior; COMMOT stays off
+    'fit_kwargs': {},                         # passed to SpaceShip.fit (max_epochs, learning_rate, radius, ...)
+
+    # --- artifacts ---
+    # Modulator group written into adata.obsm['beta_<gene>'] by betas_to_adata.
+    # None = all groups (tf + lr + ltf + metab); 'metab' = transporter pairs only.
+    # None makes spacetravlr_adata.h5ad much larger -- the run log prints the shapes.
+    'beta_group': None,
+
+    # --- slurm (mirrors metab_processing/Harreman/submit_job.ipynb) ---
+    'slurm': {
+        'account': 'fc_wagnerlabfca',
+        'partition': 'savio3_gpu',
+        'qos': 'a40_gpu3_normal',
+        'gres': 'gpu:A40:1',
+        'cpus_per_task': 8,
+        'time_hours': 15,
+        'job_name': 'MetabTravLR',
+        'python_path': '/global/home/users/fosterangus/.conda/envs/spacetravlr/bin/python',
+    },
+}
+
+
+# Add a dataset by adding a key here. `{}` means "all defaults".
+DATASETS = {
+    'Primary_Dermal_Melanoma': {},
+    'Human_Lung': {},
+}
+
+
+def get_config(dataset: str) -> dict:
+    """Resolved config for `dataset`: DEFAULTS with the dataset's overrides applied."""
+    if dataset not in DATASETS:
+        raise KeyError(f'unknown dataset {dataset!r}; known: {sorted(DATASETS)}')
+
+    cfg = copy.deepcopy(DEFAULTS)
+    override = copy.deepcopy(DATASETS[dataset])
+    cfg['slurm'].update(override.pop('slurm', {}))
+    unknown = set(override) - set(cfg)
+    if unknown:
+        raise KeyError(f'{dataset}: unknown config keys {sorted(unknown)}')
+    cfg.update(override)
+    cfg['dataset'] = dataset
+    return cfg
+
+
+def dataset_paths(dataset: str, data_dir: str = PROJECT_DATA_DIR) -> dict:
+    """Every path the run touches. Layout matches quick_start_metab.ipynb."""
+    dataset_dir = Path(data_dir) / dataset
+    outdir = dataset_dir / 'spacetravlr_output'
+    return {
+        'dataset_dir': dataset_dir,
+        'adata': dataset_dir / 'adata.h5ad',
+        'selection_yaml': dataset_dir / 'easy_download' / 'harreman_outputs' / 'metabolite_selection.yaml',
+        'outdir': outdir,
+        'input_data': outdir / 'input_data',
+        'betadata': outdir / 'betadata',
+        'metab_outdir': dataset_dir / 'easy_download' / 'metabtravlr_outputs',
+        'beta_adata': dataset_dir / 'spacetravlr_adata.h5ad',
+        'log_dir': Path(LOG_ROOT) / dataset,
+    }

@@ -1,0 +1,296 @@
+#!/usr/bin/env python
+"""Run SpaceTravLR end-to-end for one dataset. This is the body of the SLURM job.
+
+Stages (``--stage``, default all three, in this order):
+
+  setup      SpaceShip.setup_  -> spacetravlr_output/input_data/{_adata.h5ad,
+             celloracle_links.pkl, tflinks.parquet}. Skipped if already complete.
+  fit        SpaceShip.fit(metab_pairs=...) -> spacetravlr_output/betadata/<gene>_betadata.parquet.
+             Resumable: a gene whose parquet already exists is skipped by the queue,
+             so re-running after a timeout picks up where it left off.
+  artifacts  beta_analysis -> easy_download/metabtravlr_outputs/<tier>/{gene_pairs.csv,
+             histograms.csv,histograms.png} and spacetravlr_adata.h5ad (per-cell betas
+             attached to the full adata). CPU-only, cheap to re-run on its own.
+
+Submit it with ``submit_spacetravlr.py`` (or the notebook) rather than calling it directly;
+that is what creates the log directory and the sbatch job.
+
+    python run_spacetravlr.py --dataset Primary_Dermal_Melanoma
+    python run_spacetravlr.py --dataset Human_Lung --stage artifacts
+    python run_spacetravlr.py --dataset Human_Lung --overwrite
+"""
+import sys
+from pathlib import Path
+
+# Make the repo root (and src/) importable regardless of CWD or machine: walk up from
+# this file until we hit a repo marker, then put that dir on sys.path.
+_root = next(
+    (p for p in Path(__file__).resolve().parents
+     if (p / ".git").exists() or (p / "setup.py").exists()),
+    Path(__file__).resolve().parent,
+)
+for _p in (str(_root), str(_root / "src")):
+    if _p not in sys.path:
+        sys.path.insert(0, _p)
+
+import argparse
+import contextlib
+import os
+import shutil
+import time
+
+import h5py
+import scanpy as sc
+
+from SpaceTravLR.spaceship import SpaceShip
+from metab_processing.metab_travlr_config import PROJECT_DATA_DIR
+from metab_processing.SpaceTravLR import beta_analysis
+from metab_processing.SpaceTravLR.dataset_configs import DATASETS, dataset_paths, get_config
+from metab_processing.SpaceTravLR.metab_loader import load_metab_pairs
+
+STAGES = ('setup', 'fit', 'artifacts')
+
+# Everything `fit` needs from a finished setup.
+_SETUP_ARTIFACTS = (
+    'input_data/_adata.h5ad',
+    'input_data/celloracle_links.pkl',
+    'input_data/tflinks.parquet',
+)
+
+
+def _log(msg):
+    """Timestamped, flushed -- SLURM logs are otherwise block-buffered and useless live."""
+    print(f'[{time.strftime("%H:%M:%S")}] {msg}', flush=True)
+
+
+def _h5ad_is_readable(path) -> bool:
+    """Cheap truncation check -- `write_h5ad` is not atomic, so a job killed mid-write
+    (wall-time, OOM) leaves a file that exists but cannot be opened. Existence alone would
+    make the resubmitted job skip setup and then crash deep inside `fit`.
+    """
+    try:
+        with h5py.File(path, 'r') as f:
+            return 'var' in f and 'obs' in f
+    except Exception:
+        return False
+
+
+def setup_is_complete(outdir) -> bool:
+    """True if a previous setup left everything the fit stage needs.
+
+    Deliberately not `SpaceShip.is_everything_ok()`: that asserts a CWD-relative
+    `launch.py` exists, which is never true inside a SLURM job.
+    """
+    outdir = Path(outdir)
+    if not all((outdir / f).is_file() for f in _SETUP_ARTIFACTS):
+        return False
+    return _h5ad_is_readable(outdir / 'input_data' / '_adata.h5ad')
+
+
+@contextlib.contextmanager
+def _setup_lock(outdir):
+    """Refuse to run two setups on the same dataset at once.
+
+    The fit stage is already safe for concurrent workers (`oracles.py`'s lock-based gene
+    queue), but two setups would write `_adata.h5ad` and `celloracle_links.pkl` to the same
+    paths simultaneously -- HDF5 has no support for that and the result is a corrupt file.
+    """
+    outdir = Path(outdir)
+    outdir.mkdir(parents=True, exist_ok=True)
+    lock = outdir / '.setup.lock'
+    try:
+        fd = os.open(lock, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
+    except FileExistsError:
+        raise RuntimeError(
+            f'{lock} exists -- a setup job is already running for this dataset. '
+            f'Check `squeue`; if a previous job was killed, delete that file and resubmit.'
+        ) from None
+    try:
+        os.write(fd, f'pid {os.getpid()} at {time.strftime("%Y-%m-%d %H:%M:%S")}\n'.encode())
+        os.close(fd)
+        yield
+    finally:
+        lock.unlink(missing_ok=True)
+
+
+def _trained_genes(paths):
+    """Target genes that already have a betadata parquet (what `fit` would skip)."""
+    if not paths['betadata'].exists():
+        return []
+    return sorted(p.name[:-len('_betadata.parquet')]
+                  for p in paths['betadata'].glob('*_betadata.parquet'))
+
+
+def _load_adata(paths, cell_type_src):
+    """The raw dataset adata, prepared the way setup_ expects it.
+
+    `cell_type` is the annotation SpaceShip clusters on; `raw_count` is required by
+    `run_celloracle_` (spaceship.py:269).
+    """
+    _log(f'reading {paths["adata"]}')
+    adata = sc.read_h5ad(paths['adata'])
+    if cell_type_src not in adata.obs.columns:
+        raise KeyError(
+            f'cell_type_src {cell_type_src!r} not in adata.obs; '
+            f'set it in dataset_configs.py. available: {list(adata.obs.columns)}'
+        )
+    adata.obs['cell_type'] = adata.obs[cell_type_src]
+    adata.layers['raw_count'] = adata.X
+    _log(f'adata: {adata.n_obs} cells x {adata.n_vars} genes')
+    return adata
+
+
+def _processed_var_names(paths):
+    """var_names of the *processed* adata, without loading it into memory.
+
+    Used to drop metab pairs whose transporter is not in the panel. Read from the
+    processed copy so the fit stage stands alone (no need to touch the raw adata).
+    """
+    backed = sc.read_h5ad(paths['input_data'] / '_adata.h5ad', backed='r')
+    try:
+        return list(backed.var_names)
+    finally:
+        if backed.isbacked:
+            backed.file.close()
+
+
+def run_dataset(dataset, stages=STAGES, overwrite=False, clear_betadata=False,
+                data_dir=PROJECT_DATA_DIR):
+    """Run `stages` for one dataset. See the module docstring for what each stage writes."""
+    cfg = get_config(dataset)
+    paths = dataset_paths(dataset, data_dir)
+    focus_genes = cfg['focus_genes']
+
+    _log(f'=== {dataset} | stages={list(stages)} | overwrite={overwrite} ===')
+    _log(f'outdir: {paths["outdir"]}')
+    if overwrite and 'setup' not in stages:
+        raise ValueError('--overwrite redoes setup, so it needs the setup stage; '
+                         'got --stage without it. Use --clear-betadata to drop trained genes.')
+    for key in ('adata', 'selection_yaml'):
+        if not paths[key].exists():
+            raise FileNotFoundError(f'missing {key}: {paths[key]}')
+
+    ship = SpaceShip(name=dataset.replace('/', '_'), outdir=str(paths['outdir']), genes=focus_genes)
+    adata = None
+
+    # ------------------------------------------------- directory lifecycle
+    # Done up front, not inside a stage, so `--stage fit --clear-betadata` actually retrains.
+    trained_before = _trained_genes(paths)
+    if overwrite and paths['input_data'].exists():
+        _log(f'overwrite: removing {paths["input_data"]}')
+        shutil.rmtree(paths['input_data'])
+    if clear_betadata and paths['betadata'].exists():
+        _log(f'clear-betadata: removing {paths["betadata"]} ({len(trained_before)} trained genes)')
+        shutil.rmtree(paths['betadata'])
+    elif overwrite and trained_before:
+        _log(f'NOTE: keeping {len(trained_before)} existing betadata parquets -- they were trained '
+             f'on the PREVIOUS preprocessing. Pass --clear-betadata for a clean slate.')
+
+    # ---------------------------------------------------------------- setup
+    if 'setup' in stages:
+        if setup_is_complete(paths['outdir']):
+            _log('setup already complete, skipping (--overwrite to redo)')
+        else:
+            with _setup_lock(paths['outdir']):
+                adata = _load_adata(paths, cfg['cell_type_src'])
+                _log(f'setup_ (run_commot={cfg["run_commot"]}) ...')
+                # overwrite=True only bypasses setup_'s "directory exists" guard; it deletes
+                # nothing. We own the directory lifecycle above.
+                ship.setup_(adata, overwrite=True, run_commot=cfg['run_commot'])
+                if not setup_is_complete(paths['outdir']):
+                    missing = [f for f in _SETUP_ARTIFACTS if not (paths['outdir'] / f).is_file()]
+                    raise RuntimeError(
+                        f'setup_ finished but the result is unusable; missing: {missing or "none"} '
+                        f'(if nothing is missing, _adata.h5ad did not open cleanly)')
+            _log('setup complete')
+
+    if 'fit' in stages:
+        # Training reads its own `_adata.h5ad` from disk, so don't hold a full Xenium adata
+        # in memory for the hours it runs. The artifacts stage reloads it.
+        adata = None
+
+    # ------------------------------------------------------------------ fit
+    if 'fit' in stages:
+        if not setup_is_complete(paths['outdir']):
+            raise RuntimeError(f'setup is not complete for {dataset}; run --stage setup first')
+
+        metab_pairs, selection = load_metab_pairs(
+            paths['selection_yaml'], var_names=_processed_var_names(paths))
+        _log(f'{len(selection)} metabolites -> {len(metab_pairs)} model pairs')
+        _log(f'fitting {len(focus_genes)} target genes: {focus_genes}')
+        ship.fit(metab_pairs=metab_pairs, **cfg['fit_kwargs'])
+        done = _trained_genes(paths)
+        _log(f'fit complete; {len(done)} genes with betadata: {done}')
+        untrained = [g for g in focus_genes if g not in set(done)]
+        if untrained:
+            _log(f'NOTE: {len(untrained)} target genes produced no betadata (orphaned -- no '
+                 f'regulators and no metabolite modulators, or all-zero betas): {untrained}')
+
+    # ------------------------------------------------------------ artifacts
+    if 'artifacts' in stages:
+        # Guard on the CURRENT target genes, not "any parquet at all" -- stale parquets from
+        # a previous focus_genes would otherwise sail through and write empty CSVs.
+        trained = _trained_genes(paths)
+        usable = [g for g in focus_genes if g in set(trained)]
+        if not usable:
+            raise RuntimeError(
+                f'no betadata for any of the {len(focus_genes)} target genes {focus_genes} in '
+                f'{paths["betadata"]}; found {trained or "nothing"}. Run --stage fit first, or '
+                f'check focus_genes in dataset_configs.py.')
+        if len(usable) < len(focus_genes):
+            _log(f'NOTE: artifacts cover {usable}; no betadata for '
+                 f'{[g for g in focus_genes if g not in set(trained)]}')
+
+        if adata is None:
+            adata = _load_adata(paths, cfg['cell_type_src'])
+        tiers = [t for t in cfg['tiers'] if t in adata.obs.columns]
+        if not tiers:
+            raise ValueError(f'none of {cfg["tiers"]} are columns of adata.obs')
+        _log(f'artifacts over tiers {tiers} -> {paths["metab_outdir"]}')
+
+        beta_analysis.write_gene_pairs(
+            str(paths['betadata']), adata.obs, tiers, str(paths['metab_outdir']), genes=focus_genes)
+        _log('wrote gene_pairs.csv')
+
+        beta_analysis.write_histograms(
+            str(paths['betadata']), adata.obs, tiers, str(paths['metab_outdir']),
+            genes=focus_genes, plot=True)
+        _log('wrote histograms.csv + histograms.png')
+
+        # Per-cell betas onto the full adata. group=None keeps every modulator group
+        # (tf + lr + ltf + metab), which is what makes this file big -- shapes below.
+        beta_analysis.betas_to_adata(
+            adata, str(paths['betadata']), genes=focus_genes, group=cfg['beta_group'])
+        for gene, mods in adata.uns.get('beta_modulators', {}).items():
+            _log(f'  beta_{gene}: {adata.obsm[f"beta_{gene}"].shape} ({len(mods)} modulators)')
+        _log(f'writing {paths["beta_adata"]}')
+        adata.write_h5ad(paths['beta_adata'])
+        _log(f'wrote {paths["beta_adata"]} '
+             f'({paths["beta_adata"].stat().st_size / 1e9:.1f} GB)')
+
+    _log(f'=== {dataset} done ===')
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__,
+                                     formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument('--dataset', required=True, choices=sorted(DATASETS),
+                        help='dataset folder under PROJECT_DATA_DIR')
+    parser.add_argument('--stage', nargs='+', default=list(STAGES), choices=list(STAGES),
+                        help='stages to run (default: all)')
+    parser.add_argument('--overwrite', action='store_true',
+                        help='delete input_data/ and redo setup (betadata is kept); '
+                             'requires the setup stage')
+    parser.add_argument('--clear-betadata', action='store_true',
+                        help='delete betadata/, forcing every gene to retrain '
+                             '(independent of --overwrite)')
+    parser.add_argument('--data-dir', default=PROJECT_DATA_DIR)
+    args = parser.parse_args(argv)
+
+    stages = [s for s in STAGES if s in args.stage]   # always in canonical order
+    run_dataset(args.dataset, stages=stages, overwrite=args.overwrite,
+                clear_betadata=args.clear_betadata, data_dir=args.data_dir)
+
+
+if __name__ == '__main__':
+    main()
