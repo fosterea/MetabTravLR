@@ -766,5 +766,95 @@ class TestSubmit(unittest.TestCase):
         self.assertIn("--clear-betadata", cmd)
 
 
+class TestSlurmProfile(TestSubmit):
+    """Setup is CPU-only but memory-hungry; training needs the GPU. Different hardware."""
+
+    def test_setup_only_job_uses_the_big_mem_cpu_profile(self):
+        _, sb, _ = self._capture(stages=["setup"])
+        setup_cfg = get_config(DATASET)["setup_slurm"]
+        self.assertEqual(sb["partition"], setup_cfg["partition"])
+        self.assertEqual(sb["qos"], setup_cfg["qos"])
+        self.assertEqual(sb["cpus_per_task"], setup_cfg["cpus_per_task"])
+        self.assertEqual(sb["time"], timedelta(hours=setup_cfg["time_hours"]))
+        self.assertNotIn("gres", sb, "setup must not hold a GPU")
+
+    def test_setup_profile_inherits_unset_keys_from_the_gpu_block(self):
+        _, sb, cmd = self._capture(stages=["setup"])
+        cfg = get_config(DATASET)["slurm"]
+        self.assertEqual(sb["account"], cfg["account"])
+        self.assertTrue(cmd.startswith(cfg["python_path"]))
+
+    def test_training_job_keeps_the_gpu_profile(self):
+        _, sb, _ = self._capture(stages=["fit", "artifacts"])
+        cfg = get_config(DATASET)["slurm"]
+        self.assertEqual(sb["partition"], cfg["partition"])
+        self.assertEqual(sb["gres"], cfg["gres"])
+
+    def test_all_stages_in_one_job_keeps_the_gpu_profile(self):
+        # The combined job cannot be both big-mem and GPU; submit_split is the answer.
+        _, sb, _ = self._capture()
+        self.assertEqual(sb["partition"], get_config(DATASET)["slurm"]["partition"])
+
+    def test_setup_profile_can_still_be_overridden_per_submission(self):
+        _, sb, _ = self._capture(stages=["setup"], cpus_per_task=8, time_hours=1)
+        self.assertEqual(sb["cpus_per_task"], 8)
+        self.assertEqual(sb["time"], timedelta(hours=1))
+        self.assertEqual(sb["partition"], get_config(DATASET)["setup_slurm"]["partition"])
+
+
+class TestSubmitSplit(TestSubmit):
+    def _capture_split(self, **kwargs):
+        calls = []
+        with mock.patch("simple_slurm.Slurm") as slurm:
+            slurm.return_value.sbatch.side_effect = [101, 202]
+            slurm.side_effect = lambda **kw: (calls.append(kw), mock.DEFAULT)[1]
+            ids = submit_spacetravlr.submit_split(DATASET, **kwargs)
+        return ids, calls
+
+    def test_chains_training_on_afterok_of_setup(self):
+        (setup_id, run_id), calls = self._capture_split()
+        self.assertEqual((setup_id, run_id), (101, 202))
+        self.assertNotIn("dependency", calls[0], "setup job waits on nothing")
+        self.assertEqual(calls[1]["dependency"], {"afterok": 101})
+
+    def test_the_two_jobs_get_different_hardware(self):
+        _, calls = self._capture_split()
+        cfg = get_config(DATASET)
+        self.assertEqual(calls[0]["partition"], cfg["setup_slurm"]["partition"])
+        self.assertNotIn("gres", calls[0])
+        self.assertEqual(calls[1]["partition"], cfg["slurm"]["partition"])
+        self.assertEqual(calls[1]["gres"], cfg["slurm"]["gres"])
+
+    def test_overwrite_goes_to_setup_and_clear_betadata_to_training(self):
+        # run_dataset rejects --overwrite without the setup stage, so they must not swap.
+        with mock.patch("simple_slurm.Slurm") as slurm:
+            slurm.return_value.sbatch.side_effect = [1, 2]
+            submit_spacetravlr.submit_split(DATASET, overwrite=True, clear_betadata=True)
+        cmds = [c.args[0] for c in slurm.return_value.sbatch.call_args_list]
+        self.assertIn("--overwrite", cmds[0])
+        self.assertNotIn("--clear-betadata", cmds[0])
+        self.assertIn("--clear-betadata", cmds[1])
+        self.assertNotIn("--overwrite", cmds[1])
+
+    def test_stages_are_split_setup_then_fit_artifacts(self):
+        with mock.patch("simple_slurm.Slurm") as slurm:
+            slurm.return_value.sbatch.side_effect = [1, 2]
+            submit_spacetravlr.submit_split(DATASET)
+        cmds = [c.args[0] for c in slurm.return_value.sbatch.call_args_list]
+        self.assertIn("--stage setup", cmds[0])
+        self.assertIn("--stage fit artifacts", cmds[1])
+
+    def test_per_job_overrides_apply_to_the_right_job(self):
+        _, calls = self._capture_split(setup={"time_hours": 12}, run={"time_hours": 36})
+        self.assertEqual(calls[0]["time"], timedelta(hours=12))
+        self.assertEqual(calls[1]["time"], timedelta(hours=36))
+
+    def test_dry_run_submits_neither(self):
+        with mock.patch("simple_slurm.Slurm") as slurm:
+            ids = submit_spacetravlr.submit_split(DATASET, dry_run=True)
+        self.assertEqual(ids, (None, None))
+        slurm.assert_not_called()
+
+
 if __name__ == "__main__":
     unittest.main()

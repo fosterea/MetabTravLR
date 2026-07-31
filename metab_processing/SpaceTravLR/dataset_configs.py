@@ -53,6 +53,19 @@ DEFAULTS = {
         'job_name': 'MetabTravLR',
         'python_path': '/global/home/users/fosterangus/.conda/envs/spacetravlr/bin/python',
     },
+
+    # Overrides applied on top of `slurm` for a setup-ONLY job. Setup never touches the GPU
+    # -- imputation is `magic` and the GRN is sklearn ridge, both CPU -- but it is memory
+    # hungry: process_adata_ and CellOracle each copy the whole AnnData, so Human_Lung
+    # (278k cells x 5k genes, ~5.6 GB per copy) peaks near 50 GB and OOMs an 8-core GPU
+    # allocation. Memory scales with cores on Savio, hence the big-mem partition.
+    'setup_slurm': {
+        'partition': 'savio3_bigmem',
+        'qos': 'savio_normal',
+        'gres': None,              # no GPU
+        'cpus_per_task': 32,
+        'time_hours': 6,
+    },
 }
 
 
@@ -71,6 +84,7 @@ def get_config(dataset: str) -> dict:
     cfg = copy.deepcopy(DEFAULTS)
     override = copy.deepcopy(DATASETS[dataset])
     cfg['slurm'].update(override.pop('slurm', {}))
+    cfg['setup_slurm'].update(override.pop('setup_slurm', {}))
     unknown = set(override) - set(cfg)
     if unknown:
         raise KeyError(f'{dataset}: unknown config keys {sorted(unknown)}')
