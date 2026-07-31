@@ -87,9 +87,13 @@ class BaseTravLR(ABC):
         import enlighten
         warnings.filterwarnings("ignore")
         
+        _t0 = time.time()
+        print(f'[impute] densifying {layer}: {adata.n_obs} x {adata.n_vars} '
+              f'({adata.n_obs * adata.n_vars * 4 / 1e9:.1f} GB dense)', flush=True)
         X = _adata_to_matrix(adata, layer)
         X = X.T
         X = pd.DataFrame(X, columns=adata.var_names, index=adata.obs_names)
+        print(f'[impute] densified in {time.time() - _t0:.1f}s', flush=True)
 
         X_magic_list = []
         pbar = enlighten.get_manager().counter(
@@ -102,13 +106,17 @@ class BaseTravLR(ABC):
 
         for cell_type in adata.obs[annot].unique():
             magic_operator = magic.MAGIC(verbose=0)
-            
+
             mask = adata.obs[annot] == cell_type
             X_subset = X.loc[mask]
+            _t = time.time()
             X_magic_subset = magic_operator.fit_transform(X_subset, genes='all_genes')
+            print(f'[impute] cluster {cell_type!r}: {X_subset.shape[0]} cells '
+                  f'in {time.time() - _t:.1f}s', flush=True)
             X_magic_list.append(X_magic_subset)
             pbar.update()
-            
+
+        print(f'[impute] total {time.time() - _t0:.1f}s', flush=True)
         X_magic = pd.concat(X_magic_list)
         X_magic = X_magic.loc[adata.obs_names]
         

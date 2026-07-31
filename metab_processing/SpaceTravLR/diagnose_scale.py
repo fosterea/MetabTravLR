@@ -142,11 +142,70 @@ def inventory(data_dir, datasets=None):
     return out
 
 
-def bench_magic(data_dir, dataset, sizes, seed=0):
-    """Time the real MAGIC on increasing subsamples and fit t ~ m^alpha.
+def bench_impute(data_dir, dataset, sizes, annot, seed=0):
+    """Time the REAL `impute_clusterwise` on increasing subsamples and fit t ~ m^alpha.
 
-    Mirrors `impute_clusterwise`: a dense cells x genes DataFrame handed to
-    `magic.MAGIC().fit_transform(..., genes='all_genes')`.
+    Unlike `bench_magic`, this includes what the pipeline actually pays around MAGIC:
+    `_adata_to_matrix` densifies the layer (`.todense().A.copy()` -> `.transpose()` ->
+    `.copy(order='C')` -- three full dense allocations plus a cache-hostile transpose
+    copy), the DataFrame construction, and the per-cluster `.loc` slicing. At 278k x 5k
+    each of those copies is 5.6 GB, so leaving them out understates the real cost.
+    """
+    import scanpy as sc
+
+    from SpaceTravLR.oracles import BaseTravLR
+
+    path = Path(data_dir) / dataset / 'adata.h5ad'
+    print(f'\nbenchmark (real impute_clusterwise): {path}', flush=True)
+    adata = sc.read_h5ad(path, backed='r')
+    n_obs, n_vars = adata.n_obs, adata.n_vars
+    if annot not in adata.obs.columns:
+        raise KeyError(f'{annot!r} not in obs; pass --annot. '
+                       f'candidates: {[c for c in adata.obs.columns if "res" in c][:10]}')
+    rng = np.random.default_rng(seed)
+
+    results = []
+    for m in sizes:
+        if m > n_obs:
+            print(f'  skip m={_fmt(m)} (only {_fmt(n_obs)} cells)', flush=True)
+            continue
+        idx = np.sort(rng.choice(n_obs, size=m, replace=False))
+        sub = adata[idx].to_memory()
+        sub.obs['cell_type'] = sub.obs[annot]
+        sub.layers['normalized_count'] = sub.X.copy()
+        n_clusters = int(sub.obs['cell_type'].nunique())
+
+        t0 = time.time()
+        BaseTravLR.impute_clusterwise(sub, annot='cell_type',
+                                      layer='normalized_count', layer_added='imputed_count')
+        total_s = time.time() - t0
+
+        dense_gb = m * n_vars * 4 / 1e9
+        results.append({'m': int(m), 'total_s': round(total_s, 2),
+                        'n_clusters': n_clusters, 'dense_gb': round(dense_gb, 2)})
+        print(f'  m={_fmt(m):>9}  impute={total_s:8.1f}s  ({n_clusters} clusters, '
+              f'{dense_gb:.1f} GB dense)', flush=True)
+        del sub
+
+    if adata.isbacked:
+        adata.file.close()
+
+    alpha = None
+    if len(results) >= 2:
+        xs = np.log([r['m'] for r in results])
+        ys = np.log([max(r['total_s'], 1e-6) for r in results])
+        alpha = float(np.polyfit(xs, ys, 1)[0])
+
+    return {'dataset': dataset, 'annot': annot, 'mode': 'impute', 'n_obs': int(n_obs),
+            'n_vars': int(n_vars), 'points': results, 'alpha': alpha,
+            'time_key': 'total_s'}
+
+
+def bench_magic(data_dir, dataset, sizes, seed=0):
+    """Time MAGIC ALONE on increasing subsamples and fit t ~ m^alpha.
+
+    Isolates the algorithm from the marshalling around it -- useful for attributing cost,
+    but it is NOT what the pipeline pays. Use `--bench-mode impute` for that.
     """
     import magic
     import scanpy as sc
@@ -200,8 +259,8 @@ def bench_magic(data_dir, dataset, sizes, seed=0):
         ys = np.log([max(r['magic_s'], 1e-6) for r in results])
         alpha = float(np.polyfit(xs, ys, 1)[0])
 
-    return {'dataset': dataset, 'n_obs': int(n_obs), 'n_vars': int(n_vars),
-            'points': results, 'alpha': alpha}
+    return {'dataset': dataset, 'mode': 'magic', 'n_obs': int(n_obs), 'n_vars': int(n_vars),
+            'points': results, 'alpha': alpha, 'time_key': 'magic_s'}
 
 
 def _print_inventory(inv):
@@ -230,14 +289,15 @@ def _print_inventory(inv):
 
 
 def _print_bench(b):
+    key = b.get('time_key', 'magic_s')
     print('\n' + '=' * 78)
-    print('MAGIC SCALING')
+    print(f'SCALING ({b.get("mode", "magic")})')
     print('=' * 78)
     pts_all = b['points']
     if b['alpha'] is None or len(pts_all) < 2:
         print('not enough points to fit')
         return
-    slowest = max(p['magic_s'] for p in pts_all)
+    slowest = max(p[key] for p in pts_all)
     if slowest < 5:
         # Sub-second timings are dominated by fixed overhead; a fit on them is noise.
         print(f'  timings too small to fit (slowest {slowest:.2f}s). Re-run with larger '
@@ -255,11 +315,13 @@ def _print_bench(b):
     pts = b['points']
     if pts:
         ref = pts[-1]
-        for target in (100_000, 278_328, 1_000_000):
-            est = ref['magic_s'] * (target / ref['m']) ** a
-            print(f'  extrapolated: one {_fmt(target)}-cell cluster -> '
-                  f'{est / 3600:8.2f} h')
-        print('  (per cluster; the setup total is the sum over clusters)')
+        for target in (100_000, 278_328, 1_157_659):
+            est = ref[key] * (target / ref['m']) ** a
+            flag = '' if target <= 4 * ref['m'] else '   <- >4x beyond measured, unreliable'
+            print(f'  extrapolated to {_fmt(target):>9} cells -> {est / 3600:8.2f} h{flag}')
+        print(f'  (measured up to {_fmt(ref["m"])} cells; a power-law fit does not survive '
+              f'a regime change such as\n   exact->approximate kNN or the point where the '
+              f'dense copies stop fitting in RAM)')
 
 
 def main(argv=None):
@@ -269,11 +331,16 @@ def main(argv=None):
     parser.add_argument('--dataset', action='append', dest='datasets',
                         help='limit to this dataset (repeatable); default all')
     parser.add_argument('--bench', action='store_true',
-                        help='also time MAGIC on subsamples (minutes; use a compute node)')
+                        help='also time imputation on subsamples (use a compute node)')
+    parser.add_argument('--bench-mode', choices=['impute', 'magic'], default='impute',
+                        help="'impute' times the real impute_clusterwise including the dense "
+                             "marshalling (default); 'magic' times MAGIC alone")
     parser.add_argument('--bench-dataset', help='dataset to benchmark (default: first given)')
     parser.add_argument('--bench-sizes', type=int, nargs='+',
-                        default=[2000, 4000, 8000, 16000],
+                        default=[10000, 25000, 50000, 100000],
                         help='subsample sizes for the benchmark')
+    parser.add_argument('--annot', default='leiden_scVI_res_0.5',
+                        help='obs column used as cell_type for impute-mode clustering')
     parser.add_argument('--out', default='spacetravlr_diagnostics.json')
     args = parser.parse_args(argv)
 
@@ -284,7 +351,10 @@ def main(argv=None):
 
     if args.bench:
         target = args.bench_dataset or (args.datasets or sorted(inv))[0]
-        report['bench'] = bench_magic(args.data_dir, target, args.bench_sizes)
+        if args.bench_mode == 'impute':
+            report['bench'] = bench_impute(args.data_dir, target, args.bench_sizes, args.annot)
+        else:
+            report['bench'] = bench_magic(args.data_dir, target, args.bench_sizes)
         _print_bench(report['bench'])
 
     Path(args.out).write_text(json.dumps(report, indent=2, default=str))

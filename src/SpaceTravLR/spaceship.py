@@ -22,8 +22,8 @@ import pickle
 import functools
 import time
 
-import jscatter
-import jscatter
+# import jscatter
+# import jscatter
 import scanpy as sc
 import numpy as np
 import pandas as pd
@@ -131,83 +131,104 @@ class SpaceShip:
         assert annot in adata.obs.columns
         assert 'spatial' in adata.obsm
         
+        def _phase(msg, since=None):
+            elapsed = f' ({time.time() - since:.1f}s)' if since else ''
+            print(f'[process_adata] {msg}{elapsed}', flush=True)
+            return time.time()
+
+        _t = _phase(f'copying {adata.n_obs} x {adata.n_vars}')
         adata = adata.copy()
-        
-        self.species = 'mouse' if is_mouse_data(adata) else 'human'        
+
+        self.species = 'mouse' if is_mouse_data(adata) else 'human'
+        _t = _phase(f'scale_adata (species={self.species})', _t)
         adata = scale_adata(adata)
-        
+
+        _t = _phase(f'encoding {annot} ({adata.obs[annot].dtype})', _t)
         adata.obs['cell_type_int'] = adata.obs[annot].apply(
             lambda x: encode_labels(adata.obs[annot], reverse_dict=True)[x])
-        
+        _t = _phase('encoded', _t)
+
         if 'X_umap' not in adata.obsm:
             if self.status_bar:
                 self.status_bar.update('📊 Processing AnnData: Computing PCA, neighbors, and UMAP...')
+            _t = _phase('PCA + neighbors + UMAP (no X_umap present)', _t)
             sc.pp.pca(adata)
             sc.pp.neighbors(adata)
             sc.tl.umap(adata)
-            
+            _t = _phase('UMAP done', _t)
+        else:
+            _phase('X_umap present, skipping PCA/neighbors/UMAP')
+
         if 'imputed_count' not in adata.layers:
             if 'normalized_count' not in adata.layers:
                 if adata.X.max() > 100:
+                    _t = _phase('log1p', _t)
                     sc.pp.log1p(adata)
-            
+
+            _t = _phase('copying normalized_count', _t)
             adata.layers['normalized_count'] = adata.X.copy()
 
+            _t = _phase(f'impute_clusterwise over {annot}', _t)
             BaseTravLR.impute_clusterwise(
-                adata, 
-                annot=annot, 
-                layer='normalized_count', 
+                adata,
+                annot=annot,
+                layer='normalized_count',
                 layer_added='imputed_count'
             )
-            
+            _t = _phase('imputation done', _t)
+
             del adata.layers['normalized_count']
-        
+        else:
+            _phase('imputed_count already present, skipping imputation')
+
         self.annot = annot
-        
+
         if self.status_bar:
             self.status_bar.update('📊 Processing AnnData: Saving processed data...')
+        _t = _phase('writing _adata.h5ad', _t)
         adata.write_h5ad(f'{self.outdir}/input_data/_adata.h5ad')
+        _phase('wrote _adata.h5ad', _t)
         self.adata = adata
         
         if self.status_bar:
             self.status_bar.update('✅ Processing AnnData: Complete')
             
-    def interactive_select(self, adata, size=10, annot='cell_type', mode='spatial'):
-        """
-        Launches an interactive scatter plot for selecting cells.
+    # def interactive_select(self, adata, size=10, annot='cell_type', mode='spatial'):
+    #     """
+    #     Launches an interactive scatter plot for selecting cells.
 
-        Parameters
-        ----------
-        adata : ad.AnnData
-            AnnData object.
-        size : int, optional
-            Point size, by default 10.
-        annot : str, optional
-            Color by annotation, by default 'cell_type'.
-        mode : str, optional
-            'spatial' or 'umap', by default 'spatial'.
+    #     Parameters
+    #     ----------
+    #     adata : ad.AnnData
+    #         AnnData object.
+    #     size : int, optional
+    #         Point size, by default 10.
+    #     annot : str, optional
+    #         Color by annotation, by default 'cell_type'.
+    #     mode : str, optional
+    #         'spatial' or 'umap', by default 'spatial'.
 
-        Returns
-        -------
-        jscatter.Scatter
-            Interactive scatter plot widget.
-        """
-        datadf_with_umap = adata.to_df().join(adata.obs).join(
-            pd.DataFrame(adata.obsm['spatial'], columns=['x', 'y'], index=adata.obs_names)
-                )
-        datadf_with_umap['umapX'] = adata.obsm['X_umap'][:,0]
-        datadf_with_umap['umapY'] = adata.obsm['X_umap'][:,1]
+    #     Returns
+    #     -------
+    #     jscatter.Scatter
+    #         Interactive scatter plot widget.
+    #     """
+    #     datadf_with_umap = adata.to_df().join(adata.obs).join(
+    #         pd.DataFrame(adata.obsm['spatial'], columns=['x', 'y'], index=adata.obs_names)
+    #             )
+    #     datadf_with_umap['umapX'] = adata.obsm['X_umap'][:,0]
+    #     datadf_with_umap['umapY'] = adata.obsm['X_umap'][:,1]
 
-        config = {'height': 800, 'width': 800, 'size': size}
+    #     config = {'height': 800, 'width': 800, 'size': size}
 
-        if mode == 'spatial':
-            scatter = jscatter.Scatter(data=datadf_with_umap, x='x', y='y', **config).color(by=annot).legend(True)
-        elif mode == 'umap':
-            scatter = jscatter.Scatter(data=datadf_with_umap, x='umapX', y='umapY', **config).color(by=annot).legend(True)
-        else:
-            raise ValueError(f"Invalid mode: {mode}")
+    #     if mode == 'spatial':
+    #         scatter = jscatter.Scatter(data=datadf_with_umap, x='x', y='y', **config).color(by=annot).legend(True)
+    #     elif mode == 'umap':
+    #         scatter = jscatter.Scatter(data=datadf_with_umap, x='umapX', y='umapY', **config).color(by=annot).legend(True)
+    #     else:
+    #         raise ValueError(f"Invalid mode: {mode}")
             
-        return scatter    
+    #     return scatter    
         
     def load_base_cell_thresholds(self) -> pd.DataFrame:
         df_ligrec = get_cellchat_db(self.species) 
