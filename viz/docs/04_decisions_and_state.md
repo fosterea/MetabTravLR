@@ -4,6 +4,20 @@
 restart. Dates are absolute (project "today" was 2026-07-16 at kickoff).
 
 ## Current state
+- **2026-08-01 — Re-ingested: new SpaceTravLR melanoma run (7 target genes, was 4). Data-only; Playwright-verified.**
+  - `npm run ingest -- ../Results` over the same 7 datasets. **Only the 3 Melanoma `beta/*.json`
+    changed** — the harreman side of every dataset is byte-identical, so no edges/nbhd/manifest churn.
+  - What grew: target genes **4 → 7** (added **HAVCR2, HIF1A, MYC** alongside CD3E/CD4/ENTPD1/IL2RA),
+    pairs 72 → 76, Tier3 rows 1,555 → 2,680 (Tier1/Tier2 622 → 1,072). The BetaPanel heatmap is
+    column-count-agnostic, so **no code change was needed** — 7 columns render with no horizontal
+    overflow. Ingest reported no dropped rows (no pair missing from the network `gp` list).
+  - Re-ran the smoke item 12 DOM-vs-bundle diff on Melanoma Tier3: **195/195 rendered values
+    round-trip** to the bundle, 0 label/sign/hue/floor mismatches; 120 cells correctly read `—`
+    (the new genes aren't fit for every direction), 16 exact `0`, 92 `≈0`. `tsc`+`lint`+`build`
+    clean, 0 console errors/warnings.
+  - Note for later: the new genes are **sparser** than the original 4 — 120 of 315 cells in the
+    default view have no coefficient at all. That's honest (`—` ≠ `≈0`), but if Foster wants the
+    grid denser we could hide all-missing columns per block.
 - **2026-07-23 — Fixed: a selected gene-pair tab vanished when the cutoff emptied it. Playwright-verified.**
   - Foster: dragging the FDR slider until the *selected* pair had no significant interface bounced
     him back to the metabolite ("All") view and lost his place. Wanted behavior: tabs may appear and
@@ -203,6 +217,11 @@ restart. Dates are absolute (project "today" was 2026-07-16 at kickoff).
     matches source, a negative never renders `+`, hue matches sign, and `≈0` cells carry no tint.
 
 ## Changelog
+- 2026-08-01: **Data refresh — new SpaceTravLR melanoma run re-ingested.** `npm run ingest -- ../Results`;
+  only `Primary_Dermal_Melanoma/beta/{Tier1,Tier2,Tier3}.json` changed. Target genes 4 → 7 (+HAVCR2,
+  HIF1A, MYC), pairs 72 → 76, Tier3 rows 1,555 → 2,680. No code, schema, contract or ingest change —
+  `BetaPanel` already derives its columns from `targetGenes`. Verified per smoke item 12 (195/195
+  cells match the bundle, 0 mismatches) and item 11; build + console clean.
 - 2026-07-23: **Fix — a selected gene-pair tab vanished (and forwarded you to "All") once the FDR
   cutoff left it with no significant interface.** Removed the release-to-"All" `useEffect` added
   earlier the same day and replaced it with retention: `GenePairTabs` now renders a `tabs` memo =
