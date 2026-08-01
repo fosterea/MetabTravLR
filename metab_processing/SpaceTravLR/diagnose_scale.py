@@ -153,7 +153,16 @@ def bench_impute(data_dir, dataset, sizes, annot, min_cluster_size=100, seed=0):
     """
     import scanpy as sc
 
-    from SpaceTravLR.oracles import BaseTravLR
+    try:
+        from SpaceTravLR.oracles import BaseTravLR
+    except ImportError as exc:
+        raise SystemExit(
+            f'impute mode imports the SpaceTravLR package, which needs its full deps '
+            f'({exc}).\nRun it with the spacetravlr env rather than harreman:\n'
+            f'  /global/home/users/fosterangus/.conda/envs/spacetravlr/bin/python '
+            f'{sys.argv[0]} ...\n'
+            f'or pass --bench-mode magic, which only needs magic-impute + scanpy.'
+        ) from None
 
     path = Path(data_dir) / dataset / 'adata.h5ad'
     print(f'\nbenchmark (real impute_clusterwise): {path}', flush=True)
@@ -372,6 +381,15 @@ def main(argv=None):
 
     if args.bench:
         target = args.bench_dataset or (args.datasets or sorted(inv))[0]
+        # Validate --annot against what the inventory just read, so a typo fails here with
+        # the real column names rather than after loading a subsample.
+        cols = inv.get(target, {}).get('cluster_columns', {})
+        if cols and args.annot not in cols:
+            stem = args.annot.split('_res')[0]
+            near = [c for c in sorted(cols) if c.startswith(stem)]
+            raise SystemExit(
+                f'--annot {args.annot!r} is not a cluster column of {target}.\n'
+                f'did you mean one of: {near or sorted(cols)[:15]}')
         if args.bench_mode == 'impute':
             report['bench'] = bench_impute(args.data_dir, target, args.bench_sizes,
                                            args.annot, args.min_cluster_size)
