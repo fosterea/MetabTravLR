@@ -207,11 +207,17 @@ def bench_impute(data_dir, dataset, sizes, annot, min_cluster_size=100, seed=0):
                                       layer='normalized_count', layer_added='imputed_count')
         total_s = time.time() - t0
 
-        dense_gb = m * n_vars * 4 / 1e9
-        results.append({'m': int(m), 'total_s': round(total_s, 2),
-                        'n_clusters': n_clusters, 'dense_gb': round(dense_gb, 2)})
-        print(f'  m={_fmt(m):>9}  impute={total_s:8.1f}s  ({n_clusters} clusters, '
-              f'{dense_gb:.1f} GB dense)', flush=True)
+        # Fit on the cells actually imputed, not the cells requested -- dropping
+        # under-sized clusters can remove a large fraction at small m, and using the
+        # requested size would silently skew the exponent.
+        m_used = int(sub.n_obs)
+        dense_gb = m_used * n_vars * 4 / 1e9
+        results.append({'m': m_used, 'm_requested': int(m), 'dropped': dropped,
+                        'total_s': round(total_s, 2), 'n_clusters': n_clusters,
+                        'dense_gb': round(dense_gb, 2)})
+        print(f'  m={_fmt(m_used):>9}  impute={total_s:8.1f}s  ({n_clusters} clusters, '
+              f'{dense_gb:.1f} GB dense'
+              f'{f", {dropped} cells dropped" if dropped else ""})', flush=True)
         del sub
 
     if adata.isbacked:
