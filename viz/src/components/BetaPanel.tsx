@@ -1,42 +1,39 @@
 /**
- * SpaceTravLR coefficients for the selected entity, as a per-cell-type heatmap.
+ * SpaceTravLR coefficients for the selected entity, as a cell-type-major heatmap (`BetaMatrix`).
  *
- * Rows are DIRECTED transporter pairs (`environment gene → cell gene`), columns are the target
- * genes the model scores. One block per cell type; a picker narrows to a single cell type or
- * shows every breakdown stacked.
- *
- * Encoding: color = sign (diverging `--val-*`), tint depth = log magnitude on one scale shared by
- * the whole view (so cell types are comparable), and the number is printed in every cell so the
- * color never carries the value alone. Near-zero coefficients are left untinted and marked ≈0
- * rather than given a visible floor — see `betaScale.ts` for why that distinction matters.
+ * The primary factor group is the metabolite's (or gene pair's) own transporter pairs, sourced from
+ * the bundle's `metab` channel. Beneath it, the user can add COMPARISON factor groups — the other
+ * feature channels (ligand–receptor, ligand–TF, transcription factors) and the full "all metabolic
+ * transporters" superset — as chips. All groups are stacked cell-type-major by `BetaMatrix`, sharing
+ * one UNION set of target-gene columns (so a gene only a comparison factor covers still appears),
+ * while each factor keeps its OWN magnitude scale. Comparisons reset when the entity/tier/dataset
+ * changes, but survive a cell-type-filter change.
  *
  * Both directions of a pair are separate rows on purpose: `A→B` and `B→A` are different
  * coefficients, and merging them would invent a symmetry the model does not claim.
  */
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useVizStore, selectCurrentTier } from '@/store/useVizStore';
-import {
-  BETA_DECADES,
-  betaKey,
-  betaTooltip,
-  formatBeta,
-  formatMagnitude,
-  groupBeta,
-  makeBetaScale,
-} from '@/data/betaScale';
-import type { BetaRow, Entity } from '@/data/types';
+import { betaKey } from '@/data/betaScale';
+import type { BetaChannel, BetaChannelId, Entity } from '@/data/types';
+import BetaMatrix, { type BetaFactorGroup } from './BetaMatrix';
 import styles from './BetaPanel.module.css';
 
 const ALL = '__all__';
-
-/** Below this many cells a cell type's mean coefficient is noisy; flag it, don't hide it. */
-const MIN_CELLS = 500;
 
 /** The pair keys whose coefficients belong to this entity. */
 function pairKeysFor(entity: Entity): string[] {
   if (entity.kind === 'gene_pair') return [betaKey(entity.genes[0], entity.genes[1])];
   // A metabolite is served by many transporter pairs (many-to-many); show all of them.
   return [...new Set(entity.genePairs.map(([a, b]) => betaKey(a, b)))];
+}
+
+/**
+ * Chip/menu label for a channel. The primary section already shows THIS metabolite's own
+ * transporter pairs, so the metab comparison shows *every* pair — hence a distinct label.
+ */
+function optionLabel(ch: BetaChannel): string {
+  return ch.id === 'metab' ? 'All metabolic transporters' : ch.label;
 }
 
 export default function BetaPanel() {
@@ -47,6 +44,16 @@ export default function BetaPanel() {
   const betaBundle = useVizStore((s) => s.betaBundle);
   const [cellTypeFilter, setCellTypeFilter] = useState<string>(ALL);
 
+  // Comparison channels stacked below the primary, in the order they were added.
+  const [added, setAdded] = useState<BetaChannelId[]>([]);
+  // Stale comparisons must not linger onto a different entity/tier/dataset (their genes/scales are
+  // no longer meaningful). A cell-type-filter change deliberately does NOT reset them.
+  const datasetId = dataset?.id;
+  const tierId = tier?.id;
+  useEffect(() => {
+    setAdded([]);
+  }, [entityId, tierId, datasetId]);
+
   const entity = useMemo<Entity | undefined>(() => {
     if (!dataset || !entityId) return undefined;
     const list =
@@ -54,13 +61,49 @@ export default function BetaPanel() {
     return list?.find((e) => e.id === entityId);
   }, [dataset, entityId, entityKind]);
 
-  // Every cell type this entity has coefficients for, in the bundle's order.
+  const metab = useMemo(() => betaBundle?.channels.find((c) => c.id === 'metab'), [betaBundle]);
+  const channelsById = useMemo(() => {
+    const m = new Map<BetaChannelId, BetaChannel>();
+    for (const c of betaBundle?.channels ?? []) m.set(c.id, c);
+    return m;
+  }, [betaBundle]);
+
+  // This entity's own transporter-pair rows, filtered out of the metab channel by sorted pair key.
+  const primaryRows = useMemo(() => {
+    if (!entity || !metab) return [];
+    const keys = new Set(pairKeysFor(entity));
+    return metab.rows.filter((r) => r.b != null && keys.has(betaKey(r.a, r.b)));
+  }, [entity, metab]);
+
+  // The stacked factor groups: the metabolite's own pairs first, then each added comparison. For
+  // the "All metabolic transporters" option we compare against the WHOLE metab channel, not just
+  // this metabolite's pairs.
+  const groups = useMemo<BetaFactorGroup[]>(() => {
+    if (!metab) return [];
+    const primaryLabel = `This ${entityKind === 'metabolite' ? 'metabolite' : 'gene pair'}’s transporter pairs`;
+    const primary: BetaFactorGroup = {
+      key: 'metab-primary',
+      channel: metab,
+      label: primaryLabel,
+      rows: primaryRows,
+    };
+    const rest = added
+      .map((id): BetaFactorGroup | null => {
+        const ch = channelsById.get(id);
+        if (!ch) return null;
+        return { key: id, channel: ch, label: optionLabel(ch), rows: id === 'metab' ? metab.rows : ch.rows };
+      })
+      .filter((g): g is BetaFactorGroup => g !== null);
+    return [primary, ...rest];
+  }, [metab, entityKind, primaryRows, added, channelsById]);
+
+  // Every cell type that appears in ANY shown group, in the bundle's order.
   const availableCellTypes = useMemo(() => {
-    if (!entity || !betaBundle) return [];
-    const keys = pairKeysFor(entity);
-    const present = new Set(keys.flatMap((k) => betaBundle.byPair[k] ?? []).map((r) => r.cellType));
+    if (!betaBundle) return [];
+    const present = new Set<string>();
+    for (const g of groups) for (const r of g.rows) present.add(r.cellType);
     return betaBundle.cellTypes.filter((ct) => present.has(ct));
-  }, [entity, betaBundle]);
+  }, [betaBundle, groups]);
 
   // Cell-type names differ per tier, so a filter set at Tier3 is meaningless at Tier1. Fall back
   // to "All" rather than blanking the panel (and keep the <select> showing that fallback).
@@ -70,27 +113,16 @@ export default function BetaPanel() {
     [effectiveFilter, availableCellTypes],
   );
 
-  const blocks = useMemo(() => {
-    if (!entity || !betaBundle) return [];
-    return groupBeta(betaBundle.byPair, pairKeysFor(entity), shown);
-  }, [entity, betaBundle, shown]);
-
-  // ONE scale over every value on screen, so a cell in one cell type is comparable to a cell in
-  // another. Built from the shown blocks, so narrowing to one cell type rescales to it.
-  const scale = useMemo(
-    () =>
-      makeBetaScale(
-        blocks.flatMap((b) => b.directions.flatMap((d) => Object.values(d.byGene).map((r) => r.mean))),
-      ),
-    [blocks],
+  // Channels offered by the "Add comparison" menu: those in the bundle not already added.
+  const availableToAdd = useMemo(
+    () => (betaBundle?.channels ?? []).filter((c) => !added.includes(c.id)),
+    [betaBundle, added],
   );
 
   if (!dataset?.hasBeta || !betaBundle) return null;
   if (!entity) return null;
 
-  const genes = betaBundle.targetGenes;
-
-  if (!availableCellTypes.length) {
+  if (!metab || !availableCellTypes.length) {
     return (
       <section className={styles.wrap} aria-labelledby="beta-h">
         <h3 className={styles.title} id="beta-h">
@@ -104,6 +136,8 @@ export default function BetaPanel() {
       </section>
     );
   }
+
+  const remove = (id: BetaChannelId) => setAdded((a) => a.filter((x) => x !== id));
 
   return (
     <section className={styles.wrap} aria-labelledby="beta-h">
@@ -141,124 +175,49 @@ export default function BetaPanel() {
         claim: positive means the interaction raises that target gene, negative lowers it.
       </p>
 
-      <Legend scale={scale} />
-
-      {blocks.map((block) => {
-        const thin = block.nCells != null && block.nCells < MIN_CELLS;
-        return (
-          <div key={block.cellType} className={styles.block}>
-            <div className={styles.blockHead}>
-              <span className={styles.blockName}>
-                {block.cellType}
-                {thin && (
-                  <span className={styles.thinTag} title="Few cells behind these means — noisier">
-                    thin
-                  </span>
-                )}
-              </span>
-              <span className={styles.blockMeta}>
-                {block.nCells == null ? '—' : block.nCells.toLocaleString()} cells ·{' '}
-                {block.directions.length} direction{block.directions.length === 1 ? '' : 's'}
-              </span>
-            </div>
-
-            <div
-              className={styles.grid}
-              style={{
-                gridTemplateColumns: `minmax(190px, max-content) repeat(${genes.length}, 88px)`,
-              }}
-            >
-              <span className={`${styles.colHead} ${styles.dirHead}`}>environment → cell</span>
-              {genes.map((g) => (
-                <span key={g} className={`${styles.colHead} ${styles.geneHead}`}>
-                  {g}
-                </span>
-              ))}
-
-              {block.directions.map((d) => (
-                <Row key={d.id} env={d.env} cell={d.cell} byGene={d.byGene} genes={genes} scale={scale} />
-              ))}
-            </div>
-          </div>
-        );
-      })}
-
-      <p className={styles.foot}>
-        Tint depth is log magnitude over the {BETA_DECADES} orders of magnitude below the strongest
-        coefficient shown (|beta| {formatMagnitude(scale.max)}); one scale across every cell type
-        here, so blocks are directly comparable. Anything weaker than{' '}
-        {formatMagnitude(scale.floor)} is left blank and marked <b>≈0</b> — it is not given a
-        minimum bar, because a negligible coefficient should read as nothing rather than as a small
-        real effect. No significance test is applied; hover any cell for its mean, std and n. Rows
-        marked <b>thin</b> come from fewer than {MIN_CELLS.toLocaleString()} cells.
-      </p>
-    </section>
-  );
-}
-
-function Row({
-  env,
-  cell,
-  byGene,
-  genes,
-  scale,
-}: {
-  env: string;
-  cell: string;
-  byGene: Record<string, BetaRow>;
-  genes: string[];
-  scale: ReturnType<typeof makeBetaScale>;
-}) {
-  return (
-    <>
-      <span className={styles.dir} title={`${env} expressed by the environment → ${cell} expressed by the cell`}>
-        <span className={styles.envGene}>{env}</span>
-        <span className={styles.arrow} aria-label="acts on">
-          →
-        </span>
-        <span className={styles.cellGene}>{cell}</span>
-      </span>
-
-      {genes.map((g) => {
-        const r = byGene[g];
-        if (!r) {
+      {/* Comparison bar: stack other channels below, aligned to this metabolite's target genes. */}
+      <div className={styles.compare}>
+        <span className={styles.compareLabel}>Compare</span>
+        {added.map((id) => {
+          const ch = channelsById.get(id);
+          if (!ch) return null;
+          const label = optionLabel(ch);
           return (
-            <span key={g} className={`${styles.cell} ${styles.missing}`} title={`No coefficient for ${g}`}>
-              —
+            <span key={id} className={styles.chip}>
+              {label}
+              <button
+                type="button"
+                className={styles.chipRemove}
+                onClick={() => remove(id)}
+                title={`Remove ${label}`}
+                aria-label={`Remove ${label}`}
+              >
+                ✕
+              </button>
             </span>
           );
-        }
-        const v = r.mean;
-        const negligible = scale.negligible(v);
-        // Magnitude and sign ride separate channels: the tint depth never encodes the sign, and
-        // the sign never changes the depth. A near-zero value gets no tint at all.
-        const t = negligible ? 0 : scale.norm(v) * 50;
-        const hue = (v ?? 0) < 0 ? 'var(--val-neg)' : 'var(--val-pos)';
-        return (
-          <span
-            key={g}
-            className={`${styles.cell} ${negligible ? styles.negligible : ''}`}
-            style={negligible ? undefined : { background: `color-mix(in oklab, ${hue} ${t}%, var(--bg-canvas))` }}
-            title={betaTooltip(r)}
-          >
-            {formatBeta(v, scale)}
-          </span>
-        );
-      })}
-    </>
-  );
-}
+        })}
+        <select
+          className="control"
+          value=""
+          aria-label="Add comparison"
+          onChange={(e) => {
+            const id = e.target.value as BetaChannelId;
+            if (id) setAdded((a) => [...a, id]);
+          }}
+        >
+          <option value="">Add comparison ▾</option>
+          {availableToAdd.map((ch) => (
+            <option key={ch.id} value={ch.id}>
+              {optionLabel(ch)}
+            </option>
+          ))}
+        </select>
+      </div>
 
-/** Diverging scale key. Mandatory whenever the encoding is on screen. */
-function Legend({ scale }: { scale: ReturnType<typeof makeBetaScale> }) {
-  return (
-    <div className={styles.legend}>
-      <span className={styles.legendEnd}>−{formatMagnitude(scale.max)}</span>
-      <span className={styles.ramp} aria-hidden />
-      <span className={styles.legendEnd}>+{formatMagnitude(scale.max)}</span>
-      <span className={styles.legendNote}>
-        lowers ← target gene → raises · blank = ≈0 (|beta| below {formatMagnitude(scale.floor)})
-      </span>
-    </div>
+      {/* One cell-type-major matrix: columns are the UNION of target genes across shown groups, so
+          a gene only a comparison factor covers still appears (with the metab group blank there). */}
+      <BetaMatrix groups={groups} cellTypes={shown} />
+    </section>
   );
 }

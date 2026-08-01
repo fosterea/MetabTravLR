@@ -25,8 +25,8 @@ import {
 type Status = 'idle' | 'loading' | 'ready' | 'error';
 
 /** Which visualization occupies the canvas. The side panel + entity selection are shared, so
- *  switching views keeps your place. */
-export type View = 'graph' | 'nbhd';
+ *  switching views keeps your place. `spacetravlr` is entity-independent (the whole beta bundle). */
+export type View = 'graph' | 'nbhd' | 'spacetravlr';
 
 interface VizState {
   status: Status;
@@ -156,9 +156,10 @@ export const useVizStore = create<VizState>((set, get) => ({
         gpTab: undefined,
         pinnedGp: undefined,
         hoverGp: undefined,
-        // A dataset with neither neighborhood scores nor SpaceTravLR betas has nothing to put
-        // in that view.
-        view: hasEnvView(dataset) ? get().view : 'graph',
+        // Keep the current view only if it is still valid for the new dataset: `graph` always;
+        // `nbhd` iff the dataset has an environment view; `spacetravlr` iff it has betas. Otherwise
+        // fall back to the always-available graph.
+        view: viewForDataset(get().view, dataset),
       });
       if (tierId) await loadBundle(set, get);
     } catch (e) {
@@ -297,6 +298,13 @@ async function loadBundle(set: (partial: Partial<VizState>) => void, get: () => 
  */
 export const hasEnvView = (d: Dataset | { hasNbhd: boolean; hasBeta: boolean } | undefined) =>
   Boolean(d && (d.hasNbhd || d.hasBeta));
+
+/** Keep the retained view only if the new dataset can still show it, else fall back to `graph`. */
+function viewForDataset(view: View, d: Dataset): View {
+  if (view === 'nbhd') return hasEnvView(d) ? 'nbhd' : 'graph';
+  if (view === 'spacetravlr') return d.hasBeta ? 'spacetravlr' : 'graph';
+  return view; // 'graph' is always valid
+}
 
 /** Selector: the gene pair to highlight — a live hover preview wins over the pinned choice. */
 export const selectFocusedGp = (s: VizState): string | undefined => s.hoverGp ?? s.pinnedGp;

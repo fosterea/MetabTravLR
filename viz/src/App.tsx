@@ -8,6 +8,7 @@ import EntityDetails from '@/components/EntityDetails';
 import EdgeDetails from '@/components/EdgeDetails';
 import GenePairTabs from '@/components/GenePairTabs';
 import NeighborhoodView from '@/components/NeighborhoodView';
+import SpaceTravlrView from '@/components/SpaceTravlrView';
 import GraphView from '@/graph/GraphView';
 
 export default function App() {
@@ -58,13 +59,17 @@ export default function App() {
     );
   }
 
+  // The standalone SpaceTravLR view is entity-independent, so the entity side panel is irrelevant
+  // there — hide it and let the canvas fill the width.
+  const full = view === 'spacetravlr';
+
   return (
     <div className="app">
       <ControlBar />
-      <div className="app__body">
-        <EntityPanel />
+      <div className={`app__body${full ? ' app__body--full' : ''}`}>
+        {!full && <EntityPanel />}
         <main className="canvas-wrap">
-          {view === 'graph' ? (
+          {view === 'graph' && (
             <>
               <GraphView />
               <GenePairTabs />
@@ -72,9 +77,9 @@ export default function App() {
               <EntityDetails />
               <EdgeDetails />
             </>
-          ) : (
-            <NeighborhoodView />
           )}
+          {view === 'nbhd' && <NeighborhoodView />}
+          {view === 'spacetravlr' && <SpaceTravlrView />}
         </main>
       </div>
     </div>

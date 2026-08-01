@@ -11,12 +11,13 @@ manifest.json                         # { generatedAt, schemaVersion, datasets: 
 <id>/dataset.json                     # Dataset: tiers + entities (+ ranking metrics)
 <id>/edges/<Tier>.<entityKind>.json   # EdgeBundle: { tier, entityKind, cellTypes, byEntity }
 <id>/nbhd/<Tier>.json                 # NbhdBundle: neighborhood scores (omitted if absent)
-<id>/beta/<Tier>.json                 # BetaBundle: SpaceTravLR coefficients (omitted if absent)
+<id>/beta/<Tier>.json                 # BetaBundle: SpaceTravLR coefficients, ALL channels (omitted if absent)
 ```
 `byEntity` maps `entityId -> EntityEdge[]` so selecting an entity is an O(1) lookup.
-`schemaVersion` is **3** (v3 added `beta/` + `hasBeta`; v2 added `nbhd/`, and
-`project`/`hasNbhd`/`available` on `DatasetRef`). Both bumps are **additive** — an older app
-reading a newer bundle just ignores the new keys.
+`schemaVersion` is **4** (v4 made `beta/` hold ALL SpaceTravLR channels — metab/lr/ltf/tf — as a
+`BetaChannel[]`, replacing the v3 transporter-pair-only `byPair` index; v3 added `beta/` + `hasBeta`;
+v2 added `nbhd/`, and `project`/`hasNbhd`/`available` on `DatasetRef`). Every bump is **additive** —
+an older app reading a newer bundle just ignores the new keys/channels.
 
 ## Multiple datasets, and incomplete ones
 The input path may be a single `harreman_outputs/`, a `<root>/<dataset>/easy_download/…` tree,
@@ -57,22 +58,35 @@ empty dataset.
   "X exchanges E with Y", and it carries no direction. It must never be folded into `EntityEdge`.
   `log2Enrichment` is unstable for small `nCells` (parent doc 05 §5a), so `nCells` travels with
   every row and the UI flags rows under 25 significant cells as "thin".
-- **BetaRow** = `{ env, cell, gene, cellType, mean, std, n }`;
-  **BetaBundle** = `{ tier, cellTypes, targetGenes, byPair }`.
-  One SpaceTravLR learned coefficient: how much a **directed** transporter pair moves one target
-  gene, averaged over the cells of one cell type.
-  ⚠️ **Direction is real here** — the one place in this app where it is. `env` is the transporter
-  expressed by the *environment* (harreman's "export" column), `cell` the one expressed by *the
-  cell* ("import"). `env→cell` and `cell→env` are independent coefficients and must never be
-  merged, averaged, or drawn as one row; 70 of the 107 directed pairs in the melanoma run have
-  both orders present.
+- **BetaChannelId** = `'metab' | 'lr' | 'ltf' | 'tf'` (the four SpaceTravLR feature channels).
+- **BetaRow** = `{ a, b, gene, cellType, mean, std, n }` — one SpaceTravLR learned coefficient,
+  generalized across all channels: how much one **feature** moves one target gene, averaged over
+  the cells of one cell type.
+  ⚠️ **Direction is real here** — the one place in this app where it is. Member `a` is the
+  environment/sender side (export / ligand / ligand — or the TF for a single-member channel);
+  member `b` is the cell/receiver side (import / receptor / tf), and is **null** for single-member
+  channels (tf). For transporter pairs both orders can be present as distinct rows and must never
+  be merged, averaged, or drawn as one row.
   ⚠️ `mean` is **signed**, and the sign is the biological claim (raises vs lowers the target
   gene). Any encoding must keep magnitude and sign on separate channels — see `betaScale.ts`.
   No significance test is applied anywhere in this path; `std`/`n` travel with every row.
-  **Keying:** `byPair` is keyed by an order-INDEPENDENT sorted `A__B` key (`betaKey`), *not* by
-  `GenePairEntity.id` — the network lists some pairs in both orders, so a directed row cannot be
-  attributed to a single entity id. Look up with `betaKey(...entity.genes)`. Rows for pairs
-  absent from the network `gp` list are dropped, never invented.
+- **BetaChannel** = `{ id, label, kind, memberLabels, rowHeader, targetGenes, cellTypes, rows }`.
+  One feature channel, **self-describing** so the app doesn't hardcode per-channel meta: `kind`
+  is `'pair'` (two members, `a → b`) or `'single'` (tf, member `a` only); `memberLabels` labels
+  the members in tooltips (e.g. `['export (environment)','import (cell)']`, `['ligand','receptor']`,
+  `['ligand','TF']`, `['TF']`); `rowHeader` is the row-identity column head; `targetGenes` (sorted)
+  and `cellTypes` (source order) are **this channel's own** columns/blocks; `rows` are sorted
+  strongest `|mean|` first.
+  ⚠️ **Each channel has its OWN magnitude scale.** TF means are order ~1e0, metab ~1e-6, LR ~1e-7,
+  L-TF ~1e-9..1e-7. A single shared scale would render whole channels as ≈0 — per-channel scaling
+  is a correctness requirement, not styling (`BetaMatrix` builds a scale per factor group).
+- **BetaBundle** = `{ tier, cellTypes, targetGenes, channels }`. `cellTypes`/`targetGenes` are the
+  **unions** across channels (cellTypes in source order, targetGenes sorted); `channels` holds only
+  channels with ≥1 row. There is **no `byPair` index** anymore — a metabolite's transporter pairs
+  are found by filtering the `metab` channel's rows: `betaKey(r.a, r.b) ∈ pairKeysFor(entity)`
+  (order-independent sorted `A__B` key; `betaKey` in `betaScale.ts`). A transporter pair absent
+  from the network simply never matches a metabolite's pair keys (harmless — the generic channel
+  view shows all raw features regardless).
 
 ## Source → contract mapping (harreman adapter)
 | Contract field | Source |
@@ -86,7 +100,10 @@ empty dataset.
 | tier `cellTypes` | distinct `Cell Type 1/2` in the tier CSVs |
 | tier `parentTier` | coarse→fine ordering of `Tier*` dirs |
 | neighborhood scores | `Tier*/[nbhd_scores][summary_{m,gp}].csv` |
-| SpaceTravLR coefficients | `../metabtravlr_outputs/Tier*/gene_pairs.csv` (sibling of `harreman_outputs/`) |
+| SpaceTravLR `metab` channel | `../metabtravlr_outputs/Tier*/gene_pairs.csv` (`gene,export,import,pair,cell_type,mean,std,n`; pair sep `@`) |
+| SpaceTravLR `lr` channel | `../metabtravlr_outputs/Tier*/ligand_receptor.csv` (`gene,ligand,receptor,pair,cell_type,mean,std,n`; sep `$`) |
+| SpaceTravLR `ltf` channel | `../metabtravlr_outputs/Tier*/ligand_tf.csv` (`gene,ligand,tf,pair,cell_type,mean,std,n`; sep `#`) |
+| SpaceTravLR `tf` channel | `../metabtravlr_outputs/Tier*/transcription_factor.csv` (`gene,tf,cell_type,mean,std,n`; single member) |
 
 Notes / gotchas the adapter handles:
 - Metabolite names contain commas → must be parsed with a real CSV parser (Papa Parse), never
@@ -98,10 +115,17 @@ Notes / gotchas the adapter handles:
   unambiguously — the adapter resolves them through the network's own `gp` list instead of
   guessing, and drops rows it can't resolve rather than mis-attributing them.
 - `metabtravlr_outputs/` is a **sibling** of `harreman_outputs/` inside `easy_download/`, and is
-  optional — only datasets with a SpaceTravLR run have it (today: Primary Dermal Melanoma).
-  Its `gene_pairs.csv` columns are `gene,export,import,pair,cell_type,mean,std,n`, where `gene`
-  is the *target* gene and `export`/`import` are the environment/cell transporters. Its `pair`
-  column (`export@import`) is ignored in favour of the two gene columns.
+  optional — only datasets with a SpaceTravLR run have it (today: Primary Dermal Melanoma). It holds
+  **four** feature-channel CSVs (see the table above), each with `gene` (the *target* gene),
+  `cell_type`, `mean`, `std`, `n`, plus the channel's member columns. The `pair` column (e.g.
+  `export@import`, `ligand$receptor`, `ligand#tf`) is ignored in favour of the individual member
+  columns. `buildBeta` drives a config loop over the four; each channel is skipped if its file is
+  missing, and a channel is emitted only if it has ≥1 row. **Nothing is dropped for being absent
+  from the harreman network** — the standalone view shows raw features; a transporter pair outside
+  the network just never matches a metabolite's pair keys.
+- `histograms.csv` (`group,left,right,count`, groups `lr`/`ltf`/`metab`/`tf` = precomputed
+  mean-distribution bins) and `histograms.png` are also present in `metabtravlr_outputs/<Tier>/`
+  but are **NOT consumed yet** — reserved for a future per-channel histogram feature.
 
 ## Adding a new source (e.g. more SpaceTravLR outputs)
 Write a sibling adapter that emits **this same contract**. For per-(cell type, entity) tables

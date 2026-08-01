@@ -35,7 +35,10 @@ import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync, statSy
 import { join, basename, resolve } from 'node:path';
 import Papa from 'papaparse';
 
-const SCHEMA_VERSION = 3; // 3: +beta bundles (SpaceTravLR gene-pair coefficients) / hasBeta
+const SCHEMA_VERSION = 4; // 4: beta bundles hold ALL SpaceTravLR channels (metab/lr/ltf/tf), not
+// just transporter gene pairs. Each channel carries mean/std/n rows keyed by (feature, target
+// gene, cell type). Additive — an older app reading v4 just sees the extra channels.
+// 3: +beta bundles (SpaceTravLR gene-pair coefficients) / hasBeta
 // 2: manifest datasets carry project/available/hasNbhd; +nbhd bundles
 
 // ---------- tiny helpers ----------
@@ -71,19 +74,58 @@ const F = {
   nbhdM: '[nbhd_scores][summary_m].csv',
   nbhdGp: '[nbhd_scores][summary_gp].csv',
   // SpaceTravLR (MetabTravLR) learned coefficients, a SIBLING of harreman_outputs/ inside
-  // easy_download/. Per (target gene, directed transporter pair, cell type) mean beta.
+  // easy_download/. Per (target gene, feature, cell type) mean beta, across four feature channels
+  // (see BETA_CHANNELS below).
   betaDir: 'metabtravlr_outputs',
-  betaGp: 'gene_pairs.csv',
 };
 
-const gpId = (g1, g2) => `${g1}__${g2}`;
 /**
- * Order-INDEPENDENT key for the beta tables. The harreman `gp` list is not sorted and may hold a
- * pair in both orders, so a directed beta row (export,import) cannot be attributed to one `gpId`
- * unambiguously. Betas are therefore keyed on the sorted pair, and the app looks them up the same
- * way — the direction survives inside each row as `env`/`cell`, where it actually means something.
+ * The four SpaceTravLR feature channels, each in its own CSV inside `metabtravlr_outputs/<Tier>/`.
+ * `cols` names the source columns for members [a, b] (single-member channels list only `a`). The
+ * remaining meta (label/kind/rowHeader/memberLabels) is carried into the bundle so the app doesn't
+ * hardcode it. Every file also has `gene` (target gene), `cell_type`, `mean`, `std`, `n`; the
+ * `pair` column (e.g. `export@import`) is ignored in favour of the individual member columns.
  */
-const betaKey = (g1, g2) => (g1 <= g2 ? `${g1}__${g2}` : `${g2}__${g1}`);
+const BETA_CHANNELS = [
+  {
+    id: 'metab',
+    file: 'gene_pairs.csv',
+    kind: 'pair',
+    cols: ['export', 'import'],
+    label: 'Metabolic transporters',
+    rowHeader: 'environment → cell',
+    memberLabels: ['export (environment)', 'import (cell)'],
+  },
+  {
+    id: 'lr',
+    file: 'ligand_receptor.csv',
+    kind: 'pair',
+    cols: ['ligand', 'receptor'],
+    label: 'Ligand–receptor',
+    rowHeader: 'ligand → receptor',
+    memberLabels: ['ligand', 'receptor'],
+  },
+  {
+    id: 'ltf',
+    file: 'ligand_tf.csv',
+    kind: 'pair',
+    cols: ['ligand', 'tf'],
+    label: 'Ligand–TF',
+    rowHeader: 'ligand → TF',
+    memberLabels: ['ligand', 'TF'],
+  },
+  {
+    id: 'tf',
+    file: 'transcription_factor.csv',
+    kind: 'single',
+    cols: ['tf'],
+    label: 'Transcription factors',
+    rowHeader: 'transcription factor',
+    memberLabels: ['TF'],
+  },
+];
+
+const gpId = (g1, g2) => `${g1}__${g2}`;
 
 /** "Human_Prostate_Adenocarcinoma" -> "Human Prostate Adenocarcinoma". */
 const prettyName = (s) => s.replace(/[_-]+/g, ' ').trim();
@@ -217,10 +259,6 @@ function buildDataset(id, root, nameOverride, project) {
   const gpBySingleUnderscore = {};
   for (const [a, b] of network.gp || []) gpBySingleUnderscore[`${a}_${b}`] = gpId(a, b);
 
-  // Every unordered pair harreman knows about, so a beta row for a pair outside the network can
-  // be dropped rather than silently creating an entity the rest of the app has never heard of.
-  const knownBetaKeys = new Set((network.gp || []).map(([a, b]) => betaKey(a, b)));
-
   // ---- edges per (tier, entityKind) ----
   const betaRoot = findBetaRoot(root);
   const tiers = [];
@@ -257,7 +295,7 @@ function buildDataset(id, root, nameOverride, project) {
     const nbhd = buildNbhd(t, tdir, gpBySingleUnderscore);
     if (nbhd) nbhdBundles.push({ file: `${t}.json`, bundle: nbhd });
 
-    const beta = betaRoot ? buildBeta(t, join(betaRoot, t), knownBetaKeys) : null;
+    const beta = betaRoot ? buildBeta(t, join(betaRoot, t)) : null;
     if (beta) betaBundles.push({ file: `${t}.json`, bundle: beta });
   });
 
@@ -291,61 +329,73 @@ function findBetaRoot(harremanRoot) {
 }
 
 /**
- * SpaceTravLR learned coefficients for one tier (`metabtravlr_outputs/<Tier>/gene_pairs.csv`).
+ * SpaceTravLR learned coefficients for one tier, across ALL feature channels
+ * (`metabtravlr_outputs/<Tier>/{gene_pairs,ligand_receptor,ligand_tf,transcription_factor}.csv`).
  *
- * A row is one (target gene, DIRECTED transporter pair, cell type) mean beta: how much the
- * modelled interaction between an environment-expressed transporter and a cell-expressed
- * transporter moves that target gene, averaged over the cells of that type.
+ * A row is one (target gene, feature, cell type) mean beta: how much that feature moves the target
+ * gene, averaged over the cells of that type. Direction is real here, unlike everything else in
+ * this app: member `a` is the environment/sender side (export / ligand / ligand — or the TF for a
+ * single-member channel), member `b` the cell/receiver side. `A -> B` and `B -> A` are two
+ * different coefficients and must never be merged.
  *
- * Direction is real here, unlike everything else in this app: `export` is the gene expressed by
- * the ENVIRONMENT (neighboring cells), `import` the gene expressed by THE CELL itself. So
- * `A -> B` and `B -> A` are two different coefficients and must never be merged. They are stored
- * as sibling rows under one order-independent `betaKey`, each keeping its own `env`/`cell`.
+ * The generic channel view shows raw features, so nothing is dropped for being absent from the
+ * harreman network — a transporter pair not in the network simply never matches a metabolite's
+ * `pairKeys` downstream (harmless).
  *
- * Returns null when this dataset/tier has no SpaceTravLR run.
+ * Returns null when this dataset/tier has no SpaceTravLR channel with any rows.
  */
-function buildBeta(tier, tdir, knownBetaKeys) {
-  const path = join(tdir, F.betaGp);
-  if (!existsSync(path)) return null;
+function buildBeta(tier, tdir) {
+  const channels = [];
+  for (const cfg of BETA_CHANNELS) {
+    const path = join(tdir, cfg.file);
+    if (!existsSync(path)) continue;
 
-  const byPair = {};
-  let dropped = 0;
-  for (const r of readCsv(path)) {
-    const env = r.export;
-    const cell = r.import;
-    const gene = r.gene;
-    const ct = r.cell_type;
-    if (!env || !cell || !gene || !ct) continue;
-    const key = betaKey(env, cell);
-    // A pair the harreman network doesn't list has no entity in the app to hang off.
-    if (!knownBetaKeys.has(key)) {
-      dropped++;
-      continue;
+    const isPair = cfg.kind === 'pair';
+    const rows = [];
+    for (const r of readCsv(path)) {
+      const a = r[cfg.cols[0]];
+      const b = isPair ? r[cfg.cols[1]] : null;
+      const gene = r.gene;
+      const ct = r.cell_type;
+      if (!a || !gene || !ct) continue;
+      if (isPair && !b) continue;
+      rows.push({
+        a,
+        b,
+        gene,
+        cellType: ct,
+        mean: num(r.mean),
+        std: num(r.std),
+        n: num(r.n),
+      });
     }
-    (byPair[key] ||= []).push({
-      env,
-      cell,
-      gene,
-      cellType: ct,
-      mean: num(r.mean),
-      std: num(r.std),
-      n: num(r.n),
+    if (!rows.length) continue;
+
+    // Compute cell types (source order) and target genes (sorted) BEFORE sorting rows by strength.
+    const cellTypes = uniq(rows.map((row) => row.cellType));
+    const targetGenes = uniq(rows.map((row) => row.gene)).sort();
+    // Strongest |beta| first, so the app's default read is the biggest effect.
+    rows.sort((x, y) => Math.abs(y.mean ?? 0) - Math.abs(x.mean ?? 0));
+
+    channels.push({
+      id: cfg.id,
+      label: cfg.label,
+      kind: cfg.kind,
+      memberLabels: cfg.memberLabels,
+      rowHeader: cfg.rowHeader,
+      targetGenes,
+      cellTypes,
+      rows,
     });
   }
-  if (!Object.keys(byPair).length) return null;
 
-  const all = Object.values(byPair).flat();
-  // Strongest |beta| first, so the app's default read is the biggest effect.
-  for (const rows of Object.values(byPair)) {
-    rows.sort((a, b) => Math.abs(b.mean ?? 0) - Math.abs(a.mean ?? 0));
-  }
-  if (dropped) console.warn(`  ! ${tier}: dropped ${dropped} beta row(s) for pairs not in the network`);
+  if (!channels.length) return null;
 
   return {
     tier,
-    cellTypes: uniq(all.map((r) => r.cellType)),
-    targetGenes: uniq(all.map((r) => r.gene)).sort(),
-    byPair,
+    cellTypes: uniq(channels.flatMap((c) => c.cellTypes)),
+    targetGenes: uniq(channels.flatMap((c) => c.targetGenes)).sort(),
+    channels,
   };
 }
 

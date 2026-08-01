@@ -135,23 +135,32 @@ export interface NbhdBundle {
 }
 
 /**
- * One SpaceTravLR learned coefficient: how much a DIRECTED transporter pair moves one target
- * gene, averaged over the cells of one cell type (`metabtravlr_outputs/<Tier>/gene_pairs.csv`).
+ * The four SpaceTravLR feature channels. Each has its OWN target-gene set and its OWN magnitude
+ * scale — TF means are order ~1e0, metab ~1e-6, LR ~1e-7, L-TF ~1e-9..1e-7 — so any encoding must
+ * scale per channel (a single shared scale would render whole channels as ≈0). See `betaScale.ts`.
+ */
+export type BetaChannelId = 'metab' | 'lr' | 'ltf' | 'tf';
+
+/**
+ * One SpaceTravLR learned coefficient, generalized across all feature channels
+ * (`metabtravlr_outputs/<Tier>/{gene_pairs,ligand_receptor,ligand_tf,transcription_factor}.csv`).
+ * A row is: how much one feature moves one target gene, averaged over the cells of one cell type.
  *
- * ⚠️ Unlike `EntityEdge`, direction here is REAL and load-bearing. `env` is the transporter gene
- * expressed by the environment (the neighboring cells); `cell` is the one expressed by the cell
- * being modelled. `env→cell` and `cell→env` are two separate coefficients and must never be
- * merged, averaged, or displayed as one row.
+ * ⚠️ Unlike `EntityEdge`, direction here is REAL and load-bearing. Member `a` is the
+ * environment/sender side (export / ligand / ligand), OR the TF for a single-member channel;
+ * member `b` is the cell/receiver side (import / receptor / tf), and is null for single-member
+ * channels (tf). For transporter pairs both orders can be present as distinct rows and must never
+ * be merged, averaged, or displayed as one row.
  *
  * `mean` is signed — the sign is the biological claim (up- vs down-regulation of `gene`) and is
  * the one thing an encoding must never distort. `std`/`n` are the spread and the cell count
  * behind the mean; no significance test is applied anywhere in this pipeline.
  */
 export interface BetaRow {
-  /** Transporter gene expressed by the ENVIRONMENT (harreman's "export" side). */
-  env: string;
-  /** Transporter gene expressed by THE CELL (harreman's "import" side). */
-  cell: string;
+  /** Feature member 0 = environment/sender side (export / ligand / ligand), OR the TF for a single-member channel. */
+  a: string;
+  /** Feature member 1 = cell/receiver side (import / receptor / tf); null for single-member channels (tf). */
+  b: string | null;
   /** The target gene whose expression this coefficient moves. */
   gene: string;
   cellType: string;
@@ -164,18 +173,45 @@ export interface BetaRow {
 }
 
 /**
+ * One feature channel (metab/lr/ltf/tf) for one tier. Self-describing so components don't hardcode
+ * per-channel meta (labels, member roles, column headers) — they read it off the channel.
+ */
+export interface BetaChannel {
+  id: BetaChannelId;
+  /** "Metabolic transporters" | "Ligand–receptor" | "Ligand–TF" | "Transcription factors". */
+  label: string;
+  /** Pair channels have two members (a → b); single channels (tf) have only member `a`. */
+  kind: 'pair' | 'single';
+  /**
+   * Role labels for tooltips, in member order:
+   * `['export (environment)','import (cell)']`, `['ligand','receptor']`, `['ligand','TF']`, `['TF']`.
+   */
+  memberLabels: string[];
+  /** Row-identity column header: "environment → cell" | "ligand → receptor" | "ligand → TF" | "transcription factor". */
+  rowHeader: string;
+  /** Target genes present in THIS channel, sorted. The channel heatmap's columns. */
+  targetGenes: string[];
+  /** Cell types present in THIS channel, in source order. */
+  cellTypes: string[];
+  /** All rows for this channel/tier, sorted strongest |mean| first. */
+  rows: BetaRow[];
+}
+
+/**
  * SpaceTravLR coefficients for one tier (`public/data/<id>/beta/<Tier>.json`).
  *
- * Keyed by an ORDER-INDEPENDENT sorted pair key (`betaKey`), NOT by `GenePairEntity.id` — the
- * network lists some pairs in both orders, so a directed row can't be attributed to one entity
- * id. Look these up with `betaKey(...entity.genes)`; the direction lives in each row's env/cell.
+ * Holds ALL feature channels (v4). The metabolite lookup filters the `metab` channel's rows by
+ * `betaKey(r.a, r.b) ∈ pairKeys` (see `betaScale.ts`) — there is no `byPair` index anymore, since
+ * a directed row can't be attributed to a single ordered entity id.
  */
 export interface BetaBundle {
   tier: string;
+  /** Union of cell types across channels, in source order. */
   cellTypes: string[];
-  /** Target genes present at this tier, sorted. The heatmap's columns. */
+  /** Union of target genes across channels, sorted. */
   targetGenes: string[];
-  byPair: Record<string, BetaRow[]>;
+  /** Only channels with ≥1 row are present. */
+  channels: BetaChannel[];
 }
 
 /** Per-dataset descriptor (`public/data/<id>/dataset.json`). */

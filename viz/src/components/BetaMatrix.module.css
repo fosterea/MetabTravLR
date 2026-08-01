@@ -1,0 +1,159 @@
+/* Cell-type-major SpaceTravLR matrix. Diverging `--val-*` (the reserved pair), neutral surface at
+   the midpoint — a near-zero cell is untinted, a missing one is blank. Tokens only. */
+.matrix {
+  margin-top: var(--sp-4);
+}
+
+.none {
+  color: var(--text-muted);
+  font-size: 13px;
+  padding: var(--sp-4) 0;
+}
+
+/* ---- shared sign legend ---- */
+.legend {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
+  margin-bottom: var(--sp-4);
+  font-size: 11px;
+  color: var(--text-muted);
+}
+.legendEnd {
+  font-size: 11px;
+}
+/* Two hues out of a NEUTRAL surface midpoint — never a hue at zero. */
+.ramp {
+  width: 140px;
+  height: 10px;
+  border-radius: 2px;
+  background: linear-gradient(
+    to right,
+    color-mix(in oklab, var(--val-neg) 50%, var(--bg-canvas)),
+    var(--bg-canvas) 50%,
+    color-mix(in oklab, var(--val-pos) 50%, var(--bg-canvas))
+  );
+  border: 1px solid var(--border);
+}
+.legendNote {
+  margin-left: var(--sp-2);
+  max-width: 72ch;
+}
+
+/* ---- one cell type (a full-width header row inside the single matrix grid) ---- */
+.blockHead {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  padding-bottom: var(--sp-2);
+  border-bottom: 1px solid var(--border-strong);
+  margin-bottom: var(--sp-2);
+}
+/* Vertical breathing room between cell-type blocks (not before the first). */
+.blockGap {
+  margin-top: var(--sp-6);
+}
+.blockName {
+  font-size: 14px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.blockMeta {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+/* Small-n flag: a word, not a color, so it survives greyscale and CVD. */
+.thinTag {
+  font-size: 9px;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--text-muted);
+  border: 1px solid var(--border-strong);
+  border-radius: 3px;
+  padding: 0 4px;
+}
+
+/* ---- the matrix grid (one per cell-type block) ---- */
+.grid {
+  display: grid;
+  /* 2px surface gap between fills rather than borders around marks. */
+  gap: 2px;
+  align-items: stretch;
+  /* Columns are sized to content, not stretched across the pane. */
+  justify-content: start;
+  overflow-x: auto;
+}
+.colHead {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--text-muted);
+  padding-bottom: 2px;
+}
+.geneHead {
+  text-align: center;
+  align-self: end;
+}
+
+/* A factor-group divider spanning the whole row, between stacked groups in one cell-type block. */
+.divider {
+  grid-column: 1 / -1;
+  margin-top: var(--sp-3);
+  padding: var(--sp-1) 0 3px;
+  border-top: 1px solid var(--border);
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+.divider b {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+/* Feature-identity cell (first column of a feature row). */
+.dir {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-family: var(--font-mono);
+  padding-right: var(--sp-3);
+  white-space: nowrap;
+}
+.gene {
+  color: var(--text-primary);
+}
+.arrow {
+  color: var(--text-muted);
+}
+
+/* A value cell. */
+.cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 26px;
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  /* Text wears a text token, never the series color. */
+  color: var(--text-primary);
+  background: var(--bg-canvas);
+}
+/* Measured but negligible: a subtle neutral fill + `≈0`, distinct from blank. */
+.negligible {
+  color: var(--text-muted);
+  background: color-mix(in srgb, var(--border) 30%, transparent);
+}
+/* No coefficient at all: keep the slot, render nothing — the absence is the message. */
+.blank {
+  min-height: 26px;
+  background: transparent;
+}

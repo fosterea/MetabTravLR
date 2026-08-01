@@ -29,8 +29,9 @@ import type { BetaRow } from './types';
 export const BETA_DECADES = 4;
 
 /**
- * Order-INDEPENDENT key into `BetaBundle.byPair`. Must match `betaKey` in `scripts/ingest.mjs`.
- * Gene-pair entity ids preserve the network's arbitrary order, so they cannot be used directly.
+ * Order-INDEPENDENT key for matching a metabolite's transporter pairs against the `metab` channel
+ * rows: `betaKey(r.a, r.b) ∈ pairKeysFor(entity)`. Gene-pair entity ids preserve the network's
+ * arbitrary order, so they cannot be compared directly — sort the two members first.
  */
 export const betaKey = (g1: string, g2: string) => (g1 <= g2 ? `${g1}__${g2}` : `${g2}__${g1}`);
 
@@ -94,11 +95,21 @@ export function formatMagnitude(v: number): string {
   return `${mant}e${Number(exp)}`;
 }
 
-/** Full-precision label for a row's tooltip. */
-export function betaTooltip(r: BetaRow): string {
+/**
+ * Full-precision label for a row's tooltip. Takes the channel meta so members are labelled
+ * correctly (export/import vs ligand/receptor vs ligand/TF vs TF).
+ */
+export function betaTooltip(
+  r: BetaRow,
+  ch: { kind: 'pair' | 'single'; memberLabels: string[] },
+): string {
   const dec = (v: number | null) => (v == null ? '—' : v.toExponential(4));
+  const feature =
+    ch.kind === 'pair'
+      ? `${r.a} (${ch.memberLabels[0]}) → ${r.b} (${ch.memberLabels[1]})`
+      : `${r.a} (${ch.memberLabels[0]})`;
   return [
-    `${r.env} (environment) → ${r.cell} (cell)`,
+    feature,
     `target gene ${r.gene} · ${r.cellType}`,
     `mean beta ${dec(r.mean)}`,
     `std ${dec(r.std)}`,
@@ -106,19 +117,21 @@ export function betaTooltip(r: BetaRow): string {
   ].join('\n');
 }
 
-/** A directed transporter pair, as one heatmap row. */
+/** One feature (a directed pair, or a single-member TF), as one heatmap row. */
 export interface BetaDirection {
-  /** `${env}__${cell}` — unique within a cell-type block. */
+  /** `${a}__${b ?? ''}` — unique within a cell-type block. */
   id: string;
-  env: string;
-  cell: string;
+  /** Member 0 (environment/sender side, or the TF for a single-member channel). */
+  a: string;
+  /** Member 1 (cell/receiver side); null for single-member channels. */
+  b: string | null;
   /** Coefficient per target gene; missing genes are absent. */
   byGene: Record<string, BetaRow>;
   /** Largest |beta| across this row's genes — the row sort key. */
   peak: number;
 }
 
-/** One cell type's block: its directed pairs, plus the cell count behind them. */
+/** One cell type's block: its features, plus the cell count behind them. */
 export interface BetaBlock {
   cellType: string;
   nCells: number | null;
@@ -126,15 +139,11 @@ export interface BetaBlock {
 }
 
 /**
- * Group raw rows into per-cell-type blocks of directed pairs.
- * `pairKeys` selects which pairs to include (one for a gene-pair entity, many for a metabolite).
+ * Group raw rows into per-cell-type blocks of features. Works for any channel — pair rows key on
+ * `${a}__${b}`, single-member (tf) rows on `${a}__` — so both directions of a pair stay separate.
+ * Pass rows already scoped to what you want to show (all channel rows, or a metabolite's pairs).
  */
-export function groupBeta(
-  byPair: Record<string, BetaRow[]>,
-  pairKeys: string[],
-  cellTypes: string[],
-): BetaBlock[] {
-  const rows = pairKeys.flatMap((k) => byPair[k] ?? []);
+export function groupChannel(rows: BetaRow[], cellTypes: string[]): BetaBlock[] {
   const blocks: BetaBlock[] = [];
 
   for (const cellType of cellTypes) {
@@ -143,10 +152,10 @@ export function groupBeta(
 
     const byDir = new Map<string, BetaDirection>();
     for (const r of mine) {
-      const id = `${r.env}__${r.cell}`;
+      const id = `${r.a}__${r.b ?? ''}`;
       let d = byDir.get(id);
       if (!d) {
-        d = { id, env: r.env, cell: r.cell, byGene: {}, peak: 0 };
+        d = { id, a: r.a, b: r.b, byGene: {}, peak: 0 };
         byDir.set(id, d);
       }
       d.byGene[r.gene] = r;

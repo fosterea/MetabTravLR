@@ -4,6 +4,117 @@
 restart. Dates are absolute (project "today" was 2026-07-16 at kickoff).
 
 ## Current state
+- **2026-08-01 — Cell-type-major matrix layout (Cycle 3 / REVISION 1). Playwright-verified.**
+  - Foster's feedback: the channel-major `BetaSection` stacking repeated each cell type per factor and
+    the columns didn't line up. Both beta views are now **cell-type-major**: each cell type appears
+    ONCE, and the factor groups (metabolite pairs / LR / L-TF / TF / all-metabolic) are stacked
+    beneath that one cell-type label, sharing ONE ordered set of **union** target-gene columns.
+  - New `src/components/BetaMatrix.tsx` (+ `BetaMatrix.module.css`) REPLACES `BetaSection` (deleted).
+    Props: `groups: BetaFactorGroup[]` (`{key, channel, label, rows}`), `cellTypes`, optional
+    `allowedGenes`. Logic: `genesShown` = sorted UNION of target genes across all groups' rows in the
+    shown cell types (∩ `allowedGenes` when given); per-GROUP scale (`makeBetaScale` over that group's
+    shown rows — each factor keeps its own magnitude scale); ONE CSS grid for the WHOLE matrix
+    (`minmax(200px,max-content) repeat(genesShown, 84px)`) so the feature-identity column and every
+    gene column line up across every cell-type block and factor group — cell-type headers and
+    factor-group dividers are full-width spanning rows (`grid-column: 1 / -1`) within it, and a gene
+    header row repeats per block (still inside the one grid, so still aligned).
+    **Missing coefficient = BLANK whitespace** (slot kept, `title="no coefficient"`); `≈0`
+    (measured-but-negligible) stays visually distinct (subtle fill). One shared sign-only ramp legend
+    at the top; each group states its own numeric range on its divider. See A26.
+  - `SpaceTravlrView` now builds groups from the selected channels and renders ONE `<BetaMatrix
+    allowedGenes={selectedGenes} cellTypes={shown}/>` (Sections/gene chips/cell-type select kept).
+    `BetaPanel` builds groups = primary metab group (rows = the metabolite's pairs) + one per `added`
+    id (rows = full `metab.rows` for "All metabolic transporters", else `ch.rows`), `allowedGenes`
+    undefined (union columns, so a gene only a comparison factor covers still appears), renders ONE
+    `<BetaMatrix cellTypes={shown}/>`. Compare chip bar / Add-comparison menu / cell-type select /
+    direction caveat all kept; removal stays via the top chips' ✕ (the matrix has no per-section ✕);
+    `added` still resets on entity/tier/dataset, not on cell-type. `availableCellTypes` now = cell
+    types present in ANY shown group.
+  - No ingest/schema/contract change — pure UI. Dead CSS from `BetaSection` removed from
+    `BetaPanel.module.css` (`.section/.sectionHead/.remove/.grid/.cell/.foot/…`).
+  - **Verified (Playwright, Melanoma):** Environment view — 5 cell types each shown once; primary
+    transporter group + added comparison groups stacked beneath each; union gene columns in the SAME
+    position across every group/cell type; adding TF surfaced TF-only columns (CTLA4/FOXP3/IL10) with
+    the metab group **blank** there (ENTPD1 still `≈0`, distinct); per-group scales (metab 4.5e-3, TF
+    4.0e0); ✕ on a chip removed the factor group and contracted the union columns; cell-type filter
+    narrowed to one block; switching metabolite/tier cleared the added groups. Standalone view — same
+    cell-type-major layout, all 4 dividers with per-group scales; section toggle off dropped that
+    factor + its unique columns (TF off → IL10 gone); gene chip off removed a union column.
+    **DOM-vs-bundle:** 2,145 value cells across both factors round-trip to `formatBeta(bundle,
+    per-group scale reconstructed from the DOM)` with **0 text / 0 sign / 0 hue / 0 source
+    mismatches**; 6,010 blank cells all carry `title="no coefficient"` and no number (blank ≠ ≈0).
+    `tsc -b` + `lint` clean; **0 console errors/warnings** on a clean load. Screenshots
+    `viz/rev1-environment-celltype-major.png`, `viz/rev1-standalone-celltype-major.png`.
+  - **Cycle-3 review Low fix (single grid):** the first cut used one grid PER cell-type block, so the
+    `max-content` first column could differ between blocks and the gene columns didn't line up
+    vertically across blocks — violating Foster's "same order AND place for each cell type". Now the
+    whole matrix is ONE grid (headers/dividers span full width), so the shared `max-content` first
+    column and all gene columns align across every block automatically. Removed the dead empty
+    `.cornerHead` ruleset. Playwright cross-block check: the same gene-header column has an IDENTICAL
+    x across all 5 blocks in BOTH views (e.g. Environment CD3E left=546px ×5, IL2RA=1062px ×5;
+    Standalone CD3E=234 ×5 … IL2RA=750 ×5; all `allEqual`), cell-type headers + all dividers 802px
+    full-width; blank/≈0/tint unchanged; 0 console errors. Screenshots
+    `viz/rev1b-environment-onegrid.png`, `viz/rev1b-standalone-onegrid.png`.
+- **2026-08-01 — BetaPanel comparison chips (Cycle 2). Playwright-verified.**
+  - The Environment view's SpaceTravLR section now lets you stack the OTHER feature channels beneath
+    the metabolite's own transporter pairs, for a like-for-like read. `BetaPanel` gained: a primary
+    section title ("This {metabolite|gene pair}'s transporter pairs"); a "Compare" bar (below the
+    caveat, above the primary heatmap) with removable chips + an **"Add comparison ▾"** `<select>`
+    (options = channels in the bundle not already added; `metab` labelled **"All metabolic
+    transporters"** since the primary already shows this metabolite's own pairs, the others use
+    `channel.label`); and one `BetaSection` per added channel BELOW the primary — `rows` = the WHOLE
+    `channel.rows` (the superset), `genes` = `metab.targetGenes ∩ channel.targetGenes` (columns
+    aligned to the metabolite's genes), `cellTypes` = the same `shown` filter, `onRemove` = drop it.
+    Local `added: BetaChannelId[]` (order preserved) resets on entity/tier/dataset change (effect
+    keyed on `entityId + tierId + datasetId`) but NOT on a cell-type-filter change. See A25.
+  - No ingest/schema/contract change — this is pure UI over the v4 bundle + the Cycle-1 `BetaSection`.
+  - **Verified (Playwright, Melanoma Environment):** primary titled correctly; Add-comparison adds
+    LR / L-TF / TF / All-metabolic as removable chips below, in add order; each has its **own** scale
+    + legend (metab 4.5e-3, lr 8.7e-3, ltf 1.6e-5, tf 4.0e0); columns align to the metabolite's genes
+    (CD3E/CD4/ENTPD1/IL2RA; the L-TF comparison correctly narrows to its single overlapping gene
+    CD3E); the menu empties as all four are added and an option returns when its ✕ removes the
+    section; the cell-type filter narrows ALL sections at once and does NOT clear the chips; switching
+    metabolite (Iron→Fatty acid) AND switching tier (Tier3→Tier2) both clear the added sections.
+    `tsc -b` + `lint` clean; **0 console errors/warnings**. Screenshot
+    `viz/betapanel-comparisons-melanoma.png`.
+- **2026-08-01 — Multi-channel beta bundle + standalone SpaceTravLR view (Cycle 1). schemaVersion 4. Playwright-verified.**
+  - **Ingest / contract (v4):** `beta/<Tier>.json` now holds ALL FOUR SpaceTravLR feature channels
+    (`metab`/`lr`/`ltf`/`tf`) as a self-describing `BetaChannel[]`, replacing the v3 transporter-pair
+    -only `byPair` index. `BetaRow` generalized `{env,cell}` → `{a,b}` (member `b` is null for the
+    single-member `tf` channel). `buildBeta` drives a config loop over the four CSVs
+    (`gene_pairs`/`ligand_receptor`/`ligand_tf`/`transcription_factor`), computing each channel's own
+    `cellTypes`/`targetGenes` and sorting rows strongest-first. The `knownBetaKeys` network-membership
+    drop is **gone** — the generic view shows raw features; a pair outside the network simply never
+    matches a metabolite's pair keys. Re-ran `npm run ingest -- ../Results`: **only Melanoma
+    `beta/{Tier1,Tier2,Tier3}.json` + `manifest.json` (schemaVersion 3→4) changed**; no
+    edges/nbhd/dataset churn. Tier3 channel rows: metab 1555, lr 2820, ltf 100, tf 2020.
+  - **`betaScale.ts`:** scale math (`makeBetaScale`/`formatBeta`/`formatMagnitude`/`BETA_DECADES`)
+    unchanged; `groupBeta(byPair,pairKeys,cellTypes)` → `groupChannel(rows,cellTypes)` on the new
+    `{a,b}` shape (id `${a}__${b??''}`), and `betaTooltip(r, channel)` now takes channel meta so it
+    labels members per channel (export/import vs ligand/receptor vs ligand/TF vs TF).
+  - **`BetaSection` (new):** the single reusable per-channel heatmap, with its OWN per-section scale
+    (critical — TF is order 1e0, metab 1e-6). Used by both BetaPanel and the new view. `BetaPanel`
+    reworked minimally to source its primary heatmap from the `metab` channel via `BetaSection`
+    (rows filtered by `betaKey(r.a,r.b) ∈ pairKeysFor(entity)`); its caveat / cell-type select /
+    empty states kept. **No comparison chips yet — that's Cycle 2.**
+  - **Task 2 — standalone `SpaceTravlrView` (new):** a full-canvas, entity-INDEPENDENT view reading
+    the whole beta bundle. Section toggles (per channel), target-gene chips (union across selected
+    channels), and a shared cell-type select — all tracked as EXCLUSION sets so new tiers/datasets
+    default everything ON. One `BetaSection` per selected channel, each on its own scale. New third
+    View button **"SpaceTravLR"** (disabled when `!hasBeta`); `App` hides `EntityPanel` and adds
+    `app__body--full` (single-column grid) for it; `selectDataset` retains the view only if valid
+    (`graph` always / `nbhd` iff `hasEnvView` / `spacetravlr` iff `hasBeta`). See A21–A23.
+  - **Verified (Playwright, Melanoma Tier3):** SpaceTravLR button disabled on no-beta datasets
+    (FF Ovarian, and it is disabled wherever `hasBeta` is false), enabled on Melanoma; all 4 channels
+    render; per-channel scale proof — own-scale maxes **metab 4.5e-3 / lr 8.7e-3 / ltf 1.6e-5 / tf
+    4.0e0**, and the TF section shows order-1 values with spread (1914 numeric cells) while metab
+    shows 1e-3..1e-6 (730 numeric) — neither collapses to all ≈0. **DOM-vs-bundle: all 6,495 rendered
+    cells' text equals an independent `formatBeta(bundle, per-channel scale)`; 0 text / 0 sign / 0
+    hue / 0 missing mismatches** (a negative never renders `+`; hue matches sign; ≈0 carry no tint).
+    Section toggle hides/shows a channel; a gene chip removes that column from every section; the
+    cell-type select narrows all sections to one block. BetaPanel unchanged behavior (125
+    metabolite-scoped cells, 4 metab genes). `tsc -b` + `lint` + `build` clean; **0 console
+    errors/warnings**. Screenshot `viz/spacetravlr-view-melanoma.png`.
 - **2026-08-01 — Re-ingested: new SpaceTravLR melanoma run (7 target genes, was 4). Data-only; Playwright-verified.**
   - `npm run ingest -- ../Results` over the same 7 datasets. **Only the 3 Melanoma `beta/*.json`
     changed** — the harreman side of every dataset is byte-identical, so no edges/nbhd/manifest churn.
@@ -146,6 +257,12 @@ restart. Dates are absolute (project "today" was 2026-07-16 at kickoff).
 | A18 | The view is renamed **Environment** and enabled when `hasNbhd \|\| hasBeta` | It now holds two different per-cell measurements, both about a cell's surroundings rather than an interface. "Neighborhoods" named only the first one. |
 | A20 | An **explicit selection outranks a filter**: a picked gene-pair tab is retained (flagged "not significant") when the FDR cutoff empties it, never auto-released | Foster: being forwarded back to the metabolite view mid-drag loses your place and reads as a bug. The cutoff is an *exploration* control — the user asking "is this pair still significant at 0.01?" needs the answer *in place*, and "no interfaces at this cutoff" is a real answer worth showing, not a reason to discard the question. Filters may add/remove things the user did NOT choose (unselected tabs still come and go); only the user retires their own selection. Generalizes beyond tabs: prefer flagging a chosen thing over silently dropping it. |
 | A19 | Significance is **derived from FDR_np at a UI-set threshold** (`isSelected(scores, thr)`), not read from the baked-in `scores.selected` | Lets a slider control the cutoff with no ingest change. Reproduces `selected` exactly at the 0.05 default (0/20,658 mismatches), so it's a safe drop-in. `scores.selected` stays in the contract as harreman's own 0.05 call, but the app no longer reads it for graph significance. Slider stops are discrete because FDR_np is discrete with a low floor; ranking SORT deliberately does NOT depend on the threshold, so moving it never re-sorts the panel or changes auto-selection. |
+| A21 | The beta bundle holds **all four SpaceTravLR channels** (`BetaChannel[]`), replacing the transporter-pair-only `byPair` index | The new run emits four feature kinds (metab/lr/ltf/tf), each with its own target-gene set. A `byPair` map keyed on sorted transporter pairs can't represent single-member TFs or ligand→receptor roles, and the generic view needs all channels anyway. `BetaChannel` is self-describing (label/kind/memberLabels/rowHeader) so components hardcode no per-channel meta. Metabolite lookup moves from `byPair[key]` to filtering the `metab` channel's rows by `betaKey(r.a,r.b)`. |
+| A22 | **Per-channel scales are mandatory**; each factor group builds its own from its own rows (originally `BetaSection`, now `BetaMatrix` per group) | TF means are order 1e0, metab 1e-6, LR 1e-7, L-TF 1e-9..1e-7. A single shared scale (the natural instinct when stacking channels in one view) would send whole channels to the ≈0 floor — a *correctness* failure, not a styling one. So the renderer, not the view, owns a scale per factor group, and each group states its own range. |
+| A23 | Network-membership drop (`knownBetaKeys`) removed from ingest | v3 dropped beta rows for transporter pairs absent from the harreman network, because they had no entity to hang off. The standalone view shows raw features with no entity, so there's nothing to drop against; a pair outside the network simply never matches a metabolite's pair keys downstream (harmless). Keeps ingest honest to the source and avoids silently hiding features. |
+| A24 | Standalone SpaceTravLR view is **entity-independent and full-width** (hides `EntityPanel`) | It answers "what does the model say across all features?", not "…for this metabolite" — the side panel's entity selection is irrelevant, so it's hidden and the canvas fills the width (`app__body--full`). Toggles are EXCLUSION sets (empty = all shown) so new channels/genes/tiers never need re-selecting. `selectDataset` keeps the view only if the new dataset can still show it, else falls back to `graph`. |
+| A25 | BetaPanel comparisons: added channels use an **INCLUSION** list (`added: BetaChannelId[]`, starts empty), the inverse of the standalone view's exclusion sets | Opposite defaults for opposite intents: the standalone view wants everything shown by default (survey), while the metabolite view is *about that metabolite* — comparisons are a deliberate opt-in the user adds one at a time, so an empty inclusion list is the right default. The compared rows are the channel's full superset (not entity-filtered). Reset on entity/tier/dataset (stale otherwise) but not on cell-type change (that's a lens on the same comparison, per A20's "filters may change unchosen things; only the user retires their own selection"). |
+| A26 | **Cell-type-major** matrix (`BetaMatrix`), UNION gene columns, BLANK ≠ `≈0` — replaces the channel-major `BetaSection` stacking | Foster's REVISION 1: grouping by factor channel repeated each cell type per factor and columns didn't align, so cross-factor reading was hard. Cell-type-major shows each cell type once with the factor groups stacked beneath and ALL genes in a fixed column order — so "for this cell type, which factors move which genes?" is one glance. Columns are the UNION (superseding Cycle-2's intersect-to-metab-genes) so a gene only a comparison factor covers still appears; where a group has no coefficient the slot is BLANK whitespace (kept, not dropped/shifted), kept honestly distinct from `≈0` (measured-but-negligible). Scales stay **per factor group** (A22): TF ~1e0 and metab ~1e-6 in the same block would otherwise collapse to one floor. |
 
 ## Open questions / needs Foster
 - **Dataset naming**: ids/names now come straight from the `Results/` folder names
@@ -215,8 +332,63 @@ restart. Dates are absolute (project "today" was 2026-07-16 at kickoff).
 12. Beta correctness (worth re-running after any scale change — this is where the bugs are):
     in the console, diff the DOM against `beta/<Tier>.json` and assert, per cell, that the label
     matches source, a negative never renders `+`, hue matches sign, and `≈0` cells carry no tint.
+    Cycle 1: 6,495 Tier3 cells across all four channels round-trip to `formatBeta(bundle, per-channel
+    scale)` with 0 mismatches.
+13. **Standalone SpaceTravLR view** (Melanoma): the third View button is enabled only when the
+    dataset has betas (disabled on e.g. FF Ovarian / Human Lung). Clicking it hides the entity panel
+    and fills the width. Layout is **cell-type-major** (`BetaMatrix`): each cell type once, the
+    selected factor channels stacked beneath as divider-labelled groups, union target-gene columns in
+    fixed position. **Per-group scales:** the TF group shows order-1 values while metab shows ~1e-6 —
+    each divider prints its own "own scale |β| ≤ …". Toggling a **Section** chip adds/removes that
+    factor group (and any columns only it contributed); toggling a **Target gene** chip adds/removes
+    that union column; the **Cell type** select narrows to one block. Switching to a no-beta dataset
+    while in this view falls back to the Graph view. 0 console errors.
+14. **BetaPanel comparison chips + cell-type-major matrix** (Melanoma Environment view): each cell
+    type appears ONCE; beneath its label the primary group ("This metabolite's transporter pairs") and
+    any added comparison groups are stacked, sharing ONE union set of gene columns in fixed position.
+    "Add comparison ▾" adds LR / L-TF / TF / "All metabolic transporters" as removable chips (removal
+    via the chip ✕ — the matrix has no per-section ✕). Adding TF surfaces TF-only columns
+    (CTLA4/FOXP3/IL10) as **blank whitespace** in the metab group (blank ≠ `≈0`); each factor group
+    keeps its own scale (metab ~1e-6, TF ~1e0). The cell-type filter narrows ALL groups at once and
+    does NOT clear the added ones. Switching metabolite OR tier clears the added groups.
 
 ## Changelog
+- 2026-08-01: **Cell-type-major matrix layout (Cycle 3 / REVISION 1).** New `BetaMatrix.tsx`
+  (+ `.module.css`) replaces `BetaSection` (deleted): each cell type shown ONCE, factor groups stacked
+  beneath, ONE union set of target-gene columns in fixed position, per-group scales, blank whitespace
+  for absent coefficients (kept distinct from `≈0`). `SpaceTravlrView` renders one `<BetaMatrix
+  allowedGenes={selectedGenes}/>`; `BetaPanel` builds primary + `added` groups and renders one
+  `<BetaMatrix/>` with union columns (`allowedGenes` undefined) — kept the Compare chip bar, cell-type
+  select, caveat, and the entity/tier/dataset reset. Dead `BetaSection` CSS removed from
+  `BetaPanel.module.css`. UI-only, no ingest/schema/contract change. Playwright-verified on Melanoma
+  (both views cell-type-major; union columns incl. TF-only genes with metab blank there; per-group
+  scales; add/remove factor + gene chips; cell-type filter; metabolite/tier reset; 2,145 value cells
+  round-trip to `formatBeta(bundle)` with 0 mismatches, 6,010 blanks all "no coefficient"). tsc+lint
+  clean, 0 console errors. See A26; smoke items 13/14 updated.
+- 2026-08-01: **BetaPanel comparison chips (Cycle 2).** `BetaPanel` now titles its primary section
+  ("This {metabolite|gene pair}'s transporter pairs") and adds a "Compare" bar with removable chips +
+  an "Add comparison ▾" `<select>` (metab → "All metabolic transporters", others → `channel.label`).
+  Each added channel renders a `BetaSection` below the primary with the whole channel's rows, columns
+  intersected to the metabolite's target genes, the same cell-type filter, and a ✕ to remove. Local
+  `added` list resets on entity/tier/dataset change but not on cell-type change (A25). UI-only — no
+  ingest/schema/contract change. Playwright-verified on Melanoma (own per-channel scales, column
+  alignment incl. L-TF narrowing to CD3E, add/remove ↔ menu, cell-type filter across all sections,
+  metabolite+tier reset); tsc+lint clean, 0 console errors. Smoke item 14 added.
+- 2026-08-01: **Multi-channel beta bundle + standalone SpaceTravLR view (Cycle 1).** schemaVersion 4.
+  (1) **Ingest/contract:** `beta/<Tier>.json` = `{ tier, cellTypes, targetGenes, channels: BetaChannel[] }`
+  covering all four channels (metab/lr/ltf/tf); `BetaRow` `{env,cell}`→`{a,b}` (`b` null for tf);
+  `byPair` and the `knownBetaKeys` network drop removed (A21, A23). Re-ingest changed only Melanoma
+  `beta/*` + manifest schemaVersion. (2) **`betaScale.ts`:** `groupBeta`→`groupChannel(rows,cellTypes)`;
+  `betaTooltip(r, channel)` takes channel meta; scale math untouched. (3) **`BetaSection` (new)** =
+  the reusable per-channel heatmap with its OWN per-section scale (A22); **`BetaPanel`** reworked to
+  render its primary heatmap through it from the `metab` channel (no comparison chips yet — Cycle 2).
+  (4) **`SpaceTravlrView` (new)** = full-canvas, entity-independent view with Sections/Target-gene/
+  Cell-type controls (exclusion sets), one `BetaSection` per selected channel (A24); third View
+  button "SpaceTravLR" (disabled `!hasBeta`), `EntityPanel` hidden + `app__body--full`, `selectDataset`
+  view-retention guard. Playwright-verified on Melanoma Tier3: per-channel scales proven (metab
+  4.5e-3 / lr 8.7e-3 / ltf 1.6e-5 / tf 4.0e0; TF order-1 with spread, none collapsed to ≈0), all
+  6,495 rendered cells match `formatBeta(bundle)` (0 text/sign/hue/missing mismatches), toggles +
+  cell-type filter work, button disabled on no-beta datasets. tsc+lint+build clean, 0 console errors.
 - 2026-08-01: **Data refresh — new SpaceTravLR melanoma run re-ingested.** `npm run ingest -- ../Results`;
   only `Primary_Dermal_Melanoma/beta/{Tier1,Tier2,Tier3}.json` changed. Target genes 4 → 7 (+HAVCR2,
   HIF1A, MYC), pairs 72 → 76, Tier3 rows 1,555 → 2,680. No code, schema, contract or ingest change —

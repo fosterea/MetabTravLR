@@ -134,6 +134,18 @@ export default function ControlBar() {
           >
             Environment
           </button>
+          <button
+            aria-pressed={view === 'spacetravlr'}
+            onClick={() => setView('spacetravlr')}
+            disabled={!dataset?.hasBeta}
+            title={
+              dataset?.hasBeta
+                ? 'All SpaceTravLR coefficient channels, independent of the selected entity'
+                : 'This dataset has no SpaceTravLR coefficients'
+            }
+          >
+            SpaceTravLR
+          </button>
         </div>
       </div>
 
