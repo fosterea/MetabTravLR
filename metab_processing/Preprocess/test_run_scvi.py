@@ -23,7 +23,7 @@ import random
 from metab_processing.metab_travlr_config import PROJECT_DATA_DIR, DATA_DIR as METAB_DATA_DIR
 
 # Consts
-XENIUM2_DATA_DIR = PROJECT_DATA_DIR/'Xenium2'
+XENIUM2_DATA_DIR = f'{PROJECT_DATA_DIR}/Xenium2'
 N_LATENT = 45
 DEVICE = 'gpu'
 N_DEVICES = 1
@@ -93,13 +93,13 @@ def add_umap(adata, adata_path=None):
     for res in resolutions:
         
         leiden_key = res_label(res)
-        if leiden_key in adata.obs:
-            print(f"The Leiden clustering run for '{leiden_key}' has already been made.")
-        else:
-            print(f"Running clustering '{leiden_key}'.")
-            sc.tl.leiden(adata, resolution=res, key_added=leiden_key, flavor="igraph")
-            if adata.n_obs > 300000 and adata_path:
-                adata.write_h5ad(adata_path)
+        # if leiden_key in adata.obs:
+        #     print(f"The Leiden clustering run for '{leiden_key}' has already been made.")
+        # else:
+        print(f"Running clustering '{leiden_key}'.")
+        sc.tl.leiden(adata, resolution=res, key_added=leiden_key, flavor="igraph")
+        if adata.n_obs > 300000 and adata_path:
+            adata.write_h5ad(adata_path)
     
     umap_key = 'X_umap' 
 
@@ -114,8 +114,8 @@ def add_umap(adata, adata_path=None):
 
 run_scvi_params(f'{PROJECT_DATA_DIR}/{DATASET_NAME}/adata.h5ad',f'{PROJECT_DATA_DIR}/{DATASET_NAME}/scvi_model', f'{XENIUM2_DATA_DIR}/{DATASET_NAME}/adata.h5ad')
 
-adata_path = f'{PROJECT_DATA_DIR}/{DATASET_NAME}/adata.h5ad'
+adata_path = f'{XENIUM2_DATA_DIR}/{DATASET_NAME}/adata.h5ad'
 adata = sc.read_h5ad(adata_path)
-add_umap(adata, adata_path=f'{XENIUM2_DATA_DIR}/{DATASET_NAME}/adata.h5ad')
-adata.write_h5ad(f'{XENIUM2_DATA_DIR}/{DATASET_NAME}/adata.h5ad')
+add_umap(adata, adata_path=adata_path)
+adata.write_h5ad(adata_path)
 
