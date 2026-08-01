@@ -66,22 +66,62 @@ def tier_means(betadata_dir, obs, tier, genes=None, group=None):
     return pd.concat(frames, ignore_index=True)
 
 
-def write_gene_pairs(betadata_dir, obs, tiers, outdir, genes=None):
+# Per modulator group: (filename, separator, split column names). A None separator means the
+# modulator is a bare gene (TF) with nothing to split. Metab keeps its historical `gene_pairs.csv`
+# name and export/import columns; the other three save the rest of the learned betas alongside it.
+_GROUP_OUTPUTS = {
+    "metab": ("gene_pairs.csv", "@", ["export", "import"]),
+    "lr": ("ligand_receptor.csv", "$", ["ligand", "receptor"]),
+    "ltf": ("ligand_tf.csv", "#", ["ligand", "tf"]),
+    "tf": ("transcription_factor.csv", None, ["tf"]),
+}
+
+
+def _write_group(betadata_dir, obs, tier, genes, tier_dir, group):
+    """Write one modulator group's per-(gene, modulator, cell type) betas to its CSV.
+
+    L–R/L–TF/metab split their modulator into two columns plus a full-string `pair`; TF keeps a
+    single `tf` column. Returns the written DataFrame.
+    """
+    filename, sep, parts = _GROUP_OUTPUTS[group]
+    stats = tier_means(betadata_dir, obs, tier, genes, group=group)
+
+    if sep is None:  # TF: modulator is the bare gene name
+        stats = stats.rename(columns={"modulator": parts[0]})
+        stats = stats[["gene", parts[0], "cell_type", "mean", "std", "n"]]
+    else:
+        if stats.empty:  # nothing to split; keep the columns so the CSV header is stable
+            for p in parts:
+                stats[p] = pd.Series(dtype=object)
+        else:
+            stats[parts] = stats["modulator"].str.split(sep, n=1, expand=True)
+        stats = stats.rename(columns={"modulator": "pair"})
+        stats = stats[["gene", *parts, "pair", "cell_type", "mean", "std", "n"]]
+
+    stats.to_csv(tier_dir / filename, index=False)
+    return stats
+
+
+def write_gene_pairs(betadata_dir, obs, tiers, outdir, genes=None, write_all_groups=True):
     """Write `<outdir>/<tier>/gene_pairs.csv`: metabolite-pair betas per (gene, pair, cell type).
 
-    Both orientations of a heterotypic pair stay as separate rows. Returns {tier: DataFrame}.
+    Both orientations of a heterotypic pair stay as separate rows. Returns {tier: DataFrame}
+    (the metabolite frame per tier).
+
+    When `write_all_groups` is True (default), also write the other learned-beta groups next to
+    it, one CSV per tier: `ligand_receptor.csv` (ligand/receptor cols), `ligand_tf.csv`
+    (ligand/tf cols), and `transcription_factor.csv` (tf col) — so all coefficients are saved
+    for later viz/analysis.
     """
     out = {}
     for tier in tiers:
-        stats = tier_means(betadata_dir, obs, tier, genes, group="metab")
-        stats[["export", "import"]] = stats["modulator"].str.split("@", n=1, expand=True)
-        stats = stats.rename(columns={"modulator": "pair"})
-        stats = stats[["gene", "export", "import", "pair", "cell_type", "mean", "std", "n"]]
-
         tier_dir = Path(outdir) / tier
         tier_dir.mkdir(parents=True, exist_ok=True)
-        stats.to_csv(tier_dir / "gene_pairs.csv", index=False)
-        out[tier] = stats
+
+        out[tier] = _write_group(betadata_dir, obs, tier, genes, tier_dir, "metab")
+        if write_all_groups:
+            for group in ("lr", "ltf", "tf"):
+                _write_group(betadata_dir, obs, tier, genes, tier_dir, group)
     return out
 
 

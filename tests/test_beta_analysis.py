@@ -81,6 +81,38 @@ class BetaAnalysisTests(unittest.TestCase):
         tier2 = pd.read_csv(self.outdir / "Tier2" / "gene_pairs.csv")
         self.assertEqual(sorted(tier2.cell_type.unique()), ["a", "b", "c"])
 
+    def test_write_all_groups(self):
+        write_gene_pairs(self.betadata_dir, self.obs, ["Tier1"], self.outdir)
+        tier_dir = self.outdir / "Tier1"
+
+        lr = pd.read_csv(tier_dir / "ligand_receptor.csv")
+        self.assertEqual(list(lr.columns),
+                         ["gene", "ligand", "receptor", "pair", "cell_type", "mean", "std", "n"])
+        self.assertEqual(set(lr.pair), {"IL2$IL2RA"})
+        self.assertEqual((lr.iloc[0]["ligand"], lr.iloc[0]["receptor"]), ("IL2", "IL2RA"))
+        self.assertEqual(len(lr), 2 * 1 * 2)  # genes x lr pairs x cell types
+        self.assertTrue((lr["mean"] == 0.5).all())
+
+        ltf = pd.read_csv(tier_dir / "ligand_tf.csv")
+        self.assertEqual(list(ltf.columns),
+                         ["gene", "ligand", "tf", "pair", "cell_type", "mean", "std", "n"])
+        self.assertEqual(set(ltf.pair), {"IL2#STAT5A"})
+        self.assertEqual((ltf.iloc[0]["ligand"], ltf.iloc[0]["tf"]), ("IL2", "STAT5A"))
+        self.assertTrue((ltf["mean"] == 0.1).all())
+
+        tf = pd.read_csv(tier_dir / "transcription_factor.csv")
+        self.assertEqual(list(tf.columns), ["gene", "tf", "cell_type", "mean", "std", "n"])
+        self.assertEqual(set(tf.tf), {"STAT1"})
+        self.assertTrue((tf["mean"] == 2.0).all())
+
+    def test_write_all_groups_off(self):
+        write_gene_pairs(self.betadata_dir, self.obs, ["Tier1"], self.outdir,
+                         write_all_groups=False)
+        tier_dir = self.outdir / "Tier1"
+        self.assertTrue((tier_dir / "gene_pairs.csv").exists())
+        for extra in ("ligand_receptor.csv", "ligand_tf.csv", "transcription_factor.csv"):
+            self.assertFalse((tier_dir / extra).exists())
+
     def test_histograms(self):
         write_histograms(self.betadata_dir, self.obs, ["Tier1"], self.outdir, bins=5)
 
