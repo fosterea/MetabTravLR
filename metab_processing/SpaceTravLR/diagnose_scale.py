@@ -142,7 +142,7 @@ def inventory(data_dir, datasets=None):
     return out
 
 
-def bench_impute(data_dir, dataset, sizes, annot, seed=0):
+def bench_impute(data_dir, dataset, sizes, annot, min_cluster_size=100, seed=0):
     """Time the REAL `impute_clusterwise` on increasing subsamples and fit t ~ m^alpha.
 
     Unlike `bench_magic`, this includes what the pipeline actually pays around MAGIC:
@@ -172,6 +172,24 @@ def bench_impute(data_dir, dataset, sizes, annot, seed=0):
         idx = np.sort(rng.choice(n_obs, size=m, replace=False))
         sub = adata[idx].to_memory()
         sub.obs['cell_type'] = sub.obs[annot]
+
+        # Subsampling shrinks every cluster proportionally, so a small `m` invents clusters
+        # far below anything the real run sees (Human_Lung's smallest at res_0.5 is 884, but
+        # a 1000-cell subsample of it has 2-3 cells). MAGIC raises
+        # "Expected n_neighbors <= n_samples_fit" on those, which is an artefact of the
+        # benchmark, not a property of the pipeline. Drop them and say so.
+        counts = sub.obs['cell_type'].value_counts()
+        keep = set(counts[counts >= min_cluster_size].index)
+        dropped = int(counts[counts < min_cluster_size].sum())
+        if dropped:
+            print(f'  m={_fmt(m)}: dropping {dropped} cells in '
+                  f'{len(counts) - len(keep)} clusters under {min_cluster_size} '
+                  f'(subsampling artefact)', flush=True)
+            sub = sub[sub.obs['cell_type'].isin(keep)].copy()
+        if sub.n_obs == 0:
+            print(f'  skip m={_fmt(m)} (no cluster reaches {min_cluster_size} cells)', flush=True)
+            continue
+
         sub.layers['normalized_count'] = sub.X.copy()
         n_clusters = int(sub.obs['cell_type'].nunique())
 
@@ -197,8 +215,8 @@ def bench_impute(data_dir, dataset, sizes, annot, seed=0):
         alpha = float(np.polyfit(xs, ys, 1)[0])
 
     return {'dataset': dataset, 'annot': annot, 'mode': 'impute', 'n_obs': int(n_obs),
-            'n_vars': int(n_vars), 'points': results, 'alpha': alpha,
-            'time_key': 'total_s'}
+            'n_vars': int(n_vars), 'min_cluster_size': int(min_cluster_size),
+            'points': results, 'alpha': alpha, 'time_key': 'total_s'}
 
 
 def bench_magic(data_dir, dataset, sizes, seed=0):
@@ -339,6 +357,9 @@ def main(argv=None):
     parser.add_argument('--bench-sizes', type=int, nargs='+',
                         default=[10000, 25000, 50000, 100000],
                         help='subsample sizes for the benchmark')
+    parser.add_argument('--min-cluster-size', type=int, default=100,
+                        help='drop clusters smaller than this in impute mode; below ~16 cells '
+                             'MAGIC raises "Expected n_neighbors <= n_samples_fit"')
     parser.add_argument('--annot', default='leiden_scVI_res_0.5',
                         help='obs column used as cell_type for impute-mode clustering')
     parser.add_argument('--out', default='spacetravlr_diagnostics.json')
@@ -352,7 +373,8 @@ def main(argv=None):
     if args.bench:
         target = args.bench_dataset or (args.datasets or sorted(inv))[0]
         if args.bench_mode == 'impute':
-            report['bench'] = bench_impute(args.data_dir, target, args.bench_sizes, args.annot)
+            report['bench'] = bench_impute(args.data_dir, target, args.bench_sizes,
+                                           args.annot, args.min_cluster_size)
         else:
             report['bench'] = bench_magic(args.data_dir, target, args.bench_sizes)
         _print_bench(report['bench'])
