@@ -23,14 +23,14 @@ import random
 from metab_processing.metab_travlr_config import PROJECT_DATA_DIR, DATA_DIR as METAB_DATA_DIR
 
 # Consts
-XENIUM2_DATA_DIR = f'{PROJECT_DATA_DIR}/Xenium2'
+XENIUM2_DATA_DIR = f'{METAB_DATA_DIR}/Xenium2_HVG_Rep'
 N_LATENT = 45
 DEVICE = 'gpu'
 N_DEVICES = 1
 # DEVICE = 'cpu'
 # N_DEVICES = 'auto'
 SCVI_LATENT_KEY = "X_scVI"
-DATASET_NAME = 'Primary_Dermal_Melenoma'
+DATASET_NAME = 'Primary_Dermal_Melanoma'
 
 def run_scvi_params(adata_path, model_dir, save_adata_dir, overwrite_model=True):
     print(f'running on {adata_path}')
@@ -42,7 +42,7 @@ def run_scvi_params(adata_path, model_dir, save_adata_dir, overwrite_model=True)
     sc.pp.highly_variable_genes(
         adata, 
         n_top_genes=2000, 
-        flavor="seurat_v3", 
+        flavor="seurat_v3",
         subset=False
     )
     print('HVG selection complete')
@@ -84,11 +84,11 @@ res_labels = [res_label(res) for res in resolutions]
 
 
 def add_umap(adata, adata_path=None):
-    if not "neighbors" in adata.uns:
-        print('neighbors start')
-        sc.pp.neighbors(adata, use_rep="X_scVI")
-    else:
-        print('Neighbors already exists')
+    # if not "neighbors" in adata.uns:
+    print('neighbors start')
+    sc.pp.neighbors(adata, use_rep="X_scVI")
+    # else:
+    #     print('Neighbors already exists')
 
     for res in resolutions:
         
@@ -103,16 +103,16 @@ def add_umap(adata, adata_path=None):
     
     umap_key = 'X_umap' 
 
-    if umap_key in adata.obsm:
-        print(f"UMAP coordinates found under '{umap_key}'.")
-        print(f"Shape of coordinates: {adata.obsm[umap_key].shape}")
-    else:
-        print(f"Running umap '{umap_key}'.")
-        sc.tl.umap(adata)
+    # if umap_key in adata.obsm:
+    #     print(f"UMAP coordinates found under '{umap_key}'.")
+    #     print(f"Shape of coordinates: {adata.obsm[umap_key].shape}")
+    # else:
+    print(f"Running umap '{umap_key}'.")
+    sc.tl.umap(adata)
     sc.pl.umap(adata, color=res_labels)
 
 
-run_scvi_params(f'{PROJECT_DATA_DIR}/{DATASET_NAME}/adata.h5ad',f'{PROJECT_DATA_DIR}/{DATASET_NAME}/scvi_model', f'{XENIUM2_DATA_DIR}/{DATASET_NAME}/adata.h5ad')
+run_scvi_params(f'{PROJECT_DATA_DIR}/{DATASET_NAME}/adata.h5ad',f'{XENIUM2_DATA_DIR}/{DATASET_NAME}/scvi_model', f'{XENIUM2_DATA_DIR}/{DATASET_NAME}/adata.h5ad')
 
 adata_path = f'{XENIUM2_DATA_DIR}/{DATASET_NAME}/adata.h5ad'
 adata = sc.read_h5ad(adata_path)
