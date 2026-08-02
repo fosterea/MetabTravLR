@@ -1,0 +1,171 @@
+/* Hybrid factor picker: whole-group toggle buttons, a searchable combobox, and pinned chips.
+   Tokens only; shared visual language with the rest of the beta controls. */
+.picker {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  margin: var(--sp-3) 0;
+}
+
+.groups {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-2);
+}
+.caption {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--text-muted);
+  margin-right: var(--sp-1);
+}
+
+/* Whole-group button (a channel). none = plain, some = partial (outlined accent), all = filled. */
+.group {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg-elev);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-size: 12px;
+  padding: 4px 9px;
+  cursor: pointer;
+}
+.group:hover {
+  border-color: var(--accent);
+}
+/* "some" selected — a distinct partial state, not the full fill. */
+.groupPartial {
+  background: var(--accent-weak);
+  border-color: var(--accent);
+  color: var(--text-primary);
+}
+/* "all" selected. */
+.groupOn {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--on-accent);
+}
+.count {
+  font-variant-numeric: tabular-nums;
+  font-size: 11px;
+  opacity: 0.8;
+}
+
+/* Searchable "add a specific factor" combobox. */
+.comboWrap {
+  position: relative;
+  max-width: 340px;
+}
+.search {
+  width: 100%;
+}
+.popover {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  z-index: 20;
+  max-height: 280px;
+  overflow-y: auto;
+  padding: 4px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow);
+}
+.option {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 6px 8px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+.option:hover,
+.optionHi {
+  background: var(--accent-weak);
+  color: var(--text-primary);
+}
+.hint {
+  padding: 6px 8px;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* Selected-factor section (one collapsible block per channel with a selection). */
+.section {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+.sectionHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  padding: 4px 8px;
+}
+.sectionToggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 12px;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+.chevron {
+  width: 10px;
+  font-size: 10px;
+  color: var(--text-muted);
+}
+.clear {
+  background: none;
+  border: none;
+  padding: 0 4px;
+  font-size: 12px;
+  line-height: 1;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+.clear:hover {
+  color: var(--text-primary);
+}
+
+/* Removable chips for the selected factors inside an expanded section. */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: 0 8px 8px;
+}
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg-elev);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-size: 12px;
+  padding: 4px 9px;
+}
+.chipRemove {
+  background: none;
+  border: none;
+  color: inherit;
+  font-size: 11px;
+  line-height: 1;
+  padding: 0;
+  cursor: pointer;
+}

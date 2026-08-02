@@ -1,13 +1,13 @@
 /**
  * SpaceTravLR coefficients for the selected entity, as a cell-type-major heatmap (`BetaMatrix`).
  *
- * The primary factor group is the metabolite's (or gene pair's) own transporter pairs, sourced from
- * the bundle's `metab` channel. Beneath it, the user can add COMPARISON factor groups — the other
- * feature channels (ligand–receptor, ligand–TF, transcription factors) and the full "all metabolic
- * transporters" superset — as chips. All groups are stacked cell-type-major by `BetaMatrix`, sharing
- * one UNION set of target-gene columns (so a gene only a comparison factor covers still appears),
- * while each factor keeps its OWN magnitude scale. Comparisons reset when the entity/tier/dataset
- * changes, but survive a cell-type-filter change.
+ * The primary anchor group is the metabolite's (or gene pair's) own transporter pairs, always shown
+ * first. Beneath it, a `FactorPicker` lets the user stack COMPARISON factors — whole channels
+ * (ligand–receptor, ligand–TF, transcription factors, all metabolic transporters) and/or individual
+ * factors (a single L–R pair, a single TF, a specific transporter pair). All groups are stacked
+ * cell-type-major, sharing one UNION set of target-gene columns (so a gene only a comparison factor
+ * covers still appears), while each channel keeps its OWN magnitude scale. The comparison selection
+ * resets when the entity/tier/dataset changes, but survives a cell-type-filter change.
  *
  * Both directions of a pair are separate rows on purpose: `A→B` and `B→A` are different
  * coefficients, and merging them would invent a symmetry the model does not claim.
@@ -15,8 +15,10 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useVizStore, selectCurrentTier } from '@/store/useVizStore';
 import { betaKey } from '@/data/betaScale';
-import type { BetaChannel, BetaChannelId, Entity } from '@/data/types';
+import type { Entity } from '@/data/types';
 import BetaMatrix, { type BetaFactorGroup } from './BetaMatrix';
+import FactorPicker from './FactorPicker';
+import { selectedRows, type FeatureKey } from '@/data/factorSelection';
 import styles from './BetaPanel.module.css';
 
 const ALL = '__all__';
@@ -28,14 +30,6 @@ function pairKeysFor(entity: Entity): string[] {
   return [...new Set(entity.genePairs.map(([a, b]) => betaKey(a, b)))];
 }
 
-/**
- * Chip/menu label for a channel. The primary section already shows THIS metabolite's own
- * transporter pairs, so the metab comparison shows *every* pair — hence a distinct label.
- */
-function optionLabel(ch: BetaChannel): string {
-  return ch.id === 'metab' ? 'All metabolic transporters' : ch.label;
-}
-
 export default function BetaPanel() {
   const dataset = useVizStore((s) => s.dataset);
   const tier = useVizStore(selectCurrentTier);
@@ -44,14 +38,15 @@ export default function BetaPanel() {
   const betaBundle = useVizStore((s) => s.betaBundle);
   const [cellTypeFilter, setCellTypeFilter] = useState<string>(ALL);
 
-  // Comparison channels stacked below the primary, in the order they were added.
-  const [added, setAdded] = useState<BetaChannelId[]>([]);
-  // Stale comparisons must not linger onto a different entity/tier/dataset (their genes/scales are
-  // no longer meaningful). A cell-type-filter change deliberately does NOT reset them.
+  // Comparison factors stacked below the primary anchor group. Empty by default — the panel is
+  // about THIS metabolite; comparisons are a deliberate opt-in.
+  const [selected, setSelected] = useState<Set<FeatureKey>>(() => new Set());
+  // Stale comparisons must not linger onto a different entity/tier/dataset (their (a,b)/scales are no
+  // longer meaningful). A cell-type-filter change deliberately does NOT reset them.
   const datasetId = dataset?.id;
   const tierId = tier?.id;
   useEffect(() => {
-    setAdded([]);
+    setSelected(new Set());
   }, [entityId, tierId, datasetId]);
 
   const entity = useMemo<Entity | undefined>(() => {
@@ -61,12 +56,8 @@ export default function BetaPanel() {
     return list?.find((e) => e.id === entityId);
   }, [dataset, entityId, entityKind]);
 
-  const metab = useMemo(() => betaBundle?.channels.find((c) => c.id === 'metab'), [betaBundle]);
-  const channelsById = useMemo(() => {
-    const m = new Map<BetaChannelId, BetaChannel>();
-    for (const c of betaBundle?.channels ?? []) m.set(c.id, c);
-    return m;
-  }, [betaBundle]);
+  const channels = useMemo(() => betaBundle?.channels ?? [], [betaBundle]);
+  const metab = useMemo(() => channels.find((c) => c.id === 'metab'), [channels]);
 
   // This entity's own transporter-pair rows, filtered out of the metab channel by sorted pair key.
   const primaryRows = useMemo(() => {
@@ -75,9 +66,8 @@ export default function BetaPanel() {
     return metab.rows.filter((r) => r.b != null && keys.has(betaKey(r.a, r.b)));
   }, [entity, metab]);
 
-  // The stacked factor groups: the metabolite's own pairs first, then each added comparison. For
-  // the "All metabolic transporters" option we compare against the WHOLE metab channel, not just
-  // this metabolite's pairs.
+  // The stacked factor groups: the metabolite's own pairs first (the anchor), then one group per
+  // channel that contributes rows under the comparison selection.
   const groups = useMemo<BetaFactorGroup[]>(() => {
     if (!metab) return [];
     const primaryLabel = `This ${entityKind === 'metabolite' ? 'metabolite' : 'gene pair'}’s transporter pairs`;
@@ -87,15 +77,16 @@ export default function BetaPanel() {
       label: primaryLabel,
       rows: primaryRows,
     };
-    const rest = added
-      .map((id): BetaFactorGroup | null => {
-        const ch = channelsById.get(id);
-        if (!ch) return null;
-        return { key: id, channel: ch, label: optionLabel(ch), rows: id === 'metab' ? metab.rows : ch.rows };
-      })
-      .filter((g): g is BetaFactorGroup => g !== null);
-    return [primary, ...rest];
-  }, [metab, entityKind, primaryRows, added, channelsById]);
+    const comparisons = channels
+      .map((ch): BetaFactorGroup => ({
+        key: ch.id,
+        channel: ch,
+        label: ch.label,
+        rows: selectedRows(ch, selected),
+      }))
+      .filter((g) => g.rows.length > 0);
+    return [primary, ...comparisons];
+  }, [metab, channels, entityKind, primaryRows, selected]);
 
   // Every cell type that appears in ANY shown group, in the bundle's order.
   const availableCellTypes = useMemo(() => {
@@ -111,12 +102,6 @@ export default function BetaPanel() {
   const shown = useMemo(
     () => (effectiveFilter === ALL ? availableCellTypes : [effectiveFilter]),
     [effectiveFilter, availableCellTypes],
-  );
-
-  // Channels offered by the "Add comparison" menu: those in the bundle not already added.
-  const availableToAdd = useMemo(
-    () => (betaBundle?.channels ?? []).filter((c) => !added.includes(c.id)),
-    [betaBundle, added],
   );
 
   if (!dataset?.hasBeta || !betaBundle) return null;
@@ -136,8 +121,6 @@ export default function BetaPanel() {
       </section>
     );
   }
-
-  const remove = (id: BetaChannelId) => setAdded((a) => a.filter((x) => x !== id));
 
   return (
     <section className={styles.wrap} aria-labelledby="beta-h">
@@ -175,48 +158,11 @@ export default function BetaPanel() {
         claim: positive means the interaction raises that target gene, negative lowers it.
       </p>
 
-      {/* Comparison bar: stack other channels below, aligned to this metabolite's target genes. */}
-      <div className={styles.compare}>
-        <span className={styles.compareLabel}>Compare</span>
-        {added.map((id) => {
-          const ch = channelsById.get(id);
-          if (!ch) return null;
-          const label = optionLabel(ch);
-          return (
-            <span key={id} className={styles.chip}>
-              {label}
-              <button
-                type="button"
-                className={styles.chipRemove}
-                onClick={() => remove(id)}
-                title={`Remove ${label}`}
-                aria-label={`Remove ${label}`}
-              >
-                ✕
-              </button>
-            </span>
-          );
-        })}
-        <select
-          className="control"
-          value=""
-          aria-label="Add comparison"
-          onChange={(e) => {
-            const id = e.target.value as BetaChannelId;
-            if (id) setAdded((a) => [...a, id]);
-          }}
-        >
-          <option value="">Add comparison ▾</option>
-          {availableToAdd.map((ch) => (
-            <option key={ch.id} value={ch.id}>
-              {optionLabel(ch)}
-            </option>
-          ))}
-        </select>
-      </div>
+      {/* Compare the metabolite's transporters against whole groups and/or individual factors. */}
+      <FactorPicker channels={channels} selected={selected} onChange={setSelected} />
 
       {/* One cell-type-major matrix: columns are the UNION of target genes across shown groups, so
-          a gene only a comparison factor covers still appears (with the metab group blank there). */}
+          a gene only a comparison factor covers still appears (with other groups blank there). */}
       <BetaMatrix groups={groups} cellTypes={shown} />
     </section>
   );

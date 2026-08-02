@@ -4,6 +4,45 @@
 restart. Dates are absolute (project "today" was 2026-07-16 at kickoff).
 
 ## Current state
+- **2026-08-01 — FactorPicker: pick individual factors AND whole groups (Cycle 4 / REVISION 2). Playwright-verified.**
+  - Foster: the old "add a whole group" interactions (the Environment add-dropdown, the standalone
+    Section toggles) were too coarse — he wants to select arbitrary SUBSECTIONS: individual factors
+    (one matrix row = a specific transporter / L–R / L–TF pair, or a single TF) as well as whole
+    groups, on BOTH views. New reusable `FactorPicker` replaces both. The add-dropdown is gone.
+  - **Selection model (`src/data/factorSelection.ts`)** is ONE flat `Set<FeatureKey>` of individual
+    factors (`featureKey = ${channelId}::${a}::${b ?? ''}`). A whole-group button is just a BULK
+    add/remove of that group's factors into the same set, so every factor stays individually
+    removable (Foster's flow: "click the group to activate it, then ✕ the ones you don't care
+    about"). Helpers: `featureKey`, `channelFeatures(channel)` (deduped `{key,a,b,label}`),
+    `selectedRows(channel, selected)`. Kept in a data module (not the .tsx) so both views + the picker
+    share them without tripping react-refresh. See A27.
+  - **`FactorPicker.tsx` (+ `.module.css`, new):** (1) whole-group buttons, one per channel, showing
+    none/some/all state (`sel/total` count; partial = outlined-accent, all = filled + aria-pressed);
+    click bulk-adds all, or removes all when already all. (2) a searchable "Add a specific factor…"
+    combobox — matches EITHER member name (handles the two-names-per-row case) or `a → b`, capped ~40
+    with a "keep typing" hint, excludes already-selected, keyboard ↑/↓/Enter/Esc, outside-click
+    close. (3) selected factors GROUPED INTO COLLAPSIBLE SECTIONS by channel — header
+    `channel.label · {k} selected` + chevron + "clear" ✕; default collapsed for big groups (>8) so
+    activating 233 L–R factors reads as a tidy "· 233 selected", expand to prune individual chips.
+  - **`SpaceTravlrView`** now renders `<FactorPicker/>` (replacing the Section toggles) + the target-
+    gene chips + cell-type select; groups = channels with `selectedRows` non-empty. Default selection
+    = ALL factors of ALL channels (re-seeded whenever the bundle/tier/dataset changes). **`BetaPanel`**
+    keeps the primary anchor group (metabolite's transporters) first, adds `<FactorPicker/>` for
+    comparisons (default EMPTY, reset on entity/tier/dataset, kept on cell-type); comparison groups =
+    channels with `selectedRows` non-empty, label = `channel.label`; union columns (no `allowedGenes`).
+  - Cleanup: removed BetaPanel's `added`/`optionLabel`/`availableToAdd`/`channelsById` machinery and
+    the dead `.compare`/`.compareLabel`/`.chipRemove` CSS. No dead code.
+  - **Verified (Playwright, Melanoma):** Env opens with only the metabolite's transporters (all group
+    buttons 0/N); Standalone opens with all groups selected (buttons all, 4 collapsed "· N selected"
+    sections: metab 113, LR 233, L-TF 55, TF 320). A whole-group click selects all its factors and
+    the matrix shows the whole group (L-TF → 55 rows/block); expanding the section and ✕-ing 2 factors
+    dropped exactly those rows (55→53) and flipped the button to **partial** (53/55); the section
+    "clear ✕" removed the whole channel (0/55, matrix back to primary). Search by a receptor name
+    (CXCR3 / TGFBR2 — the SECOND of the two names) listed the matching L–R pairs; pinning one added a
+    one-row L–R group with the button showing partial (1/233). Standalone whole-group toggle-off
+    removed metab (0/113) from the matrix. DOM-vs-bundle spot check on a pinned-TF view: 40 cells, 0
+    text/sign/hue/source mismatches. `tsc -b` + `lint` + `build` clean; **0 console errors/warnings**.
+    Screenshots `viz/rev2b-env-flatpicker.png`, `viz/rev2b-standalone-flatpicker.png`.
 - **2026-08-01 — Cell-type-major matrix layout (Cycle 3 / REVISION 1). Playwright-verified.**
   - Foster's feedback: the channel-major `BetaSection` stacking repeated each cell type per factor and
     the columns didn't line up. Both beta views are now **cell-type-major**: each cell type appears
@@ -263,6 +302,7 @@ restart. Dates are absolute (project "today" was 2026-07-16 at kickoff).
 | A24 | Standalone SpaceTravLR view is **entity-independent and full-width** (hides `EntityPanel`) | It answers "what does the model say across all features?", not "…for this metabolite" — the side panel's entity selection is irrelevant, so it's hidden and the canvas fills the width (`app__body--full`). Toggles are EXCLUSION sets (empty = all shown) so new channels/genes/tiers never need re-selecting. `selectDataset` keeps the view only if the new dataset can still show it, else falls back to `graph`. |
 | A25 | BetaPanel comparisons: added channels use an **INCLUSION** list (`added: BetaChannelId[]`, starts empty), the inverse of the standalone view's exclusion sets | Opposite defaults for opposite intents: the standalone view wants everything shown by default (survey), while the metabolite view is *about that metabolite* — comparisons are a deliberate opt-in the user adds one at a time, so an empty inclusion list is the right default. The compared rows are the channel's full superset (not entity-filtered). Reset on entity/tier/dataset (stale otherwise) but not on cell-type change (that's a lens on the same comparison, per A20's "filters may change unchosen things; only the user retires their own selection"). |
 | A26 | **Cell-type-major** matrix (`BetaMatrix`), UNION gene columns, BLANK ≠ `≈0` — replaces the channel-major `BetaSection` stacking | Foster's REVISION 1: grouping by factor channel repeated each cell type per factor and columns didn't align, so cross-factor reading was hard. Cell-type-major shows each cell type once with the factor groups stacked beneath and ALL genes in a fixed column order — so "for this cell type, which factors move which genes?" is one glance. Columns are the UNION (superseding Cycle-2's intersect-to-metab-genes) so a gene only a comparison factor covers still appears; where a group has no coefficient the slot is BLANK whitespace (kept, not dropped/shifted), kept honestly distinct from `≈0` (measured-but-negligible). Scales stay **per factor group** (A22): TF ~1e0 and metab ~1e-6 in the same block would otherwise collapse to one floor. |
+| A27 | Factor selection is ONE flat `Set<FeatureKey>` of individual factors; a whole-group button is a BULK add/remove into that set (replaces the Cycle-2 add-dropdown and a briefly-built `{wholeGroups, features}` split) | Foster (2nd round): wants to select arbitrary subsections — individual factors AND whole groups — with the flow "click the group to activate it, then ✕ out the ones you don't care about." A flat per-factor set makes every factor equally removable regardless of how it got selected; the whole-group button is pure sugar (add-all / remove-all) over that set, and its none/some/all state is derived, not stored. Selected factors are shown in per-channel collapsible sections so activating a 233-factor group reads as "· 233 selected" not 233 chips. A separate `wholeGroups` set (the first attempt) made "the group is on but I removed 3 of its factors" unrepresentable — the flat set makes partial selection natural. Standalone defaults to all factors selected (survey); Environment defaults to empty (it's about the one metabolite). |
 
 ## Open questions / needs Foster
 - **Dataset naming**: ids/names now come straight from the `Results/` folder names
@@ -337,22 +377,49 @@ restart. Dates are absolute (project "today" was 2026-07-16 at kickoff).
 13. **Standalone SpaceTravLR view** (Melanoma): the third View button is enabled only when the
     dataset has betas (disabled on e.g. FF Ovarian / Human Lung). Clicking it hides the entity panel
     and fills the width. Layout is **cell-type-major** (`BetaMatrix`): each cell type once, the
-    selected factor channels stacked beneath as divider-labelled groups, union target-gene columns in
-    fixed position. **Per-group scales:** the TF group shows order-1 values while metab shows ~1e-6 —
-    each divider prints its own "own scale |β| ≤ …". Toggling a **Section** chip adds/removes that
-    factor group (and any columns only it contributed); toggling a **Target gene** chip adds/removes
-    that union column; the **Cell type** select narrows to one block. Switching to a no-beta dataset
-    while in this view falls back to the Graph view. 0 console errors.
-14. **BetaPanel comparison chips + cell-type-major matrix** (Melanoma Environment view): each cell
-    type appears ONCE; beneath its label the primary group ("This metabolite's transporter pairs") and
-    any added comparison groups are stacked, sharing ONE union set of gene columns in fixed position.
-    "Add comparison ▾" adds LR / L-TF / TF / "All metabolic transporters" as removable chips (removal
-    via the chip ✕ — the matrix has no per-section ✕). Adding TF surfaces TF-only columns
-    (CTLA4/FOXP3/IL10) as **blank whitespace** in the metab group (blank ≠ `≈0`); each factor group
-    keeps its own scale (metab ~1e-6, TF ~1e0). The cell-type filter narrows ALL groups at once and
-    does NOT clear the added ones. Switching metabolite OR tier clears the added groups.
+    selected factors stacked beneath as divider-labelled groups, union target-gene columns in fixed
+    position. **Per-group scales:** the TF group shows order-1 values while metab shows ~1e-6 — each
+    divider prints its own "own scale |β| ≤ …". The **FactorPicker** defaults to all factors (group
+    buttons "all", collapsed "· N selected" sections); a whole-group button toggles the group;
+    toggling a **Target gene** chip adds/removes a union column; the **Cell type** select narrows to
+    one block. Switching to a no-beta dataset while in this view falls back to the Graph view. 0
+    console errors.
+14. **BetaPanel + FactorPicker** (Melanoma Environment view): each cell type appears ONCE; beneath its
+    label the primary group ("This metabolite's transporter pairs", always first) and any comparison
+    groups are stacked, sharing ONE union set of gene columns in fixed position. The **FactorPicker**
+    defaults empty; clicking a whole-group button selects all its factors (matrix shows the whole
+    group) and shows a collapsed "· N selected" section; expanding it and ✕-ing individual chips
+    removes exactly those rows and flips the button to the **partial** state; the section "clear ✕"
+    deselects the whole channel. The **search** finds a factor by EITHER of its two member names and
+    pins it as a one-row group. Each factor group keeps its own scale (metab ~1e-6, TF ~1e0); union
+    columns include genes only a comparison factor covers (metab group **blank** there, blank ≠ `≈0`).
+    The cell-type filter narrows ALL groups at once and does NOT clear the selection. Switching
+    metabolite OR tier clears the comparison selection.
+    - **Cycle-4 review fixes (FactorPicker):** (1) MEDIUM — Escape no longer wedges the combobox: it
+      clears the query but KEEPS focus, and typing (re)opens the popover via `onChange` rather than a
+      focus change, so type→Esc→type reopens. (2) a11y — the listbox has an id, the input carries
+      `aria-controls` + `aria-activedescendant` (→ highlighted option id), options keep
+      role="option"/aria-selected. (3) blur-close — an `onBlur` with a `relatedTarget`-in-combobox
+      check closes the popover on tab-out/click-away. (4) ranking — matches are ordered exact →
+      startsWith → substring on either member before the ~40 cap, so a fully-typed name is never
+      hidden. (5) expand overrides clear when the selection empties, so re-adding a big group after a
+      metabolite switch shows the tidy collapsed "· N selected" summary, not 100+ chips. Playwright-
+      verified all five (Escape→retype→reopen; "CD4" exact ranked above "CD44"; blur closes;
+      re-added LR after metabolite switch collapsed); tsc+lint clean, 0 console errors. Screenshot
+      `viz/rev2c-factorpicker-fixes.png`.
 
 ## Changelog
+- 2026-08-01: **FactorPicker — pick individual factors AND whole groups (Cycle 4 / REVISION 2).** New
+  `FactorPicker.tsx` (+ `.module.css`) and `src/data/factorSelection.ts` replace the Environment
+  add-dropdown and the standalone Section toggles. Selection is ONE flat `Set<FeatureKey>`; whole-
+  group buttons bulk add/remove (none/some/all state); a searchable combobox adds a single factor
+  (matches either member name); selected factors show in per-channel collapsible sections (chip prune
+  + "clear" ✕). `SpaceTravlrView` default = all factors; `BetaPanel` default = empty (primary anchor
+  kept). Union columns + per-group scales unchanged (BetaMatrix untouched). Removed BetaPanel's
+  add-dropdown machinery + dead `.compare`/`.chipRemove` CSS. UI-only, no ingest/schema/contract
+  change. Playwright-verified on Melanoma (group none→all→partial via expand+✕, section clear, search
+  by second member name, standalone all-default, DOM-vs-bundle 40/40 on a pinned-TF view). tsc+lint+
+  build clean, 0 console errors. See A27; smoke items 13/14 updated.
 - 2026-08-01: **Cell-type-major matrix layout (Cycle 3 / REVISION 1).** New `BetaMatrix.tsx`
   (+ `.module.css`) replaces `BetaSection` (deleted): each cell type shown ONCE, factor groups stacked
   beneath, ONE union set of target-gene columns in fixed position, per-group scales, blank whitespace
