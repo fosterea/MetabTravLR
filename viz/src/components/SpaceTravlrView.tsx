@@ -1,16 +1,19 @@
 /**
  * Standalone SpaceTravLR view: the whole beta bundle, INDEPENDENT of the selected entity. A single
- * cell-type-major matrix — each cell type once, the selected factor channels (metab / lr / ltf / tf)
- * stacked beneath it, each on its OWN magnitude scale, with union target-gene columns.
+ * cell-type-major matrix — each cell type once, the selected factors (chosen via the FactorPicker)
+ * stacked beneath it, each channel on its OWN magnitude scale, with union target-gene columns.
  *
- * Controls: toggle channels (Sections), toggle target-gene columns (Target genes), and pick a
- * cell type. Toggles are tracked as EXCLUSION sets (empty = all shown), so a new tier/dataset never
- * needs re-selecting — new channels and new genes appear on by default.
+ * Controls: a `FactorPicker` (whole-group buttons + a searchable add-a-specific-factor box + per-
+ * channel selected-factor sections) chooses the ROWS; target-gene chips choose the COLUMNS; a
+ * cell-type select scopes the blocks. The factor selection defaults to every factor of every
+ * channel (populated on arrival) and re-seeds to that default whenever the bundle (tier/dataset)
+ * changes, since feature keys are (a,b)-specific and don't carry across tiers.
  */
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useVizStore, selectCurrentTier } from '@/store/useVizStore';
-import type { BetaChannelId } from '@/data/types';
 import BetaMatrix, { type BetaFactorGroup } from './BetaMatrix';
+import FactorPicker from './FactorPicker';
+import { channelFeatures, selectedRows, type FeatureKey } from '@/data/factorSelection';
 import styles from './SpaceTravlrView.module.css';
 import beta from './BetaPanel.module.css';
 
@@ -21,32 +24,35 @@ export default function SpaceTravlrView() {
   const betaBundle = useVizStore((s) => s.betaBundle);
   const bundleLoading = useVizStore((s) => s.bundleLoading);
 
-  // Exclusion sets: empty = everything shown, so new channels/genes default ON across tiers.
-  const [excluded, setExcluded] = useState<Set<BetaChannelId>>(new Set());
+  const [selected, setSelected] = useState<Set<FeatureKey>>(() => new Set());
   const [excludedGenes, setExcludedGenes] = useState<Set<string>>(new Set());
   const [cellTypeFilter, setCellTypeFilter] = useState<string>(ALL);
 
   const channels = useMemo(() => betaBundle?.channels ?? [], [betaBundle]);
-  const selectedChannels = useMemo(
-    () => channels.filter((c) => !excluded.has(c.id)),
-    [channels, excluded],
+
+  // Default: every factor of every channel selected (no blank canvas; the per-channel sections just
+  // render collapsed "N selected" summaries). Re-seed whenever the bundle changes (tier/dataset).
+  useEffect(() => {
+    setSelected(new Set(channels.flatMap((ch) => channelFeatures(ch).map((f) => f.key))));
+  }, [channels]);
+
+  // One factor group per channel that contributes any rows under the current selection.
+  const groups = useMemo<BetaFactorGroup[]>(
+    () =>
+      channels
+        .map((ch) => ({ key: ch.id, channel: ch, label: ch.label, rows: selectedRows(ch, selected) }))
+        .filter((g) => g.rows.length > 0),
+    [channels, selected],
   );
 
-  // Target genes: the union across the SELECTED channels (sorted), so hiding a channel drops the
-  // genes only it contributed.
+  // Target genes = the union across the selected factors' rows (sorted); chips toggle columns.
   const unionGenes = useMemo(
-    () => [...new Set(selectedChannels.flatMap((c) => c.targetGenes))].sort(),
-    [selectedChannels],
+    () => [...new Set(groups.flatMap((g) => g.rows.map((r) => r.gene)))].sort(),
+    [groups],
   );
   const selectedGenes = useMemo(
     () => unionGenes.filter((g) => !excludedGenes.has(g)),
     [unionGenes, excludedGenes],
-  );
-
-  // One factor group per selected channel (whole channel's rows), rendered cell-type-major.
-  const groups = useMemo<BetaFactorGroup[]>(
-    () => selectedChannels.map((c) => ({ key: c.id, channel: c, label: c.label, rows: c.rows })),
-    [selectedChannels],
   );
 
   // Cell-type names differ per tier, so a filter set at Tier3 is meaningless at Tier1. Fall back
@@ -54,14 +60,6 @@ export default function SpaceTravlrView() {
   const cellTypes = betaBundle?.cellTypes ?? [];
   const effectiveFilter = cellTypes.includes(cellTypeFilter) ? cellTypeFilter : ALL;
   const shown = effectiveFilter === ALL ? cellTypes : [effectiveFilter];
-
-  const toggleChannel = (id: BetaChannelId) =>
-    setExcluded((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
-      return next;
-    });
 
   const toggleGene = (g: string) =>
     setExcludedGenes((prev) => {
@@ -102,25 +100,7 @@ export default function SpaceTravlrView() {
           </label>
         </div>
 
-        <div className={styles.group}>
-          <span className={styles.groupLabel}>Sections</span>
-          <div className={beta.chips} role="group" aria-label="Sections">
-            {channels.map((c) => {
-              const on = !excluded.has(c.id);
-              return (
-                <button
-                  key={c.id}
-                  type="button"
-                  className={`${beta.chip} ${on ? beta.chipOn : ''}`}
-                  aria-pressed={on}
-                  onClick={() => toggleChannel(c.id)}
-                >
-                  {c.label}
-                </button>
-              );
-            })}
-          </div>
-        </div>
+        <FactorPicker channels={channels} selected={selected} onChange={setSelected} />
 
         {unionGenes.length > 0 && (
           <div className={styles.group}>
@@ -156,8 +136,8 @@ export default function SpaceTravlrView() {
       </div>
 
       <div className={styles.body}>
-        {selectedChannels.length === 0 ? (
-          <div className={styles.none}>Select at least one section.</div>
+        {groups.length === 0 ? (
+          <div className={styles.none}>Select at least one factor.</div>
         ) : selectedGenes.length === 0 ? (
           <div className={styles.none}>Select at least one target gene.</div>
         ) : (

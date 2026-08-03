@@ -54,26 +54,12 @@
   padding: var(--sp-4) 0;
 }
 
-/* ---- toggle / comparison chips (BetaPanel compare bar + SpaceTravlrView Sections/Genes) ---- */
+/* ---- target-gene column chips (BetaPanel unused now; reused by SpaceTravlrView's gene chips) ---- */
 .chips {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: var(--sp-2);
-}
-/* The comparison bar: a label, the added-factor chips, and the "Add comparison" menu. */
-.compare {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--sp-2);
-  margin: var(--sp-3) 0;
-}
-.compareLabel {
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.4px;
-  color: var(--text-muted);
 }
 .chip {
   display: inline-flex;
@@ -95,14 +81,4 @@
   background: var(--accent);
   border-color: var(--accent);
   color: var(--on-accent);
-}
-/* The ✕ affordance inside a removable chip. */
-.chipRemove {
-  background: none;
-  border: none;
-  color: inherit;
-  font-size: 11px;
-  line-height: 1;
-  padding: 0;
-  cursor: pointer;
 }
