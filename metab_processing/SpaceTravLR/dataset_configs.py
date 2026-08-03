@@ -77,6 +77,7 @@ DEFAULTS = {
 DATASETS = {
     'Primary_Dermal_Melanoma': {},
     'Human_Lung': {},
+    'Human_Prostate_Adenocarcinoma': {},
 }
 
 
