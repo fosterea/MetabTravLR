@@ -78,6 +78,11 @@ DATASETS = {
     'Primary_Dermal_Melanoma': {},
     'Human_Lung': {},
     'Human_Prostate_Adenocarcinoma': {},
+    'Human_Breast': {},
+    'Human_Cervical_Cancer': {},
+    'FF_Human_Ovarian_Adenocarcinoma': {},
+    'FFPE_Human_Ovarian_Cancer': {},
+    
 }
 
 
