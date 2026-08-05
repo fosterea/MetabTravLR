@@ -255,7 +255,8 @@ class TestIsolateCacheDir(unittest.TestCase):
             with mock.patch.object(run_spacetravlr, "_isolate_cache_dir",
                                    side_effect=lambda: order.append("isolate")), \
                  mock.patch.object(run_spacetravlr, "SpaceShip", OrderedShip), \
-                 mock.patch.object(run_spacetravlr, "_load_adata", lambda p, s: object()):
+                 mock.patch.object(run_spacetravlr, "_load_adata", lambda p, s: object()), \
+                 mock.patch.object(run_spacetravlr, "_check_cluster_sizes", lambda a, s: None):
                 run_spacetravlr.run_dataset(DATASET, stages=["setup"], data_dir=tmp)
 
         self.assertEqual(order, ["isolate", "setup_"])
@@ -311,6 +312,105 @@ class TestProcessedVarNames(unittest.TestCase):
 
 
 # ----------------------------------------------------------------------- run_dataset
+# ------------------------------------------------------- MAGIC cluster-size preflight
+def clustered_adata(**columns):
+    """Minimal stand-in for an AnnData: `_check_cluster_sizes` only reads `.obs`.
+
+    Each kwarg is `column=[label per cell]`, stored categorical the way scanpy's leiden
+    output is -- that dtype is what makes the unused-category case possible.
+    """
+    import pandas as pd
+    from types import SimpleNamespace
+
+    obs = pd.DataFrame({k: pd.Series(v, dtype="category") for k, v in columns.items()})
+    return SimpleNamespace(obs=obs)
+
+
+class TestClusterSizeCheck(unittest.TestCase):
+    """Human_Breast died an hour into setup on a 10-cell cluster
+    (`ValueError: n_neighbors = 16, n_samples_fit = 10`). Catch it at load instead."""
+
+    def test_passes_when_every_cluster_is_big_enough(self):
+        adata = clustered_adata(res=["a"] * 20 + ["b"] * 16)
+        run_spacetravlr._check_cluster_sizes(adata, "res")   # must not raise
+
+    def test_boundary_cluster_of_exactly_the_minimum_is_allowed(self):
+        adata = clustered_adata(res=["a"] * 20 + ["b"] * run_spacetravlr.MAGIC_MIN_CLUSTER_CELLS)
+        run_spacetravlr._check_cluster_sizes(adata, "res")
+
+    def test_one_cell_below_the_minimum_raises(self):
+        adata = clustered_adata(
+            res=["a"] * 20 + ["b"] * (run_spacetravlr.MAGIC_MIN_CLUSTER_CELLS - 1))
+        with self.assertRaises(ValueError):
+            run_spacetravlr._check_cluster_sizes(adata, "res")
+
+    def test_message_names_the_offending_cluster_and_its_size(self):
+        adata = clustered_adata(res=["big"] * 500 + ["tiny"] * 10)
+        with self.assertRaises(ValueError) as ctx:
+            run_spacetravlr._check_cluster_sizes(adata, "res")
+        msg = str(ctx.exception)
+        self.assertIn("tiny", msg)
+        self.assertIn("10", msg)
+        self.assertNotIn("big", msg)   # only the offenders, not every cluster
+
+    def test_message_lists_sibling_resolutions_and_which_are_usable(self):
+        # The whole point: one failed run should tell Foster what to switch to.
+        adata = clustered_adata(**{
+            "leiden_scVI_res_0.5": ["a"] * 500 + ["b"] * 10,
+            "leiden_scVI_res_0.25": ["a"] * 510,
+            "leiden_scVI_res_1": ["a"] * 495 + ["b"] * 10 + ["c"] * 5,
+        })
+        with self.assertRaises(ValueError) as ctx:
+            run_spacetravlr._check_cluster_sizes(adata, "leiden_scVI_res_0.5")
+        msg = str(ctx.exception)
+        coarser = [ln for ln in msg.splitlines() if "leiden_scVI_res_0.25" in ln]
+        finer = [ln for ln in msg.splitlines() if "leiden_scVI_res_1" in ln]
+        self.assertTrue(coarser and coarser[0].strip().endswith("yes"), msg)
+        self.assertTrue(finer and finer[0].strip().endswith("no"), msg)
+
+    def test_unused_categories_are_not_reported_as_empty_clusters(self):
+        # A category with no cells is never visited by impute_clusterwise's
+        # `obs[annot].unique()`, so it must not trip the check.
+        import pandas as pd
+        from types import SimpleNamespace
+
+        col = pd.Series(["a"] * 20 + ["b"] * 20,
+                        dtype=pd.CategoricalDtype(["a", "b", "ghost"]))
+        adata = SimpleNamespace(obs=pd.DataFrame({"res": col}))
+        run_spacetravlr._check_cluster_sizes(adata, "res")
+
+    def test_sibling_annotations_are_coarsest_first_and_exclude_self(self):
+        adata = clustered_adata(**{
+            "leiden_scVI_res_0.5": ["a"] * 20,
+            "leiden_scVI_res_2": ["a"] * 20,
+            "leiden_scVI_res_0.25": ["a"] * 20,
+            "some_other_column": ["a"] * 20,
+        })
+        siblings = run_spacetravlr._sibling_annotations(adata.obs, "leiden_scVI_res_0.5")
+        self.assertEqual(siblings, ["leiden_scVI_res_0.25", "leiden_scVI_res_2"])
+
+    def test_no_siblings_when_the_column_has_no_numeric_suffix(self):
+        adata = clustered_adata(cell_type=["a"] * 20, other=["a"] * 20)
+        self.assertEqual(run_spacetravlr._sibling_annotations(adata.obs, "cell_type"), [])
+
+
+class TestHumanBreastResolution(unittest.TestCase):
+    def test_breast_overrides_to_a_coarser_resolution_than_the_default(self):
+        default = dataset_configs.DEFAULTS["cell_type_src"]
+        breast = get_config("Human_Breast")["cell_type_src"]
+        self.assertNotEqual(breast, default)
+        prefix = "leiden_scVI_res_"
+        self.assertTrue(breast.startswith(prefix))
+        self.assertLess(float(breast[len(prefix):]), float(default[len(prefix):]))
+
+    def test_other_datasets_keep_the_default_resolution(self):
+        for dataset in DATASETS:
+            if dataset == "Human_Breast":
+                continue
+            self.assertEqual(get_config(dataset)["cell_type_src"],
+                             dataset_configs.DEFAULTS["cell_type_src"], dataset)
+
+
 class RunDatasetCase(unittest.TestCase):
     """Shared harness: patch out everything heavy, record what got called."""
 
@@ -361,6 +461,8 @@ class RunDatasetCase(unittest.TestCase):
         patches = [
             mock.patch.object(run_spacetravlr, "SpaceShip", FakeShip),
             mock.patch.object(run_spacetravlr, "_load_adata", lambda paths, src: self.adata),
+            # FakeAdata has no real obs frame; the check has its own tests below.
+            mock.patch.object(run_spacetravlr, "_check_cluster_sizes", lambda adata, src: None),
             mock.patch.object(run_spacetravlr, "load_metab_pairs",
                               lambda path, var_names=None: ([("A", "B")], {"m1": [("A", "B")]})),
             mock.patch.object(run_spacetravlr, "_processed_var_names", lambda paths: ["A", "B"]),
@@ -398,6 +500,21 @@ class TestRunDatasetSetupStage(RunDatasetCase):
         # it deletes nothing. We own the directory lifecycle.
         self.assertTrue(self.setup_calls[0]["overwrite"])
         self.assertFalse(self.setup_calls[0]["run_commot"])
+
+    def test_bad_cluster_sizes_abort_before_setup_and_release_the_lock(self):
+        make_dataset_tree(self.root)
+        paths = dataset_paths(DATASET, self.root)
+        boom = ValueError("cluster too small")
+
+        def raiser(adata, src):
+            raise boom
+
+        with mock.patch.object(run_spacetravlr, "_check_cluster_sizes", raiser):
+            with self.assertRaises(ValueError):
+                self.run_it(stages=["setup"])
+        # The expensive part never started, and a retry is not blocked by a stale lock.
+        self.assertEqual(self.setup_calls, [])
+        self.assertFalse((paths["outdir"] / ".setup.lock").exists())
 
     def test_setup_skipped_when_already_complete(self):
         make_dataset_tree(self.root, setup=True)

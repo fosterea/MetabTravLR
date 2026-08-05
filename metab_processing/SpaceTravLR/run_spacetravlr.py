@@ -36,6 +36,7 @@ for _p in (str(_root), str(_root / "src")):
 import argparse
 import contextlib
 import os
+import re
 import shutil
 import subprocess
 import time
@@ -57,6 +58,14 @@ _SETUP_ARTIFACTS = (
     'input_data/celloracle_links.pkl',
     'input_data/tflinks.parquet',
 )
+
+# Smallest cluster MAGIC will accept. `impute_clusterwise` (oracles.py:84) runs MAGIC once
+# per cluster with the library defaults, and graphtools then asks sklearn for 16 neighbours
+# -- observed as `ValueError: Expected n_neighbors <= n_samples_fit, but n_neighbors = 16,
+# n_samples_fit = 10` on Human_Breast at leiden_scVI_res_0.5. There is no size guard in the
+# package, and the crash lands only when the loop reaches that cluster, which on a large
+# dataset is an hour of imputation thrown away. Check before setup starts instead.
+MAGIC_MIN_CLUSTER_CELLS = 16
 
 
 def _log(msg):
@@ -203,6 +212,63 @@ def _load_adata(paths, cell_type_src):
     return adata
 
 
+def _cluster_sizes(obs, column):
+    """Observed cluster sizes in `column`, smallest first.
+
+    Categorical columns keep categories with no cells; `impute_clusterwise` iterates
+    `obs[annot].unique()`, which does not, so drop the empties or we would report
+    phantom zero-cell clusters.
+    """
+    counts = obs[column].value_counts()
+    return counts[counts > 0].sort_values()
+
+
+def _sibling_annotations(obs, cell_type_src):
+    """Other resolutions of the same annotation family.
+
+    'leiden_scVI_res_0.5' -> every other 'leiden_scVI_res_*' column, coarsest first.
+    Empty if `cell_type_src` has no trailing number to strip.
+    """
+    prefix = re.sub(r'[\d.]+$', '', cell_type_src)
+    if prefix == cell_type_src:
+        return []
+
+    def _res(name):
+        try:
+            return float(name[len(prefix):])
+        except ValueError:
+            return float('inf')
+
+    siblings = [c for c in obs.columns if c != cell_type_src and c.startswith(prefix)]
+    return sorted(siblings, key=_res)
+
+
+def _check_cluster_sizes(adata, cell_type_src):
+    """Fail before setup if any cluster is too small for MAGIC, and say what to use instead."""
+    sizes = _cluster_sizes(adata.obs, cell_type_src)
+    too_small = sizes[sizes < MAGIC_MIN_CLUSTER_CELLS]
+    if too_small.empty:
+        _log(f'{cell_type_src}: {len(sizes)} clusters, smallest {int(sizes.iloc[0])} cells')
+        return
+
+    offenders = ', '.join(f'{c!r}={int(n)}' for c, n in too_small.items())
+    lines = [
+        f'{cell_type_src} has {len(too_small)} cluster(s) below the '
+        f'{MAGIC_MIN_CLUSTER_CELLS}-cell minimum MAGIC needs ({offenders}). '
+        f'Imputation would crash partway through setup (oracles.py:113). '
+        f'Pick a coarser resolution via cell_type_src in dataset_configs.py.',
+    ]
+    siblings = _sibling_annotations(adata.obs, cell_type_src)
+    if siblings:
+        lines.append('  annotation                     clusters  smallest  usable')
+        for col in siblings:
+            other = _cluster_sizes(adata.obs, col)
+            smallest = int(other.iloc[0]) if len(other) else 0
+            ok = 'yes' if smallest >= MAGIC_MIN_CLUSTER_CELLS else 'no'
+            lines.append(f'  {col:<30} {len(other):>8} {smallest:>9}  {ok}')
+    raise ValueError('\n'.join(lines))
+
+
 def _processed_var_names(paths):
     """var_names of the *processed* adata, without loading it into memory.
 
@@ -257,6 +323,7 @@ def run_dataset(dataset, stages=STAGES, overwrite=False, clear_betadata=False,
         else:
             with _setup_lock(paths['outdir']):
                 adata = _load_adata(paths, cfg['cell_type_src'])
+                _check_cluster_sizes(adata, cfg['cell_type_src'])
                 _log(f'setup_ (run_commot={cfg["run_commot"]}) ...')
                 # overwrite=True only bypasses setup_'s "directory exists" guard; it deletes
                 # nothing. We own the directory lifecycle above.
