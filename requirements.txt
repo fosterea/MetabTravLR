@@ -41,7 +41,7 @@ anndata==0.12.10
 sphinx
 sphinx-rtd-theme
 nbsphinx
-# jscatter
+jscatter
 simple_slurm
 group_lasso
 easydict

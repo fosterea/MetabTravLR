@@ -40,7 +40,7 @@ setup(
         "sphinx_tippy",
         "sphinx_autodoc_typehints",
         "numpy==1.26",
-        # "jscatter"
+        "jscatter"
     ],
     classifiers=[
         "Development Status :: 3 - Alpha",
