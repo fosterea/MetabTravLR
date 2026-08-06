@@ -107,7 +107,7 @@
         "Tier3"
       ],
       "hasNbhd": true,
-      "hasBeta": false,
+      "hasBeta": true,
       "available": true
     },
     {
