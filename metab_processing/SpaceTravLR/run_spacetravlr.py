@@ -67,6 +67,11 @@ _SETUP_ARTIFACTS = (
 # dataset is an hour of imputation thrown away. Check before setup starts instead.
 MAGIC_MIN_CLUSTER_CELLS = 16
 
+# Cells in sub-MAGIC clusters are dropped at load. A few outliers are fine to discard, but
+# past this fraction of all cells the resolution itself is too fine -- stop and ask for a
+# coarser one rather than silently throwing away a meaningful slice of the dataset.
+MAX_TINY_CLUSTER_CELL_FRACTION = 0.02
+
 
 def _log(msg):
     """Timestamped, flushed -- SLURM logs are otherwise block-buffered and useless live."""
@@ -243,30 +248,59 @@ def _sibling_annotations(obs, cell_type_src):
     return sorted(siblings, key=_res)
 
 
-def _check_cluster_sizes(adata, cell_type_src):
-    """Fail before setup if any cluster is too small for MAGIC, and say what to use instead."""
+def _drop_tiny_clusters(adata, cell_type_src):
+    """Drop cells in clusters too small for MAGIC and return the trimmed adata.
+
+    `impute_clusterwise` runs MAGIC once per cluster and graphtools then asks sklearn for
+    MAGIC_MIN_CLUSTER_CELLS neighbours; a smaller cluster crashes setup partway through
+    (oracles.py:113). Such a cluster would also fit its own per-cluster GroupLasso on a
+    handful of cells -- overfit betas we would not trust anyway -- so we discard those
+    cells here rather than impute and train them. This only trims the in-memory copy that
+    becomes the processed `_adata.h5ad`; the source `adata.h5ad` is never modified.
+
+    Dropping is only right for a few outliers. Above MAX_TINY_CLUSTER_CELL_FRACTION of all
+    cells the annotation is simply too fine -- raise and name a coarser resolution instead.
+    """
     sizes = _cluster_sizes(adata.obs, cell_type_src)
     too_small = sizes[sizes < MAGIC_MIN_CLUSTER_CELLS]
     if too_small.empty:
-        _log(f'{cell_type_src}: {len(sizes)} clusters, smallest {int(sizes.iloc[0])} cells')
-        return
+        _log(f'{cell_type_src}: {len(sizes)} clusters, smallest {int(sizes.iloc[0])} '
+             f'cells (>= {MAGIC_MIN_CLUSTER_CELLS}) -- keeping every cell')
+        return adata
 
+    n_drop = int(too_small.sum())
+    frac = n_drop / adata.n_obs
     offenders = ', '.join(f'{c!r}={int(n)}' for c, n in too_small.items())
-    lines = [
-        f'{cell_type_src} has {len(too_small)} cluster(s) below the '
-        f'{MAGIC_MIN_CLUSTER_CELLS}-cell minimum MAGIC needs ({offenders}). '
-        f'Imputation would crash partway through setup (oracles.py:113). '
-        f'Pick a coarser resolution via cell_type_src in dataset_configs.py.',
-    ]
-    siblings = _sibling_annotations(adata.obs, cell_type_src)
-    if siblings:
-        lines.append('  annotation                     clusters  smallest  usable')
-        for col in siblings:
-            other = _cluster_sizes(adata.obs, col)
-            smallest = int(other.iloc[0]) if len(other) else 0
-            ok = 'yes' if smallest >= MAGIC_MIN_CLUSTER_CELLS else 'no'
-            lines.append(f'  {col:<30} {len(other):>8} {smallest:>9}  {ok}')
-    raise ValueError('\n'.join(lines))
+
+    if frac > MAX_TINY_CLUSTER_CELL_FRACTION:
+        lines = [
+            f'{cell_type_src}: {len(too_small)} cluster(s) below the '
+            f'{MAGIC_MIN_CLUSTER_CELLS}-cell MAGIC minimum hold {n_drop} cells '
+            f'({frac:.1%} of {adata.n_obs}) -- too many to drop as outliers ({offenders}). '
+            f'Pick a coarser resolution via cell_type_src in dataset_configs.py.',
+        ]
+        siblings = _sibling_annotations(adata.obs, cell_type_src)
+        if siblings:
+            lines.append('  annotation                     clusters  smallest  usable')
+            for col in siblings:
+                other = _cluster_sizes(adata.obs, col)
+                smallest = int(other.iloc[0]) if len(other) else 0
+                ok = 'yes' if smallest >= MAGIC_MIN_CLUSTER_CELLS else 'no'
+                lines.append(f'  {col:<30} {len(other):>8} {smallest:>9}  {ok}')
+        raise ValueError('\n'.join(lines))
+
+    _log(f'{cell_type_src}: dropping {n_drop} cell(s) ({frac:.2%} of {adata.n_obs}) in '
+         f'{len(too_small)} cluster(s) below the {MAGIC_MIN_CLUSTER_CELLS}-cell MAGIC '
+         f'minimum: {offenders}')
+    keep = ~adata.obs[cell_type_src].isin(list(too_small.index))
+    adata = adata[keep.values].copy()
+    for col in {cell_type_src, 'cell_type'} & set(adata.obs.columns):
+        if hasattr(adata.obs[col], 'cat'):
+            adata.obs[col] = adata.obs[col].cat.remove_unused_categories()
+    kept = _cluster_sizes(adata.obs, cell_type_src)
+    _log(f'{cell_type_src}: kept {adata.n_obs} cells in {len(kept)} clusters, '
+         f'smallest now {int(kept.iloc[0])}')
+    return adata
 
 
 def _processed_var_names(paths):
@@ -323,7 +357,7 @@ def run_dataset(dataset, stages=STAGES, overwrite=False, clear_betadata=False,
         else:
             with _setup_lock(paths['outdir']):
                 adata = _load_adata(paths, cfg['cell_type_src'])
-                _check_cluster_sizes(adata, cfg['cell_type_src'])
+                adata = _drop_tiny_clusters(adata, cfg['cell_type_src'])
                 _log(f'setup_ (run_commot={cfg["run_commot"]}) ...')
                 # overwrite=True only bypasses setup_'s "directory exists" guard; it deletes
                 # nothing. We own the directory lifecycle above.

@@ -256,7 +256,7 @@ class TestIsolateCacheDir(unittest.TestCase):
                                    side_effect=lambda: order.append("isolate")), \
                  mock.patch.object(run_spacetravlr, "SpaceShip", OrderedShip), \
                  mock.patch.object(run_spacetravlr, "_load_adata", lambda p, s: object()), \
-                 mock.patch.object(run_spacetravlr, "_check_cluster_sizes", lambda a, s: None):
+                 mock.patch.object(run_spacetravlr, "_drop_tiny_clusters", lambda a, s: a):
                 run_spacetravlr.run_dataset(DATASET, stages=["setup"], data_dir=tmp)
 
         self.assertEqual(order, ["isolate", "setup_"])
@@ -312,72 +312,96 @@ class TestProcessedVarNames(unittest.TestCase):
 
 
 # ----------------------------------------------------------------------- run_dataset
-# ------------------------------------------------------- MAGIC cluster-size preflight
+# ------------------------------------------------- MAGIC tiny-cluster drop at load
 def clustered_adata(**columns):
-    """Minimal stand-in for an AnnData: `_check_cluster_sizes` only reads `.obs`.
+    """A real AnnData whose only meaningful content is `.obs` cluster columns.
 
     Each kwarg is `column=[label per cell]`, stored categorical the way scanpy's leiden
-    output is -- that dtype is what makes the unused-category case possible.
+    output is -- that dtype is what makes the unused-category case possible. `X` is a
+    zero matrix just so subsetting (`_drop_tiny_clusters` returns `adata[keep].copy()`)
+    behaves like the real thing.
     """
+    import anndata as ad
+    import numpy as np
     import pandas as pd
-    from types import SimpleNamespace
 
+    n = len(next(iter(columns.values())))
     obs = pd.DataFrame({k: pd.Series(v, dtype="category") for k, v in columns.items()})
-    return SimpleNamespace(obs=obs)
+    adata = ad.AnnData(np.zeros((n, 1), dtype="float32"), obs=obs)
+    return adata
 
 
-class TestClusterSizeCheck(unittest.TestCase):
-    """Human_Breast died an hour into setup on a 10-cell cluster
-    (`ValueError: n_neighbors = 16, n_samples_fit = 10`). Catch it at load instead."""
+class TestDropTinyClusters(unittest.TestCase):
+    """Human_Breast died an hour into setup on a sub-16-cell cluster
+    (`ValueError: n_neighbors = 16, n_samples_fit = 10`). Drop those outlier cells at
+    load instead -- and, if too many cells are in tiny clusters, stop and ask for a
+    coarser resolution rather than silently discard a meaningful slice."""
 
-    def test_passes_when_every_cluster_is_big_enough(self):
+    def test_keeps_every_cell_when_all_clusters_big_enough(self):
         adata = clustered_adata(res=["a"] * 20 + ["b"] * 16)
-        run_spacetravlr._check_cluster_sizes(adata, "res")   # must not raise
+        out = run_spacetravlr._drop_tiny_clusters(adata, "res")
+        self.assertEqual(out.n_obs, 36)
 
-    def test_boundary_cluster_of_exactly_the_minimum_is_allowed(self):
-        adata = clustered_adata(res=["a"] * 20 + ["b"] * run_spacetravlr.MAGIC_MIN_CLUSTER_CELLS)
-        run_spacetravlr._check_cluster_sizes(adata, "res")
-
-    def test_one_cell_below_the_minimum_raises(self):
+    def test_boundary_cluster_of_exactly_the_minimum_is_kept(self):
         adata = clustered_adata(
-            res=["a"] * 20 + ["b"] * (run_spacetravlr.MAGIC_MIN_CLUSTER_CELLS - 1))
-        with self.assertRaises(ValueError):
-            run_spacetravlr._check_cluster_sizes(adata, "res")
+            res=["a"] * 20 + ["b"] * run_spacetravlr.MAGIC_MIN_CLUSTER_CELLS)
+        out = run_spacetravlr._drop_tiny_clusters(adata, "res")
+        self.assertEqual(out.n_obs, 20 + run_spacetravlr.MAGIC_MIN_CLUSTER_CELLS)
 
-    def test_message_names_the_offending_cluster_and_its_size(self):
-        adata = clustered_adata(res=["big"] * 500 + ["tiny"] * 10)
-        with self.assertRaises(ValueError) as ctx:
-            run_spacetravlr._check_cluster_sizes(adata, "res")
-        msg = str(ctx.exception)
-        self.assertIn("tiny", msg)
-        self.assertIn("10", msg)
-        self.assertNotIn("big", msg)   # only the offenders, not every cluster
+    def test_drops_cells_in_a_sub_minimum_cluster(self):
+        adata = clustered_adata(res=["big"] * 1000 + ["tiny"] * 10)
+        out = run_spacetravlr._drop_tiny_clusters(adata, "res")
+        self.assertEqual(out.n_obs, 1000)
+        # The emptied category is gone, so impute_clusterwise never visits it.
+        self.assertNotIn("tiny", list(out.obs["res"].cat.categories))
+        self.assertEqual(set(out.obs["res"]), {"big"})
 
-    def test_message_lists_sibling_resolutions_and_which_are_usable(self):
-        # The whole point: one failed run should tell Foster what to switch to.
+    def test_source_adata_is_not_mutated(self):
+        adata = clustered_adata(res=["big"] * 1000 + ["tiny"] * 10)
+        run_spacetravlr._drop_tiny_clusters(adata, "res")
+        # The drop trims a copy; the object we were handed still has all its cells.
+        self.assertEqual(adata.n_obs, 1010)
+        self.assertIn("tiny", set(adata.obs["res"]))
+
+    def test_drop_is_logged_with_count_and_cluster(self):
+        adata = clustered_adata(res=["big"] * 1000 + ["tiny"] * 10)
+        msgs = []
+        with mock.patch.object(run_spacetravlr, "_log", lambda m: msgs.append(m)):
+            run_spacetravlr._drop_tiny_clusters(adata, "res")
+        blob = "\n".join(msgs)
+        self.assertIn("dropping", blob)
+        self.assertIn("tiny", blob)
+        self.assertIn("10", blob)
+
+    def test_too_many_tiny_cells_raise_with_a_resolution_table(self):
+        # 10 of 210 cells (~4.8%) exceeds the drop fraction -- the resolution is too fine,
+        # so one failed run should tell Foster which sibling to switch to.
         adata = clustered_adata(**{
-            "leiden_scVI_res_0.5": ["a"] * 500 + ["b"] * 10,
-            "leiden_scVI_res_0.25": ["a"] * 510,
-            "leiden_scVI_res_1": ["a"] * 495 + ["b"] * 10 + ["c"] * 5,
+            "leiden_scVI_res_0.5": ["a"] * 200 + ["b"] * 10,
+            "leiden_scVI_res_0.25": ["a"] * 210,
+            "leiden_scVI_res_1": ["a"] * 195 + ["b"] * 10 + ["c"] * 5,
         })
         with self.assertRaises(ValueError) as ctx:
-            run_spacetravlr._check_cluster_sizes(adata, "leiden_scVI_res_0.5")
+            run_spacetravlr._drop_tiny_clusters(adata, "leiden_scVI_res_0.5")
         msg = str(ctx.exception)
         coarser = [ln for ln in msg.splitlines() if "leiden_scVI_res_0.25" in ln]
         finer = [ln for ln in msg.splitlines() if "leiden_scVI_res_1" in ln]
         self.assertTrue(coarser and coarser[0].strip().endswith("yes"), msg)
         self.assertTrue(finer and finer[0].strip().endswith("no"), msg)
 
-    def test_unused_categories_are_not_reported_as_empty_clusters(self):
+    def test_unused_categories_are_not_counted_as_empty_clusters(self):
         # A category with no cells is never visited by impute_clusterwise's
-        # `obs[annot].unique()`, so it must not trip the check.
+        # `obs[annot].unique()`, so it must not trip the drop.
+        import anndata as ad
+        import numpy as np
         import pandas as pd
-        from types import SimpleNamespace
 
         col = pd.Series(["a"] * 20 + ["b"] * 20,
                         dtype=pd.CategoricalDtype(["a", "b", "ghost"]))
-        adata = SimpleNamespace(obs=pd.DataFrame({"res": col}))
-        run_spacetravlr._check_cluster_sizes(adata, "res")
+        adata = ad.AnnData(np.zeros((40, 1), dtype="float32"),
+                           obs=pd.DataFrame({"res": col}))
+        out = run_spacetravlr._drop_tiny_clusters(adata, "res")
+        self.assertEqual(out.n_obs, 40)
 
     def test_sibling_annotations_are_coarsest_first_and_exclude_self(self):
         adata = clustered_adata(**{
@@ -394,19 +418,11 @@ class TestClusterSizeCheck(unittest.TestCase):
         self.assertEqual(run_spacetravlr._sibling_annotations(adata.obs, "cell_type"), [])
 
 
-class TestHumanBreastResolution(unittest.TestCase):
-    def test_breast_overrides_to_a_coarser_resolution_than_the_default(self):
-        default = dataset_configs.DEFAULTS["cell_type_src"]
-        breast = get_config("Human_Breast")["cell_type_src"]
-        self.assertNotEqual(breast, default)
-        prefix = "leiden_scVI_res_"
-        self.assertTrue(breast.startswith(prefix))
-        self.assertLess(float(breast[len(prefix):]), float(default[len(prefix):]))
-
-    def test_other_datasets_keep_the_default_resolution(self):
+class TestDatasetResolutions(unittest.TestCase):
+    def test_every_dataset_keeps_the_default_resolution(self):
+        # Tiny clusters are handled by dropping outliers at load, not by per-dataset
+        # resolution overrides -- so no dataset (Human_Breast included) overrides it.
         for dataset in DATASETS:
-            if dataset == "Human_Breast":
-                continue
             self.assertEqual(get_config(dataset)["cell_type_src"],
                              dataset_configs.DEFAULTS["cell_type_src"], dataset)
 
@@ -461,8 +477,9 @@ class RunDatasetCase(unittest.TestCase):
         patches = [
             mock.patch.object(run_spacetravlr, "SpaceShip", FakeShip),
             mock.patch.object(run_spacetravlr, "_load_adata", lambda paths, src: self.adata),
-            # FakeAdata has no real obs frame; the check has its own tests below.
-            mock.patch.object(run_spacetravlr, "_check_cluster_sizes", lambda adata, src: None),
+            # FakeAdata has no real obs frame; the drop has its own tests below. It is a
+            # pass-through here, returning the adata unchanged the way "nothing to drop" does.
+            mock.patch.object(run_spacetravlr, "_drop_tiny_clusters", lambda adata, src: adata),
             mock.patch.object(run_spacetravlr, "load_metab_pairs",
                               lambda path, var_names=None: ([("A", "B")], {"m1": [("A", "B")]})),
             mock.patch.object(run_spacetravlr, "_processed_var_names", lambda paths: ["A", "B"]),
@@ -504,12 +521,12 @@ class TestRunDatasetSetupStage(RunDatasetCase):
     def test_bad_cluster_sizes_abort_before_setup_and_release_the_lock(self):
         make_dataset_tree(self.root)
         paths = dataset_paths(DATASET, self.root)
-        boom = ValueError("cluster too small")
+        boom = ValueError("resolution too fine")
 
         def raiser(adata, src):
             raise boom
 
-        with mock.patch.object(run_spacetravlr, "_check_cluster_sizes", raiser):
+        with mock.patch.object(run_spacetravlr, "_drop_tiny_clusters", raiser):
             with self.assertRaises(ValueError):
                 self.run_it(stages=["setup"])
         # The expensive part never started, and a retry is not blocked by a stale lock.

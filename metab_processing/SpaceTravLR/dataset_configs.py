@@ -78,13 +78,11 @@ DATASETS = {
     'Primary_Dermal_Melanoma': {},
     'Human_Lung': {},
     'Human_Prostate_Adenocarcinoma': {},
-    'Human_Breast': {
-        # res_0.5 puts 10 cells in one cluster, and MAGIC needs at least
-        # MAGIC_MIN_CLUSTER_CELLS (16) per cluster or `impute_clusterwise` dies partway
-        # through setup. Coarser resolution merges the outlier away. `run_spacetravlr.py`
-        # re-checks this at load and names a working resolution if 0.25 is still too fine.
-        'cell_type_src': 'leiden_scVI_res_0.25',
-    },
+    # Human_Breast has tiny outlier clusters at every resolution (no res_* column is
+    # MAGIC-clean, and it has no res_0.25), so switching resolution cannot help. Those
+    # few outlier cells are dropped at load instead -- see `_drop_tiny_clusters` in
+    # run_spacetravlr.py -- and the dataset keeps the default resolution.
+    'Human_Breast': {},
     'Human_Cervical_Cancer': {},
     'FF_Human_Ovarian_Adenocarcinoma': {},
     'FFPE_Human_Ovarian_Cancer': {},
