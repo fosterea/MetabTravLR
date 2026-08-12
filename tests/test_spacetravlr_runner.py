@@ -451,12 +451,12 @@ class RunDatasetCase(unittest.TestCase):
                 for name in ("celloracle_links.pkl", "tflinks.parquet"):
                     (self.outdir / "input_data" / name).write_text("x")
 
-            def fit(self, metab_pairs=None, **kwargs):
+            def fit(self, metabolites=None, **kwargs):
                 betadata = self.outdir / "betadata"
                 before = sorted(p.name for p in betadata.glob("*_betadata.parquet")) \
                     if betadata.exists() else []
                 outer.fit_calls.append(
-                    {"metab_pairs": metab_pairs, "kwargs": kwargs, "betadata_before": before})
+                    {"metabolites": metabolites, "kwargs": kwargs, "betadata_before": before})
                 betadata.mkdir(parents=True, exist_ok=True)
                 for gene in self.genes:
                     (betadata / f"{gene}_betadata.parquet").write_text("x")
@@ -469,7 +469,7 @@ class RunDatasetCase(unittest.TestCase):
                 self.artifact_calls.append((name, a, kw))
                 if name == "betas_to_adata":
                     adata = a[0]
-                    adata.uns["beta_modulators"] = {"CD4": ["ABCA1@ABCA1"]}
+                    adata.uns["beta_modulators"] = {"CD4": ["metab@ABCA1"]}
                     adata.obsm["beta_CD4"] = _Shape((6, 1))
                 return {}
             return _fn
@@ -480,10 +480,10 @@ class RunDatasetCase(unittest.TestCase):
             # FakeAdata has no real obs frame; the drop has its own tests below. It is a
             # pass-through here, returning the adata unchanged the way "nothing to drop" does.
             mock.patch.object(run_spacetravlr, "_drop_tiny_clusters", lambda adata, src: adata),
-            mock.patch.object(run_spacetravlr, "load_metab_pairs",
-                              lambda path, var_names=None: ([("A", "B")], {"m1": [("A", "B")]})),
+            mock.patch.object(run_spacetravlr, "load_metabolites",
+                              lambda path, var_names=None: ({"m1": [("A", "B")]}, {"m1": [("A", "B")]})),
             mock.patch.object(run_spacetravlr, "_processed_var_names", lambda paths: ["A", "B"]),
-            mock.patch.object(run_spacetravlr.beta_analysis, "write_gene_pairs", record("write_gene_pairs")),
+            mock.patch.object(run_spacetravlr.beta_analysis, "write_metabolites", record("write_metabolites")),
             mock.patch.object(run_spacetravlr.beta_analysis, "write_histograms", record("write_histograms")),
             mock.patch.object(run_spacetravlr.beta_analysis, "betas_to_adata", record("betas_to_adata")),
         ]
@@ -645,13 +645,13 @@ class TestRunDatasetFitStage(RunDatasetCase):
         self.assertEqual(self.fit_calls[0]["betadata_before"], ["CD4_betadata.parquet"],
                          "a plain resubmit must resume, not retrain")
 
-    def test_fit_passes_metab_pairs_and_config_kwargs(self):
+    def test_fit_passes_metabolites_and_config_kwargs(self):
         make_dataset_tree(self.root, setup=True)
         with mock.patch.dict(dataset_configs.DATASETS,
                              {DATASET: {"fit_kwargs": {"max_epochs": 3}}}, clear=False):
             self.run_it(stages=["fit"])
         self.assertEqual(len(self.fit_calls), 1)
-        self.assertEqual(self.fit_calls[0]["metab_pairs"], [("A", "B")])
+        self.assertEqual(self.fit_calls[0]["metabolites"], {"m1": [("A", "B")]})
         self.assertEqual(self.fit_calls[0]["kwargs"], {"max_epochs": 3})
 
 
@@ -675,13 +675,13 @@ class TestRunDatasetArtifactsStage(RunDatasetCase):
         make_dataset_tree(self.root, setup=True, betadata_genes=["CD4"])
         self.run_it(stages=["artifacts"])
         self.assertEqual([n for n, _, _ in self.artifact_calls],
-                         ["write_gene_pairs", "write_histograms", "betas_to_adata"])
+                         ["write_metabolites", "write_histograms", "betas_to_adata"])
 
     def test_artifacts_write_everything_and_the_beta_adata(self):
         paths = make_dataset_tree(self.root, setup=True, betadata_genes=["CD4"])
         self.run_it(stages=["artifacts"])
         names = [name for name, _, _ in self.artifact_calls]
-        self.assertEqual(names, ["write_gene_pairs", "write_histograms", "betas_to_adata"])
+        self.assertEqual(names, ["write_metabolites", "write_histograms", "betas_to_adata"])
         self.assertEqual(self.adata.written_to, paths["beta_adata"])
         self.assertTrue(paths["beta_adata"].exists())
 
@@ -725,7 +725,7 @@ class TestRunDatasetAllStages(RunDatasetCase):
         self.assertEqual(len(self.setup_calls), 1)
         self.assertEqual(len(self.fit_calls), 1)
         self.assertEqual([n for n, _, _ in self.artifact_calls],
-                         ["write_gene_pairs", "write_histograms", "betas_to_adata"])
+                         ["write_metabolites", "write_histograms", "betas_to_adata"])
         self.assertTrue(paths["beta_adata"].exists())
 
 
@@ -756,11 +756,11 @@ class TestArtifactsAgainstRealBetaAnalysis(unittest.TestCase):
             paths["selection_yaml"].parent.mkdir(parents=True, exist_ok=True)
             paths["selection_yaml"].write_text("metabolites: []\n")
 
-            # Two trained target genes, one metab pair + one TF modulator each.
+            # Two trained target genes, two metabolites (one merged) + one TF modulator each.
             betas = pd.DataFrame(
                 {
-                    "beta_ABCA1@ABCA1": np.arange(6, dtype="float32"),
-                    "beta_ATP7A@ATP7B": np.linspace(-1, 1, 6, dtype="float32"),
+                    "beta_metab@Glucose": np.arange(6, dtype="float32"),
+                    "beta_metab@Copper|Zinc": np.linspace(-1, 1, 6, dtype="float32"),
                     "beta_STAT1": np.full(6, 0.5, dtype="float32"),
                 },
                 index=cells,
@@ -772,11 +772,11 @@ class TestArtifactsAgainstRealBetaAnalysis(unittest.TestCase):
             run_spacetravlr.run_dataset(DATASET, stages=["artifacts"], data_dir=tmp)
 
             tier_dir = paths["metab_outdir"] / "Tier1"
-            gene_pairs = pd.read_csv(tier_dir / "gene_pairs.csv")
-            self.assertEqual(set(gene_pairs["gene"]), {"CD4", "CD3E"})
-            self.assertEqual(set(gene_pairs["pair"]), {"ABCA1@ABCA1", "ATP7A@ATP7B"},
-                             "gene_pairs.csv is the metab group only")
-            self.assertEqual(set(gene_pairs["cell_type"]), {"T Cell", "Tumor"})
+            metabolites = pd.read_csv(tier_dir / "metabolites.csv")
+            self.assertEqual(set(metabolites["gene"]), {"CD4", "CD3E"})
+            self.assertEqual(set(metabolites["metabolite"]), {"Glucose", "Copper|Zinc"},
+                             "metabolites.csv is the metab group only, 'metab@' stripped")
+            self.assertEqual(set(metabolites["cell_type"]), {"T Cell", "Tumor"})
 
             hist = pd.read_csv(tier_dir / "histograms.csv")
             self.assertEqual(set(hist["group"]), {"metab", "tf"})
@@ -789,7 +789,7 @@ class TestArtifactsAgainstRealBetaAnalysis(unittest.TestCase):
             self.assertEqual(out.obsm["beta_CD4"].shape, (6, 3),
                              "group=None keeps every modulator group")
             self.assertEqual(list(out.uns["beta_modulators"]["CD4"]),
-                             ["ABCA1@ABCA1", "ATP7A@ATP7B", "STAT1"])
+                             ["metab@Glucose", "metab@Copper|Zinc", "STAT1"])
             np.testing.assert_allclose(out.obsm["beta_CD4"][:, 0], np.arange(6))
 
     def test_artifacts_stage_end_to_end_with_metab_only_beta_group(self):

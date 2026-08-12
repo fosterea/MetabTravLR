@@ -30,6 +30,7 @@ labeled gene sets to rank metabolites by effect (e.g. ↑T-cell activity / ↓ex
 | D7 | 2026-07-10 | **Keep TF + L–R modulators, but optional** (default keep). | Metabolite β estimated controlling for known regulation. Likely **skip COMMOT** (harreman is our prior). |
 | D8 | 2026-07-16 | **Fix the received-ligand kernel: hard cutoff at `radius` + narrow σ; row-chunk.** Committed `793c096`. | Auto mode, **verified against the paper's actual methods text** (Foster's prompt to check). Finding: the paper *mandates a hard cutoff* — "spatial neighbors n as all locations i within a circle … with a predefined radius r", summing over only in-radius neighbors — so the old "fast" kernel (`σ=radius`, **no cutoff**, sum over all cells) genuinely **violates the paper** (real bug; OOM'd at 57 GB @100k). The paper does **NOT** specify σ (defers to CytoSignal); `σ=radius/3.72` is the codebase's own `gaussian_kernel_2d` convention (makes the Gaussian ≈0 at the cutoff) and is what the original slow `compute_radius_weights` uses. So the fix = align fast path to `gaussian_kernel_2d`: cutoff = paper-mandated, σ = code-convention. → ~1.34 GB @20k, matches narrow reference to ~2e-16, chunk-invariant. **CHANGES results vs old wide kernel — intended.** Old wide fns kept as `*_wide_deprecated`. Paper refs: Methods "Spatially informed signaling inference" (p17); σ nuance in `05`/agent trace. |
 | D9 | 2026-07-20 | **Harreman aggregate CCC OOM → gene-pair chunking (bit-identical), NOT lowering M.** The `HarremanRunner` OOM at Xenium scale is in `compute_{,ct_}cell_communication`'s dense `(n_cells × n_gp)` matmul intermediates — a *different* problem from the per-cell §5 OOM (already fixed via `nbhd_scores`→`compute_interacting_cell_scores_lowmem`). Their permutation null is already cell-reduced, so `M` is irrelevant to their memory. | Chunk the **gene-pair** axis (provably bit-identical: score sums over cells; column slicing + per-row DANB standardize don't reorder). Simplest fix that solves it at any scale; "chunk matmul only" was rejected once we verified `standardize_counts` is per-row (→ chunk `counts_1/2` too). Adaptive default chunk `= max(1, 50M//n_cells)`. Reproduced two stock float32 quirks for exactness. See `05` §5c; drop-ins in `cell_communication_lowmem.py` (CU-A–D). |
+| D11 | 2026-08-11 | **Metabolite terms now represent whole metabolites, not gene pairs: one summed modulator column per metabolite.** Supersedes the per-pair `beta_<export>@<import>` scheme (D6's per-pair columns). The estimator receives `metabolites: dict[name, list[(export, import)]]` and builds ONE column `metab@<name>` per metabolite = **sum over its pairs** of `received_ligand(export, diffused) × import(local)`, summing **both orientations** `(a,b)+(b,a)` (directionality dropped). One group-lasso group-#5 entry + one learned β per metabolite. Follows the paper's kernel-sum principle and weights every metabolite equally (one coefficient), vs. the old scheme where a metabolite with N transporter pairs got N columns. | Foster's call, 2026-08-11. **Merge** metabolites with an identical expanded pair-set into one `nameA\|nameB` column (they'd be perfectly-collinear duplicate predictors under near-OLS) — done in the **loader**, so the core estimator stays merge-agnostic. Betadata column `beta_metab@<name>` (the `metab@` marker keeps the read-back's `@`→metab classification). Param renamed `metab_pairs`→`metabolites` end-to-end (estimator/oracles/spaceship/loader/runner). **Downstream break (Foster to handle later):** viz + anything consuming the old `beta_<e>@<i>` columns or `gene_pairs.csv`. The near-OLS caveat (2026-07-17) still applies: summed-column scale grows with pair count, β absorbs the inverse — read magnitudes accordingly. |
 | D10 | 2026-07-21 | **Per-cell nbhd OOM (≥600k cells) → Option B: two-pass gene-pair + metabolite chunking, preserve the exact `uns` contract.** Foster chose **B over A** (stream-to-summary): our wall is **GPU** memory, not RAM, and B is simpler (no `summarize_nbhd_scores` refactor). B bounds GPU to `(n_cells, chunk)` but still stores the full `(n_cells, n_gp)`/`(n_cells, n_m)` matrices on **CPU** — accepted. | CU-E in `compute_interacting_cell_scores_lowmem`'s `np` branch. Params `gene_pair_chunk_size`/`metabolite_chunk_size` threaded through `nbhd_scores.compute_nbhd_scores` **only** (not `HarremanRunner`). Metabolite pass recomputes union gene-pair scores (~2× perm matmuls, sanctioned). **Review-caught bug:** observed `cs_m` must be reduced on the **same device** (GPU) as the perm scores — a CPU-side `.sum(dim=1)` over ≥3 pairs can ULP-differ from CUDA → flip an exceedance; CPU tests can't see it. See `07` §10, `05` §5. |
 
 ## Leaning / proposed (not final)
@@ -47,9 +48,10 @@ labeled gene sets to rank metabolites by effect (e.g. ↑T-cell activity / ↓ex
 - Repo renamed **SpaceOracle → SpaceTravLR** (both names in code/paths).
 - Two phases: **train** (`SpaceShip.setup_` → `run_spacetravlr` → `betadata/{gene}_betadata.parquet`)
   vs **simulate** (`GeneFactory.perturb`, out of scope).
-- Coefficients: betadata columns `beta0`, `beta_<TF>`, `beta_<lig>$<rec>` (L–R ← our
-  metabolites), `beta_<lig>#<TF>` (L–TF). Produced by `CellularNicheNetwork` as
-  `sigmoid(MLP(spatial))·anchors` (anchors = group-lasso solution).
+- Coefficients: betadata columns `beta0`, `beta_<TF>`, `beta_<lig>$<rec>` (L–R),
+  `beta_<lig>#<TF>` (L–TF), and (D11, 2026-08-11) **`beta_metab@<name>` — one summed
+  column per metabolite** (was per-pair `beta_<export>@<import>`). Produced by
+  `CellularNicheNetwork` as `sigmoid(MLP(spatial))·anchors` (anchors = group-lasso solution).
 - CellOracle runs **once** at setup (`spaceship.run_celloracle_`, vendored `celloracle_tmp`,
   base GRN `SpaceTravLR_data/{species}_base_grn.parquet`) → `celloracle_links.pkl`; at
   train time only the pickle is read.
@@ -359,6 +361,47 @@ new files, zero changes to `src/SpaceTravLR/`** (`dataset_configs.py`, `run_spac
   `Results/`, not just the one that ran) — it's a final notebook cell instead.
 - Pre-existing unrelated failure, untouched: `tests/test_spacetravlr.py::test_spawn_worker` passes
   `clusters=`, which the Savio-style `spawn_worker` signature no longer takes.
+
+## Session 2026-08-11 — metabolites as whole-metabolite summed columns (decision D11)
+Changed the metabolite representation from **one column per transporter gene pair**
+(`beta_<export>@<import>`) to **one summed column per metabolite** (`beta_metab@<name>`). See
+**D11** for the rationale (Foster: weight every metabolite equally, drop pair/direction detail,
+follow the paper's kernel-sum principle). Surgical, default-preserving (`metabolites=None` →
+byte-identical), full suite green (340 passed, 1 skipped, 1 known-unrelated `test_spawn_worker`).
+
+- **Core (`src/`), minimal:** `parallel_estimators.py` — param `metab_pairs`→`metabolites`
+  (`dict[name, list[(export,import)]]`); each metabolite → one `metab@<name>` column =
+  `sum_pairs received_ligands_tfl[export] × counts[import]` (new `metabolite_interactions(..., metabolites)`
+  static method, known-answer tested); group-#5 gets one entry per metabolite; per-pair
+  target-gene exclusion drops the pair from the sum (metabolite survives on its others; dropped
+  entirely if none remain); export/import genes still drive the diffusion cache. The internal
+  attribute `self.metab_pairs` is **kept** (now the list of `metab@<name>` column names) to
+  avoid churn in `oracles.py`/`get_betas`. `oracles.py` + `spaceship.py`: renamed param, dict
+  validation, `run_params['n_metabolites']`, orphan-gate relaxation unchanged.
+- **Merge lives in the loader, not core.** `metab_loader.py`: `build_metabolites`/`load_metabolites`
+  (replacing `build_metab_pairs`/`load_metab_pairs`) return `{column_name: [(export,import)]}` —
+  per-metabolite orientation expansion + within-metabolite unordered dedup + var-filter, then
+  **merge metabolites with an identical expanded pair-set** into one `nameA|nameB` column
+  (`MERGE_SEP='|'`; drops empties). So the estimator never sees perfectly-collinear duplicate
+  columns. Runner (`run_spacetravlr.py`) passes `metabolites=` to `ship.fit`.
+- **Read-back (`beta_analysis.py`):** metab group now writes a single `metabolite` column (the
+  `metab@` marker stripped; merged name kept) to **`metabolites.csv`** (was `gene_pairs.csv` with
+  export/import/pair columns); `write_gene_pairs`→`write_metabolites`. `betas_to_adata` **keeps**
+  the `metab@` prefix on `adata.obsm` labels (Foster's ask). L-R/L-TF/TF outputs unchanged.
+- **Tests rewritten:** `test_metab_group.py` (known-answer summing of both orientations +
+  multi-pair + shared genes, group-5 count = #metabolites), `test_metab_loader.py` (merge +
+  orientation + var-filter), `test_metab_wiring.py` (dict threading, metab-only gene →
+  `beta_metab@` column), `test_beta_analysis.py` + `test_spacetravlr_runner.py` (new
+  `metabolites.csv`/`metabolite` column, obsm keeps `metab@`).
+- **Downstream break (Foster to handle later, per his instruction):** viz + any consumer of the
+  old `beta_<e>@<i>` columns or `gene_pairs.csv`.
+- **Notebooks updated to the new API** (Foster asked): `quick_start_metab.ipynb`
+  (`load_metabolites`, `fit(metabolites=…)`, `write_metabolites`, `metab@`-aware plot cell) and
+  `submit_spacetravlr.ipynb` (doc `gene_pairs.csv`→`metabolites.csv`). Their **stale cell outputs**
+  still show the old format and regenerate on the next run. `submit_spacetravlr.py` needed **no
+  change** — it only shells out to `run_spacetravlr.py` (already threaded).
+- **Caveat carried forward:** near-OLS (2026-07-17) means a summed column's scale grows with its
+  pair count and β absorbs the inverse — fine for read-time magnitude, documented.
 
 ## Local assets for dev/testing
 - Demo data in `data/`: `Slidetags_human_tonsil.h5ad`, `Slidetags_human_melanoma.h5ad`,

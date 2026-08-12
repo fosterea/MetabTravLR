@@ -64,6 +64,14 @@ behavior is byte-identical when unused. **Prefer building the metabolite interac
 our own script and passing it in, over expanding core signatures** — but the group/column
 plumbing must live in the estimator.
 
+> **⚠️ SUPERSEDED by D11 (2026-08-11):** metabolites are now **one summed column per
+> metabolite** (`beta_metab@<name>`), not one column per gene pair. The estimator takes
+> `metabolites: dict[name, list[(export,import)]]` and sums each metabolite's pairs (both
+> orientations) into a single `metab@<name>` group-#5 column. Identical-signature metabolites
+> are **merged in the loader** (`nameA|nameB`). CU-1/CU-2/CU-4 below describe the original
+> per-pair scheme; read them for the mechanism, but the current column contract is D11's. See
+> `04_decisions_and_state.md` D11 + the 2026-08-11 session entry.
+
 ### CU-1 — Add a metabolite modulator group to the estimator *(core, unavoidable)*
 `models/parallel_estimators.py`:
 - New optional ctor arg `metab_pairs: list[tuple[export, import]] | None = None` on

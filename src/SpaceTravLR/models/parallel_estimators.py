@@ -604,7 +604,7 @@ class SpatialCellularProgramsEstimator:
             radius=100, contact_distance=30, use_ligands=True,
             tf_ligand_cutoff=0.01, receptor_thresh=0.01,
             regulators=None, grn=None, colinks_path=None, tflinks=None, scale_factor=100,
-            extra_modulators=None, extra_lr=None, metab_pairs=None, activation='identity'):
+            extra_modulators=None, extra_lr=None, metabolites=None, activation='identity'):
         
 
         assert isinstance(adata, AnnData), 'adata must be an AnnData object'
@@ -707,64 +707,75 @@ class SpatialCellularProgramsEstimator:
         self.modulators = modulators + self.extra_modulators
         self.modulators_genes = list(set(modulators_genes + self.extra_modulators))
 
-        # --- Metabolite transporter pairs: own modulator group (D6), '@' separator ---
-        # Reuses the L-R computation (received_ligand(export, diffused) x import(local))
-        # but is kept independent of the extra_lr/L-R group #2.
-        self.metab_pairs_input = metab_pairs
+        # --- Metabolite transporter groups: own modulator group (D6), 'metab@' marker ---
+        # Each metabolite becomes ONE summed modulator column:
+        #   metab@<name> = sum over its (export, import) pairs of
+        #                  received_ligand(export, diffused) x import(local).
+        # Both orientations (a,b) and (b,a) are just two pairs in a metabolite's list
+        # and are summed together here -- directionality is intentionally dropped.
+        # Reuses the L-R diffusion computation but is a group independent of L-R (#2).
+        self.metabolites_input = metabolites
 
-        # Check the container type FIRST (before calling len()/iterating), so a
-        # non-list, non-len-able input (e.g. an int) raises our intended ValueError
-        # instead of a TypeError from len().
-        if metab_pairs is not None and not isinstance(metab_pairs, list):
-            raise ValueError("metab_pairs must be list[tuple[export:str, import:str]]")
+        # Check the container type FIRST (before iterating), so a non-dict input raises
+        # our intended ValueError rather than an opaque error later.
+        if metabolites is not None and not isinstance(metabolites, dict):
+            raise ValueError(
+                "metabolites must be dict[name:str, list[tuple[export:str, import:str]]]")
 
-        if metab_pairs is not None and len(metab_pairs) > 0:
-            if not all(
-                isinstance(p, (tuple, list))
-                and len(p) == 2
-                and all(isinstance(g, str) for g in p)
-                for p in metab_pairs
-            ):
-                raise ValueError("metab_pairs must be list[tuple[export:str, import:str]]")
+        if metabolites is not None and len(metabolites) > 0:
+            for name, pairs in metabolites.items():
+                if not isinstance(name, str):
+                    raise ValueError("metabolites keys must be str metabolite names")
+                if not isinstance(pairs, (list, tuple)) or not all(
+                    isinstance(p, (tuple, list))
+                    and len(p) == 2
+                    and all(isinstance(g, str) for g in p)
+                    for p in pairs
+                ):
+                    raise ValueError(
+                        "metabolites must be dict[name, list[tuple[export:str, import:str]]]")
 
-            # Filter to genes present in adata.var_names (both genes present), deduped.
-            _var_filtered = []
-            _seen_var = set()
+            # Per metabolite: keep pairs whose BOTH genes are in var_names; exclude
+            # pairs touching the target gene from the SUM (a gene can't predict itself);
+            # dedupe exact-duplicate pairs within the metabolite. Drop metabolites left
+            # with no usable pairs. The diffusion list is the target-AGNOSTIC union of
+            # all in-var pairs, so the shared received_ligands_tfl cache (built by the
+            # first gene in a training loop) holds every export gene later genes need.
+            var_names = set(adata.var_names)
+            self.metabolites = {}          # name -> [(export, import)] summed into metab@name
+            _diffusion_pairs = []
+            _seen_diffusion = set()
             n_dropped = 0
-            for e, i in metab_pairs:
-                if e in adata.var_names and i in adata.var_names:
-                    if (e, i) not in _seen_var:
-                        _seen_var.add((e, i))
-                        _var_filtered.append((e, i))
-                else:
-                    n_dropped += 1
+            for name, pairs in metabolites.items():
+                kept = []
+                seen = set()
+                for e, i in pairs:
+                    if e not in var_names or i not in var_names:
+                        n_dropped += 1
+                        continue
+                    if (e, i) not in _seen_diffusion:
+                        _seen_diffusion.add((e, i))
+                        _diffusion_pairs.append((e, i))
+                    if e == self.target_gene or i == self.target_gene:
+                        continue
+                    if (e, i) in seen:
+                        continue
+                    seen.add((e, i))
+                    kept.append((e, i))
+                if kept:
+                    self.metabolites[name] = kept
             if n_dropped > 0:
-                print(f'Excluding {n_dropped} metab_pairs with genes not in adata.var_names')
+                print(f'Excluding {n_dropped} metabolite pairs with genes not in adata.var_names')
 
-            # For diffusion: target-agnostic, so the shared received_ligands_tfl cache
-            # (built by the first gene in a training loop) contains every export gene
-            # any later gene needs. Do NOT target-filter this.
-            _diffusion_pairs = list(_var_filtered)
-
-            # For modulator columns: additionally exclude pairs touching the target gene
-            # (a gene can't predict itself), dedupe preserving order.
-            self.metab_exports = []
-            self.metab_imports = []
-            _seen_modulator = set()
-            for e, i in _var_filtered:
-                if e == self.target_gene or i == self.target_gene:
-                    continue
-                if (e, i) in _seen_modulator:
-                    continue
-                _seen_modulator.add((e, i))
-                self.metab_exports.append(e)
-                self.metab_imports.append(i)
-            self.metab_pairs = [f"{e}@{i}" for e, i in zip(self.metab_exports, self.metab_imports)]
+            self.metab_pairs = [f"metab@{name}" for name in self.metabolites]
+            self.metab_exports = sorted({e for pairs in self.metabolites.values() for e, _ in pairs})
+            self.metab_imports = sorted({i for pairs in self.metabolites.values() for _, i in pairs})
 
             self._diffusion_extra_lr = (list(self.extra_lr) if self.extra_lr else []) + _diffusion_pairs
             if len(self._diffusion_extra_lr) == 0:
                 self._diffusion_extra_lr = None
         else:
+            self.metabolites = {}
             self.metab_pairs = []
             self.metab_exports = []
             self.metab_imports = []
@@ -877,19 +888,26 @@ class SpatialCellularProgramsEstimator:
         )
 
     @staticmethod
-    def metabolite_interactions(received_export_df, import_gex_df):
-        """received_ligand(export, diffused) × import(local); '@'-separated columns.
-        Mirrors ligand_regulators_interactions but is its own metabolite group."""
+    def metabolite_interactions(received_export_df, import_gex_df, metabolites):
+        """One summed column per metabolite. For metabolite `name` with pairs
+        [(e1,i1),(e2,i2),...], column `metab@<name>` = sum_k received(e_k) * import(i_k),
+        where received(.) is the diffused export expression (received_ligands_tfl) and
+        import(.) is the RAW import expression (like the L-TF path uses raw regulator
+        expression). Both orientations of a heterotypic pair are just two entries in the
+        list and are summed here (directionality intentionally dropped).
+
+        `received_export_df` must contain every export gene, `import_gex_df` every import
+        gene. Column order follows `metabolites`' iteration order."""
         assert isinstance(received_export_df, pd.DataFrame)
         assert isinstance(import_gex_df, pd.DataFrame)
         assert received_export_df.index.equals(import_gex_df.index)
-        assert received_export_df.shape[1] == import_gex_df.shape[1]
-        interactions = received_export_df.values * import_gex_df.values
-        return pd.DataFrame(
-            interactions,
-            columns=[e + '@' + i for e, i in zip(received_export_df.columns, import_gex_df.columns)],
-            index=import_gex_df.index,
-        )
+        out = {}
+        for name, pairs in metabolites.items():
+            acc = np.zeros(len(import_gex_df), dtype=float)
+            for e, i in pairs:
+                acc = acc + received_export_df[e].values * import_gex_df[i].values
+            out[f'metab@{name}'] = acc
+        return pd.DataFrame(out, index=import_gex_df.index)
 
     @staticmethod
     def check_LR_properties(adata, layer):
@@ -993,6 +1011,7 @@ class SpatialCellularProgramsEstimator:
             adata.uns['metabolite_interactions'] = self.metabolite_interactions(
                 adata.uns['received_ligands_tfl'][self.metab_exports],
                 counts_df[self.metab_imports],
+                self.metabolites,
             )
         else:
             adata.uns['metabolite_interactions'] = pd.DataFrame(index=adata.obs.index)
@@ -1207,7 +1226,7 @@ class SpatialCellularProgramsEstimator:
             print(f'\t{len(self.lr_pairs)} Ligand-Receptor Pairs')
             print(f'\t{len(self.tfl_pairs)} TranscriptionFactor-Ligand Pairs')
             print(f'\t{len(self.extra_modulators)} Extra modulators')
-            print(f'\t{len(self.metab_pairs)} Metabolite Pairs')
+            print(f'\t{len(self.metab_pairs)} Metabolites')
             
         self.scores = {}
         

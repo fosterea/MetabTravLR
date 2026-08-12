@@ -5,10 +5,10 @@ Stages (``--stage``, default all three, in this order):
 
   setup      SpaceShip.setup_  -> spacetravlr_output/input_data/{_adata.h5ad,
              celloracle_links.pkl, tflinks.parquet}. Skipped if already complete.
-  fit        SpaceShip.fit(metab_pairs=...) -> spacetravlr_output/betadata/<gene>_betadata.parquet.
+  fit        SpaceShip.fit(metabolites=...) -> spacetravlr_output/betadata/<gene>_betadata.parquet.
              Resumable: a gene whose parquet already exists is skipped by the queue,
              so re-running after a timeout picks up where it left off.
-  artifacts  beta_analysis -> easy_download/metabtravlr_outputs/<tier>/{gene_pairs.csv,
+  artifacts  beta_analysis -> easy_download/metabtravlr_outputs/<tier>/{metabolites.csv,
              histograms.csv,histograms.png} and spacetravlr_adata.h5ad (per-cell betas
              attached to the full adata). CPU-only, cheap to re-run on its own.
 
@@ -48,7 +48,7 @@ from SpaceTravLR.spaceship import SpaceShip
 from metab_processing.metab_travlr_config import PROJECT_DATA_DIR
 from metab_processing.SpaceTravLR import beta_analysis
 from metab_processing.SpaceTravLR.dataset_configs import DATASETS, dataset_paths, get_config
-from metab_processing.SpaceTravLR.metab_loader import load_metab_pairs
+from metab_processing.SpaceTravLR.metab_loader import load_metabolites
 
 STAGES = ('setup', 'fit', 'artifacts')
 
@@ -379,11 +379,11 @@ def run_dataset(dataset, stages=STAGES, overwrite=False, clear_betadata=False,
         if not setup_is_complete(paths['outdir']):
             raise RuntimeError(f'setup is not complete for {dataset}; run --stage setup first')
 
-        metab_pairs, selection = load_metab_pairs(
+        metabolites, selection = load_metabolites(
             paths['selection_yaml'], var_names=_processed_var_names(paths))
-        _log(f'{len(selection)} metabolites -> {len(metab_pairs)} model pairs')
+        _log(f'{len(selection)} metabolites -> {len(metabolites)} model columns')
         _log(f'fitting {len(focus_genes)} target genes: {focus_genes}')
-        ship.fit(metab_pairs=metab_pairs, **cfg['fit_kwargs'])
+        ship.fit(metabolites=metabolites, **cfg['fit_kwargs'])
         done = _trained_genes(paths)
         _log(f'fit complete; {len(done)} genes with betadata: {done}')
         untrained = [g for g in focus_genes if g not in set(done)]
@@ -413,9 +413,9 @@ def run_dataset(dataset, stages=STAGES, overwrite=False, clear_betadata=False,
             raise ValueError(f'none of {cfg["tiers"]} are columns of adata.obs')
         _log(f'artifacts over tiers {tiers} -> {paths["metab_outdir"]}')
 
-        beta_analysis.write_gene_pairs(
+        beta_analysis.write_metabolites(
             str(paths['betadata']), adata.obs, tiers, str(paths['metab_outdir']), genes=focus_genes)
-        _log('wrote gene_pairs.csv')
+        _log('wrote metabolites.csv')
 
         beta_analysis.write_histograms(
             str(paths['betadata']), adata.obs, tiers, str(paths['metab_outdir']),

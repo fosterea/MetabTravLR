@@ -48,4 +48,5 @@ memory; the root `../../CLAUDE.md` points here).
   but is added as its **own new modulator group** with a distinct separator
   (`beta_<export>@<import>`), TF/LR kept optional (decisions D6/D7 in `04_...md`).
 - Coefficients live in `betadata/{gene}_betadata.parquet`: `beta_<TF>`, `beta_<lig>$<rec>`
-  (L–R), `beta_<lig>#<TF>` (L–TF), and (new) `beta_<export>@<import>` (metabolites).
+  (L–R), `beta_<lig>#<TF>` (L–TF), and (D11, 2026-08-11) **`beta_metab@<name>` — one summed
+  column per metabolite** (was per-pair `beta_<export>@<import>`; see `04` D11).

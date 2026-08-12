@@ -11,9 +11,15 @@ import pyarrow.parquet as pq
 
 SEPARATORS = {"@": "metab", "$": "lr", "#": "ltf"}
 
+METAB_PREFIX = "metab@"
+
 
 def _group(modulator):
-    """Modulator group: 'metab', 'lr', 'ltf', or 'tf' (no separator)."""
+    """Modulator group: 'metab', 'lr', 'ltf', or 'tf' (no separator).
+
+    A metabolite column is named 'metab@<name>' (the '@' keys it to the metab group);
+    L-R uses '$', L-TF uses '#'; a bare gene name (no separator) is a TF.
+    """
     for sep, name in SEPARATORS.items():
         if sep in modulator:
             return name
@@ -66,11 +72,12 @@ def tier_means(betadata_dir, obs, tier, genes=None, group=None):
     return pd.concat(frames, ignore_index=True)
 
 
-# Per modulator group: (filename, separator, split column names). A None separator means the
-# modulator is a bare gene (TF) with nothing to split. Metab keeps its historical `gene_pairs.csv`
-# name and export/import columns; the other three save the rest of the learned betas alongside it.
+# Per modulator group: (filename, separator, split column names). A metabolite is ONE summed
+# column, so it is written as a single `metabolite` column (the 'metab@' marker stripped; a
+# merged column keeps its 'nameA|nameB' joined name). L-R/L-TF split their modulator into two
+# columns plus a full-string `pair`; TF keeps a single bare `tf` column.
 _GROUP_OUTPUTS = {
-    "metab": ("gene_pairs.csv", "@", ["export", "import"]),
+    "metab": ("metabolites.csv", None, ["metabolite"]),
     "lr": ("ligand_receptor.csv", "$", ["ligand", "receptor"]),
     "ltf": ("ligand_tf.csv", "#", ["ligand", "tf"]),
     "tf": ("transcription_factor.csv", None, ["tf"]),
@@ -80,13 +87,21 @@ _GROUP_OUTPUTS = {
 def _write_group(betadata_dir, obs, tier, genes, tier_dir, group):
     """Write one modulator group's per-(gene, modulator, cell type) betas to its CSV.
 
-    L–R/L–TF/metab split their modulator into two columns plus a full-string `pair`; TF keeps a
-    single `tf` column. Returns the written DataFrame.
+    Metab -> a single `metabolite` column (the 'metab@' marker stripped). L–R/L–TF split their
+    modulator into two columns plus a full-string `pair`; TF keeps a single `tf` column.
+    Returns the written DataFrame.
     """
     filename, sep, parts = _GROUP_OUTPUTS[group]
     stats = tier_means(betadata_dir, obs, tier, genes, group=group)
 
-    if sep is None:  # TF: modulator is the bare gene name
+    if group == "metab":  # single summed column; strip the 'metab@' marker
+        col = parts[0]
+        if stats.empty:
+            stats[col] = pd.Series(dtype=object)
+        else:
+            stats[col] = stats["modulator"].str.replace(f"^{METAB_PREFIX}", "", regex=True)
+        stats = stats[["gene", col, "cell_type", "mean", "std", "n"]]
+    elif sep is None:  # TF: modulator is the bare gene name
         stats = stats.rename(columns={"modulator": parts[0]})
         stats = stats[["gene", parts[0], "cell_type", "mean", "std", "n"]]
     else:
@@ -102,11 +117,11 @@ def _write_group(betadata_dir, obs, tier, genes, tier_dir, group):
     return stats
 
 
-def write_gene_pairs(betadata_dir, obs, tiers, outdir, genes=None, write_all_groups=True):
-    """Write `<outdir>/<tier>/gene_pairs.csv`: metabolite-pair betas per (gene, pair, cell type).
-
-    Both orientations of a heterotypic pair stay as separate rows. Returns {tier: DataFrame}
-    (the metabolite frame per tier).
+def write_metabolites(betadata_dir, obs, tiers, outdir, genes=None, write_all_groups=True):
+    """Write `<outdir>/<tier>/metabolites.csv`: metabolite betas per (gene, metabolite, cell
+    type). Each metabolite is one summed column (`metabolite` = the name, 'metab@' stripped;
+    merged identical-signature metabolites keep their 'nameA|nameB' joined name). Returns
+    {tier: DataFrame} (the metabolite frame per tier).
 
     When `write_all_groups` is True (default), also write the other learned-beta groups next to
     it, one CSV per tier: `ligand_receptor.csv` (ligand/receptor cols), `ligand_tf.csv`

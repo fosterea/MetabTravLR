@@ -1,5 +1,10 @@
 """Tier-0 tests for `metab_processing/SpaceTravLR/beta_analysis.py` — the read-out side of
 MetabTravLR. Tiny hand-built betadata parquets with KNOWN beta values, known-answer asserts.
+
+Each metabolite is ONE summed column named `beta_metab@<name>` (a merged, identical-signature
+group keeps its `nameA|nameB` joined name). The read-out writes a single `metabolite` column
+(with the `metab@` marker stripped) to `metabolites.csv`, while `betas_to_adata` keeps the full
+`metab@<name>` labels on `adata.obsm`.
 """
 import os
 import sys
@@ -15,18 +20,17 @@ import pandas as pd
 from metab_processing.SpaceTravLR.beta_analysis import (
     betas_to_adata,
     tier_means,
-    write_gene_pairs,
+    write_metabolites,
     write_histograms,
 )
 
 CELLS = [f"c{i}" for i in range(6)]
 BETAS = {
-    "beta_ABCA1@ABCA1": [1.0, 2, 3, 4, 5, 6],     # metab
-    "beta_ATP7A@ATP7B": [0.0, 0, 0, 1, 1, 1],     # metab, heterotypic
-    "beta_ATP7B@ATP7A": [-1.0, -1, -1, 0, 0, 0],  # ... and its reverse orientation
-    "beta_IL2$IL2RA": [0.5] * 6,                  # lr
-    "beta_IL2#STAT5A": [0.1] * 6,                 # ltf
-    "beta_STAT1": [2.0] * 6,                      # tf
+    "beta_metab@Glucose": [1.0, 2, 3, 4, 5, 6],       # metab, single
+    "beta_metab@Copper|Zinc": [0.0, 0, 0, 1, 1, 1],   # metab, merged (two names joined)
+    "beta_IL2$IL2RA": [0.5] * 6,                       # lr
+    "beta_IL2#STAT5A": [0.1] * 6,                      # ltf
+    "beta_STAT1": [2.0] * 6,                           # tf
 }
 
 
@@ -58,31 +62,31 @@ class BetaAnalysisTests(unittest.TestCase):
 
     def test_tier_means_known_values(self):
         means = tier_means(self.betadata_dir, self.obs, "Tier1", genes=["CD4"])
-        row = means[(means.modulator == "ABCA1@ABCA1") & (means.cell_type == "T Cell")].iloc[0]
+        row = means[(means.modulator == "metab@Glucose") & (means.cell_type == "T Cell")].iloc[0]
         # cells c0..c2 are 'T Cell': mean([1,2,3]) = 2, sample std = 1
         self.assertEqual((row["mean"], row["std"], row["n"]), (2.0, 1.0, 3))
         self.assertEqual(len(means), len(BETAS) * 2)  # all modulators x 2 cell types
 
-    def test_gene_pairs_csv(self):
-        write_gene_pairs(self.betadata_dir, self.obs, ["Tier1", "Tier2"], self.outdir)
+    def test_metabolites_csv(self):
+        write_metabolites(self.betadata_dir, self.obs, ["Tier1", "Tier2"], self.outdir)
 
-        df = pd.read_csv(self.outdir / "Tier1" / "gene_pairs.csv")
+        df = pd.read_csv(self.outdir / "Tier1" / "metabolites.csv")
         self.assertEqual(list(df.columns),
-                         ["gene", "export", "import", "pair", "cell_type", "mean", "std", "n"])
-        # metabolite pairs only, both orientations kept as their own rows
-        self.assertEqual(set(df.pair), {"ABCA1@ABCA1", "ATP7A@ATP7B", "ATP7B@ATP7A"})
-        self.assertEqual(len(df), 2 * 3 * 2)  # genes x pairs x cell types
+                         ["gene", "metabolite", "cell_type", "mean", "std", "n"])
+        # metab group only; one row per (gene, metabolite, cell type); 'metab@' stripped,
+        # merged name preserved.
+        self.assertEqual(set(df.metabolite), {"Glucose", "Copper|Zinc"})
+        self.assertEqual(len(df), 2 * 2 * 2)  # genes x metabolites x cell types
 
-        reverse = df[(df.gene == "CD4") & (df.pair == "ATP7B@ATP7A") & (df.cell_type == "T Cell")]
-        self.assertEqual((reverse.iloc[0]["export"], reverse.iloc[0]["import"]), ("ATP7B", "ATP7A"))
-        self.assertEqual(reverse.iloc[0]["mean"], -1.0)
+        merged = df[(df.gene == "CD4") & (df.metabolite == "Copper|Zinc") & (df.cell_type == "T Cell")]
+        self.assertEqual(merged.iloc[0]["mean"], 0.0)  # mean([0,0,0])
 
         # a second tier is a second folder, grouped by that tier's labels
-        tier2 = pd.read_csv(self.outdir / "Tier2" / "gene_pairs.csv")
+        tier2 = pd.read_csv(self.outdir / "Tier2" / "metabolites.csv")
         self.assertEqual(sorted(tier2.cell_type.unique()), ["a", "b", "c"])
 
     def test_write_all_groups(self):
-        write_gene_pairs(self.betadata_dir, self.obs, ["Tier1"], self.outdir)
+        write_metabolites(self.betadata_dir, self.obs, ["Tier1"], self.outdir)
         tier_dir = self.outdir / "Tier1"
 
         lr = pd.read_csv(tier_dir / "ligand_receptor.csv")
@@ -106,10 +110,10 @@ class BetaAnalysisTests(unittest.TestCase):
         self.assertTrue((tf["mean"] == 2.0).all())
 
     def test_write_all_groups_off(self):
-        write_gene_pairs(self.betadata_dir, self.obs, ["Tier1"], self.outdir,
-                         write_all_groups=False)
+        write_metabolites(self.betadata_dir, self.obs, ["Tier1"], self.outdir,
+                          write_all_groups=False)
         tier_dir = self.outdir / "Tier1"
-        self.assertTrue((tier_dir / "gene_pairs.csv").exists())
+        self.assertTrue((tier_dir / "metabolites.csv").exists())
         for extra in ("ligand_receptor.csv", "ligand_tf.csv", "transcription_factor.csv"):
             self.assertFalse((tier_dir / extra).exists())
 
@@ -120,18 +124,35 @@ class BetaAnalysisTests(unittest.TestCase):
         self.assertEqual(set(hist.group), {"metab", "lr", "ltf", "tf"})
         self.assertEqual(list(hist.columns), ["group", "left", "right", "count"])
         # every (gene, modulator, cell type) mean lands in exactly one bin of its group
-        self.assertEqual(hist[hist.group == "metab"]["count"].sum(), 2 * 3 * 2)
+        self.assertEqual(hist[hist.group == "metab"]["count"].sum(), 2 * 2 * 2)
         self.assertEqual(hist[hist.group == "tf"]["count"].sum(), 2 * 1 * 2)
         self.assertEqual(len(hist[hist.group == "lr"]), 5)
 
-    def test_betas_to_adata(self):
+    def test_realistic_metabolite_name_round_trips(self):
+        # A real chemical name (commas, parens, apostrophe, hyphens) must survive the
+        # 'metab@'-strip + CSV write/read verbatim, and stay classified as the metab group
+        # even though it contains no separator of its own.
+        name = "(3a,5b,7a)-23-Carboxy-7-hydroxy-24-nor'cholan-3-yl acid"
+        betas = pd.DataFrame({f"beta_metab@{name}": [1.0] * 6, "beta_STAT1": [2.0] * 6},
+                             index=CELLS)
+        d = self.tmp / "betadata2"
+        d.mkdir()
+        betas.to_parquet(d / "CD4_betadata.parquet")
+
+        out = self.tmp / "out2"
+        write_metabolites(d, self.obs, ["Tier1"], out)
+        df = pd.read_csv(out / "Tier1" / "metabolites.csv")
+        self.assertEqual(set(df.metabolite), {name})  # 'metab@' stripped, name intact
+
+    def test_betas_to_adata_keeps_metab_prefix(self):
         adata = FakeAnnData(CELLS + ["untrained"])
         betas_to_adata(adata, self.betadata_dir, genes=["CD4"])
 
         self.assertEqual(list(adata.obsm), ["beta_CD4"])
-        self.assertEqual(adata.obsm["beta_CD4"].shape, (7, 3))  # metab columns only
+        self.assertEqual(adata.obsm["beta_CD4"].shape, (7, 2))  # metab columns only
+        # obsm labels KEEP the 'metab@' marker (Foster's ask)
         self.assertEqual(adata.uns["beta_modulators"]["CD4"],
-                         ["ABCA1@ABCA1", "ATP7A@ATP7B", "ATP7B@ATP7A"])
+                         ["metab@Glucose", "metab@Copper|Zinc"])
         # betas stay tied to their cell; a cell the gene wasn't fit on is NaN
         np.testing.assert_array_equal(adata.obsm["beta_CD4"][:6, 0], [1, 2, 3, 4, 5, 6])
         self.assertTrue(np.isnan(adata.obsm["beta_CD4"][-1]).all())

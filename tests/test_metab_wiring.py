@@ -1,14 +1,14 @@
 """
-Tests for CU-2: thread `metab_pairs` through the trainer (`oracles.SpaceTravLR`)
-and orchestrator (`SpaceShip.run_spacetravlr`), and relax the no-TF orphan skip
+Tests for threading `metabolites` through the trainer (`oracles.SpaceTravLR`) and
+orchestrator (`SpaceShip.run_spacetravlr`), plus the no-TF orphan-skip relaxation
 so a gene with metabolite modulators but no TF regulators still trains.
 
-CU-1 (already committed) gave `SpatialCellularProgramsEstimator` a `metab_pairs`
-ctor arg and exposed `.metab_pairs` (list of `export@import` strings, `[]` when
-none). CU-2 is pure plumbing: no new science, so these tests are Tier 0
-(construction / kwarg-capture / file-presence), reusing the `FakeEstimator` +
-`patch('SpaceTravLR.oracles.SpatialCellularProgramsEstimator', ...)` pattern
-from `tests/test_gene_focus.py`.
+`SpatialCellularProgramsEstimator` takes a `metabolites` ctor arg
+(`dict {name: [(export, import), ...]}`) and exposes `.metab_pairs` (list of
+`metab@<name>` column-name strings, `[]` when none). This plumbing carries no new
+science, so these are Tier 0 (construction / kwarg-capture / file-presence),
+reusing the `FakeEstimator` + `patch(...)` pattern from `tests/test_gene_focus.py`,
+plus one Tier-1 real-estimator end-to-end.
 """
 import os
 import glob
@@ -86,10 +86,10 @@ def temp_dir():
 ALL_GENES = ['CD74', 'TF1', 'TF2', 'LigA', 'RecA']
 
 
-def _make_fake_estimator_class(attempted, regulators_by_gene, metab_pairs_seen, betadata_override=None):
+def _make_fake_estimator_class(attempted, regulators_by_gene, metabolites_seen, betadata_override=None):
     """Builds a FakeEstimator class (closure) that records:
     - every target_gene it's constructed for (`attempted`)
-    - the `metab_pairs` kwarg it was constructed with, per gene (`metab_pairs_seen`)
+    - the `metabolites` kwarg it was constructed with, per gene (`metabolites_seen`)
     and reports `.regulators` per `regulators_by_gene[target_gene]` (default ['TF1']).
 
     `betadata_override`: optional `{gene: DataFrame}` to hand back a specific
@@ -102,15 +102,15 @@ def _make_fake_estimator_class(attempted, regulators_by_gene, metab_pairs_seen, 
     class FakeEstimator:
         def __init__(self, adata, target_gene, **kwargs):
             attempted.append(target_gene)
-            metab_pairs_seen[target_gene] = kwargs.get('metab_pairs', '<MISSING>')
+            metabolites_seen[target_gene] = kwargs.get('metabolites', '<MISSING>')
             self._obs_names = adata.obs_names
             self._target_gene = target_gene
             self.regulators = regulators_by_gene.get(target_gene, ['TF1'])
-            # CU-1 contract: .metab_pairs is [] when none supplied, else the list
-            # of 'export@import' strings (the estimator formats the tuples it's
-            # given into '<export>@<import>' column-name strings).
-            supplied = kwargs.get('metab_pairs')
-            self.metab_pairs = [f'{e}@{i}' for e, i in supplied] if supplied else []
+            # Contract: .metab_pairs is [] when none supplied, else one
+            # 'metab@<name>' column-name string per metabolite (the estimator
+            # sums each metabolite's pairs into a single such column).
+            supplied = kwargs.get('metabolites')
+            self.metab_pairs = [f'metab@{name}' for name in supplied] if supplied else []
             self.modulators = list(self.regulators) + list(self.metab_pairs)
             self.test_mode = None
 
@@ -132,59 +132,58 @@ def _make_fake_estimator_class(attempted, regulators_by_gene, metab_pairs_seen, 
 
 
 # ---------------------------------------------------------------------------
-# 1. Threading through oracles: SpaceTravLR(metab_pairs=...) reaches the
+# 1. Threading through oracles: SpaceTravLR(metabolites=...) reaches the
 #    estimator ctor unchanged.
 # ---------------------------------------------------------------------------
 
-def test_metab_pairs_threaded_to_estimator_ctor(temp_dir):
+def test_metabolites_threaded_to_estimator_ctor(temp_dir):
     adata = make_synthetic_adata(ALL_GENES)
     grn = MockRegulatoryFactory()
-    supplied = [('A', 'B'), ('B', 'A')]
+    supplied = {'M1': [('A', 'B'), ('B', 'A')], 'M2': [('LigA', 'RecA')]}
 
     attempted = []
-    metab_pairs_seen = {}
-    FakeEstimator = _make_fake_estimator_class(attempted, {}, metab_pairs_seen)
+    metabolites_seen = {}
+    FakeEstimator = _make_fake_estimator_class(attempted, {}, metabolites_seen)
 
     with patch('SpaceTravLR.oracles.SpatialCellularProgramsEstimator', FakeEstimator):
         st = SpaceTravLR(adata=adata, save_dir=temp_dir, grn=grn, genes=['CD74'],
-                          max_epochs=1, metab_pairs=supplied)
-        assert st.metab_pairs == supplied
+                          max_epochs=1, metabolites=supplied)
+        assert st.metabolites == supplied
         st.run()
 
     assert attempted == ['CD74']
-    assert metab_pairs_seen['CD74'] == supplied
+    assert metabolites_seen['CD74'] == supplied
 
 
 # ---------------------------------------------------------------------------
-# 2. Orphan relax: metab_pairs present, regulators empty -> gene trains.
+# 2. Orphan relax: metabolites present, regulators empty -> gene trains.
 # ---------------------------------------------------------------------------
 
-def test_orphan_relaxed_when_metab_pairs_present(temp_dir):
+def test_orphan_relaxed_when_metabolites_present(temp_dir):
     adata = make_synthetic_adata(ALL_GENES)
     grn = MockRegulatoryFactory()
 
     attempted = []
-    metab_pairs_seen = {}
+    metabolites_seen = {}
     # CD74 reports NO TF regulators, but the FakeEstimator will still expose a
-    # non-empty .metab_pairs because metab_pairs=[('A','B')] is supplied.
-    FakeEstimator = _make_fake_estimator_class(attempted, {'CD74': []}, metab_pairs_seen)
+    # non-empty .metab_pairs because metabolites={'M': ...} is supplied.
+    FakeEstimator = _make_fake_estimator_class(attempted, {'CD74': []}, metabolites_seen)
 
     with patch('SpaceTravLR.oracles.SpatialCellularProgramsEstimator', FakeEstimator):
         st = SpaceTravLR(adata=adata, save_dir=temp_dir, grn=grn, genes=['CD74'],
-                          max_epochs=1, metab_pairs=[('A', 'B')])
+                          max_epochs=1, metabolites={'M': [('A', 'B')]})
         st.run()
 
-    assert attempted == ['CD74']  # fit was reached (attempted only records ctor calls,
-    # but combined with the assertions below we confirm fit()/write happened, not orphan)
+    assert attempted == ['CD74']
     assert not os.path.exists(f'{temp_dir}/CD74.orphan')
     assert os.path.exists(f'{temp_dir}/CD74_betadata.parquet')
 
     betadata = pd.read_parquet(f'{temp_dir}/CD74_betadata.parquet')
-    assert 'beta_A@B' in betadata.columns
+    assert 'beta_metab@M' in betadata.columns
 
 
 # ---------------------------------------------------------------------------
-# 3. Orphan PRESERVED: no metab_pairs, no TF regulators -> gene IS orphaned.
+# 3. Orphan PRESERVED: no metabolites, no TF regulators -> gene IS orphaned.
 #    Pins the default-preserving gate.
 # ---------------------------------------------------------------------------
 
@@ -193,17 +192,17 @@ def test_orphan_preserved_when_no_metab_and_no_regulators(temp_dir):
     grn = MockRegulatoryFactory()
 
     attempted = []
-    metab_pairs_seen = {}
+    metabolites_seen = {}
     fit_calls = []
 
-    class FakeEstimatorNoFit(_make_fake_estimator_class(attempted, {'CD74': []}, metab_pairs_seen)):
+    class FakeEstimatorNoFit(_make_fake_estimator_class(attempted, {'CD74': []}, metabolites_seen)):
         def fit(self, *args, **kwargs):
             fit_calls.append(True)
             return None
 
     with patch('SpaceTravLR.oracles.SpatialCellularProgramsEstimator', FakeEstimatorNoFit):
         st = SpaceTravLR(adata=adata, save_dir=temp_dir, grn=grn, genes=['CD74'],
-                          max_epochs=1, metab_pairs=None)
+                          max_epochs=1, metabolites=None)
         st.run()
 
     assert os.path.exists(f'{temp_dir}/CD74.orphan')
@@ -212,38 +211,32 @@ def test_orphan_preserved_when_no_metab_and_no_regulators(temp_dir):
 
 
 # ---------------------------------------------------------------------------
-# 4. Default unchanged: metab_pairs omitted -> self.metab_pairs is None, and
-#    the estimator is constructed with metab_pairs=None.
+# 4. Default unchanged: metabolites omitted -> self.metabolites is None, and
+#    the estimator is constructed with metabolites=None.
 # ---------------------------------------------------------------------------
 
-def test_default_metab_pairs_is_none(temp_dir):
+def test_default_metabolites_is_none(temp_dir):
     adata = make_synthetic_adata(ALL_GENES)
     grn = MockRegulatoryFactory()
 
     attempted = []
-    metab_pairs_seen = {}
-    FakeEstimator = _make_fake_estimator_class(attempted, {}, metab_pairs_seen)
+    metabolites_seen = {}
+    FakeEstimator = _make_fake_estimator_class(attempted, {}, metabolites_seen)
 
     with patch('SpaceTravLR.oracles.SpatialCellularProgramsEstimator', FakeEstimator):
         st = SpaceTravLR(adata=adata, save_dir=temp_dir, grn=grn, genes=['CD74'], max_epochs=1)
-        assert st.metab_pairs is None
+        assert st.metabolites is None
         st.run()
 
-    assert metab_pairs_seen['CD74'] is None
+    assert metabolites_seen['CD74'] is None
 
 
 # ---------------------------------------------------------------------------
-# 5. SpaceShip pass-through: run_spacetravlr(metab_pairs=...) forwards the
-#    kwarg into the SpaceTravLR constructor. We patch the disk reads
-#    (sc.read_h5ad / pd.read_parquet / pickle.load) so no real setup artifacts
-#    are needed, and patch SpaceTravLR.oracles.SpaceTravLR (the name
-#    run_spacetravlr imports locally) with a kwarg-capturing fake whose .run()
-#    is a no-op.
+# 5. SpaceShip pass-through: run_spacetravlr(metabolites=...) forwards the
+#    kwarg into the SpaceTravLR constructor.
 # ---------------------------------------------------------------------------
 
-def test_spaceship_run_spacetravlr_forwards_metab_pairs(temp_dir):
-    # Minimal on-disk placeholders so `open(...)` succeeds; their *content* is
-    # never parsed because sc.read_h5ad/pd.read_parquet/pickle.load are mocked.
+def test_spaceship_run_spacetravlr_forwards_metabolites(temp_dir):
     os.makedirs(f'{temp_dir}/input_data', exist_ok=True)
     os.makedirs(f'{temp_dir}/betadata', exist_ok=True)
     for fname in ('_adata.h5ad', 'tflinks.parquet', 'celloracle_links.pkl'):
@@ -260,19 +253,19 @@ def test_spaceship_run_spacetravlr_forwards_metab_pairs(temp_dir):
             return None
 
     ship = SpaceShip(name='test', outdir=temp_dir, genes=['CD74'])
-    supplied = [('A', 'B'), ('B', 'A')]
+    supplied = {'M1': [('A', 'B'), ('B', 'A')]}
 
     with patch('SpaceTravLR.spaceship.sc.read_h5ad', return_value=make_synthetic_adata(ALL_GENES)), \
          patch('SpaceTravLR.spaceship.pd.read_parquet', return_value=pd.DataFrame()), \
          patch('SpaceTravLR.spaceship.pickle.load', return_value=fake_links), \
          patch('SpaceTravLR.oracles.SpaceTravLR', FakeSpaceTravLR):
-        ship.run_spacetravlr(metab_pairs=supplied)
+        ship.run_spacetravlr(metabolites=supplied)
 
-    assert captured_kwargs.get('metab_pairs') == supplied
+    assert captured_kwargs.get('metabolites') == supplied
     assert captured_kwargs.get('genes') == ['CD74']
 
 
-def test_spaceship_run_spacetravlr_default_metab_pairs_is_none(temp_dir):
+def test_spaceship_run_spacetravlr_default_metabolites_is_none(temp_dir):
     os.makedirs(f'{temp_dir}/input_data', exist_ok=True)
     os.makedirs(f'{temp_dir}/betadata', exist_ok=True)
     for fname in ('_adata.h5ad', 'tflinks.parquet', 'celloracle_links.pkl'):
@@ -296,45 +289,40 @@ def test_spaceship_run_spacetravlr_default_metab_pairs_is_none(temp_dir):
          patch('SpaceTravLR.oracles.SpaceTravLR', FakeSpaceTravLR):
         ship.run_spacetravlr()
 
-    assert captured_kwargs.get('metab_pairs') is None
+    assert captured_kwargs.get('metabolites') is None
 
 
 # ---------------------------------------------------------------------------
-# 6. Second orphan gate (review finding, medium): the write/orphan decision at
-#    the bottom of run() must be made on the POST-filter betadata frame, not
-#    the raw column count. Before CU-2, a gene only ever reached this point
-#    with regulators != [], so the raw column count (> 1) and the post-filter
-#    column count (> 0, since beta0 basically always survives) coincided. CU-2
-#    makes a TF-less, metab-only gene reachable here too, and such a gene CAN
-#    land in the group-lasso R^2<0.15 zeroed-anchor fallback (every beta,
-#    incl. beta0, == 0) -- the raw-count check would then write a degenerate
-#    0-column parquet instead of orphaning.
+# 6. Second orphan gate: the write/orphan decision at the bottom of run() must
+#    be made on the POST-filter betadata frame, not the raw column count. A
+#    TF-less, metab-only gene can land in the group-lasso R^2<0.15 zeroed-anchor
+#    fallback (every beta, incl. beta0, == 0) -- the raw-count check would then
+#    write a degenerate 0-column parquet instead of orphaning.
 # ---------------------------------------------------------------------------
 
 def test_second_gate_writes_identical_filtered_betadata_when_nonzero(temp_dir):
-    """Behavior-preservation half of the fix: whenever >=1 beta is nonzero,
-    the written parquet must be EXACTLY the same filtered frame as before
-    (`betadata.loc[:, (betadata != 0).any(axis=0)]`), independent of whether
-    the raw frame also contains all-zero columns to drop."""
+    """Behavior-preservation half: whenever >=1 beta is nonzero, the written
+    parquet must be EXACTLY the same filtered frame as before
+    (`betadata.loc[:, (betadata != 0).any(axis=0)]`)."""
     adata = make_synthetic_adata(ALL_GENES)
     grn = MockRegulatoryFactory()
     n = adata.n_obs
 
     raw_betadata = pd.DataFrame({
-        'beta0': np.zeros(n),          # zeroed out (poor-fit-like)
-        'beta_TF1': np.zeros(n),       # zeroed out
-        'beta_A@B': np.full(n, 0.5),   # the one real, nonzero beta
+        'beta0': np.zeros(n),                # zeroed out (poor-fit-like)
+        'beta_TF1': np.zeros(n),             # zeroed out
+        'beta_metab@M': np.full(n, 0.5),     # the one real, nonzero beta
     }, index=adata.obs_names)
 
-    attempted, metab_pairs_seen = [], {}
+    attempted, metabolites_seen = [], {}
     FakeEstimator = _make_fake_estimator_class(
-        attempted, {'CD74': []}, metab_pairs_seen,
+        attempted, {'CD74': []}, metabolites_seen,
         betadata_override={'CD74': raw_betadata},
     )
 
     with patch('SpaceTravLR.oracles.SpatialCellularProgramsEstimator', FakeEstimator):
         st = SpaceTravLR(adata=adata, save_dir=temp_dir, grn=grn, genes=['CD74'],
-                          max_epochs=1, metab_pairs=[('A', 'B')])
+                          max_epochs=1, metabolites={'M': [('A', 'B')]})
         st.run()
 
     assert not os.path.exists(f'{temp_dir}/CD74.orphan')
@@ -343,33 +331,31 @@ def test_second_gate_writes_identical_filtered_betadata_when_nonzero(temp_dir):
     written = pd.read_parquet(f'{temp_dir}/CD74_betadata.parquet')
     expected = raw_betadata.loc[:, (raw_betadata != 0).any(axis=0)]
     pd.testing.assert_frame_equal(written, expected, check_dtype=False)
-    assert list(written.columns) == ['beta_A@B']  # the all-zero columns were dropped, as before
+    assert list(written.columns) == ['beta_metab@M']  # the all-zero columns were dropped
 
 
 def test_second_gate_orphans_when_all_betas_zero(temp_dir):
-    """The bug this fixes: a metab-only (no-TF) gene whose fit lands entirely
-    in the zeroed-anchor fallback (beta0 included) must now be ORPHANED, not
-    written as a degenerate 0-column parquet. Only reachable post-CU-2 because
-    pre-CU-2 a no-TF gene never got past the first orphan gate to reach fit()
-    at all."""
+    """A metab-only (no-TF) gene whose fit lands entirely in the zeroed-anchor
+    fallback (beta0 included) must be ORPHANED, not written as a degenerate
+    0-column parquet."""
     adata = make_synthetic_adata(ALL_GENES)
     grn = MockRegulatoryFactory()
     n = adata.n_obs
 
     raw_betadata = pd.DataFrame({
         'beta0': np.zeros(n),
-        'beta_A@B': np.zeros(n),
+        'beta_metab@M': np.zeros(n),
     }, index=adata.obs_names)
 
-    attempted, metab_pairs_seen = [], {}
+    attempted, metabolites_seen = [], {}
     FakeEstimator = _make_fake_estimator_class(
-        attempted, {'CD74': []}, metab_pairs_seen,
+        attempted, {'CD74': []}, metabolites_seen,
         betadata_override={'CD74': raw_betadata},
     )
 
     with patch('SpaceTravLR.oracles.SpatialCellularProgramsEstimator', FakeEstimator):
         st = SpaceTravLR(adata=adata, save_dir=temp_dir, grn=grn, genes=['CD74'],
-                          max_epochs=1, metab_pairs=[('A', 'B')])
+                          max_epochs=1, metabolites={'M': [('A', 'B')]})
         st.run()
 
     assert os.path.exists(f'{temp_dir}/CD74.orphan')
@@ -377,66 +363,59 @@ def test_second_gate_orphans_when_all_betas_zero(temp_dir):
 
 
 # ---------------------------------------------------------------------------
-# 7. Fail-fast validation (review finding, low): a malformed metab_pairs must
-#    raise at SpaceTravLR construction, not silently propagate to the first
-#    gene's estimator construction (matters for unattended Savio runs).
+# 7. Fail-fast validation: a malformed metabolites must raise at SpaceTravLR
+#    construction, not silently propagate to the first gene's estimator.
 # ---------------------------------------------------------------------------
 
-def test_metab_pairs_bad_type_raises_at_construction(temp_dir):
+def test_metabolites_bad_type_raises_at_construction(temp_dir):
     adata = make_synthetic_adata(ALL_GENES)
     grn = MockRegulatoryFactory()
 
-    with pytest.raises(ValueError, match='metab_pairs'):
+    with pytest.raises(ValueError, match='metabolites'):
         SpaceTravLR(adata=adata, save_dir=temp_dir, grn=grn, genes=['CD74'],
-                    metab_pairs='not-a-list')
+                    metabolites=[('A', 'B')])  # a list, not a dict
 
 
-def test_metab_pairs_bad_element_shape_raises_at_construction(temp_dir):
+def test_metabolites_bad_element_shape_raises_at_construction(temp_dir):
     adata = make_synthetic_adata(ALL_GENES)
     grn = MockRegulatoryFactory()
 
-    with pytest.raises(ValueError, match='metab_pairs'):
+    with pytest.raises(ValueError, match='metabolites'):
         SpaceTravLR(adata=adata, save_dir=temp_dir, grn=grn, genes=['CD74'],
-                    metab_pairs=[('A', 'B', 'C')])  # 3-tuple, not (export, import)
+                    metabolites={'M': [('A', 'B', 'C')]})  # 3-tuple, not (export, import)
 
 
-def test_metab_pairs_non_string_genes_raises_at_construction(temp_dir):
+def test_metabolites_non_string_genes_raises_at_construction(temp_dir):
     adata = make_synthetic_adata(ALL_GENES)
     grn = MockRegulatoryFactory()
 
-    with pytest.raises(ValueError, match='metab_pairs'):
+    with pytest.raises(ValueError, match='metabolites'):
         SpaceTravLR(adata=adata, save_dir=temp_dir, grn=grn, genes=['CD74'],
-                    metab_pairs=[(1, 2)])
+                    metabolites={'M': [(1, 2)]})
 
 
-def test_metab_pairs_empty_list_is_valid(temp_dir):
-    """An empty list is a legitimate 'no metabolites' spelling (same as
-    None), not a malformed input -- must NOT raise."""
+def test_metabolites_empty_dict_is_valid(temp_dir):
+    """An empty dict is a legitimate 'no metabolites' spelling (same as None),
+    not a malformed input -- must NOT raise."""
     adata = make_synthetic_adata(ALL_GENES)
     grn = MockRegulatoryFactory()
 
-    st = SpaceTravLR(adata=adata, save_dir=temp_dir, grn=grn, genes=['CD74'], metab_pairs=[])
-    assert st.metab_pairs == []
+    st = SpaceTravLR(adata=adata, save_dir=temp_dir, grn=grn, genes=['CD74'], metabolites={})
+    assert st.metabolites == {}
 
 
 # ---------------------------------------------------------------------------
-# 8. Tier-1, real estimator (review finding, medium): drive a REAL
-#    SpatialCellularProgramsEstimator (not a fake) through the actual
-#    oracles.SpaceTravLR.run() loop for a TF-less target gene whose only
-#    modulator is a metabolite pair, with real spatial signal so it clears
-#    the group-lasso R^2>=0.15 threshold (not the zeroed-anchor fallback).
-#    Exercises the relaxed first gate AND the fixed second gate together on
-#    real training output.
+# 8. Tier-1, real estimator: drive a REAL SpatialCellularProgramsEstimator
+#    through the actual oracles.SpaceTravLR.run() loop for a TF-less target
+#    gene whose only modulator is a metabolite, with real spatial signal so it
+#    clears the group-lasso R^2>=0.15 threshold (not the zeroed-anchor
+#    fallback). Exercises the relaxed first gate AND the fixed second gate.
 # ---------------------------------------------------------------------------
 
 def test_real_estimator_trains_no_tf_metab_only_gene_via_run(temp_dir):
     import torch
     from SpaceTravLR.models.parallel_estimators import SpatialCellularProgramsEstimator
 
-    # Seed the GLOBAL RNGs (not just a local Generator): model weight init,
-    # DataLoader shuffling, and RotatedTensorDataset's rotation all draw from
-    # these, so this must be pinned for the test to be non-flaky (see the
-    # rationale in tests/test_get_betas_batching.py::_trained_estimator).
     torch.manual_seed(0)
     np.random.seed(0)
     rng = np.random.default_rng(0)
@@ -448,8 +427,7 @@ def test_real_estimator_trains_no_tf_metab_only_gene_via_run(temp_dir):
     X = rng.random((N, len(names))).astype(np.float32)
 
     # Hand-craft the target as a clean function of the metabolite flux
-    # (received(A, diffused) x raw(B)) so the real CNN fit clears R^2>=0.15
-    # in at least the (single) cluster, instead of hitting the fallback.
+    # (received(A, diffused) x raw(B)) so the real CNN fit clears R^2>=0.15.
     received_A = rng.uniform(0.5, 2.5, N).astype(np.float32)
     raw_B = rng.uniform(0.5, 2.5, N).astype(np.float32)
     flux = received_A * raw_B
@@ -466,24 +444,18 @@ def test_real_estimator_trains_no_tf_metab_only_gene_via_run(temp_dir):
     a.obsm['spatial'] = rng.uniform(0, 500, size=(N, 2)).astype(np.float32)
     a.layers['imputed_count'] = X.copy()
     a.layers['normalized_count'] = X.copy()
-    # Pre-seed the diffused export-gene cache: this is the same trick
-    # tests/test_metab_group.py uses (`_build_metab_estimator`) to skip the
-    # real O(N^2) diffusion and hand the estimator a known-good flux term.
     a.uns['received_ligands_tfl'] = pd.DataFrame(
         {'A': received_A, 'B': raw_B}, index=a.obs_names
     )
 
     class NoTFGRN:
-        """Reports zero TF regulators for every gene, so the target's only
-        modulator is the metabolite pair."""
+        """Reports zero TF regulators for every gene."""
         def get_regulators(self, adata, target_gene, alpha=0.05):
             return []
 
     captured = []
 
     class CapturingEstimator(SpatialCellularProgramsEstimator):
-        """The REAL estimator, thinly wrapped to stash `self` after a real
-        fit() so the test can inspect `.scores` -- no logic is overridden."""
         def fit(self, *args, **kwargs):
             result = super().fit(*args, **kwargs)
             captured.append(self)
@@ -494,14 +466,14 @@ def test_real_estimator_trains_no_tf_metab_only_gene_via_run(temp_dir):
             adata=a, save_dir=temp_dir, grn=NoTFGRN(), genes=[target],
             max_epochs=25, batch_size=256,
             tflinks=pd.DataFrame(),  # avoid a real NicheNet network download
-            metab_pairs=[('A', 'B')],
+            metabolites={'MET': [('A', 'B')]},
         )
         st.run()
 
     assert len(captured) == 1
     est = captured[0]
     assert est.regulators == []
-    assert est.metab_pairs == ['A@B']
+    assert est.metab_pairs == ['metab@MET']
     assert any(v >= 0.15 for v in est.scores.values()), (
         f"fixture didn't train a real CNN (all clusters hit the zeroed-anchor "
         f"fallback): scores={est.scores}"
@@ -512,5 +484,5 @@ def test_real_estimator_trains_no_tf_metab_only_gene_via_run(temp_dir):
     assert os.path.exists(bd_path)
 
     betadata = pd.read_parquet(bd_path)
-    assert 'beta_A@B' in betadata.columns
-    assert np.isfinite(betadata['beta_A@B'].values.astype(float)).all()
+    assert 'beta_metab@MET' in betadata.columns
+    assert np.isfinite(betadata['beta_metab@MET'].values.astype(float)).all()

@@ -610,7 +610,7 @@ class SpaceShip:
         batch_size: int = 512, 
         radius: int = 300,
         contact_distance: int = 50,
-        metab_pairs=None,
+        metabolites=None,
     ):
         """
         Trains the SpaceTravLR model to learn spatial gene regulation.
@@ -637,8 +637,9 @@ class SpaceShip:
             Radius for secreted signaling, by default 300.
         contact_distance : int, optional
             Distance for contact-dependent signaling, by default 50.
-        metab_pairs : list[(export, import)], optional
-            Transporter gene pairs added as a metabolite modulator group, by default None.
+        metabolites : dict[name, list[(export, import)]], optional
+            Metabolites, each summed into one modulator column from its transporter
+            gene pairs, by default None.
         """
 
         from .oracles import SpaceTravLR
@@ -663,7 +664,7 @@ class SpaceShip:
             save_dir=base_dir,
             tflinks=tflinks,
             genes=self.focus_genes,
-            metab_pairs=metab_pairs,
+            metabolites=metabolites,
         )
 
         space_travlr.run()
