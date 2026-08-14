@@ -15,7 +15,14 @@
  * distinct: BLANK = no coefficient measured; `≈0` = measured but negligible.
  */
 import { Fragment } from 'react';
-import { betaTooltip, formatBeta, formatMagnitude, groupChannel, makeBetaScale } from '@/data/betaScale';
+import {
+  betaTooltip,
+  formatBeta,
+  formatMagnitude,
+  groupChannel,
+  makeBetaScale,
+  memberDisplay,
+} from '@/data/betaScale';
 import type { BetaBlock } from '@/data/betaScale';
 import type { BetaChannel, BetaRow } from '@/data/types';
 import styles from './BetaMatrix.module.css';
@@ -29,7 +36,7 @@ export interface BetaFactorGroup {
   key: string;
   /** The source channel — supplies rowHeader / kind / memberLabels / label. */
   channel: BetaChannel;
-  /** Divider label (e.g. "This metabolite's transporter pairs", "All metabolic transporters"). */
+  /** Divider label (e.g. "This metabolite", "Metabolites", "Ligand–receptor"). */
   label: string;
   /** Rows scoped to what this group should show (a metabolite's pairs, or a whole channel). */
   rows: BetaRow[];
@@ -155,7 +162,7 @@ function FactorRows({
         const featureTitle =
           channel.kind === 'pair'
             ? `${d.a} (${channel.memberLabels[0]}) → ${d.b} (${channel.memberLabels[1]})`
-            : `${d.a} (${channel.memberLabels[0]})`;
+            : `${memberDisplay(d.a).text} (${channel.memberLabels[0]})`;
         return (
           <FeatureRow
             key={d.id}
@@ -190,10 +197,15 @@ function FeatureRow({
   scale: ReturnType<typeof makeBetaScale>;
   featureTitle: string;
 }) {
+  // A single-member metab value may be a pipe-joined group — render it readably (" · ") with a
+  // tooltip listing the grouped metabolites. Plain names / gene names pass through unchanged.
+  const aDisp = memberDisplay(a);
   return (
     <>
       <span className={styles.dir} title={featureTitle}>
-        <span className={styles.gene}>{a}</span>
+        <span className={styles.gene} title={aDisp.title}>
+          {aDisp.text}
+        </span>
         {channel.kind === 'pair' && (
           <>
             <span className={styles.arrow} aria-label="acts on">

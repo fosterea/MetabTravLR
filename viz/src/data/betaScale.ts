@@ -29,11 +29,29 @@ import type { BetaRow } from './types';
 export const BETA_DECADES = 4;
 
 /**
- * Order-INDEPENDENT key for matching a metabolite's transporter pairs against the `metab` channel
- * rows: `betaKey(r.a, r.b) ∈ pairKeysFor(entity)`. Gene-pair entity ids preserve the network's
- * arbitrary order, so they cannot be compared directly — sort the two members first.
+ * A single-member metabolite value can be a pipe-joined GROUP — several metabolites that share one
+ * transporter set and are reported together under one coefficient (e.g. `Adenosine|Cytidine|…`).
+ * Format that raw `A|B|C` string for DISPLAY only (never mutate the data): a readable " · "
+ * separator plus the member list for a tooltip. A plain name — and every gene name in a pair
+ * channel — passes straight through, so this stays channel-agnostic.
  */
-export const betaKey = (g1: string, g2: string) => (g1 <= g2 ? `${g1}__${g2}` : `${g2}__${g1}`);
+export interface MemberDisplay {
+  /** Readable text: members joined by " · ", or the name unchanged. */
+  text: string;
+  /** The pipe-split members when this is a group, else null. */
+  members: string[] | null;
+  /** Tooltip listing the grouped members, or undefined when not a group. */
+  title?: string;
+}
+export function memberDisplay(name: string): MemberDisplay {
+  if (!name.includes('|')) return { text: name, members: null };
+  const members = name.split('|');
+  return {
+    text: members.join(' · '),
+    members,
+    title: `Reported as a group (share one transporter set): ${members.join(', ')}`,
+  };
+}
 
 export interface BetaScale {
   /** Magnitude in [0, 1]. Always non-negative — the sign travels separately. */
@@ -107,7 +125,7 @@ export function betaTooltip(
   const feature =
     ch.kind === 'pair'
       ? `${r.a} (${ch.memberLabels[0]}) → ${r.b} (${ch.memberLabels[1]})`
-      : `${r.a} (${ch.memberLabels[0]})`;
+      : `${memberDisplay(r.a).text} (${ch.memberLabels[0]})`;
   return [
     feature,
     `target gene ${r.gene} · ${r.cellType}`,
@@ -121,9 +139,9 @@ export function betaTooltip(
 export interface BetaDirection {
   /** `${a}__${b ?? ''}` — unique within a cell-type block. */
   id: string;
-  /** Member 0 (environment/sender side, or the TF for a single-member channel). */
+  /** Member 0: environment/sender side (pair channels), or the sole member of a single-member channel (the metabolite for `metab`, the TF for `tf`). */
   a: string;
-  /** Member 1 (cell/receiver side); null for single-member channels. */
+  /** Member 1 (cell/receiver side); null for single-member channels (`metab`, `tf`). */
   b: string | null;
   /** Coefficient per target gene; missing genes are absent. */
   byGene: Record<string, BetaRow>;
@@ -140,8 +158,8 @@ export interface BetaBlock {
 
 /**
  * Group raw rows into per-cell-type blocks of features. Works for any channel — pair rows key on
- * `${a}__${b}`, single-member (tf) rows on `${a}__` — so both directions of a pair stay separate.
- * Pass rows already scoped to what you want to show (all channel rows, or a metabolite's pairs).
+ * `${a}__${b}`, single-member rows (`metab`, `tf`) on `${a}__` — so both directions of a pair stay
+ * separate. Pass rows already scoped to what you want to show (all channel rows, or one metabolite's).
  */
 export function groupChannel(rows: BetaRow[], cellTypes: string[]): BetaBlock[] {
   const blocks: BetaBlock[] = [];

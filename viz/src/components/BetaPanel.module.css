@@ -48,6 +48,24 @@
   max-width: 78ch;
 }
 
+/* Grouping note: shown when the selected metabolite maps to a pipe-group (metabolites that share a
+   transporter set and so share one coefficient). Accented so the "can't be distinguished" caveat
+   reads distinctly from the ordinary caveat above it. */
+.groupNote {
+  margin: 0 0 var(--sp-4);
+  padding: var(--sp-2) var(--sp-3);
+  border-left: 2px solid var(--accent);
+  background: var(--accent-weak);
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--text-secondary);
+  max-width: 78ch;
+}
+.groupNote b {
+  color: var(--text-primary);
+}
+
 .none {
   color: var(--text-muted);
   font-size: 13px;

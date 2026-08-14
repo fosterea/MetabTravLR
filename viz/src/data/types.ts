@@ -143,23 +143,25 @@ export type BetaChannelId = 'metab' | 'lr' | 'ltf' | 'tf';
 
 /**
  * One SpaceTravLR learned coefficient, generalized across all feature channels
- * (`metabtravlr_outputs/<Tier>/{gene_pairs,ligand_receptor,ligand_tf,transcription_factor}.csv`).
+ * (`metabtravlr_outputs/<Tier>/{metabolites,ligand_receptor,ligand_tf,transcription_factor}.csv`).
  * A row is: how much one feature moves one target gene, averaged over the cells of one cell type.
  *
- * ⚠️ Unlike `EntityEdge`, direction here is REAL and load-bearing. Member `a` is the
- * environment/sender side (export / ligand / ligand), OR the TF for a single-member channel;
- * member `b` is the cell/receiver side (import / receptor / tf), and is null for single-member
- * channels (tf). For transporter pairs both orders can be present as distinct rows and must never
- * be merged, averaged, or displayed as one row.
+ * ⚠️ For the PAIR channels (`lr`/`ltf`) direction is REAL and load-bearing: member `a` is the
+ * ligand/sender side, member `b` the receiver side, both orders can be present as distinct rows,
+ * and they must never be merged, averaged, or displayed as one row. The SINGLE-member channels
+ * (`tf`, `metab`) carry only member `a` (`b` null): for `tf` it is the transcription factor; for
+ * `metab` it is the whole metabolite (from `metabolites.csv`, summed over its transporters), which
+ * may be a pipe-joined GROUP of metabolites that share a transporter set and so share one
+ * coefficient (e.g. `Adenosine|Cytidine|…`) — no direction is asserted for `metab`.
  *
  * `mean` is signed — the sign is the biological claim (up- vs down-regulation of `gene`) and is
  * the one thing an encoding must never distort. `std`/`n` are the spread and the cell count
  * behind the mean; no significance test is applied anywhere in this pipeline.
  */
 export interface BetaRow {
-  /** Feature member 0 = environment/sender side (export / ligand / ligand), OR the TF for a single-member channel. */
+  /** Feature member 0 = ligand/sender side for pair channels; the TF (`tf`) or the whole metabolite (`metab`, possibly a pipe-group) for single-member channels. */
   a: string;
-  /** Feature member 1 = cell/receiver side (import / receptor / tf); null for single-member channels (tf). */
+  /** Feature member 1 = receiver side (receptor / tf) for pair channels; null for single-member channels (`tf`, `metab`). */
   b: string | null;
   /** The target gene whose expression this coefficient moves. */
   gene: string;
@@ -178,16 +180,16 @@ export interface BetaRow {
  */
 export interface BetaChannel {
   id: BetaChannelId;
-  /** "Metabolic transporters" | "Ligand–receptor" | "Ligand–TF" | "Transcription factors". */
+  /** "Metabolites" | "Ligand–receptor" | "Ligand–TF" | "Transcription factors". */
   label: string;
-  /** Pair channels have two members (a → b); single channels (tf) have only member `a`. */
+  /** Pair channels have two members (a → b); single channels (tf, metab) have only member `a`. */
   kind: 'pair' | 'single';
   /**
    * Role labels for tooltips, in member order:
-   * `['export (environment)','import (cell)']`, `['ligand','receptor']`, `['ligand','TF']`, `['TF']`.
+   * `['metabolite']`, `['ligand','receptor']`, `['ligand','TF']`, `['TF']`.
    */
   memberLabels: string[];
-  /** Row-identity column header: "environment → cell" | "ligand → receptor" | "ligand → TF" | "transcription factor". */
+  /** Row-identity column header: "metabolite" | "ligand → receptor" | "ligand → TF" | "transcription factor". */
   rowHeader: string;
   /** Target genes present in THIS channel, sorted. The channel heatmap's columns. */
   targetGenes: string[];
@@ -200,9 +202,10 @@ export interface BetaChannel {
 /**
  * SpaceTravLR coefficients for one tier (`public/data/<id>/beta/<Tier>.json`).
  *
- * Holds ALL feature channels (v4). The metabolite lookup filters the `metab` channel's rows by
- * `betaKey(r.a, r.b) ∈ pairKeys` (see `betaScale.ts`) — there is no `byPair` index anymore, since
- * a directed row can't be attributed to a single ordered entity id.
+ * Holds ALL feature channels (v4). The `metab` channel is single-member, keyed by whole metabolite
+ * (`metabolites.csv`): a metabolite entity's coefficients are its rows whose `metabolite` value
+ * (member `a`) matches the entity name exactly, OR whose pipe-joined group of metabolites includes
+ * it (metabolites sharing a transporter set share one coefficient). There is no `byPair` index.
  */
 export interface BetaBundle {
   tier: string;

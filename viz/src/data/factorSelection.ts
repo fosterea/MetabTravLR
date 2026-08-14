@@ -8,6 +8,7 @@
  * these helpers without tripping react-refresh's "components only" rule.
  */
 import type { BetaChannel, BetaChannelId, BetaRow } from './types';
+import { memberDisplay } from './betaScale';
 
 /** Identity of one individual factor: `${channelId}::${a}::${b ?? ''}`. */
 export type FeatureKey = string;
@@ -20,7 +21,7 @@ export interface FeatureOption {
   channelId: BetaChannelId;
   a: string;
   b: string | null;
-  /** Short feature label: `a → b` (pair) or `a` (single). */
+  /** Short feature label: `a → b` (pair) or `a` (single; a pipe-group renders readably as `x · y`). */
   label: string;
 }
 
@@ -32,7 +33,7 @@ export function channelFeatures(channel: BetaChannel): FeatureOption[] {
     const key = featureKey(channel.id, r.a, r.b);
     if (seen.has(key)) continue;
     seen.add(key);
-    const label = channel.kind === 'pair' ? `${r.a} → ${r.b}` : r.a;
+    const label = channel.kind === 'pair' ? `${r.a} → ${r.b}` : memberDisplay(r.a).text;
     out.push({ key, channelId: channel.id, a: r.a, b: r.b, label });
   }
   return out;

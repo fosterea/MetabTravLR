@@ -1,20 +1,22 @@
 /**
  * SpaceTravLR coefficients for the selected entity, as a cell-type-major heatmap (`BetaMatrix`).
  *
- * The primary anchor group is the metabolite's (or gene pair's) own transporter pairs, always shown
- * first. Beneath it, a `FactorPicker` lets the user stack COMPARISON factors — whole channels
- * (ligand–receptor, ligand–TF, transcription factors, all metabolic transporters) and/or individual
- * factors (a single L–R pair, a single TF, a specific transporter pair). All groups are stacked
- * cell-type-major, sharing one UNION set of target-gene columns (so a gene only a comparison factor
- * covers still appears), while each channel keeps its OWN magnitude scale. The comparison selection
- * resets when the entity/tier/dataset changes, but survives a cell-type-filter change.
+ * The primary anchor group is the selected METABOLITE's own coefficients, always shown first —
+ * sourced from the single-member `metab` channel (`metabolites.csv`, one row per whole metabolite,
+ * summed over its transporters). A metabolite links to a row when the entity name equals the row's
+ * `metabolite` value OR is one of the pipe-split members of a grouped value (metabolites that share
+ * a transporter set are reported together, sharing one coefficient). Gene-pair entities have no
+ * metabolite to anchor to, so their primary group is empty and the "no coefficients" empty-state
+ * shows.
  *
- * Both directions of a pair are separate rows on purpose: `A→B` and `B→A` are different
- * coefficients, and merging them would invent a symmetry the model does not claim.
+ * Beneath the primary, a `FactorPicker` lets the user stack COMPARISON factors — whole channels
+ * (metabolites, ligand–receptor, ligand–TF, transcription factors) and/or individual factors. All
+ * groups are stacked cell-type-major, sharing one UNION set of target-gene columns, while each
+ * channel keeps its OWN magnitude scale. The comparison selection resets when the entity/tier/
+ * dataset changes, but survives a cell-type-filter change.
  */
 import { useEffect, useMemo, useState } from 'react';
 import { useVizStore, selectCurrentTier } from '@/store/useVizStore';
-import { betaKey } from '@/data/betaScale';
 import type { Entity } from '@/data/types';
 import BetaMatrix, { type BetaFactorGroup } from './BetaMatrix';
 import FactorPicker from './FactorPicker';
@@ -23,11 +25,12 @@ import styles from './BetaPanel.module.css';
 
 const ALL = '__all__';
 
-/** The pair keys whose coefficients belong to this entity. */
-function pairKeysFor(entity: Entity): string[] {
-  if (entity.kind === 'gene_pair') return [betaKey(entity.genes[0], entity.genes[1])];
-  // A metabolite is served by many transporter pairs (many-to-many); show all of them.
-  return [...new Set(entity.genePairs.map(([a, b]) => betaKey(a, b)))];
+/**
+ * A metab row's `metabolite` value matches an entity when it equals the entity name, or the entity
+ * name is one of the pipe-split members of a grouped value (`Adenosine|Cytidine|…`).
+ */
+function metaboliteMatches(rowMetab: string, entityName: string): boolean {
+  return rowMetab === entityName || rowMetab.split('|').includes(entityName);
 }
 
 export default function BetaPanel() {
@@ -59,22 +62,32 @@ export default function BetaPanel() {
   const channels = useMemo(() => betaBundle?.channels ?? [], [betaBundle]);
   const metab = useMemo(() => channels.find((c) => c.id === 'metab'), [channels]);
 
-  // This entity's own transporter-pair rows, filtered out of the metab channel by sorted pair key.
+  // This metabolite's own coefficients: the metab channel's single-member rows whose `metabolite`
+  // (member `a`) matches the selected entity by exact-or-member. Only metabolite-kind entities can
+  // match; a gene pair has no metabolite value, so it falls through to the empty-state.
   const primaryRows = useMemo(() => {
-    if (!entity || !metab) return [];
-    const keys = new Set(pairKeysFor(entity));
-    return metab.rows.filter((r) => r.b != null && keys.has(betaKey(r.a, r.b)));
+    if (!entity || !metab || entity.kind !== 'metabolite') return [];
+    return metab.rows.filter((r) => metaboliteMatches(r.a, entity.name));
   }, [entity, metab]);
 
-  // The stacked factor groups: the metabolite's own pairs first (the anchor), then one group per
-  // channel that contributes rows under the comparison selection.
+  // When the matched rows come from a pipe-GROUP value, surface which metabolites are grouped: they
+  // share a transporter set and can't be distinguished, so they share one coefficient.
+  // Assumes every matched row shares ONE metabolite value (true for the current data: no member name
+  // maps to more than one distinct value). If a member ever appeared both standalone and in a group,
+  // this note would reflect only the first value while the matrix would render both.
+  const groupMembers = useMemo(() => {
+    const value = primaryRows[0]?.a;
+    return value && value.includes('|') ? value.split('|') : null;
+  }, [primaryRows]);
+
+  // The stacked factor groups: the metabolite's own coefficients first (the anchor), then one group
+  // per channel that contributes rows under the comparison selection.
   const groups = useMemo<BetaFactorGroup[]>(() => {
     if (!metab) return [];
-    const primaryLabel = `This ${entityKind === 'metabolite' ? 'metabolite' : 'gene pair'}’s transporter pairs`;
     const primary: BetaFactorGroup = {
       key: 'metab-primary',
       channel: metab,
-      label: primaryLabel,
+      label: 'This metabolite',
       rows: primaryRows,
     };
     const comparisons = channels
@@ -86,7 +99,7 @@ export default function BetaPanel() {
       }))
       .filter((g) => g.rows.length > 0);
     return [primary, ...comparisons];
-  }, [metab, channels, entityKind, primaryRows, selected]);
+  }, [metab, channels, primaryRows, selected]);
 
   // Every cell type that appears in ANY shown group, in the bundle's order.
   const availableCellTypes = useMemo(() => {
@@ -115,8 +128,7 @@ export default function BetaPanel() {
         </h3>
         <div className={styles.none}>
           No SpaceTravLR coefficients for this{' '}
-          {entityKind === 'metabolite' ? 'metabolite’s transporter pairs' : 'gene pair'} at{' '}
-          {tier?.label}.
+          {entityKind === 'metabolite' ? 'metabolite' : 'gene pair'} at {tier?.label}.
         </div>
       </section>
     );
@@ -130,7 +142,7 @@ export default function BetaPanel() {
             SpaceTravLR coefficients
           </h3>
           <div className={styles.subtitle}>
-            How much each transporter pair moves the target genes, per cell type
+            How much this metabolite’s transport moves the target genes, per cell type
           </div>
         </div>
 
@@ -152,13 +164,19 @@ export default function BetaPanel() {
       </div>
 
       <p className={styles.caveat}>
-        <b>Direction is real here.</b> Each row is one direction: the <b>environment</b> gene is
-        expressed by the neighboring cells, the <b>cell</b> gene by the cell being modelled. A pair
-        listed both ways has two independent coefficients — they are never merged. Sign is the
-        claim: positive means the interaction raises that target gene, negative lowers it.
+        Each value is how much this metabolite’s transport moves the target gene in cells of that
+        type. <b>Sign is the claim:</b> positive raises that gene, negative lowers it. The metabolite
+        is summed over its transporters, so <b>no direction is asserted</b> here.
       </p>
 
-      {/* Compare the metabolite's transporters against whole groups and/or individual factors. */}
+      {groupMembers && (
+        <p className={styles.groupNote}>
+          <b>Reported as a group:</b> {groupMembers.join(', ')}. These metabolites share the same
+          transporter set and can’t be distinguished, so they share one coefficient.
+        </p>
+      )}
+
+      {/* Compare this metabolite against whole channels and/or individual factors. */}
       <FactorPicker channels={channels} selected={selected} onChange={setSelected} />
 
       {/* One cell-type-major matrix: columns are the UNION of target genes across shown groups, so

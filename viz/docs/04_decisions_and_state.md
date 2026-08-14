@@ -4,6 +4,49 @@
 restart. Dates are absolute (project "today" was 2026-07-16 at kickoff).
 
 ## Current state
+- **2026-08-13 — `metab` beta channel sourced from `metabolites.csv` (single-member, whole metabolite). Playwright-verified.**
+  - **The pipeline changed:** the SpaceTravLR `metab` channel now comes from
+    `metabtravlr_outputs/<Tier>/metabolites.csv` (`gene,metabolite,cell_type,mean,std,n`) instead of
+    `gene_pairs.csv`. Each row is one **whole metabolite** (summed over its transporters), so the
+    channel is `kind:'single'` (member `a` = the metabolite, `b` = null) — NOT a transporter gene
+    pair. `gene_pairs.csv` is **no longer ingested at all** (Foster's decision 1). The other three
+    channels (lr/ltf/tf) are unchanged. **schemaVersion stays 4** — metab is still a `BetaChannel`,
+    just `kind:'single'`; this is a compatible content change, not a shape change.
+  - Some `metabolite` values are **pipe-joined groups** (e.g.
+    `Adenosine|Cytidine|Guanosine|Inosine|Thymidine|Uridine`) — metabolites that share one
+    transporter set and are reported together, sharing one coefficient (38 distinct values at Tier3,
+    of which 10 are groups).
+  - **Metabolite→row matching = exact-or-member** (decision 2): a metabolite entity links to a metab
+    row when the entity name equals the row's `metabolite` OR is one of its pipe-split members
+    (`BetaPanel.metaboliteMatches`). 56 of the 160 melanoma metabolite entities match a row; the
+    other ~104 (and every gene-pair entity) fall through to the "no coefficients" empty-state
+    (decision 3). **Grouping is made visible:** when the match resolves to a pipe-group, BetaPanel
+    shows an accented note listing the grouped metabolites ("share the same transporter set and
+    can't be distinguished, so they share one coefficient"), and the row identity renders the pipe
+    readably as `A · B · C` with a `title` tooltip (new `memberDisplay` in `betaScale.ts`, applied
+    channel-agnostically in `BetaMatrix` + the FactorPicker labels).
+  - **Edits:** `ingest.mjs` BETA_CHANNELS[metab] (file/kind/cols/label/rowHeader/memberLabels +
+    docstrings); `betaScale.ts` (removed dead `betaKey`; added `memberDisplay`; tooltip reads the
+    readable member); `BetaPanel.tsx` (deleted `pairKeysFor`/`betaKey`; new exact-or-member
+    matching; group note; rewritten subtitle/caveat/empty-state — no more "transporter pairs" or
+    export→import direction for metab); `BetaMatrix.tsx` + `factorSelection.ts` (readable pipe
+    rendering); `types.ts` + `05_data_contract.md` (doc sync). New CSS `.groupNote`.
+  - **Re-ingest** (`npm run ingest -- ../Results`): only Melanoma + Human_Lung `beta/*.json` changed.
+    Melanoma metab Tier3 **pair 2680 → single 1140 rows** (label "Metabolic transporters" →
+    "Metabolites"), Tier1/Tier2 456 each; 38 distinct metabolite values, all `b` null. Human_Lung /
+    Human_Prostate have `gene_pairs.csv` but **no `metabolites.csv`**, so per decision 1 they now
+    emit **no metab channel** (lr/ltf/tf unchanged) — Human_Lung's beta changed to reflect that.
+  - **Verified (Playwright, Melanoma):** app loads 0 console errors/warnings. Environment view —
+    exact match **D-Glucose** → single-member primary group across cell types, divider "This
+    metabolite — metabolite", copy free of "transporter pairs"/direction; group member **Adenosine**
+    → primary resolves to the grouped row, the group note lists all 6 members, and the row identity
+    reads "Adenosine · Cytidine · … · Uridine" (no raw `|`); **L-Glutamine** (no row) and a gene-pair
+    entity both show "No SpaceTravLR coefficients … at Tier3" (no crash). Standalone SpaceTravLR view
+    — metab group labelled **"Metabolites" (38/38)**, grouped rows readable, per-group scales intact
+    (metab 1.4e-2 / lr 9.9e-3 / ltf 3.8e-5 / tf 4.0e0). DOM-vs-bundle on D-Glucose: **35/35 numeric
+    cells** round-trip to `formatBeta(bundle, per-group scale)`, **0 sign violations** (a negative
+    never renders `+`). `lint` + `tsc -b` + `build` clean, 0 warnings. See A28; smoke items 11/13/14
+    updated. Screenshot `viz/metab-single-member-adenosine-group.png`.
 - **2026-08-01 — FactorPicker: pick individual factors AND whole groups (Cycle 4 / REVISION 2). Playwright-verified.**
   - Foster: the old "add a whole group" interactions (the Environment add-dropdown, the standalone
     Section toggles) were too coarse — he wants to select arbitrary SUBSECTIONS: individual factors
@@ -303,6 +346,7 @@ restart. Dates are absolute (project "today" was 2026-07-16 at kickoff).
 | A25 | BetaPanel comparisons: added channels use an **INCLUSION** list (`added: BetaChannelId[]`, starts empty), the inverse of the standalone view's exclusion sets | Opposite defaults for opposite intents: the standalone view wants everything shown by default (survey), while the metabolite view is *about that metabolite* — comparisons are a deliberate opt-in the user adds one at a time, so an empty inclusion list is the right default. The compared rows are the channel's full superset (not entity-filtered). Reset on entity/tier/dataset (stale otherwise) but not on cell-type change (that's a lens on the same comparison, per A20's "filters may change unchosen things; only the user retires their own selection"). |
 | A26 | **Cell-type-major** matrix (`BetaMatrix`), UNION gene columns, BLANK ≠ `≈0` — replaces the channel-major `BetaSection` stacking | Foster's REVISION 1: grouping by factor channel repeated each cell type per factor and columns didn't align, so cross-factor reading was hard. Cell-type-major shows each cell type once with the factor groups stacked beneath and ALL genes in a fixed column order — so "for this cell type, which factors move which genes?" is one glance. Columns are the UNION (superseding Cycle-2's intersect-to-metab-genes) so a gene only a comparison factor covers still appears; where a group has no coefficient the slot is BLANK whitespace (kept, not dropped/shifted), kept honestly distinct from `≈0` (measured-but-negligible). Scales stay **per factor group** (A22): TF ~1e0 and metab ~1e-6 in the same block would otherwise collapse to one floor. |
 | A27 | Factor selection is ONE flat `Set<FeatureKey>` of individual factors; a whole-group button is a BULK add/remove into that set (replaces the Cycle-2 add-dropdown and a briefly-built `{wholeGroups, features}` split) | Foster (2nd round): wants to select arbitrary subsections — individual factors AND whole groups — with the flow "click the group to activate it, then ✕ out the ones you don't care about." A flat per-factor set makes every factor equally removable regardless of how it got selected; the whole-group button is pure sugar (add-all / remove-all) over that set, and its none/some/all state is derived, not stored. Selected factors are shown in per-channel collapsible sections so activating a 233-factor group reads as "· 233 selected" not 233 chips. A separate `wholeGroups` set (the first attempt) made "the group is on but I removed 3 of its factors" unrepresentable — the flat set makes partial selection natural. Standalone defaults to all factors selected (survey); Environment defaults to empty (it's about the one metabolite). |
+| A28 | The `metab` beta channel is sourced from **`metabolites.csv`** (single-member, whole metabolite), fully **replacing** `gene_pairs.csv` (no longer ingested); metabolite→row matching is **exact-or-member** with the pipe-group made visible in the UI | Foster's decisions for the pipeline change. (1) **Replace fully, not add** — the model now reports one coefficient per whole metabolite (summed over transporters), so a transporter-gene-pair channel is the wrong unit; the metab channel becomes `kind:'single'` keyed by metabolite, and gene_pairs.csv is dropped entirely. (2) **Exact-or-member** matching (name == value, or name ∈ value.split('\|')) is the only correct link once some values are pipe-joined groups of metabolites that share a transporter set; those groups **must be surfaced** (a note listing the members + readable `A · B · C` rendering) because they share ONE coefficient and can't be distinguished — hiding that would imply a per-metabolite number the model doesn't have. (3) **Gene-pair entities show "no coefficients"** — a pair has no metabolite value to anchor to, so its primary group is empty and the existing empty-state applies (which short-circuits before the FactorPicker, so no comparison factors are offered for a gene pair). schemaVersion is NOT bumped — metab is still a `BetaChannel`, this is a compatible content change. |
 
 ## Open questions / needs Foster
 - **Dataset naming**: ids/names now come straight from the `Results/` folder names
@@ -354,9 +398,14 @@ restart. Dates are absolute (project "today" was 2026-07-16 at kickoff).
    hovering a row highlights that pair on the graph and releases back to the pinned one.
 10. Screenshot captured as evidence.
 11. Environment view on **Primary Dermal Melanoma**: nbhd bars AND a "SpaceTravLR coefficients"
-    heatmap. Cell-type picker narrows to one block and rescales the ramp. A bidirectional pair
-    (e.g. SLC16A4 – SLCO2B1) shows **two** rows. A pair with no betas shows the "no coefficients"
-    message, not an empty grid. On Human Lung the beta section is absent but the bars still render.
+    heatmap. Cell-type picker narrows to one block and rescales the ramp. The `metab` channel is now
+    **single-member (whole metabolite)**: an **exact-match** metabolite (e.g. D-Glucose) shows its
+    single-member rows across cell types (divider "This metabolite — metabolite", no "transporter
+    pairs"/direction copy); a **group-member** metabolite (e.g. Adenosine) resolves to the grouped
+    row AND shows the "Reported as a group" note listing the members, with the row identity rendered
+    readably (`A · B · C`, no raw `|`). A metabolite with **no** metab row (e.g. L-Glutamine) and any
+    **gene-pair** entity both show the "No SpaceTravLR coefficients … at Tier3" empty-state, not an
+    empty grid. On Human Lung the beta section is absent but the bars still render.
 12b. FDR slider (Graph view): default reads "FDR < 0.05" and matches the old `selected`-based
     counts. Dragging left tightens (fewer/no significant edges); dragging right loosens for
     metabolites but never exceeds the gene-pair bundle's significant-only set. Legend + EntityDetails
@@ -378,15 +427,19 @@ restart. Dates are absolute (project "today" was 2026-07-16 at kickoff).
     dataset has betas (disabled on e.g. FF Ovarian / Human Lung). Clicking it hides the entity panel
     and fills the width. Layout is **cell-type-major** (`BetaMatrix`): each cell type once, the
     selected factors stacked beneath as divider-labelled groups, union target-gene columns in fixed
-    position. **Per-group scales:** the TF group shows order-1 values while metab shows ~1e-6 — each
-    divider prints its own "own scale |β| ≤ …". The **FactorPicker** defaults to all factors (group
-    buttons "all", collapsed "· N selected" sections); a whole-group button toggles the group;
+    position. **Per-group scales:** the TF group shows order-1 values while metab shows ~1e-2..1e-6 —
+    each divider prints its own "own scale |β| ≤ …". The **metab group is labelled "Metabolites"**
+    (single-member; grouped metabolites render readably as `A · B · C`). The **FactorPicker** defaults
+    to all factors (group buttons "all", e.g. Metabolites 38/38, collapsed "· N selected" sections);
+    a whole-group button toggles the group;
     toggling a **Target gene** chip adds/removes a union column; the **Cell type** select narrows to
     one block. Switching to a no-beta dataset while in this view falls back to the Graph view. 0
     console errors.
 14. **BetaPanel + FactorPicker** (Melanoma Environment view): each cell type appears ONCE; beneath its
-    label the primary group ("This metabolite's transporter pairs", always first) and any comparison
-    groups are stacked, sharing ONE union set of gene columns in fixed position. The **FactorPicker**
+    label the primary group ("This metabolite" — the selected metabolite's own single-member rows,
+    matched exact-or-member, always first) and any comparison groups are stacked, sharing ONE union
+    set of gene columns in fixed position. A pipe-group metabolite adds the "Reported as a group"
+    note. The **FactorPicker**
     defaults empty; clicking a whole-group button selects all its factors (matrix shows the whole
     group) and shows a collapsed "· N selected" section; expanding it and ✕-ing individual chips
     removes exactly those rows and flips the button to the **partial** state; the section "clear ✕"
@@ -409,6 +462,28 @@ restart. Dates are absolute (project "today" was 2026-07-16 at kickoff).
       `viz/rev2c-factorpicker-fixes.png`.
 
 ## Changelog
+- 2026-08-13: **`metab` beta channel switched to `metabolites.csv` (single-member, whole metabolite).**
+  Pipeline change (Foster's 3 decisions, A28). (1) **Ingest:** `BETA_CHANNELS[metab]` now reads
+  `metabolites.csv` as `kind:'single'` (`cols:['metabolite']`, label "Metabolites", rowHeader
+  "metabolite", memberLabels `['metabolite']`); `gene_pairs.csv` is **no longer ingested**. The
+  existing `buildBeta` `kind:'single'` path handles it (member `a` = metabolite, `b` = null); metab
+  values may be **pipe-joined groups**. (2) **`BetaPanel`:** deleted `pairKeysFor`/`betaKey`; primary
+  rows now = metab rows matching the entity **exact-or-member** (`metaboliteMatches`); metabolite-kind
+  only, so gene pairs (and no-match metabolites) hit the "no coefficients" empty-state; rewrote
+  subtitle/caveat/empty-state (no "transporter pairs"/direction); added an accented **group note**
+  listing the grouped metabolites. (3) **Readable pipe rendering:** new `memberDisplay` in
+  `betaScale.ts` (removed the now-dead `betaKey`) renders `A|B|C` as `A · B · C` + tooltip, applied
+  channel-agnostically in `BetaMatrix` (`FeatureRow`/`FactorRows`, used by both views) and the
+  FactorPicker labels; tooltip reads the readable member. (4) **Docs/types synced**
+  (`types.ts`, `05_data_contract.md`). New `.groupNote` CSS. **schemaVersion stays 4** (compatible
+  content change — metab is still a `BetaChannel`). Re-ingest: only Melanoma + Human_Lung `beta/*`
+  changed — Melanoma metab Tier3 **2680 pair rows → 1140 single rows** (label "Metabolites"), 38
+  distinct values; Human_Lung/Human_Prostate have `gene_pairs.csv` but no `metabolites.csv`, so they
+  now emit **no metab channel**. Playwright-verified on Melanoma (exact D-Glucose, group Adenosine +
+  member note + readable identity, no-match L-Glutamine + gene-pair empty-states, standalone metab
+  "Metabolites" 38/38 with per-group scales, DOM-vs-bundle 35/35 on D-Glucose, 0 sign violations).
+  `lint` + `tsc -b` + `build` clean, 0 console errors/warnings. Screenshot
+  `viz/metab-single-member-adenosine-group.png`. Smoke items 11/13/14 updated.
 - 2026-08-01: **FactorPicker — pick individual factors AND whole groups (Cycle 4 / REVISION 2).** New
   `FactorPicker.tsx` (+ `.module.css`) and `src/data/factorSelection.ts` replace the Environment
   add-dropdown and the standalone Section toggles. Selection is ONE flat `Set<FeatureKey>`; whole-

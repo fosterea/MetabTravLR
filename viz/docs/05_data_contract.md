@@ -18,6 +18,9 @@ manifest.json                         # { generatedAt, schemaVersion, datasets: 
 `BetaChannel[]`, replacing the v3 transporter-pair-only `byPair` index; v3 added `beta/` + `hasBeta`;
 v2 added `nbhd/`, and `project`/`hasNbhd`/`available` on `DatasetRef`). Every bump is **additive** —
 an older app reading a newer bundle just ignores the new keys/channels.
+**2026-08-13:** the `metab` channel switched its source from `gene_pairs.csv` (`kind:'pair'`) to
+`metabolites.csv` (`kind:'single'`, keyed by whole metabolite). This is a **content** change, not a
+shape change — metab is still a `BetaChannel` — so `schemaVersion` stays **4** (not bumped).
 
 ## Multiple datasets, and incomplete ones
 The input path may be a single `harreman_outputs/`, a `<root>/<dataset>/easy_download/…` tree,
@@ -62,18 +65,20 @@ empty dataset.
 - **BetaRow** = `{ a, b, gene, cellType, mean, std, n }` — one SpaceTravLR learned coefficient,
   generalized across all channels: how much one **feature** moves one target gene, averaged over
   the cells of one cell type.
-  ⚠️ **Direction is real here** — the one place in this app where it is. Member `a` is the
-  environment/sender side (export / ligand / ligand — or the TF for a single-member channel);
-  member `b` is the cell/receiver side (import / receptor / tf), and is **null** for single-member
-  channels (tf). For transporter pairs both orders can be present as distinct rows and must never
-  be merged, averaged, or drawn as one row.
+  ⚠️ **Direction is real for the PAIR channels (lr/ltf)** — the one place in this app where it is.
+  Member `a` is the ligand/sender side, member `b` the receiver side, both orders can be present as
+  distinct rows, and they must never be merged, averaged, or drawn as one row. The **single-member**
+  channels (`tf`, `metab`) carry only member `a` (`b` **null**): for `tf` the transcription factor;
+  for `metab` the **whole metabolite** (from `metabolites.csv`, summed over its transporters), which
+  may be a **pipe-joined group** of metabolites that share a transporter set and so share one
+  coefficient (e.g. `Adenosine|Cytidine|…`) — no direction is asserted for `metab`.
   ⚠️ `mean` is **signed**, and the sign is the biological claim (raises vs lowers the target
   gene). Any encoding must keep magnitude and sign on separate channels — see `betaScale.ts`.
   No significance test is applied anywhere in this path; `std`/`n` travel with every row.
 - **BetaChannel** = `{ id, label, kind, memberLabels, rowHeader, targetGenes, cellTypes, rows }`.
   One feature channel, **self-describing** so the app doesn't hardcode per-channel meta: `kind`
-  is `'pair'` (two members, `a → b`) or `'single'` (tf, member `a` only); `memberLabels` labels
-  the members in tooltips (e.g. `['export (environment)','import (cell)']`, `['ligand','receptor']`,
+  is `'pair'` (two members, `a → b`) or `'single'` (tf/metab, member `a` only); `memberLabels` labels
+  the members in tooltips (e.g. `['metabolite']`, `['ligand','receptor']`,
   `['ligand','TF']`, `['TF']`); `rowHeader` is the row-identity column head; `targetGenes` (sorted)
   and `cellTypes` (source order) are **this channel's own** columns/blocks; `rows` are sorted
   strongest `|mean|` first.
@@ -82,11 +87,12 @@ empty dataset.
   is a correctness requirement, not styling (`BetaMatrix` builds a scale per factor group).
 - **BetaBundle** = `{ tier, cellTypes, targetGenes, channels }`. `cellTypes`/`targetGenes` are the
   **unions** across channels (cellTypes in source order, targetGenes sorted); `channels` holds only
-  channels with ≥1 row. There is **no `byPair` index** anymore — a metabolite's transporter pairs
-  are found by filtering the `metab` channel's rows: `betaKey(r.a, r.b) ∈ pairKeysFor(entity)`
-  (order-independent sorted `A__B` key; `betaKey` in `betaScale.ts`). A transporter pair absent
-  from the network simply never matches a metabolite's pair keys (harmless — the generic channel
-  view shows all raw features regardless).
+  channels with ≥1 row. There is **no `byPair` index**. The `metab` channel is **single-member,
+  keyed by whole metabolite** (`metabolites.csv`): a metabolite entity's own coefficients are the
+  `metab` rows whose `metabolite` value (member `a`) **matches the entity name exact-or-member** —
+  equal to the name, OR the name is one of the pipe-split members of a grouped value
+  (`BetaPanel.metaboliteMatches`). A metabolite absent from `metabolites.csv` simply matches no rows
+  (harmless — the standalone channel view shows all raw features regardless).
 
 ## Source → contract mapping (harreman adapter)
 | Contract field | Source |
@@ -100,7 +106,7 @@ empty dataset.
 | tier `cellTypes` | distinct `Cell Type 1/2` in the tier CSVs |
 | tier `parentTier` | coarse→fine ordering of `Tier*` dirs |
 | neighborhood scores | `Tier*/[nbhd_scores][summary_{m,gp}].csv` |
-| SpaceTravLR `metab` channel | `../metabtravlr_outputs/Tier*/gene_pairs.csv` (`gene,export,import,pair,cell_type,mean,std,n`; pair sep `@`) |
+| SpaceTravLR `metab` channel | `../metabtravlr_outputs/Tier*/metabolites.csv` (`gene,metabolite,cell_type,mean,std,n`; **single member** = whole metabolite, summed over transporters; the `metabolite` value may be a pipe-joined group, e.g. `Adenosine\|Cytidine\|…`) |
 | SpaceTravLR `lr` channel | `../metabtravlr_outputs/Tier*/ligand_receptor.csv` (`gene,ligand,receptor,pair,cell_type,mean,std,n`; sep `$`) |
 | SpaceTravLR `ltf` channel | `../metabtravlr_outputs/Tier*/ligand_tf.csv` (`gene,ligand,tf,pair,cell_type,mean,std,n`; sep `#`) |
 | SpaceTravLR `tf` channel | `../metabtravlr_outputs/Tier*/transcription_factor.csv` (`gene,tf,cell_type,mean,std,n`; single member) |
@@ -115,14 +121,16 @@ Notes / gotchas the adapter handles:
   unambiguously — the adapter resolves them through the network's own `gp` list instead of
   guessing, and drops rows it can't resolve rather than mis-attributing them.
 - `metabtravlr_outputs/` is a **sibling** of `harreman_outputs/` inside `easy_download/`, and is
-  optional — only datasets with a SpaceTravLR run have it (today: Primary Dermal Melanoma). It holds
-  **four** feature-channel CSVs (see the table above), each with `gene` (the *target* gene),
-  `cell_type`, `mean`, `std`, `n`, plus the channel's member columns. The `pair` column (e.g.
-  `export@import`, `ligand$receptor`, `ligand#tf`) is ignored in favour of the individual member
+  optional — only datasets with a SpaceTravLR run have it. It holds up to **four** feature-channel
+  CSVs (see the table above), each with `gene` (the *target* gene), `cell_type`, `mean`, `std`, `n`,
+  plus the channel's member column(s). The `metab` channel is now sourced from **`metabolites.csv`**
+  (single-member, whole-metabolite; `gene_pairs.csv` is **no longer ingested at all**). The `lr`/`ltf`
+  `pair` column (e.g. `ligand$receptor`, `ligand#tf`) is ignored in favour of the individual member
   columns. `buildBeta` drives a config loop over the four; each channel is skipped if its file is
-  missing, and a channel is emitted only if it has ≥1 row. **Nothing is dropped for being absent
-  from the harreman network** — the standalone view shows raw features; a transporter pair outside
-  the network just never matches a metabolite's pair keys.
+  missing (so a dataset whose run has no `metabolites.csv` simply emits **no metab channel** —
+  today only Primary Dermal Melanoma has one; Human Lung / Human Prostate have the other channels
+  but no `metabolites.csv`), and a channel is emitted only if it has ≥1 row. **Nothing is dropped
+  for being absent from the harreman network** — the standalone view shows raw features.
 - `histograms.csv` (`group,left,right,count`, groups `lr`/`ltf`/`metab`/`tf` = precomputed
   mean-distribution bins) and `histograms.png` are also present in `metabtravlr_outputs/<Tier>/`
   but are **NOT consumed yet** — reserved for a future per-channel histogram feature.

@@ -83,18 +83,22 @@ const F = {
  * The four SpaceTravLR feature channels, each in its own CSV inside `metabtravlr_outputs/<Tier>/`.
  * `cols` names the source columns for members [a, b] (single-member channels list only `a`). The
  * remaining meta (label/kind/rowHeader/memberLabels) is carried into the bundle so the app doesn't
- * hardcode it. Every file also has `gene` (target gene), `cell_type`, `mean`, `std`, `n`; the
- * `pair` column (e.g. `export@import`) is ignored in favour of the individual member columns.
+ * hardcode it. Every file also has `gene` (target gene), `cell_type`, `mean`, `std`, `n`.
+ *   - `metab` is SINGLE-member, keyed by whole metabolite (`metabolites.csv`, summed over its
+ *     transporters): member `a` is the metabolite, which may be a pipe-joined GROUP of metabolites
+ *     that share one transporter set and so share one coefficient (e.g. `Adenosine|Cytidine|…`).
+ *   - `lr`/`ltf` are pair channels; their `pair` column (e.g. `ligand$receptor`) is ignored in
+ *     favour of the individual member columns. `tf` is single-member.
  */
 const BETA_CHANNELS = [
   {
     id: 'metab',
-    file: 'gene_pairs.csv',
-    kind: 'pair',
-    cols: ['export', 'import'],
-    label: 'Metabolic transporters',
-    rowHeader: 'environment → cell',
-    memberLabels: ['export (environment)', 'import (cell)'],
+    file: 'metabolites.csv',
+    kind: 'single',
+    cols: ['metabolite'],
+    label: 'Metabolites',
+    rowHeader: 'metabolite',
+    memberLabels: ['metabolite'],
   },
   {
     id: 'lr',
@@ -330,17 +334,18 @@ function findBetaRoot(harremanRoot) {
 
 /**
  * SpaceTravLR learned coefficients for one tier, across ALL feature channels
- * (`metabtravlr_outputs/<Tier>/{gene_pairs,ligand_receptor,ligand_tf,transcription_factor}.csv`).
+ * (`metabtravlr_outputs/<Tier>/{metabolites,ligand_receptor,ligand_tf,transcription_factor}.csv`).
  *
  * A row is one (target gene, feature, cell type) mean beta: how much that feature moves the target
- * gene, averaged over the cells of that type. Direction is real here, unlike everything else in
- * this app: member `a` is the environment/sender side (export / ligand / ligand — or the TF for a
- * single-member channel), member `b` the cell/receiver side. `A -> B` and `B -> A` are two
- * different coefficients and must never be merged.
+ * gene, averaged over the cells of that type. For the PAIR channels (lr/ltf) direction is real —
+ * member `a` is the ligand/sender side, member `b` the receiver side, and `A -> B` vs `B -> A` are
+ * two different coefficients that must never be merged. The single-member channels (`metab`, `tf`)
+ * carry only member `a` (`b` null): for `metab` that is the whole metabolite (from
+ * `metabolites.csv`, summed over its transporters), which may be a pipe-joined group of metabolites
+ * sharing one transporter set.
  *
  * The generic channel view shows raw features, so nothing is dropped for being absent from the
- * harreman network — a transporter pair not in the network simply never matches a metabolite's
- * `pairKeys` downstream (harmless).
+ * harreman network.
  *
  * Returns null when this dataset/tier has no SpaceTravLR channel with any rows.
  */
