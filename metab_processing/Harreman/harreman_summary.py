@@ -340,6 +340,8 @@ def write_metabolite_selection(easy_download_path, metabolites, out_path=None, f
     CCC test (it appears in ``[ccc_results][cell_com_df_gp_sig].csv``). All transporters are
     IMP-EXP (bidirectional), so no direction/type is stored.
 
+    Addition: I, the human added functionality to save the no selection gp per metabolite in a yaml format.
+
     Parameters
     ----------
     easy_download_path : path to the harreman_outputs folder (or its parent).
@@ -367,12 +369,14 @@ def write_metabolite_selection(easy_download_path, metabolites, out_path=None, f
     entries.sort(key=lambda e: e["name"])
 
     if out_path is None:
+        no_selection_out_path = root / f"metabolite_no_selection.{'json' if fmt == 'json' else 'yaml'}"
         out_path = root / f"metabolite_selection.{'json' if fmt == 'json' else 'yaml'}"
     out_path = Path(out_path)
     if out_path.suffix.lower() == ".json":
         fmt = "json"
 
     _dump_selection({"metabolites": entries}, out_path, fmt)
+    _dump_selection({"metabolites": gpm}, no_selection_out_path, fmt)
     return out_path
 
 
