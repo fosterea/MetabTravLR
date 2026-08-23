@@ -27,16 +27,16 @@ XENIUM_DATA_DIR = PROJECT_DATA_DIR
 TIERS = ['Tier1', 'Tier2', 'Tier3']
 
 
-def run_dataset(data_dir, dataset_name):
+def run_dataset(data_dir, dataset_name, tiers=TIERS):
     harRunner = HarremanRunner(f'{data_dir}/{dataset_name}')
     harRunner.load_adata()
     harRunner.save_harreman_network()
 
-    tiers = [tier for tier in TIERS if tier in harRunner.adata.obs.columns]
-    if not tiers:
-        raise ValueError('no tier annotations')
+    present = [tier for tier in tiers if tier in harRunner.adata.obs.columns]
+    if not present:
+        raise ValueError(f'none of {tiers} in adata.obs')
 
-    for tier in tiers:
+    for tier in present:
         harRunner.run_harreman(tier)
 
     out_path = harRunner.easy_download_path
@@ -54,7 +54,7 @@ def marker_path(data_dir, dataset_name):
     return Path(f'{data_dir}/{dataset_name}/easy_download/.{dataset_name}')
 
 
-def run_all(data_dir=XENIUM_DATA_DIR):
+def run_all(data_dir=XENIUM_DATA_DIR, tiers=TIERS):
     d_sets = os.listdir(data_dir)
     # d_sets = ['Primary_Dermal_Melanoma']
     print(d_sets)
@@ -67,7 +67,7 @@ def run_all(data_dir=XENIUM_DATA_DIR):
 
         print(f'running {dataset_name}')
         try:
-            run_dataset(data_dir, dataset_name)
+            run_dataset(data_dir, dataset_name, tiers=tiers)
             print(f'finished {dataset_name}')
         except Exception as e:
             print(f'failed {dataset_name}: {type(e).__name__}: {e}')
@@ -75,4 +75,19 @@ def run_all(data_dir=XENIUM_DATA_DIR):
         gc.collect()
         torch.cuda.empty_cache()
 
-run_all()
+
+def main(argv=None):
+    import argparse
+    ap = argparse.ArgumentParser(
+        description='Run harreman over every dataset folder under a data dir.')
+    ap.add_argument('--data-dir', default=XENIUM_DATA_DIR,
+                    help='top-level dir whose subfolders are datasets (default: PROJECT_DATA_DIR)')
+    ap.add_argument('--cell-type-cols', nargs='+', default=TIERS,
+                    help='adata.obs column(s) to run cell-type-aware harreman over; '
+                         'one output subfolder per column (default: Tier1 Tier2 Tier3)')
+    args = ap.parse_args(argv)
+    run_all(data_dir=args.data_dir, tiers=args.cell_type_cols)
+
+
+if __name__ == '__main__':
+    main()

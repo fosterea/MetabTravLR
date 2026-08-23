@@ -86,6 +86,12 @@ DATASETS = {
     'Human_Cervical_Cancer': {},
     'FF_Human_Ovarian_Adenocarcinoma': {},
     'FFPE_Human_Ovarian_Cancer': {},
+    # UC Xenium samples live under a different data dir ({DATA_DIR}/UC_Xenium), so pass
+    # data_dir=f'{DATA_DIR}/UC_Xenium' to submit()/run_spacetravlr for these. Their cells
+    # carry a provided `cell_type` annotation (9 types), which is also the single tier we
+    # summarize betas over -> metabtravlr_outputs/cell_type/.
+    'Sample_1_UC1_inflamed':      {'cell_type_src': 'cell_type', 'tiers': ['cell_type']},
+    'Sample_2_UC1_less_inflamed': {'cell_type_src': 'cell_type', 'tiers': ['cell_type']},
 }
 
 

@@ -32,12 +32,15 @@ from metab_processing.metab_travlr_config import PROJECT_DATA_DIR
 from metab_processing.SpaceTravLR.dataset_configs import dataset_paths, get_config
 
 RUN_SCRIPT = Path(__file__).resolve().parent / 'run_spacetravlr.py'
+# Same CLI as run_spacetravlr.py, but sources every transporter pair (metabolite_no_selection.yaml)
+# and writes to parallel all_metab_* paths -- see run_all_metab.py.
+RUN_ALL_METAB_SCRIPT = Path(__file__).resolve().parent / 'run_all_metab.py'
 
 
 def build_command(dataset, stages=None, overwrite=False, clear_betadata=False,
-                  data_dir=PROJECT_DATA_DIR, python_path='python') -> str:
-    """The `python run_spacetravlr.py ...` line SLURM will execute."""
-    cmd = [python_path, str(RUN_SCRIPT), '--dataset', dataset]
+                  data_dir=PROJECT_DATA_DIR, python_path='python', script=RUN_SCRIPT) -> str:
+    """The `python <script> ...` line SLURM will execute."""
+    cmd = [python_path, str(script), '--dataset', dataset]
     if stages:
         cmd += ['--stage', *stages]
     if overwrite:
@@ -50,7 +53,8 @@ def build_command(dataset, stages=None, overwrite=False, clear_betadata=False,
 
 
 def submit(dataset, stages=None, overwrite=False, clear_betadata=False,
-           data_dir=PROJECT_DATA_DIR, dry_run=False, dependency=None, **slurm_overrides):
+           data_dir=PROJECT_DATA_DIR, dry_run=False, dependency=None, all_metab=False,
+           **slurm_overrides):
     """Submit one dataset as a SLURM job. Returns the job id (None if `dry_run`).
 
     Parameters
@@ -63,6 +67,10 @@ def submit(dataset, stages=None, overwrite=False, clear_betadata=False,
         Delete `input_data/` and redo setup. Trained betadata is kept.
     clear_betadata : bool
         Also delete `betadata/`, forcing every gene to retrain.
+    all_metab : bool
+        Run `run_all_metab.py` instead of `run_spacetravlr.py`: source EVERY transporter
+        pair (metabolite_no_selection.yaml), not just harreman's significant ones, and write
+        to parallel `all_metab_*` paths so a normal run is never touched.
     dry_run : bool
         Print the sbatch settings and command without submitting.
     dependency : dict, optional
@@ -83,11 +91,14 @@ def submit(dataset, stages=None, overwrite=False, clear_betadata=False,
 
     stamp = time.strftime('%Y%m%d_%H%M%S')
     tag = '-'.join(stages) if stages else 'all'
+    if all_metab:
+        tag = f'all_metab_{tag}'
     outlog = paths['log_dir'] / f'{tag}_{stamp}.log'
 
     command = build_command(
         dataset, stages=stages, overwrite=overwrite, clear_betadata=clear_betadata,
-        data_dir=data_dir, python_path=slurm_cfg['python_path'])
+        data_dir=data_dir, python_path=slurm_cfg['python_path'],
+        script=RUN_ALL_METAB_SCRIPT if all_metab else RUN_SCRIPT)
 
     sbatch_kwargs = dict(
         account=slurm_cfg['account'],
@@ -95,7 +106,7 @@ def submit(dataset, stages=None, overwrite=False, clear_betadata=False,
         qos=slurm_cfg['qos'],
         cpus_per_task=slurm_cfg['cpus_per_task'],
         ignore_pbs=True,
-        job_name=f'{slurm_cfg["job_name"]}_{dataset}',
+        job_name=f'{slurm_cfg["job_name"]}_{dataset}{"_all_metab" if all_metab else ""}',
         output=str(outlog),
         time=timedelta(hours=slurm_cfg['time_hours']),
     )
