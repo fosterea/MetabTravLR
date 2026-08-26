@@ -94,6 +94,19 @@ DATASETS = {
     'Sample_2_UC1_less_inflamed': {'cell_type_src': 'cell_type', 'tiers': ['cell_type']},
 }
 
+# Alexi UC dataset: 4 spatial slices of patient 13473_HS4_UC, saved by
+# Preprocess/alexi_data.ipynb under {DATA_DIR}/Alexi_UC_Spliced/<slice>/adata.h5ad. Pass
+# data_dir=f'{DATA_DIR}/Alexi_UC_Spliced' to submit()/run_spacetravlr. The coarse ICI-5K
+# annotation is both the cell_type and the single tier (-> metabtravlr_outputs/<annot>/);
+# these slices are small, so 8 cores is plenty.
+_ALEXI_ANNOT = '25_06_11_ICI_5K_Coarse_annotations'
+for _slice in ('Slice_1', 'Slice_2', 'Slice_3', 'Slice_4'):
+    DATASETS[f'13473_HS4_UC-{_slice}'] = {
+        'cell_type_src': _ALEXI_ANNOT,
+        'tiers': [_ALEXI_ANNOT],
+        'slurm': {'cpus_per_task': 8},
+    }
+
 
 def get_config(dataset: str) -> dict:
     """Resolved config for `dataset`: DEFAULTS with the dataset's overrides applied."""
