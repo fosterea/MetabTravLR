@@ -4,6 +4,34 @@
 restart. Dates are absolute (project "today" was 2026-07-16 at kickoff).
 
 ## Current state
+- **2026-08-27 — Second project (Alexi UC) + a Project→Dataset two-step picker. Playwright-verified.**
+  - `Results/` now holds **two** projects: `Xenium_Tcell_Dataset` (the original 7 datasets) and a new
+    `Alexi_UC` (4 UC slices `13473_HS4_UC-Slice_{1..4}`). The dataset picker was a single project-
+    grouped `<select>` (optgroups); it is now **two selects — Project, then Dataset** — because a
+    second project makes the flat list unwieldy. The Project select only appears when >1 project
+    exists; picking a project jumps to that project's first *available* dataset, and the Dataset
+    select lists only that project's datasets. **Store unchanged** — "current project" is derived
+    from the loaded dataset's `project`, so no new state/action was needed (`ControlBar.tsx` only).
+  - **Ingest fix (the one non-cosmetic change):** the UC runs name their single cell-type level after
+    the annotation set (`25_06_11_ICI_5K_Coarse_annotations`), NOT `TierN` like the Xenium runs, and
+    they nest the tier tables inside it. `discoverTiers` matched `^Tier\w+$` and would have dropped
+    every UC dataset as "no tier outputs". It now detects a tier dir by the **presence of its tier
+    table** (`[ct_ccc_results][cell_com_df_m].csv`), so both layouts ingest identically. `betaRoot`'s
+    `join(betaRoot, tierId)` already resolves the matching `metabtravlr_outputs/<annotation>/` dir, so
+    no other ingest change. Each UC slice → 158 metabolites, 392 gene pairs, 1 tier (12 cell types),
+    nbhd + beta (3 channels: Metabolites 39, Ligand–receptor 99, Transcription factors 306 — no L–TF
+    rows, so that channel is simply absent). **No schema/contract change** (schemaVersion stays 4).
+  - Re-ingest (`npm run ingest -- ../Results`): 11 datasets total; the 7 Xenium `public/data/*` are
+    byte-identical, +4 new `13473_HS4_UC-Slice_*` dirs.
+  - **Verified (Playwright):** app loads 0 console errors/warnings; Project defaults to **Alexi UC**
+    (first available), Dataset lists the 4 UC slices, tier shows the annotation level (12 types), the
+    UC graph draws (Fatty acid auto-selected with its CD36/FABP5/MSR1/CPT1A pair tabs); switching
+    Project → **Xenium Tcell Dataset** repopulates Dataset to the 7 panel datasets (SpaceTravLR button
+    correctly disabled on FF Ovarian, no beta); UC **SpaceTravLR view** renders all 3 channels with
+    per-group scales (Metabolites |β| ≤ 1.3e-1). `tsc -b` + `lint` + `build` clean, 0 warnings.
+  - **Data note:** the UC tier LABEL is the raw annotation dir name (`25_06_11_ICI_5K_Coarse_annotations`)
+    — informative but verbose; prettify later if Foster wants. The h5ad + `UC_Xenium_Data_Raw/` at the
+    repo root are other agents' working data, NOT committed here.
 - **2026-08-13 — `metab` beta channel sourced from `metabolites.csv` (single-member, whole metabolite). Playwright-verified.**
   - **The pipeline changed:** the SpaceTravLR `metab` channel now comes from
     `metabtravlr_outputs/<Tier>/metabolites.csv` (`gene,metabolite,cell_type,mean,std,n`) instead of

@@ -181,11 +181,14 @@ function discoverDatasets(inputPath) {
 }
 
 // ---------- tier discovery ----------
+// A "tier" is any subdirectory of harreman_outputs/ that carries the per-cell-type metabolite
+// table. Most runs name these `Tier1/Tier2/Tier3` (cell-type resolution levels), but some name the
+// single level after its annotation set (e.g. `25_06_11_ICI_5K_Coarse_annotations`) — so we detect
+// by the table's presence, not by a `Tier*` name, and both layouts ingest identically.
 function discoverTiers(root) {
-  const tierDirs = readdirSync(root)
-    .filter((n) => /^Tier\w+$/i.test(n) && isDir(join(root, n)))
-    .sort(); // Tier1 < Tier2 < Tier3 lexicographically for single digits
-  return tierDirs;
+  return readdirSync(root)
+    .filter((n) => isDir(join(root, n)) && existsSync(join(root, n, F.tierM)))
+    .sort(); // Tier1 < Tier2 < Tier3 lexicographically for single digits; single-level runs sort trivially
 }
 
 /** A tier dir only counts once it has the per-cell-type metabolite table — a run that was

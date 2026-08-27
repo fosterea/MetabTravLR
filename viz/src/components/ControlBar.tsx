@@ -1,6 +1,6 @@
 /** Top control bar: dataset, tier, view, entity-kind, the FDR significance slider, and the
  *  show-non-significant toggle. */
-import { Fragment, useMemo } from 'react';
+import { useMemo } from 'react';
 import { useVizStore, hasEnvView } from '@/store/useVizStore';
 import type { DatasetRef } from '@/data/types';
 
@@ -44,7 +44,8 @@ export default function ControlBar() {
   const toggleGpExpandAll = useVizStore((s) => s.toggleGpExpandAll);
   const setView = useVizStore((s) => s.setView);
 
-  // Group datasets by their source project folder, so a future second project stays legible.
+  // Datasets are chosen in two steps — first the source project, then a dataset within it — so a
+  // second project (e.g. Alexi UC alongside the Xenium panel) stays legible as the list grows.
   // Datasets whose harreman run never finished are listed but disabled, with the reason —
   // silently hiding them would look like data loss.
   const groups = useMemo(() => {
@@ -57,12 +58,44 @@ export default function ControlBar() {
     return [...by.entries()];
   }, [manifest]);
 
+  // The project of the currently selected dataset, and the datasets belonging to it.
+  const currentProject =
+    manifest?.datasets.find((d) => d.id === datasetId)?.project ?? '';
+  const datasetsInProject =
+    groups.find(([project]) => project === currentProject)?.[1] ?? [];
+
+  // Switching project jumps to that project's first available dataset (its ingested files exist).
+  const selectProject = (project: string) => {
+    const ds = groups.find(([p]) => p === project)?.[1] ?? [];
+    const target = ds.find((d) => d.available !== false) ?? ds[0];
+    if (target) selectDataset(target.id);
+  };
+
   return (
     <header className="controlbar">
       <div className="controlbar__brand">
         MetabTravLR
         <small>crosstalk explorer</small>
       </div>
+
+      {/* Only offer the project step when there is more than one to choose between. */}
+      {groups.length > 1 && (
+        <div className="field">
+          <label htmlFor="project">Project</label>
+          <select
+            id="project"
+            className="control"
+            value={currentProject}
+            onChange={(e) => selectProject(e.target.value)}
+          >
+            {groups.map(([project]) => (
+              <option key={project || 'all'} value={project}>
+                {project || 'Other'}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
 
       <div className="field">
         <label htmlFor="dataset">Dataset</label>
@@ -72,27 +105,17 @@ export default function ControlBar() {
           value={datasetId ?? ''}
           onChange={(e) => selectDataset(e.target.value)}
         >
-          {groups.map(([project, ds]) => {
-            const options = ds.map((d) => (
-              <option
-                key={d.id}
-                value={d.id}
-                disabled={d.available === false}
-                title={d.unavailableReason}
-              >
-                {d.name}
-                {d.available === false ? ' — incomplete run' : ''}
-              </option>
-            ));
-            // Only wrap in a <optgroup> when there is something to distinguish.
-            return project && groups.length > 1 ? (
-              <optgroup key={project} label={project}>
-                {options}
-              </optgroup>
-            ) : (
-              <Fragment key={project || 'all'}>{options}</Fragment>
-            );
-          })}
+          {datasetsInProject.map((d) => (
+            <option
+              key={d.id}
+              value={d.id}
+              disabled={d.available === false}
+              title={d.unavailableReason}
+            >
+              {d.name}
+              {d.available === false ? ' — incomplete run' : ''}
+            </option>
+          ))}
         </select>
       </div>
 

@@ -27,6 +27,13 @@ The input path may be a single `harreman_outputs/`, a `<root>/<dataset>/easy_dow
 or a `<root>/<project>/<dataset>/easy_download/…` tree (`Results/`). Each dataset dir becomes
 one `DatasetRef`, tagged with its `project`.
 
+A **tier dir** is any subdirectory of `harreman_outputs/` that carries the per-cell-type
+metabolite table (`[ct_ccc_results][cell_com_df_m].csv`). Most runs name these `Tier1/Tier2/Tier3`
+(cell-type resolution levels), but some name the single level after its annotation set (e.g.
+`25_06_11_ICI_5K_Coarse_annotations`, the Alexi UC runs) — so discovery keys on the table's
+presence, not on a `Tier*` name, and the matching `metabtravlr_outputs/<dir>/` beta folder is found
+by the same dir name. The tier `id`/`label` is that dir name verbatim.
+
 A harreman run writes `harreman_network.json` early and the tier tables last, so an interrupted
 run leaves a network JSON and nothing else. Ingest **never hard-fails** on these: a dataset with
 no usable tier (or any other build error) is written to the manifest as

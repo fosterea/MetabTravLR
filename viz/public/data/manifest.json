@@ -3,6 +3,70 @@
   "schemaVersion": 4,
   "datasets": [
     {
+      "id": "13473_HS4_UC-Slice_1",
+      "name": "13473 HS4 UC Slice 1",
+      "project": "Alexi UC",
+      "source": "harreman",
+      "entityKinds": [
+        "metabolite",
+        "gene_pair"
+      ],
+      "tierIds": [
+        "25_06_11_ICI_5K_Coarse_annotations"
+      ],
+      "hasNbhd": true,
+      "hasBeta": true,
+      "available": true
+    },
+    {
+      "id": "13473_HS4_UC-Slice_2",
+      "name": "13473 HS4 UC Slice 2",
+      "project": "Alexi UC",
+      "source": "harreman",
+      "entityKinds": [
+        "metabolite",
+        "gene_pair"
+      ],
+      "tierIds": [
+        "25_06_11_ICI_5K_Coarse_annotations"
+      ],
+      "hasNbhd": true,
+      "hasBeta": true,
+      "available": true
+    },
+    {
+      "id": "13473_HS4_UC-Slice_3",
+      "name": "13473 HS4 UC Slice 3",
+      "project": "Alexi UC",
+      "source": "harreman",
+      "entityKinds": [
+        "metabolite",
+        "gene_pair"
+      ],
+      "tierIds": [
+        "25_06_11_ICI_5K_Coarse_annotations"
+      ],
+      "hasNbhd": true,
+      "hasBeta": true,
+      "available": true
+    },
+    {
+      "id": "13473_HS4_UC-Slice_4",
+      "name": "13473 HS4 UC Slice 4",
+      "project": "Alexi UC",
+      "source": "harreman",
+      "entityKinds": [
+        "metabolite",
+        "gene_pair"
+      ],
+      "tierIds": [
+        "25_06_11_ICI_5K_Coarse_annotations"
+      ],
+      "hasNbhd": true,
+      "hasBeta": true,
+      "available": true
+    },
+    {
       "id": "FF_Human_Ovarian_Adenocarcinoma",
       "name": "FF Human Ovarian Adenocarcinoma",
       "project": "Xenium Tcell Dataset",
