@@ -41,7 +41,14 @@ GENE_SETS = {
     'consistency': ['CD3D', 'CD3G', 'CD3E'],
     'positive_control': ['MYC', 'HIF1A'],
     'discovery': ['TCF7', 'TOX', 'PDCD1', 'HAVCR2', 'LAG3'],
-    'addition': ['GAPDH', 'TBP']
+    'addition': ['GAPDH', 'TBP'],
+
+    # UC related genes:
+    'sodium_handlers': ['SLC9A3', 'SCNN1A', 'SCNN1G', 'SLC5A1', 'ATP1A1'],
+    'downstream_outcomes': [
+        'MAPK14', 'MAPK11', 'MAPK12', 'SGK1', # These get phosphorylated
+        'RORC' # Th17 TF
+    ]
 }
 
 FOCUS_GENES = list(set(dict.fromkeys(g for genes in GENE_SETS.values() for g in genes)))
