@@ -1539,6 +1539,226 @@ CD4,Testosterone,T,2.0461592e-05,2.121147e-07,397
 CD4,Vitamin D3,T,0.0,0.0,397
 CD4,Water,T,2.9985056e-06,2.6535835e-08,397
 CD4,alpha-Tocopherol,T,0.0,0.0,397
+CSF2,"17a-Ethynylestradiol|3',4'-Dihydrodiol|4-Hydroxycyclophosphamide|8-Hydroxycarvedilol|E-3179|Estriol|Glycerol|N-Desmethylcitalopram|N-Desmethyleletriptan|O-Deethylated candesartan|Progesterone",Endothelial,0.0,0.0,151
+CSF2,2-Hydroxychlorpropamide,Endothelial,0.0,0.0,151
+CSF2,4'-Hydroxydiclofenac,Endothelial,0.0,0.0,151
+CSF2,4-ene-Valproic acid,Endothelial,0.0,0.0,151
+CSF2,5-Hydroxyomeprazole,Endothelial,0.0,0.0,151
+CSF2,Amiloride-sensitive sodium transport,Endothelial,0.0,0.0,151
+CSF2,Anion exchange,Endothelial,0.0,0.0,151
+CSF2,Chloride,Endothelial,0.0,0.0,151
+CSF2,Cholesterol,Endothelial,0.0,0.0,151
+CSF2,Cholic acid,Endothelial,0.0,0.0,151
+CSF2,Cortisol|Hydroxylansoprazole|N-Desmethyltamoxifen|N-desmethylimatinib,Endothelial,0.0,0.0,151
+CSF2,Estradiol,Endothelial,0.0,0.0,151
+CSF2,Glycyl-glycine|L-Dopa,Endothelial,0.0,0.0,151
+CSF2,Iron,Endothelial,0.0,0.0,151
+CSF2,Nicotinate,Endothelial,0.0,0.0,151
+CSF2,O-Desmethylverapamil (D-702),Endothelial,0.0,0.0,151
+CSF2,Sodium_hydrogen exchange,Endothelial,0.0,0.0,151
+CSF2,Taurocholic acid,Endothelial,0.0,0.0,151
+CSF2,Testosterone,Endothelial,0.0,0.0,151
+CSF2,Water,Endothelial,0.0,0.0,151
+CSF2,"17a-Ethynylestradiol|3',4'-Dihydrodiol|4-Hydroxycyclophosphamide|8-Hydroxycarvedilol|E-3179|Estriol|Glycerol|N-Desmethylcitalopram|N-Desmethyleletriptan|O-Deethylated candesartan|Progesterone",Enteric_glia,0.0,0.0,199
+CSF2,2-Hydroxychlorpropamide,Enteric_glia,0.0,0.0,199
+CSF2,4'-Hydroxydiclofenac,Enteric_glia,0.0,0.0,199
+CSF2,4-ene-Valproic acid,Enteric_glia,0.0,0.0,199
+CSF2,5-Hydroxyomeprazole,Enteric_glia,0.0,0.0,199
+CSF2,Amiloride-sensitive sodium transport,Enteric_glia,0.0,0.0,199
+CSF2,Anion exchange,Enteric_glia,0.0,0.0,199
+CSF2,Chloride,Enteric_glia,0.0,0.0,199
+CSF2,Cholesterol,Enteric_glia,0.0,0.0,199
+CSF2,Cholic acid,Enteric_glia,0.0,0.0,199
+CSF2,Cortisol|Hydroxylansoprazole|N-Desmethyltamoxifen|N-desmethylimatinib,Enteric_glia,0.0,0.0,199
+CSF2,Estradiol,Enteric_glia,0.0,0.0,199
+CSF2,Glycyl-glycine|L-Dopa,Enteric_glia,0.0,0.0,199
+CSF2,Iron,Enteric_glia,0.0,0.0,199
+CSF2,Nicotinate,Enteric_glia,0.0,0.0,199
+CSF2,O-Desmethylverapamil (D-702),Enteric_glia,0.0,0.0,199
+CSF2,Sodium_hydrogen exchange,Enteric_glia,0.0,0.0,199
+CSF2,Taurocholic acid,Enteric_glia,0.0,0.0,199
+CSF2,Testosterone,Enteric_glia,0.0,0.0,199
+CSF2,Water,Enteric_glia,0.0,0.0,199
+CSF2,"17a-Ethynylestradiol|3',4'-Dihydrodiol|4-Hydroxycyclophosphamide|8-Hydroxycarvedilol|E-3179|Estriol|Glycerol|N-Desmethylcitalopram|N-Desmethyleletriptan|O-Deethylated candesartan|Progesterone",Fibroblast,0.0,0.0,753
+CSF2,2-Hydroxychlorpropamide,Fibroblast,0.0,0.0,753
+CSF2,4'-Hydroxydiclofenac,Fibroblast,0.0,0.0,753
+CSF2,4-ene-Valproic acid,Fibroblast,0.0,0.0,753
+CSF2,5-Hydroxyomeprazole,Fibroblast,0.0,0.0,753
+CSF2,Amiloride-sensitive sodium transport,Fibroblast,0.0,0.0,753
+CSF2,Anion exchange,Fibroblast,0.0,0.0,753
+CSF2,Chloride,Fibroblast,0.0,0.0,753
+CSF2,Cholesterol,Fibroblast,0.0,0.0,753
+CSF2,Cholic acid,Fibroblast,0.0,0.0,753
+CSF2,Cortisol|Hydroxylansoprazole|N-Desmethyltamoxifen|N-desmethylimatinib,Fibroblast,0.0,0.0,753
+CSF2,Estradiol,Fibroblast,0.0,0.0,753
+CSF2,Glycyl-glycine|L-Dopa,Fibroblast,0.0,0.0,753
+CSF2,Iron,Fibroblast,0.0,0.0,753
+CSF2,Nicotinate,Fibroblast,0.0,0.0,753
+CSF2,O-Desmethylverapamil (D-702),Fibroblast,0.0,0.0,753
+CSF2,Sodium_hydrogen exchange,Fibroblast,0.0,0.0,753
+CSF2,Taurocholic acid,Fibroblast,0.0,0.0,753
+CSF2,Testosterone,Fibroblast,0.0,0.0,753
+CSF2,Water,Fibroblast,0.0,0.0,753
+CSF2,"17a-Ethynylestradiol|3',4'-Dihydrodiol|4-Hydroxycyclophosphamide|8-Hydroxycarvedilol|E-3179|Estriol|Glycerol|N-Desmethylcitalopram|N-Desmethyleletriptan|O-Deethylated candesartan|Progesterone",IEC,-1.5806088e-05,3.1389982e-07,2721
+CSF2,2-Hydroxychlorpropamide,IEC,-0.000117925454,3.491065e-06,2721
+CSF2,4'-Hydroxydiclofenac,IEC,-8.8287925e-06,3.5869425e-07,2721
+CSF2,4-ene-Valproic acid,IEC,4.582961e-07,4.8521365e-08,2721
+CSF2,5-Hydroxyomeprazole,IEC,-2.8716993e-05,4.1295255e-07,2721
+CSF2,Amiloride-sensitive sodium transport,IEC,0.000107680964,3.8141354e-06,2721
+CSF2,Anion exchange,IEC,0.0042918874,2.607513e-05,2721
+CSF2,Chloride,IEC,-3.82732e-06,9.23217e-08,2721
+CSF2,Cholesterol,IEC,-2.7121345e-05,5.947819e-07,2721
+CSF2,Cholic acid,IEC,-9.973921e-06,1.11976455e-07,2721
+CSF2,Cortisol|Hydroxylansoprazole|N-Desmethyltamoxifen|N-desmethylimatinib,IEC,-4.688512e-05,1.0782661e-06,2721
+CSF2,Estradiol,IEC,-3.179674e-05,2.684666e-07,2721
+CSF2,Glycyl-glycine|L-Dopa,IEC,-5.8137317e-08,1.5867024e-09,2721
+CSF2,Iron,IEC,-2.5133577e-05,1.0851064e-06,2721
+CSF2,Nicotinate,IEC,6.5304885e-06,2.4729394e-07,2721
+CSF2,O-Desmethylverapamil (D-702),IEC,-1.7100913e-07,2.778461e-09,2721
+CSF2,Sodium_hydrogen exchange,IEC,-4.1179006e-05,5.519715e-07,2721
+CSF2,Taurocholic acid,IEC,-8.918674e-06,1.6239036e-07,2721
+CSF2,Testosterone,IEC,-2.253173e-05,2.702528e-06,2721
+CSF2,Water,IEC,-0.00019452884,1.5681077e-06,2721
+CSF2,"17a-Ethynylestradiol|3',4'-Dihydrodiol|4-Hydroxycyclophosphamide|8-Hydroxycarvedilol|E-3179|Estriol|Glycerol|N-Desmethylcitalopram|N-Desmethyleletriptan|O-Deethylated candesartan|Progesterone",MAST,0.0,0.0,52
+CSF2,2-Hydroxychlorpropamide,MAST,0.0,0.0,52
+CSF2,4'-Hydroxydiclofenac,MAST,0.0,0.0,52
+CSF2,4-ene-Valproic acid,MAST,0.0,0.0,52
+CSF2,5-Hydroxyomeprazole,MAST,0.0,0.0,52
+CSF2,Amiloride-sensitive sodium transport,MAST,0.0,0.0,52
+CSF2,Anion exchange,MAST,0.0,0.0,52
+CSF2,Chloride,MAST,0.0,0.0,52
+CSF2,Cholesterol,MAST,0.0,0.0,52
+CSF2,Cholic acid,MAST,0.0,0.0,52
+CSF2,Cortisol|Hydroxylansoprazole|N-Desmethyltamoxifen|N-desmethylimatinib,MAST,0.0,0.0,52
+CSF2,Estradiol,MAST,0.0,0.0,52
+CSF2,Glycyl-glycine|L-Dopa,MAST,0.0,0.0,52
+CSF2,Iron,MAST,0.0,0.0,52
+CSF2,Nicotinate,MAST,0.0,0.0,52
+CSF2,O-Desmethylverapamil (D-702),MAST,0.0,0.0,52
+CSF2,Sodium_hydrogen exchange,MAST,0.0,0.0,52
+CSF2,Taurocholic acid,MAST,0.0,0.0,52
+CSF2,Testosterone,MAST,0.0,0.0,52
+CSF2,Water,MAST,0.0,0.0,52
+CSF2,"17a-Ethynylestradiol|3',4'-Dihydrodiol|4-Hydroxycyclophosphamide|8-Hydroxycarvedilol|E-3179|Estriol|Glycerol|N-Desmethylcitalopram|N-Desmethyleletriptan|O-Deethylated candesartan|Progesterone",MNP,0.0,0.0,335
+CSF2,2-Hydroxychlorpropamide,MNP,0.0,0.0,335
+CSF2,4'-Hydroxydiclofenac,MNP,0.0,0.0,335
+CSF2,4-ene-Valproic acid,MNP,0.0,0.0,335
+CSF2,5-Hydroxyomeprazole,MNP,0.0,0.0,335
+CSF2,Amiloride-sensitive sodium transport,MNP,0.0,0.0,335
+CSF2,Anion exchange,MNP,0.0,0.0,335
+CSF2,Chloride,MNP,0.0,0.0,335
+CSF2,Cholesterol,MNP,0.0,0.0,335
+CSF2,Cholic acid,MNP,0.0,0.0,335
+CSF2,Cortisol|Hydroxylansoprazole|N-Desmethyltamoxifen|N-desmethylimatinib,MNP,0.0,0.0,335
+CSF2,Estradiol,MNP,0.0,0.0,335
+CSF2,Glycyl-glycine|L-Dopa,MNP,0.0,0.0,335
+CSF2,Iron,MNP,0.0,0.0,335
+CSF2,Nicotinate,MNP,0.0,0.0,335
+CSF2,O-Desmethylverapamil (D-702),MNP,0.0,0.0,335
+CSF2,Sodium_hydrogen exchange,MNP,0.0,0.0,335
+CSF2,Taurocholic acid,MNP,0.0,0.0,335
+CSF2,Testosterone,MNP,0.0,0.0,335
+CSF2,Water,MNP,0.0,0.0,335
+CSF2,"17a-Ethynylestradiol|3',4'-Dihydrodiol|4-Hydroxycyclophosphamide|8-Hydroxycarvedilol|E-3179|Estriol|Glycerol|N-Desmethylcitalopram|N-Desmethyleletriptan|O-Deethylated candesartan|Progesterone",Muscularis_mucosa,0.0,0.0,51
+CSF2,2-Hydroxychlorpropamide,Muscularis_mucosa,0.0,0.0,51
+CSF2,4'-Hydroxydiclofenac,Muscularis_mucosa,0.0,0.0,51
+CSF2,4-ene-Valproic acid,Muscularis_mucosa,0.0,0.0,51
+CSF2,5-Hydroxyomeprazole,Muscularis_mucosa,0.0,0.0,51
+CSF2,Amiloride-sensitive sodium transport,Muscularis_mucosa,0.0,0.0,51
+CSF2,Anion exchange,Muscularis_mucosa,0.0,0.0,51
+CSF2,Chloride,Muscularis_mucosa,0.0,0.0,51
+CSF2,Cholesterol,Muscularis_mucosa,0.0,0.0,51
+CSF2,Cholic acid,Muscularis_mucosa,0.0,0.0,51
+CSF2,Cortisol|Hydroxylansoprazole|N-Desmethyltamoxifen|N-desmethylimatinib,Muscularis_mucosa,0.0,0.0,51
+CSF2,Estradiol,Muscularis_mucosa,0.0,0.0,51
+CSF2,Glycyl-glycine|L-Dopa,Muscularis_mucosa,0.0,0.0,51
+CSF2,Iron,Muscularis_mucosa,0.0,0.0,51
+CSF2,Nicotinate,Muscularis_mucosa,0.0,0.0,51
+CSF2,O-Desmethylverapamil (D-702),Muscularis_mucosa,0.0,0.0,51
+CSF2,Sodium_hydrogen exchange,Muscularis_mucosa,0.0,0.0,51
+CSF2,Taurocholic acid,Muscularis_mucosa,0.0,0.0,51
+CSF2,Testosterone,Muscularis_mucosa,0.0,0.0,51
+CSF2,Water,Muscularis_mucosa,0.0,0.0,51
+CSF2,"17a-Ethynylestradiol|3',4'-Dihydrodiol|4-Hydroxycyclophosphamide|8-Hydroxycarvedilol|E-3179|Estriol|Glycerol|N-Desmethylcitalopram|N-Desmethyleletriptan|O-Deethylated candesartan|Progesterone",Myofibroblast,0.0,0.0,193
+CSF2,2-Hydroxychlorpropamide,Myofibroblast,0.0,0.0,193
+CSF2,4'-Hydroxydiclofenac,Myofibroblast,0.0,0.0,193
+CSF2,4-ene-Valproic acid,Myofibroblast,0.0,0.0,193
+CSF2,5-Hydroxyomeprazole,Myofibroblast,0.0,0.0,193
+CSF2,Amiloride-sensitive sodium transport,Myofibroblast,0.0,0.0,193
+CSF2,Anion exchange,Myofibroblast,0.0,0.0,193
+CSF2,Chloride,Myofibroblast,0.0,0.0,193
+CSF2,Cholesterol,Myofibroblast,0.0,0.0,193
+CSF2,Cholic acid,Myofibroblast,0.0,0.0,193
+CSF2,Cortisol|Hydroxylansoprazole|N-Desmethyltamoxifen|N-desmethylimatinib,Myofibroblast,0.0,0.0,193
+CSF2,Estradiol,Myofibroblast,0.0,0.0,193
+CSF2,Glycyl-glycine|L-Dopa,Myofibroblast,0.0,0.0,193
+CSF2,Iron,Myofibroblast,0.0,0.0,193
+CSF2,Nicotinate,Myofibroblast,0.0,0.0,193
+CSF2,O-Desmethylverapamil (D-702),Myofibroblast,0.0,0.0,193
+CSF2,Sodium_hydrogen exchange,Myofibroblast,0.0,0.0,193
+CSF2,Taurocholic acid,Myofibroblast,0.0,0.0,193
+CSF2,Testosterone,Myofibroblast,0.0,0.0,193
+CSF2,Water,Myofibroblast,0.0,0.0,193
+CSF2,"17a-Ethynylestradiol|3',4'-Dihydrodiol|4-Hydroxycyclophosphamide|8-Hydroxycarvedilol|E-3179|Estriol|Glycerol|N-Desmethylcitalopram|N-Desmethyleletriptan|O-Deethylated candesartan|Progesterone",Pericyte,0.0,0.0,49
+CSF2,2-Hydroxychlorpropamide,Pericyte,0.0,0.0,49
+CSF2,4'-Hydroxydiclofenac,Pericyte,0.0,0.0,49
+CSF2,4-ene-Valproic acid,Pericyte,0.0,0.0,49
+CSF2,5-Hydroxyomeprazole,Pericyte,0.0,0.0,49
+CSF2,Amiloride-sensitive sodium transport,Pericyte,0.0,0.0,49
+CSF2,Anion exchange,Pericyte,0.0,0.0,49
+CSF2,Chloride,Pericyte,0.0,0.0,49
+CSF2,Cholesterol,Pericyte,0.0,0.0,49
+CSF2,Cholic acid,Pericyte,0.0,0.0,49
+CSF2,Cortisol|Hydroxylansoprazole|N-Desmethyltamoxifen|N-desmethylimatinib,Pericyte,0.0,0.0,49
+CSF2,Estradiol,Pericyte,0.0,0.0,49
+CSF2,Glycyl-glycine|L-Dopa,Pericyte,0.0,0.0,49
+CSF2,Iron,Pericyte,0.0,0.0,49
+CSF2,Nicotinate,Pericyte,0.0,0.0,49
+CSF2,O-Desmethylverapamil (D-702),Pericyte,0.0,0.0,49
+CSF2,Sodium_hydrogen exchange,Pericyte,0.0,0.0,49
+CSF2,Taurocholic acid,Pericyte,0.0,0.0,49
+CSF2,Testosterone,Pericyte,0.0,0.0,49
+CSF2,Water,Pericyte,0.0,0.0,49
+CSF2,"17a-Ethynylestradiol|3',4'-Dihydrodiol|4-Hydroxycyclophosphamide|8-Hydroxycarvedilol|E-3179|Estriol|Glycerol|N-Desmethylcitalopram|N-Desmethyleletriptan|O-Deethylated candesartan|Progesterone",Plasma,0.0,0.0,823
+CSF2,2-Hydroxychlorpropamide,Plasma,0.0,0.0,823
+CSF2,4'-Hydroxydiclofenac,Plasma,0.0,0.0,823
+CSF2,4-ene-Valproic acid,Plasma,0.0,0.0,823
+CSF2,5-Hydroxyomeprazole,Plasma,0.0,0.0,823
+CSF2,Amiloride-sensitive sodium transport,Plasma,0.0,0.0,823
+CSF2,Anion exchange,Plasma,0.0,0.0,823
+CSF2,Chloride,Plasma,0.0,0.0,823
+CSF2,Cholesterol,Plasma,0.0,0.0,823
+CSF2,Cholic acid,Plasma,0.0,0.0,823
+CSF2,Cortisol|Hydroxylansoprazole|N-Desmethyltamoxifen|N-desmethylimatinib,Plasma,0.0,0.0,823
+CSF2,Estradiol,Plasma,0.0,0.0,823
+CSF2,Glycyl-glycine|L-Dopa,Plasma,0.0,0.0,823
+CSF2,Iron,Plasma,0.0,0.0,823
+CSF2,Nicotinate,Plasma,0.0,0.0,823
+CSF2,O-Desmethylverapamil (D-702),Plasma,0.0,0.0,823
+CSF2,Sodium_hydrogen exchange,Plasma,0.0,0.0,823
+CSF2,Taurocholic acid,Plasma,0.0,0.0,823
+CSF2,Testosterone,Plasma,0.0,0.0,823
+CSF2,Water,Plasma,0.0,0.0,823
+CSF2,"17a-Ethynylestradiol|3',4'-Dihydrodiol|4-Hydroxycyclophosphamide|8-Hydroxycarvedilol|E-3179|Estriol|Glycerol|N-Desmethylcitalopram|N-Desmethyleletriptan|O-Deethylated candesartan|Progesterone",T,0.0,0.0,397
+CSF2,2-Hydroxychlorpropamide,T,0.0,0.0,397
+CSF2,4'-Hydroxydiclofenac,T,0.0,0.0,397
+CSF2,4-ene-Valproic acid,T,0.0,0.0,397
+CSF2,5-Hydroxyomeprazole,T,0.0,0.0,397
+CSF2,Amiloride-sensitive sodium transport,T,0.0,0.0,397
+CSF2,Anion exchange,T,0.0,0.0,397
+CSF2,Chloride,T,0.0,0.0,397
+CSF2,Cholesterol,T,0.0,0.0,397
+CSF2,Cholic acid,T,0.0,0.0,397
+CSF2,Cortisol|Hydroxylansoprazole|N-Desmethyltamoxifen|N-desmethylimatinib,T,0.0,0.0,397
+CSF2,Estradiol,T,0.0,0.0,397
+CSF2,Glycyl-glycine|L-Dopa,T,0.0,0.0,397
+CSF2,Iron,T,0.0,0.0,397
+CSF2,Nicotinate,T,0.0,0.0,397
+CSF2,O-Desmethylverapamil (D-702),T,0.0,0.0,397
+CSF2,Sodium_hydrogen exchange,T,0.0,0.0,397
+CSF2,Taurocholic acid,T,0.0,0.0,397
+CSF2,Testosterone,T,0.0,0.0,397
+CSF2,Water,T,0.0,0.0,397
 ENTPD1,"17a-Ethynylestradiol|3',4'-Dihydrodiol|4-Hydroxycyclophosphamide|8-Hydroxycarvedilol|E-3179|Estriol|Glycerol|N-Desmethylcitalopram|N-Desmethyleletriptan|O-Deethylated candesartan|Progesterone",Endothelial,0.0,0.0,151
 ENTPD1,2-Hydroxychlorpropamide,Endothelial,0.0,0.0,151
 ENTPD1,25-Hydroxycholesterol,Endothelial,0.0,0.0,151
@@ -2936,6 +3156,248 @@ HIF1A,Testosterone,T,8.861861e-09,4.6651603e-11,397
 HIF1A,Vitamin D3,T,0.0,0.0,397
 HIF1A,Water,T,5.2225085e-10,6.2425347e-12,397
 HIF1A,alpha-Tocopherol,T,0.0,0.0,397
+IL17F,"17a-Ethynylestradiol|3',4'-Dihydrodiol|4-Hydroxycyclophosphamide|8-Hydroxycarvedilol|E-3179|Estriol|Glycerol|N-Desmethylcitalopram|N-Desmethyleletriptan|O-Deethylated candesartan|Progesterone",Endothelial,0.0,0.0,151
+IL17F,2-Hydroxychlorpropamide,Endothelial,0.0,0.0,151
+IL17F,4'-Hydroxydiclofenac,Endothelial,0.0,0.0,151
+IL17F,4-ene-Valproic acid,Endothelial,0.0,0.0,151
+IL17F,5-Hydroxyomeprazole,Endothelial,0.0,0.0,151
+IL17F,Amiloride-sensitive sodium transport,Endothelial,0.0,0.0,151
+IL17F,Anion exchange,Endothelial,0.0,0.0,151
+IL17F,Cholesterol,Endothelial,0.0,0.0,151
+IL17F,Cholic acid,Endothelial,0.0,0.0,151
+IL17F,Cortisol|Hydroxylansoprazole|N-Desmethyltamoxifen|N-desmethylimatinib,Endothelial,0.0,0.0,151
+IL17F,Estradiol,Endothelial,0.0,0.0,151
+IL17F,Fatty acid,Endothelial,0.0,0.0,151
+IL17F,Folic acid,Endothelial,0.0,0.0,151
+IL17F,Iron,Endothelial,0.0,0.0,151
+IL17F,L-Carnitine,Endothelial,0.0,0.0,151
+IL17F,Nicotinate,Endothelial,0.0,0.0,151
+IL17F,O-Desmethylverapamil (D-702),Endothelial,0.0,0.0,151
+IL17F,Sodium,Endothelial,0.0,0.0,151
+IL17F,Sodium_hydrogen exchange,Endothelial,0.0,0.0,151
+IL17F,Taurocholic acid,Endothelial,0.0,0.0,151
+IL17F,Testosterone,Endothelial,0.0,0.0,151
+IL17F,Water,Endothelial,0.0,0.0,151
+IL17F,"17a-Ethynylestradiol|3',4'-Dihydrodiol|4-Hydroxycyclophosphamide|8-Hydroxycarvedilol|E-3179|Estriol|Glycerol|N-Desmethylcitalopram|N-Desmethyleletriptan|O-Deethylated candesartan|Progesterone",Enteric_glia,0.0,0.0,199
+IL17F,2-Hydroxychlorpropamide,Enteric_glia,0.0,0.0,199
+IL17F,4'-Hydroxydiclofenac,Enteric_glia,0.0,0.0,199
+IL17F,4-ene-Valproic acid,Enteric_glia,0.0,0.0,199
+IL17F,5-Hydroxyomeprazole,Enteric_glia,0.0,0.0,199
+IL17F,Amiloride-sensitive sodium transport,Enteric_glia,0.0,0.0,199
+IL17F,Anion exchange,Enteric_glia,0.0,0.0,199
+IL17F,Cholesterol,Enteric_glia,0.0,0.0,199
+IL17F,Cholic acid,Enteric_glia,0.0,0.0,199
+IL17F,Cortisol|Hydroxylansoprazole|N-Desmethyltamoxifen|N-desmethylimatinib,Enteric_glia,0.0,0.0,199
+IL17F,Estradiol,Enteric_glia,0.0,0.0,199
+IL17F,Fatty acid,Enteric_glia,0.0,0.0,199
+IL17F,Folic acid,Enteric_glia,0.0,0.0,199
+IL17F,Iron,Enteric_glia,0.0,0.0,199
+IL17F,L-Carnitine,Enteric_glia,0.0,0.0,199
+IL17F,Nicotinate,Enteric_glia,0.0,0.0,199
+IL17F,O-Desmethylverapamil (D-702),Enteric_glia,0.0,0.0,199
+IL17F,Sodium,Enteric_glia,0.0,0.0,199
+IL17F,Sodium_hydrogen exchange,Enteric_glia,0.0,0.0,199
+IL17F,Taurocholic acid,Enteric_glia,0.0,0.0,199
+IL17F,Testosterone,Enteric_glia,0.0,0.0,199
+IL17F,Water,Enteric_glia,0.0,0.0,199
+IL17F,"17a-Ethynylestradiol|3',4'-Dihydrodiol|4-Hydroxycyclophosphamide|8-Hydroxycarvedilol|E-3179|Estriol|Glycerol|N-Desmethylcitalopram|N-Desmethyleletriptan|O-Deethylated candesartan|Progesterone",Fibroblast,0.0,0.0,753
+IL17F,2-Hydroxychlorpropamide,Fibroblast,0.0,0.0,753
+IL17F,4'-Hydroxydiclofenac,Fibroblast,0.0,0.0,753
+IL17F,4-ene-Valproic acid,Fibroblast,0.0,0.0,753
+IL17F,5-Hydroxyomeprazole,Fibroblast,0.0,0.0,753
+IL17F,Amiloride-sensitive sodium transport,Fibroblast,0.0,0.0,753
+IL17F,Anion exchange,Fibroblast,0.0,0.0,753
+IL17F,Cholesterol,Fibroblast,0.0,0.0,753
+IL17F,Cholic acid,Fibroblast,0.0,0.0,753
+IL17F,Cortisol|Hydroxylansoprazole|N-Desmethyltamoxifen|N-desmethylimatinib,Fibroblast,0.0,0.0,753
+IL17F,Estradiol,Fibroblast,0.0,0.0,753
+IL17F,Fatty acid,Fibroblast,0.0,0.0,753
+IL17F,Folic acid,Fibroblast,0.0,0.0,753
+IL17F,Iron,Fibroblast,0.0,0.0,753
+IL17F,L-Carnitine,Fibroblast,0.0,0.0,753
+IL17F,Nicotinate,Fibroblast,0.0,0.0,753
+IL17F,O-Desmethylverapamil (D-702),Fibroblast,0.0,0.0,753
+IL17F,Sodium,Fibroblast,0.0,0.0,753
+IL17F,Sodium_hydrogen exchange,Fibroblast,0.0,0.0,753
+IL17F,Taurocholic acid,Fibroblast,0.0,0.0,753
+IL17F,Testosterone,Fibroblast,0.0,0.0,753
+IL17F,Water,Fibroblast,0.0,0.0,753
+IL17F,"17a-Ethynylestradiol|3',4'-Dihydrodiol|4-Hydroxycyclophosphamide|8-Hydroxycarvedilol|E-3179|Estriol|Glycerol|N-Desmethylcitalopram|N-Desmethyleletriptan|O-Deethylated candesartan|Progesterone",IEC,8.525186e-07,2.368921e-08,2721
+IL17F,2-Hydroxychlorpropamide,IEC,1.5538582e-06,2.2000842e-08,2721
+IL17F,4'-Hydroxydiclofenac,IEC,1.428741e-06,2.2130715e-08,2721
+IL17F,4-ene-Valproic acid,IEC,2.0492475e-07,1.8797428e-09,2721
+IL17F,5-Hydroxyomeprazole,IEC,3.0346757e-06,7.418138e-08,2721
+IL17F,Amiloride-sensitive sodium transport,IEC,-1.1762297e-06,4.3095035e-08,2721
+IL17F,Anion exchange,IEC,-3.8780378e-05,8.5080694e-07,2721
+IL17F,Cholesterol,IEC,1.4855889e-06,1.1571094e-08,2721
+IL17F,Cholic acid,IEC,1.8417418e-06,4.2725976e-08,2721
+IL17F,Cortisol|Hydroxylansoprazole|N-Desmethyltamoxifen|N-desmethylimatinib,IEC,1.5298436e-06,7.637248e-09,2721
+IL17F,Estradiol,IEC,1.7043758e-06,2.2601023e-08,2721
+IL17F,Fatty acid,IEC,-1.3828994e-06,1.4020957e-08,2721
+IL17F,Folic acid,IEC,6.512115e-08,1.5400127e-09,2721
+IL17F,Iron,IEC,1.7115979e-06,3.246264e-08,2721
+IL17F,L-Carnitine,IEC,-3.1313643e-10,1.7974728e-11,2721
+IL17F,Nicotinate,IEC,-7.144186e-08,9.976539e-09,2721
+IL17F,O-Desmethylverapamil (D-702),IEC,2.049741e-06,8.2306514e-08,2721
+IL17F,Sodium,IEC,-2.1661861e-09,4.2202915e-11,2721
+IL17F,Sodium_hydrogen exchange,IEC,1.331946e-06,3.894058e-08,2721
+IL17F,Taurocholic acid,IEC,2.5562226e-06,2.4263706e-08,2721
+IL17F,Testosterone,IEC,1.8926568e-06,2.9227309e-08,2721
+IL17F,Water,IEC,9.355769e-07,1.2189454e-07,2721
+IL17F,"17a-Ethynylestradiol|3',4'-Dihydrodiol|4-Hydroxycyclophosphamide|8-Hydroxycarvedilol|E-3179|Estriol|Glycerol|N-Desmethylcitalopram|N-Desmethyleletriptan|O-Deethylated candesartan|Progesterone",MAST,0.0,0.0,52
+IL17F,2-Hydroxychlorpropamide,MAST,0.0,0.0,52
+IL17F,4'-Hydroxydiclofenac,MAST,0.0,0.0,52
+IL17F,4-ene-Valproic acid,MAST,0.0,0.0,52
+IL17F,5-Hydroxyomeprazole,MAST,0.0,0.0,52
+IL17F,Amiloride-sensitive sodium transport,MAST,0.0,0.0,52
+IL17F,Anion exchange,MAST,0.0,0.0,52
+IL17F,Cholesterol,MAST,0.0,0.0,52
+IL17F,Cholic acid,MAST,0.0,0.0,52
+IL17F,Cortisol|Hydroxylansoprazole|N-Desmethyltamoxifen|N-desmethylimatinib,MAST,0.0,0.0,52
+IL17F,Estradiol,MAST,0.0,0.0,52
+IL17F,Fatty acid,MAST,0.0,0.0,52
+IL17F,Folic acid,MAST,0.0,0.0,52
+IL17F,Iron,MAST,0.0,0.0,52
+IL17F,L-Carnitine,MAST,0.0,0.0,52
+IL17F,Nicotinate,MAST,0.0,0.0,52
+IL17F,O-Desmethylverapamil (D-702),MAST,0.0,0.0,52
+IL17F,Sodium,MAST,0.0,0.0,52
+IL17F,Sodium_hydrogen exchange,MAST,0.0,0.0,52
+IL17F,Taurocholic acid,MAST,0.0,0.0,52
+IL17F,Testosterone,MAST,0.0,0.0,52
+IL17F,Water,MAST,0.0,0.0,52
+IL17F,"17a-Ethynylestradiol|3',4'-Dihydrodiol|4-Hydroxycyclophosphamide|8-Hydroxycarvedilol|E-3179|Estriol|Glycerol|N-Desmethylcitalopram|N-Desmethyleletriptan|O-Deethylated candesartan|Progesterone",MNP,0.0,0.0,335
+IL17F,2-Hydroxychlorpropamide,MNP,0.0,0.0,335
+IL17F,4'-Hydroxydiclofenac,MNP,0.0,0.0,335
+IL17F,4-ene-Valproic acid,MNP,0.0,0.0,335
+IL17F,5-Hydroxyomeprazole,MNP,0.0,0.0,335
+IL17F,Amiloride-sensitive sodium transport,MNP,0.0,0.0,335
+IL17F,Anion exchange,MNP,0.0,0.0,335
+IL17F,Cholesterol,MNP,0.0,0.0,335
+IL17F,Cholic acid,MNP,0.0,0.0,335
+IL17F,Cortisol|Hydroxylansoprazole|N-Desmethyltamoxifen|N-desmethylimatinib,MNP,0.0,0.0,335
+IL17F,Estradiol,MNP,0.0,0.0,335
+IL17F,Fatty acid,MNP,0.0,0.0,335
+IL17F,Folic acid,MNP,0.0,0.0,335
+IL17F,Iron,MNP,0.0,0.0,335
+IL17F,L-Carnitine,MNP,0.0,0.0,335
+IL17F,Nicotinate,MNP,0.0,0.0,335
+IL17F,O-Desmethylverapamil (D-702),MNP,0.0,0.0,335
+IL17F,Sodium,MNP,0.0,0.0,335
+IL17F,Sodium_hydrogen exchange,MNP,0.0,0.0,335
+IL17F,Taurocholic acid,MNP,0.0,0.0,335
+IL17F,Testosterone,MNP,0.0,0.0,335
+IL17F,Water,MNP,0.0,0.0,335
+IL17F,"17a-Ethynylestradiol|3',4'-Dihydrodiol|4-Hydroxycyclophosphamide|8-Hydroxycarvedilol|E-3179|Estriol|Glycerol|N-Desmethylcitalopram|N-Desmethyleletriptan|O-Deethylated candesartan|Progesterone",Muscularis_mucosa,0.0,0.0,51
+IL17F,2-Hydroxychlorpropamide,Muscularis_mucosa,0.0,0.0,51
+IL17F,4'-Hydroxydiclofenac,Muscularis_mucosa,0.0,0.0,51
+IL17F,4-ene-Valproic acid,Muscularis_mucosa,0.0,0.0,51
+IL17F,5-Hydroxyomeprazole,Muscularis_mucosa,0.0,0.0,51
+IL17F,Amiloride-sensitive sodium transport,Muscularis_mucosa,0.0,0.0,51
+IL17F,Anion exchange,Muscularis_mucosa,0.0,0.0,51
+IL17F,Cholesterol,Muscularis_mucosa,0.0,0.0,51
+IL17F,Cholic acid,Muscularis_mucosa,0.0,0.0,51
+IL17F,Cortisol|Hydroxylansoprazole|N-Desmethyltamoxifen|N-desmethylimatinib,Muscularis_mucosa,0.0,0.0,51
+IL17F,Estradiol,Muscularis_mucosa,0.0,0.0,51
+IL17F,Fatty acid,Muscularis_mucosa,0.0,0.0,51
+IL17F,Folic acid,Muscularis_mucosa,0.0,0.0,51
+IL17F,Iron,Muscularis_mucosa,0.0,0.0,51
+IL17F,L-Carnitine,Muscularis_mucosa,0.0,0.0,51
+IL17F,Nicotinate,Muscularis_mucosa,0.0,0.0,51
+IL17F,O-Desmethylverapamil (D-702),Muscularis_mucosa,0.0,0.0,51
+IL17F,Sodium,Muscularis_mucosa,0.0,0.0,51
+IL17F,Sodium_hydrogen exchange,Muscularis_mucosa,0.0,0.0,51
+IL17F,Taurocholic acid,Muscularis_mucosa,0.0,0.0,51
+IL17F,Testosterone,Muscularis_mucosa,0.0,0.0,51
+IL17F,Water,Muscularis_mucosa,0.0,0.0,51
+IL17F,"17a-Ethynylestradiol|3',4'-Dihydrodiol|4-Hydroxycyclophosphamide|8-Hydroxycarvedilol|E-3179|Estriol|Glycerol|N-Desmethylcitalopram|N-Desmethyleletriptan|O-Deethylated candesartan|Progesterone",Myofibroblast,0.0,0.0,193
+IL17F,2-Hydroxychlorpropamide,Myofibroblast,0.0,0.0,193
+IL17F,4'-Hydroxydiclofenac,Myofibroblast,0.0,0.0,193
+IL17F,4-ene-Valproic acid,Myofibroblast,0.0,0.0,193
+IL17F,5-Hydroxyomeprazole,Myofibroblast,0.0,0.0,193
+IL17F,Amiloride-sensitive sodium transport,Myofibroblast,0.0,0.0,193
+IL17F,Anion exchange,Myofibroblast,0.0,0.0,193
+IL17F,Cholesterol,Myofibroblast,0.0,0.0,193
+IL17F,Cholic acid,Myofibroblast,0.0,0.0,193
+IL17F,Cortisol|Hydroxylansoprazole|N-Desmethyltamoxifen|N-desmethylimatinib,Myofibroblast,0.0,0.0,193
+IL17F,Estradiol,Myofibroblast,0.0,0.0,193
+IL17F,Fatty acid,Myofibroblast,0.0,0.0,193
+IL17F,Folic acid,Myofibroblast,0.0,0.0,193
+IL17F,Iron,Myofibroblast,0.0,0.0,193
+IL17F,L-Carnitine,Myofibroblast,0.0,0.0,193
+IL17F,Nicotinate,Myofibroblast,0.0,0.0,193
+IL17F,O-Desmethylverapamil (D-702),Myofibroblast,0.0,0.0,193
+IL17F,Sodium,Myofibroblast,0.0,0.0,193
+IL17F,Sodium_hydrogen exchange,Myofibroblast,0.0,0.0,193
+IL17F,Taurocholic acid,Myofibroblast,0.0,0.0,193
+IL17F,Testosterone,Myofibroblast,0.0,0.0,193
+IL17F,Water,Myofibroblast,0.0,0.0,193
+IL17F,"17a-Ethynylestradiol|3',4'-Dihydrodiol|4-Hydroxycyclophosphamide|8-Hydroxycarvedilol|E-3179|Estriol|Glycerol|N-Desmethylcitalopram|N-Desmethyleletriptan|O-Deethylated candesartan|Progesterone",Pericyte,0.0,0.0,49
+IL17F,2-Hydroxychlorpropamide,Pericyte,0.0,0.0,49
+IL17F,4'-Hydroxydiclofenac,Pericyte,0.0,0.0,49
+IL17F,4-ene-Valproic acid,Pericyte,0.0,0.0,49
+IL17F,5-Hydroxyomeprazole,Pericyte,0.0,0.0,49
+IL17F,Amiloride-sensitive sodium transport,Pericyte,0.0,0.0,49
+IL17F,Anion exchange,Pericyte,0.0,0.0,49
+IL17F,Cholesterol,Pericyte,0.0,0.0,49
+IL17F,Cholic acid,Pericyte,0.0,0.0,49
+IL17F,Cortisol|Hydroxylansoprazole|N-Desmethyltamoxifen|N-desmethylimatinib,Pericyte,0.0,0.0,49
+IL17F,Estradiol,Pericyte,0.0,0.0,49
+IL17F,Fatty acid,Pericyte,0.0,0.0,49
+IL17F,Folic acid,Pericyte,0.0,0.0,49
+IL17F,Iron,Pericyte,0.0,0.0,49
+IL17F,L-Carnitine,Pericyte,0.0,0.0,49
+IL17F,Nicotinate,Pericyte,0.0,0.0,49
+IL17F,O-Desmethylverapamil (D-702),Pericyte,0.0,0.0,49
+IL17F,Sodium,Pericyte,0.0,0.0,49
+IL17F,Sodium_hydrogen exchange,Pericyte,0.0,0.0,49
+IL17F,Taurocholic acid,Pericyte,0.0,0.0,49
+IL17F,Testosterone,Pericyte,0.0,0.0,49
+IL17F,Water,Pericyte,0.0,0.0,49
+IL17F,"17a-Ethynylestradiol|3',4'-Dihydrodiol|4-Hydroxycyclophosphamide|8-Hydroxycarvedilol|E-3179|Estriol|Glycerol|N-Desmethylcitalopram|N-Desmethyleletriptan|O-Deethylated candesartan|Progesterone",Plasma,0.0,0.0,823
+IL17F,2-Hydroxychlorpropamide,Plasma,0.0,0.0,823
+IL17F,4'-Hydroxydiclofenac,Plasma,0.0,0.0,823
+IL17F,4-ene-Valproic acid,Plasma,0.0,0.0,823
+IL17F,5-Hydroxyomeprazole,Plasma,0.0,0.0,823
+IL17F,Amiloride-sensitive sodium transport,Plasma,0.0,0.0,823
+IL17F,Anion exchange,Plasma,0.0,0.0,823
+IL17F,Cholesterol,Plasma,0.0,0.0,823
+IL17F,Cholic acid,Plasma,0.0,0.0,823
+IL17F,Cortisol|Hydroxylansoprazole|N-Desmethyltamoxifen|N-desmethylimatinib,Plasma,0.0,0.0,823
+IL17F,Estradiol,Plasma,0.0,0.0,823
+IL17F,Fatty acid,Plasma,0.0,0.0,823
+IL17F,Folic acid,Plasma,0.0,0.0,823
+IL17F,Iron,Plasma,0.0,0.0,823
+IL17F,L-Carnitine,Plasma,0.0,0.0,823
+IL17F,Nicotinate,Plasma,0.0,0.0,823
+IL17F,O-Desmethylverapamil (D-702),Plasma,0.0,0.0,823
+IL17F,Sodium,Plasma,0.0,0.0,823
+IL17F,Sodium_hydrogen exchange,Plasma,0.0,0.0,823
+IL17F,Taurocholic acid,Plasma,0.0,0.0,823
+IL17F,Testosterone,Plasma,0.0,0.0,823
+IL17F,Water,Plasma,0.0,0.0,823
+IL17F,"17a-Ethynylestradiol|3',4'-Dihydrodiol|4-Hydroxycyclophosphamide|8-Hydroxycarvedilol|E-3179|Estriol|Glycerol|N-Desmethylcitalopram|N-Desmethyleletriptan|O-Deethylated candesartan|Progesterone",T,0.0,0.0,397
+IL17F,2-Hydroxychlorpropamide,T,0.0,0.0,397
+IL17F,4'-Hydroxydiclofenac,T,0.0,0.0,397
+IL17F,4-ene-Valproic acid,T,0.0,0.0,397
+IL17F,5-Hydroxyomeprazole,T,0.0,0.0,397
+IL17F,Amiloride-sensitive sodium transport,T,0.0,0.0,397
+IL17F,Anion exchange,T,0.0,0.0,397
+IL17F,Cholesterol,T,0.0,0.0,397
+IL17F,Cholic acid,T,0.0,0.0,397
+IL17F,Cortisol|Hydroxylansoprazole|N-Desmethyltamoxifen|N-desmethylimatinib,T,0.0,0.0,397
+IL17F,Estradiol,T,0.0,0.0,397
+IL17F,Fatty acid,T,0.0,0.0,397
+IL17F,Folic acid,T,0.0,0.0,397
+IL17F,Iron,T,0.0,0.0,397
+IL17F,L-Carnitine,T,0.0,0.0,397
+IL17F,Nicotinate,T,0.0,0.0,397
+IL17F,O-Desmethylverapamil (D-702),T,0.0,0.0,397
+IL17F,Sodium,T,0.0,0.0,397
+IL17F,Sodium_hydrogen exchange,T,0.0,0.0,397
+IL17F,Taurocholic acid,T,0.0,0.0,397
+IL17F,Testosterone,T,0.0,0.0,397
+IL17F,Water,T,0.0,0.0,397
 IL2RA,25-Hydroxycholesterol,Endothelial,0.0,0.0,151
 IL2RA,5-Hydroxyomeprazole,Endothelial,0.0,0.0,151
 IL2RA,Acetate,Endothelial,0.0,0.0,151
@@ -4388,369 +4850,402 @@ MYC,Sodium_hydrogen exchange,T,0.0,0.0,397
 MYC,Taurocholic acid,T,0.0,0.0,397
 MYC,Testosterone,T,0.0,0.0,397
 MYC,Water,T,0.0,0.0,397
-RORC,"17a-Ethynylestradiol|3',4'-Dihydrodiol|4-Hydroxycyclophosphamide|8-Hydroxycarvedilol|E-3179|Estriol|Glycerol|N-Desmethylcitalopram|N-Desmethyleletriptan|O-Deethylated candesartan|Progesterone",Endothelial,0.0,0.0,151
-RORC,2-Hydroxychlorpropamide,Endothelial,0.0,0.0,151
-RORC,25-Hydroxycholesterol,Endothelial,0.0,0.0,151
-RORC,4'-Hydroxydiclofenac,Endothelial,0.0,0.0,151
-RORC,4-ene-Valproic acid,Endothelial,0.0,0.0,151
-RORC,5-Hydroxyomeprazole,Endothelial,0.0,0.0,151
-RORC,Acetate,Endothelial,0.0,0.0,151
-RORC,Acetyl-L-Carnitine|Choline|Creatine|Dopamine|Histamine|Norepinephrine,Endothelial,0.0,0.0,151
-RORC,Adenosine triphosphate,Endothelial,0.0,0.0,151
-RORC,Amiloride-sensitive sodium transport,Endothelial,0.0,0.0,151
-RORC,Anion exchange,Endothelial,0.0,0.0,151
-RORC,Chloride,Endothelial,0.0,0.0,151
-RORC,Chloride ion,Endothelial,0.0,0.0,151
-RORC,Cholesterol,Endothelial,0.0,0.0,151
-RORC,Cholic acid,Endothelial,0.0,0.0,151
-RORC,Citric acid|Oxalic acid,Endothelial,0.0,0.0,151
-RORC,Cortisol|Hydroxylansoprazole|N-Desmethyltamoxifen|N-desmethylimatinib,Endothelial,0.0,0.0,151
-RORC,Estradiol,Endothelial,0.0,0.0,151
-RORC,Fatty acid,Endothelial,0.0,0.0,151
-RORC,Folic acid,Endothelial,0.0,0.0,151
-RORC,Folinic acid|Glutathione,Endothelial,0.0,0.0,151
-RORC,Glycyl-glycine|L-Dopa,Endothelial,0.0,0.0,151
-RORC,Iron,Endothelial,0.0,0.0,151
-RORC,L-Carnitine,Endothelial,0.0,0.0,151
-RORC,L-Cystine,Endothelial,0.0,0.0,151
-RORC,Nicotinate,Endothelial,0.0,0.0,151
-RORC,O-Desmethylverapamil (D-702),Endothelial,0.0,0.0,151
-RORC,Sodium,Endothelial,0.0,0.0,151
-RORC,Sodium_hydrogen exchange,Endothelial,0.0,0.0,151
-RORC,Taurocholic acid,Endothelial,0.0,0.0,151
-RORC,Testosterone,Endothelial,0.0,0.0,151
-RORC,Water,Endothelial,0.0,0.0,151
-RORC,alpha-Tocopherol,Endothelial,0.0,0.0,151
-RORC,"17a-Ethynylestradiol|3',4'-Dihydrodiol|4-Hydroxycyclophosphamide|8-Hydroxycarvedilol|E-3179|Estriol|Glycerol|N-Desmethylcitalopram|N-Desmethyleletriptan|O-Deethylated candesartan|Progesterone",Enteric_glia,0.0,0.0,199
-RORC,2-Hydroxychlorpropamide,Enteric_glia,0.0,0.0,199
-RORC,25-Hydroxycholesterol,Enteric_glia,0.0,0.0,199
-RORC,4'-Hydroxydiclofenac,Enteric_glia,0.0,0.0,199
-RORC,4-ene-Valproic acid,Enteric_glia,0.0,0.0,199
-RORC,5-Hydroxyomeprazole,Enteric_glia,0.0,0.0,199
-RORC,Acetate,Enteric_glia,0.0,0.0,199
-RORC,Acetyl-L-Carnitine|Choline|Creatine|Dopamine|Histamine|Norepinephrine,Enteric_glia,0.0,0.0,199
-RORC,Adenosine triphosphate,Enteric_glia,0.0,0.0,199
-RORC,Amiloride-sensitive sodium transport,Enteric_glia,0.0,0.0,199
-RORC,Anion exchange,Enteric_glia,0.0,0.0,199
-RORC,Chloride,Enteric_glia,0.0,0.0,199
-RORC,Chloride ion,Enteric_glia,0.0,0.0,199
-RORC,Cholesterol,Enteric_glia,0.0,0.0,199
-RORC,Cholic acid,Enteric_glia,0.0,0.0,199
-RORC,Citric acid|Oxalic acid,Enteric_glia,0.0,0.0,199
-RORC,Cortisol|Hydroxylansoprazole|N-Desmethyltamoxifen|N-desmethylimatinib,Enteric_glia,0.0,0.0,199
-RORC,Estradiol,Enteric_glia,0.0,0.0,199
-RORC,Fatty acid,Enteric_glia,0.0,0.0,199
-RORC,Folic acid,Enteric_glia,0.0,0.0,199
-RORC,Folinic acid|Glutathione,Enteric_glia,0.0,0.0,199
-RORC,Glycyl-glycine|L-Dopa,Enteric_glia,0.0,0.0,199
-RORC,Iron,Enteric_glia,0.0,0.0,199
-RORC,L-Carnitine,Enteric_glia,0.0,0.0,199
-RORC,L-Cystine,Enteric_glia,0.0,0.0,199
-RORC,Nicotinate,Enteric_glia,0.0,0.0,199
-RORC,O-Desmethylverapamil (D-702),Enteric_glia,0.0,0.0,199
-RORC,Sodium,Enteric_glia,0.0,0.0,199
-RORC,Sodium_hydrogen exchange,Enteric_glia,0.0,0.0,199
-RORC,Taurocholic acid,Enteric_glia,0.0,0.0,199
-RORC,Testosterone,Enteric_glia,0.0,0.0,199
-RORC,Water,Enteric_glia,0.0,0.0,199
-RORC,alpha-Tocopherol,Enteric_glia,0.0,0.0,199
-RORC,"17a-Ethynylestradiol|3',4'-Dihydrodiol|4-Hydroxycyclophosphamide|8-Hydroxycarvedilol|E-3179|Estriol|Glycerol|N-Desmethylcitalopram|N-Desmethyleletriptan|O-Deethylated candesartan|Progesterone",Fibroblast,0.0,0.0,753
-RORC,2-Hydroxychlorpropamide,Fibroblast,0.0,0.0,753
-RORC,25-Hydroxycholesterol,Fibroblast,0.0,0.0,753
-RORC,4'-Hydroxydiclofenac,Fibroblast,0.0,0.0,753
-RORC,4-ene-Valproic acid,Fibroblast,0.0,0.0,753
-RORC,5-Hydroxyomeprazole,Fibroblast,0.0,0.0,753
-RORC,Acetate,Fibroblast,0.0,0.0,753
-RORC,Acetyl-L-Carnitine|Choline|Creatine|Dopamine|Histamine|Norepinephrine,Fibroblast,0.0,0.0,753
-RORC,Adenosine triphosphate,Fibroblast,0.0,0.0,753
-RORC,Amiloride-sensitive sodium transport,Fibroblast,0.0,0.0,753
-RORC,Anion exchange,Fibroblast,0.0,0.0,753
-RORC,Chloride,Fibroblast,0.0,0.0,753
-RORC,Chloride ion,Fibroblast,0.0,0.0,753
-RORC,Cholesterol,Fibroblast,0.0,0.0,753
-RORC,Cholic acid,Fibroblast,0.0,0.0,753
-RORC,Citric acid|Oxalic acid,Fibroblast,0.0,0.0,753
-RORC,Cortisol|Hydroxylansoprazole|N-Desmethyltamoxifen|N-desmethylimatinib,Fibroblast,0.0,0.0,753
-RORC,Estradiol,Fibroblast,0.0,0.0,753
-RORC,Fatty acid,Fibroblast,0.0,0.0,753
-RORC,Folic acid,Fibroblast,0.0,0.0,753
-RORC,Folinic acid|Glutathione,Fibroblast,0.0,0.0,753
-RORC,Glycyl-glycine|L-Dopa,Fibroblast,0.0,0.0,753
-RORC,Iron,Fibroblast,0.0,0.0,753
-RORC,L-Carnitine,Fibroblast,0.0,0.0,753
-RORC,L-Cystine,Fibroblast,0.0,0.0,753
-RORC,Nicotinate,Fibroblast,0.0,0.0,753
-RORC,O-Desmethylverapamil (D-702),Fibroblast,0.0,0.0,753
-RORC,Sodium,Fibroblast,0.0,0.0,753
-RORC,Sodium_hydrogen exchange,Fibroblast,0.0,0.0,753
-RORC,Taurocholic acid,Fibroblast,0.0,0.0,753
-RORC,Testosterone,Fibroblast,0.0,0.0,753
-RORC,Water,Fibroblast,0.0,0.0,753
-RORC,alpha-Tocopherol,Fibroblast,0.0,0.0,753
-RORC,"17a-Ethynylestradiol|3',4'-Dihydrodiol|4-Hydroxycyclophosphamide|8-Hydroxycarvedilol|E-3179|Estriol|Glycerol|N-Desmethylcitalopram|N-Desmethyleletriptan|O-Deethylated candesartan|Progesterone",IEC,0.00020904432,9.581757e-06,2721
-RORC,2-Hydroxychlorpropamide,IEC,0.00043787455,4.7047753e-05,2721
-RORC,25-Hydroxycholesterol,IEC,-8.363148e-09,3.9772297e-09,2721
-RORC,4'-Hydroxydiclofenac,IEC,0.00019279674,6.1705073e-06,2721
-RORC,4-ene-Valproic acid,IEC,7.474453e-05,2.1371927e-06,2721
-RORC,5-Hydroxyomeprazole,IEC,0.0008068144,3.092481e-05,2721
-RORC,Acetate,IEC,7.387264e-06,9.425099e-07,2721
-RORC,Acetyl-L-Carnitine|Choline|Creatine|Dopamine|Histamine|Norepinephrine,IEC,1.8590856e-05,4.07139e-06,2721
-RORC,Adenosine triphosphate,IEC,-0.00010855051,4.8436746e-06,2721
-RORC,Amiloride-sensitive sodium transport,IEC,0.00016175359,8.971843e-06,2721
-RORC,Anion exchange,IEC,-0.055058528,0.004337691,2721
-RORC,Chloride,IEC,0.0005744864,5.9943115e-05,2721
-RORC,Chloride ion,IEC,9.700981e-05,2.9047696e-06,2721
-RORC,Cholesterol,IEC,0.0004031763,0.00011159638,2721
-RORC,Cholic acid,IEC,0.00019156963,2.1016462e-05,2721
-RORC,Citric acid|Oxalic acid,IEC,-1.817176e-05,2.1083597e-06,2721
-RORC,Cortisol|Hydroxylansoprazole|N-Desmethyltamoxifen|N-desmethylimatinib,IEC,0.0007861422,3.4778135e-05,2721
-RORC,Estradiol,IEC,0.0011070495,0.0001517643,2721
-RORC,Fatty acid,IEC,-3.666512e-05,1.5794769e-06,2721
-RORC,Folic acid,IEC,1.3640393e-06,1.5202282e-07,2721
-RORC,Folinic acid|Glutathione,IEC,-2.3134398e-05,4.1331687e-06,2721
-RORC,Glycyl-glycine|L-Dopa,IEC,-1.5490403e-07,1.0040734e-08,2721
-RORC,Iron,IEC,0.00066198607,2.5067984e-05,2721
-RORC,L-Carnitine,IEC,0.0004671291,7.248454e-05,2721
-RORC,L-Cystine,IEC,1.3560986e-08,1.1141306e-09,2721
-RORC,Nicotinate,IEC,3.7142734e-05,2.447777e-06,2721
-RORC,O-Desmethylverapamil (D-702),IEC,0.00034158022,0.00014282964,2721
-RORC,Sodium,IEC,7.449224e-05,3.9337447e-06,2721
-RORC,Sodium_hydrogen exchange,IEC,0.0005769055,3.1094118e-05,2721
-RORC,Taurocholic acid,IEC,0.0007595203,7.1605304e-05,2721
-RORC,Testosterone,IEC,0.0011830559,8.4156956e-05,2721
-RORC,Water,IEC,-0.00025800397,2.9211098e-05,2721
-RORC,alpha-Tocopherol,IEC,6.487815e-09,2.1418052e-10,2721
-RORC,"17a-Ethynylestradiol|3',4'-Dihydrodiol|4-Hydroxycyclophosphamide|8-Hydroxycarvedilol|E-3179|Estriol|Glycerol|N-Desmethylcitalopram|N-Desmethyleletriptan|O-Deethylated candesartan|Progesterone",MAST,0.0,0.0,52
-RORC,2-Hydroxychlorpropamide,MAST,0.0,0.0,52
-RORC,25-Hydroxycholesterol,MAST,0.0,0.0,52
-RORC,4'-Hydroxydiclofenac,MAST,0.0,0.0,52
-RORC,4-ene-Valproic acid,MAST,0.0,0.0,52
-RORC,5-Hydroxyomeprazole,MAST,0.0,0.0,52
-RORC,Acetate,MAST,0.0,0.0,52
-RORC,Acetyl-L-Carnitine|Choline|Creatine|Dopamine|Histamine|Norepinephrine,MAST,0.0,0.0,52
-RORC,Adenosine triphosphate,MAST,0.0,0.0,52
-RORC,Amiloride-sensitive sodium transport,MAST,0.0,0.0,52
-RORC,Anion exchange,MAST,0.0,0.0,52
-RORC,Chloride,MAST,0.0,0.0,52
-RORC,Chloride ion,MAST,0.0,0.0,52
-RORC,Cholesterol,MAST,0.0,0.0,52
-RORC,Cholic acid,MAST,0.0,0.0,52
-RORC,Citric acid|Oxalic acid,MAST,0.0,0.0,52
-RORC,Cortisol|Hydroxylansoprazole|N-Desmethyltamoxifen|N-desmethylimatinib,MAST,0.0,0.0,52
-RORC,Estradiol,MAST,0.0,0.0,52
-RORC,Fatty acid,MAST,0.0,0.0,52
-RORC,Folic acid,MAST,0.0,0.0,52
-RORC,Folinic acid|Glutathione,MAST,0.0,0.0,52
-RORC,Glycyl-glycine|L-Dopa,MAST,0.0,0.0,52
-RORC,Iron,MAST,0.0,0.0,52
-RORC,L-Carnitine,MAST,0.0,0.0,52
-RORC,L-Cystine,MAST,0.0,0.0,52
-RORC,Nicotinate,MAST,0.0,0.0,52
-RORC,O-Desmethylverapamil (D-702),MAST,0.0,0.0,52
-RORC,Sodium,MAST,0.0,0.0,52
-RORC,Sodium_hydrogen exchange,MAST,0.0,0.0,52
-RORC,Taurocholic acid,MAST,0.0,0.0,52
-RORC,Testosterone,MAST,0.0,0.0,52
-RORC,Water,MAST,0.0,0.0,52
-RORC,alpha-Tocopherol,MAST,0.0,0.0,52
-RORC,"17a-Ethynylestradiol|3',4'-Dihydrodiol|4-Hydroxycyclophosphamide|8-Hydroxycarvedilol|E-3179|Estriol|Glycerol|N-Desmethylcitalopram|N-Desmethyleletriptan|O-Deethylated candesartan|Progesterone",MNP,0.0,0.0,335
-RORC,2-Hydroxychlorpropamide,MNP,0.0,0.0,335
-RORC,25-Hydroxycholesterol,MNP,0.0,0.0,335
-RORC,4'-Hydroxydiclofenac,MNP,0.0,0.0,335
-RORC,4-ene-Valproic acid,MNP,0.0,0.0,335
-RORC,5-Hydroxyomeprazole,MNP,0.0,0.0,335
-RORC,Acetate,MNP,0.0,0.0,335
-RORC,Acetyl-L-Carnitine|Choline|Creatine|Dopamine|Histamine|Norepinephrine,MNP,0.0,0.0,335
-RORC,Adenosine triphosphate,MNP,0.0,0.0,335
-RORC,Amiloride-sensitive sodium transport,MNP,0.0,0.0,335
-RORC,Anion exchange,MNP,0.0,0.0,335
-RORC,Chloride,MNP,0.0,0.0,335
-RORC,Chloride ion,MNP,0.0,0.0,335
-RORC,Cholesterol,MNP,0.0,0.0,335
-RORC,Cholic acid,MNP,0.0,0.0,335
-RORC,Citric acid|Oxalic acid,MNP,0.0,0.0,335
-RORC,Cortisol|Hydroxylansoprazole|N-Desmethyltamoxifen|N-desmethylimatinib,MNP,0.0,0.0,335
-RORC,Estradiol,MNP,0.0,0.0,335
-RORC,Fatty acid,MNP,0.0,0.0,335
-RORC,Folic acid,MNP,0.0,0.0,335
-RORC,Folinic acid|Glutathione,MNP,0.0,0.0,335
-RORC,Glycyl-glycine|L-Dopa,MNP,0.0,0.0,335
-RORC,Iron,MNP,0.0,0.0,335
-RORC,L-Carnitine,MNP,0.0,0.0,335
-RORC,L-Cystine,MNP,0.0,0.0,335
-RORC,Nicotinate,MNP,0.0,0.0,335
-RORC,O-Desmethylverapamil (D-702),MNP,0.0,0.0,335
-RORC,Sodium,MNP,0.0,0.0,335
-RORC,Sodium_hydrogen exchange,MNP,0.0,0.0,335
-RORC,Taurocholic acid,MNP,0.0,0.0,335
-RORC,Testosterone,MNP,0.0,0.0,335
-RORC,Water,MNP,0.0,0.0,335
-RORC,alpha-Tocopherol,MNP,0.0,0.0,335
-RORC,"17a-Ethynylestradiol|3',4'-Dihydrodiol|4-Hydroxycyclophosphamide|8-Hydroxycarvedilol|E-3179|Estriol|Glycerol|N-Desmethylcitalopram|N-Desmethyleletriptan|O-Deethylated candesartan|Progesterone",Muscularis_mucosa,0.0,0.0,51
-RORC,2-Hydroxychlorpropamide,Muscularis_mucosa,0.0,0.0,51
-RORC,25-Hydroxycholesterol,Muscularis_mucosa,0.0,0.0,51
-RORC,4'-Hydroxydiclofenac,Muscularis_mucosa,0.0,0.0,51
-RORC,4-ene-Valproic acid,Muscularis_mucosa,0.0,0.0,51
-RORC,5-Hydroxyomeprazole,Muscularis_mucosa,0.0,0.0,51
-RORC,Acetate,Muscularis_mucosa,0.0,0.0,51
-RORC,Acetyl-L-Carnitine|Choline|Creatine|Dopamine|Histamine|Norepinephrine,Muscularis_mucosa,0.0,0.0,51
-RORC,Adenosine triphosphate,Muscularis_mucosa,0.0,0.0,51
-RORC,Amiloride-sensitive sodium transport,Muscularis_mucosa,0.0,0.0,51
-RORC,Anion exchange,Muscularis_mucosa,0.0,0.0,51
-RORC,Chloride,Muscularis_mucosa,0.0,0.0,51
-RORC,Chloride ion,Muscularis_mucosa,0.0,0.0,51
-RORC,Cholesterol,Muscularis_mucosa,0.0,0.0,51
-RORC,Cholic acid,Muscularis_mucosa,0.0,0.0,51
-RORC,Citric acid|Oxalic acid,Muscularis_mucosa,0.0,0.0,51
-RORC,Cortisol|Hydroxylansoprazole|N-Desmethyltamoxifen|N-desmethylimatinib,Muscularis_mucosa,0.0,0.0,51
-RORC,Estradiol,Muscularis_mucosa,0.0,0.0,51
-RORC,Fatty acid,Muscularis_mucosa,0.0,0.0,51
-RORC,Folic acid,Muscularis_mucosa,0.0,0.0,51
-RORC,Folinic acid|Glutathione,Muscularis_mucosa,0.0,0.0,51
-RORC,Glycyl-glycine|L-Dopa,Muscularis_mucosa,0.0,0.0,51
-RORC,Iron,Muscularis_mucosa,0.0,0.0,51
-RORC,L-Carnitine,Muscularis_mucosa,0.0,0.0,51
-RORC,L-Cystine,Muscularis_mucosa,0.0,0.0,51
-RORC,Nicotinate,Muscularis_mucosa,0.0,0.0,51
-RORC,O-Desmethylverapamil (D-702),Muscularis_mucosa,0.0,0.0,51
-RORC,Sodium,Muscularis_mucosa,0.0,0.0,51
-RORC,Sodium_hydrogen exchange,Muscularis_mucosa,0.0,0.0,51
-RORC,Taurocholic acid,Muscularis_mucosa,0.0,0.0,51
-RORC,Testosterone,Muscularis_mucosa,0.0,0.0,51
-RORC,Water,Muscularis_mucosa,0.0,0.0,51
-RORC,alpha-Tocopherol,Muscularis_mucosa,0.0,0.0,51
-RORC,"17a-Ethynylestradiol|3',4'-Dihydrodiol|4-Hydroxycyclophosphamide|8-Hydroxycarvedilol|E-3179|Estriol|Glycerol|N-Desmethylcitalopram|N-Desmethyleletriptan|O-Deethylated candesartan|Progesterone",Myofibroblast,0.0,0.0,193
-RORC,2-Hydroxychlorpropamide,Myofibroblast,0.0,0.0,193
-RORC,25-Hydroxycholesterol,Myofibroblast,0.0,0.0,193
-RORC,4'-Hydroxydiclofenac,Myofibroblast,0.0,0.0,193
-RORC,4-ene-Valproic acid,Myofibroblast,0.0,0.0,193
-RORC,5-Hydroxyomeprazole,Myofibroblast,0.0,0.0,193
-RORC,Acetate,Myofibroblast,0.0,0.0,193
-RORC,Acetyl-L-Carnitine|Choline|Creatine|Dopamine|Histamine|Norepinephrine,Myofibroblast,0.0,0.0,193
-RORC,Adenosine triphosphate,Myofibroblast,0.0,0.0,193
-RORC,Amiloride-sensitive sodium transport,Myofibroblast,0.0,0.0,193
-RORC,Anion exchange,Myofibroblast,0.0,0.0,193
-RORC,Chloride,Myofibroblast,0.0,0.0,193
-RORC,Chloride ion,Myofibroblast,0.0,0.0,193
-RORC,Cholesterol,Myofibroblast,0.0,0.0,193
-RORC,Cholic acid,Myofibroblast,0.0,0.0,193
-RORC,Citric acid|Oxalic acid,Myofibroblast,0.0,0.0,193
-RORC,Cortisol|Hydroxylansoprazole|N-Desmethyltamoxifen|N-desmethylimatinib,Myofibroblast,0.0,0.0,193
-RORC,Estradiol,Myofibroblast,0.0,0.0,193
-RORC,Fatty acid,Myofibroblast,0.0,0.0,193
-RORC,Folic acid,Myofibroblast,0.0,0.0,193
-RORC,Folinic acid|Glutathione,Myofibroblast,0.0,0.0,193
-RORC,Glycyl-glycine|L-Dopa,Myofibroblast,0.0,0.0,193
-RORC,Iron,Myofibroblast,0.0,0.0,193
-RORC,L-Carnitine,Myofibroblast,0.0,0.0,193
-RORC,L-Cystine,Myofibroblast,0.0,0.0,193
-RORC,Nicotinate,Myofibroblast,0.0,0.0,193
-RORC,O-Desmethylverapamil (D-702),Myofibroblast,0.0,0.0,193
-RORC,Sodium,Myofibroblast,0.0,0.0,193
-RORC,Sodium_hydrogen exchange,Myofibroblast,0.0,0.0,193
-RORC,Taurocholic acid,Myofibroblast,0.0,0.0,193
-RORC,Testosterone,Myofibroblast,0.0,0.0,193
-RORC,Water,Myofibroblast,0.0,0.0,193
-RORC,alpha-Tocopherol,Myofibroblast,0.0,0.0,193
-RORC,"17a-Ethynylestradiol|3',4'-Dihydrodiol|4-Hydroxycyclophosphamide|8-Hydroxycarvedilol|E-3179|Estriol|Glycerol|N-Desmethylcitalopram|N-Desmethyleletriptan|O-Deethylated candesartan|Progesterone",Pericyte,0.0,0.0,49
-RORC,2-Hydroxychlorpropamide,Pericyte,0.0,0.0,49
-RORC,25-Hydroxycholesterol,Pericyte,0.0,0.0,49
-RORC,4'-Hydroxydiclofenac,Pericyte,0.0,0.0,49
-RORC,4-ene-Valproic acid,Pericyte,0.0,0.0,49
-RORC,5-Hydroxyomeprazole,Pericyte,0.0,0.0,49
-RORC,Acetate,Pericyte,0.0,0.0,49
-RORC,Acetyl-L-Carnitine|Choline|Creatine|Dopamine|Histamine|Norepinephrine,Pericyte,0.0,0.0,49
-RORC,Adenosine triphosphate,Pericyte,0.0,0.0,49
-RORC,Amiloride-sensitive sodium transport,Pericyte,0.0,0.0,49
-RORC,Anion exchange,Pericyte,0.0,0.0,49
-RORC,Chloride,Pericyte,0.0,0.0,49
-RORC,Chloride ion,Pericyte,0.0,0.0,49
-RORC,Cholesterol,Pericyte,0.0,0.0,49
-RORC,Cholic acid,Pericyte,0.0,0.0,49
-RORC,Citric acid|Oxalic acid,Pericyte,0.0,0.0,49
-RORC,Cortisol|Hydroxylansoprazole|N-Desmethyltamoxifen|N-desmethylimatinib,Pericyte,0.0,0.0,49
-RORC,Estradiol,Pericyte,0.0,0.0,49
-RORC,Fatty acid,Pericyte,0.0,0.0,49
-RORC,Folic acid,Pericyte,0.0,0.0,49
-RORC,Folinic acid|Glutathione,Pericyte,0.0,0.0,49
-RORC,Glycyl-glycine|L-Dopa,Pericyte,0.0,0.0,49
-RORC,Iron,Pericyte,0.0,0.0,49
-RORC,L-Carnitine,Pericyte,0.0,0.0,49
-RORC,L-Cystine,Pericyte,0.0,0.0,49
-RORC,Nicotinate,Pericyte,0.0,0.0,49
-RORC,O-Desmethylverapamil (D-702),Pericyte,0.0,0.0,49
-RORC,Sodium,Pericyte,0.0,0.0,49
-RORC,Sodium_hydrogen exchange,Pericyte,0.0,0.0,49
-RORC,Taurocholic acid,Pericyte,0.0,0.0,49
-RORC,Testosterone,Pericyte,0.0,0.0,49
-RORC,Water,Pericyte,0.0,0.0,49
-RORC,alpha-Tocopherol,Pericyte,0.0,0.0,49
-RORC,"17a-Ethynylestradiol|3',4'-Dihydrodiol|4-Hydroxycyclophosphamide|8-Hydroxycarvedilol|E-3179|Estriol|Glycerol|N-Desmethylcitalopram|N-Desmethyleletriptan|O-Deethylated candesartan|Progesterone",Plasma,0.0,0.0,823
-RORC,2-Hydroxychlorpropamide,Plasma,0.0,0.0,823
-RORC,25-Hydroxycholesterol,Plasma,0.0,0.0,823
-RORC,4'-Hydroxydiclofenac,Plasma,0.0,0.0,823
-RORC,4-ene-Valproic acid,Plasma,0.0,0.0,823
-RORC,5-Hydroxyomeprazole,Plasma,0.0,0.0,823
-RORC,Acetate,Plasma,0.0,0.0,823
-RORC,Acetyl-L-Carnitine|Choline|Creatine|Dopamine|Histamine|Norepinephrine,Plasma,0.0,0.0,823
-RORC,Adenosine triphosphate,Plasma,0.0,0.0,823
-RORC,Amiloride-sensitive sodium transport,Plasma,0.0,0.0,823
-RORC,Anion exchange,Plasma,0.0,0.0,823
-RORC,Chloride,Plasma,0.0,0.0,823
-RORC,Chloride ion,Plasma,0.0,0.0,823
-RORC,Cholesterol,Plasma,0.0,0.0,823
-RORC,Cholic acid,Plasma,0.0,0.0,823
-RORC,Citric acid|Oxalic acid,Plasma,0.0,0.0,823
-RORC,Cortisol|Hydroxylansoprazole|N-Desmethyltamoxifen|N-desmethylimatinib,Plasma,0.0,0.0,823
-RORC,Estradiol,Plasma,0.0,0.0,823
-RORC,Fatty acid,Plasma,0.0,0.0,823
-RORC,Folic acid,Plasma,0.0,0.0,823
-RORC,Folinic acid|Glutathione,Plasma,0.0,0.0,823
-RORC,Glycyl-glycine|L-Dopa,Plasma,0.0,0.0,823
-RORC,Iron,Plasma,0.0,0.0,823
-RORC,L-Carnitine,Plasma,0.0,0.0,823
-RORC,L-Cystine,Plasma,0.0,0.0,823
-RORC,Nicotinate,Plasma,0.0,0.0,823
-RORC,O-Desmethylverapamil (D-702),Plasma,0.0,0.0,823
-RORC,Sodium,Plasma,0.0,0.0,823
-RORC,Sodium_hydrogen exchange,Plasma,0.0,0.0,823
-RORC,Taurocholic acid,Plasma,0.0,0.0,823
-RORC,Testosterone,Plasma,0.0,0.0,823
-RORC,Water,Plasma,0.0,0.0,823
-RORC,alpha-Tocopherol,Plasma,0.0,0.0,823
-RORC,"17a-Ethynylestradiol|3',4'-Dihydrodiol|4-Hydroxycyclophosphamide|8-Hydroxycarvedilol|E-3179|Estriol|Glycerol|N-Desmethylcitalopram|N-Desmethyleletriptan|O-Deethylated candesartan|Progesterone",T,0.0,0.0,397
-RORC,2-Hydroxychlorpropamide,T,0.0,0.0,397
-RORC,25-Hydroxycholesterol,T,0.0,0.0,397
-RORC,4'-Hydroxydiclofenac,T,0.0,0.0,397
-RORC,4-ene-Valproic acid,T,0.0,0.0,397
-RORC,5-Hydroxyomeprazole,T,0.0,0.0,397
-RORC,Acetate,T,0.0,0.0,397
-RORC,Acetyl-L-Carnitine|Choline|Creatine|Dopamine|Histamine|Norepinephrine,T,0.0,0.0,397
-RORC,Adenosine triphosphate,T,0.0,0.0,397
-RORC,Amiloride-sensitive sodium transport,T,0.0,0.0,397
-RORC,Anion exchange,T,0.0,0.0,397
-RORC,Chloride,T,0.0,0.0,397
-RORC,Chloride ion,T,0.0,0.0,397
-RORC,Cholesterol,T,0.0,0.0,397
-RORC,Cholic acid,T,0.0,0.0,397
-RORC,Citric acid|Oxalic acid,T,0.0,0.0,397
-RORC,Cortisol|Hydroxylansoprazole|N-Desmethyltamoxifen|N-desmethylimatinib,T,0.0,0.0,397
-RORC,Estradiol,T,0.0,0.0,397
-RORC,Fatty acid,T,0.0,0.0,397
-RORC,Folic acid,T,0.0,0.0,397
-RORC,Folinic acid|Glutathione,T,0.0,0.0,397
-RORC,Glycyl-glycine|L-Dopa,T,0.0,0.0,397
-RORC,Iron,T,0.0,0.0,397
-RORC,L-Carnitine,T,0.0,0.0,397
-RORC,L-Cystine,T,0.0,0.0,397
-RORC,Nicotinate,T,0.0,0.0,397
-RORC,O-Desmethylverapamil (D-702),T,0.0,0.0,397
-RORC,Sodium,T,0.0,0.0,397
-RORC,Sodium_hydrogen exchange,T,0.0,0.0,397
-RORC,Taurocholic acid,T,0.0,0.0,397
-RORC,Testosterone,T,0.0,0.0,397
-RORC,Water,T,0.0,0.0,397
-RORC,alpha-Tocopherol,T,0.0,0.0,397
+NDRG1,"17a-Ethynylestradiol|3',4'-Dihydrodiol|4-Hydroxycyclophosphamide|8-Hydroxycarvedilol|E-3179|Estriol|Glycerol|N-Desmethylcitalopram|N-Desmethyleletriptan|O-Deethylated candesartan|Progesterone",Endothelial,0.0,0.0,151
+NDRG1,2-Hydroxychlorpropamide,Endothelial,0.0,0.0,151
+NDRG1,25-Hydroxycholesterol,Endothelial,0.0,0.0,151
+NDRG1,4'-Hydroxydiclofenac,Endothelial,0.0,0.0,151
+NDRG1,4-ene-Valproic acid,Endothelial,0.0,0.0,151
+NDRG1,5-Hydroxyomeprazole,Endothelial,0.0,0.0,151
+NDRG1,Acetate,Endothelial,0.0,0.0,151
+NDRG1,Acetyl-L-Carnitine|Choline|Creatine|Dopamine|Histamine|Norepinephrine,Endothelial,0.0,0.0,151
+NDRG1,Adenosine triphosphate,Endothelial,0.0,0.0,151
+NDRG1,Amiloride-sensitive sodium transport,Endothelial,0.0,0.0,151
+NDRG1,Anion exchange,Endothelial,0.0,0.0,151
+NDRG1,Butyrate|D-Lactate|Ketone bodies|L-Glutamate|L-Lactate|Pyruvate|alpha-Ketoisovaleric acid,Endothelial,0.0,0.0,151
+NDRG1,Chloride,Endothelial,0.0,0.0,151
+NDRG1,Chloride ion,Endothelial,0.0,0.0,151
+NDRG1,Cholesterol,Endothelial,0.0,0.0,151
+NDRG1,Cholic acid,Endothelial,0.0,0.0,151
+NDRG1,Citric acid|Oxalic acid,Endothelial,0.0,0.0,151
+NDRG1,Cortisol|Hydroxylansoprazole|N-Desmethyltamoxifen|N-desmethylimatinib,Endothelial,0.0,0.0,151
+NDRG1,D-Galactose|D-Glucose|D-Mannose|Dehydroascorbic acid|Docosahexaenoic acid|Glucosamine,Endothelial,0.0,0.0,151
+NDRG1,Estradiol,Endothelial,0.0,0.0,151
+NDRG1,Fatty acid,Endothelial,0.0,0.0,151
+NDRG1,Folic acid,Endothelial,0.0,0.0,151
+NDRG1,Folinic acid|Glutathione,Endothelial,0.0,0.0,151
+NDRG1,Glycyl-glycine|L-Dopa,Endothelial,0.0,0.0,151
+NDRG1,Iron,Endothelial,0.0,0.0,151
+NDRG1,L-Carnitine,Endothelial,0.0,0.0,151
+NDRG1,L-Cystine,Endothelial,0.0,0.0,151
+NDRG1,Nicotinate,Endothelial,0.0,0.0,151
+NDRG1,O-Desmethylverapamil (D-702),Endothelial,0.0,0.0,151
+NDRG1,Phosphate,Endothelial,0.0,0.0,151
+NDRG1,Sodium,Endothelial,0.0,0.0,151
+NDRG1,Sodium_hydrogen exchange,Endothelial,0.0,0.0,151
+NDRG1,Taurocholic acid,Endothelial,0.0,0.0,151
+NDRG1,Testosterone,Endothelial,0.0,0.0,151
+NDRG1,Water,Endothelial,0.0,0.0,151
+NDRG1,alpha-Tocopherol,Endothelial,0.0,0.0,151
+NDRG1,"17a-Ethynylestradiol|3',4'-Dihydrodiol|4-Hydroxycyclophosphamide|8-Hydroxycarvedilol|E-3179|Estriol|Glycerol|N-Desmethylcitalopram|N-Desmethyleletriptan|O-Deethylated candesartan|Progesterone",Enteric_glia,0.0,0.0,199
+NDRG1,2-Hydroxychlorpropamide,Enteric_glia,0.0,0.0,199
+NDRG1,25-Hydroxycholesterol,Enteric_glia,0.0,0.0,199
+NDRG1,4'-Hydroxydiclofenac,Enteric_glia,0.0,0.0,199
+NDRG1,4-ene-Valproic acid,Enteric_glia,0.0,0.0,199
+NDRG1,5-Hydroxyomeprazole,Enteric_glia,0.0,0.0,199
+NDRG1,Acetate,Enteric_glia,0.0,0.0,199
+NDRG1,Acetyl-L-Carnitine|Choline|Creatine|Dopamine|Histamine|Norepinephrine,Enteric_glia,0.0,0.0,199
+NDRG1,Adenosine triphosphate,Enteric_glia,0.0,0.0,199
+NDRG1,Amiloride-sensitive sodium transport,Enteric_glia,0.0,0.0,199
+NDRG1,Anion exchange,Enteric_glia,0.0,0.0,199
+NDRG1,Butyrate|D-Lactate|Ketone bodies|L-Glutamate|L-Lactate|Pyruvate|alpha-Ketoisovaleric acid,Enteric_glia,0.0,0.0,199
+NDRG1,Chloride,Enteric_glia,0.0,0.0,199
+NDRG1,Chloride ion,Enteric_glia,0.0,0.0,199
+NDRG1,Cholesterol,Enteric_glia,0.0,0.0,199
+NDRG1,Cholic acid,Enteric_glia,0.0,0.0,199
+NDRG1,Citric acid|Oxalic acid,Enteric_glia,0.0,0.0,199
+NDRG1,Cortisol|Hydroxylansoprazole|N-Desmethyltamoxifen|N-desmethylimatinib,Enteric_glia,0.0,0.0,199
+NDRG1,D-Galactose|D-Glucose|D-Mannose|Dehydroascorbic acid|Docosahexaenoic acid|Glucosamine,Enteric_glia,0.0,0.0,199
+NDRG1,Estradiol,Enteric_glia,0.0,0.0,199
+NDRG1,Fatty acid,Enteric_glia,0.0,0.0,199
+NDRG1,Folic acid,Enteric_glia,0.0,0.0,199
+NDRG1,Folinic acid|Glutathione,Enteric_glia,0.0,0.0,199
+NDRG1,Glycyl-glycine|L-Dopa,Enteric_glia,0.0,0.0,199
+NDRG1,Iron,Enteric_glia,0.0,0.0,199
+NDRG1,L-Carnitine,Enteric_glia,0.0,0.0,199
+NDRG1,L-Cystine,Enteric_glia,0.0,0.0,199
+NDRG1,Nicotinate,Enteric_glia,0.0,0.0,199
+NDRG1,O-Desmethylverapamil (D-702),Enteric_glia,0.0,0.0,199
+NDRG1,Phosphate,Enteric_glia,0.0,0.0,199
+NDRG1,Sodium,Enteric_glia,0.0,0.0,199
+NDRG1,Sodium_hydrogen exchange,Enteric_glia,0.0,0.0,199
+NDRG1,Taurocholic acid,Enteric_glia,0.0,0.0,199
+NDRG1,Testosterone,Enteric_glia,0.0,0.0,199
+NDRG1,Water,Enteric_glia,0.0,0.0,199
+NDRG1,alpha-Tocopherol,Enteric_glia,0.0,0.0,199
+NDRG1,"17a-Ethynylestradiol|3',4'-Dihydrodiol|4-Hydroxycyclophosphamide|8-Hydroxycarvedilol|E-3179|Estriol|Glycerol|N-Desmethylcitalopram|N-Desmethyleletriptan|O-Deethylated candesartan|Progesterone",Fibroblast,-1.1843666e-08,1.5898882e-10,753
+NDRG1,2-Hydroxychlorpropamide,Fibroblast,5.765048e-08,1.8844046e-08,753
+NDRG1,25-Hydroxycholesterol,Fibroblast,-2.0686168e-06,4.2589697e-08,753
+NDRG1,4'-Hydroxydiclofenac,Fibroblast,6.229486e-08,1.1976316e-08,753
+NDRG1,4-ene-Valproic acid,Fibroblast,-1.2946264e-06,1.8773923e-08,753
+NDRG1,5-Hydroxyomeprazole,Fibroblast,-2.0720659e-06,8.0201836e-08,753
+NDRG1,Acetate,Fibroblast,-1.5620525e-07,3.4729997e-08,753
+NDRG1,Acetyl-L-Carnitine|Choline|Creatine|Dopamine|Histamine|Norepinephrine,Fibroblast,1.4089268e-07,3.4009278e-09,753
+NDRG1,Adenosine triphosphate,Fibroblast,3.8736434e-07,9.248338e-08,753
+NDRG1,Amiloride-sensitive sodium transport,Fibroblast,8.93106e-09,1.4943197e-10,753
+NDRG1,Anion exchange,Fibroblast,-9.962327e-06,2.0820107e-07,753
+NDRG1,Butyrate|D-Lactate|Ketone bodies|L-Glutamate|L-Lactate|Pyruvate|alpha-Ketoisovaleric acid,Fibroblast,0.0,0.0,753
+NDRG1,Chloride,Fibroblast,-5.531057e-07,6.3535204e-08,753
+NDRG1,Chloride ion,Fibroblast,0.0,0.0,753
+NDRG1,Cholesterol,Fibroblast,-9.811807e-07,6.294699e-08,753
+NDRG1,Cholic acid,Fibroblast,-1.802153e-06,3.1275285e-08,753
+NDRG1,Citric acid|Oxalic acid,Fibroblast,-9.502242e-07,4.3134026e-08,753
+NDRG1,Cortisol|Hydroxylansoprazole|N-Desmethyltamoxifen|N-desmethylimatinib,Fibroblast,-6.638807e-07,6.263036e-08,753
+NDRG1,D-Galactose|D-Glucose|D-Mannose|Dehydroascorbic acid|Docosahexaenoic acid|Glucosamine,Fibroblast,0.0,0.0,753
+NDRG1,Estradiol,Fibroblast,-1.0739577e-06,1.488386e-08,753
+NDRG1,Fatty acid,Fibroblast,-1.0173231e-05,2.310393e-07,753
+NDRG1,Folic acid,Fibroblast,-4.2170558e-07,6.251476e-08,753
+NDRG1,Folinic acid|Glutathione,Fibroblast,-1.0421783e-07,5.5468075e-09,753
+NDRG1,Glycyl-glycine|L-Dopa,Fibroblast,0.0,0.0,753
+NDRG1,Iron,Fibroblast,9.771475e-07,4.0859298e-08,753
+NDRG1,L-Carnitine,Fibroblast,-1.1743118e-06,1.4868241e-08,753
+NDRG1,L-Cystine,Fibroblast,0.0,0.0,753
+NDRG1,Nicotinate,Fibroblast,-1.2130585e-06,3.040183e-08,753
+NDRG1,O-Desmethylverapamil (D-702),Fibroblast,-3.715732e-07,7.3970754e-09,753
+NDRG1,Phosphate,Fibroblast,0.0,0.0,753
+NDRG1,Sodium,Fibroblast,-3.006125e-07,4.4905356e-08,753
+NDRG1,Sodium_hydrogen exchange,Fibroblast,4.640559e-07,1.30393705e-08,753
+NDRG1,Taurocholic acid,Fibroblast,-4.5061054e-07,8.34573e-09,753
+NDRG1,Testosterone,Fibroblast,-5.157957e-07,1.0863075e-07,753
+NDRG1,Water,Fibroblast,1.7521455e-07,6.2656422e-09,753
+NDRG1,alpha-Tocopherol,Fibroblast,0.0,0.0,753
+NDRG1,"17a-Ethynylestradiol|3',4'-Dihydrodiol|4-Hydroxycyclophosphamide|8-Hydroxycarvedilol|E-3179|Estriol|Glycerol|N-Desmethylcitalopram|N-Desmethyleletriptan|O-Deethylated candesartan|Progesterone",IEC,0.025672995,0.002567316,2721
+NDRG1,2-Hydroxychlorpropamide,IEC,0.051873893,0.00286716,2721
+NDRG1,25-Hydroxycholesterol,IEC,0.0006235718,3.2412667e-05,2721
+NDRG1,4'-Hydroxydiclofenac,IEC,0.028611228,0.0011799071,2721
+NDRG1,4-ene-Valproic acid,IEC,0.013272172,0.00032138833,2721
+NDRG1,5-Hydroxyomeprazole,IEC,0.05888028,0.0006387281,2721
+NDRG1,Acetate,IEC,-0.0007713876,0.00030660396,2721
+NDRG1,Acetyl-L-Carnitine|Choline|Creatine|Dopamine|Histamine|Norepinephrine,IEC,0.011114539,0.00044524705,2721
+NDRG1,Adenosine triphosphate,IEC,0.007660309,0.00043644814,2721
+NDRG1,Amiloride-sensitive sodium transport,IEC,0.031722162,0.005349034,2721
+NDRG1,Anion exchange,IEC,1.0298294,0.003554937,2721
+NDRG1,Butyrate|D-Lactate|Ketone bodies|L-Glutamate|L-Lactate|Pyruvate|alpha-Ketoisovaleric acid,IEC,-0.00019246964,4.3226657e-05,2721
+NDRG1,Chloride,IEC,-0.00016346986,4.0233786e-05,2721
+NDRG1,Chloride ion,IEC,-0.00037278477,0.00014650077,2721
+NDRG1,Cholesterol,IEC,0.05697722,0.0009948902,2721
+NDRG1,Cholic acid,IEC,0.025617968,0.0021894497,2721
+NDRG1,Citric acid|Oxalic acid,IEC,-0.00033502636,0.00027422197,2721
+NDRG1,Cortisol|Hydroxylansoprazole|N-Desmethyltamoxifen|N-desmethylimatinib,IEC,0.057729848,0.00065648207,2721
+NDRG1,D-Galactose|D-Glucose|D-Mannose|Dehydroascorbic acid|Docosahexaenoic acid|Glucosamine,IEC,0.0006251318,0.00046544973,2721
+NDRG1,Estradiol,IEC,0.055834394,0.00096255704,2721
+NDRG1,Fatty acid,IEC,0.013996716,0.00032488577,2721
+NDRG1,Folic acid,IEC,0.0033125153,0.00039943206,2721
+NDRG1,Folinic acid|Glutathione,IEC,-0.00040458905,0.00013453164,2721
+NDRG1,Glycyl-glycine|L-Dopa,IEC,0.0027097557,0.00023174702,2721
+NDRG1,Iron,IEC,0.048856292,0.00022132728,2721
+NDRG1,L-Carnitine,IEC,0.0074730082,0.00080158387,2721
+NDRG1,L-Cystine,IEC,0.00044895287,0.00019751952,2721
+NDRG1,Nicotinate,IEC,0.011889444,0.00030347495,2721
+NDRG1,O-Desmethylverapamil (D-702),IEC,0.13080765,0.00082354643,2721
+NDRG1,Phosphate,IEC,0.00016597469,4.265145e-05,2721
+NDRG1,Sodium,IEC,0.009537306,0.000710206,2721
+NDRG1,Sodium_hydrogen exchange,IEC,0.025801914,0.00033638088,2721
+NDRG1,Taurocholic acid,IEC,0.059087954,0.0006623787,2721
+NDRG1,Testosterone,IEC,0.0602766,0.0006361032,2721
+NDRG1,Water,IEC,0.37405533,0.004382718,2721
+NDRG1,alpha-Tocopherol,IEC,0.0013261897,0.00014414034,2721
+NDRG1,"17a-Ethynylestradiol|3',4'-Dihydrodiol|4-Hydroxycyclophosphamide|8-Hydroxycarvedilol|E-3179|Estriol|Glycerol|N-Desmethylcitalopram|N-Desmethyleletriptan|O-Deethylated candesartan|Progesterone",MAST,0.0,0.0,52
+NDRG1,2-Hydroxychlorpropamide,MAST,0.0,0.0,52
+NDRG1,25-Hydroxycholesterol,MAST,0.0,0.0,52
+NDRG1,4'-Hydroxydiclofenac,MAST,0.0,0.0,52
+NDRG1,4-ene-Valproic acid,MAST,0.0,0.0,52
+NDRG1,5-Hydroxyomeprazole,MAST,0.0,0.0,52
+NDRG1,Acetate,MAST,0.0,0.0,52
+NDRG1,Acetyl-L-Carnitine|Choline|Creatine|Dopamine|Histamine|Norepinephrine,MAST,0.0,0.0,52
+NDRG1,Adenosine triphosphate,MAST,0.0,0.0,52
+NDRG1,Amiloride-sensitive sodium transport,MAST,0.0,0.0,52
+NDRG1,Anion exchange,MAST,0.0,0.0,52
+NDRG1,Butyrate|D-Lactate|Ketone bodies|L-Glutamate|L-Lactate|Pyruvate|alpha-Ketoisovaleric acid,MAST,0.0,0.0,52
+NDRG1,Chloride,MAST,0.0,0.0,52
+NDRG1,Chloride ion,MAST,0.0,0.0,52
+NDRG1,Cholesterol,MAST,0.0,0.0,52
+NDRG1,Cholic acid,MAST,0.0,0.0,52
+NDRG1,Citric acid|Oxalic acid,MAST,0.0,0.0,52
+NDRG1,Cortisol|Hydroxylansoprazole|N-Desmethyltamoxifen|N-desmethylimatinib,MAST,0.0,0.0,52
+NDRG1,D-Galactose|D-Glucose|D-Mannose|Dehydroascorbic acid|Docosahexaenoic acid|Glucosamine,MAST,0.0,0.0,52
+NDRG1,Estradiol,MAST,0.0,0.0,52
+NDRG1,Fatty acid,MAST,0.0,0.0,52
+NDRG1,Folic acid,MAST,0.0,0.0,52
+NDRG1,Folinic acid|Glutathione,MAST,0.0,0.0,52
+NDRG1,Glycyl-glycine|L-Dopa,MAST,0.0,0.0,52
+NDRG1,Iron,MAST,0.0,0.0,52
+NDRG1,L-Carnitine,MAST,0.0,0.0,52
+NDRG1,L-Cystine,MAST,0.0,0.0,52
+NDRG1,Nicotinate,MAST,0.0,0.0,52
+NDRG1,O-Desmethylverapamil (D-702),MAST,0.0,0.0,52
+NDRG1,Phosphate,MAST,0.0,0.0,52
+NDRG1,Sodium,MAST,0.0,0.0,52
+NDRG1,Sodium_hydrogen exchange,MAST,0.0,0.0,52
+NDRG1,Taurocholic acid,MAST,0.0,0.0,52
+NDRG1,Testosterone,MAST,0.0,0.0,52
+NDRG1,Water,MAST,0.0,0.0,52
+NDRG1,alpha-Tocopherol,MAST,0.0,0.0,52
+NDRG1,"17a-Ethynylestradiol|3',4'-Dihydrodiol|4-Hydroxycyclophosphamide|8-Hydroxycarvedilol|E-3179|Estriol|Glycerol|N-Desmethylcitalopram|N-Desmethyleletriptan|O-Deethylated candesartan|Progesterone",MNP,0.0,0.0,335
+NDRG1,2-Hydroxychlorpropamide,MNP,0.0,0.0,335
+NDRG1,25-Hydroxycholesterol,MNP,0.0,0.0,335
+NDRG1,4'-Hydroxydiclofenac,MNP,0.0,0.0,335
+NDRG1,4-ene-Valproic acid,MNP,0.0,0.0,335
+NDRG1,5-Hydroxyomeprazole,MNP,0.0,0.0,335
+NDRG1,Acetate,MNP,0.0,0.0,335
+NDRG1,Acetyl-L-Carnitine|Choline|Creatine|Dopamine|Histamine|Norepinephrine,MNP,0.0,0.0,335
+NDRG1,Adenosine triphosphate,MNP,0.0,0.0,335
+NDRG1,Amiloride-sensitive sodium transport,MNP,0.0,0.0,335
+NDRG1,Anion exchange,MNP,0.0,0.0,335
+NDRG1,Butyrate|D-Lactate|Ketone bodies|L-Glutamate|L-Lactate|Pyruvate|alpha-Ketoisovaleric acid,MNP,0.0,0.0,335
+NDRG1,Chloride,MNP,0.0,0.0,335
+NDRG1,Chloride ion,MNP,0.0,0.0,335
+NDRG1,Cholesterol,MNP,0.0,0.0,335
+NDRG1,Cholic acid,MNP,0.0,0.0,335
+NDRG1,Citric acid|Oxalic acid,MNP,0.0,0.0,335
+NDRG1,Cortisol|Hydroxylansoprazole|N-Desmethyltamoxifen|N-desmethylimatinib,MNP,0.0,0.0,335
+NDRG1,D-Galactose|D-Glucose|D-Mannose|Dehydroascorbic acid|Docosahexaenoic acid|Glucosamine,MNP,0.0,0.0,335
+NDRG1,Estradiol,MNP,0.0,0.0,335
+NDRG1,Fatty acid,MNP,0.0,0.0,335
+NDRG1,Folic acid,MNP,0.0,0.0,335
+NDRG1,Folinic acid|Glutathione,MNP,0.0,0.0,335
+NDRG1,Glycyl-glycine|L-Dopa,MNP,0.0,0.0,335
+NDRG1,Iron,MNP,0.0,0.0,335
+NDRG1,L-Carnitine,MNP,0.0,0.0,335
+NDRG1,L-Cystine,MNP,0.0,0.0,335
+NDRG1,Nicotinate,MNP,0.0,0.0,335
+NDRG1,O-Desmethylverapamil (D-702),MNP,0.0,0.0,335
+NDRG1,Phosphate,MNP,0.0,0.0,335
+NDRG1,Sodium,MNP,0.0,0.0,335
+NDRG1,Sodium_hydrogen exchange,MNP,0.0,0.0,335
+NDRG1,Taurocholic acid,MNP,0.0,0.0,335
+NDRG1,Testosterone,MNP,0.0,0.0,335
+NDRG1,Water,MNP,0.0,0.0,335
+NDRG1,alpha-Tocopherol,MNP,0.0,0.0,335
+NDRG1,"17a-Ethynylestradiol|3',4'-Dihydrodiol|4-Hydroxycyclophosphamide|8-Hydroxycarvedilol|E-3179|Estriol|Glycerol|N-Desmethylcitalopram|N-Desmethyleletriptan|O-Deethylated candesartan|Progesterone",Muscularis_mucosa,0.0,0.0,51
+NDRG1,2-Hydroxychlorpropamide,Muscularis_mucosa,0.0,0.0,51
+NDRG1,25-Hydroxycholesterol,Muscularis_mucosa,0.0,0.0,51
+NDRG1,4'-Hydroxydiclofenac,Muscularis_mucosa,0.0,0.0,51
+NDRG1,4-ene-Valproic acid,Muscularis_mucosa,0.0,0.0,51
+NDRG1,5-Hydroxyomeprazole,Muscularis_mucosa,0.0,0.0,51
+NDRG1,Acetate,Muscularis_mucosa,0.0,0.0,51
+NDRG1,Acetyl-L-Carnitine|Choline|Creatine|Dopamine|Histamine|Norepinephrine,Muscularis_mucosa,0.0,0.0,51
+NDRG1,Adenosine triphosphate,Muscularis_mucosa,0.0,0.0,51
+NDRG1,Amiloride-sensitive sodium transport,Muscularis_mucosa,0.0,0.0,51
+NDRG1,Anion exchange,Muscularis_mucosa,0.0,0.0,51
+NDRG1,Butyrate|D-Lactate|Ketone bodies|L-Glutamate|L-Lactate|Pyruvate|alpha-Ketoisovaleric acid,Muscularis_mucosa,0.0,0.0,51
+NDRG1,Chloride,Muscularis_mucosa,0.0,0.0,51
+NDRG1,Chloride ion,Muscularis_mucosa,0.0,0.0,51
+NDRG1,Cholesterol,Muscularis_mucosa,0.0,0.0,51
+NDRG1,Cholic acid,Muscularis_mucosa,0.0,0.0,51
+NDRG1,Citric acid|Oxalic acid,Muscularis_mucosa,0.0,0.0,51
+NDRG1,Cortisol|Hydroxylansoprazole|N-Desmethyltamoxifen|N-desmethylimatinib,Muscularis_mucosa,0.0,0.0,51
+NDRG1,D-Galactose|D-Glucose|D-Mannose|Dehydroascorbic acid|Docosahexaenoic acid|Glucosamine,Muscularis_mucosa,0.0,0.0,51
+NDRG1,Estradiol,Muscularis_mucosa,0.0,0.0,51
+NDRG1,Fatty acid,Muscularis_mucosa,0.0,0.0,51
+NDRG1,Folic acid,Muscularis_mucosa,0.0,0.0,51
+NDRG1,Folinic acid|Glutathione,Muscularis_mucosa,0.0,0.0,51
+NDRG1,Glycyl-glycine|L-Dopa,Muscularis_mucosa,0.0,0.0,51
+NDRG1,Iron,Muscularis_mucosa,0.0,0.0,51
+NDRG1,L-Carnitine,Muscularis_mucosa,0.0,0.0,51
+NDRG1,L-Cystine,Muscularis_mucosa,0.0,0.0,51
+NDRG1,Nicotinate,Muscularis_mucosa,0.0,0.0,51
+NDRG1,O-Desmethylverapamil (D-702),Muscularis_mucosa,0.0,0.0,51
+NDRG1,Phosphate,Muscularis_mucosa,0.0,0.0,51
+NDRG1,Sodium,Muscularis_mucosa,0.0,0.0,51
+NDRG1,Sodium_hydrogen exchange,Muscularis_mucosa,0.0,0.0,51
+NDRG1,Taurocholic acid,Muscularis_mucosa,0.0,0.0,51
+NDRG1,Testosterone,Muscularis_mucosa,0.0,0.0,51
+NDRG1,Water,Muscularis_mucosa,0.0,0.0,51
+NDRG1,alpha-Tocopherol,Muscularis_mucosa,0.0,0.0,51
+NDRG1,"17a-Ethynylestradiol|3',4'-Dihydrodiol|4-Hydroxycyclophosphamide|8-Hydroxycarvedilol|E-3179|Estriol|Glycerol|N-Desmethylcitalopram|N-Desmethyleletriptan|O-Deethylated candesartan|Progesterone",Myofibroblast,0.0,0.0,193
+NDRG1,2-Hydroxychlorpropamide,Myofibroblast,0.0,0.0,193
+NDRG1,25-Hydroxycholesterol,Myofibroblast,0.0,0.0,193
+NDRG1,4'-Hydroxydiclofenac,Myofibroblast,0.0,0.0,193
+NDRG1,4-ene-Valproic acid,Myofibroblast,0.0,0.0,193
+NDRG1,5-Hydroxyomeprazole,Myofibroblast,0.0,0.0,193
+NDRG1,Acetate,Myofibroblast,0.0,0.0,193
+NDRG1,Acetyl-L-Carnitine|Choline|Creatine|Dopamine|Histamine|Norepinephrine,Myofibroblast,0.0,0.0,193
+NDRG1,Adenosine triphosphate,Myofibroblast,0.0,0.0,193
+NDRG1,Amiloride-sensitive sodium transport,Myofibroblast,0.0,0.0,193
+NDRG1,Anion exchange,Myofibroblast,0.0,0.0,193
+NDRG1,Butyrate|D-Lactate|Ketone bodies|L-Glutamate|L-Lactate|Pyruvate|alpha-Ketoisovaleric acid,Myofibroblast,0.0,0.0,193
+NDRG1,Chloride,Myofibroblast,0.0,0.0,193
+NDRG1,Chloride ion,Myofibroblast,0.0,0.0,193
+NDRG1,Cholesterol,Myofibroblast,0.0,0.0,193
+NDRG1,Cholic acid,Myofibroblast,0.0,0.0,193
+NDRG1,Citric acid|Oxalic acid,Myofibroblast,0.0,0.0,193
+NDRG1,Cortisol|Hydroxylansoprazole|N-Desmethyltamoxifen|N-desmethylimatinib,Myofibroblast,0.0,0.0,193
+NDRG1,D-Galactose|D-Glucose|D-Mannose|Dehydroascorbic acid|Docosahexaenoic acid|Glucosamine,Myofibroblast,0.0,0.0,193
+NDRG1,Estradiol,Myofibroblast,0.0,0.0,193
+NDRG1,Fatty acid,Myofibroblast,0.0,0.0,193
+NDRG1,Folic acid,Myofibroblast,0.0,0.0,193
+NDRG1,Folinic acid|Glutathione,Myofibroblast,0.0,0.0,193
+NDRG1,Glycyl-glycine|L-Dopa,Myofibroblast,0.0,0.0,193
+NDRG1,Iron,Myofibroblast,0.0,0.0,193
+NDRG1,L-Carnitine,Myofibroblast,0.0,0.0,193
+NDRG1,L-Cystine,Myofibroblast,0.0,0.0,193
+NDRG1,Nicotinate,Myofibroblast,0.0,0.0,193
+NDRG1,O-Desmethylverapamil (D-702),Myofibroblast,0.0,0.0,193
+NDRG1,Phosphate,Myofibroblast,0.0,0.0,193
+NDRG1,Sodium,Myofibroblast,0.0,0.0,193
+NDRG1,Sodium_hydrogen exchange,Myofibroblast,0.0,0.0,193
+NDRG1,Taurocholic acid,Myofibroblast,0.0,0.0,193
+NDRG1,Testosterone,Myofibroblast,0.0,0.0,193
+NDRG1,Water,Myofibroblast,0.0,0.0,193
+NDRG1,alpha-Tocopherol,Myofibroblast,0.0,0.0,193
+NDRG1,"17a-Ethynylestradiol|3',4'-Dihydrodiol|4-Hydroxycyclophosphamide|8-Hydroxycarvedilol|E-3179|Estriol|Glycerol|N-Desmethylcitalopram|N-Desmethyleletriptan|O-Deethylated candesartan|Progesterone",Pericyte,0.0,0.0,49
+NDRG1,2-Hydroxychlorpropamide,Pericyte,0.0,0.0,49
+NDRG1,25-Hydroxycholesterol,Pericyte,0.0,0.0,49
+NDRG1,4'-Hydroxydiclofenac,Pericyte,0.0,0.0,49
+NDRG1,4-ene-Valproic acid,Pericyte,0.0,0.0,49
+NDRG1,5-Hydroxyomeprazole,Pericyte,0.0,0.0,49
+NDRG1,Acetate,Pericyte,0.0,0.0,49
+NDRG1,Acetyl-L-Carnitine|Choline|Creatine|Dopamine|Histamine|Norepinephrine,Pericyte,0.0,0.0,49
+NDRG1,Adenosine triphosphate,Pericyte,0.0,0.0,49
+NDRG1,Amiloride-sensitive sodium transport,Pericyte,0.0,0.0,49
+NDRG1,Anion exchange,Pericyte,0.0,0.0,49
+NDRG1,Butyrate|D-Lactate|Ketone bodies|L-Glutamate|L-Lactate|Pyruvate|alpha-Ketoisovaleric acid,Pericyte,0.0,0.0,49
+NDRG1,Chloride,Pericyte,0.0,0.0,49
+NDRG1,Chloride ion,Pericyte,0.0,0.0,49
+NDRG1,Cholesterol,Pericyte,0.0,0.0,49
+NDRG1,Cholic acid,Pericyte,0.0,0.0,49
+NDRG1,Citric acid|Oxalic acid,Pericyte,0.0,0.0,49
+NDRG1,Cortisol|Hydroxylansoprazole|N-Desmethyltamoxifen|N-desmethylimatinib,Pericyte,0.0,0.0,49
+NDRG1,D-Galactose|D-Glucose|D-Mannose|Dehydroascorbic acid|Docosahexaenoic acid|Glucosamine,Pericyte,0.0,0.0,49
+NDRG1,Estradiol,Pericyte,0.0,0.0,49
+NDRG1,Fatty acid,Pericyte,0.0,0.0,49
+NDRG1,Folic acid,Pericyte,0.0,0.0,49
+NDRG1,Folinic acid|Glutathione,Pericyte,0.0,0.0,49
+NDRG1,Glycyl-glycine|L-Dopa,Pericyte,0.0,0.0,49
+NDRG1,Iron,Pericyte,0.0,0.0,49
+NDRG1,L-Carnitine,Pericyte,0.0,0.0,49
+NDRG1,L-Cystine,Pericyte,0.0,0.0,49
+NDRG1,Nicotinate,Pericyte,0.0,0.0,49
+NDRG1,O-Desmethylverapamil (D-702),Pericyte,0.0,0.0,49
+NDRG1,Phosphate,Pericyte,0.0,0.0,49
+NDRG1,Sodium,Pericyte,0.0,0.0,49
+NDRG1,Sodium_hydrogen exchange,Pericyte,0.0,0.0,49
+NDRG1,Taurocholic acid,Pericyte,0.0,0.0,49
+NDRG1,Testosterone,Pericyte,0.0,0.0,49
+NDRG1,Water,Pericyte,0.0,0.0,49
+NDRG1,alpha-Tocopherol,Pericyte,0.0,0.0,49
+NDRG1,"17a-Ethynylestradiol|3',4'-Dihydrodiol|4-Hydroxycyclophosphamide|8-Hydroxycarvedilol|E-3179|Estriol|Glycerol|N-Desmethylcitalopram|N-Desmethyleletriptan|O-Deethylated candesartan|Progesterone",Plasma,0.0,0.0,823
+NDRG1,2-Hydroxychlorpropamide,Plasma,0.0,0.0,823
+NDRG1,25-Hydroxycholesterol,Plasma,0.0,0.0,823
+NDRG1,4'-Hydroxydiclofenac,Plasma,0.0,0.0,823
+NDRG1,4-ene-Valproic acid,Plasma,0.0,0.0,823
+NDRG1,5-Hydroxyomeprazole,Plasma,0.0,0.0,823
+NDRG1,Acetate,Plasma,0.0,0.0,823
+NDRG1,Acetyl-L-Carnitine|Choline|Creatine|Dopamine|Histamine|Norepinephrine,Plasma,0.0,0.0,823
+NDRG1,Adenosine triphosphate,Plasma,0.0,0.0,823
+NDRG1,Amiloride-sensitive sodium transport,Plasma,0.0,0.0,823
+NDRG1,Anion exchange,Plasma,0.0,0.0,823
+NDRG1,Butyrate|D-Lactate|Ketone bodies|L-Glutamate|L-Lactate|Pyruvate|alpha-Ketoisovaleric acid,Plasma,0.0,0.0,823
+NDRG1,Chloride,Plasma,0.0,0.0,823
+NDRG1,Chloride ion,Plasma,0.0,0.0,823
+NDRG1,Cholesterol,Plasma,0.0,0.0,823
+NDRG1,Cholic acid,Plasma,0.0,0.0,823
+NDRG1,Citric acid|Oxalic acid,Plasma,0.0,0.0,823
+NDRG1,Cortisol|Hydroxylansoprazole|N-Desmethyltamoxifen|N-desmethylimatinib,Plasma,0.0,0.0,823
+NDRG1,D-Galactose|D-Glucose|D-Mannose|Dehydroascorbic acid|Docosahexaenoic acid|Glucosamine,Plasma,0.0,0.0,823
+NDRG1,Estradiol,Plasma,0.0,0.0,823
+NDRG1,Fatty acid,Plasma,0.0,0.0,823
+NDRG1,Folic acid,Plasma,0.0,0.0,823
+NDRG1,Folinic acid|Glutathione,Plasma,0.0,0.0,823
+NDRG1,Glycyl-glycine|L-Dopa,Plasma,0.0,0.0,823
+NDRG1,Iron,Plasma,0.0,0.0,823
+NDRG1,L-Carnitine,Plasma,0.0,0.0,823
+NDRG1,L-Cystine,Plasma,0.0,0.0,823
+NDRG1,Nicotinate,Plasma,0.0,0.0,823
+NDRG1,O-Desmethylverapamil (D-702),Plasma,0.0,0.0,823
+NDRG1,Phosphate,Plasma,0.0,0.0,823
+NDRG1,Sodium,Plasma,0.0,0.0,823
+NDRG1,Sodium_hydrogen exchange,Plasma,0.0,0.0,823
+NDRG1,Taurocholic acid,Plasma,0.0,0.0,823
+NDRG1,Testosterone,Plasma,0.0,0.0,823
+NDRG1,Water,Plasma,0.0,0.0,823
+NDRG1,alpha-Tocopherol,Plasma,0.0,0.0,823
+NDRG1,"17a-Ethynylestradiol|3',4'-Dihydrodiol|4-Hydroxycyclophosphamide|8-Hydroxycarvedilol|E-3179|Estriol|Glycerol|N-Desmethylcitalopram|N-Desmethyleletriptan|O-Deethylated candesartan|Progesterone",T,0.0,0.0,397
+NDRG1,2-Hydroxychlorpropamide,T,0.0,0.0,397
+NDRG1,25-Hydroxycholesterol,T,0.0,0.0,397
+NDRG1,4'-Hydroxydiclofenac,T,0.0,0.0,397
+NDRG1,4-ene-Valproic acid,T,0.0,0.0,397
+NDRG1,5-Hydroxyomeprazole,T,0.0,0.0,397
+NDRG1,Acetate,T,0.0,0.0,397
+NDRG1,Acetyl-L-Carnitine|Choline|Creatine|Dopamine|Histamine|Norepinephrine,T,0.0,0.0,397
+NDRG1,Adenosine triphosphate,T,0.0,0.0,397
+NDRG1,Amiloride-sensitive sodium transport,T,0.0,0.0,397
+NDRG1,Anion exchange,T,0.0,0.0,397
+NDRG1,Butyrate|D-Lactate|Ketone bodies|L-Glutamate|L-Lactate|Pyruvate|alpha-Ketoisovaleric acid,T,0.0,0.0,397
+NDRG1,Chloride,T,0.0,0.0,397
+NDRG1,Chloride ion,T,0.0,0.0,397
+NDRG1,Cholesterol,T,0.0,0.0,397
+NDRG1,Cholic acid,T,0.0,0.0,397
+NDRG1,Citric acid|Oxalic acid,T,0.0,0.0,397
+NDRG1,Cortisol|Hydroxylansoprazole|N-Desmethyltamoxifen|N-desmethylimatinib,T,0.0,0.0,397
+NDRG1,D-Galactose|D-Glucose|D-Mannose|Dehydroascorbic acid|Docosahexaenoic acid|Glucosamine,T,0.0,0.0,397
+NDRG1,Estradiol,T,0.0,0.0,397
+NDRG1,Fatty acid,T,0.0,0.0,397
+NDRG1,Folic acid,T,0.0,0.0,397
+NDRG1,Folinic acid|Glutathione,T,0.0,0.0,397
+NDRG1,Glycyl-glycine|L-Dopa,T,0.0,0.0,397
+NDRG1,Iron,T,0.0,0.0,397
+NDRG1,L-Carnitine,T,0.0,0.0,397
+NDRG1,L-Cystine,T,0.0,0.0,397
+NDRG1,Nicotinate,T,0.0,0.0,397
+NDRG1,O-Desmethylverapamil (D-702),T,0.0,0.0,397
+NDRG1,Phosphate,T,0.0,0.0,397
+NDRG1,Sodium,T,0.0,0.0,397
+NDRG1,Sodium_hydrogen exchange,T,0.0,0.0,397
+NDRG1,Taurocholic acid,T,0.0,0.0,397
+NDRG1,Testosterone,T,0.0,0.0,397
+NDRG1,Water,T,0.0,0.0,397
+NDRG1,alpha-Tocopherol,T,0.0,0.0,397
 SCNN1A,"17a-Ethynylestradiol|3',4'-Dihydrodiol|4-Hydroxycyclophosphamide|8-Hydroxycarvedilol|E-3179|Estriol|Glycerol|N-Desmethylcitalopram|N-Desmethyleletriptan|O-Deethylated candesartan|Progesterone",Endothelial,0.0,0.0,151
 SCNN1A,2-Hydroxychlorpropamide,Endothelial,0.0,0.0,151
 SCNN1A,25-Hydroxycholesterol,Endothelial,0.0,0.0,151
