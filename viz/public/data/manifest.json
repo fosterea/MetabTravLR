@@ -12,6 +12,7 @@
         "gene_pair"
       ],
       "tierIds": [
+        "24_11_12_ICI_5K_Fine_annotations",
         "25_06_11_ICI_5K_Coarse_annotations"
       ],
       "hasNbhd": true,
@@ -28,6 +29,7 @@
         "gene_pair"
       ],
       "tierIds": [
+        "24_11_12_ICI_5K_Fine_annotations",
         "25_06_11_ICI_5K_Coarse_annotations"
       ],
       "hasNbhd": true,
@@ -44,6 +46,7 @@
         "gene_pair"
       ],
       "tierIds": [
+        "24_11_12_ICI_5K_Fine_annotations",
         "25_06_11_ICI_5K_Coarse_annotations"
       ],
       "hasNbhd": true,
@@ -60,6 +63,7 @@
         "gene_pair"
       ],
       "tierIds": [
+        "24_11_12_ICI_5K_Fine_annotations",
         "25_06_11_ICI_5K_Coarse_annotations"
       ],
       "hasNbhd": true,
