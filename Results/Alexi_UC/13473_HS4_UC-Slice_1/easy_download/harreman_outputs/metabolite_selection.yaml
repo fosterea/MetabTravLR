@@ -39,25 +39,24 @@ metabolites:
   - [ABCB1, ABCB1]
 - name: 4-ene-Valproic acid
   gene_pairs:
-  - [SLC16A1, SLC16A1]
   - [SLC22A5, SLC22A5]
+  - [SLC16A1, SLC16A1]
   - [SLC16A1, SLC22A5]
 - name: 5-Hydroxyomeprazole
   gene_pairs:
-  - [ABCB1, ABCG2]
   - [ABCG2, ABCG2]
-  - [ABCB1, ABCC3]
   - [ABCB1, ABCB1]
-  - [ABCC3, ABCG2]
   - [ABCC3, ABCC3]
+  - [ABCC3, ABCG2]
+  - [ABCB1, ABCG2]
+  - [ABCB1, ABCC3]
 - name: 8-Hydroxycarvedilol
   gene_pairs:
   - [ABCB1, ABCB1]
 - name: Acetate
   gene_pairs:
-  - [SLCO2B1, SLCO2B1]
   - [SLC16A1, SLC16A1]
-  - [SLC16A1, SLCO2B1]
+  - [SLCO2B1, SLCO2B1]
 - name: Acetyl-L-Carnitine
   gene_pairs:
   - [SLC22A5, SLC22A5]
@@ -72,9 +71,9 @@ metabolites:
   - [SCNN1A, SCNN1A]
 - name: Anion exchange
   gene_pairs:
+  - [SLC26A2, SLC26A3]
   - [SLC26A2, SLC26A2]
   - [SLC26A3, SLC26A3]
-  - [SLC26A2, SLC26A3]
 - name: Butyrate
   gene_pairs:
   - [SLC16A1, SLC16A1]
@@ -95,14 +94,14 @@ metabolites:
   - [SLC12A2, SLC12A2]
 - name: Cholesterol
   gene_pairs:
-  - [CD36, CD36]
   - [ABCG2, ABCG2]
-  - [ABCB1, ABCG2]
   - [ABCB1, ABCB1]
+  - [ABCB1, ABCG2]
+  - [CD36, CD36]
 - name: Cholic acid
   gene_pairs:
-  - [ABCB1, ABCB1]
   - [ABCB1, ABCC3]
+  - [ABCB1, ABCB1]
   - [ABCC3, ABCC3]
 - name: Choline
   gene_pairs:
@@ -115,8 +114,8 @@ metabolites:
   - [ABCC3, ABCC3]
 - name: Cortisol
   gene_pairs:
-  - [ABCG2, ABCG2]
   - [ABCB1, ABCG2]
+  - [ABCG2, ABCG2]
   - [ABCB1, ABCB1]
 - name: Creatine
   gene_pairs:
@@ -135,25 +134,25 @@ metabolites:
   - [ABCB1, ABCB1]
 - name: Estradiol
   gene_pairs:
-  - [ABCB1, SLC22A1]
-  - [ABCB1, ABCB1]
-  - [ABCB1, ABCG2]
   - [ABCG2, ABCG2]
+  - [ABCB1, ABCB1]
+  - [ABCB1, SLC22A1]
   - [SLCO2B1, SLCO2B1]
+  - [ABCB1, ABCG2]
 - name: Estriol
   gene_pairs:
   - [ABCB1, ABCB1]
 - name: Fatty acid
   gene_pairs:
+  - [CPT1A, CPT1A]
+  - [FABP5, FABP5]
   - [CD36, MSR1]
   - [CD36, CD36]
-  - [CPT1A, CPT1A]
   - [MSR1, MSR1]
-  - [FABP5, FABP5]
 - name: Folic acid
   gene_pairs:
-  - [ABCC3, ABCG2]
   - [ABCG2, ABCG2]
+  - [ABCC3, ABCG2]
   - [ABCC3, ABCC3]
 - name: Folinic acid
   gene_pairs:
@@ -175,16 +174,16 @@ metabolites:
   - [SLC22A5, SLC22A5]
 - name: Hydroxylansoprazole
   gene_pairs:
-  - [ABCG2, ABCG2]
   - [ABCB1, ABCG2]
+  - [ABCG2, ABCG2]
   - [ABCB1, ABCB1]
 - name: Hyodeoxycholic acid
   gene_pairs:
   - [ABCC3, ABCC3]
 - name: Iron
   gene_pairs:
-  - [SLC40A1, SLC40A1]
   - [SLC3A2, SLC40A1]
+  - [SLC40A1, SLC40A1]
 - name: Isoursodeoxycholic acid
   gene_pairs:
   - [ABCC3, ABCC3]
@@ -197,8 +196,8 @@ metabolites:
 - name: L-Carnitine
   gene_pairs:
   - [SLC22A5, SLC22A5]
-  - [SLC16A9, SLC22A5]
   - [SLC22A4, SLC22A5]
+  - [SLC16A9, SLC22A5]
   - [SLC16A9, SLC16A9]
 - name: L-Cystine
   gene_pairs:
@@ -210,6 +209,7 @@ metabolites:
   gene_pairs:
   - [SLC16A1, SLC16A1]
   - [SLC16A1, SLC1A1]
+  - [SLC1A1, SLC1A1]
 - name: L-Lactate
   gene_pairs:
   - [SLC16A1, SLC16A1]
@@ -233,25 +233,24 @@ metabolites:
   - [ABCB1, ABCB1]
 - name: N-Desmethyltamoxifen
   gene_pairs:
-  - [ABCG2, ABCG2]
   - [ABCB1, ABCG2]
+  - [ABCG2, ABCG2]
   - [ABCB1, ABCB1]
 - name: N-desmethylimatinib
   gene_pairs:
   - [ABCG2, ABCG2]
-  - [ABCB1, ABCG2]
-  - [ABCB1, SLC22A1]
   - [ABCB1, ABCB1]
+  - [ABCB1, SLC22A1]
+  - [ABCB1, ABCG2]
 - name: Neurotransmitter
   gene_pairs:
   - [SLC6A9, SLC6A9]
 - name: Nicotinate
   gene_pairs:
-  - [SLC22A5, SLC22A5]
-  - [SLC16A1, SLC22A5]
-  - [SLCO2B1, SLCO2B1]
   - [SLC16A1, SLC16A1]
-  - [SLC16A1, SLCO2B1]
+  - [SLCO2B1, SLCO2B1]
+  - [SLC16A1, SLC22A5]
+  - [SLC22A5, SLC22A5]
 - name: Norepinephrine
   gene_pairs:
   - [SLC22A5, SLC22A5]
@@ -260,21 +259,21 @@ metabolites:
   - [ABCB1, ABCB1]
 - name: O-Desmethylverapamil (D-702)
   gene_pairs:
-  - [ABCB1, SLC22A4]
+  - [ABCB1, SLC22A5]
+  - [SLC22A5, SLC22A5]
+  - [ABCB1, ABCC3]
+  - [ABCG2, ABCG2]
+  - [ABCB1, ABCB1]
+  - [ABCC3, ABCG2]
   - [ABCB1, SLC22A1]
   - [ABCG2, SLC22A4]
-  - [ABCB1, ABCB1]
-  - [ABCB1, SLC22A5]
-  - [ABCC3, ABCC3]
-  - [ABCG2, SLC22A5]
-  - [ABCB1, ABCC3]
-  - [ABCC3, ABCG2]
-  - [SLC22A4, SLC22A5]
   - [ABCC3, SLC22A4]
-  - [ABCC3, SLC22A5]
-  - [SLC22A5, SLC22A5]
   - [ABCB1, ABCG2]
-  - [ABCG2, ABCG2]
+  - [ABCG2, SLC22A5]
+  - [ABCC3, SLC22A5]
+  - [ABCB1, SLC22A4]
+  - [ABCC3, ABCC3]
+  - [SLC22A4, SLC22A5]
 - name: Oxalic acid
   gene_pairs:
   - [SLCO2B1, SLCO2B1]
@@ -283,52 +282,51 @@ metabolites:
   - [SLC20A2, SLC20A2]
 - name: Progesterone
   gene_pairs:
-  - [ABCB1, SLC22A1]
   - [ABCB1, ABCB1]
+  - [ABCB1, SLC22A1]
 - name: Pyruvate
   gene_pairs:
   - [SLC16A1, SLC16A1]
 - name: Sodium
   gene_pairs:
-  - [SLC22A4, SLC22A5]
-  - [SLC5A1, SLC5A1]
-  - [SLC12A2, SLC1A5]
-  - [SLC12A2, SLC5A1]
-  - [SLC22A5, SLC22A5]
-  - [SLC1A5, SLC5A3]
   - [SLC12A2, SLC12A2]
   - [SLC12A2, SLC5A3]
+  - [SLC12A2, SLC1A5]
+  - [SLC12A2, SLC5A1]
+  - [SLC22A4, SLC22A5]
+  - [SLC22A5, SLC22A5]
+  - [SLC1A5, SLC5A3]
+  - [SLC5A1, SLC5A1]
 - name: Sodium_hydrogen exchange
   gene_pairs:
   - [SLC9A3, SLC9A3]
-  - [SLC9A1, SLC9A1]
   - [SLC9A1, SLC9A3]
+  - [SLC9A1, SLC9A1]
 - name: Sulfolithocholic acid
   gene_pairs:
   - [ABCC3, ABCC3]
 - name: Taurocholic acid
   gene_pairs:
-  - [ABCC3, ABCC3]
-  - [ABCC3, ABCG2]
+  - [ABCB1, ABCB1]
   - [ABCB1, SLC22A1]
-  - [SLC16A1, SLC16A1]
-  - [ABCB1, SLC16A1]
+  - [ABCC3, SLC16A1]
+  - [ABCB1, ABCC3]
+  - [ABCC3, ABCG2]
   - [ABCG2, SLC16A1]
   - [ABCG2, ABCG2]
+  - [ABCC3, ABCC3]
+  - [ABCB1, SLC16A1]
+  - [SLC16A1, SLC16A1]
   - [SLCO2B1, SLCO2B1]
-  - [SLC16A1, SLCO2B1]
-  - [ABCB1, ABCB1]
-  - [ABCB1, ABCC3]
   - [ABCB1, ABCG2]
-  - [ABCC3, SLC16A1]
 - name: Testosterone
   gene_pairs:
-  - [ABCB1, SLC22A4]
-  - [ABCB1, ABCG2]
   - [ABCG2, ABCG2]
-  - [ABCB1, SLC22A1]
-  - [ABCG2, SLC22A4]
   - [ABCB1, ABCB1]
+  - [ABCB1, SLC22A4]
+  - [ABCB1, SLC22A1]
+  - [ABCB1, ABCG2]
+  - [ABCG2, SLC22A4]
 - name: Trihydroxycoprostanoic acid
   gene_pairs:
   - [ABCC3, ABCC3]
@@ -352,10 +350,10 @@ metabolites:
   - [CD36, CD36]
 - name: Water
   gene_pairs:
-  - [AQP7, AQP8]
-  - [AQP7, AQP7]
   - [AQP8, AQP8]
   - [AQP5, AQP9]
+  - [AQP7, AQP8]
+  - [AQP7, AQP7]
 - name: Zinc
   gene_pairs:
   - [SLC39A8, SLC39A8]

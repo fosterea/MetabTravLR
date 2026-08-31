@@ -1,191 +1,463 @@
 sample_id,tier,cell_type_1,cell_type_2,gene1,gene2,tcell_involvement,metabolites,FDR_np,pval_np,C_np
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,B,Pericyte,SLC3A2,SLC40A1,Tcell_interface,Iron,0.0017807723103195,0.0009990009990009,24.454021
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Endothelial_arterial,Plasma,SLC40A1,SLC40A1,Tcell_interface,Iron,0.0017807723103195,0.0009990009990009,45.276207
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Endothelial_arterial,Plasma,ABCB1,SLC16A1,Tcell_interface,Taurocholic acid,0.0017807723103195,0.0009990009990009,18.559095
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Endothelial_venous,Pericyte,SLC16A1,SLC16A1,Tcell_interface,4-ene-Valproic acid | Acetate | Butyrate | D-Lactate | Ketone bodies | L-Glutamate | L-Lactate | Nicotinate | Pyruvate | Taurocholic acid | alpha-Ketoisovaleric acid,0.0017807723103195,0.0009990009990009,20.4985
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Fibroblast_CTF_S2,IEC_Goblet_2,SLC26A3,SLC26A3,Tcell_interface,Anion exchange,0.0017807723103195,0.0009990009990009,20.940466
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Fibroblast_CTF_S2,T_CD4,SLC16A9,SLC22A5,Tcell_interface,L-Carnitine,0.0017807723103195,0.0009990009990009,14.841188
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Fibroblast_cCF_S1,Muscularis_mucosa,SCNN1A,SCNN1A,Tcell_interface,Amiloride-sensitive sodium transport,0.0017807723103195,0.0009990009990009,18.911398
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Fibroblast_cCF_S1,Myofibroblast,ABCB1,SLC16A1,Tcell_interface,Taurocholic acid,0.0017807723103195,0.0009990009990009,16.074865
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Fibroblast_submucosal_S3,MNP_mDC,ABCC3,SLC22A5,Tcell_interface,O-Desmethylverapamil (D-702),0.0017807723103195,0.0009990009990009,15.762853
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_CT_absorptive_colonocyte,IEC_Colonocyte_NOS,SLC3A2,SLC40A1,Tcell_interface,Iron,0.0017807723103195,0.0009990009990009,556.135
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_CT_absorptive_colonocyte,IEC_Colonocyte_NOS,ABCB1,ABCB1,Tcell_interface,"17a-Ethynylestradiol | 2-Hydroxychlorpropamide | 3',4'-Dihydrodiol | 4'-Hydroxydiclofenac | 4-Hydroxycyclophosphamide | 5-Hydroxyomeprazole | 8-Hydroxycarvedilol | Cholesterol | Cholic acid | Cortisol | E-3179 | Estradiol | Estriol | Glycerol | Hydroxylansoprazole | N-Desmethylcitalopram | N-Desmethyleletriptan | N-Desmethyltamoxifen | N-desmethylimatinib | O-Deethylated candesartan | O-Desmethylverapamil (D-702) | Progesterone | Taurocholic acid | Testosterone",0.0017807723103195,0.0009990009990009,417.19263
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_CT_absorptive_colonocyte,IEC_Colonocyte_NOS,ABCB1,ABCG2,Tcell_interface,5-Hydroxyomeprazole | Cholesterol | Cortisol | Estradiol | Hydroxylansoprazole | N-Desmethyltamoxifen | N-desmethylimatinib | O-Desmethylverapamil (D-702) | Taurocholic acid | Testosterone,0.0017807723103195,0.0009990009990009,270.16443
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_CT_absorptive_colonocyte,IEC_Colonocyte_NOS,ABCC3,ABCG2,Tcell_interface,5-Hydroxyomeprazole | Folic acid | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0017807723103195,0.0009990009990009,115.51012
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_CT_absorptive_colonocyte,IEC_Colonocyte_NOS,AQP7,AQP8,Tcell_interface,Water,0.0017807723103195,0.0009990009990009,1510.4343
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_CT_absorptive_colonocyte,IEC_Colonocyte_NOS,AQP8,AQP8,Tcell_interface,Water,0.0017807723103195,0.0009990009990009,223.59903
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_CT_absorptive_colonocyte,IEC_Colonocyte_NOS,SLC9A1,SLC9A3,Tcell_interface,Sodium_hydrogen exchange,0.0017807723103195,0.0009990009990009,471.71692
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_CT_absorptive_colonocyte,IEC_Colonocyte_NOS,SLC26A2,SLC26A3,Tcell_interface,Anion exchange,0.0017807723103195,0.0009990009990009,2648.5862
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_CT_absorptive_colonocyte,IEC_Colonocyte_NOS,SLC26A3,SLC26A3,Tcell_interface,Anion exchange,0.0017807723103195,0.0009990009990009,3393.1948
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Colonocyte_NOS,MNP_macrophage,ABCB1,SLC22A5,Tcell_interface,O-Desmethylverapamil (D-702),0.0017807723103195,0.0009990009990009,39.59284
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Colonocyte_NOS,Plasma,SLC20A2,SLC20A2,Tcell_interface,Phosphate,0.0017807723103195,0.0009990009990009,49.218185
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Colonocyte_NOS,T_CD8,SLC26A2,SLC26A3,Tcell_interface,Anion exchange,0.0017807723103195,0.0009990009990009,622.5457
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Colonocyte_NOS,T_CD8,SLC26A2,SLC26A2,Tcell_interface,Anion exchange,0.0017807723103195,0.0009990009990009,809.2541
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Myofibroblast,Plasma,ABCC1,SLCO2B1,Tcell_interface,Taurocholic acid,0.0017807723103195,0.0009990009990009,24.427864
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Endothelial_arterial,Myofibroblast,ABCA1,ABCA1,Tcell_interface,25-Hydroxycholesterol,0.0034085146093959,0.0019980019980019,21.629946
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Endothelial_venous,Pericyte,ABCB1,SLC16A1,Tcell_interface,Taurocholic acid,0.0034085146093959,0.0019980019980019,17.53301
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Enteric_glia,IEC_CT_absorptive_colonocyte,SLC15A1,SLC15A1,Tcell_interface,2-Hydroxychlorpropamide | Glycyl-glycine | L-Dopa,0.0034085146093959,0.0019980019980019,18.638983
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Fibroblast_CTF_S2,IEC_Colonocyte_NOS,SLC26A2,SLC26A2,Tcell_interface,Anion exchange,0.0034085146093959,0.0019980019980019,1298.8529
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_BEST4_OTOP2,IEC_CT_absorptive_colonocyte,AQP7,AQP8,Tcell_interface,Water,0.0034085146093959,0.0019980019980019,120.88758
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_BEST4_OTOP2,IEC_CT_absorptive_colonocyte,SLC9A1,SLC9A3,Tcell_interface,Sodium_hydrogen exchange,0.0034085146093959,0.0019980019980019,61.03693
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_CT_absorptive_colonocyte,T_CD8,ABCB1,ABCB1,Tcell_interface,"17a-Ethynylestradiol | 2-Hydroxychlorpropamide | 3',4'-Dihydrodiol | 4'-Hydroxydiclofenac | 4-Hydroxycyclophosphamide | 5-Hydroxyomeprazole | 8-Hydroxycarvedilol | Cholesterol | Cholic acid | Cortisol | E-3179 | Estradiol | Estriol | Glycerol | Hydroxylansoprazole | N-Desmethylcitalopram | N-Desmethyleletriptan | N-Desmethyltamoxifen | N-desmethylimatinib | O-Deethylated candesartan | O-Desmethylverapamil (D-702) | Progesterone | Taurocholic acid | Testosterone",0.0034085146093959,0.0019980019980019,97.13761
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Colonocyte_NOS,IEC_Goblet_2,ABCC4,SLCO2B1,Tcell_interface,Taurocholic acid,0.0034085146093959,0.0019980019980019,32.093746
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Colonocyte_NOS,T_CD8,SLC26A3,SLC26A3,Tcell_interface,Anion exchange,0.0034085146093959,0.0019980019980019,485.8865
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,MNP_macrophage,T_CD8,ATP7B,SLC20A2,Tcell_interface,Phosphate,0.0034085146093959,0.0019980019980019,10.763307
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Endothelial_lymphatic,MNP_mDC,CPT1A,CPT1A,Tcell_interface,Fatty acid,0.0049084773494222,0.0029970029970029,14.296327
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Endothelial_venous,IEC_CT_absorptive_colonocyte,SLC16A1,SLC22A5,Tcell_interface,4-ene-Valproic acid | Nicotinate,0.0049084773494222,0.0029970029970029,20.111559
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Endothelial_venous,IEC_Colonocyte_NOS,SLC16A1,SLC22A5,Tcell_interface,4-ene-Valproic acid | Nicotinate,0.0049084773494222,0.0029970029970029,33.361904
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Enteric_glia,Pericyte,FABP5,FABP5,Tcell_interface,Fatty acid,0.0049084773494222,0.0029970029970029,15.865165
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Fibroblast_CTF_S2,Plasma,SLC2A1,SLC2A1,Tcell_interface,D-Galactose | D-Glucose | D-Mannose | Dehydroascorbic acid | Docosahexaenoic acid | Glucosamine,0.0049084773494222,0.0029970029970029,23.742846
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_CT_absorptive_colonocyte,IEC_Colonocyte_NOS,SCNN1A,SCNN1A,Tcell_interface,Amiloride-sensitive sodium transport,0.0049084773494222,0.0029970029970029,918.3586
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Colonocyte_NOS,Pericyte,CD36,CD36,Tcell_interface,Cholesterol | Fatty acid | Vitamin D3,0.0049084773494222,0.0029970029970029,72.26615
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Myofibroblast,T_CD8,SLC3A2,SLC40A1,Tcell_interface,Iron,0.0049084773494222,0.0029970029970029,22.439577
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Endothelial_lymphatic,Enteric_glia,AQP7,AQP7,Tcell_interface,Water,0.0063074313838839,0.0039960039960039,38.527912
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Enteric_glia,Fibroblast_cCF_S1,CLCN3,CLCN3,Tcell_interface,Chloride,0.0063074313838839,0.0039960039960039,42.969913
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Enteric_glia,MNP_mDC,SLC3A1,SLC3A2,Tcell_interface,L-Cystine,0.0063074313838839,0.0039960039960039,11.186568
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Fibroblast_cCF_S1,IEC_Goblet_2,SLC40A1,SLC40A1,Tcell_interface,Iron,0.0063074313838839,0.0039960039960039,21.224897
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Muscularis_mucosa,T_CD4,SLC40A1,SLC40A1,Tcell_interface,Iron,0.0063074313838839,0.0039960039960039,19.398613
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Endothelial_venous,T_CD4,CPT1A,CPT1A,Tcell_interface,Fatty acid,0.0076629667118438,0.0049950049950049,40.535004
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Fibroblast_CTF_S2,IEC_BEST4_OTOP2,SLC12A2,SLC12A2,Tcell_interface,Chloride ion | Sodium,0.0076629667118438,0.0049950049950049,27.836834
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_BEST4_OTOP2,IEC_CT_absorptive_colonocyte,ABCB1,ABCG2,Tcell_interface,5-Hydroxyomeprazole | Cholesterol | Cortisol | Estradiol | Hydroxylansoprazole | N-Desmethyltamoxifen | N-desmethylimatinib | O-Desmethylverapamil (D-702) | Taurocholic acid | Testosterone,0.0076629667118438,0.0049950049950049,37.755016
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_BEST4_OTOP2,T_CD4,SLC3A2,SLC40A1,Tcell_interface,Iron,0.0076629667118438,0.0049950049950049,30.026484
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_CT_absorptive_colonocyte,IEC_Colonocyte_NOS,ABCC3,SLC16A1,Tcell_interface,Taurocholic acid,0.0076629667118438,0.0049950049950049,72.04623
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Colonocyte_NOS,MNP_macrophage,SLC22A5,SLC22A5,Tcell_interface,4-ene-Valproic acid | Acetyl-L-Carnitine | Choline | Creatine | Dopamine | Histamine | L-Carnitine | Nicotinate | Norepinephrine | O-Desmethylverapamil (D-702) | Sodium,0.0076629667118438,0.0049950049950049,56.218258
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,MAST,MNP_macrophage,SLC26A2,SLC26A2,Tcell_interface,Anion exchange,0.0076629667118438,0.0049950049950049,20.892933
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Endothelial_lymphatic,Fibroblast_CTF_S2,SLC12A2,SLC12A2,Tcell_interface,Chloride ion | Sodium,0.008957905365412,0.0059940059940059,14.819548
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_BEST4_OTOP2,MNP_mDC,SLC26A3,SLC26A3,Tcell_interface,Anion exchange,0.008957905365412,0.0059940059940059,13.881412
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Colonocyte_NOS,MNP_macrophage,SLC16A1,SLC22A5,Tcell_interface,4-ene-Valproic acid | Nicotinate,0.008957905365412,0.0059940059940059,35.382256
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Colonocyte_NOS,MNP_macrophage,SLC3A1,SLC3A2,Tcell_interface,L-Cystine,0.008957905365412,0.0059940059940059,28.283403
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Goblet_2,T_CD4,CD38,CD38,Tcell_interface,Adenosine diphosphate ribose,0.008957905365412,0.0059940059940059,16.12874
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,MNP_macrophage,Pericyte,ABCA1,ABCA1,Tcell_interface,25-Hydroxycholesterol,0.008957905365412,0.0059940059940059,58.10888
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Endothelial_venous,IEC_CT_absorptive_colonocyte,ABCB1,SLC22A5,Tcell_interface,O-Desmethylverapamil (D-702),0.0102378974109197,0.0069930069930069,17.202047
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Fibroblast_CTF_S2,MNP_macrophage,FABP5,FABP5,Tcell_interface,Fatty acid,0.0102378974109197,0.0069930069930069,36.639885
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_BEST4_OTOP2,IEC_CT_absorptive_colonocyte,AQP7,AQP7,Tcell_interface,Water,0.0102378974109197,0.0069930069930069,14.816606
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Tuft,Plasma,CD36,CD36,Tcell_interface,Cholesterol | Fatty acid | Vitamin D3,0.0102378974109197,0.0069930069930069,21.965147
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Endothelial_venous,Pericyte,ABCC1,SLCO2B1,Tcell_interface,Taurocholic acid,0.0114963484079916,0.0079920079920079,15.624871
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Fibroblast_CTF_S2,IEC_CT_absorptive_colonocyte,AQP7,AQP7,Tcell_interface,Water,0.0114963484079916,0.0079920079920079,20.066357
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Colonocyte_NOS,IEC_Goblet_2,CD38,CD38,Tcell_interface,Adenosine diphosphate ribose,0.0114963484079916,0.0079920079920079,13.811649
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Colonocyte_NOS,MNP_macrophage,SLC16A9,SLC16A9,Tcell_interface,L-Carnitine,0.0114963484079916,0.0079920079920079,23.394808
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Colonocyte_NOS,MNP_macrophage,CLCN3,CLCN3,Tcell_interface,Chloride,0.0114963484079916,0.0079920079920079,97.09742
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Colonocyte_NOS,Plasma,SLC15A1,SLC15A1,Tcell_interface,2-Hydroxychlorpropamide | Glycyl-glycine | L-Dopa,0.0114963484079916,0.0079920079920079,13.8215065
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Goblet,MNP_macrophage,CPT1A,CPT1A,Tcell_interface,Fatty acid,0.0114963484079916,0.0079920079920079,33.32419
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Endothelial_arterial,Endothelial_lymphatic,SCARB1,SCARB1,Tcell_interface,alpha-Tocopherol,0.0127142264128565,0.0089910089910089,16.961086
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Endothelial_arterial,MNP_mDC,FABP5,FABP5,Tcell_interface,Fatty acid,0.0127142264128565,0.0089910089910089,15.980907
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Endothelial_lymphatic,Fibroblast_CTF_S2,CD36,MSR1,Tcell_interface,Fatty acid,0.0127142264128565,0.0089910089910089,16.673422
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Enteric_glia,Pericyte,CD36,MSR1,Tcell_interface,Fatty acid,0.0127142264128565,0.0089910089910089,15.865165
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Fibroblast_CTF_S2,IEC_Colonocyte_NOS,SLC26A2,SLC26A3,Tcell_interface,Anion exchange,0.0127142264128565,0.0089910089910089,1098.5919
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Fibroblast_CTF_S2,Plasma,ABCG2,SLC22A4,Tcell_interface,O-Desmethylverapamil (D-702) | Testosterone,0.0127142264128565,0.0089910089910089,17.853334
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Fibroblast_CTF_S2,T_CD4,ABCC4,SLCO2B1,Tcell_interface,Taurocholic acid,0.0127142264128565,0.0089910089910089,17.596815
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Colonocyte_NOS,MAST,ABCG2,SLC22A4,Tcell_interface,O-Desmethylverapamil (D-702) | Testosterone,0.0127142264128565,0.0089910089910089,18.884771
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Colonocyte_NOS,Muscularis_mucosa,CD38,CD38,Tcell_interface,Adenosine diphosphate ribose,0.0127142264128565,0.0089910089910089,13.144388
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,MNP_macrophage,Pericyte,SLC26A2,SLC26A3,Tcell_interface,Anion exchange,0.0127142264128565,0.0089910089910089,16.840097
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Fibroblast_CTF_S2,Fibroblast_cCF_S1,CD38,CD38,Tcell_interface,Adenosine diphosphate ribose,0.0139360139360139,0.0099900099900099,16.34561
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_BEST4_OTOP2,T_CD8,SLC26A2,SLC26A2,Tcell_interface,Anion exchange,0.0139360139360139,0.0099900099900099,88.75564
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,MNP_mDC,MNP_macrophage,MSR1,MSR1,Tcell_interface,Fatty acid,0.0139360139360139,0.0099900099900099,25.208384
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Enteric_glia,MNP_macrophage,CPT1A,CPT1A,Tcell_interface,Fatty acid,0.0151371807000946,0.0109890109890109,35.101395
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Fibroblast_CTF_S2,MNP_macrophage,MSR1,MSR1,Tcell_interface,Fatty acid,0.0151371807000946,0.0109890109890109,35.796738
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Colonocyte_NOS,MNP_macrophage,ABCC3,SLC22A5,Tcell_interface,O-Desmethylverapamil (D-702),0.0151371807000946,0.0109890109890109,23.019928
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,MNP_macrophage,Plasma,SLC16A1,SLC22A5,Tcell_interface,4-ene-Valproic acid | Nicotinate,0.0151371807000946,0.0109890109890109,11.042412
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Endothelial_venous,IEC_Colonocyte_NOS,FABP5,FABP5,Tcell_interface,Fatty acid,0.0163324797208852,0.0119880119880119,19.746294
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_BEST4_OTOP2,IEC_ISC,SLC12A2,SLC12A2,Tcell_interface,Chloride ion | Sodium,0.0163324797208852,0.0119880119880119,15.185667
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_CT_absorptive_colonocyte,IEC_Colonocyte_NOS,SLC22A4,SLC22A5,Tcell_interface,L-Carnitine | O-Desmethylverapamil (D-702) | Sodium,0.0163324797208852,0.0119880119880119,49.286415
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_CT_absorptive_colonocyte,IEC_Colonocyte_NOS,ABCB1,SLC15A1,Tcell_interface,2-Hydroxychlorpropamide,0.0163324797208852,0.0119880119880119,55.21075
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Colonocyte_NOS,IEC_Goblet,ABCB1,ABCG2,Tcell_interface,5-Hydroxyomeprazole | Cholesterol | Cortisol | Estradiol | Hydroxylansoprazole | N-Desmethyltamoxifen | N-desmethylimatinib | O-Desmethylverapamil (D-702) | Taurocholic acid | Testosterone,0.0163324797208852,0.0119880119880119,22.851482
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Endothelial_lymphatic,Plasma,CD36,CD36,Tcell_interface,Cholesterol | Fatty acid | Vitamin D3,0.0175103534236661,0.0129870129870129,30.791162
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Enteric_glia,IEC_CT_absorptive_colonocyte,SLC22A5,SLC22A5,Tcell_interface,4-ene-Valproic acid | Acetyl-L-Carnitine | Choline | Creatine | Dopamine | Histamine | L-Carnitine | Nicotinate | Norepinephrine | O-Desmethylverapamil (D-702) | Sodium,0.0175103534236661,0.0129870129870129,17.066412
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Colonocyte_NOS,IEC_Goblet,ATP7B,SLC20A2,Tcell_interface,Phosphate,0.0175103534236661,0.0129870129870129,30.27331
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,MNP_macrophage,T_CD8,SLC26A2,SLC26A3,Tcell_interface,Anion exchange,0.0175103534236661,0.0129870129870129,20.359364
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Pericyte,T_CD4,ABCA1,ABCA1,Tcell_interface,25-Hydroxycholesterol,0.0175103534236661,0.0129870129870129,23.763786
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Enteric_glia,Fibroblast_cCF_S1,SLC12A2,SLC12A2,Tcell_interface,Chloride ion | Sodium,0.0186927295395694,0.0139860139860139,18.445604
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_BEST4_OTOP2,MNP_mDC,SLC26A2,SLC26A3,Tcell_interface,Anion exchange,0.0186927295395694,0.0139860139860139,13.881412
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_CT_absorptive_colonocyte,IEC_Goblet,SCNN1A,SCNN1A,Tcell_interface,Amiloride-sensitive sodium transport,0.0186927295395694,0.0139860139860139,113.3201
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Colonocyte_NOS,IEC_Goblet,SLC22A4,SLC22A5,Tcell_interface,L-Carnitine | O-Desmethylverapamil (D-702) | Sodium,0.0186927295395694,0.0139860139860139,49.35318
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,MNP_macrophage,Plasma,TAP1,TAP1,Tcell_interface,Adenosine triphosphate,0.0186927295395694,0.0139860139860139,35.65416
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Fibroblast_CTF_S2,IEC_CT_absorptive_colonocyte,AQP8,AQP8,Tcell_interface,Water,0.0198735410003015,0.0149850149850149,46.788544
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Fibroblast_CTF_S2,MNP_macrophage,ABCA1,ABCA1,Tcell_interface,25-Hydroxycholesterol,0.0198735410003015,0.0149850149850149,120.32853
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Colonocyte_NOS,T_CD4,SLC16A1,SLC16A1,Tcell_interface,4-ene-Valproic acid | Acetate | Butyrate | D-Lactate | Ketone bodies | L-Glutamate | L-Lactate | Nicotinate | Pyruvate | Taurocholic acid | alpha-Ketoisovaleric acid,0.0198735410003015,0.0149850149850149,18.68624
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Goblet,T_CD8,TAP1,TAP1,Tcell_interface,Adenosine triphosphate,0.0198735410003015,0.0149850149850149,35.58094
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Endothelial_venous,IEC_Colonocyte_NOS,ABCB1,SLC22A5,Tcell_interface,O-Desmethylverapamil (D-702),0.0210025689942718,0.0159840159840159,28.535482
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Fibroblast_CTF_S2,IEC_Colonocyte_NOS,SCNN1A,SCNN1G,Tcell_interface,Amiloride-sensitive sodium transport,0.0210025689942718,0.0159840159840159,29.522234
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Fibroblast_CTF_S2,Plasma,ABCB1,SLC22A5,Tcell_interface,O-Desmethylverapamil (D-702),0.0210025689942718,0.0159840159840159,17.853334
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Colonocyte_NOS,Muscularis_mucosa,TAP1,TAP1,Tcell_interface,Adenosine triphosphate,0.0210025689942718,0.0159840159840159,33.192673
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,MNP_mDC,Plasma,CD36,FABP5,Tcell_interface,Fatty acid,0.0210025689942718,0.0159840159840159,17.42971
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Endothelial_arterial,Fibroblast_cCF_S1,TAP1,TAP1,Tcell_interface,Adenosine triphosphate,0.0221150555667468,0.0169830169830169,29.980204
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Endothelial_arterial,MNP_mDC,CPT1A,CPT1A,Tcell_interface,Fatty acid,0.0221150555667468,0.0169830169830169,16.7657
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Enteric_glia,IEC_BEST4_OTOP2,CD36,CD36,Tcell_interface,Cholesterol | Fatty acid | Vitamin D3,0.0221150555667468,0.0169830169830169,15.999258
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Endothelial_arterial,T_CD8,ABCB1,ABCB1,Tcell_interface,"17a-Ethynylestradiol | 2-Hydroxychlorpropamide | 3',4'-Dihydrodiol | 4'-Hydroxydiclofenac | 4-Hydroxycyclophosphamide | 5-Hydroxyomeprazole | 8-Hydroxycarvedilol | Cholesterol | Cholic acid | Cortisol | E-3179 | Estradiol | Estriol | Glycerol | Hydroxylansoprazole | N-Desmethylcitalopram | N-Desmethyleletriptan | N-Desmethyltamoxifen | N-desmethylimatinib | O-Deethylated candesartan | O-Desmethylverapamil (D-702) | Progesterone | Taurocholic acid | Testosterone",0.0232465123003156,0.0179820179820179,17.74317
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Endothelial_venous,Myofibroblast,TAP1,TAP1,Tcell_interface,Adenosine triphosphate,0.0232465123003156,0.0179820179820179,18.65837
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_BEST4_OTOP2,T_CD8,ABCB1,ABCG2,Tcell_interface,5-Hydroxyomeprazole | Cholesterol | Cortisol | Estradiol | Hydroxylansoprazole | N-Desmethyltamoxifen | N-desmethylimatinib | O-Desmethylverapamil (D-702) | Taurocholic acid | Testosterone,0.0232465123003156,0.0179820179820179,14.469323
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_CT_absorptive_colonocyte,IEC_Colonocyte_NOS,SLC40A1,SLC40A1,Tcell_interface,Iron,0.0232465123003156,0.0179820179820179,170.00691
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Colonocyte_NOS,IEC_Goblet,CLCN3,CLCN3,Tcell_interface,Chloride,0.0232465123003156,0.0179820179820179,386.24774
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Goblet,MNP_macrophage,SLC26A2,SLC26A3,Tcell_interface,Anion exchange,0.0232465123003156,0.0179820179820179,21.728703
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Myofibroblast,T_CD4,SLC26A2,SLC26A2,Tcell_interface,Anion exchange,0.0232465123003156,0.0179820179820179,19.91038
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_BEST4_OTOP2,IEC_CT_absorptive_colonocyte,SLC26A3,SLC26A3,Tcell_interface,Anion exchange,0.0243819228057406,0.0189810189810189,197.32574
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Colonocyte_NOS,IEC_Tuft,ABCG2,SLC22A5,Tcell_interface,O-Desmethylverapamil (D-702),0.0243819228057406,0.0189810189810189,14.842197
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Fibroblast_CTF_S2,Myofibroblast,TAP1,TAP1,Tcell_interface,Adenosine triphosphate,0.0254866415049481,0.0199800199800199,22.864775
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_BEST4_OTOP2,MNP_macrophage,ABCC4,SLCO2B1,Tcell_interface,Taurocholic acid,0.0254866415049481,0.0199800199800199,14.170753
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_CT_absorptive_colonocyte,IEC_Colonocyte_NOS,ABCC4,SLCO2B1,Tcell_interface,Taurocholic acid,0.0254866415049481,0.0199800199800199,13.318773
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Colonocyte_NOS,T_CD4,CD38,CD38,Tcell_interface,Adenosine diphosphate ribose,0.0254866415049481,0.0199800199800199,12.735513
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Endothelial_arterial,Fibroblast_FRC_S4,TAP1,TAP1,Tcell_interface,Adenosine triphosphate,0.0265978562921794,0.0209790209790209,17.04349
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Enteric_glia,Plasma,CLCN3,CLCN3,Tcell_interface,Chloride,0.0265978562921794,0.0209790209790209,36.1714
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_BEST4_OTOP2,IEC_Colonocyte_NOS,TAP1,TAP1,Tcell_interface,Adenosine triphosphate,0.0265978562921794,0.0209790209790209,130.42654
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_CT_absorptive_colonocyte,IEC_Colonocyte_NOS,ABCG2,ABCG2,Tcell_interface,5-Hydroxyomeprazole | Cholesterol | Cortisol | Estradiol | Folic acid | Hydroxylansoprazole | N-Desmethyltamoxifen | N-desmethylimatinib | O-Desmethylverapamil (D-702) | Taurocholic acid | Testosterone,0.0265978562921794,0.0209790209790209,70.30728
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_CT_absorptive_colonocyte,IEC_Colonocyte_NOS,SLC26A2,SLC26A2,Tcell_interface,Anion exchange,0.0265978562921794,0.0209790209790209,2153.49
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Colonocyte_NOS,T_CD4,ABCG2,SLC22A4,Tcell_interface,O-Desmethylverapamil (D-702) | Testosterone,0.0265978562921794,0.0209790209790209,17.43906
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Endothelial_arterial,Fibroblast_cCF_S1,SLC12A2,SLC12A2,Tcell_interface,Chloride ion | Sodium,0.0277006162870321,0.0219780219780219,17.006008
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Endothelial_arterial,Pericyte,CD36,FABP5,Tcell_interface,Fatty acid,0.0277006162870321,0.0219780219780219,20.292538
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Fibroblast_CTF_S2,IEC_Colonocyte_NOS,SCNN1A,SCNN1A,Tcell_interface,Amiloride-sensitive sodium transport,0.0277006162870321,0.0219780219780219,270.86392
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_BEST4_OTOP2,T_CD8,SLC12A2,SLC12A2,Tcell_interface,Chloride ion | Sodium,0.0277006162870321,0.0219780219780219,12.128695
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Colonocyte_NOS,MNP_mDC,SLC26A2,SLC26A2,Tcell_interface,Anion exchange,0.0277006162870321,0.0219780219780219,72.43167
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Colonocyte_NOS,Myofibroblast,SCNN1A,SCNN1A,Tcell_interface,Amiloride-sensitive sodium transport,0.0277006162870321,0.0219780219780219,68.645195
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Fibroblast_CTF_S2,T_CD8,CD36,MSR1,Tcell_interface,Fatty acid,0.028821583457047,0.0229770229770229,14.907154
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_BEST4_OTOP2,IEC_CT_absorptive_colonocyte,ABCB1,SLC15A1,Tcell_interface,2-Hydroxychlorpropamide,0.028821583457047,0.0229770229770229,28.644087
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_BEST4_OTOP2,Myofibroblast,SCNN1A,SCNN1G,Tcell_interface,Amiloride-sensitive sodium transport,0.028821583457047,0.0229770229770229,17.507616
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_CT_absorptive_colonocyte,IEC_Colonocyte_NOS,SLC15A1,SLC15A1,Tcell_interface,2-Hydroxychlorpropamide | Glycyl-glycine | L-Dopa,0.028821583457047,0.0229770229770229,31.939318
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Colonocyte_NOS,T_CD8,CD36,CD36,Tcell_interface,Cholesterol | Fatty acid | Vitamin D3,0.028821583457047,0.0229770229770229,385.13727
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,MNP_macrophage,Pericyte,CPT1A,CPT1A,Tcell_interface,Fatty acid,0.028821583457047,0.0229770229770229,15.389735
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_CT_absorptive_colonocyte,IEC_Colonocyte_NOS,SLC20A2,SLC20A2,Tcell_interface,Phosphate,0.0299158268537801,0.0239760239760239,66.20888
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Colonocyte_NOS,IEC_Tuft,SLC22A5,SLC22A5,Tcell_interface,4-ene-Valproic acid | Acetyl-L-Carnitine | Choline | Creatine | Dopamine | Histamine | L-Carnitine | Nicotinate | Norepinephrine | O-Desmethylverapamil (D-702) | Sodium,0.0299158268537801,0.0239760239760239,14.481241
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Endothelial_arterial,IEC_Goblet,CD36,CD36,Tcell_interface,Cholesterol | Fatty acid | Vitamin D3,0.0310096176097601,0.0249750249750249,19.962082
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Endothelial_lymphatic,MAST,ABCC1,SLCO2B1,Tcell_interface,Taurocholic acid,0.0310096176097601,0.0249750249750249,18.493252
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Fibroblast_cCF_S1,MNP_macrophage,CD36,MSR1,Tcell_interface,Fatty acid,0.0310096176097601,0.0249750249750249,27.013271
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_BEST4_OTOP2,IEC_CT_absorptive_colonocyte,SLC22A4,SLC22A5,Tcell_interface,L-Carnitine | O-Desmethylverapamil (D-702) | Sodium,0.0310096176097601,0.0249750249750249,7.1076546
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_BEST4_OTOP2,IEC_CT_absorptive_colonocyte,AQP8,AQP8,Tcell_interface,Water,0.0310096176097601,0.0249750249750249,38.51712
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_BEST4_OTOP2,T_CD8,ABCC3,ABCG2,Tcell_interface,5-Hydroxyomeprazole | Folic acid | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0310096176097601,0.0249750249750249,14.469323
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Endothelial_venous,Pericyte,ABCC4,SLCO2B1,Tcell_interface,Taurocholic acid,0.0321155200047933,0.0259740259740259,15.624871
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_BEST4_OTOP2,MNP_mDC,SLC26A2,SLC26A2,Tcell_interface,Anion exchange,0.0321155200047933,0.0259740259740259,13.881412
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Plasma,T_CD4,ABCB1,ABCB1,Tcell_interface,"17a-Ethynylestradiol | 2-Hydroxychlorpropamide | 3',4'-Dihydrodiol | 4'-Hydroxydiclofenac | 4-Hydroxycyclophosphamide | 5-Hydroxyomeprazole | 8-Hydroxycarvedilol | Cholesterol | Cholic acid | Cortisol | E-3179 | Estradiol | Estriol | Glycerol | Hydroxylansoprazole | N-Desmethylcitalopram | N-Desmethyleletriptan | N-Desmethyltamoxifen | N-desmethylimatinib | O-Deethylated candesartan | O-Desmethylverapamil (D-702) | Progesterone | Taurocholic acid | Testosterone",0.0332063696021293,0.0269730269730269,19.214693
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Endothelial_lymphatic,Fibroblast_cCF_S1,ABCC1,SLCO2B1,Tcell_interface,Taurocholic acid,0.0343210232275208,0.0279720279720279,16.181963
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Enteric_glia,Fibroblast_cCF_S1,SLC3A1,SLC3A2,Tcell_interface,L-Cystine,0.0343210232275208,0.0279720279720279,15.248976
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Goblet,IEC_Tuft,SLC9A3,SLC9A3,Tcell_interface,Sodium_hydrogen exchange,0.0343210232275208,0.0279720279720279,13.473433
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,MNP_macrophage,Muscularis_mucosa,TAP1,TAP1,Tcell_interface,Adenosine triphosphate,0.0343210232275208,0.0279720279720279,16.543125
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Fibroblast_CTF_S2,IEC_Colonocyte_NOS,CLCN3,CLCN3,Tcell_interface,Chloride,0.0353785716561741,0.0289710289710289,230.7476
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Fibroblast_CTF_S2,Myofibroblast,SCNN1A,SCNN1G,Tcell_interface,Amiloride-sensitive sodium transport,0.0353785716561741,0.0289710289710289,13.710393
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Fibroblast_cCF_S1,Myofibroblast,SLC9A3,SLC9A3,Tcell_interface,Sodium_hydrogen exchange,0.0353785716561741,0.0289710289710289,18.025864
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Fibroblast_cCF_S1,Pericyte,SLC12A2,SLC12A2,Tcell_interface,Chloride ion | Sodium,0.0353785716561741,0.0289710289710289,17.050718
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_BEST4_OTOP2,IEC_Colonocyte_NOS,SLC20A2,SLC20A2,Tcell_interface,Phosphate,0.0353785716561741,0.0289710289710289,15.945343
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_CT_absorptive_colonocyte,IEC_Colonocyte_NOS,SLC3A1,SLC3A2,Tcell_interface,L-Cystine,0.0353785716561741,0.0289710289710289,32.708553
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_CT_absorptive_colonocyte,IEC_Colonocyte_NOS,ABCC3,ABCC3,Tcell_interface,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | 5-Hydroxyomeprazole | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Deoxycholic acid | Folic acid | Folinic acid | Glutathione | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | O-Desmethylverapamil (D-702) | Sulfolithocholic acid | Taurocholic acid | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0353785716561741,0.0289710289710289,96.95324
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Colonocyte_NOS,Pericyte,ABCB1,SLC16A1,Tcell_interface,Taurocholic acid,0.0353785716561741,0.0289710289710289,13.564416
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Colonocyte_NOS,T_CD4,SLC26A2,SLC26A3,Tcell_interface,Anion exchange,0.0353785716561741,0.0289710289710289,129.86302
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Goblet,IEC_ISC,SLC12A2,SLC12A2,Tcell_interface,Chloride ion | Sodium,0.0353785716561741,0.0289710289710289,17.263065
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Endothelial_arterial,Endothelial_lymphatic,CPT1A,CPT1A,Tcell_interface,Fatty acid,0.0364611381634515,0.0299700299700299,42.78946
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Endothelial_venous,Plasma,SLC40A1,SLC40A1,Tcell_interface,Iron,0.0364611381634515,0.0299700299700299,20.511774
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Fibroblast_CTF_S2,IEC_CT_absorptive_colonocyte,CD36,CD36,Tcell_interface,Cholesterol | Fatty acid | Vitamin D3,0.0364611381634515,0.0299700299700299,62.255257
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_BEST4_OTOP2,Plasma,SLC9A1,SLC9A1,Tcell_interface,Sodium_hydrogen exchange,0.0364611381634515,0.0299700299700299,11.792583
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_CT_absorptive_colonocyte,IEC_Colonocyte_NOS,SLC16A9,SLC22A5,Tcell_interface,L-Carnitine,0.0364611381634515,0.0299700299700299,55.376423
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Colonocyte_NOS,T_gd_and_ambiguous,SCNN1A,SCNN1A,Tcell_interface,Amiloride-sensitive sodium transport,0.0364611381634515,0.0299700299700299,31.31359
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Fibroblast_submucosal_S3,T_CD4,TAP1,TAP1,Tcell_interface,Adenosine triphosphate,0.037532343298062,0.0309690309690309,17.787254
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Colonocyte_NOS,MNP_macrophage,SLC9A1,SLC9A1,Tcell_interface,Sodium_hydrogen exchange,0.037532343298062,0.0309690309690309,36.121056
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Goblet,IEC_Tuft,SLC26A2,SLC26A3,Tcell_interface,Anion exchange,0.037532343298062,0.0309690309690309,24.726265
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Goblet,T_CD8,ABCG2,SLC22A5,Tcell_interface,O-Desmethylverapamil (D-702),0.037532343298062,0.0309690309690309,11.225426
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Enteric_glia,MAST,CLCN3,CLCN3,Tcell_interface,Chloride,0.0385920385920385,0.0319680319680319,19.5656
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,MNP_mDC,MNP_macrophage,CD36,MSR1,Tcell_interface,Fatty acid,0.0385920385920385,0.0319680319680319,27.297014
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Enteric_glia,Plasma,CD36,CD36,Tcell_interface,Cholesterol | Fatty acid | Vitamin D3,0.0396777417245506,0.0329670329670329,55.208527
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Fibroblast_cCF_S1,IEC_Colonocyte_NOS,ABCB1,ABCB1,Tcell_interface,"17a-Ethynylestradiol | 2-Hydroxychlorpropamide | 3',4'-Dihydrodiol | 4'-Hydroxydiclofenac | 4-Hydroxycyclophosphamide | 5-Hydroxyomeprazole | 8-Hydroxycarvedilol | Cholesterol | Cholic acid | Cortisol | E-3179 | Estradiol | Estriol | Glycerol | Hydroxylansoprazole | N-Desmethylcitalopram | N-Desmethyleletriptan | N-Desmethyltamoxifen | N-desmethylimatinib | O-Deethylated candesartan | O-Desmethylverapamil (D-702) | Progesterone | Taurocholic acid | Testosterone",0.0396777417245506,0.0329670329670329,13.534921
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_CT_absorptive_colonocyte,T_CD8,AQP7,AQP8,Tcell_interface,Water,0.0396777417245506,0.0329670329670329,18.896097
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Endothelial_arterial,IEC_Colonocyte_NOS,SLC26A2,SLC26A2,Tcell_interface,Anion exchange,0.0407814809468983,0.0339660339660339,65.165
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Enteric_glia,Plasma,ABCC1,SLCO2B1,Tcell_interface,Taurocholic acid,0.0407814809468983,0.0339660339660339,19.879337
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Colonocyte_NOS,T_CD4,ABCC3,SLC16A1,Tcell_interface,Taurocholic acid,0.0407814809468983,0.0339660339660339,18.68624
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,T_CD4,T_CD8,TAP1,TAP1,Tcell_interface,Adenosine triphosphate,0.0418835075874787,0.0349650349650349,37.020855
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Fibroblast_cCF_S1,Pericyte,TAP1,TAP1,Tcell_interface,Adenosine triphosphate,0.0429546456286257,0.0359640359640359,21.208881
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_CT_absorptive_colonocyte,MNP_macrophage,CD36,CD36,Tcell_interface,Cholesterol | Fatty acid | Vitamin D3,0.0429546456286257,0.0359640359640359,17.715925
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Colonocyte_NOS,Myofibroblast,SLC16A1,SLC16A1,Tcell_interface,4-ene-Valproic acid | Acetate | Butyrate | D-Lactate | Ketone bodies | L-Glutamate | L-Lactate | Nicotinate | Pyruvate | Taurocholic acid | alpha-Ketoisovaleric acid,0.0429546456286257,0.0359640359640359,13.805968
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Fibroblast_CTF_S2,MNP_macrophage,SCNN1A,SCNN1A,Tcell_interface,Amiloride-sensitive sodium transport,0.0440233213500455,0.0369630369630369,12.449005
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Fibroblast_CTF_S2,Myofibroblast,ABCA1,ABCA1,Tcell_interface,25-Hydroxycholesterol,0.0440233213500455,0.0369630369630369,21.603662
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Colonocyte_NOS,IEC_Tuft,CD36,CD36,Tcell_interface,Cholesterol | Fatty acid | Vitamin D3,0.0440233213500455,0.0369630369630369,31.404411
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Colonocyte_NOS,MNP_mDC,SLC26A3,SLC26A3,Tcell_interface,Anion exchange,0.0440233213500455,0.0369630369630369,36.57353
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Endothelial_arterial,Enteric_glia,CD36,MSR1,Tcell_interface,Fatty acid,0.0450859861120641,0.0379620379620379,15.45506
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Fibroblast_CTF_S2,MNP_mDC,TAP1,TAP1,Tcell_interface,Adenosine triphosphate,0.0450859861120641,0.0379620379620379,20.777391
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_BEST4_OTOP2,Myofibroblast,TAP1,TAP1,Tcell_interface,Adenosine triphosphate,0.0450859861120641,0.0379620379620379,17.998064
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Endothelial_arterial,Fibroblast_CTF_S2,ABCA1,ABCA1,Tcell_interface,25-Hydroxycholesterol,0.0461662306743507,0.0389610389610389,15.725737
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Fibroblast_CTF_S2,MNP_mDC,ABCC1,SLCO2B1,Tcell_interface,Taurocholic acid,0.0461662306743507,0.0389610389610389,21.804056
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Fibroblast_CTF_S2,T_CD4,FABP5,FABP5,Tcell_interface,Fatty acid,0.0472615731887564,0.0399600399600399,16.109375
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,MNP_macrophage,Plasma,CD38,CD38,Tcell_interface,Adenosine diphosphate ribose,0.0472615731887564,0.0399600399600399,75.93646
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_BEST4_OTOP2,IEC_CT_absorptive_colonocyte,SLC40A1,SLC40A1,Tcell_interface,Iron,0.0483610264174527,0.0409590409590409,30.457785
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_CT_absorptive_colonocyte,IEC_Colonocyte_NOS,SLC16A9,SLC16A9,Tcell_interface,L-Carnitine,0.0483610264174527,0.0409590409590409,98.20907
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Enteric_glia,MNP_macrophage,FABP5,FABP5,Tcell_interface,Fatty acid,0.0494525771927666,0.0419580419580419,12.0413685
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Goblet,T_CD8,SLC12A2,SLC12A2,Tcell_interface,Chloride ion | Sodium,0.0494525771927666,0.0419580419580419,11.225426
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Enteric_glia,Enteric_glia,ABCB1,SLC22A4,within_Tcell,O-Desmethylverapamil (D-702) | Testosterone,0.0017807723103195,0.0009990009990009,25.523302
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_CT_absorptive_colonocyte,IEC_CT_absorptive_colonocyte,ABCB1,ABCB1,within_Tcell,"17a-Ethynylestradiol | 2-Hydroxychlorpropamide | 3',4'-Dihydrodiol | 4'-Hydroxydiclofenac | 4-Hydroxycyclophosphamide | 5-Hydroxyomeprazole | 8-Hydroxycarvedilol | Cholesterol | Cholic acid | Cortisol | E-3179 | Estradiol | Estriol | Glycerol | Hydroxylansoprazole | N-Desmethylcitalopram | N-Desmethyleletriptan | N-Desmethyltamoxifen | N-desmethylimatinib | O-Deethylated candesartan | O-Desmethylverapamil (D-702) | Progesterone | Taurocholic acid | Testosterone",0.0017807723103195,0.0009990009990009,2738.0195
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_CT_absorptive_colonocyte,IEC_CT_absorptive_colonocyte,ABCB1,ABCG2,within_Tcell,5-Hydroxyomeprazole | Cholesterol | Cortisol | Estradiol | Hydroxylansoprazole | N-Desmethyltamoxifen | N-desmethylimatinib | O-Desmethylverapamil (D-702) | Taurocholic acid | Testosterone,0.0017807723103195,0.0009990009990009,1208.4099
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_CT_absorptive_colonocyte,IEC_CT_absorptive_colonocyte,AQP7,AQP8,within_Tcell,Water,0.0017807723103195,0.0009990009990009,12377.933
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Colonocyte_NOS,IEC_Colonocyte_NOS,SLC2A1,SLC2A1,within_Tcell,D-Galactose | D-Glucose | D-Mannose | Dehydroascorbic acid | Docosahexaenoic acid | Glucosamine,0.0017807723103195,0.0009990009990009,700.6878
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Colonocyte_NOS,IEC_Colonocyte_NOS,SLC22A4,SLC22A5,within_Tcell,L-Carnitine | O-Desmethylverapamil (D-702) | Sodium,0.0017807723103195,0.0009990009990009,339.28842
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Colonocyte_NOS,IEC_Colonocyte_NOS,SLC12A2,SLC12A2,within_Tcell,Chloride ion | Sodium,0.0017807723103195,0.0009990009990009,1021.31824
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Colonocyte_NOS,IEC_Colonocyte_NOS,ABCG2,ABCG2,within_Tcell,5-Hydroxyomeprazole | Cholesterol | Cortisol | Estradiol | Folic acid | Hydroxylansoprazole | N-Desmethyltamoxifen | N-desmethylimatinib | O-Desmethylverapamil (D-702) | Taurocholic acid | Testosterone,0.0017807723103195,0.0009990009990009,441.22034
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Colonocyte_NOS,IEC_Colonocyte_NOS,ABCB1,ABCB1,within_Tcell,"17a-Ethynylestradiol | 2-Hydroxychlorpropamide | 3',4'-Dihydrodiol | 4'-Hydroxydiclofenac | 4-Hydroxycyclophosphamide | 5-Hydroxyomeprazole | 8-Hydroxycarvedilol | Cholesterol | Cholic acid | Cortisol | E-3179 | Estradiol | Estriol | Glycerol | Hydroxylansoprazole | N-Desmethylcitalopram | N-Desmethyleletriptan | N-Desmethyltamoxifen | N-desmethylimatinib | O-Deethylated candesartan | O-Desmethylverapamil (D-702) | Progesterone | Taurocholic acid | Testosterone",0.0017807723103195,0.0009990009990009,1107.4886
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Colonocyte_NOS,IEC_Colonocyte_NOS,ABCB1,ABCG2,within_Tcell,5-Hydroxyomeprazole | Cholesterol | Cortisol | Estradiol | Hydroxylansoprazole | N-Desmethyltamoxifen | N-desmethylimatinib | O-Desmethylverapamil (D-702) | Taurocholic acid | Testosterone,0.0017807723103195,0.0009990009990009,681.13654
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Colonocyte_NOS,IEC_Colonocyte_NOS,ABCB1,SLC16A1,within_Tcell,Taurocholic acid,0.0017807723103195,0.0009990009990009,727.4919
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Colonocyte_NOS,IEC_Colonocyte_NOS,AQP7,AQP8,within_Tcell,Water,0.0017807723103195,0.0009990009990009,1266.5302
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Colonocyte_NOS,IEC_Colonocyte_NOS,AQP8,AQP8,within_Tcell,Water,0.0017807723103195,0.0009990009990009,356.88193
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Colonocyte_NOS,IEC_Colonocyte_NOS,ABCB1,SLC22A5,within_Tcell,O-Desmethylverapamil (D-702),0.0017807723103195,0.0009990009990009,1312.8031
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Colonocyte_NOS,IEC_Colonocyte_NOS,ABCB1,SLC15A1,within_Tcell,2-Hydroxychlorpropamide,0.0017807723103195,0.0009990009990009,172.13667
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Colonocyte_NOS,IEC_Colonocyte_NOS,SLC9A1,SLC9A3,within_Tcell,Sodium_hydrogen exchange,0.0017807723103195,0.0009990009990009,1223.8191
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Colonocyte_NOS,IEC_Colonocyte_NOS,SLC9A1,SLC9A1,within_Tcell,Sodium_hydrogen exchange,0.0017807723103195,0.0009990009990009,1349.752
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Colonocyte_NOS,IEC_Colonocyte_NOS,SLC26A2,SLC26A3,within_Tcell,Anion exchange,0.0017807723103195,0.0009990009990009,53441.215
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Colonocyte_NOS,IEC_Colonocyte_NOS,SLC26A2,SLC26A2,within_Tcell,Anion exchange,0.0017807723103195,0.0009990009990009,62394.94
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Colonocyte_NOS,IEC_Colonocyte_NOS,SLC26A3,SLC26A3,within_Tcell,Anion exchange,0.0017807723103195,0.0009990009990009,47493.586
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Tuft,IEC_Tuft,SLC26A3,SLC26A3,within_Tcell,Anion exchange,0.0017807723103195,0.0009990009990009,19.123152
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,MNP_macrophage,MNP_macrophage,CPT1A,CPT1A,within_Tcell,Fatty acid,0.0017807723103195,0.0009990009990009,244.82584
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,MNP_macrophage,MNP_macrophage,FABP5,FABP5,within_Tcell,Fatty acid,0.0017807723103195,0.0009990009990009,159.579
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_CT_absorptive_colonocyte,IEC_CT_absorptive_colonocyte,SLC22A5,SLC22A5,within_Tcell,4-ene-Valproic acid | Acetyl-L-Carnitine | Choline | Creatine | Dopamine | Histamine | L-Carnitine | Nicotinate | Norepinephrine | O-Desmethylverapamil (D-702) | Sodium,0.0034085146093959,0.0019980019980019,1129.4525
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_CT_absorptive_colonocyte,IEC_CT_absorptive_colonocyte,SLC3A2,SLC40A1,within_Tcell,Iron,0.0034085146093959,0.0019980019980019,2732.7612
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_CT_absorptive_colonocyte,IEC_CT_absorptive_colonocyte,SLC15A1,SLC15A1,within_Tcell,2-Hydroxychlorpropamide | Glycyl-glycine | L-Dopa,0.0034085146093959,0.0019980019980019,803.995
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_CT_absorptive_colonocyte,IEC_CT_absorptive_colonocyte,SCARB1,SCARB1,within_Tcell,alpha-Tocopherol,0.0034085146093959,0.0019980019980019,392.15762
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_CT_absorptive_colonocyte,IEC_CT_absorptive_colonocyte,AQP8,AQP8,within_Tcell,Water,0.0034085146093959,0.0019980019980019,2011.1328
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_CT_absorptive_colonocyte,IEC_CT_absorptive_colonocyte,ABCB1,SLC22A5,within_Tcell,O-Desmethylverapamil (D-702),0.0034085146093959,0.0019980019980019,1662.4884
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_CT_absorptive_colonocyte,IEC_CT_absorptive_colonocyte,ABCB1,SLC15A1,within_Tcell,2-Hydroxychlorpropamide,0.0034085146093959,0.0019980019980019,1293.0414
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Colonocyte_NOS,IEC_Colonocyte_NOS,ABCG2,SLC16A1,within_Tcell,Taurocholic acid,0.0034085146093959,0.0019980019980019,382.49948
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Colonocyte_NOS,IEC_Colonocyte_NOS,ABCC3,SLC22A5,within_Tcell,O-Desmethylverapamil (D-702),0.0034085146093959,0.0019980019980019,782.7402
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Colonocyte_NOS,IEC_Colonocyte_NOS,SLC3A2,SLC40A1,within_Tcell,Iron,0.0049084773494222,0.0029970029970029,4001.4692
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,MNP_macrophage,MNP_macrophage,CD36,FABP5,within_Tcell,Fatty acid,0.0049084773494222,0.0029970029970029,230.64314
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_CT_absorptive_colonocyte,IEC_CT_absorptive_colonocyte,ABCG2,ABCG2,within_Tcell,5-Hydroxyomeprazole | Cholesterol | Cortisol | Estradiol | Folic acid | Hydroxylansoprazole | N-Desmethyltamoxifen | N-desmethylimatinib | O-Desmethylverapamil (D-702) | Taurocholic acid | Testosterone,0.0063074313838839,0.0039960039960039,627.06366
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Colonocyte_NOS,IEC_Colonocyte_NOS,SLC15A1,SLC15A1,within_Tcell,2-Hydroxychlorpropamide | Glycyl-glycine | L-Dopa,0.0063074313838839,0.0039960039960039,43.16741
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Colonocyte_NOS,IEC_Colonocyte_NOS,ATP7B,SLC20A2,within_Tcell,Phosphate,0.0076629667118438,0.0049950049950049,230.04068
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_CT_absorptive_colonocyte,IEC_CT_absorptive_colonocyte,SLC9A1,SLC9A1,within_Tcell,Sodium_hydrogen exchange,0.008957905365412,0.0059940059940059,997.31085
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,MNP_macrophage,MNP_macrophage,MSR1,MSR1,within_Tcell,Fatty acid,0.008957905365412,0.0059940059940059,317.3066
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,MNP_macrophage,MNP_macrophage,ABCA1,ABCA1,within_Tcell,25-Hydroxycholesterol,0.008957905365412,0.0059940059940059,629.3489
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Colonocyte_NOS,IEC_Colonocyte_NOS,ABCB1,SLC22A4,within_Tcell,O-Desmethylverapamil (D-702) | Testosterone,0.0102378974109197,0.0069930069930069,131.23776
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Enteric_glia,Enteric_glia,ABCA1,ABCA1,within_Tcell,25-Hydroxycholesterol,0.0114963484079916,0.0079920079920079,186.4322
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,MNP_macrophage,MNP_macrophage,SLC9A1,SLC9A1,within_Tcell,Sodium_hydrogen exchange,0.0127142264128565,0.0089910089910089,15.130251
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Endothelial_lymphatic,Endothelial_lymphatic,CPT1A,CPT1A,within_Tcell,Fatty acid,0.0151371807000946,0.0109890109890109,51.50672
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Fibroblast_CTF_S2,Fibroblast_CTF_S2,ABCA1,ABCA1,within_Tcell,25-Hydroxycholesterol,0.0163324797208852,0.0119880119880119,45.31333
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Colonocyte_NOS,IEC_Colonocyte_NOS,ABCC4,SLCO2B1,within_Tcell,Taurocholic acid,0.0175103534236661,0.0129870129870129,81.79806
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Colonocyte_NOS,IEC_Colonocyte_NOS,CD36,MSR1,within_Tcell,Fatty acid,0.0198735410003015,0.0149850149850149,14.148671
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_CT_absorptive_colonocyte,IEC_CT_absorptive_colonocyte,SLC40A1,SLC40A1,within_Tcell,Iron,0.0232465123003156,0.0179820179820179,791.42285
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_CT_absorptive_colonocyte,IEC_CT_absorptive_colonocyte,AQP7,AQP7,within_Tcell,Water,0.0243819228057406,0.0189810189810189,401.96774
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Colonocyte_NOS,IEC_Colonocyte_NOS,ABCC3,ABCG2,within_Tcell,5-Hydroxyomeprazole | Folic acid | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0265978562921794,0.0209790209790209,623.22327
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,MNP_macrophage,MNP_macrophage,SLC40A1,SLC40A1,within_Tcell,Iron,0.0265978562921794,0.0209790209790209,320.62735
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,MNP_macrophage,MNP_macrophage,SLC9A3,SLC9A3,within_Tcell,Sodium_hydrogen exchange,0.0277006162870321,0.0219780219780219,23.917213
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Plasma,Plasma,SLC16A9,SLC16A9,within_Tcell,L-Carnitine,0.028821583457047,0.0229770229770229,16.885963
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_CT_absorptive_colonocyte,IEC_CT_absorptive_colonocyte,SLC9A1,SLC9A3,within_Tcell,Sodium_hydrogen exchange,0.0321155200047933,0.0259740259740259,2918.666
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_BEST4_OTOP2,IEC_BEST4_OTOP2,SLC40A1,SLC40A1,within_Tcell,Iron,0.0332063696021293,0.0269730269730269,38.783817
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_BEST4_OTOP2,IEC_BEST4_OTOP2,SLC22A5,SLC22A5,within_Tcell,4-ene-Valproic acid | Acetyl-L-Carnitine | Choline | Creatine | Dopamine | Histamine | L-Carnitine | Nicotinate | Norepinephrine | O-Desmethylverapamil (D-702) | Sodium,0.0343210232275208,0.0279720279720279,140.50745
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Colonocyte_NOS,IEC_Colonocyte_NOS,SLC16A9,SLC16A9,within_Tcell,L-Carnitine,0.0343210232275208,0.0279720279720279,612.2781
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_CT_absorptive_colonocyte,IEC_CT_absorptive_colonocyte,SLC2A1,SLC2A1,within_Tcell,D-Galactose | D-Glucose | D-Mannose | Dehydroascorbic acid | Docosahexaenoic acid | Glucosamine,0.0353785716561741,0.0289710289710289,223.34474
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Plasma,Plasma,ABCB1,SLC22A5,within_Tcell,O-Desmethylverapamil (D-702),0.0353785716561741,0.0289710289710289,17.492805
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_Colonocyte_NOS,IEC_Colonocyte_NOS,SLC3A1,SLC3A2,within_Tcell,L-Cystine,0.0364611381634515,0.0299700299700299,72.4937
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,MNP_macrophage,MNP_macrophage,SLC26A2,SLC26A2,within_Tcell,Anion exchange,0.0364611381634515,0.0299700299700299,30.132435
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_CT_absorptive_colonocyte,IEC_CT_absorptive_colonocyte,SLC16A1,SLC22A5,within_Tcell,4-ene-Valproic acid | Nicotinate,0.037532343298062,0.0309690309690309,164.61394
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,IEC_CT_absorptive_colonocyte,IEC_CT_absorptive_colonocyte,SLC16A9,SLC22A5,within_Tcell,L-Carnitine,0.037532343298062,0.0309690309690309,172.79192
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,T_CD8,T_CD8,ABCC3,SLC22A5,within_Tcell,O-Desmethylverapamil (D-702),0.0385920385920385,0.0319680319680319,11.912254
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,MNP_macrophage,MNP_macrophage,ABCC1,SLCO2B1,within_Tcell,Taurocholic acid,0.0407814809468983,0.0339660339660339,426.58936
+13473_HS4_UC-Slice_4,24_11_12_ICI_5K_Fine_annotations,Plasma,Plasma,TAP1,TAP1,within_Tcell,Adenosine triphosphate,0.0450859861120641,0.0379620379620379,89.01352
 13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,B,Pericyte,SLC40A1,SLC40A1,Tcell_interface,Iron,0.0021144989196107,0.0009990009990009,24.454021
 13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Endothelial,IEC,SLC16A1,SLC22A5,Tcell_interface,4-ene-Valproic acid | Nicotinate,0.0021144989196107,0.0009990009990009,53.47346
 13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Endothelial,Pericyte,SLC16A1,SLC16A1,Tcell_interface,4-ene-Valproic acid | Acetate | Butyrate | D-Lactate | Ketone bodies | L-Glutamate | L-Lactate | Nicotinate | Pyruvate | Taurocholic acid | alpha-Ketoisovaleric acid,0.0021144989196107,0.0009990009990009,20.4985
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Fibroblast,IEC,SLC26A3,SLC26A3,Tcell_interface,Anion exchange,0.0021144989196107,0.0009990009990009,1329.4375
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Fibroblast,IEC,SLC26A2,SLC26A2,Tcell_interface,Anion exchange,0.0021144989196107,0.0009990009990009,1150.6866
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,T,SLC26A3,SLC26A3,Tcell_interface,Anion exchange,0.0021144989196107,0.0009990009990009,1217.4342
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,T,SLC26A2,SLC26A3,Tcell_interface,Anion exchange,0.0021144989196107,0.0009990009990009,632.56964
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,T,SLC26A2,SLC26A2,Tcell_interface,Anion exchange,0.0021144989196107,0.0009990009990009,850.0628
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Enteric_glia,IEC,SLCO2B1,SLCO2B1,Tcell_interface,Acetate | Citric acid | Estradiol | Nicotinate | Oxalic acid | Taurocholic acid,0.0040315014934304,0.0019980019980019,34.56559
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Enteric_glia,Pericyte,FABP5,FABP5,Tcell_interface,Fatty acid,0.0040315014934304,0.0019980019980019,15.865165
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Fibroblast,IEC,SLC26A2,SLC26A3,Tcell_interface,Anion exchange,0.0021144989196107,0.0009990009990009,1329.4375
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Fibroblast,IEC,SLC26A3,SLC26A3,Tcell_interface,Anion exchange,0.0021144989196107,0.0009990009990009,1150.6866
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,T,SLC26A2,SLC26A3,Tcell_interface,Anion exchange,0.0021144989196107,0.0009990009990009,1217.4342
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,T,SLC26A2,SLC26A2,Tcell_interface,Anion exchange,0.0021144989196107,0.0009990009990009,632.56964
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,T,SLC26A3,SLC26A3,Tcell_interface,Anion exchange,0.0021144989196107,0.0009990009990009,850.0628
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Enteric_glia,IEC,SLC22A5,SLC22A5,Tcell_interface,4-ene-Valproic acid | Acetyl-L-Carnitine | Choline | Creatine | Dopamine | Histamine | L-Carnitine | Nicotinate | Norepinephrine | O-Desmethylverapamil (D-702) | Sodium,0.0040315014934304,0.0019980019980019,34.56559
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Enteric_glia,Pericyte,MSR1,MSR1,Tcell_interface,Fatty acid,0.0040315014934304,0.0019980019980019,15.865165
 13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Enteric_glia,IEC,SLC15A1,SLC15A1,Tcell_interface,2-Hydroxychlorpropamide | Glycyl-glycine | L-Dopa,0.0058226231246759,0.0029970029970029,18.638983
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Fibroblast,IEC,SLC26A2,SLC26A3,Tcell_interface,Anion exchange,0.0058226231246759,0.0029970029970029,809.2383
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Fibroblast,MNP,FABP5,FABP5,Tcell_interface,Fatty acid,0.0058226231246759,0.0029970029970029,52.316257
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Fibroblast,Myofibroblast,ABCB1,SLC16A1,Tcell_interface,Taurocholic acid,0.0058226231246759,0.0029970029970029,16.074865
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,Pericyte,CD36,MSR1,Tcell_interface,Fatty acid,0.0058226231246759,0.0029970029970029,72.26615
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,Plasma,SLC20A2,SLC20A2,Tcell_interface,Phosphate,0.0058226231246759,0.0029970029970029,49.218185
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,MNP,T,ATP7B,SLC20A2,Tcell_interface,Phosphate,0.0058226231246759,0.0029970029970029,10.763307
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Fibroblast,IEC,SLC26A2,SLC26A2,Tcell_interface,Anion exchange,0.0058226231246759,0.0029970029970029,809.2383
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Fibroblast,MNP,MSR1,MSR1,Tcell_interface,Fatty acid,0.0058226231246759,0.0029970029970029,52.316257
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Fibroblast,Myofibroblast,ABCC3,SLC16A1,Tcell_interface,Taurocholic acid,0.0058226231246759,0.0029970029970029,16.074865
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,Pericyte,FABP5,FABP5,Tcell_interface,Fatty acid,0.0058226231246759,0.0029970029970029,72.26615
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,Plasma,ATP7B,SLC20A2,Tcell_interface,Phosphate,0.0058226231246759,0.0029970029970029,49.218185
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,MNP,T,SLC20A2,SLC20A2,Tcell_interface,Phosphate,0.0058226231246759,0.0029970029970029,10.763307
 13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Muscularis_mucosa,T,SLC3A2,SLC40A1,Tcell_interface,Iron,0.0058226231246759,0.0029970029970029,19.398613
 13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Fibroblast,Plasma,SLC2A1,SLC2A1,Tcell_interface,D-Galactose | D-Glucose | D-Mannose | Dehydroascorbic acid | Docosahexaenoic acid | Glucosamine,0.007513772887472,0.0039960039960039,23.742846
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Myofibroblast,Plasma,ABCC1,SLCO2B1,Tcell_interface,Taurocholic acid,0.007513772887472,0.0039960039960039,24.427864
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Myofibroblast,Plasma,ABCC4,SLCO2B1,Tcell_interface,Taurocholic acid,0.007513772887472,0.0039960039960039,24.427864
 13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Fibroblast,Muscularis_mucosa,SCNN1A,SCNN1A,Tcell_interface,Amiloride-sensitive sodium transport,0.0090995164322387,0.0049950049950049,18.911398
 13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Endothelial,Fibroblast,SLC12A2,SLC12A2,Tcell_interface,Chloride ion | Sodium,0.0106843828816922,0.0059940059940059,31.825556
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,MNP,Pericyte,SLC26A2,SLC26A2,Tcell_interface,Anion exchange,0.0106843828816922,0.0059940059940059,16.840097
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,MNP,Pericyte,SLC26A3,SLC26A3,Tcell_interface,Anion exchange,0.0106843828816922,0.0059940059940059,16.840097
 13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Fibroblast,IEC,SCNN1A,SCNN1G,Tcell_interface,Amiloride-sensitive sodium transport,0.0121704040267963,0.0069930069930069,29.522234
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,MAST,MNP,SLC26A3,SLC26A3,Tcell_interface,Anion exchange,0.0121704040267963,0.0069930069930069,20.892933
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,MAST,MNP,SLC26A2,SLC26A3,Tcell_interface,Anion exchange,0.0121704040267963,0.0069930069930069,20.892933
 13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,MNP,SLC16A1,SLC22A5,Tcell_interface,4-ene-Valproic acid | Nicotinate,0.0136110675956434,0.0079920079920079,35.382256
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,T,ABCB1,ABCB1,Tcell_interface,"17a-Ethynylestradiol | 2-Hydroxychlorpropamide | 3',4'-Dihydrodiol | 4'-Hydroxydiclofenac | 4-Hydroxycyclophosphamide | 5-Hydroxyomeprazole | 8-Hydroxycarvedilol | Cholesterol | Cholic acid | Cortisol | E-3179 | Estradiol | Estriol | Glycerol | Hydroxylansoprazole | N-Desmethylcitalopram | N-Desmethyleletriptan | N-Desmethyltamoxifen | N-desmethylimatinib | O-Deethylated candesartan | O-Desmethylverapamil (D-702) | Progesterone | Taurocholic acid | Testosterone",0.0136110675956434,0.0079920079920079,132.18604
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,T,ABCC3,ABCG2,Tcell_interface,5-Hydroxyomeprazole | Folic acid | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0136110675956434,0.0079920079920079,46.72658
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,T,ABCB1,ABCG2,Tcell_interface,5-Hydroxyomeprazole | Cholesterol | Cortisol | Estradiol | Hydroxylansoprazole | N-Desmethyltamoxifen | N-desmethylimatinib | O-Desmethylverapamil (D-702) | Taurocholic acid | Testosterone,0.0136110675956434,0.0079920079920079,132.18604
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,T,ABCC4,ABCC4,Tcell_interface,4'-Hydroxydiclofenac | Cholic acid | Cyclic AMP | Folic acid | Folinic acid | Glutathione | Hydroxycelecoxib | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0136110675956434,0.0079920079920079,46.72658
 13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Endothelial,Myofibroblast,ABCA1,ABCA1,Tcell_interface,25-Hydroxycholesterol,0.0149975915817292,0.0089910089910089,21.629946
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Fibroblast,MNP,SLCO2B1,SLCO2B1,Tcell_interface,Acetate | Citric acid | Estradiol | Nicotinate | Oxalic acid | Taurocholic acid,0.0149975915817292,0.0089910089910089,192.62962
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Endothelial,Plasma,ABCB1,SLC16A1,Tcell_interface,Taurocholic acid,0.01641599409272,0.0099900099900099,18.559095
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Enteric_glia,Pericyte,FABP5,MSR1,Tcell_interface,Fatty acid,0.01641599409272,0.0099900099900099,15.865165
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Fibroblast,MNP,SLC22A5,SLC22A5,Tcell_interface,4-ene-Valproic acid | Acetyl-L-Carnitine | Choline | Creatine | Dopamine | Histamine | L-Carnitine | Nicotinate | Norepinephrine | O-Desmethylverapamil (D-702) | Sodium,0.0149975915817292,0.0089910089910089,192.62962
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Endothelial,Plasma,ABCC3,SLC16A1,Tcell_interface,Taurocholic acid,0.01641599409272,0.0099900099900099,18.559095
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Enteric_glia,Pericyte,CPT1A,CPT1A,Tcell_interface,Fatty acid,0.01641599409272,0.0099900099900099,15.865165
 13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Fibroblast,IEC,SCNN1A,SCNN1A,Tcell_interface,Amiloride-sensitive sodium transport,0.01641599409272,0.0099900099900099,290.3576
 13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Enteric_glia,Fibroblast,SLC12A2,SLC12A2,Tcell_interface,Chloride ion | Sodium,0.0178145671620386,0.0109890109890109,18.445604
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,T,ABCB1,ABCG2,Tcell_interface,5-Hydroxyomeprazole | Cholesterol | Cortisol | Estradiol | Hydroxylansoprazole | N-Desmethyltamoxifen | N-desmethylimatinib | O-Desmethylverapamil (D-702) | Taurocholic acid | Testosterone,0.0178145671620386,0.0109890109890109,35.687237
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,T,ABCB1,ABCB1,Tcell_interface,"17a-Ethynylestradiol | 2-Hydroxychlorpropamide | 3',4'-Dihydrodiol | 4'-Hydroxydiclofenac | 4-Hydroxycyclophosphamide | 5-Hydroxyomeprazole | 8-Hydroxycarvedilol | Cholesterol | Cholic acid | Cortisol | E-3179 | Estradiol | Estriol | Glycerol | Hydroxylansoprazole | N-Desmethylcitalopram | N-Desmethyleletriptan | N-Desmethyltamoxifen | N-desmethylimatinib | O-Deethylated candesartan | O-Desmethylverapamil (D-702) | Progesterone | Taurocholic acid | Testosterone",0.0178145671620386,0.0109890109890109,35.687237
 13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,T,SCNN1A,SCNN1A,Tcell_interface,Amiloride-sensitive sodium transport,0.0191759950311258,0.0119880119880119,175.97945
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Endothelial,Enteric_glia,AQP5,AQP5,Tcell_interface,Water,0.0204611084515959,0.0129870129870129,52.07154
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Endothelial,Enteric_glia,AQP8,AQP8,Tcell_interface,Water,0.0204611084515959,0.0129870129870129,52.07154
 13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Enteric_glia,Plasma,CLCN3,CLCN3,Tcell_interface,Chloride,0.0204611084515959,0.0129870129870129,36.1714
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,MNP,SLC22A5,SLC22A5,Tcell_interface,4-ene-Valproic acid | Acetyl-L-Carnitine | Choline | Creatine | Dopamine | Histamine | L-Carnitine | Nicotinate | Norepinephrine | O-Desmethylverapamil (D-702) | Sodium,0.0204611084515959,0.0129870129870129,56.218258
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,MNP,SLCO2B1,SLCO2B1,Tcell_interface,Acetate | Citric acid | Estradiol | Nicotinate | Oxalic acid | Taurocholic acid,0.0204611084515959,0.0129870129870129,56.218258
 13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Endothelial,Plasma,SLC3A2,SLC40A1,Tcell_interface,Iron,0.0217931813384577,0.0139860139860139,65.78798
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Enteric_glia,MNP,CPT1A,CPT1A,Tcell_interface,Fatty acid,0.0217931813384577,0.0139860139860139,35.101395
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Fibroblast,MNP,ABCB1,SLC22A5,Tcell_interface,O-Desmethylverapamil (D-702),0.0217931813384577,0.0139860139860139,15.762853
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Enteric_glia,MNP,CD36,MSR1,Tcell_interface,Fatty acid,0.0217931813384577,0.0139860139860139,35.101395
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Fibroblast,MNP,ABCC3,SLC22A5,Tcell_interface,O-Desmethylverapamil (D-702),0.0217931813384577,0.0139860139860139,15.762853
 13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,MNP,SLC3A1,SLC3A2,Tcell_interface,L-Cystine,0.0217931813384577,0.0139860139860139,28.283403
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,MNP,SLC26A2,SLC26A2,Tcell_interface,Anion exchange,0.0217931813384577,0.0139860139860139,247.30186
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,MNP,SLC26A3,SLC26A3,Tcell_interface,Anion exchange,0.0217931813384577,0.0139860139860139,247.30186
 13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Fibroblast,IEC,CLCN3,CLCN3,Tcell_interface,Chloride,0.0231591891778517,0.0149850149850149,279.7109
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,MNP,ABCG2,SLC22A5,Tcell_interface,O-Desmethylverapamil (D-702),0.0231591891778517,0.0149850149850149,39.59284
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,MNP,ABCB1,SLC22A5,Tcell_interface,O-Desmethylverapamil (D-702),0.0231591891778517,0.0149850149850149,39.59284
 13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Pericyte,T,ABCA1,ABCA1,Tcell_interface,25-Hydroxycholesterol,0.0244936251104331,0.0159840159840159,23.763786
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Fibroblast,Plasma,ABCB1,SLC22A4,Tcell_interface,O-Desmethylverapamil (D-702) | Testosterone,0.0257367489544386,0.0169830169830169,17.853334
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Fibroblast,Plasma,ABCG2,SLC22A4,Tcell_interface,O-Desmethylverapamil (D-702) | Testosterone,0.0257367489544386,0.0169830169830169,17.853334
 13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,MNP,Pericyte,ABCA1,ABCA1,Tcell_interface,25-Hydroxycholesterol,0.0257367489544386,0.0169830169830169,58.10888
 13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,MNP,Plasma,SLC16A1,SLC22A5,Tcell_interface,4-ene-Valproic acid | Nicotinate,0.0257367489544386,0.0169830169830169,11.042412
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Endothelial,Plasma,CD36,MSR1,Tcell_interface,Fatty acid,0.0270240156818606,0.0179820179820179,75.83929
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Endothelial,Plasma,FABP5,FABP5,Tcell_interface,Fatty acid,0.0270240156818606,0.0179820179820179,75.83929
 13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Fibroblast,MNP,SLC40A1,SLC40A1,Tcell_interface,Iron,0.0270240156818606,0.0179820179820179,809.9036
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,MAST,ABCB1,SLC22A4,Tcell_interface,O-Desmethylverapamil (D-702) | Testosterone,0.0282159874530854,0.0189810189810189,18.884771
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,MNP,SLC16A9,SLC16A9,Tcell_interface,L-Carnitine,0.0282159874530854,0.0189810189810189,23.394808
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Endothelial,MNP,CPT1A,CPT1A,Tcell_interface,Fatty acid,0.0295024440641082,0.0199800199800199,94.48758
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,MNP,ABCB1,SLC22A5,Tcell_interface,O-Desmethylverapamil (D-702),0.0295024440641082,0.0199800199800199,23.019928
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,MAST,ABCG2,SLC22A4,Tcell_interface,O-Desmethylverapamil (D-702) | Testosterone,0.0282159874530854,0.0189810189810189,18.884771
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,MNP,SLC16A9,SLC22A5,Tcell_interface,L-Carnitine,0.0282159874530854,0.0189810189810189,23.394808
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Endothelial,MNP,CD36,MSR1,Tcell_interface,Fatty acid,0.0295024440641082,0.0199800199800199,94.48758
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,MNP,ABCC3,SLC22A5,Tcell_interface,O-Desmethylverapamil (D-702),0.0295024440641082,0.0199800199800199,23.019928
 13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Myofibroblast,T,SLC40A1,SLC40A1,Tcell_interface,Iron,0.0295024440641082,0.0199800199800199,40.324795
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Fibroblast,T,FABP5,FABP5,Tcell_interface,Fatty acid,0.0307377841472939,0.0209790209790209,31.911982
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Fibroblast,Plasma,ABCG2,SLC22A5,Tcell_interface,O-Desmethylverapamil (D-702),0.0355063391544078,0.0249750249750249,17.853334
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Fibroblast,T,MSR1,MSR1,Tcell_interface,Fatty acid,0.0307377841472939,0.0209790209790209,31.911982
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Fibroblast,Plasma,ABCB1,SLC22A5,Tcell_interface,O-Desmethylverapamil (D-702),0.0355063391544078,0.0249750249750249,17.853334
 13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Enteric_glia,Fibroblast,CLCN3,CLCN3,Tcell_interface,Chloride,0.0366903885027552,0.0259740259740259,42.969913
 13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,MNP,CLCN3,CLCN3,Tcell_interface,Chloride,0.0366903885027552,0.0259740259740259,97.09742
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,MNP,Pericyte,CPT1A,CPT1A,Tcell_interface,Fatty acid,0.0366903885027552,0.0259740259740259,15.389735
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,MNP,Pericyte,CD36,MSR1,Tcell_interface,Fatty acid,0.0366903885027552,0.0259740259740259,15.389735
 13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,Muscularis_mucosa,TAP1,TAP1,Tcell_interface,Adenosine triphosphate,0.037779345390339,0.0269730269730269,33.192673
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Endothelial,Pericyte,ABCB1,SLC16A1,Tcell_interface,Taurocholic acid,0.0389725941776414,0.0279720279720279,17.53301
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Endothelial,Pericyte,ABCC3,SLC16A1,Tcell_interface,Taurocholic acid,0.0389725941776414,0.0279720279720279,17.53301
 13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Enteric_glia,Fibroblast,SLC3A1,SLC3A2,Tcell_interface,L-Cystine,0.0389725941776414,0.0279720279720279,15.248976
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Fibroblast,T,FABP5,MSR1,Tcell_interface,Fatty acid,0.0401673666410324,0.0289710289710289,14.907154
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Fibroblast,T,CPT1A,CPT1A,Tcell_interface,Fatty acid,0.0401673666410324,0.0289710289710289,14.907154
 13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,T,SLC12A2,SLC12A2,Tcell_interface,Chloride ion | Sodium,0.0401673666410324,0.0289710289710289,36.869316
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,T,CD36,FABP5,Tcell_interface,Fatty acid,0.0401673666410324,0.0289710289710289,33.365803
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Enteric_glia,Plasma,ABCC1,SLCO2B1,Tcell_interface,Taurocholic acid,0.0414080184674553,0.0299700299700299,19.879337
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,T,FABP5,MSR1,Tcell_interface,Fatty acid,0.0401673666410324,0.0289710289710289,33.365803
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Enteric_glia,Plasma,ABCC4,SLCO2B1,Tcell_interface,Taurocholic acid,0.0414080184674553,0.0299700299700299,19.879337
 13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Fibroblast,MNP,ABCA1,ABCA1,Tcell_interface,25-Hydroxycholesterol,0.0414080184674553,0.0299700299700299,313.66614
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Endothelial,MAST,ABCC1,SLCO2B1,Tcell_interface,Taurocholic acid,0.0426400755462064,0.0309690309690309,18.493252
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Enteric_glia,Plasma,CD36,MSR1,Tcell_interface,Fatty acid,0.0426400755462064,0.0309690309690309,55.208527
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Endothelial,MAST,ABCC4,SLCO2B1,Tcell_interface,Taurocholic acid,0.0426400755462064,0.0309690309690309,18.493252
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Enteric_glia,Plasma,FABP5,FABP5,Tcell_interface,Fatty acid,0.0426400755462064,0.0309690309690309,55.208527
 13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Fibroblast,MNP,SCNN1A,SCNN1A,Tcell_interface,Amiloride-sensitive sodium transport,0.0438031461816363,0.0319680319680319,12.449005
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,Plasma,CD36,FABP5,Tcell_interface,Fatty acid,0.0438031461816363,0.0319680319680319,49.671898
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,Plasma,FABP5,MSR1,Tcell_interface,Fatty acid,0.0438031461816363,0.0319680319680319,49.671898
 13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Fibroblast,Pericyte,SLC12A2,SLC12A2,Tcell_interface,Chloride ion | Sodium,0.0450322873003285,0.0329670329670329,17.050718
 13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,MNP,Muscularis_mucosa,TAP1,TAP1,Tcell_interface,Adenosine triphosphate,0.0450322873003285,0.0329670329670329,16.543125
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Endothelial,IEC,SLC26A3,SLC26A3,Tcell_interface,Anion exchange,0.0461274291134216,0.0339660339660339,118.81492
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Endothelial,IEC,SLC26A2,SLC26A3,Tcell_interface,Anion exchange,0.0461274291134216,0.0339660339660339,118.81492
 13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Fibroblast,Myofibroblast,SCNN1A,SCNN1G,Tcell_interface,Amiloride-sensitive sodium transport,0.0461274291134216,0.0339660339660339,13.710393
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Endothelial,Pericyte,ABCC4,SLCO2B1,Tcell_interface,Taurocholic acid,0.048427182573524,0.0359640359640359,15.624871
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Endothelial,Pericyte,ABCC1,SLCO2B1,Tcell_interface,Taurocholic acid,0.048427182573524,0.0359640359640359,15.624871
 13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Enteric_glia,MAST,CLCN3,CLCN3,Tcell_interface,Chloride,0.048427182573524,0.0359640359640359,19.5656
 13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Endothelial,Myofibroblast,TAP1,TAP1,Tcell_interface,Adenosine triphosphate,0.0496043456880729,0.0369630369630369,18.65837
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Endothelial,Pericyte,CD36,FABP5,Tcell_interface,Fatty acid,0.0496043456880729,0.0369630369630369,39.071846
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Enteric_glia,Enteric_glia,ABCG2,SLC22A4,within_Tcell,O-Desmethylverapamil (D-702) | Testosterone,0.0021144989196107,0.0009990009990009,25.523302
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Endothelial,Pericyte,FABP5,MSR1,Tcell_interface,Fatty acid,0.0496043456880729,0.0369630369630369,39.071846
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Enteric_glia,Enteric_glia,ABCB1,SLC22A4,within_Tcell,O-Desmethylverapamil (D-702) | Testosterone,0.0021144989196107,0.0009990009990009,25.523302
 13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,IEC,SLC2A1,SLC2A1,within_Tcell,D-Galactose | D-Glucose | D-Mannose | Dehydroascorbic acid | Docosahexaenoic acid | Glucosamine,0.0021144989196107,0.0009990009990009,1116.0465
 13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,IEC,SLC3A1,SLC3A2,within_Tcell,L-Cystine,0.0021144989196107,0.0009990009990009,234.25223
 13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,IEC,SLC40A1,SLC40A1,within_Tcell,Iron,0.0021144989196107,0.0009990009990009,8702.69
 13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,IEC,SLC3A2,SLC40A1,within_Tcell,Iron,0.0021144989196107,0.0009990009990009,1848.8665
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,IEC,SLC16A9,SLC22A5,within_Tcell,L-Carnitine,0.0021144989196107,0.0009990009990009,571.7489
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,IEC,SLC16A9,SLC16A9,within_Tcell,L-Carnitine,0.0021144989196107,0.0009990009990009,571.7489
 13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,IEC,SLC12A2,SLC12A2,within_Tcell,Chloride ion | Sodium,0.0021144989196107,0.0009990009990009,1339.3011
 13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,IEC,ABCG2,ABCG2,within_Tcell,5-Hydroxyomeprazole | Cholesterol | Cortisol | Estradiol | Folic acid | Hydroxylansoprazole | N-Desmethyltamoxifen | N-desmethylimatinib | O-Desmethylverapamil (D-702) | Taurocholic acid | Testosterone,0.0021144989196107,0.0009990009990009,1272.6759
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,IEC,ABCB1,ABCG2,within_Tcell,5-Hydroxyomeprazole | Cholesterol | Cortisol | Estradiol | Hydroxylansoprazole | N-Desmethyltamoxifen | N-desmethylimatinib | O-Desmethylverapamil (D-702) | Taurocholic acid | Testosterone,0.0021144989196107,0.0009990009990009,2378.6829
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,IEC,ABCB1,ABCB1,within_Tcell,"17a-Ethynylestradiol | 2-Hydroxychlorpropamide | 3',4'-Dihydrodiol | 4'-Hydroxydiclofenac | 4-Hydroxycyclophosphamide | 5-Hydroxyomeprazole | 8-Hydroxycarvedilol | Cholesterol | Cholic acid | Cortisol | E-3179 | Estradiol | Estriol | Glycerol | Hydroxylansoprazole | N-Desmethylcitalopram | N-Desmethyleletriptan | N-Desmethyltamoxifen | N-desmethylimatinib | O-Deethylated candesartan | O-Desmethylverapamil (D-702) | Progesterone | Taurocholic acid | Testosterone",0.0021144989196107,0.0009990009990009,4750.3833
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,IEC,ABCB1,ABCB1,within_Tcell,"17a-Ethynylestradiol | 2-Hydroxychlorpropamide | 3',4'-Dihydrodiol | 4'-Hydroxydiclofenac | 4-Hydroxycyclophosphamide | 5-Hydroxyomeprazole | 8-Hydroxycarvedilol | Cholesterol | Cholic acid | Cortisol | E-3179 | Estradiol | Estriol | Glycerol | Hydroxylansoprazole | N-Desmethylcitalopram | N-Desmethyleletriptan | N-Desmethyltamoxifen | N-desmethylimatinib | O-Deethylated candesartan | O-Desmethylverapamil (D-702) | Progesterone | Taurocholic acid | Testosterone",0.0021144989196107,0.0009990009990009,2378.6829
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,IEC,ABCB1,ABCG2,within_Tcell,5-Hydroxyomeprazole | Cholesterol | Cortisol | Estradiol | Hydroxylansoprazole | N-Desmethyltamoxifen | N-desmethylimatinib | O-Desmethylverapamil (D-702) | Taurocholic acid | Testosterone,0.0021144989196107,0.0009990009990009,4750.3833
 13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,IEC,SLC15A1,SLC15A1,within_Tcell,2-Hydroxychlorpropamide | Glycyl-glycine | L-Dopa,0.0021144989196107,0.0009990009990009,933.6382
 13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,IEC,SCARB1,SCARB1,within_Tcell,alpha-Tocopherol,0.0021144989196107,0.0009990009990009,440.87897
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,IEC,ABCB1,SLC16A1,within_Tcell,Taurocholic acid,0.0021144989196107,0.0009990009990009,1205.0635
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,IEC,ABCB1,SLC22A4,within_Tcell,O-Desmethylverapamil (D-702) | Testosterone,0.0021144989196107,0.0009990009990009,521.84656
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,IEC,ABCG2,SLC22A4,within_Tcell,O-Desmethylverapamil (D-702) | Testosterone,0.0021144989196107,0.0009990009990009,295.9376
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,IEC,AQP7,AQP7,within_Tcell,Water,0.0021144989196107,0.0009990009990009,3211.375
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,IEC,AQP5,AQP5,within_Tcell,Water,0.0021144989196107,0.0009990009990009,643.4451
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,IEC,AQP8,AQP8,within_Tcell,Water,0.0021144989196107,0.0009990009990009,17431.586
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,IEC,ABCG2,SLC22A5,within_Tcell,O-Desmethylverapamil (D-702),0.0021144989196107,0.0009990009990009,3710.7507
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,IEC,ABCB1,SLC22A5,within_Tcell,O-Desmethylverapamil (D-702),0.0021144989196107,0.0009990009990009,1556.4688
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,IEC,ABCC3,SLC16A1,within_Tcell,Taurocholic acid,0.0021144989196107,0.0009990009990009,1205.0635
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,IEC,ABCG2,SLC22A4,within_Tcell,O-Desmethylverapamil (D-702) | Testosterone,0.0021144989196107,0.0009990009990009,521.84656
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,IEC,ABCB1,SLC22A4,within_Tcell,O-Desmethylverapamil (D-702) | Testosterone,0.0021144989196107,0.0009990009990009,295.9376
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,IEC,AQP7,AQP8,within_Tcell,Water,0.0021144989196107,0.0009990009990009,3211.375
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,IEC,AQP8,AQP8,within_Tcell,Water,0.0021144989196107,0.0009990009990009,643.4451
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,IEC,AQP7,AQP7,within_Tcell,Water,0.0021144989196107,0.0009990009990009,17431.586
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,IEC,ABCB1,SLC22A5,within_Tcell,O-Desmethylverapamil (D-702),0.0021144989196107,0.0009990009990009,3710.7507
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,IEC,ABCC3,SLC22A5,within_Tcell,O-Desmethylverapamil (D-702),0.0021144989196107,0.0009990009990009,1556.4688
 13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,IEC,ABCB1,SLC15A1,within_Tcell,2-Hydroxychlorpropamide,0.0021144989196107,0.0009990009990009,1654.2646
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,IEC,SLC9A3,SLC9A3,within_Tcell,Sodium_hydrogen exchange,0.0021144989196107,0.0009990009990009,5223.483
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,IEC,SLC9A1,SLC9A3,within_Tcell,Sodium_hydrogen exchange,0.0021144989196107,0.0009990009990009,2845.1807
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,IEC,SLC26A3,SLC26A3,within_Tcell,Anion exchange,0.0021144989196107,0.0009990009990009,78770.62
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,IEC,SLC26A2,SLC26A3,within_Tcell,Anion exchange,0.0021144989196107,0.0009990009990009,71176.48
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,IEC,SLC26A2,SLC26A2,within_Tcell,Anion exchange,0.0021144989196107,0.0009990009990009,71955.16
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,IEC,SLC9A1,SLC9A3,within_Tcell,Sodium_hydrogen exchange,0.0021144989196107,0.0009990009990009,5223.483
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,IEC,SLC9A3,SLC9A3,within_Tcell,Sodium_hydrogen exchange,0.0021144989196107,0.0009990009990009,2845.1807
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,IEC,SLC26A2,SLC26A3,within_Tcell,Anion exchange,0.0021144989196107,0.0009990009990009,78770.62
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,IEC,SLC26A2,SLC26A2,within_Tcell,Anion exchange,0.0021144989196107,0.0009990009990009,71176.48
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,IEC,SLC26A3,SLC26A3,within_Tcell,Anion exchange,0.0021144989196107,0.0009990009990009,71955.16
 13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,IEC,SCNN1A,SCNN1A,within_Tcell,Amiloride-sensitive sodium transport,0.0021144989196107,0.0009990009990009,17915.152
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,MNP,MNP,MSR1,MSR1,within_Tcell,Fatty acid,0.0021144989196107,0.0009990009990009,261.6467
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,MNP,MNP,CPT1A,CPT1A,within_Tcell,Fatty acid,0.0021144989196107,0.0009990009990009,244.82584
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,MNP,MNP,FABP5,FABP5,within_Tcell,Fatty acid,0.0021144989196107,0.0009990009990009,170.96242
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,MNP,MNP,CD36,FABP5,within_Tcell,Fatty acid,0.0021144989196107,0.0009990009990009,251.51817
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,MNP,MNP,CD36,CD36,within_Tcell,Cholesterol | Fatty acid | Vitamin D3,0.0021144989196107,0.0009990009990009,261.6467
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,MNP,MNP,CD36,MSR1,within_Tcell,Fatty acid,0.0021144989196107,0.0009990009990009,244.82584
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,MNP,MNP,MSR1,MSR1,within_Tcell,Fatty acid,0.0021144989196107,0.0009990009990009,170.96242
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,MNP,MNP,FABP5,MSR1,within_Tcell,Fatty acid,0.0021144989196107,0.0009990009990009,251.51817
 13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,MNP,MNP,ABCA1,ABCA1,within_Tcell,25-Hydroxycholesterol,0.0021144989196107,0.0009990009990009,695.6584
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,T,T,MSR1,MSR1,within_Tcell,Fatty acid,0.0021144989196107,0.0009990009990009,18.455194
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,IEC,SLC22A5,SLC22A5,within_Tcell,4-ene-Valproic acid | Acetyl-L-Carnitine | Choline | Creatine | Dopamine | Histamine | L-Carnitine | Nicotinate | Norepinephrine | O-Desmethylverapamil (D-702) | Sodium,0.0040315014934304,0.0019980019980019,4167.5205
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,IEC,SLC16A9,SLC16A9,within_Tcell,L-Carnitine,0.0040315014934304,0.0019980019980019,1173.9626
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,IEC,SLC20A2,SLC20A2,within_Tcell,Phosphate,0.0040315014934304,0.0019980019980019,725.5049
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,IEC,ABCC3,ABCG2,within_Tcell,5-Hydroxyomeprazole | Folic acid | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0040315014934304,0.0019980019980019,1052.6029
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,IEC,ABCC4,SLCO2B1,within_Tcell,Taurocholic acid,0.0040315014934304,0.0019980019980019,127.21058
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,MNP,MNP,CD36,CD36,within_Tcell,Cholesterol | Fatty acid | Vitamin D3,0.0040315014934304,0.0019980019980019,367.72336
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Fibroblast,Fibroblast,ABCC4,ABCC4,within_Tcell,4'-Hydroxydiclofenac | Cholic acid | Cyclic AMP | Folic acid | Folinic acid | Glutathione | Hydroxycelecoxib | O-Desmethylverapamil (D-702) | Taurocholic acid,0.007513772887472,0.0039960039960039,102.20471
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,IEC,ATP7B,SLC20A2,within_Tcell,Phosphate,0.007513772887472,0.0039960039960039,306.81784
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,T,T,CD36,CD36,within_Tcell,Cholesterol | Fatty acid | Vitamin D3,0.0021144989196107,0.0009990009990009,18.455194
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,IEC,SLCO2B1,SLCO2B1,within_Tcell,Acetate | Citric acid | Estradiol | Nicotinate | Oxalic acid | Taurocholic acid,0.0040315014934304,0.0019980019980019,4167.5205
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,IEC,SLC16A9,SLC22A5,within_Tcell,L-Carnitine,0.0040315014934304,0.0019980019980019,1173.9626
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,IEC,ATP7B,SLC20A2,within_Tcell,Phosphate,0.0040315014934304,0.0019980019980019,725.5049
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,IEC,ABCC4,ABCC4,within_Tcell,4'-Hydroxydiclofenac | Cholic acid | Cyclic AMP | Folic acid | Folinic acid | Glutathione | Hydroxycelecoxib | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0040315014934304,0.0019980019980019,1052.6029
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,IEC,ABCC1,SLCO2B1,within_Tcell,Taurocholic acid,0.0040315014934304,0.0019980019980019,127.21058
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,MNP,MNP,CD36,FABP5,within_Tcell,Fatty acid,0.0040315014934304,0.0019980019980019,367.72336
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Fibroblast,Fibroblast,ABCC3,ABCG2,within_Tcell,5-Hydroxyomeprazole | Folic acid | O-Desmethylverapamil (D-702) | Taurocholic acid,0.007513772887472,0.0039960039960039,102.20471
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,IEC,SLC20A2,SLC20A2,within_Tcell,Phosphate,0.007513772887472,0.0039960039960039,306.81784
 13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,IEC,SCNN1A,SCNN1G,within_Tcell,Amiloride-sensitive sodium transport,0.007513772887472,0.0039960039960039,660.65173
 13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Enteric_glia,Enteric_glia,ABCA1,ABCA1,within_Tcell,25-Hydroxycholesterol,0.0090995164322387,0.0049950049950049,186.4322
 13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,IEC,ABCG2,SLC16A1,within_Tcell,Taurocholic acid,0.0106843828816922,0.0059940059940059,488.99356
 13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,IEC,TAP1,TAP1,within_Tcell,Adenosine triphosphate,0.0178145671620386,0.0109890109890109,3068.1147
 13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,MNP,MNP,SLC3A2,SLC40A1,within_Tcell,Iron,0.0204611084515959,0.0129870129870129,320.62735
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,T,T,ABCB1,SLC22A5,within_Tcell,O-Desmethylverapamil (D-702),0.0231591891778517,0.0149850149850149,11.912254
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,MNP,MNP,SLC9A1,SLC9A3,within_Tcell,Sodium_hydrogen exchange,0.0244936251104331,0.0159840159840159,15.130251
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,IEC,FABP5,MSR1,within_Tcell,Fatty acid,0.0257367489544386,0.0169830169830169,14.148671
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,MNP,MNP,ABCC4,ABCC4,within_Tcell,4'-Hydroxydiclofenac | Cholic acid | Cyclic AMP | Folic acid | Folinic acid | Glutathione | Hydroxycelecoxib | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0355063391544078,0.0249750249750249,41.613808
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Plasma,Plasma,SLC16A9,SLC16A9,within_Tcell,L-Carnitine,0.037779345390339,0.0269730269730269,16.885963
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Plasma,Plasma,ABCG2,SLC22A5,within_Tcell,O-Desmethylverapamil (D-702),0.0414080184674553,0.0299700299700299,17.492805
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,IEC,CD36,MSR1,within_Tcell,Fatty acid,0.0450322873003285,0.0329670329670329,20319.102
-13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,MNP,MNP,ABCC1,SLCO2B1,within_Tcell,Taurocholic acid,0.0450322873003285,0.0329670329670329,426.58936
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,T,T,ABCC3,SLC22A5,within_Tcell,O-Desmethylverapamil (D-702),0.0231591891778517,0.0149850149850149,11.912254
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,MNP,MNP,SLC9A3,SLC9A3,within_Tcell,Sodium_hydrogen exchange,0.0244936251104331,0.0159840159840159,15.130251
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,IEC,CPT1A,CPT1A,within_Tcell,Fatty acid,0.0257367489544386,0.0169830169830169,14.148671
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,MNP,MNP,ABCC3,ABCG2,within_Tcell,5-Hydroxyomeprazole | Folic acid | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0355063391544078,0.0249750249750249,41.613808
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Plasma,Plasma,SLC16A9,SLC22A5,within_Tcell,L-Carnitine,0.037779345390339,0.0269730269730269,16.885963
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Plasma,Plasma,ABCB1,SLC22A5,within_Tcell,O-Desmethylverapamil (D-702),0.0414080184674553,0.0299700299700299,17.492805
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,IEC,IEC,FABP5,FABP5,within_Tcell,Fatty acid,0.0450322873003285,0.0329670329670329,20319.102
+13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,MNP,MNP,ABCC4,SLCO2B1,within_Tcell,Taurocholic acid,0.0450322873003285,0.0329670329670329,426.58936
 13473_HS4_UC-Slice_4,25_06_11_ICI_5K_Coarse_annotations,Plasma,Plasma,TAP1,TAP1,within_Tcell,Adenosine triphosphate,0.0472902395324988,0.0349650349650349,89.01352
-13473_HS4_UC-Slice_4,global,,,SLC2A1,SLC2A1,cell_type_independent,D-Galactose | D-Glucose | D-Mannose | Dehydroascorbic acid | Docosahexaenoic acid | Glucosamine,0.0095514239198187,0.000999001,1223.818746466295
-13473_HS4_UC-Slice_4,global,,,SLC16A1,SLC16A1,cell_type_independent,4-ene-Valproic acid | Acetate | Butyrate | D-Lactate | Ketone bodies | L-Glutamate | L-Lactate | Nicotinate | Pyruvate | Taurocholic acid | alpha-Ketoisovaleric acid,0.0095514239198187,0.000999001,635.2572684643777
-13473_HS4_UC-Slice_4,global,,,SLC22A5,SLC22A5,cell_type_independent,4-ene-Valproic acid | Acetyl-L-Carnitine | Choline | Creatine | Dopamine | Histamine | L-Carnitine | Nicotinate | Norepinephrine | O-Desmethylverapamil (D-702) | Sodium,0.0095514239198187,0.000999001,4578.361954544602
-13473_HS4_UC-Slice_4,global,,,SLC16A1,SLC22A5,cell_type_independent,4-ene-Valproic acid | Nicotinate,0.0095514239198187,0.000999001,2762.698584809598
-13473_HS4_UC-Slice_4,global,,,SLC40A1,SLC40A1,cell_type_independent,Iron,0.0095514239198187,0.000999001,17752.786570449054
-13473_HS4_UC-Slice_4,global,,,SLC16A9,SLC22A5,cell_type_independent,L-Carnitine,0.0095514239198187,0.000999001,2750.4204357492854
-13473_HS4_UC-Slice_4,global,,,SLC16A9,SLC16A9,cell_type_independent,L-Carnitine,0.0095514239198187,0.000999001,584.3562070972329
-13473_HS4_UC-Slice_4,global,,,SLC12A2,SLC12A2,cell_type_independent,Chloride ion | Sodium,0.0095514239198187,0.000999001,1684.6972047968184
-13473_HS4_UC-Slice_4,global,,,CD36,MSR1,cell_type_independent,Fatty acid,0.0095514239198187,0.000999001,932.9004897935624
-13473_HS4_UC-Slice_4,global,,,CD36,CD36,cell_type_independent,Cholesterol | Fatty acid | Vitamin D3,0.0095514239198187,0.000999001,603.8498136171779
-13473_HS4_UC-Slice_4,global,,,CPT1A,CPT1A,cell_type_independent,Fatty acid,0.0095514239198187,0.000999001,27007.234892076267
-13473_HS4_UC-Slice_4,global,,,MSR1,MSR1,cell_type_independent,Fatty acid,0.0095514239198187,0.000999001,424.6450252302968
-13473_HS4_UC-Slice_4,global,,,ABCA1,ABCA1,cell_type_independent,25-Hydroxycholesterol,0.0095514239198187,0.000999001,2812.959235375156
-13473_HS4_UC-Slice_4,global,,,ABCG2,ABCG2,cell_type_independent,5-Hydroxyomeprazole | Cholesterol | Cortisol | Estradiol | Folic acid | Hydroxylansoprazole | N-Desmethyltamoxifen | N-desmethylimatinib | O-Desmethylverapamil (D-702) | Taurocholic acid | Testosterone,0.0095514239198187,0.000999001,1272.675935258174
-13473_HS4_UC-Slice_4,global,,,ABCB1,ABCG2,cell_type_independent,5-Hydroxyomeprazole | Cholesterol | Cortisol | Estradiol | Hydroxylansoprazole | N-Desmethyltamoxifen | N-desmethylimatinib | O-Desmethylverapamil (D-702) | Taurocholic acid | Testosterone,0.0095514239198187,0.000999001,4881.257580679361
-13473_HS4_UC-Slice_4,global,,,ABCB1,ABCB1,cell_type_independent,"17a-Ethynylestradiol | 2-Hydroxychlorpropamide | 3',4'-Dihydrodiol | 4'-Hydroxydiclofenac | 4-Hydroxycyclophosphamide | 5-Hydroxyomeprazole | 8-Hydroxycarvedilol | Cholesterol | Cholic acid | Cortisol | E-3179 | Estradiol | Estriol | Glycerol | Hydroxylansoprazole | N-Desmethylcitalopram | N-Desmethyleletriptan | N-Desmethyltamoxifen | N-desmethylimatinib | O-Deethylated candesartan | O-Desmethylverapamil (D-702) | Progesterone | Taurocholic acid | Testosterone",0.0095514239198187,0.000999001,5151.989660463297
-13473_HS4_UC-Slice_4,global,,,SLC20A2,SLC20A2,cell_type_independent,Phosphate,0.0095514239198187,0.000999001,807.8088149750502
-13473_HS4_UC-Slice_4,global,,,ABCC3,ABCG2,cell_type_independent,5-Hydroxyomeprazole | Folic acid | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0095514239198187,0.000999001,2315.143469479437
-13473_HS4_UC-Slice_4,global,,,ABCC3,ABCC3,cell_type_independent,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | 5-Hydroxyomeprazole | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Deoxycholic acid | Folic acid | Folinic acid | Glutathione | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | O-Desmethylverapamil (D-702) | Sulfolithocholic acid | Taurocholic acid | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.0095514239198187,0.000999001,2393.212086297991
-13473_HS4_UC-Slice_4,global,,,SLC15A1,SLC15A1,cell_type_independent,2-Hydroxychlorpropamide | Glycyl-glycine | L-Dopa,0.0095514239198187,0.000999001,966.0986609529328
-13473_HS4_UC-Slice_4,global,,,SCARB1,SCARB1,cell_type_independent,alpha-Tocopherol,0.0095514239198187,0.000999001,553.0727182833598
-13473_HS4_UC-Slice_4,global,,,ABCB1,SLC16A1,cell_type_independent,Taurocholic acid,0.0095514239198187,0.000999001,2551.445241519841
-13473_HS4_UC-Slice_4,global,,,ABCG2,SLC16A1,cell_type_independent,Taurocholic acid,0.0095514239198187,0.000999001,1050.6951754034294
-13473_HS4_UC-Slice_4,global,,,ABCC4,SLCO2B1,cell_type_independent,Taurocholic acid,0.0095514239198187,0.000999001,1829.460907616637
-13473_HS4_UC-Slice_4,global,,,ABCB1,SLC22A4,cell_type_independent,O-Desmethylverapamil (D-702) | Testosterone,0.0095514239198187,0.000999001,1138.2268983973888
-13473_HS4_UC-Slice_4,global,,,ABCG2,SLC22A4,cell_type_independent,O-Desmethylverapamil (D-702) | Testosterone,0.0095514239198187,0.000999001,696.4651997791711
-13473_HS4_UC-Slice_4,global,,,TAP1,TAP1,cell_type_independent,Adenosine triphosphate,0.0095514239198187,0.000999001,4878.923534723816
-13473_HS4_UC-Slice_4,global,,,AQP7,AQP8,cell_type_independent,Water,0.0095514239198187,0.000999001,6741.409415704009
-13473_HS4_UC-Slice_4,global,,,AQP7,AQP7,cell_type_independent,Water,0.0095514239198187,0.000999001,810.0583818165569
-13473_HS4_UC-Slice_4,global,,,AQP8,AQP8,cell_type_independent,Water,0.0095514239198187,0.000999001,17562.911311696553
-13473_HS4_UC-Slice_4,global,,,ABCB1,SLC22A5,cell_type_independent,O-Desmethylverapamil (D-702),0.0095514239198187,0.000999001,8011.045117946889
-13473_HS4_UC-Slice_4,global,,,ABCG2,SLC22A5,cell_type_independent,O-Desmethylverapamil (D-702),0.0095514239198187,0.000999001,3274.4894241998486
-13473_HS4_UC-Slice_4,global,,,ABCC3,SLC22A5,cell_type_independent,O-Desmethylverapamil (D-702),0.0095514239198187,0.000999001,6157.29865190298
-13473_HS4_UC-Slice_4,global,,,ABCB1,SLC15A1,cell_type_independent,2-Hydroxychlorpropamide,0.0095514239198187,0.000999001,3238.2206172662964
-13473_HS4_UC-Slice_4,global,,,CLCN3,CLCN3,cell_type_independent,Chloride,0.0095514239198187,0.000999001,6952.115584138319
-13473_HS4_UC-Slice_4,global,,,SLC9A3,SLC9A3,cell_type_independent,Sodium_hydrogen exchange,0.0095514239198187,0.000999001,5223.483081312264
-13473_HS4_UC-Slice_4,global,,,SLC9A1,SLC9A3,cell_type_independent,Sodium_hydrogen exchange,0.0095514239198187,0.000999001,5895.856710551765
-13473_HS4_UC-Slice_4,global,,,SLC26A2,SLC26A2,cell_type_independent,Anion exchange,0.0095514239198187,0.000999001,85942.1011588203
-13473_HS4_UC-Slice_4,global,,,SLC26A3,SLC26A3,cell_type_independent,Anion exchange,0.0095514239198187,0.000999001,75305.30712113468
-13473_HS4_UC-Slice_4,global,,,SLC26A2,SLC26A3,cell_type_independent,Anion exchange,0.0095514239198187,0.000999001,155749.196132599
-13473_HS4_UC-Slice_4,global,,,SCNN1A,SCNN1A,cell_type_independent,Amiloride-sensitive sodium transport,0.0095514239198187,0.000999001,19218.25447405943
-13473_HS4_UC-Slice_4,global,,,CD36,FABP5,cell_type_independent,Fatty acid,0.0166641864133008,0.001998002,1905.2682942947383
-13473_HS4_UC-Slice_4,global,,,ATP7B,SLC20A2,cell_type_independent,Phosphate,0.0166641864133008,0.001998002,692.276411307137
-13473_HS4_UC-Slice_4,global,,,ABCC3,SLC16A1,cell_type_independent,Taurocholic acid,0.0166641864133008,0.001998002,2208.8689044333923
-13473_HS4_UC-Slice_4,global,,,SCNN1A,SCNN1G,cell_type_independent,Amiloride-sensitive sodium transport,0.0166641864133008,0.001998002,1416.2610288621308
-13473_HS4_UC-Slice_4,global,,,FABP5,FABP5,cell_type_independent,Fatty acid,0.0313286704570055,0.003996004,2812.2396784235025
-13473_HS4_UC-Slice_4,global,,,FABP5,MSR1,cell_type_independent,Fatty acid,0.0313286704570055,0.003996004,1482.0067552150028
-13473_HS4_UC-Slice_4,global,,,ABCC1,SLCO2B1,cell_type_independent,Taurocholic acid,0.0313286704570055,0.003996004,4132.414903046986
-13473_HS4_UC-Slice_4,global,,,SLC3A1,SLC3A2,cell_type_independent,L-Cystine,0.035600761053237,0.0049950047,598.1050391409192
-13473_HS4_UC-Slice_4,global,,,SLC3A2,SLC40A1,cell_type_independent,Iron,0.035600761053237,0.0049950047,8074.242454646621
-13473_HS4_UC-Slice_4,global,,,AQP5,AQP5,cell_type_independent,Water,0.035600761053237,0.0049950047,17.182397231626965
-13473_HS4_UC-Slice_4,global,,,SLCO2B1,SLCO2B1,cell_type_independent,Acetate | Citric acid | Estradiol | Nicotinate | Oxalic acid | Taurocholic acid,0.0480922580811015,0.006993007,4163.439471798807
-13473_HS4_UC-Slice_4,global,,,ABCC4,ABCC4,cell_type_independent,4'-Hydroxydiclofenac | Cholic acid | Cyclic AMP | Folic acid | Folinic acid | Glutathione | Hydroxycelecoxib | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0480922580811015,0.006993007,231.97878319347
+13473_HS4_UC-Slice_4,global,,,SLC2A1,SLC2A1,cell_type_independent,D-Galactose | D-Glucose | D-Mannose | Dehydroascorbic acid | Docosahexaenoic acid | Glucosamine,0.0103054837029623,0.000999001,1223.818746466295
+13473_HS4_UC-Slice_4,global,,,SLC16A1,SLC16A1,cell_type_independent,4-ene-Valproic acid | Acetate | Butyrate | D-Lactate | Ketone bodies | L-Glutamate | L-Lactate | Nicotinate | Pyruvate | Taurocholic acid | alpha-Ketoisovaleric acid,0.0103054837029623,0.000999001,635.2572684643777
+13473_HS4_UC-Slice_4,global,,,SLC16A1,SLC22A5,cell_type_independent,4-ene-Valproic acid | Nicotinate,0.0103054837029623,0.000999001,2762.6985848095974
+13473_HS4_UC-Slice_4,global,,,SLC22A5,SLC22A5,cell_type_independent,4-ene-Valproic acid | Acetyl-L-Carnitine | Choline | Creatine | Dopamine | Histamine | L-Carnitine | Nicotinate | Norepinephrine | O-Desmethylverapamil (D-702) | Sodium,0.0103054837029623,0.000999001,4578.361954544601
+13473_HS4_UC-Slice_4,global,,,SLC40A1,SLC40A1,cell_type_independent,Iron,0.0103054837029623,0.000999001,17752.786570449054
+13473_HS4_UC-Slice_4,global,,,SLC16A9,SLC22A5,cell_type_independent,L-Carnitine,0.0103054837029623,0.000999001,2750.4204357492854
+13473_HS4_UC-Slice_4,global,,,SLC16A9,SLC16A9,cell_type_independent,L-Carnitine,0.0103054837029623,0.000999001,584.3562070972329
+13473_HS4_UC-Slice_4,global,,,SLC12A2,SLC12A2,cell_type_independent,Chloride ion | Sodium,0.0103054837029623,0.000999001,1684.6972047968184
+13473_HS4_UC-Slice_4,global,,,CPT1A,CPT1A,cell_type_independent,Fatty acid,0.0103054837029623,0.000999001,27007.234892076267
+13473_HS4_UC-Slice_4,global,,,CD36,MSR1,cell_type_independent,Fatty acid,0.0103054837029623,0.000999001,932.9004897935624
+13473_HS4_UC-Slice_4,global,,,CD36,CD36,cell_type_independent,Cholesterol | Fatty acid | Vitamin D3,0.0103054837029623,0.000999001,603.8498136171779
+13473_HS4_UC-Slice_4,global,,,ABCA1,ABCA1,cell_type_independent,25-Hydroxycholesterol,0.0103054837029623,0.000999001,2812.959235375156
+13473_HS4_UC-Slice_4,global,,,ABCG2,ABCG2,cell_type_independent,5-Hydroxyomeprazole | Cholesterol | Cortisol | Estradiol | Folic acid | Hydroxylansoprazole | N-Desmethyltamoxifen | N-desmethylimatinib | O-Desmethylverapamil (D-702) | Taurocholic acid | Testosterone,0.0103054837029623,0.000999001,1272.675935258174
+13473_HS4_UC-Slice_4,global,,,ABCB1,ABCB1,cell_type_independent,"17a-Ethynylestradiol | 2-Hydroxychlorpropamide | 3',4'-Dihydrodiol | 4'-Hydroxydiclofenac | 4-Hydroxycyclophosphamide | 5-Hydroxyomeprazole | 8-Hydroxycarvedilol | Cholesterol | Cholic acid | Cortisol | E-3179 | Estradiol | Estriol | Glycerol | Hydroxylansoprazole | N-Desmethylcitalopram | N-Desmethyleletriptan | N-Desmethyltamoxifen | N-desmethylimatinib | O-Deethylated candesartan | O-Desmethylverapamil (D-702) | Progesterone | Taurocholic acid | Testosterone",0.0103054837029623,0.000999001,5151.989660463298
+13473_HS4_UC-Slice_4,global,,,ABCB1,ABCG2,cell_type_independent,5-Hydroxyomeprazole | Cholesterol | Cortisol | Estradiol | Hydroxylansoprazole | N-Desmethyltamoxifen | N-desmethylimatinib | O-Desmethylverapamil (D-702) | Taurocholic acid | Testosterone,0.0103054837029623,0.000999001,4881.257580679361
+13473_HS4_UC-Slice_4,global,,,SLC20A2,SLC20A2,cell_type_independent,Phosphate,0.0103054837029623,0.000999001,807.8088149750502
+13473_HS4_UC-Slice_4,global,,,ABCC3,ABCG2,cell_type_independent,5-Hydroxyomeprazole | Folic acid | O-Desmethylverapamil (D-702) | Taurocholic acid,0.0103054837029623,0.000999001,2315.143469479437
+13473_HS4_UC-Slice_4,global,,,SLC15A1,SLC15A1,cell_type_independent,2-Hydroxychlorpropamide | Glycyl-glycine | L-Dopa,0.0103054837029623,0.000999001,966.0986609529328
+13473_HS4_UC-Slice_4,global,,,SCARB1,SCARB1,cell_type_independent,alpha-Tocopherol,0.0103054837029623,0.000999001,553.0727182833598
+13473_HS4_UC-Slice_4,global,,,ABCC4,SLCO2B1,cell_type_independent,Taurocholic acid,0.0103054837029623,0.000999001,1829.460907616637
+13473_HS4_UC-Slice_4,global,,,ABCB1,SLC16A1,cell_type_independent,Taurocholic acid,0.0103054837029623,0.000999001,2551.445241519841
+13473_HS4_UC-Slice_4,global,,,ABCG2,SLC22A4,cell_type_independent,O-Desmethylverapamil (D-702) | Testosterone,0.0103054837029623,0.000999001,696.4651997791711
+13473_HS4_UC-Slice_4,global,,,AQP8,AQP8,cell_type_independent,Water,0.0103054837029623,0.000999001,17562.911311696553
+13473_HS4_UC-Slice_4,global,,,AQP7,AQP8,cell_type_independent,Water,0.0103054837029623,0.000999001,6741.409415704009
+13473_HS4_UC-Slice_4,global,,,AQP7,AQP7,cell_type_independent,Water,0.0103054837029623,0.000999001,810.0583818165569
+13473_HS4_UC-Slice_4,global,,,ABCB1,SLC22A5,cell_type_independent,O-Desmethylverapamil (D-702),0.0103054837029623,0.000999001,8011.045117946889
+13473_HS4_UC-Slice_4,global,,,ABCG2,SLC22A5,cell_type_independent,O-Desmethylverapamil (D-702),0.0103054837029623,0.000999001,3274.489424199849
+13473_HS4_UC-Slice_4,global,,,ABCC3,SLC22A5,cell_type_independent,O-Desmethylverapamil (D-702),0.0103054837029623,0.000999001,6157.29865190298
+13473_HS4_UC-Slice_4,global,,,ABCB1,SLC15A1,cell_type_independent,2-Hydroxychlorpropamide,0.0103054837029623,0.000999001,3238.2206172662964
+13473_HS4_UC-Slice_4,global,,,CLCN3,CLCN3,cell_type_independent,Chloride,0.0103054837029623,0.000999001,6952.115584138319
+13473_HS4_UC-Slice_4,global,,,SLC9A3,SLC9A3,cell_type_independent,Sodium_hydrogen exchange,0.0103054837029623,0.000999001,5223.483081312264
+13473_HS4_UC-Slice_4,global,,,SLC9A1,SLC9A3,cell_type_independent,Sodium_hydrogen exchange,0.0103054837029623,0.000999001,5895.856710551765
+13473_HS4_UC-Slice_4,global,,,SLC26A2,SLC26A3,cell_type_independent,Anion exchange,0.0103054837029623,0.000999001,155749.19613259903
+13473_HS4_UC-Slice_4,global,,,SLC26A2,SLC26A2,cell_type_independent,Anion exchange,0.0103054837029623,0.000999001,85942.1011588203
+13473_HS4_UC-Slice_4,global,,,SLC26A3,SLC26A3,cell_type_independent,Anion exchange,0.0103054837029623,0.000999001,75305.30712113468
+13473_HS4_UC-Slice_4,global,,,SCNN1A,SCNN1A,cell_type_independent,Amiloride-sensitive sodium transport,0.0103054837029623,0.000999001,19218.25447405943
+13473_HS4_UC-Slice_4,global,,,SCNN1A,SCNN1G,cell_type_independent,Amiloride-sensitive sodium transport,0.0103054837029623,0.000999001,1416.2610288621308
+13473_HS4_UC-Slice_4,global,,,CD36,FABP5,cell_type_independent,Fatty acid,0.017026451335329,0.001998002,1905.2682942947383
+13473_HS4_UC-Slice_4,global,,,MSR1,MSR1,cell_type_independent,Fatty acid,0.017026451335329,0.001998002,424.6450252302968
+13473_HS4_UC-Slice_4,global,,,ATP7B,SLC20A2,cell_type_independent,Phosphate,0.017026451335329,0.001998002,692.276411307137
+13473_HS4_UC-Slice_4,global,,,ABCC3,ABCC3,cell_type_independent,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid | 1b,3a,12a-Trihydroxy-5b-cholanoic acid | 3-Sulfodeoxycholic acid | 3alpha,7alpha-Dihydroxycoprostanic acid | 3b-Hydroxy-5-cholenoic acid | 5-Hydroxyomeprazole | Chenodeoxycholic acid | Chenodeoxycholic acid 3-sulfate | Cholic acid | Coprocholic acid | Deoxycholic acid | Folic acid | Folinic acid | Glutathione | Glycochenodeoxycholate-3-sulfate | Hyodeoxycholic acid | Isoursodeoxycholic acid | Lithocholic acid | O-Desmethylverapamil (D-702) | Sulfolithocholic acid | Taurocholic acid | Trihydroxycoprostanoic acid | Ursocholic acid | Ursodeoxycholic acid | Ursodeoxycholic acid 3-sulfate | Varanic acid",0.017026451335329,0.001998002,2393.212086297991
+13473_HS4_UC-Slice_4,global,,,ABCC3,SLC16A1,cell_type_independent,Taurocholic acid,0.017026451335329,0.001998002,2208.868904433392
+13473_HS4_UC-Slice_4,global,,,ABCG2,SLC16A1,cell_type_independent,Taurocholic acid,0.017026451335329,0.001998002,1050.6951754034294
+13473_HS4_UC-Slice_4,global,,,ABCB1,SLC22A4,cell_type_independent,O-Desmethylverapamil (D-702) | Testosterone,0.017026451335329,0.001998002,1138.2268983973886
+13473_HS4_UC-Slice_4,global,,,ABCC1,SLCO2B1,cell_type_independent,Taurocholic acid,0.0239760242402553,0.002997003,4132.414903046987
+13473_HS4_UC-Slice_4,global,,,TAP1,TAP1,cell_type_independent,Adenosine triphosphate,0.0239760242402553,0.002997003,4878.923534723816
+13473_HS4_UC-Slice_4,global,,,SLC3A1,SLC3A2,cell_type_independent,L-Cystine,0.0307143828009857,0.003996004,598.1050391409192
+13473_HS4_UC-Slice_4,global,,,SLC3A2,SLC40A1,cell_type_independent,Iron,0.0362600377864307,0.004995005,8074.242454646621
+13473_HS4_UC-Slice_4,global,,,SLC22A4,SLC22A5,cell_type_independent,L-Carnitine | O-Desmethylverapamil (D-702) | Sodium,0.0362600377864307,0.004995005,1252.7385742383565
+13473_HS4_UC-Slice_4,global,,,FABP5,FABP5,cell_type_independent,Fatty acid,0.0362600377864307,0.004995005,2812.2396784235025
+13473_HS4_UC-Slice_4,global,,,CD38,CD38,cell_type_independent,Adenosine diphosphate ribose,0.0419580424204468,0.005994006,1283.030720210591
+13473_HS4_UC-Slice_4,global,,,SLC9A1,SLC9A1,cell_type_independent,Sodium_hydrogen exchange,0.0472630812176342,0.006993007,3413.28011764641

@@ -1,0 +1,2215 @@
+cell_type,metabolite,n_cells,frac_sig,mean_cs,mean_cs_sig,mean_neg_log10_pval,log2_enrichment
+B,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid",7,0.0,0.0,,1.6550503,-inf
+B,17a-Ethynylestradiol,7,0.0,0.0,,2.259219,-inf
+B,"1b,3a,12a-Trihydroxy-5b-cholanoic acid",7,0.0,0.0,,1.6550503,-inf
+B,2-Hydroxychlorpropamide,7,0.0,0.0,,2.259219,-inf
+B,25-Hydroxycholesterol,7,0.0,0.0,,2.1787703,-inf
+B,"3',4'-Dihydrodiol",7,0.0,0.0,,2.259219,-inf
+B,3-Sulfodeoxycholic acid,7,0.0,0.0,,1.6550503,-inf
+B,"3alpha,7alpha-Dihydroxycoprostanic acid",7,0.0,0.0,,1.6550503,-inf
+B,3b-Hydroxy-5-cholenoic acid,7,0.0,0.0,,1.6550503,-inf
+B,4'-Hydroxydiclofenac,7,0.0,0.0,,2.259219,-inf
+B,4-Hydroxycyclophosphamide,7,0.0,0.0,,2.259219,-inf
+B,4-ene-Valproic acid,7,0.0,0.0,,1.4602238,-inf
+B,5-Hydroxyomeprazole,7,0.0,0.0,,1.5350951,-inf
+B,8-Hydroxycarvedilol,7,0.0,0.0,,2.259219,-inf
+B,Acetate,7,0.0,0.0,,1.4674689,-inf
+B,Acetyl-L-Carnitine,7,0.0,0.0,,1.6501476,-inf
+B,Adenosine diphosphate ribose,7,0.0,0.0,,2.2743423,-inf
+B,Adenosine triphosphate,7,0.14285714285714285,0.7348446015047168,5.143912210533017,1.4897478,1.734538856771666
+B,Amiloride-sensitive sodium transport,7,0.0,0.0,,1.4315574,-inf
+B,Anion exchange,7,0.0,0.0,,0.6956344,-inf
+B,Butyrate,7,0.0,0.0,,1.9690362,-inf
+B,Chenodeoxycholic acid,7,0.0,0.0,,1.6550503,-inf
+B,Chenodeoxycholic acid 3-sulfate,7,0.0,0.0,,1.6550503,-inf
+B,Chloride,7,0.0,0.0,,1.5620229,-inf
+B,Chloride ion,7,0.0,0.0,,1.6311228,-inf
+B,Cholesterol,7,0.0,0.0,,2.1996455,-inf
+B,Cholic acid,7,0.0,0.0,,1.5452578,-inf
+B,Choline,7,0.0,0.0,,1.6501476,-inf
+B,Citric acid,7,0.0,0.0,,1.6094506,-inf
+B,Coprocholic acid,7,0.0,0.0,,1.6550503,-inf
+B,Cortisol,7,0.0,0.0,,2.1996455,-inf
+B,Creatine,7,0.0,0.0,,1.6501476,-inf
+B,D-Lactate,7,0.0,0.0,,1.9690362,-inf
+B,Deoxycholic acid,7,0.0,0.0,,1.6550503,-inf
+B,Dopamine,7,0.0,0.0,,1.6501476,-inf
+B,E-3179,7,0.0,0.0,,2.259219,-inf
+B,Estradiol,7,0.0,0.0,,1.520641,-inf
+B,Estriol,7,0.0,0.0,,2.259219,-inf
+B,Fatty acid,7,0.0,0.0,,0.6291322,-inf
+B,Folic acid,7,0.0,0.0,,1.6428976,-inf
+B,Folinic acid,7,0.0,0.0,,1.6550503,-inf
+B,Glutathione,7,0.0,0.0,,1.6550503,-inf
+B,Glycerol,7,0.0,0.0,,2.259219,-inf
+B,Glycochenodeoxycholate-3-sulfate,7,0.0,0.0,,1.6550503,-inf
+B,Histamine,7,0.0,0.0,,1.6501476,-inf
+B,Hydroxylansoprazole,7,0.0,0.0,,2.1996455,-inf
+B,Hyodeoxycholic acid,7,0.0,0.0,,1.6550503,-inf
+B,Iron,7,0.14285714285714285,1.4065804934620911,9.846063454234638,1.6143309,1.9014361655164103
+B,Isoursodeoxycholic acid,7,0.0,0.0,,1.6550503,-inf
+B,Ketone bodies,7,0.0,0.0,,1.9690362,-inf
+B,L-Arginine,7,0.0,0.0,,2.5492394,-inf
+B,L-Carnitine,7,0.0,0.0,,1.636897,-inf
+B,L-Cystine,7,0.0,0.0,,2.5492394,-inf
+B,L-Lactate,7,0.0,0.0,,1.9690362,-inf
+B,L-Lysine,7,0.0,0.0,,2.5492394,-inf
+B,L-Ornithine,7,0.0,0.0,,2.5492394,-inf
+B,Lithocholic acid,7,0.0,0.0,,1.6550503,-inf
+B,N-Desmethylcitalopram,7,0.0,0.0,,2.259219,-inf
+B,N-Desmethyleletriptan,7,0.0,0.0,,2.259219,-inf
+B,N-Desmethyltamoxifen,7,0.0,0.0,,2.1996455,-inf
+B,N-desmethylimatinib,7,0.0,0.0,,2.1996455,-inf
+B,Neurotransmitter,7,0.0,0.0,,2.3173468,-inf
+B,Nicotinate,7,0.0,0.0,,1.2377074,-inf
+B,Norepinephrine,7,0.0,0.0,,1.6501476,-inf
+B,O-Deethylated candesartan,7,0.0,0.0,,2.259219,-inf
+B,O-Desmethylverapamil (D-702),7,0.0,0.0,,1.2773355,-inf
+B,Oxalic acid,7,0.0,0.0,,1.6094506,-inf
+B,Phosphate,7,0.0,0.0,,2.8145728,-inf
+B,Progesterone,7,0.0,0.0,,2.259219,-inf
+B,Pyruvate,7,0.0,0.0,,1.9690362,-inf
+B,Sodium,7,0.0,0.0,,1.3548203,-inf
+B,Sodium_hydrogen exchange,7,0.0,0.0,,1.1767379,-inf
+B,Sulfolithocholic acid,7,0.0,0.0,,1.6550503,-inf
+B,Taurocholic acid,7,0.0,0.0,,1.1922406,-inf
+B,Testosterone,7,0.0,0.0,,2.1285992,-inf
+B,Trihydroxycoprostanoic acid,7,0.0,0.0,,1.6550503,-inf
+B,Ursocholic acid,7,0.0,0.0,,1.6550503,-inf
+B,Ursodeoxycholic acid,7,0.0,0.0,,1.6550503,-inf
+B,Ursodeoxycholic acid 3-sulfate,7,0.0,0.0,,1.6550503,-inf
+B,Varanic acid,7,0.0,0.0,,1.6550503,-inf
+B,Water,7,0.0,0.0,,1.7066672,-inf
+B,alpha-Ketoisovaleric acid,7,0.0,0.0,,1.9690362,-inf
+Endothelial_arterial,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid",106,0.009433962264150943,0.05672321981346597,6.012661300227393,1.6926078,-1.5200276029218664
+Endothelial_arterial,17a-Ethynylestradiol,106,0.0,0.0,,2.2585776,-inf
+Endothelial_arterial,"1b,3a,12a-Trihydroxy-5b-cholanoic acid",106,0.009433962264150943,0.05672321981346597,6.012661300227393,1.6926078,-1.5200276029218664
+Endothelial_arterial,2-Hydroxychlorpropamide,106,0.0,0.0,,2.226094,-inf
+Endothelial_arterial,25-Hydroxycholesterol,106,0.009433962264150943,0.1585180065138944,16.802908690472805,2.1112747,-0.02817450659219182
+Endothelial_arterial,"3',4'-Dihydrodiol",106,0.0,0.0,,2.2585776,-inf
+Endothelial_arterial,3-Sulfodeoxycholic acid,106,0.009433962264150943,0.05672321981346597,6.012661300227393,1.6926078,-1.5200276029218664
+Endothelial_arterial,"3alpha,7alpha-Dihydroxycoprostanic acid",106,0.009433962264150943,0.05672321981346597,6.012661300227393,1.6926078,-1.5200276029218664
+Endothelial_arterial,3b-Hydroxy-5-cholenoic acid,106,0.009433962264150943,0.05672321981346597,6.012661300227393,1.6926078,-1.5200276029218664
+Endothelial_arterial,4'-Hydroxydiclofenac,106,0.0,0.0,,2.2585776,-inf
+Endothelial_arterial,4-Hydroxycyclophosphamide,106,0.0,0.0,,2.2585776,-inf
+Endothelial_arterial,4-ene-Valproic acid,106,0.0,0.0,,1.3908617,-inf
+Endothelial_arterial,5-Hydroxyomeprazole,106,0.009433962264150943,0.05672321981346597,6.012661300227393,1.5228605,-1.9683412570750087
+Endothelial_arterial,8-Hydroxycarvedilol,106,0.0,0.0,,2.2585776,-inf
+Endothelial_arterial,Acetate,106,0.0,0.0,,1.4513204,-inf
+Endothelial_arterial,Acetyl-L-Carnitine,106,0.0,0.0,,1.6205744,-inf
+Endothelial_arterial,Adenosine diphosphate ribose,106,0.0,0.0,,2.1931882,-inf
+Endothelial_arterial,Adenosine triphosphate,106,0.04716981132075472,0.6855495569258424,14.533650606827859,1.4694546,0.13590141915343343
+Endothelial_arterial,Amiloride-sensitive sodium transport,106,0.009433962264150943,0.07698327324458591,8.160226963926107,1.460482,-2.3892409953865124
+Endothelial_arterial,Anion exchange,106,0.0,0.1518033720334115,,0.6682933,-inf
+Endothelial_arterial,Butyrate,106,0.0,0.0,,1.9327492,-inf
+Endothelial_arterial,Chenodeoxycholic acid,106,0.009433962264150943,0.05672321981346597,6.012661300227393,1.6926078,-1.5200276029218664
+Endothelial_arterial,Chenodeoxycholic acid 3-sulfate,106,0.009433962264150943,0.05672321981346597,6.012661300227393,1.6926078,-1.5200276029218664
+Endothelial_arterial,Chloride,106,0.0,0.0,,1.5686687,-inf
+Endothelial_arterial,Chloride ion,106,0.009433962264150943,0.19274528652172493,20.431000371302844,1.6404939,-1.958911844155078
+Endothelial_arterial,Cholesterol,106,0.0,0.0,,2.1329615,-inf
+Endothelial_arterial,Cholic acid,106,0.009433962264150943,0.05672321981346597,6.012661300227393,1.5475528,-1.5949896606030884
+Endothelial_arterial,Choline,106,0.0,0.0,,1.6205744,-inf
+Endothelial_arterial,Citric acid,106,0.0,0.0,,1.6034069,-inf
+Endothelial_arterial,Coprocholic acid,106,0.009433962264150943,0.05672321981346597,6.012661300227393,1.6926078,-1.5200276029218664
+Endothelial_arterial,Cortisol,106,0.0,0.0,,2.1329615,-inf
+Endothelial_arterial,Creatine,106,0.0,0.0,,1.6205744,-inf
+Endothelial_arterial,D-Lactate,106,0.0,0.0,,1.9327492,-inf
+Endothelial_arterial,Deoxycholic acid,106,0.009433962264150943,0.05672321981346597,6.012661300227393,1.6926078,-1.5200276029218664
+Endothelial_arterial,Dopamine,106,0.0,0.0,,1.6205744,-inf
+Endothelial_arterial,E-3179,106,0.0,0.0,,2.2585776,-inf
+Endothelial_arterial,Estradiol,106,0.0,0.0,,1.4976406,-inf
+Endothelial_arterial,Estriol,106,0.0,0.0,,2.2585776,-inf
+Endothelial_arterial,Fatty acid,106,0.02830188679245283,6.9036544512628355,92.38419155426902,0.6192384,0.09735637549166745
+Endothelial_arterial,Folic acid,106,0.009433962264150943,0.05672321981346597,6.012661300227393,1.6632394,-1.9494203951777802
+Endothelial_arterial,Folinic acid,106,0.009433962264150943,0.05672321981346597,6.012661300227393,1.6926078,-1.5200276029218664
+Endothelial_arterial,Glutathione,106,0.009433962264150943,0.05672321981346597,6.012661300227393,1.6926078,-1.5200276029218664
+Endothelial_arterial,Glycerol,106,0.0,0.0,,2.2585776,-inf
+Endothelial_arterial,Glycochenodeoxycholate-3-sulfate,106,0.009433962264150943,0.05672321981346597,6.012661300227393,1.6926078,-1.5200276029218664
+Endothelial_arterial,Histamine,106,0.0,0.0,,1.6205744,-inf
+Endothelial_arterial,Hydroxylansoprazole,106,0.0,0.0,,2.1329615,-inf
+Endothelial_arterial,Hyodeoxycholic acid,106,0.009433962264150943,0.05672321981346597,6.012661300227393,1.6926078,-1.5200276029218664
+Endothelial_arterial,Iron,106,0.02830188679245283,0.9623032442493138,34.001381296809086,1.5222403,-0.4341668662680285
+Endothelial_arterial,Isoursodeoxycholic acid,106,0.009433962264150943,0.05672321981346597,6.012661300227393,1.6926078,-1.5200276029218664
+Endothelial_arterial,Ketone bodies,106,0.0,0.0,,1.9327492,-inf
+Endothelial_arterial,L-Arginine,106,0.0,0.0,,2.6237183,-inf
+Endothelial_arterial,L-Carnitine,106,0.0,0.0,,1.5774673,-inf
+Endothelial_arterial,L-Cystine,106,0.0,0.0,,2.6237183,-inf
+Endothelial_arterial,L-Lactate,106,0.0,0.0,,1.9327492,-inf
+Endothelial_arterial,L-Lysine,106,0.0,0.0,,2.6237183,-inf
+Endothelial_arterial,L-Ornithine,106,0.0,0.0,,2.6237183,-inf
+Endothelial_arterial,Lithocholic acid,106,0.009433962264150943,0.05672321981346597,6.012661300227393,1.6926078,-1.5200276029218664
+Endothelial_arterial,N-Desmethylcitalopram,106,0.0,0.0,,2.2585776,-inf
+Endothelial_arterial,N-Desmethyleletriptan,106,0.0,0.0,,2.2585776,-inf
+Endothelial_arterial,N-Desmethyltamoxifen,106,0.0,0.0,,2.1329615,-inf
+Endothelial_arterial,N-desmethylimatinib,106,0.0,0.0,,2.1329615,-inf
+Endothelial_arterial,Neurotransmitter,106,0.0,0.0,,2.4120698,-inf
+Endothelial_arterial,Nicotinate,106,0.0,0.0,,1.1931168,-inf
+Endothelial_arterial,Norepinephrine,106,0.0,0.0,,1.6205744,-inf
+Endothelial_arterial,O-Deethylated candesartan,106,0.0,0.0,,2.2585776,-inf
+Endothelial_arterial,O-Desmethylverapamil (D-702),106,0.0,0.34341509955286625,,1.2063974,-inf
+Endothelial_arterial,Oxalic acid,106,0.0,0.0,,1.6034069,-inf
+Endothelial_arterial,Phosphate,106,0.0,0.0,,2.831694,-inf
+Endothelial_arterial,Progesterone,106,0.0,0.0,,2.2585776,-inf
+Endothelial_arterial,Pyruvate,106,0.0,0.0,,1.9327492,-inf
+Endothelial_arterial,Sodium,106,0.0,0.19274528652172493,,1.3187249,-inf
+Endothelial_arterial,Sodium_hydrogen exchange,106,0.0,0.0929102613817849,,1.1216574,-inf
+Endothelial_arterial,Sulfolithocholic acid,106,0.009433962264150943,0.05672321981346597,6.012661300227393,1.6926078,-1.5200276029218664
+Endothelial_arterial,Taurocholic acid,106,0.0,0.05672321981346597,,1.1657487,-inf
+Endothelial_arterial,Testosterone,106,0.009433962264150943,0.2866918797394003,30.38933925237643,2.1072292,-0.7937092529551687
+Endothelial_arterial,Trihydroxycoprostanoic acid,106,0.009433962264150943,0.05672321981346597,6.012661300227393,1.6926078,-1.5200276029218664
+Endothelial_arterial,Ursocholic acid,106,0.009433962264150943,0.05672321981346597,6.012661300227393,1.6926078,-1.5200276029218664
+Endothelial_arterial,Ursodeoxycholic acid,106,0.009433962264150943,0.05672321981346597,6.012661300227393,1.6926078,-1.5200276029218664
+Endothelial_arterial,Ursodeoxycholic acid 3-sulfate,106,0.009433962264150943,0.05672321981346597,6.012661300227393,1.6926078,-1.5200276029218664
+Endothelial_arterial,Varanic acid,106,0.009433962264150943,0.05672321981346597,6.012661300227393,1.6926078,-1.5200276029218664
+Endothelial_arterial,Water,106,0.009433962264150943,1.3301731376452823,54.73964835661445,1.6945045,-2.190062188969086
+Endothelial_arterial,alpha-Ketoisovaleric acid,106,0.0,0.0,,1.9327492,-inf
+Endothelial_lymphatic,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid",71,0.0,0.0,,1.6897923,-inf
+Endothelial_lymphatic,17a-Ethynylestradiol,71,0.0,0.0,,2.2823532,-inf
+Endothelial_lymphatic,"1b,3a,12a-Trihydroxy-5b-cholanoic acid",71,0.0,0.0,,1.6897923,-inf
+Endothelial_lymphatic,2-Hydroxychlorpropamide,71,0.0,0.0,,2.2728684,-inf
+Endothelial_lymphatic,25-Hydroxycholesterol,71,0.014084507042253521,0.5119806634594861,36.350627105623516,2.144944,0.5499988284663254
+Endothelial_lymphatic,"3',4'-Dihydrodiol",71,0.0,0.0,,2.2823532,-inf
+Endothelial_lymphatic,3-Sulfodeoxycholic acid,71,0.0,0.0,,1.6897923,-inf
+Endothelial_lymphatic,"3alpha,7alpha-Dihydroxycoprostanic acid",71,0.0,0.0,,1.6897923,-inf
+Endothelial_lymphatic,3b-Hydroxy-5-cholenoic acid,71,0.0,0.0,,1.6897923,-inf
+Endothelial_lymphatic,4'-Hydroxydiclofenac,71,0.0,0.0,,2.2823532,-inf
+Endothelial_lymphatic,4-Hydroxycyclophosphamide,71,0.0,0.0,,2.2823532,-inf
+Endothelial_lymphatic,4-ene-Valproic acid,71,0.0,0.0,,1.3955729,-inf
+Endothelial_lymphatic,5-Hydroxyomeprazole,71,0.0,0.0,,1.5378568,-inf
+Endothelial_lymphatic,8-Hydroxycarvedilol,71,0.0,0.0,,2.2823532,-inf
+Endothelial_lymphatic,Acetate,71,0.014084507042253521,0.15377544545692576,10.918056627441729,1.450345,-1.6864937899149761
+Endothelial_lymphatic,Acetyl-L-Carnitine,71,0.0,0.0,,1.6162763,-inf
+Endothelial_lymphatic,Adenosine diphosphate ribose,71,0.014084507042253521,0.32336109037342975,22.95863741651351,2.1897323,0.7221798038490057
+Endothelial_lymphatic,Adenosine triphosphate,71,0.014084507042253521,0.30960154513282556,21.981709704430614,1.468562,-1.6078533406754116
+Endothelial_lymphatic,Amiloride-sensitive sodium transport,71,0.0,0.0,,1.4595034,-inf
+Endothelial_lymphatic,Anion exchange,71,0.0,0.0,,0.70335126,-inf
+Endothelial_lymphatic,Butyrate,71,0.0,0.0,,1.9316024,-inf
+Endothelial_lymphatic,Chenodeoxycholic acid,71,0.0,0.0,,1.6897923,-inf
+Endothelial_lymphatic,Chenodeoxycholic acid 3-sulfate,71,0.0,0.0,,1.6897923,-inf
+Endothelial_lymphatic,Chloride,71,0.0,0.0,,1.5883206,-inf
+Endothelial_lymphatic,Chloride ion,71,0.014084507042253521,0.24322197384377997,17.268760142908377,1.6287519,-1.3807385090965607
+Endothelial_lymphatic,Cholesterol,71,0.0,0.0,,2.1541862,-inf
+Endothelial_lymphatic,Cholic acid,71,0.0,0.0,,1.5663207,-inf
+Endothelial_lymphatic,Choline,71,0.0,0.0,,1.6162763,-inf
+Endothelial_lymphatic,Citric acid,71,0.014084507042253521,0.15377544545692576,10.918056627441729,1.6022105,-1.0469363139209065
+Endothelial_lymphatic,Coprocholic acid,71,0.0,0.0,,1.6897923,-inf
+Endothelial_lymphatic,Cortisol,71,0.0,0.0,,2.1541862,-inf
+Endothelial_lymphatic,Creatine,71,0.0,0.0,,1.6162763,-inf
+Endothelial_lymphatic,D-Lactate,71,0.0,0.0,,1.9316024,-inf
+Endothelial_lymphatic,Deoxycholic acid,71,0.0,0.0,,1.6897923,-inf
+Endothelial_lymphatic,Dopamine,71,0.0,0.0,,1.6162763,-inf
+Endothelial_lymphatic,E-3179,71,0.0,0.0,,2.2823532,-inf
+Endothelial_lymphatic,Estradiol,71,0.014084507042253521,0.15377544545692576,10.918056627441729,1.4993733,-1.6159131104693634
+Endothelial_lymphatic,Estriol,71,0.0,0.0,,2.2823532,-inf
+Endothelial_lymphatic,Fatty acid,71,0.0,4.623973208669291,,0.59397763,-inf
+Endothelial_lymphatic,Folic acid,71,0.0,0.0,,1.659216,-inf
+Endothelial_lymphatic,Folinic acid,71,0.0,0.0,,1.6897923,-inf
+Endothelial_lymphatic,Glutathione,71,0.0,0.0,,1.6897923,-inf
+Endothelial_lymphatic,Glycerol,71,0.0,0.0,,2.2823532,-inf
+Endothelial_lymphatic,Glycochenodeoxycholate-3-sulfate,71,0.0,0.0,,1.6897923,-inf
+Endothelial_lymphatic,Histamine,71,0.0,0.0,,1.6162763,-inf
+Endothelial_lymphatic,Hydroxylansoprazole,71,0.0,0.0,,2.1541862,-inf
+Endothelial_lymphatic,Hyodeoxycholic acid,71,0.0,0.0,,1.6897923,-inf
+Endothelial_lymphatic,Iron,71,0.014084507042253521,0.1252142794123748,8.890213838278612,1.4945157,-1.4409560319306676
+Endothelial_lymphatic,Isoursodeoxycholic acid,71,0.0,0.0,,1.6897923,-inf
+Endothelial_lymphatic,Ketone bodies,71,0.0,0.0,,1.9316024,-inf
+Endothelial_lymphatic,L-Arginine,71,0.0,0.0,,2.6253722,-inf
+Endothelial_lymphatic,L-Carnitine,71,0.0,0.0,,1.5938109,-inf
+Endothelial_lymphatic,L-Cystine,71,0.0,0.0,,2.6253722,-inf
+Endothelial_lymphatic,L-Lactate,71,0.0,0.0,,1.9316024,-inf
+Endothelial_lymphatic,L-Lysine,71,0.0,0.0,,2.6253722,-inf
+Endothelial_lymphatic,L-Ornithine,71,0.0,0.0,,2.6253722,-inf
+Endothelial_lymphatic,Lithocholic acid,71,0.0,0.0,,1.6897923,-inf
+Endothelial_lymphatic,N-Desmethylcitalopram,71,0.0,0.0,,2.2823532,-inf
+Endothelial_lymphatic,N-Desmethyleletriptan,71,0.0,0.0,,2.2823532,-inf
+Endothelial_lymphatic,N-Desmethyltamoxifen,71,0.0,0.0,,2.1541862,-inf
+Endothelial_lymphatic,N-desmethylimatinib,71,0.0,0.0,,2.1541862,-inf
+Endothelial_lymphatic,Neurotransmitter,71,0.0,0.0,,2.441447,-inf
+Endothelial_lymphatic,Nicotinate,71,0.014084507042253521,0.15377544545692576,10.918056627441729,1.1976941,-0.8695400630474591
+Endothelial_lymphatic,Norepinephrine,71,0.0,0.0,,1.6162763,-inf
+Endothelial_lymphatic,O-Deethylated candesartan,71,0.0,0.0,,2.2823532,-inf
+Endothelial_lymphatic,O-Desmethylverapamil (D-702),71,0.0,0.0,,1.2441,-inf
+Endothelial_lymphatic,Oxalic acid,71,0.014084507042253521,0.15377544545692576,10.918056627441729,1.6022105,-1.0469363139209065
+Endothelial_lymphatic,Phosphate,71,0.0,0.0,,2.7789142,-inf
+Endothelial_lymphatic,Progesterone,71,0.0,0.0,,2.2823532,-inf
+Endothelial_lymphatic,Pyruvate,71,0.0,0.0,,1.9316024,-inf
+Endothelial_lymphatic,Sodium,71,0.0,0.24322197384377997,,1.29493,-inf
+Endothelial_lymphatic,Sodium_hydrogen exchange,71,0.0,0.0,,1.1611824,-inf
+Endothelial_lymphatic,Sulfolithocholic acid,71,0.0,0.0,,1.6897923,-inf
+Endothelial_lymphatic,Taurocholic acid,71,0.014084507042253521,0.15377544545692576,10.918056627441729,1.1998625,-1.4679230795309368
+Endothelial_lymphatic,Testosterone,71,0.0,0.0,,2.127499,-inf
+Endothelial_lymphatic,Trihydroxycoprostanoic acid,71,0.0,0.0,,1.6897923,-inf
+Endothelial_lymphatic,Ursocholic acid,71,0.0,0.0,,1.6897923,-inf
+Endothelial_lymphatic,Ursodeoxycholic acid,71,0.0,0.0,,1.6897923,-inf
+Endothelial_lymphatic,Ursodeoxycholic acid 3-sulfate,71,0.0,0.0,,1.6897923,-inf
+Endothelial_lymphatic,Varanic acid,71,0.0,0.0,,1.6897923,-inf
+Endothelial_lymphatic,Water,71,0.0,0.0,,1.7205249,-inf
+Endothelial_lymphatic,alpha-Ketoisovaleric acid,71,0.0,0.0,,1.9316024,-inf
+Endothelial_venous,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid",88,0.0,0.0,,1.7148831,-inf
+Endothelial_venous,17a-Ethynylestradiol,88,0.0,0.0,,2.314562,-inf
+Endothelial_venous,"1b,3a,12a-Trihydroxy-5b-cholanoic acid",88,0.0,0.0,,1.7148831,-inf
+Endothelial_venous,2-Hydroxychlorpropamide,88,0.0,0.0,,2.2964346,-inf
+Endothelial_venous,25-Hydroxycholesterol,88,0.0,0.0,,2.14794,-inf
+Endothelial_venous,"3',4'-Dihydrodiol",88,0.0,0.0,,2.314562,-inf
+Endothelial_venous,3-Sulfodeoxycholic acid,88,0.0,0.0,,1.7148831,-inf
+Endothelial_venous,"3alpha,7alpha-Dihydroxycoprostanic acid",88,0.0,0.0,,1.7148831,-inf
+Endothelial_venous,3b-Hydroxy-5-cholenoic acid,88,0.0,0.0,,1.7148831,-inf
+Endothelial_venous,4'-Hydroxydiclofenac,88,0.0,0.0,,2.314562,-inf
+Endothelial_venous,4-Hydroxycyclophosphamide,88,0.0,0.0,,2.314562,-inf
+Endothelial_venous,4-ene-Valproic acid,88,0.0,0.0,,1.4269866,-inf
+Endothelial_venous,5-Hydroxyomeprazole,88,0.0,0.34242627416192695,,1.570871,-inf
+Endothelial_venous,8-Hydroxycarvedilol,88,0.0,0.0,,2.314562,-inf
+Endothelial_venous,Acetate,88,0.0,0.0,,1.4660972,-inf
+Endothelial_venous,Acetyl-L-Carnitine,88,0.0,0.0,,1.6241207,-inf
+Endothelial_venous,Adenosine diphosphate ribose,88,0.0,0.0,,2.194958,-inf
+Endothelial_venous,Adenosine triphosphate,88,0.03409090909090909,0.6856957088013086,20.11374079150505,1.4913838,-0.332575339086871
+Endothelial_venous,Amiloride-sensitive sodium transport,88,0.0,0.0,,1.4867771,-inf
+Endothelial_venous,Anion exchange,88,0.0,0.0,,0.70640427,-inf
+Endothelial_venous,Butyrate,88,0.0,0.0,,1.9351672,-inf
+Endothelial_venous,Chenodeoxycholic acid,88,0.0,0.0,,1.7148831,-inf
+Endothelial_venous,Chenodeoxycholic acid 3-sulfate,88,0.0,0.0,,1.7148831,-inf
+Endothelial_venous,Chloride,88,0.0,0.0,,1.5871066,-inf
+Endothelial_venous,Chloride ion,88,0.0,0.0,,1.6484162,-inf
+Endothelial_venous,Cholesterol,88,0.0,0.0,,2.182965,-inf
+Endothelial_venous,Cholic acid,88,0.0,0.34242627416192695,,1.596573,-inf
+Endothelial_venous,Choline,88,0.0,0.0,,1.6241207,-inf
+Endothelial_venous,Citric acid,88,0.0,0.0,,1.6250718,-inf
+Endothelial_venous,Coprocholic acid,88,0.0,0.0,,1.7148831,-inf
+Endothelial_venous,Cortisol,88,0.0,0.0,,2.182965,-inf
+Endothelial_venous,Creatine,88,0.0,0.0,,1.6241207,-inf
+Endothelial_venous,D-Lactate,88,0.0,0.0,,1.9351672,-inf
+Endothelial_venous,Deoxycholic acid,88,0.0,0.0,,1.7148831,-inf
+Endothelial_venous,Dopamine,88,0.0,0.0,,1.6241207,-inf
+Endothelial_venous,E-3179,88,0.0,0.0,,2.314562,-inf
+Endothelial_venous,Estradiol,88,0.0,0.0,,1.5243737,-inf
+Endothelial_venous,Estriol,88,0.0,0.0,,2.314562,-inf
+Endothelial_venous,Fatty acid,88,0.011363636363636364,9.708214511306485,164.7288921970719,0.6348851,-1.2191172893035869
+Endothelial_venous,Folic acid,88,0.0,0.0,,1.6888667,-inf
+Endothelial_venous,Folinic acid,88,0.0,0.0,,1.7148831,-inf
+Endothelial_venous,Glutathione,88,0.0,0.0,,1.7148831,-inf
+Endothelial_venous,Glycerol,88,0.0,0.0,,2.314562,-inf
+Endothelial_venous,Glycochenodeoxycholate-3-sulfate,88,0.0,0.0,,1.7148831,-inf
+Endothelial_venous,Histamine,88,0.0,0.0,,1.6241207,-inf
+Endothelial_venous,Hydroxylansoprazole,88,0.0,0.0,,2.182965,-inf
+Endothelial_venous,Hyodeoxycholic acid,88,0.0,0.0,,1.7148831,-inf
+Endothelial_venous,Iron,88,0.03409090909090909,0.7571363801797705,22.2093338186066,1.5452416,-0.16567803034212658
+Endothelial_venous,Isoursodeoxycholic acid,88,0.0,0.0,,1.7148831,-inf
+Endothelial_venous,Ketone bodies,88,0.0,0.0,,1.9351672,-inf
+Endothelial_venous,L-Arginine,88,0.0,0.0,,2.6366491,-inf
+Endothelial_venous,L-Carnitine,88,0.0,0.0,,1.6032261,-inf
+Endothelial_venous,L-Cystine,88,0.0,0.0,,2.6366491,-inf
+Endothelial_venous,L-Lactate,88,0.0,0.0,,1.9351672,-inf
+Endothelial_venous,L-Lysine,88,0.0,0.0,,2.6366491,-inf
+Endothelial_venous,L-Ornithine,88,0.0,0.0,,2.6366491,-inf
+Endothelial_venous,Lithocholic acid,88,0.0,0.0,,1.7148831,-inf
+Endothelial_venous,N-Desmethylcitalopram,88,0.0,0.0,,2.314562,-inf
+Endothelial_venous,N-Desmethyleletriptan,88,0.0,0.0,,2.314562,-inf
+Endothelial_venous,N-Desmethyltamoxifen,88,0.0,0.0,,2.182965,-inf
+Endothelial_venous,N-desmethylimatinib,88,0.0,0.0,,2.182965,-inf
+Endothelial_venous,Neurotransmitter,88,0.0,0.0,,2.4343832,-inf
+Endothelial_venous,Nicotinate,88,0.0,0.0,,1.228241,-inf
+Endothelial_venous,Norepinephrine,88,0.0,0.0,,1.6241207,-inf
+Endothelial_venous,O-Deethylated candesartan,88,0.0,0.0,,2.314562,-inf
+Endothelial_venous,O-Desmethylverapamil (D-702),88,0.0,0.34242627416192695,,1.258829,-inf
+Endothelial_venous,Oxalic acid,88,0.0,0.0,,1.6250718,-inf
+Endothelial_venous,Phosphate,88,0.0,0.0,,2.8761206,-inf
+Endothelial_venous,Progesterone,88,0.0,0.0,,2.314562,-inf
+Endothelial_venous,Pyruvate,88,0.0,0.0,,1.9351672,-inf
+Endothelial_venous,Sodium,88,0.0,0.0,,1.3148979,-inf
+Endothelial_venous,Sodium_hydrogen exchange,88,0.0,0.5051183856500074,,1.1499782,-inf
+Endothelial_venous,Sulfolithocholic acid,88,0.0,0.0,,1.7148831,-inf
+Endothelial_venous,Taurocholic acid,88,0.0,0.34242627416192695,,1.1985631,-inf
+Endothelial_venous,Testosterone,88,0.0,0.0,,2.1770232,-inf
+Endothelial_venous,Trihydroxycoprostanoic acid,88,0.0,0.0,,1.7148831,-inf
+Endothelial_venous,Ursocholic acid,88,0.0,0.0,,1.7148831,-inf
+Endothelial_venous,Ursodeoxycholic acid,88,0.0,0.0,,1.7148831,-inf
+Endothelial_venous,Ursodeoxycholic acid 3-sulfate,88,0.0,0.0,,1.7148831,-inf
+Endothelial_venous,Varanic acid,88,0.0,0.0,,1.7148831,-inf
+Endothelial_venous,Water,88,0.0,0.0,,1.807664,-inf
+Endothelial_venous,alpha-Ketoisovaleric acid,88,0.0,0.0,,1.9351672,-inf
+Enteric_glia,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid",91,0.02197802197802198,0.3788611890038445,17.238184099674925,1.7070346,-0.29990178855736327
+Enteric_glia,17a-Ethynylestradiol,91,0.0,0.0,,2.292654,-inf
+Enteric_glia,"1b,3a,12a-Trihydroxy-5b-cholanoic acid",91,0.02197802197802198,0.3788611890038445,17.238184099674925,1.7070346,-0.29990178855736327
+Enteric_glia,2-Hydroxychlorpropamide,91,0.0,0.0,,2.278405,-inf
+Enteric_glia,25-Hydroxycholesterol,91,0.0,0.0,,2.1317267,-inf
+Enteric_glia,"3',4'-Dihydrodiol",91,0.0,0.0,,2.292654,-inf
+Enteric_glia,3-Sulfodeoxycholic acid,91,0.02197802197802198,0.3788611890038445,17.238184099674925,1.7070346,-0.29990178855736327
+Enteric_glia,"3alpha,7alpha-Dihydroxycoprostanic acid",91,0.02197802197802198,0.3788611890038445,17.238184099674925,1.7070346,-0.29990178855736327
+Enteric_glia,3b-Hydroxy-5-cholenoic acid,91,0.02197802197802198,0.3788611890038445,17.238184099674925,1.7070346,-0.29990178855736327
+Enteric_glia,4'-Hydroxydiclofenac,91,0.0,0.0,,2.292654,-inf
+Enteric_glia,4-Hydroxycyclophosphamide,91,0.0,0.0,,2.292654,-inf
+Enteric_glia,4-ene-Valproic acid,91,0.0,0.16786412643469892,,1.419896,-inf
+Enteric_glia,5-Hydroxyomeprazole,91,0.02197802197802198,0.5291525427018636,17.238184099674925,1.5449344,-0.7482154427105058
+Enteric_glia,8-Hydroxycarvedilol,91,0.0,0.0,,2.292654,-inf
+Enteric_glia,Acetate,91,0.02197802197802198,0.47142599236612626,21.449882652658744,1.4479511,-1.0445413106089905
+Enteric_glia,Acetyl-L-Carnitine,91,0.01098901098901099,0.16786412643469892,15.275635505557602,1.62189,-1.584152680300853
+Enteric_glia,Adenosine diphosphate ribose,91,0.0,0.0,,2.214978,-inf
+Enteric_glia,Adenosine triphosphate,91,0.01098901098901099,0.1357593837719183,12.354103923244566,1.4731902,-1.9659008613694258
+Enteric_glia,Amiloride-sensitive sodium transport,91,0.0,0.0,,1.4635932,-inf
+Enteric_glia,Anion exchange,91,0.0,0.5061443427698128,,0.68473876,-inf
+Enteric_glia,Butyrate,91,0.0,0.0,,1.90459,-inf
+Enteric_glia,Chenodeoxycholic acid,91,0.02197802197802198,0.3788611890038445,17.238184099674925,1.7070346,-0.29990178855736327
+Enteric_glia,Chenodeoxycholic acid 3-sulfate,91,0.02197802197802198,0.3788611890038445,17.238184099674925,1.7070346,-0.29990178855736327
+Enteric_glia,Chloride,91,0.01098901098901099,0.13655933256959443,12.426899263833093,1.583026,-1.535969146790888
+Enteric_glia,Chloride ion,91,0.0,0.0,,1.6238568,-inf
+Enteric_glia,Cholesterol,91,0.0,0.0,,2.1918046,-inf
+Enteric_glia,Cholic acid,91,0.02197802197802198,0.5291525427018636,17.238184099674925,1.5622554,-0.3748638462385855
+Enteric_glia,Choline,91,0.01098901098901099,0.16786412643469892,15.275635505557602,1.62189,-1.584152680300853
+Enteric_glia,Citric acid,91,0.02197802197802198,0.47142599236612626,21.449882652658744,1.6023864,-0.40498383461492077
+Enteric_glia,Coprocholic acid,91,0.02197802197802198,0.3788611890038445,17.238184099674925,1.7070346,-0.29990178855736327
+Enteric_glia,Cortisol,91,0.0,0.0,,2.1918046,-inf
+Enteric_glia,Creatine,91,0.01098901098901099,0.16786412643469892,15.275635505557602,1.62189,-1.584152680300853
+Enteric_glia,D-Lactate,91,0.0,0.0,,1.90459,-inf
+Enteric_glia,Deoxycholic acid,91,0.02197802197802198,0.3788611890038445,17.238184099674925,1.7070346,-0.29990178855736327
+Enteric_glia,Dopamine,91,0.01098901098901099,0.16786412643469892,15.275635505557602,1.62189,-1.584152680300853
+Enteric_glia,E-3179,91,0.0,0.0,,2.292654,-inf
+Enteric_glia,Estradiol,91,0.02197802197802198,0.47142599236612626,21.449882652658744,1.5154787,-0.9739606311633775
+Enteric_glia,Estriol,91,0.0,0.0,,2.292654,-inf
+Enteric_glia,Fatty acid,91,0.0,1.4071263179316433,,0.61515987,-inf
+Enteric_glia,Folic acid,91,0.02197802197802198,0.3788611890038445,17.238184099674925,1.6810154,-0.7292945808132769
+Enteric_glia,Folinic acid,91,0.02197802197802198,0.3788611890038445,17.238184099674925,1.7070346,-0.29990178855736327
+Enteric_glia,Glutathione,91,0.02197802197802198,0.3788611890038445,17.238184099674925,1.7070346,-0.29990178855736327
+Enteric_glia,Glycerol,91,0.0,0.0,,2.292654,-inf
+Enteric_glia,Glycochenodeoxycholate-3-sulfate,91,0.02197802197802198,0.3788611890038445,17.238184099674925,1.7070346,-0.29990178855736327
+Enteric_glia,Histamine,91,0.01098901098901099,0.16786412643469892,15.275635505557602,1.62189,-1.584152680300853
+Enteric_glia,Hydroxylansoprazole,91,0.0,0.0,,2.1918046,-inf
+Enteric_glia,Hyodeoxycholic acid,91,0.02197802197802198,0.3788611890038445,17.238184099674925,1.7070346,-0.29990178855736327
+Enteric_glia,Iron,91,0.03296703296703297,0.9024092335819067,27.373080085317838,1.5493321,-0.21404105190352543
+Enteric_glia,Isoursodeoxycholic acid,91,0.02197802197802198,0.3788611890038445,17.238184099674925,1.7070346,-0.29990178855736327
+Enteric_glia,Ketone bodies,91,0.0,0.0,,1.90459,-inf
+Enteric_glia,L-Arginine,91,0.0,0.0,,2.6391666,-inf
+Enteric_glia,L-Carnitine,91,0.01098901098901099,0.16786412643469892,15.275635505557602,1.5967872,-1.54681652902788
+Enteric_glia,L-Cystine,91,0.0,0.0,,2.6391666,-inf
+Enteric_glia,L-Lactate,91,0.0,0.0,,1.90459,-inf
+Enteric_glia,L-Lysine,91,0.0,0.0,,2.6391666,-inf
+Enteric_glia,L-Ornithine,91,0.0,0.0,,2.6391666,-inf
+Enteric_glia,Lithocholic acid,91,0.02197802197802198,0.3788611890038445,17.238184099674925,1.7070346,-0.29990178855736327
+Enteric_glia,N-Desmethylcitalopram,91,0.0,0.0,,2.292654,-inf
+Enteric_glia,N-Desmethyleletriptan,91,0.0,0.0,,2.292654,-inf
+Enteric_glia,N-Desmethyltamoxifen,91,0.0,0.0,,2.1918046,-inf
+Enteric_glia,N-desmethylimatinib,91,0.0,0.0,,2.1918046,-inf
+Enteric_glia,Neurotransmitter,91,0.0,0.0,,2.419388,-inf
+Enteric_glia,Nicotinate,91,0.01098901098901099,0.6392901188008252,34.91850916506769,1.2270379,-1.2275875837414731
+Enteric_glia,Norepinephrine,91,0.01098901098901099,0.16786412643469892,15.275635505557602,1.62189,-1.584152680300853
+Enteric_glia,O-Deethylated candesartan,91,0.0,0.0,,2.292654,-inf
+Enteric_glia,O-Desmethylverapamil (D-702),91,0.0,0.8384998465052325,,1.2356094,-inf
+Enteric_glia,Oxalic acid,91,0.02197802197802198,0.47142599236612626,21.449882652658744,1.6023864,-0.40498383461492077
+Enteric_glia,Phosphate,91,0.0,0.0,,2.80413,-inf
+Enteric_glia,Progesterone,91,0.0,0.0,,2.292654,-inf
+Enteric_glia,Pyruvate,91,0.0,0.0,,1.90459,-inf
+Enteric_glia,Sodium,91,0.0,0.16786412643469892,,1.2958266,-inf
+Enteric_glia,Sodium_hydrogen exchange,91,0.0,0.12969002475439861,,1.1546093,-inf
+Enteric_glia,Sulfolithocholic acid,91,0.02197802197802198,0.3788611890038445,17.238184099674925,1.7070346,-0.29990178855736327
+Enteric_glia,Taurocholic acid,91,0.02197802197802198,1.150869888766009,21.449882652658744,1.165148,-0.8259706002249508
+Enteric_glia,Testosterone,91,0.0,0.0,,2.1617785,-inf
+Enteric_glia,Trihydroxycoprostanoic acid,91,0.02197802197802198,0.3788611890038445,17.238184099674925,1.7070346,-0.29990178855736327
+Enteric_glia,Ursocholic acid,91,0.02197802197802198,0.3788611890038445,17.238184099674925,1.7070346,-0.29990178855736327
+Enteric_glia,Ursodeoxycholic acid,91,0.02197802197802198,0.3788611890038445,17.238184099674925,1.7070346,-0.29990178855736327
+Enteric_glia,Ursodeoxycholic acid 3-sulfate,91,0.02197802197802198,0.3788611890038445,17.238184099674925,1.7070346,-0.29990178855736327
+Enteric_glia,Varanic acid,91,0.02197802197802198,0.3788611890038445,17.238184099674925,1.7070346,-0.29990178855736327
+Enteric_glia,Water,91,0.0,0.3329919729329906,,1.703991,-inf
+Enteric_glia,alpha-Ketoisovaleric acid,91,0.0,0.0,,1.90459,-inf
+Fibroblast_CTF_S2,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid",308,0.003246753246753247,0.018318708051012877,5.642162079711966,1.6773313,-3.0588936890535683
+Fibroblast_CTF_S2,17a-Ethynylestradiol,308,0.0,0.0,,2.2887976,-inf
+Fibroblast_CTF_S2,"1b,3a,12a-Trihydroxy-5b-cholanoic acid",308,0.003246753246753247,0.018318708051012877,5.642162079711966,1.6773313,-3.0588936890535683
+Fibroblast_CTF_S2,2-Hydroxychlorpropamide,308,0.0,0.0,,2.2564447,-inf
+Fibroblast_CTF_S2,25-Hydroxycholesterol,308,0.022727272727272728,0.4544277063731611,19.994819080419088,2.093655,1.2403143293337102
+Fibroblast_CTF_S2,"3',4'-Dihydrodiol",308,0.0,0.0,,2.2887976,-inf
+Fibroblast_CTF_S2,3-Sulfodeoxycholic acid,308,0.003246753246753247,0.018318708051012877,5.642162079711966,1.6773313,-3.0588936890535683
+Fibroblast_CTF_S2,"3alpha,7alpha-Dihydroxycoprostanic acid",308,0.003246753246753247,0.018318708051012877,5.642162079711966,1.6773313,-3.0588936890535683
+Fibroblast_CTF_S2,3b-Hydroxy-5-cholenoic acid,308,0.003246753246753247,0.018318708051012877,5.642162079711966,1.6773313,-3.0588936890535683
+Fibroblast_CTF_S2,4'-Hydroxydiclofenac,308,0.0,0.0,,2.2887976,-inf
+Fibroblast_CTF_S2,4-Hydroxycyclophosphamide,308,0.0,0.0,,2.2887976,-inf
+Fibroblast_CTF_S2,4-ene-Valproic acid,308,0.0,0.8908930442073193,,1.3443391,-inf
+Fibroblast_CTF_S2,5-Hydroxyomeprazole,308,0.0,0.018318708051012877,,1.4619218,-inf
+Fibroblast_CTF_S2,8-Hydroxycarvedilol,308,0.0,0.0,,2.2887976,-inf
+Fibroblast_CTF_S2,Acetate,308,0.022727272727272728,0.3887795151214061,17.10629866534187,1.441899,-0.9961782890475914
+Fibroblast_CTF_S2,Acetyl-L-Carnitine,308,0.012987012987012988,0.24498437628946848,18.863796974289073,1.6165819,-1.3431445807970581
+Fibroblast_CTF_S2,Adenosine diphosphate ribose,308,0.0,0.0,,2.1726646,-inf
+Fibroblast_CTF_S2,Adenosine triphosphate,308,0.012987012987012988,0.20050533434479523,15.438910744549233,1.4427832,-1.7248927618656311
+Fibroblast_CTF_S2,Amiloride-sensitive sodium transport,308,0.022727272727272728,0.3040498085753905,13.378191577317182,1.4478008,-1.1207521594606102
+Fibroblast_CTF_S2,Anion exchange,308,0.022727272727272728,6.367052859017205,135.13675356305268,0.685944,-1.9114633253983428
+Fibroblast_CTF_S2,Butyrate,308,0.00974025974025974,0.12380772655935038,12.71092659342664,1.9186239,-0.8793185175775369
+Fibroblast_CTF_S2,Chenodeoxycholic acid,308,0.003246753246753247,0.018318708051012877,5.642162079711966,1.6773313,-3.0588936890535683
+Fibroblast_CTF_S2,Chenodeoxycholic acid 3-sulfate,308,0.003246753246753247,0.018318708051012877,5.642162079711966,1.6773313,-3.0588936890535683
+Fibroblast_CTF_S2,Chloride,308,0.003246753246753247,0.04988201370267305,15.363660220423299,1.5613514,-3.294961047287093
+Fibroblast_CTF_S2,Chloride ion,308,0.00974025974025974,0.2619360916755171,26.89210541201976,1.6092831,-1.9128154295656237
+Fibroblast_CTF_S2,Cholesterol,308,0.0,0.0,,2.144331,-inf
+Fibroblast_CTF_S2,Cholic acid,308,0.0,0.018318708051012877,,1.4833158,-inf
+Fibroblast_CTF_S2,Choline,308,0.012987012987012988,0.24498437628946848,18.863796974289073,1.6165819,-1.3431445807970581
+Fibroblast_CTF_S2,Citric acid,308,0.012987012987012988,0.2649717885620557,20.402827719278292,1.5915002,-1.1639757351111257
+Fibroblast_CTF_S2,Coprocholic acid,308,0.003246753246753247,0.018318708051012877,5.642162079711966,1.6773313,-3.0588936890535683
+Fibroblast_CTF_S2,Cortisol,308,0.0,0.0,,2.144331,-inf
+Fibroblast_CTF_S2,Creatine,308,0.012987012987012988,0.24498437628946848,18.863796974289073,1.6165819,-1.3431445807970581
+Fibroblast_CTF_S2,D-Lactate,308,0.00974025974025974,0.12380772655935038,12.71092659342664,1.9186239,-0.8793185175775369
+Fibroblast_CTF_S2,Deoxycholic acid,308,0.003246753246753247,0.018318708051012877,5.642162079711966,1.6773313,-3.0588936890535683
+Fibroblast_CTF_S2,Dopamine,308,0.012987012987012988,0.24498437628946848,18.863796974289073,1.6165819,-1.3431445807970581
+Fibroblast_CTF_S2,E-3179,308,0.0,0.0,,2.2887976,-inf
+Fibroblast_CTF_S2,Estradiol,308,0.012987012987012988,0.2649717885620557,20.402827719278292,1.4870306,-1.7329525316595826
+Fibroblast_CTF_S2,Estriol,308,0.0,0.0,,2.2887976,-inf
+Fibroblast_CTF_S2,Fatty acid,308,0.012987012987012988,6.146515199035748,107.80652125864668,0.62009823,-1.0264722113611908
+Fibroblast_CTF_S2,Folic acid,308,0.003246753246753247,0.018318708051012877,5.642162079711966,1.6508006,-3.488286481309482
+Fibroblast_CTF_S2,Folinic acid,308,0.003246753246753247,0.018318708051012877,5.642162079711966,1.6773313,-3.0588936890535683
+Fibroblast_CTF_S2,Glutathione,308,0.003246753246753247,0.018318708051012877,5.642162079711966,1.6773313,-3.0588936890535683
+Fibroblast_CTF_S2,Glycerol,308,0.0,0.0,,2.2887976,-inf
+Fibroblast_CTF_S2,Glycochenodeoxycholate-3-sulfate,308,0.003246753246753247,0.018318708051012877,5.642162079711966,1.6773313,-3.0588936890535683
+Fibroblast_CTF_S2,Histamine,308,0.012987012987012988,0.24498437628946848,18.863796974289073,1.6165819,-1.3431445807970581
+Fibroblast_CTF_S2,Hydroxylansoprazole,308,0.0,0.0,,2.144331,-inf
+Fibroblast_CTF_S2,Hyodeoxycholic acid,308,0.003246753246753247,0.018318708051012877,5.642162079711966,1.6773313,-3.0588936890535683
+Fibroblast_CTF_S2,Iron,308,0.04220779220779221,0.7946736080037718,18.82765163578167,1.5102557,0.14244426502020546
+Fibroblast_CTF_S2,Isoursodeoxycholic acid,308,0.003246753246753247,0.018318708051012877,5.642162079711966,1.6773313,-3.0588936890535683
+Fibroblast_CTF_S2,Ketone bodies,308,0.00974025974025974,0.12380772655935038,12.71092659342664,1.9186239,-0.8793185175775369
+Fibroblast_CTF_S2,L-Arginine,308,0.0,0.0,,2.5993881,-inf
+Fibroblast_CTF_S2,L-Carnitine,308,0.012987012987012988,0.24498437628946848,18.863796974289073,1.5399089,-1.3058084295240853
+Fibroblast_CTF_S2,L-Cystine,308,0.0,0.0,,2.5993881,-inf
+Fibroblast_CTF_S2,L-Lactate,308,0.00974025974025974,0.12380772655935038,12.71092659342664,1.9186239,-0.8793185175775369
+Fibroblast_CTF_S2,L-Lysine,308,0.0,0.0,,2.5993881,-inf
+Fibroblast_CTF_S2,L-Ornithine,308,0.0,0.0,,2.5993881,-inf
+Fibroblast_CTF_S2,Lithocholic acid,308,0.003246753246753247,0.018318708051012877,5.642162079711966,1.6773313,-3.0588936890535683
+Fibroblast_CTF_S2,N-Desmethylcitalopram,308,0.0,0.0,,2.2887976,-inf
+Fibroblast_CTF_S2,N-Desmethyleletriptan,308,0.0,0.0,,2.2887976,-inf
+Fibroblast_CTF_S2,N-Desmethyltamoxifen,308,0.0,0.0,,2.144331,-inf
+Fibroblast_CTF_S2,N-desmethylimatinib,308,0.0,0.0,,2.144331,-inf
+Fibroblast_CTF_S2,Neurotransmitter,308,0.0,0.0,,2.3779542,-inf
+Fibroblast_CTF_S2,Nicotinate,308,0.00974025974025974,1.155864832769375,22.739132038707453,1.1633301,-1.4016169835165222
+Fibroblast_CTF_S2,Norepinephrine,308,0.012987012987012988,0.24498437628946848,18.863796974289073,1.6165819,-1.3431445807970581
+Fibroblast_CTF_S2,O-Deethylated candesartan,308,0.0,0.0,,2.2887976,-inf
+Fibroblast_CTF_S2,O-Desmethylverapamil (D-702),308,0.0,0.44178030397909074,,1.1322029,-inf
+Fibroblast_CTF_S2,Oxalic acid,308,0.012987012987012988,0.2649717885620557,20.402827719278292,1.5915002,-1.1639757351111257
+Fibroblast_CTF_S2,Phosphate,308,0.0,0.0,,2.819097,-inf
+Fibroblast_CTF_S2,Progesterone,308,0.0,0.0,,2.2887976,-inf
+Fibroblast_CTF_S2,Pyruvate,308,0.00974025974025974,0.12380772655935038,12.71092659342664,1.9186239,-0.8793185175775369
+Fibroblast_CTF_S2,Sodium,308,0.016233766233766232,0.6676069941143691,22.672201634132808,1.2858906,-1.293871809756387
+Fibroblast_CTF_S2,Sodium_hydrogen exchange,308,0.003246753246753247,0.5053995699029469,63.645272681130564,1.0763983,-2.473931188332412
+Fibroblast_CTF_S2,Sulfolithocholic acid,308,0.003246753246753247,0.018318708051012877,5.642162079711966,1.6773313,-3.0588936890535683
+Fibroblast_CTF_S2,Taurocholic acid,308,0.006493506493506494,0.9359658439707454,26.740926240702493,1.0974363,-2.584962500721156
+Fibroblast_CTF_S2,Testosterone,308,0.0,0.0,,2.1203043,-inf
+Fibroblast_CTF_S2,Trihydroxycoprostanoic acid,308,0.003246753246753247,0.018318708051012877,5.642162079711966,1.6773313,-3.0588936890535683
+Fibroblast_CTF_S2,Ursocholic acid,308,0.003246753246753247,0.018318708051012877,5.642162079711966,1.6773313,-3.0588936890535683
+Fibroblast_CTF_S2,Ursodeoxycholic acid,308,0.003246753246753247,0.018318708051012877,5.642162079711966,1.6773313,-3.0588936890535683
+Fibroblast_CTF_S2,Ursodeoxycholic acid 3-sulfate,308,0.003246753246753247,0.018318708051012877,5.642162079711966,1.6773313,-3.0588936890535683
+Fibroblast_CTF_S2,Varanic acid,308,0.003246753246753247,0.018318708051012877,5.642162079711966,1.6773313,-3.0588936890535683
+Fibroblast_CTF_S2,Water,308,0.006493506493506494,0.1607456993160638,24.754837694673824,1.7019874,-2.7289282751007877
+Fibroblast_CTF_S2,alpha-Ketoisovaleric acid,308,0.00974025974025974,0.12380772655935038,12.71092659342664,1.9186239,-0.8793185175775369
+Fibroblast_FRC_S4,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid",7,0.0,0.0,,1.6495985,-inf
+Fibroblast_FRC_S4,17a-Ethynylestradiol,7,0.0,0.0,,2.2186115,-inf
+Fibroblast_FRC_S4,"1b,3a,12a-Trihydroxy-5b-cholanoic acid",7,0.0,0.0,,1.6495985,-inf
+Fibroblast_FRC_S4,2-Hydroxychlorpropamide,7,0.0,0.0,,2.2186115,-inf
+Fibroblast_FRC_S4,25-Hydroxycholesterol,7,0.0,0.0,,2.1607604,-inf
+Fibroblast_FRC_S4,"3',4'-Dihydrodiol",7,0.0,0.0,,2.2186115,-inf
+Fibroblast_FRC_S4,3-Sulfodeoxycholic acid,7,0.0,0.0,,1.6495985,-inf
+Fibroblast_FRC_S4,"3alpha,7alpha-Dihydroxycoprostanic acid",7,0.0,0.0,,1.6495985,-inf
+Fibroblast_FRC_S4,3b-Hydroxy-5-cholenoic acid,7,0.0,0.0,,1.6495985,-inf
+Fibroblast_FRC_S4,4'-Hydroxydiclofenac,7,0.0,0.0,,2.2186115,-inf
+Fibroblast_FRC_S4,4-Hydroxycyclophosphamide,7,0.0,0.0,,2.2186115,-inf
+Fibroblast_FRC_S4,4-ene-Valproic acid,7,0.0,0.0,,1.3210894,-inf
+Fibroblast_FRC_S4,5-Hydroxyomeprazole,7,0.0,0.0,,1.4217408,-inf
+Fibroblast_FRC_S4,8-Hydroxycarvedilol,7,0.0,0.0,,2.2186115,-inf
+Fibroblast_FRC_S4,Acetate,7,0.0,0.0,,1.3509244,-inf
+Fibroblast_FRC_S4,Acetyl-L-Carnitine,7,0.0,0.0,,1.6122762,-inf
+Fibroblast_FRC_S4,Adenosine diphosphate ribose,7,0.0,0.0,,2.0948267,-inf
+Fibroblast_FRC_S4,Adenosine triphosphate,7,0.2857142857142857,4.254004646230003,14.889016261805011,1.4714235,2.7345388567716657
+Fibroblast_FRC_S4,Amiloride-sensitive sodium transport,7,0.0,0.0,,1.4081553,-inf
+Fibroblast_FRC_S4,Anion exchange,7,0.0,0.0,,0.6686618,-inf
+Fibroblast_FRC_S4,Butyrate,7,0.0,0.0,,1.7904719,-inf
+Fibroblast_FRC_S4,Chenodeoxycholic acid,7,0.0,0.0,,1.6495985,-inf
+Fibroblast_FRC_S4,Chenodeoxycholic acid 3-sulfate,7,0.0,0.0,,1.6495985,-inf
+Fibroblast_FRC_S4,Chloride,7,0.0,0.0,,1.5855181,-inf
+Fibroblast_FRC_S4,Chloride ion,7,0.0,0.0,,1.5444845,-inf
+Fibroblast_FRC_S4,Cholesterol,7,0.0,0.0,,2.164926,-inf
+Fibroblast_FRC_S4,Cholic acid,7,0.0,0.0,,1.4295137,-inf
+Fibroblast_FRC_S4,Choline,7,0.0,0.0,,1.6122762,-inf
+Fibroblast_FRC_S4,Citric acid,7,0.0,0.0,,1.5126302,-inf
+Fibroblast_FRC_S4,Coprocholic acid,7,0.0,0.0,,1.6495985,-inf
+Fibroblast_FRC_S4,Cortisol,7,0.0,0.0,,2.164926,-inf
+Fibroblast_FRC_S4,Creatine,7,0.0,0.0,,1.6122762,-inf
+Fibroblast_FRC_S4,D-Lactate,7,0.0,0.0,,1.7904719,-inf
+Fibroblast_FRC_S4,Deoxycholic acid,7,0.0,0.0,,1.6495985,-inf
+Fibroblast_FRC_S4,Dopamine,7,0.0,0.0,,1.6122762,-inf
+Fibroblast_FRC_S4,E-3179,7,0.0,0.0,,2.2186115,-inf
+Fibroblast_FRC_S4,Estradiol,7,0.0,0.0,,1.4356759,-inf
+Fibroblast_FRC_S4,Estriol,7,0.0,0.0,,2.2186115,-inf
+Fibroblast_FRC_S4,Fatty acid,7,0.0,5.4671037760759384,,0.57113034,-inf
+Fibroblast_FRC_S4,Folic acid,7,0.0,0.0,,1.6328272,-inf
+Fibroblast_FRC_S4,Folinic acid,7,0.0,0.0,,1.6495985,-inf
+Fibroblast_FRC_S4,Glutathione,7,0.0,0.0,,1.6495985,-inf
+Fibroblast_FRC_S4,Glycerol,7,0.0,0.0,,2.2186115,-inf
+Fibroblast_FRC_S4,Glycochenodeoxycholate-3-sulfate,7,0.0,0.0,,1.6495985,-inf
+Fibroblast_FRC_S4,Histamine,7,0.0,0.0,,1.6122762,-inf
+Fibroblast_FRC_S4,Hydroxylansoprazole,7,0.0,0.0,,2.164926,-inf
+Fibroblast_FRC_S4,Hyodeoxycholic acid,7,0.0,0.0,,1.6495985,-inf
+Fibroblast_FRC_S4,Iron,7,0.0,0.0,,1.4686803,-inf
+Fibroblast_FRC_S4,Isoursodeoxycholic acid,7,0.0,0.0,,1.6495985,-inf
+Fibroblast_FRC_S4,Ketone bodies,7,0.0,0.0,,1.7904719,-inf
+Fibroblast_FRC_S4,L-Arginine,7,0.0,0.0,,2.5630836,-inf
+Fibroblast_FRC_S4,L-Carnitine,7,0.0,0.0,,1.5551919,-inf
+Fibroblast_FRC_S4,L-Cystine,7,0.0,0.0,,2.5630836,-inf
+Fibroblast_FRC_S4,L-Lactate,7,0.0,0.0,,1.7904719,-inf
+Fibroblast_FRC_S4,L-Lysine,7,0.0,0.0,,2.5630836,-inf
+Fibroblast_FRC_S4,L-Ornithine,7,0.0,0.0,,2.5630836,-inf
+Fibroblast_FRC_S4,Lithocholic acid,7,0.0,0.0,,1.6495985,-inf
+Fibroblast_FRC_S4,N-Desmethylcitalopram,7,0.0,0.0,,2.2186115,-inf
+Fibroblast_FRC_S4,N-Desmethyleletriptan,7,0.0,0.0,,2.2186115,-inf
+Fibroblast_FRC_S4,N-Desmethyltamoxifen,7,0.0,0.0,,2.164926,-inf
+Fibroblast_FRC_S4,N-desmethylimatinib,7,0.0,0.0,,2.164926,-inf
+Fibroblast_FRC_S4,Neurotransmitter,7,0.0,0.0,,2.4063823,-inf
+Fibroblast_FRC_S4,Nicotinate,7,0.0,0.0,,1.1179657,-inf
+Fibroblast_FRC_S4,Norepinephrine,7,0.0,0.0,,1.6122762,-inf
+Fibroblast_FRC_S4,O-Deethylated candesartan,7,0.0,0.0,,2.2186115,-inf
+Fibroblast_FRC_S4,O-Desmethylverapamil (D-702),7,0.0,0.0,,1.1483284,-inf
+Fibroblast_FRC_S4,Oxalic acid,7,0.0,0.0,,1.5126302,-inf
+Fibroblast_FRC_S4,Phosphate,7,0.0,0.0,,2.932274,-inf
+Fibroblast_FRC_S4,Progesterone,7,0.0,0.0,,2.2186115,-inf
+Fibroblast_FRC_S4,Pyruvate,7,0.0,0.0,,1.7904719,-inf
+Fibroblast_FRC_S4,Sodium,7,0.0,0.0,,1.2910746,-inf
+Fibroblast_FRC_S4,Sodium_hydrogen exchange,7,0.0,0.0,,1.0938765,-inf
+Fibroblast_FRC_S4,Sulfolithocholic acid,7,0.0,0.0,,1.6495985,-inf
+Fibroblast_FRC_S4,Taurocholic acid,7,0.0,0.0,,1.0957989,-inf
+Fibroblast_FRC_S4,Testosterone,7,0.0,0.0,,2.164926,-inf
+Fibroblast_FRC_S4,Trihydroxycoprostanoic acid,7,0.0,0.0,,1.6495985,-inf
+Fibroblast_FRC_S4,Ursocholic acid,7,0.0,0.0,,1.6495985,-inf
+Fibroblast_FRC_S4,Ursodeoxycholic acid,7,0.0,0.0,,1.6495985,-inf
+Fibroblast_FRC_S4,Ursodeoxycholic acid 3-sulfate,7,0.0,0.0,,1.6495985,-inf
+Fibroblast_FRC_S4,Varanic acid,7,0.0,0.0,,1.6495985,-inf
+Fibroblast_FRC_S4,Water,7,0.0,0.0,,1.7199179,-inf
+Fibroblast_FRC_S4,alpha-Ketoisovaleric acid,7,0.0,0.0,,1.7904719,-inf
+Fibroblast_cCF_S1,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid",480,0.0,0.0,,1.7063686,-inf
+Fibroblast_cCF_S1,17a-Ethynylestradiol,480,0.0,0.0,,2.2911766,-inf
+Fibroblast_cCF_S1,"1b,3a,12a-Trihydroxy-5b-cholanoic acid",480,0.0,0.0,,1.7063686,-inf
+Fibroblast_cCF_S1,2-Hydroxychlorpropamide,480,0.0,0.0,,2.2623255,-inf
+Fibroblast_cCF_S1,25-Hydroxycholesterol,480,0.020833333333333332,0.39832292027473637,19.119500173187344,2.110778,1.1147834472498512
+Fibroblast_cCF_S1,"3',4'-Dihydrodiol",480,0.0,0.0,,2.2911766,-inf
+Fibroblast_cCF_S1,3-Sulfodeoxycholic acid,480,0.0,0.0,,1.7063686,-inf
+Fibroblast_cCF_S1,"3alpha,7alpha-Dihydroxycoprostanic acid",480,0.0,0.0,,1.7063686,-inf
+Fibroblast_cCF_S1,3b-Hydroxy-5-cholenoic acid,480,0.0,0.0,,1.7063686,-inf
+Fibroblast_cCF_S1,4'-Hydroxydiclofenac,480,0.0,0.0,,2.2911766,-inf
+Fibroblast_cCF_S1,4-Hydroxycyclophosphamide,480,0.0,0.0,,2.2911766,-inf
+Fibroblast_cCF_S1,4-ene-Valproic acid,480,0.0,0.0,,1.4123323,-inf
+Fibroblast_cCF_S1,5-Hydroxyomeprazole,480,0.0,0.05759746703960502,,1.5307043,-inf
+Fibroblast_cCF_S1,8-Hydroxycarvedilol,480,0.0,0.0,,2.2911766,-inf
+Fibroblast_cCF_S1,Acetate,480,0.041666666666666664,0.7901941225508029,18.96465894121927,1.4767154,-0.1217091711314505
+Fibroblast_cCF_S1,Acetyl-L-Carnitine,480,0.0,0.0,,1.6352689,-inf
+Fibroblast_cCF_S1,Adenosine diphosphate ribose,480,0.00625,0.1318801014996879,21.100816239950063,2.2017584,-0.4500011715336746
+Fibroblast_cCF_S1,Adenosine triphosphate,480,0.00625,0.14477668167169638,23.164269067471423,1.4658718,-2.7800343160580923
+Fibroblast_cCF_S1,Amiloride-sensitive sodium transport,480,0.0,0.0,,1.4654907,-inf
+Fibroblast_cCF_S1,Anion exchange,480,0.0,0.20237436775210754,,0.6854477,-inf
+Fibroblast_cCF_S1,Butyrate,480,0.0,0.0,,1.9311116,-inf
+Fibroblast_cCF_S1,Chenodeoxycholic acid,480,0.0,0.0,,1.7063686,-inf
+Fibroblast_cCF_S1,Chenodeoxycholic acid 3-sulfate,480,0.0,0.0,,1.7063686,-inf
+Fibroblast_cCF_S1,Chloride,480,0.008333333333333333,0.11946152940632934,14.335383528759522,1.5850031,-1.9350651022007104
+Fibroblast_cCF_S1,Chloride ion,480,0.004166666666666667,0.09911639597727179,23.787935034545228,1.6204051,-3.1378819852003974
+Fibroblast_cCF_S1,Cholesterol,480,0.0,0.0,,2.171979,-inf
+Fibroblast_cCF_S1,Cholic acid,480,0.0,0.05759746703960502,,1.5541427,-inf
+Fibroblast_cCF_S1,Choline,480,0.0,0.0,,1.6352689,-inf
+Fibroblast_cCF_S1,Citric acid,480,0.041666666666666664,0.7901941225508029,18.96465894121927,1.6307901,0.5178483048626192
+Fibroblast_cCF_S1,Coprocholic acid,480,0.0,0.0,,1.7063686,-inf
+Fibroblast_cCF_S1,Cortisol,480,0.0,0.0,,2.171979,-inf
+Fibroblast_cCF_S1,Creatine,480,0.0,0.0,,1.6352689,-inf
+Fibroblast_cCF_S1,D-Lactate,480,0.0,0.0,,1.9311116,-inf
+Fibroblast_cCF_S1,Deoxycholic acid,480,0.0,0.0,,1.7063686,-inf
+Fibroblast_cCF_S1,Dopamine,480,0.0,0.0,,1.6352689,-inf
+Fibroblast_cCF_S1,E-3179,480,0.0,0.0,,2.2911766,-inf
+Fibroblast_cCF_S1,Estradiol,480,0.03958333333333333,0.7901941225508029,19.15904777919609,1.5260974,-0.12512907312961463
+Fibroblast_cCF_S1,Estriol,480,0.0,0.0,,2.2911766,-inf
+Fibroblast_cCF_S1,Fatty acid,480,0.004166666666666667,2.2445457242968043,79.2349706721212,0.6177988,-2.666576266274808
+Fibroblast_cCF_S1,Folic acid,480,0.0,0.0,,1.6807829,-inf
+Fibroblast_cCF_S1,Folinic acid,480,0.0,0.0,,1.7063686,-inf
+Fibroblast_cCF_S1,Glutathione,480,0.0,0.0,,1.7063686,-inf
+Fibroblast_cCF_S1,Glycerol,480,0.0,0.0,,2.2911766,-inf
+Fibroblast_cCF_S1,Glycochenodeoxycholate-3-sulfate,480,0.0,0.0,,1.7063686,-inf
+Fibroblast_cCF_S1,Histamine,480,0.0,0.0,,1.6352689,-inf
+Fibroblast_cCF_S1,Hydroxylansoprazole,480,0.0,0.0,,2.171979,-inf
+Fibroblast_cCF_S1,Hyodeoxycholic acid,480,0.0,0.0,,1.7063686,-inf
+Fibroblast_cCF_S1,Iron,480,0.03958333333333333,0.8140967240232263,20.56665408058677,1.5390699,0.049828005409081444
+Fibroblast_cCF_S1,Isoursodeoxycholic acid,480,0.0,0.0,,1.7063686,-inf
+Fibroblast_cCF_S1,Ketone bodies,480,0.0,0.0,,1.9311116,-inf
+Fibroblast_cCF_S1,L-Arginine,480,0.0,0.0,,2.648826,-inf
+Fibroblast_cCF_S1,L-Carnitine,480,0.0,0.0,,1.5940177,-inf
+Fibroblast_cCF_S1,L-Cystine,480,0.0,0.0,,2.648826,-inf
+Fibroblast_cCF_S1,L-Lactate,480,0.0,0.0,,1.9311116,-inf
+Fibroblast_cCF_S1,L-Lysine,480,0.0,0.0,,2.648826,-inf
+Fibroblast_cCF_S1,L-Ornithine,480,0.0,0.0,,2.648826,-inf
+Fibroblast_cCF_S1,Lithocholic acid,480,0.0,0.0,,1.7063686,-inf
+Fibroblast_cCF_S1,N-Desmethylcitalopram,480,0.0,0.0,,2.2911766,-inf
+Fibroblast_cCF_S1,N-Desmethyleletriptan,480,0.0,0.0,,2.2911766,-inf
+Fibroblast_cCF_S1,N-Desmethyltamoxifen,480,0.0,0.0,,2.171979,-inf
+Fibroblast_cCF_S1,N-desmethylimatinib,480,0.0,0.0,,2.171979,-inf
+Fibroblast_cCF_S1,Neurotransmitter,480,0.0,0.0,,2.3956492,-inf
+Fibroblast_cCF_S1,Nicotinate,480,0.03333333333333333,0.7901941225508029,20.24324817960292,1.2297988,0.37331646084870446
+Fibroblast_cCF_S1,Norepinephrine,480,0.0,0.0,,1.6352689,-inf
+Fibroblast_cCF_S1,O-Deethylated candesartan,480,0.0,0.0,,2.2911766,-inf
+Fibroblast_cCF_S1,O-Desmethylverapamil (D-702),480,0.0,0.11519493407921004,,1.2318014,-inf
+Fibroblast_cCF_S1,Oxalic acid,480,0.041666666666666664,0.7901941225508029,18.96465894121927,1.6307901,0.5178483048626192
+Fibroblast_cCF_S1,Phosphate,480,0.0,0.0,,2.8160126,-inf
+Fibroblast_cCF_S1,Progesterone,480,0.0,0.0,,2.2911766,-inf
+Fibroblast_cCF_S1,Pyruvate,480,0.0,0.0,,1.9311116,-inf
+Fibroblast_cCF_S1,Sodium,480,0.0020833333333333333,0.09911639597727179,37.413238376996105,1.3123027,-4.255903959557366
+Fibroblast_cCF_S1,Sodium_hydrogen exchange,480,0.0,0.237041264009036,,1.1249431,-inf
+Fibroblast_cCF_S1,Sulfolithocholic acid,480,0.0,0.0,,1.7063686,-inf
+Fibroblast_cCF_S1,Taurocholic acid,480,0.027083333333333334,0.8477915895904079,21.735556161467283,1.1858128,-0.524626837493681
+Fibroblast_cCF_S1,Testosterone,480,0.0,0.0,,2.1481397,-inf
+Fibroblast_cCF_S1,Trihydroxycoprostanoic acid,480,0.0,0.0,,1.7063686,-inf
+Fibroblast_cCF_S1,Ursocholic acid,480,0.0,0.0,,1.7063686,-inf
+Fibroblast_cCF_S1,Ursodeoxycholic acid,480,0.0,0.0,,1.7063686,-inf
+Fibroblast_cCF_S1,Ursodeoxycholic acid 3-sulfate,480,0.0,0.0,,1.7063686,-inf
+Fibroblast_cCF_S1,Varanic acid,480,0.0,0.0,,1.7063686,-inf
+Fibroblast_cCF_S1,Water,480,0.0,0.016549284056268713,,1.7526766,-inf
+Fibroblast_cCF_S1,alpha-Ketoisovaleric acid,480,0.0,0.0,,1.9311116,-inf
+Fibroblast_submucosal_S3,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid",16,0.0,0.0,,1.7031878,-inf
+Fibroblast_submucosal_S3,17a-Ethynylestradiol,16,0.0,0.0,,2.316565,-inf
+Fibroblast_submucosal_S3,"1b,3a,12a-Trihydroxy-5b-cholanoic acid",16,0.0,0.0,,1.7031878,-inf
+Fibroblast_submucosal_S3,2-Hydroxychlorpropamide,16,0.0,0.0,,2.2718146,-inf
+Fibroblast_submucosal_S3,25-Hydroxycholesterol,16,0.0,0.0,,2.114612,-inf
+Fibroblast_submucosal_S3,"3',4'-Dihydrodiol",16,0.0,0.0,,2.316565,-inf
+Fibroblast_submucosal_S3,3-Sulfodeoxycholic acid,16,0.0,0.0,,1.7031878,-inf
+Fibroblast_submucosal_S3,"3alpha,7alpha-Dihydroxycoprostanic acid",16,0.0,0.0,,1.7031878,-inf
+Fibroblast_submucosal_S3,3b-Hydroxy-5-cholenoic acid,16,0.0,0.0,,1.7031878,-inf
+Fibroblast_submucosal_S3,4'-Hydroxydiclofenac,16,0.0,0.0,,2.316565,-inf
+Fibroblast_submucosal_S3,4-Hydroxycyclophosphamide,16,0.0,0.0,,2.316565,-inf
+Fibroblast_submucosal_S3,4-ene-Valproic acid,16,0.0,0.0,,1.4322573,-inf
+Fibroblast_submucosal_S3,5-Hydroxyomeprazole,16,0.0,0.0,,1.5667956,-inf
+Fibroblast_submucosal_S3,8-Hydroxycarvedilol,16,0.0,0.0,,2.316565,-inf
+Fibroblast_submucosal_S3,Acetate,16,0.0625,0.5464201782785878,8.742722852457405,1.4527025,0.46325332958970583
+Fibroblast_submucosal_S3,Acetyl-L-Carnitine,16,0.0,0.0,,1.6100872,-inf
+Fibroblast_submucosal_S3,Adenosine diphosphate ribose,16,0.0,0.0,,2.1440115,-inf
+Fibroblast_submucosal_S3,Adenosine triphosphate,16,0.0625,1.0528485695324719,16.84557711251955,1.4954059,0.5418937788292701
+Fibroblast_submucosal_S3,Amiloride-sensitive sodium transport,16,0.0,0.0,,1.4473025,-inf
+Fibroblast_submucosal_S3,Anion exchange,16,0.0,4.325015583832368,,0.67208666,-inf
+Fibroblast_submucosal_S3,Butyrate,16,0.0,0.0,,1.8809009,-inf
+Fibroblast_submucosal_S3,Chenodeoxycholic acid,16,0.0,0.0,,1.7031878,-inf
+Fibroblast_submucosal_S3,Chenodeoxycholic acid 3-sulfate,16,0.0,0.0,,1.7031878,-inf
+Fibroblast_submucosal_S3,Chloride,16,0.0,0.0,,1.5826476,-inf
+Fibroblast_submucosal_S3,Chloride ion,16,0.0,0.0,,1.5985029,-inf
+Fibroblast_submucosal_S3,Cholesterol,16,0.0,0.0,,2.1631796,-inf
+Fibroblast_submucosal_S3,Cholic acid,16,0.0,0.0,,1.5881295,-inf
+Fibroblast_submucosal_S3,Choline,16,0.0,0.0,,1.6100872,-inf
+Fibroblast_submucosal_S3,Citric acid,16,0.0625,0.5464201782785878,8.742722852457405,1.6179562,1.1028108055837755
+Fibroblast_submucosal_S3,Coprocholic acid,16,0.0,0.0,,1.7031878,-inf
+Fibroblast_submucosal_S3,Cortisol,16,0.0,0.0,,2.1631796,-inf
+Fibroblast_submucosal_S3,Creatine,16,0.0,0.0,,1.6100872,-inf
+Fibroblast_submucosal_S3,D-Lactate,16,0.0,0.0,,1.8809009,-inf
+Fibroblast_submucosal_S3,Deoxycholic acid,16,0.0,0.0,,1.7031878,-inf
+Fibroblast_submucosal_S3,Dopamine,16,0.0,0.0,,1.6100872,-inf
+Fibroblast_submucosal_S3,E-3179,16,0.0,0.0,,2.316565,-inf
+Fibroblast_submucosal_S3,Estradiol,16,0.0625,0.5464201782785878,8.742722852457405,1.510981,0.5338340090353184
+Fibroblast_submucosal_S3,Estriol,16,0.0,0.0,,2.316565,-inf
+Fibroblast_submucosal_S3,Fatty acid,16,0.0,0.0,,0.6379354,-inf
+Fibroblast_submucosal_S3,Folic acid,16,0.0,0.0,,1.6683828,-inf
+Fibroblast_submucosal_S3,Folinic acid,16,0.0,0.0,,1.7031878,-inf
+Fibroblast_submucosal_S3,Glutathione,16,0.0,0.0,,1.7031878,-inf
+Fibroblast_submucosal_S3,Glycerol,16,0.0,0.0,,2.316565,-inf
+Fibroblast_submucosal_S3,Glycochenodeoxycholate-3-sulfate,16,0.0,0.0,,1.7031878,-inf
+Fibroblast_submucosal_S3,Histamine,16,0.0,0.0,,1.6100872,-inf
+Fibroblast_submucosal_S3,Hydroxylansoprazole,16,0.0,0.0,,2.1631796,-inf
+Fibroblast_submucosal_S3,Hyodeoxycholic acid,16,0.0,0.0,,1.7031878,-inf
+Fibroblast_submucosal_S3,Iron,16,0.0,0.0,,1.5009285,-inf
+Fibroblast_submucosal_S3,Isoursodeoxycholic acid,16,0.0,0.0,,1.7031878,-inf
+Fibroblast_submucosal_S3,Ketone bodies,16,0.0,0.0,,1.8809009,-inf
+Fibroblast_submucosal_S3,L-Arginine,16,0.0,0.0,,2.6553817,-inf
+Fibroblast_submucosal_S3,L-Carnitine,16,0.0,0.0,,1.5966122,-inf
+Fibroblast_submucosal_S3,L-Cystine,16,0.0,0.0,,2.6553817,-inf
+Fibroblast_submucosal_S3,L-Lactate,16,0.0,0.0,,1.8809009,-inf
+Fibroblast_submucosal_S3,L-Lysine,16,0.0,0.0,,2.6553817,-inf
+Fibroblast_submucosal_S3,L-Ornithine,16,0.0,0.0,,2.6553817,-inf
+Fibroblast_submucosal_S3,Lithocholic acid,16,0.0,0.0,,1.7031878,-inf
+Fibroblast_submucosal_S3,N-Desmethylcitalopram,16,0.0,0.0,,2.316565,-inf
+Fibroblast_submucosal_S3,N-Desmethyleletriptan,16,0.0,0.0,,2.316565,-inf
+Fibroblast_submucosal_S3,N-Desmethyltamoxifen,16,0.0,0.0,,2.1631796,-inf
+Fibroblast_submucosal_S3,N-desmethylimatinib,16,0.0,0.0,,2.1631796,-inf
+Fibroblast_submucosal_S3,Neurotransmitter,16,0.0,0.0,,2.4004326,-inf
+Fibroblast_submucosal_S3,Nicotinate,16,0.0,0.5464201782785878,,1.235934,-inf
+Fibroblast_submucosal_S3,Norepinephrine,16,0.0,0.0,,1.6100872,-inf
+Fibroblast_submucosal_S3,O-Deethylated candesartan,16,0.0,0.0,,2.316565,-inf
+Fibroblast_submucosal_S3,O-Desmethylverapamil (D-702),16,0.0,0.0,,1.2882469,-inf
+Fibroblast_submucosal_S3,Oxalic acid,16,0.0625,0.5464201782785878,8.742722852457405,1.6179562,1.1028108055837755
+Fibroblast_submucosal_S3,Phosphate,16,0.0,0.0,,2.8090935,-inf
+Fibroblast_submucosal_S3,Progesterone,16,0.0,0.0,,2.316565,-inf
+Fibroblast_submucosal_S3,Pyruvate,16,0.0,0.0,,1.8809009,-inf
+Fibroblast_submucosal_S3,Sodium,16,0.0,0.0,,1.2668544,-inf
+Fibroblast_submucosal_S3,Sodium_hydrogen exchange,16,0.0,0.0,,1.0792286,-inf
+Fibroblast_submucosal_S3,Sulfolithocholic acid,16,0.0,0.0,,1.7031878,-inf
+Fibroblast_submucosal_S3,Taurocholic acid,16,0.0,0.5464201782785878,,1.2098224,-inf
+Fibroblast_submucosal_S3,Testosterone,16,0.0,0.0,,2.1333594,-inf
+Fibroblast_submucosal_S3,Trihydroxycoprostanoic acid,16,0.0,0.0,,1.7031878,-inf
+Fibroblast_submucosal_S3,Ursocholic acid,16,0.0,0.0,,1.7031878,-inf
+Fibroblast_submucosal_S3,Ursodeoxycholic acid,16,0.0,0.0,,1.7031878,-inf
+Fibroblast_submucosal_S3,Ursodeoxycholic acid 3-sulfate,16,0.0,0.0,,1.7031878,-inf
+Fibroblast_submucosal_S3,Varanic acid,16,0.0,0.0,,1.7031878,-inf
+Fibroblast_submucosal_S3,Water,16,0.0,0.0,,1.7532339,-inf
+Fibroblast_submucosal_S3,alpha-Ketoisovaleric acid,16,0.0,0.0,,1.8809009,-inf
+IEC_BEST4_OTOP2,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid",67,0.04477611940298507,0.717604673184011,16.026504367776244,1.7310445,0.7267661619047165
+IEC_BEST4_OTOP2,17a-Ethynylestradiol,67,0.0,0.0,,2.2691371,-inf
+IEC_BEST4_OTOP2,"1b,3a,12a-Trihydroxy-5b-cholanoic acid",67,0.04477611940298507,0.717604673184011,16.026504367776244,1.7310445,0.7267661619047165
+IEC_BEST4_OTOP2,2-Hydroxychlorpropamide,67,0.0,0.0,,2.2593877,-inf
+IEC_BEST4_OTOP2,25-Hydroxycholesterol,67,0.0,0.0,,2.108284,-inf
+IEC_BEST4_OTOP2,"3',4'-Dihydrodiol",67,0.0,0.0,,2.2691371,-inf
+IEC_BEST4_OTOP2,3-Sulfodeoxycholic acid,67,0.04477611940298507,0.717604673184011,16.026504367776244,1.7310445,0.7267661619047165
+IEC_BEST4_OTOP2,"3alpha,7alpha-Dihydroxycoprostanic acid",67,0.04477611940298507,0.717604673184011,16.026504367776244,1.7310445,0.7267661619047165
+IEC_BEST4_OTOP2,3b-Hydroxy-5-cholenoic acid,67,0.04477611940298507,0.717604673184011,16.026504367776244,1.7310445,0.7267661619047165
+IEC_BEST4_OTOP2,4'-Hydroxydiclofenac,67,0.0,0.0,,2.2691371,-inf
+IEC_BEST4_OTOP2,4-Hydroxycyclophosphamide,67,0.0,0.0,,2.2691371,-inf
+IEC_BEST4_OTOP2,4-ene-Valproic acid,67,0.029850746268656716,1.5331271111340576,22.60447436582325,1.3028233,1.7267661619047168
+IEC_BEST4_OTOP2,5-Hydroxyomeprazole,67,0.04477611940298507,0.717604673184011,16.026504367776244,1.4853784,0.2784525077515741
+IEC_BEST4_OTOP2,8-Hydroxycarvedilol,67,0.0,0.0,,2.2691371,-inf
+IEC_BEST4_OTOP2,Acetate,67,0.05970149253731343,1.248419799358236,20.911031639250453,1.4698684,0.3971641391319334
+IEC_BEST4_OTOP2,Acetyl-L-Carnitine,67,0.04477611940298507,0.4484429555985153,10.015226008366843,1.6164564,0.4425152701612269
+IEC_BEST4_OTOP2,Adenosine diphosphate ribose,67,0.0,0.0,,2.212496,-inf
+IEC_BEST4_OTOP2,Adenosine triphosphate,67,0.08955223880597014,1.1949697779786799,13.343829187428591,1.4923992,1.060767089092654
+IEC_BEST4_OTOP2,Amiloride-sensitive sodium transport,67,0.029850746268656716,0.6200662670341738,17.54787647983747,1.4588519,-0.7274097312810854
+IEC_BEST4_OTOP2,Anion exchange,67,0.07462686567164178,18.402510884561543,126.68104147692357,0.7562923,-0.19619280233145575
+IEC_BEST4_OTOP2,Butyrate,67,0.014925373134328358,0.22253173799539405,14.909626445691401,1.9145738,-0.2635836680615643
+IEC_BEST4_OTOP2,Chenodeoxycholic acid,67,0.04477611940298507,0.717604673184011,16.026504367776244,1.7310445,0.7267661619047165
+IEC_BEST4_OTOP2,Chenodeoxycholic acid 3-sulfate,67,0.04477611940298507,0.717604673184011,16.026504367776244,1.7310445,0.7267661619047165
+IEC_BEST4_OTOP2,Chloride,67,0.029850746268656716,0.34834640057082406,11.669604419122606,1.580747,-0.09426369704996418
+IEC_BEST4_OTOP2,Chloride ion,67,0.07462686567164178,1.387607178688055,18.59393619441994,1.6333624,1.024847514837711
+IEC_BEST4_OTOP2,Cholesterol,67,0.0,0.0,,2.1744585,-inf
+IEC_BEST4_OTOP2,Cholic acid,67,0.04477611940298507,0.717604673184011,16.026504367776244,1.5029227,0.6518041042234946
+IEC_BEST4_OTOP2,Choline,67,0.04477611940298507,0.4484429555985153,10.015226008366843,1.6164564,0.4425152701612269
+IEC_BEST4_OTOP2,Citric acid,67,0.04477611940298507,1.025888061362842,22.91150003710347,1.615787,0.6216841158471592
+IEC_BEST4_OTOP2,Coprocholic acid,67,0.04477611940298507,0.717604673184011,16.026504367776244,1.7310445,0.7267661619047165
+IEC_BEST4_OTOP2,Cortisol,67,0.0,0.0,,2.1744585,-inf
+IEC_BEST4_OTOP2,Creatine,67,0.04477611940298507,0.4484429555985153,10.015226008366843,1.6164564,0.4425152701612269
+IEC_BEST4_OTOP2,D-Lactate,67,0.014925373134328358,0.22253173799539405,14.909626445691401,1.9145738,-0.2635836680615643
+IEC_BEST4_OTOP2,Deoxycholic acid,67,0.04477611940298507,0.717604673184011,16.026504367776244,1.7310445,0.7267661619047165
+IEC_BEST4_OTOP2,Dopamine,67,0.04477611940298507,0.4484429555985153,10.015226008366843,1.6164564,0.4425152701612269
+IEC_BEST4_OTOP2,E-3179,67,0.0,0.0,,2.2691371,-inf
+IEC_BEST4_OTOP2,Estradiol,67,0.04477611940298507,1.025888061362842,22.91150003710347,1.5289927,0.05270731929870221
+IEC_BEST4_OTOP2,Estriol,67,0.0,0.0,,2.2691371,-inf
+IEC_BEST4_OTOP2,Fatty acid,67,0.04477611940298507,15.701632276939014,99.27566680063372,0.6423126,0.759187639597094
+IEC_BEST4_OTOP2,Folic acid,67,0.04477611940298507,0.717604673184011,16.026504367776244,1.7056955,0.29737336964880273
+IEC_BEST4_OTOP2,Folinic acid,67,0.04477611940298507,0.717604673184011,16.026504367776244,1.7310445,0.7267661619047165
+IEC_BEST4_OTOP2,Glutathione,67,0.04477611940298507,0.717604673184011,16.026504367776244,1.7310445,0.7267661619047165
+IEC_BEST4_OTOP2,Glycerol,67,0.0,0.0,,2.2691371,-inf
+IEC_BEST4_OTOP2,Glycochenodeoxycholate-3-sulfate,67,0.04477611940298507,0.717604673184011,16.026504367776244,1.7310445,0.7267661619047165
+IEC_BEST4_OTOP2,Histamine,67,0.04477611940298507,0.4484429555985153,10.015226008366843,1.6164564,0.4425152701612269
+IEC_BEST4_OTOP2,Hydroxylansoprazole,67,0.0,0.0,,2.1744585,-inf
+IEC_BEST4_OTOP2,Hyodeoxycholic acid,67,0.04477611940298507,0.717604673184011,16.026504367776244,1.7310445,0.7267661619047165
+IEC_BEST4_OTOP2,Iron,67,0.0,0.0,,1.4987197,-inf
+IEC_BEST4_OTOP2,Isoursodeoxycholic acid,67,0.04477611940298507,0.717604673184011,16.026504367776244,1.7310445,0.7267661619047165
+IEC_BEST4_OTOP2,Ketone bodies,67,0.014925373134328358,0.22253173799539405,14.909626445691401,1.9145738,-0.2635836680615643
+IEC_BEST4_OTOP2,L-Arginine,67,0.0,0.0,,2.6108873,-inf
+IEC_BEST4_OTOP2,L-Carnitine,67,0.04477611940298507,0.6958941843530273,10.015226008366843,1.5235726,0.4798514214341996
+IEC_BEST4_OTOP2,L-Cystine,67,0.0,0.0,,2.6108873,-inf
+IEC_BEST4_OTOP2,L-Lactate,67,0.014925373134328358,0.22253173799539405,14.909626445691401,1.9145738,-0.2635836680615643
+IEC_BEST4_OTOP2,L-Lysine,67,0.0,0.0,,2.6108873,-inf
+IEC_BEST4_OTOP2,L-Ornithine,67,0.0,0.0,,2.6108873,-inf
+IEC_BEST4_OTOP2,Lithocholic acid,67,0.04477611940298507,0.717604673184011,16.026504367776244,1.7310445,0.7267661619047165
+IEC_BEST4_OTOP2,N-Desmethylcitalopram,67,0.0,0.0,,2.2691371,-inf
+IEC_BEST4_OTOP2,N-Desmethyleletriptan,67,0.0,0.0,,2.2691371,-inf
+IEC_BEST4_OTOP2,N-Desmethyltamoxifen,67,0.0,0.0,,2.1744585,-inf
+IEC_BEST4_OTOP2,N-desmethylimatinib,67,0.0,0.0,,2.1744585,-inf
+IEC_BEST4_OTOP2,Neurotransmitter,67,0.029850746268656716,0.7303999443519144,24.46839813578913,2.3870692,2.0248475148377114
+IEC_BEST4_OTOP2,Nicotinate,67,0.05970149253731343,2.5590151724968995,25.71793796681881,1.1645626,1.2141178659994505
+IEC_BEST4_OTOP2,Norepinephrine,67,0.04477611940298507,0.4484429555985153,10.015226008366843,1.6164564,0.4425152701612269
+IEC_BEST4_OTOP2,O-Deethylated candesartan,67,0.0,0.0,,2.2691371,-inf
+IEC_BEST4_OTOP2,O-Desmethylverapamil (D-702),67,0.014925373134328358,2.952466348378592,37.18609445821471,1.1104457,-0.5757966081157149
+IEC_BEST4_OTOP2,Oxalic acid,67,0.04477611940298507,1.025888061362842,22.91150003710347,1.615787,0.6216841158471592
+IEC_BEST4_OTOP2,Phosphate,67,0.0,0.0,,2.8187609,-inf
+IEC_BEST4_OTOP2,Progesterone,67,0.0,0.0,,2.2691371,-inf
+IEC_BEST4_OTOP2,Pyruvate,67,0.014925373134328358,0.22253173799539405,14.909626445691401,1.9145738,-0.2635836680615643
+IEC_BEST4_OTOP2,Sodium,67,0.05970149253731343,2.0031967402609463,24.19353918145427,1.2748799,0.5848974455933798
+IEC_BEST4_OTOP2,Sodium_hydrogen exchange,67,0.04477611940298507,8.106439263745337,89.87360654113691,1.1431009,1.3117286626258728
+IEC_BEST4_OTOP2,Sulfolithocholic acid,67,0.04477611940298507,0.717604673184011,16.026504367776244,1.7310445,0.7267661619047165
+IEC_BEST4_OTOP2,Taurocholic acid,67,0.04477611940298507,2.8355330907889,29.736545538128382,1.1021421,0.20069735023712892
+IEC_BEST4_OTOP2,Testosterone,67,0.014925373134328358,0.4187859002438082,28.058655316335148,2.1563528,-0.1318779888497419
+IEC_BEST4_OTOP2,Trihydroxycoprostanoic acid,67,0.04477611940298507,0.717604673184011,16.026504367776244,1.7310445,0.7267661619047165
+IEC_BEST4_OTOP2,Ursocholic acid,67,0.04477611940298507,0.717604673184011,16.026504367776244,1.7310445,0.7267661619047165
+IEC_BEST4_OTOP2,Ursodeoxycholic acid,67,0.04477611940298507,0.717604673184011,16.026504367776244,1.7310445,0.7267661619047165
+IEC_BEST4_OTOP2,Ursodeoxycholic acid 3-sulfate,67,0.04477611940298507,0.717604673184011,16.026504367776244,1.7310445,0.7267661619047165
+IEC_BEST4_OTOP2,Varanic acid,67,0.04477611940298507,0.717604673184011,16.026504367776244,1.7310445,0.7267661619047165
+IEC_BEST4_OTOP2,Water,67,0.0,0.0,,1.6784884,-inf
+IEC_BEST4_OTOP2,alpha-Ketoisovaleric acid,67,0.014925373134328358,0.22253173799539405,14.909626445691401,1.9145738,-0.2635836680615643
+IEC_CT_absorptive_colonocyte,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid",324,0.07407407407407407,1.495128272425819,20.184231677748556,1.7334229,1.4530053494778643
+IEC_CT_absorptive_colonocyte,17a-Ethynylestradiol,324,0.2777777777777778,6.464849248644746,23.273457295121084,2.4236343,4.17367713630342
+IEC_CT_absorptive_colonocyte,"1b,3a,12a-Trihydroxy-5b-cholanoic acid",324,0.07407407407407407,1.495128272425819,20.184231677748556,1.7334229,1.4530053494778643
+IEC_CT_absorptive_colonocyte,2-Hydroxychlorpropamide,324,0.2808641975308642,8.24627000108568,29.36034593793143,2.1592522,4.167250867143987
+IEC_CT_absorptive_colonocyte,25-Hydroxycholesterol,324,0.021604938271604937,0.21332337773667365,9.873824912383181,2.108562,1.1672508671439867
+IEC_CT_absorptive_colonocyte,"3',4'-Dihydrodiol",324,0.2777777777777778,6.464849248644746,23.273457295121084,2.4236343,4.17367713630342
+IEC_CT_absorptive_colonocyte,3-Sulfodeoxycholic acid,324,0.07407407407407407,1.495128272425819,20.184231677748556,1.7334229,1.4530053494778643
+IEC_CT_absorptive_colonocyte,"3alpha,7alpha-Dihydroxycoprostanic acid",324,0.07407407407407407,1.495128272425819,20.184231677748556,1.7334229,1.4530053494778643
+IEC_CT_absorptive_colonocyte,3b-Hydroxy-5-cholenoic acid,324,0.07407407407407407,1.495128272425819,20.184231677748556,1.7334229,1.4530053494778643
+IEC_CT_absorptive_colonocyte,4'-Hydroxydiclofenac,324,0.2777777777777778,6.464849248644746,23.273457295121084,2.4236343,4.17367713630342
+IEC_CT_absorptive_colonocyte,4-Hydroxycyclophosphamide,324,0.2777777777777778,6.464849248644746,23.273457295121084,2.4236343,4.17367713630342
+IEC_CT_absorptive_colonocyte,4-ene-Valproic acid,324,0.05246913580246913,7.242162695855175,55.93889361259272,1.2312502,2.5404681907282036
+IEC_CT_absorptive_colonocyte,5-Hydroxyomeprazole,324,0.39814814814814814,30.384262516319982,71.0669716157539,1.5805687,3.43095645002682
+IEC_CT_absorptive_colonocyte,8-Hydroxycarvedilol,324,0.2777777777777778,6.464849248644746,23.273457295121084,2.4236343,4.17367713630342
+IEC_CT_absorptive_colonocyte,Acetate,324,0.11728395061728394,1.60404519929895,13.6765959098121,1.4856094,1.3713308401486664
+IEC_CT_absorptive_colonocyte,Acetyl-L-Carnitine,324,0.18518518518518517,3.277862659523232,17.70045836142545,1.7250077,2.490682552621737
+IEC_CT_absorptive_colonocyte,Adenosine diphosphate ribose,324,0.0,0.0,,2.1976624,-inf
+IEC_CT_absorptive_colonocyte,Adenosine triphosphate,324,0.17901234567901234,3.647780672887722,20.37725755199348,1.5613316,2.0600247710722175
+IEC_CT_absorptive_colonocyte,Amiloride-sensitive sodium transport,324,0.3117283950617284,8.70819790673656,27.935209126560846,1.7386075,2.6570409390438567
+IEC_CT_absorptive_colonocyte,Anion exchange,324,0.6080246913580247,232.46019061330483,320.9289565201819,1.9263566,2.830170109810706
+IEC_CT_absorptive_colonocyte,Butyrate,324,0.08333333333333333,1.1552299133863204,13.862758960635846,1.9575543,2.217543021675052
+IEC_CT_absorptive_colonocyte,Chenodeoxycholic acid,324,0.07407407407407407,1.495128272425819,20.184231677748556,1.7334229,1.4530053494778643
+IEC_CT_absorptive_colonocyte,Chenodeoxycholic acid 3-sulfate,324,0.07407407407407407,1.495128272425819,20.184231677748556,1.7334229,1.4530053494778643
+IEC_CT_absorptive_colonocyte,Chloride,324,0.08641975308641975,1.326783155913519,15.352776518427863,1.607564,1.4393304125807878
+IEC_CT_absorptive_colonocyte,Chloride ion,324,0.0,0.0,,1.607926,-inf
+IEC_CT_absorptive_colonocyte,Cholesterol,324,0.36419753086419754,23.541253147091915,62.20386819179724,1.8816934,4.424915736936793
+IEC_CT_absorptive_colonocyte,Cholic acid,324,0.17901234567901234,13.307858617872789,52.92793303425738,1.4234183,2.651061786203058
+IEC_CT_absorptive_colonocyte,Choline,324,0.18518518518518517,3.277862659523232,17.70045836142545,1.7250077,2.490682552621737
+IEC_CT_absorptive_colonocyte,Citric acid,324,0.040123456790123455,0.4488152859126293,11.185857895053223,1.610078,0.46340052084024297
+IEC_CT_absorptive_colonocyte,Coprocholic acid,324,0.07407407407407407,1.495128272425819,20.184231677748556,1.7334229,1.4530053494778643
+IEC_CT_absorptive_colonocyte,Cortisol,324,0.36419753086419754,23.541253147091915,62.20386819179724,1.8816934,4.424915736936793
+IEC_CT_absorptive_colonocyte,Creatine,324,0.18518518518518517,3.277862659523232,17.70045836142545,1.7250077,2.490682552621737
+IEC_CT_absorptive_colonocyte,D-Lactate,324,0.08333333333333333,1.1552299133863204,13.862758960635846,1.9575543,2.217543021675052
+IEC_CT_absorptive_colonocyte,Deoxycholic acid,324,0.07407407407407407,1.495128272425819,20.184231677748556,1.7334229,1.4530053494778643
+IEC_CT_absorptive_colonocyte,Dopamine,324,0.18518518518518517,3.277862659523232,17.70045836142545,1.7250077,2.490682552621737
+IEC_CT_absorptive_colonocyte,E-3179,324,0.2777777777777778,6.464849248644746,23.273457295121084,2.4236343,4.17367713630342
+IEC_CT_absorptive_colonocyte,Estradiol,324,0.37037037037037035,23.990068433004545,62.20630751113695,1.6492271,3.1008746017592124
+IEC_CT_absorptive_colonocyte,Estriol,324,0.2777777777777778,6.464849248644746,23.273457295121084,2.4236343,4.17367713630342
+IEC_CT_absorptive_colonocyte,Fatty acid,324,0.046296296296296294,24.430339261393186,86.80501494418965,0.70250696,0.8073549220576041
+IEC_CT_absorptive_colonocyte,Folic acid,324,0.29012345679012347,7.814454900665622,26.93492965761342,1.9062511,2.993238908178432
+IEC_CT_absorptive_colonocyte,Folinic acid,324,0.07407407407407407,1.495128272425819,20.184231677748556,1.7334229,1.4530053494778643
+IEC_CT_absorptive_colonocyte,Glutathione,324,0.07407407407407407,1.495128272425819,20.184231677748556,1.7334229,1.4530053494778643
+IEC_CT_absorptive_colonocyte,Glycerol,324,0.2777777777777778,6.464849248644746,23.273457295121084,2.4236343,4.17367713630342
+IEC_CT_absorptive_colonocyte,Glycochenodeoxycholate-3-sulfate,324,0.07407407407407407,1.495128272425819,20.184231677748556,1.7334229,1.4530053494778643
+IEC_CT_absorptive_colonocyte,Histamine,324,0.18518518518518517,3.277862659523232,17.70045836142545,1.7250077,2.490682552621737
+IEC_CT_absorptive_colonocyte,Hydroxylansoprazole,324,0.36419753086419754,23.541253147091915,62.20386819179724,1.8816934,4.424915736936793
+IEC_CT_absorptive_colonocyte,Hyodeoxycholic acid,324,0.07407407407407407,1.495128272425819,20.184231677748556,1.7334229,1.4530053494778643
+IEC_CT_absorptive_colonocyte,Iron,324,0.15432098765432098,3.4739501831323127,22.511197186697387,1.6063612,2.0127972744641145
+IEC_CT_absorptive_colonocyte,Isoursodeoxycholic acid,324,0.07407407407407407,1.495128272425819,20.184231677748556,1.7334229,1.4530053494778643
+IEC_CT_absorptive_colonocyte,Ketone bodies,324,0.08333333333333333,1.1552299133863204,13.862758960635846,1.9575543,2.217543021675052
+IEC_CT_absorptive_colonocyte,L-Arginine,324,0.09876543209876543,1.4321775071911242,14.500797260310133,2.6826632,4.289506617194984
+IEC_CT_absorptive_colonocyte,L-Carnitine,324,0.17901234567901234,5.987486854592062,26.74265362843599,1.5008242,2.479109103413763
+IEC_CT_absorptive_colonocyte,L-Cystine,324,0.09876543209876543,1.4321775071911242,14.500797260310133,2.6826632,4.289506617194984
+IEC_CT_absorptive_colonocyte,L-Lactate,324,0.08333333333333333,1.1552299133863204,13.862758960635846,1.9575543,2.217543021675052
+IEC_CT_absorptive_colonocyte,L-Lysine,324,0.09876543209876543,1.4321775071911242,14.500797260310133,2.6826632,4.289506617194984
+IEC_CT_absorptive_colonocyte,L-Ornithine,324,0.09876543209876543,1.4321775071911242,14.500797260310133,2.6826632,4.289506617194984
+IEC_CT_absorptive_colonocyte,Lithocholic acid,324,0.07407407407407407,1.495128272425819,20.184231677748556,1.7334229,1.4530053494778643
+IEC_CT_absorptive_colonocyte,N-Desmethylcitalopram,324,0.2777777777777778,6.464849248644746,23.273457295121084,2.4236343,4.17367713630342
+IEC_CT_absorptive_colonocyte,N-Desmethyleletriptan,324,0.2777777777777778,6.464849248644746,23.273457295121084,2.4236343,4.17367713630342
+IEC_CT_absorptive_colonocyte,N-Desmethyltamoxifen,324,0.36419753086419754,23.541253147091915,62.20386819179724,1.8816934,4.424915736936793
+IEC_CT_absorptive_colonocyte,N-desmethylimatinib,324,0.36419753086419754,23.541253147091915,62.20386819179724,1.8816934,4.424915736936793
+IEC_CT_absorptive_colonocyte,Neurotransmitter,324,0.04938271604938271,0.7042634968388415,14.261335810986541,2.4214609,2.7510867024108587
+IEC_CT_absorptive_colonocyte,Nicotinate,324,0.04938271604938271,7.690977981767807,58.555828743214576,1.1160891,0.9403570535725982
+IEC_CT_absorptive_colonocyte,Norepinephrine,324,0.18518518518518517,3.277862659523232,17.70045836142545,1.7250077,2.490682552621737
+IEC_CT_absorptive_colonocyte,O-Deethylated candesartan,324,0.2777777777777778,6.464849248644746,23.273457295121084,2.4236343,4.17367713630342
+IEC_CT_absorptive_colonocyte,O-Desmethylverapamil (D-702),324,0.35802469135802467,58.33087714318051,141.34965445794415,1.3409257,4.008423574585005
+IEC_CT_absorptive_colonocyte,Oxalic acid,324,0.040123456790123455,0.4488152859126293,11.185857895053223,1.610078,0.46340052084024297
+IEC_CT_absorptive_colonocyte,Phosphate,324,0.030864197530864196,0.5970472319902295,19.344330316483433,2.8217041,3.611434712082347
+IEC_CT_absorptive_colonocyte,Progesterone,324,0.2777777777777778,6.464849248644746,23.273457295121084,2.4236343,4.17367713630342
+IEC_CT_absorptive_colonocyte,Pyruvate,324,0.08333333333333333,1.1552299133863204,13.862758960635846,1.9575543,2.217543021675052
+IEC_CT_absorptive_colonocyte,Sodium,324,0.1697530864197531,3.277862659523232,18.52978587809053,1.4069997,2.092496346691187
+IEC_CT_absorptive_colonocyte,Sodium_hydrogen exchange,324,0.2345679012345679,109.73497977606287,205.33098323511837,1.5390363,3.7009328629214497
+IEC_CT_absorptive_colonocyte,Sulfolithocholic acid,324,0.07407407407407407,1.495128272425819,20.184231677748556,1.7334229,1.4530053494778643
+IEC_CT_absorptive_colonocyte,Taurocholic acid,324,0.3395061728395062,38.77865129049802,95.87344547360874,1.3268099,3.12333375061378
+IEC_CT_absorptive_colonocyte,Testosterone,324,0.3395061728395062,25.350416187025946,71.22398555263814,1.8242415,4.375720912248066
+IEC_CT_absorptive_colonocyte,Trihydroxycoprostanoic acid,324,0.07407407407407407,1.495128272425819,20.184231677748556,1.7334229,1.4530053494778643
+IEC_CT_absorptive_colonocyte,Ursocholic acid,324,0.07407407407407407,1.495128272425819,20.184231677748556,1.7334229,1.4530053494778643
+IEC_CT_absorptive_colonocyte,Ursodeoxycholic acid,324,0.07407407407407407,1.495128272425819,20.184231677748556,1.7334229,1.4530053494778643
+IEC_CT_absorptive_colonocyte,Ursodeoxycholic acid 3-sulfate,324,0.07407407407407407,1.495128272425819,20.184231677748556,1.7334229,1.4530053494778643
+IEC_CT_absorptive_colonocyte,Varanic acid,324,0.07407407407407407,1.495128272425819,20.184231677748556,1.7334229,1.4530053494778643
+IEC_CT_absorptive_colonocyte,Water,324,0.8395061728395061,135.81094747976758,161.77480508619374,1.7598524,4.285471103959828
+IEC_CT_absorptive_colonocyte,alpha-Ketoisovaleric acid,324,0.08333333333333333,1.1552299133863204,13.862758960635846,1.9575543,2.217543021675052
+IEC_Colonocyte_NOS,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid",3065,0.05546492659053834,0.8727467875629565,15.735111199296833,1.7170905,1.0356124292008908
+IEC_Colonocyte_NOS,17a-Ethynylestradiol,3065,0.011092985318107667,0.21329127263097827,19.227580900410246,2.2797806,-0.47253447446943464
+IEC_Colonocyte_NOS,"1b,3a,12a-Trihydroxy-5b-cholanoic acid",3065,0.05546492659053834,0.8727467875629565,15.735111199296833,1.7170905,1.0356124292008908
+IEC_Colonocyte_NOS,2-Hydroxychlorpropamide,3065,0.011419249592169658,0.24584365162713012,21.528879778204395,2.2448232,-0.453082111803262
+IEC_Colonocyte_NOS,25-Hydroxycholesterol,3065,0.005546492659053833,0.09769030036780317,17.612986507489218,2.1091576,-0.794462569356797
+IEC_Colonocyte_NOS,"3',4'-Dihydrodiol",3065,0.011092985318107667,0.21329127263097827,19.227580900410246,2.2797806,-0.47253447446943464
+IEC_Colonocyte_NOS,3-Sulfodeoxycholic acid,3065,0.05546492659053834,0.8727467875629565,15.735111199296833,1.7170905,1.0356124292008908
+IEC_Colonocyte_NOS,"3alpha,7alpha-Dihydroxycoprostanic acid",3065,0.05546492659053834,0.8727467875629565,15.735111199296833,1.7170905,1.0356124292008908
+IEC_Colonocyte_NOS,3b-Hydroxy-5-cholenoic acid,3065,0.05546492659053834,0.8727467875629565,15.735111199296833,1.7170905,1.0356124292008908
+IEC_Colonocyte_NOS,4'-Hydroxydiclofenac,3065,0.011092985318107667,0.21329127263097827,19.227580900410246,2.2797806,-0.47253447446943464
+IEC_Colonocyte_NOS,4-Hydroxycyclophosphamide,3065,0.011092985318107667,0.21329127263097827,19.227580900410246,2.2797806,-0.47253447446943464
+IEC_Colonocyte_NOS,4-ene-Valproic acid,3065,0.01598694942903752,2.408953481967061,44.061200554920845,1.2812201,0.8258938378995535
+IEC_Colonocyte_NOS,5-Hydroxyomeprazole,3065,0.04861337683523654,1.9823624190612439,31.734370006184204,1.454086,0.39707635937220825
+IEC_Colonocyte_NOS,8-Hydroxycarvedilol,3065,0.011092985318107667,0.21329127263097827,19.227580900410246,2.2797806,-0.47253447446943464
+IEC_Colonocyte_NOS,Acetate,3065,0.0701468189233279,1.1165966829141538,15.799562447256305,1.4686928,0.6297748206010222
+IEC_Colonocyte_NOS,Acetyl-L-Carnitine,3065,0.05546492659053834,0.8438389313168876,15.213919555801532,1.6439805,0.7513615374574011
+IEC_Colonocyte_NOS,Adenosine diphosphate ribose,3065,0.0006525285481239804,0.009899114492049383,15.17039295906568,2.1967454,-3.709744435224456
+IEC_Colonocyte_NOS,Adenosine triphosphate,3065,0.057096247960848286,1.0243220983889012,17.88052285983231,1.4792405,0.41143353208345523
+IEC_Colonocyte_NOS,Amiloride-sensitive sodium transport,3065,0.07830342577487764,1.5153238424359032,19.219149616675683,1.4905702,0.6638986962070614
+IEC_Colonocyte_NOS,Anion exchange,3065,0.16117455138662318,41.188047574973055,171.78489898368338,0.8822061,0.9146641662454884
+IEC_Colonocyte_NOS,Butyrate,3065,0.03230016313213703,0.42805921973728556,13.252540489846265,1.9277158,0.8501907838976739
+IEC_Colonocyte_NOS,Chenodeoxycholic acid,3065,0.05546492659053834,0.8727467875629565,15.735111199296833,1.7170905,1.0356124292008908
+IEC_Colonocyte_NOS,Chenodeoxycholic acid 3-sulfate,3065,0.05546492659053834,0.8727467875629565,15.735111199296833,1.7170905,1.0356124292008908
+IEC_Colonocyte_NOS,Chloride,3065,0.059380097879282216,0.9951416131541114,16.758840902842593,1.5978462,0.8979487750283607
+IEC_Colonocyte_NOS,Chloride ion,3065,0.04371941272430669,0.7438710710534462,17.01466293118517,1.6254249,0.25342644228774996
+IEC_Colonocyte_NOS,Cholesterol,3065,0.007504078303425775,0.5711284066381701,65.27173121872819,2.1409411,-1.1759867120615546
+IEC_Colonocyte_NOS,Cholic acid,3065,0.04861337683523654,1.6245252850540526,25.846580250461624,1.4709193,0.7704279558441283
+IEC_Colonocyte_NOS,Choline,3065,0.05546492659053834,0.8438389313168876,15.213919555801532,1.6439805,0.7513615374574011
+IEC_Colonocyte_NOS,Citric acid,3065,0.04143556280587276,0.6885374631768678,16.617065548323623,1.613917,0.5098241337777975
+IEC_Colonocyte_NOS,Coprocholic acid,3065,0.05546492659053834,0.8727467875629565,15.735111199296833,1.7170905,1.0356124292008908
+IEC_Colonocyte_NOS,Cortisol,3065,0.007504078303425775,0.5711284066381701,65.27173121872819,2.1409411,-1.1759867120615546
+IEC_Colonocyte_NOS,Creatine,3065,0.05546492659053834,0.8438389313168876,15.213919555801532,1.6439805,0.7513615374574011
+IEC_Colonocyte_NOS,D-Lactate,3065,0.03230016313213703,0.42805921973728556,13.252540489846265,1.9277158,0.8501907838976739
+IEC_Colonocyte_NOS,Deoxycholic acid,3065,0.05546492659053834,0.8727467875629565,15.735111199296833,1.7170905,1.0356124292008908
+IEC_Colonocyte_NOS,Dopamine,3065,0.05546492659053834,0.8438389313168876,15.213919555801532,1.6439805,0.7513615374574011
+IEC_Colonocyte_NOS,E-3179,3065,0.011092985318107667,0.21329127263097827,19.227580900410246,2.2797806,-0.47253447446943464
+IEC_Colonocyte_NOS,Estradiol,3065,0.04535073409461664,1.2596658698150385,25.251776021388135,1.5104271,0.07110372318068213
+IEC_Colonocyte_NOS,Estriol,3065,0.011092985318107667,0.21329127263097827,19.227580900410246,2.2797806,-0.47253447446943464
+IEC_Colonocyte_NOS,Fatty acid,3065,0.050244698205546494,19.295799262487165,105.95470454689216,0.6783641,0.9254295114504678
+IEC_Colonocyte_NOS,Folic acid,3065,0.05807504078303426,0.9676776630660818,16.66253953537944,1.6927878,0.672562131773673
+IEC_Colonocyte_NOS,Folinic acid,3065,0.05546492659053834,0.8727467875629565,15.735111199296833,1.7170905,1.0356124292008908
+IEC_Colonocyte_NOS,Glutathione,3065,0.05546492659053834,0.8727467875629565,15.735111199296833,1.7170905,1.0356124292008908
+IEC_Colonocyte_NOS,Glycerol,3065,0.011092985318107667,0.21329127263097827,19.227580900410246,2.2797806,-0.47253447446943464
+IEC_Colonocyte_NOS,Glycochenodeoxycholate-3-sulfate,3065,0.05546492659053834,0.8727467875629565,15.735111199296833,1.7170905,1.0356124292008908
+IEC_Colonocyte_NOS,Histamine,3065,0.05546492659053834,0.8438389313168876,15.213919555801532,1.6439805,0.7513615374574011
+IEC_Colonocyte_NOS,Hydroxylansoprazole,3065,0.007504078303425775,0.5711284066381701,65.27173121872819,2.1409411,-1.1759867120615546
+IEC_Colonocyte_NOS,Hyodeoxycholic acid,3065,0.05546492659053834,0.8727467875629565,15.735111199296833,1.7170905,1.0356124292008908
+IEC_Colonocyte_NOS,Iron,3065,0.033931484502446985,0.5327923813033227,15.702006237448886,1.5165728,-0.1724405528630371
+IEC_Colonocyte_NOS,Isoursodeoxycholic acid,3065,0.05546492659053834,0.8727467875629565,15.735111199296833,1.7170905,1.0356124292008908
+IEC_Colonocyte_NOS,Ketone bodies,3065,0.03230016313213703,0.42805921973728556,13.252540489846265,1.9277158,0.8501907838976739
+IEC_Colonocyte_NOS,L-Arginine,3065,0.002936378466557912,0.03436704750020592,11.703888954236795,2.6171436,-0.782389737056222
+IEC_Colonocyte_NOS,L-Carnitine,3065,0.05318107667210441,1.1664032279313787,17.45258361422059,1.5201637,0.7280349068237497
+IEC_Colonocyte_NOS,L-Cystine,3065,0.002936378466557912,0.03436704750020592,11.703888954236795,2.6171436,-0.782389737056222
+IEC_Colonocyte_NOS,L-Lactate,3065,0.03230016313213703,0.42805921973728556,13.252540489846265,1.9277158,0.8501907838976739
+IEC_Colonocyte_NOS,L-Lysine,3065,0.002936378466557912,0.03436704750020592,11.703888954236795,2.6171436,-0.782389737056222
+IEC_Colonocyte_NOS,L-Ornithine,3065,0.002936378466557912,0.03436704750020592,11.703888954236795,2.6171436,-0.782389737056222
+IEC_Colonocyte_NOS,Lithocholic acid,3065,0.05546492659053834,0.8727467875629565,15.735111199296833,1.7170905,1.0356124292008908
+IEC_Colonocyte_NOS,N-Desmethylcitalopram,3065,0.011092985318107667,0.21329127263097827,19.227580900410246,2.2797806,-0.47253447446943464
+IEC_Colonocyte_NOS,N-Desmethyleletriptan,3065,0.011092985318107667,0.21329127263097827,19.227580900410246,2.2797806,-0.47253447446943464
+IEC_Colonocyte_NOS,N-Desmethyltamoxifen,3065,0.007504078303425775,0.5711284066381701,65.27173121872819,2.1409411,-1.1759867120615546
+IEC_Colonocyte_NOS,N-desmethylimatinib,3065,0.007504078303425775,0.5711284066381701,65.27173121872819,2.1409411,-1.1759867120615546
+IEC_Colonocyte_NOS,Neurotransmitter,3065,0.011745513866231648,0.13582731565566658,11.564186735683837,2.4006314,0.6791903481596522
+IEC_Colonocyte_NOS,Nicotinate,3065,0.036215334420880915,3.097490945143931,31.80719045854137,1.136119,0.4929515642291851
+IEC_Colonocyte_NOS,Norepinephrine,3065,0.05546492659053834,0.8438389313168876,15.213919555801532,1.6439805,0.7513615374574011
+IEC_Colonocyte_NOS,O-Deethylated candesartan,3065,0.011092985318107667,0.21329127263097827,19.227580900410246,2.2797806,-0.47253447446943464
+IEC_Colonocyte_NOS,O-Desmethylverapamil (D-702),3065,0.020228384991843394,5.185439642331317,90.86821771690137,1.0666181,-0.13718246584921076
+IEC_Colonocyte_NOS,Oxalic acid,3065,0.04143556280587276,0.6885374631768678,16.617065548323623,1.613917,0.5098241337777975
+IEC_Colonocyte_NOS,Phosphate,3065,0.002936378466557912,0.04229298432283977,14.403110772167098,2.8103573,0.21761026294377805
+IEC_Colonocyte_NOS,Progesterone,3065,0.011092985318107667,0.21329127263097827,19.227580900410246,2.2797806,-0.47253447446943464
+IEC_Colonocyte_NOS,Pyruvate,3065,0.03230016313213703,0.42805921973728556,13.252540489846265,1.9277158,0.8501907838976739
+IEC_Colonocyte_NOS,Sodium,3065,0.053833605220228384,2.16325379533463,24.47329687145409,1.2680895,0.435637491718824
+IEC_Colonocyte_NOS,Sodium_hydrogen exchange,3065,0.022512234910277325,8.088310522391682,117.1023119077003,1.0904163,0.31970845056251435
+IEC_Colonocyte_NOS,Sulfolithocholic acid,3065,0.05546492659053834,0.8727467875629565,15.735111199296833,1.7170905,1.0356124292008908
+IEC_Colonocyte_NOS,Taurocholic acid,3065,0.043393148450244695,4.879329589926042,57.9172633698343,1.0714675,0.1554351168967909
+IEC_Colonocyte_NOS,Testosterone,3065,0.007830342577487765,0.6275077115361934,69.75218281429957,2.1123288,-1.0624976562489572
+IEC_Colonocyte_NOS,Trihydroxycoprostanoic acid,3065,0.05546492659053834,0.8727467875629565,15.735111199296833,1.7170905,1.0356124292008908
+IEC_Colonocyte_NOS,Ursocholic acid,3065,0.05546492659053834,0.8727467875629565,15.735111199296833,1.7170905,1.0356124292008908
+IEC_Colonocyte_NOS,Ursodeoxycholic acid,3065,0.05546492659053834,0.8727467875629565,15.735111199296833,1.7170905,1.0356124292008908
+IEC_Colonocyte_NOS,Ursodeoxycholic acid 3-sulfate,3065,0.05546492659053834,0.8727467875629565,15.735111199296833,1.7170905,1.0356124292008908
+IEC_Colonocyte_NOS,Varanic acid,3065,0.05546492659053834,0.8727467875629565,15.735111199296833,1.7170905,1.0356124292008908
+IEC_Colonocyte_NOS,Water,3065,0.024469820554649267,1.5615069591665207,60.417490447997615,1.7215728,-0.8149944024881495
+IEC_Colonocyte_NOS,alpha-Ketoisovaleric acid,3065,0.03230016313213703,0.42805921973728556,13.252540489846265,1.9277158,0.8501907838976739
+IEC_Goblet,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid",476,0.012605042016806723,0.17384981495042867,13.792085319400675,1.7124751,-1.1019624109454544
+IEC_Goblet,17a-Ethynylestradiol,476,0.0,0.0,,2.278213,-inf
+IEC_Goblet,"1b,3a,12a-Trihydroxy-5b-cholanoic acid",476,0.012605042016806723,0.17384981495042867,13.792085319400675,1.7124751,-1.1019624109454544
+IEC_Goblet,2-Hydroxychlorpropamide,476,0.0,0.0,,2.2609663,-inf
+IEC_Goblet,25-Hydroxycholesterol,476,0.0,0.0,,2.1045895,-inf
+IEC_Goblet,"3',4'-Dihydrodiol",476,0.0,0.0,,2.278213,-inf
+IEC_Goblet,3-Sulfodeoxycholic acid,476,0.012605042016806723,0.17384981495042867,13.792085319400675,1.7124751,-1.1019624109454544
+IEC_Goblet,"3alpha,7alpha-Dihydroxycoprostanic acid",476,0.012605042016806723,0.17384981495042867,13.792085319400675,1.7124751,-1.1019624109454544
+IEC_Goblet,3b-Hydroxy-5-cholenoic acid,476,0.012605042016806723,0.17384981495042867,13.792085319400675,1.7124751,-1.1019624109454544
+IEC_Goblet,4'-Hydroxydiclofenac,476,0.0,0.0,,2.278213,-inf
+IEC_Goblet,4-Hydroxycyclophosphamide,476,0.0,0.0,,2.278213,-inf
+IEC_Goblet,4-ene-Valproic acid,476,0.0063025210084033615,0.9896039996803707,52.65038554303044,1.3251268,-0.5169999102242983
+IEC_Goblet,5-Hydroxyomeprazole,476,0.01050420168067227,0.17384981495042867,14.150221944956275,1.4918641,-1.8133104709323906
+IEC_Goblet,8-Hydroxycarvedilol,476,0.0,0.0,,2.278213,-inf
+IEC_Goblet,Acetate,476,0.01050420168067227,0.19797858904158355,18.847561676758755,1.4499576,-2.1096363388308754
+IEC_Goblet,Acetyl-L-Carnitine,476,0.01680672268907563,0.30144471609181756,17.935960607463144,1.6282042,-0.9711758034101003
+IEC_Goblet,Adenosine diphosphate ribose,476,0.0,0.0,,2.1957,-inf
+IEC_Goblet,Adenosine triphosphate,476,0.04411764705882353,0.8633555606606652,19.569392708308413,1.4782919,0.03939343830008727
+IEC_Goblet,Amiloride-sensitive sodium transport,476,0.07352941176470588,1.2353798880061948,16.801166476884248,1.4846802,0.5731447128137098
+IEC_Goblet,Anion exchange,476,0.0021008403361344537,2.3192355955920108,214.3022555214826,0.67278767,-5.346849470068989
+IEC_Goblet,Butyrate,476,0.01050420168067227,0.19797858904158355,18.847561676758755,1.9239641,-0.7703841460243727
+IEC_Goblet,Chenodeoxycholic acid,476,0.012605042016806723,0.17384981495042867,13.792085319400675,1.7124751,-1.1019624109454544
+IEC_Goblet,Chenodeoxycholic acid 3-sulfate,476,0.012605042016806723,0.17384981495042867,13.792085319400675,1.7124751,-1.1019624109454544
+IEC_Goblet,Chloride,476,0.029411764705882353,0.49510377830953545,16.833528462524207,1.583475,-0.11563734784253113
+IEC_Goblet,Chloride ion,476,0.11134453781512606,2.9562713797350035,26.550663712337013,1.693959,1.6021113016633772
+IEC_Goblet,Cholesterol,476,0.0,0.0,,2.1729624,-inf
+IEC_Goblet,Cholic acid,476,0.01050420168067227,0.17384981495042867,14.150221944956275,1.5109785,-1.43995887446047
+IEC_Goblet,Choline,476,0.01680672268907563,0.30144471609181756,17.935960607463144,1.6282042,-0.9711758034101003
+IEC_Goblet,Citric acid,476,0.0,0.0,,1.6001586,-inf
+IEC_Goblet,Coprocholic acid,476,0.012605042016806723,0.17384981495042867,13.792085319400675,1.7124751,-1.1019624109454544
+IEC_Goblet,Cortisol,476,0.0,0.0,,2.1729624,-inf
+IEC_Goblet,Creatine,476,0.01680672268907563,0.30144471609181756,17.935960607463144,1.6282042,-0.9711758034101003
+IEC_Goblet,D-Lactate,476,0.01050420168067227,0.19797858904158355,18.847561676758755,1.9239641,-0.7703841460243727
+IEC_Goblet,Deoxycholic acid,476,0.012605042016806723,0.17384981495042867,13.792085319400675,1.7124751,-1.1019624109454544
+IEC_Goblet,Dopamine,476,0.01680672268907563,0.30144471609181756,17.935960607463144,1.6282042,-0.9711758034101003
+IEC_Goblet,E-3179,476,0.0,0.0,,2.278213,-inf
+IEC_Goblet,Estradiol,476,0.0,0.0,,1.5033567,-inf
+IEC_Goblet,Estriol,476,0.0,0.0,,2.278213,-inf
+IEC_Goblet,Fatty acid,476,0.031512605042016806,11.64472549878676,93.78156394530119,0.6510882,0.2523871616342853
+IEC_Goblet,Folic acid,476,0.012605042016806723,0.17384981495042867,13.792085319400675,1.6845773,-1.5313552032013682
+IEC_Goblet,Folinic acid,476,0.012605042016806723,0.17384981495042867,13.792085319400675,1.7124751,-1.1019624109454544
+IEC_Goblet,Glutathione,476,0.012605042016806723,0.17384981495042867,13.792085319400675,1.7124751,-1.1019624109454544
+IEC_Goblet,Glycerol,476,0.0,0.0,,2.278213,-inf
+IEC_Goblet,Glycochenodeoxycholate-3-sulfate,476,0.012605042016806723,0.17384981495042867,13.792085319400675,1.7124751,-1.1019624109454544
+IEC_Goblet,Histamine,476,0.01680672268907563,0.30144471609181756,17.935960607463144,1.6282042,-0.9711758034101003
+IEC_Goblet,Hydroxylansoprazole,476,0.0,0.0,,2.1729624,-inf
+IEC_Goblet,Hyodeoxycholic acid,476,0.012605042016806723,0.17384981495042867,13.792085319400675,1.7124751,-1.1019624109454544
+IEC_Goblet,Iron,476,0.01050420168067227,0.2714873740169336,25.845598006412082,1.5200881,-1.8640985808465667
+IEC_Goblet,Isoursodeoxycholic acid,476,0.012605042016806723,0.17384981495042867,13.792085319400675,1.7124751,-1.1019624109454544
+IEC_Goblet,Ketone bodies,476,0.01050420168067227,0.19797858904158355,18.847561676758755,1.9239641,-0.7703841460243727
+IEC_Goblet,L-Arginine,476,0.0021008403361344537,0.030422119714406094,14.4809289840573,2.6234145,-1.265461143228334
+IEC_Goblet,L-Carnitine,476,0.02100840336134454,0.5850932879876984,27.850440508214444,1.5279796,-0.6119115572497649
+IEC_Goblet,L-Cystine,476,0.0021008403361344537,0.030422119714406094,14.4809289840573,2.6234145,-1.265461143228334
+IEC_Goblet,L-Lactate,476,0.01050420168067227,0.19797858904158355,18.847561676758755,1.9239641,-0.7703841460243727
+IEC_Goblet,L-Lysine,476,0.0021008403361344537,0.030422119714406094,14.4809289840573,2.6234145,-1.265461143228334
+IEC_Goblet,L-Ornithine,476,0.0021008403361344537,0.030422119714406094,14.4809289840573,2.6234145,-1.265461143228334
+IEC_Goblet,Lithocholic acid,476,0.012605042016806723,0.17384981495042867,13.792085319400675,1.7124751,-1.1019624109454544
+IEC_Goblet,N-Desmethylcitalopram,476,0.0,0.0,,2.278213,-inf
+IEC_Goblet,N-Desmethyleletriptan,476,0.0,0.0,,2.278213,-inf
+IEC_Goblet,N-Desmethyltamoxifen,476,0.0,0.0,,2.1729624,-inf
+IEC_Goblet,N-desmethylimatinib,476,0.0,0.0,,2.1729624,-inf
+IEC_Goblet,Neurotransmitter,476,0.0021008403361344537,0.0444902976538245,21.17738168322046,2.4126616,-1.80388105801246
+IEC_Goblet,Nicotinate,476,0.0063025210084033615,0.9896039996803707,52.65038554303044,1.1497386,-2.0296482061295644
+IEC_Goblet,Norepinephrine,476,0.01680672268907563,0.30144471609181756,17.935960607463144,1.6282042,-0.9711758034101003
+IEC_Goblet,O-Deethylated candesartan,476,0.0,0.0,,2.278213,-inf
+IEC_Goblet,O-Desmethylverapamil (D-702),476,0.0021008403361344537,1.1953623452535953,105.02666562949162,1.1219565,-3.404525180965886
+IEC_Goblet,Oxalic acid,476,0.0,0.0,,1.6001586,-inf
+IEC_Goblet,Phosphate,476,0.0021008403361344537,0.015158146277235501,7.215277627964099,2.8294969,-0.26546114322833403
+IEC_Goblet,Progesterone,476,0.0,0.0,,2.278213,-inf
+IEC_Goblet,Pyruvate,476,0.01050420168067227,0.19797858904158355,18.847561676758755,1.9239641,-0.7703841460243727
+IEC_Goblet,Sodium,476,0.07563025210084033,5.1094759941723344,46.15081226414444,1.2701536,0.9260938741855209
+IEC_Goblet,Sodium_hydrogen exchange,476,0.0021008403361344537,0.7781731987451044,94.88285029985013,1.117608,-3.1019624109454544
+IEC_Goblet,Sulfolithocholic acid,476,0.012605042016806723,0.17384981495042867,13.792085319400675,1.7124751,-1.1019624109454544
+IEC_Goblet,Taurocholic acid,476,0.0063025210084033615,0.9820012716315345,42.937690071278666,1.1062657,-2.6280312226130422
+IEC_Goblet,Testosterone,476,0.0,0.0,,2.152377,-inf
+IEC_Goblet,Trihydroxycoprostanoic acid,476,0.012605042016806723,0.17384981495042867,13.792085319400675,1.7124751,-1.1019624109454544
+IEC_Goblet,Ursocholic acid,476,0.012605042016806723,0.17384981495042867,13.792085319400675,1.7124751,-1.1019624109454544
+IEC_Goblet,Ursodeoxycholic acid,476,0.012605042016806723,0.17384981495042867,13.792085319400675,1.7124751,-1.1019624109454544
+IEC_Goblet,Ursodeoxycholic acid 3-sulfate,476,0.012605042016806723,0.17384981495042867,13.792085319400675,1.7124751,-1.1019624109454544
+IEC_Goblet,Varanic acid,476,0.012605042016806723,0.17384981495042867,13.792085319400675,1.7124751,-1.1019624109454544
+IEC_Goblet,Water,476,0.0,0.0,,1.7504729,-inf
+IEC_Goblet,alpha-Ketoisovaleric acid,476,0.01050420168067227,0.19797858904158355,18.847561676758755,1.9239641,-0.7703841460243727
+IEC_Goblet_2,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid",208,0.03365384615384615,0.41603590059034457,12.362209617541668,1.7090837,0.3148080555578448
+IEC_Goblet_2,17a-Ethynylestradiol,208,0.0,0.0,,2.2885993,-inf
+IEC_Goblet_2,"1b,3a,12a-Trihydroxy-5b-cholanoic acid",208,0.03365384615384615,0.41603590059034457,12.362209617541668,1.7090837,0.3148080555578448
+IEC_Goblet_2,2-Hydroxychlorpropamide,208,0.0,0.0,,2.2780554,-inf
+IEC_Goblet_2,25-Hydroxycholesterol,208,0.0,0.0,,2.120019,-inf
+IEC_Goblet_2,"3',4'-Dihydrodiol",208,0.0,0.0,,2.2885993,-inf
+IEC_Goblet_2,3-Sulfodeoxycholic acid,208,0.03365384615384615,0.41603590059034457,12.362209617541668,1.7090837,0.3148080555578448
+IEC_Goblet_2,"3alpha,7alpha-Dihydroxycoprostanic acid",208,0.03365384615384615,0.41603590059034457,12.362209617541668,1.7090837,0.3148080555578448
+IEC_Goblet_2,3b-Hydroxy-5-cholenoic acid,208,0.03365384615384615,0.41603590059034457,12.362209617541668,1.7090837,0.3148080555578448
+IEC_Goblet_2,4'-Hydroxydiclofenac,208,0.0,0.0,,2.2885993,-inf
+IEC_Goblet_2,4-Hydroxycyclophosphamide,208,0.0,0.0,,2.2885993,-inf
+IEC_Goblet_2,4-ene-Valproic acid,208,0.004807692307692308,1.2619800084009385,43.59394855633144,1.3353907,-0.907584365778603
+IEC_Goblet_2,5-Hydroxyomeprazole,208,0.028846153846153848,0.41603590059034457,13.584265934539596,1.486363,-0.3558980199317455
+IEC_Goblet_2,8-Hydroxycarvedilol,208,0.0,0.0,,2.2885993,-inf
+IEC_Goblet_2,Acetate,208,0.02403846153846154,0.3571536838096418,14.857593246481098,1.4656848,-0.915258293664024
+IEC_Goblet_2,Acetyl-L-Carnitine,208,0.03365384615384615,0.5198797316772226,15.447854884123185,1.6373805,0.03055716381435494
+IEC_Goblet_2,Adenosine diphosphate ribose,208,0.0,0.0,,2.229989,-inf
+IEC_Goblet_2,Adenosine triphosphate,208,0.057692307692307696,1.1089824037910416,19.22236166571139,1.487782,0.42641656140933437
+IEC_Goblet_2,Amiloride-sensitive sodium transport,208,0.04807692307692308,0.6836894676545986,14.22074092721565,1.4667847,-0.03983216407704272
+IEC_Goblet_2,Anion exchange,208,0.0,1.799062285976196,,0.66442204,-inf
+IEC_Goblet_2,Butyrate,208,0.019230769230769232,0.3391263810980632,17.634571817099285,1.9393679,0.1020658042551162
+IEC_Goblet_2,Chenodeoxycholic acid,208,0.03365384615384615,0.41603590059034457,12.362209617541668,1.7090837,0.3148080555578448
+IEC_Goblet_2,Chenodeoxycholic acid 3-sulfate,208,0.03365384615384615,0.41603590059034457,12.362209617541668,1.7090837,0.3148080555578448
+IEC_Goblet_2,Chloride,208,0.052884615384615384,0.7163228479879385,13.545013852862837,1.5886941,0.7308173939040132
+IEC_Goblet_2,Chloride ion,208,0.12980769230769232,2.9059445700068127,22.38653594671915,1.6889241,1.8234563944304978
+IEC_Goblet_2,Cholesterol,208,0.0,0.0,,2.1767344,-inf
+IEC_Goblet_2,Cholic acid,208,0.028846153846153848,0.41603590059034457,13.584265934539596,1.5062625,0.01745357654017477
+IEC_Goblet_2,Choline,208,0.03365384615384615,0.5198797316772226,15.447854884123185,1.6373805,0.03055716381435494
+IEC_Goblet_2,Citric acid,208,0.004807692307692308,0.01802730271157862,3.7496789640083534,1.6135883,-2.5976289125573166
+IEC_Goblet_2,Coprocholic acid,208,0.03365384615384615,0.41603590059034457,12.362209617541668,1.7090837,0.3148080555578448
+IEC_Goblet_2,Cortisol,208,0.0,0.0,,2.1767344,-inf
+IEC_Goblet_2,Creatine,208,0.03365384615384615,0.5198797316772226,15.447854884123185,1.6373805,0.03055716381435494
+IEC_Goblet_2,D-Lactate,208,0.019230769230769232,0.3391263810980632,17.634571817099285,1.9393679,0.1020658042551162
+IEC_Goblet_2,Deoxycholic acid,208,0.03365384615384615,0.41603590059034457,12.362209617541668,1.7090837,0.3148080555578448
+IEC_Goblet_2,Dopamine,208,0.03365384615384615,0.5198797316772226,15.447854884123185,1.6373805,0.03055716381435494
+IEC_Goblet_2,E-3179,208,0.0,0.0,,2.2885993,-inf
+IEC_Goblet_2,Estradiol,208,0.004807692307692308,0.01802730271157862,3.7496789640083534,1.5154585,-3.1666057091057738
+IEC_Goblet_2,Estriol,208,0.0,0.0,,2.2885993,-inf
+IEC_Goblet_2,Fatty acid,208,0.04326923076923077,18.157511390633644,90.23740868015699,0.686219,0.7097996126349304
+IEC_Goblet_2,Folic acid,208,0.03365384615384615,0.41603590059034457,12.362209617541668,1.6817304,-0.11458473669806903
+IEC_Goblet_2,Folinic acid,208,0.03365384615384615,0.41603590059034457,12.362209617541668,1.7090837,0.3148080555578448
+IEC_Goblet_2,Glutathione,208,0.03365384615384615,0.41603590059034457,12.362209617541668,1.7090837,0.3148080555578448
+IEC_Goblet_2,Glycerol,208,0.0,0.0,,2.2885993,-inf
+IEC_Goblet_2,Glycochenodeoxycholate-3-sulfate,208,0.03365384615384615,0.41603590059034457,12.362209617541668,1.7090837,0.3148080555578448
+IEC_Goblet_2,Histamine,208,0.03365384615384615,0.5198797316772226,15.447854884123185,1.6373805,0.03055716381435494
+IEC_Goblet_2,Hydroxylansoprazole,208,0.0,0.0,,2.1767344,-inf
+IEC_Goblet_2,Hyodeoxycholic acid,208,0.03365384615384615,0.41603590059034457,12.362209617541668,1.7090837,0.3148080555578448
+IEC_Goblet_2,Iron,208,0.02403846153846154,0.32591142377281856,13.557915228949252,1.5094839,-0.6697205356797151
+IEC_Goblet_2,Isoursodeoxycholic acid,208,0.03365384615384615,0.41603590059034457,12.362209617541668,1.7090837,0.3148080555578448
+IEC_Goblet_2,Ketone bodies,208,0.019230769230769232,0.3391263810980632,17.634571817099285,1.9393679,0.1020658042551162
+IEC_Goblet_2,L-Arginine,208,0.0,0.0,,2.6460316,-inf
+IEC_Goblet_2,L-Carnitine,208,0.03365384615384615,0.7373517911347265,15.447854884123185,1.5444546,0.06789331508732793
+IEC_Goblet_2,L-Cystine,208,0.0,0.0,,2.6460316,-inf
+IEC_Goblet_2,L-Lactate,208,0.019230769230769232,0.3391263810980632,17.634571817099285,1.9393679,0.1020658042551162
+IEC_Goblet_2,L-Lysine,208,0.0,0.0,,2.6460316,-inf
+IEC_Goblet_2,L-Ornithine,208,0.0,0.0,,2.6460316,-inf
+IEC_Goblet_2,Lithocholic acid,208,0.03365384615384615,0.41603590059034457,12.362209617541668,1.7090837,0.3148080555578448
+IEC_Goblet_2,N-Desmethylcitalopram,208,0.0,0.0,,2.2885993,-inf
+IEC_Goblet_2,N-Desmethyleletriptan,208,0.0,0.0,,2.2885993,-inf
+IEC_Goblet_2,N-Desmethyltamoxifen,208,0.0,0.0,,2.1767344,-inf
+IEC_Goblet_2,N-desmethylimatinib,208,0.0,0.0,,2.1767344,-inf
+IEC_Goblet_2,Neurotransmitter,208,0.0,0.0,,2.4180017,-inf
+IEC_Goblet_2,Nicotinate,208,0.004807692307692308,1.280007311112517,43.59394855633144,1.1604207,-2.420232661683869
+IEC_Goblet_2,Norepinephrine,208,0.03365384615384615,0.5198797316772226,15.447854884123185,1.6373805,0.03055716381435494
+IEC_Goblet_2,O-Deethylated candesartan,208,0.0,0.0,,2.2885993,-inf
+IEC_Goblet_2,O-Desmethylverapamil (D-702),208,0.009615384615384616,1.5568741710978633,36.636782943302194,1.1079537,-1.2101471357990343
+IEC_Goblet_2,Oxalic acid,208,0.004807692307692308,0.01802730271157862,3.7496789640083534,1.6135883,-2.5976289125573166
+IEC_Goblet_2,Phosphate,208,0.004807692307692308,0.02221273378647509,4.620248627586818,2.8306906,0.9289169019385174
+IEC_Goblet_2,Progesterone,208,0.0,0.0,,2.2885993,-inf
+IEC_Goblet_2,Pyruvate,208,0.019230769230769232,0.3391263810980632,17.634571817099285,1.9393679,0.1020658042551162
+IEC_Goblet_2,Sodium,208,0.0673076923076923,4.689157784088303,41.79884212711878,1.2672037,0.7579018399676639
+IEC_Goblet_2,Sodium_hydrogen exchange,208,0.0,0.7951179743042752,,1.112839,-inf
+IEC_Goblet_2,Sulfolithocholic acid,208,0.03365384615384615,0.41603590059034457,12.362209617541668,1.7090837,0.3148080555578448
+IEC_Goblet_2,Taurocholic acid,208,0.009615384615384616,1.1423667366070878,39.07932345181257,1.0820429,-2.0186156781673468
+IEC_Goblet_2,Testosterone,208,0.0,0.0,,2.1649086,-inf
+IEC_Goblet_2,Trihydroxycoprostanoic acid,208,0.03365384615384615,0.41603590059034457,12.362209617541668,1.7090837,0.3148080555578448
+IEC_Goblet_2,Ursocholic acid,208,0.03365384615384615,0.41603590059034457,12.362209617541668,1.7090837,0.3148080555578448
+IEC_Goblet_2,Ursodeoxycholic acid,208,0.03365384615384615,0.41603590059034457,12.362209617541668,1.7090837,0.3148080555578448
+IEC_Goblet_2,Ursodeoxycholic acid 3-sulfate,208,0.03365384615384615,0.41603590059034457,12.362209617541668,1.7090837,0.3148080555578448
+IEC_Goblet_2,Varanic acid,208,0.03365384615384615,0.41603590059034457,12.362209617541668,1.7090837,0.3148080555578448
+IEC_Goblet_2,Water,208,0.004807692307692308,0.2794808454968366,18.317413227973702,1.768819,-3.162581452546979
+IEC_Goblet_2,alpha-Ketoisovaleric acid,208,0.019230769230769232,0.3391263810980632,17.634571817099285,1.9393679,0.1020658042551162
+IEC_ISC,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid",345,0.014492753623188406,0.3574723882338482,24.665594788135525,1.7027262,-0.900631605136836
+IEC_ISC,17a-Ethynylestradiol,345,0.0,0.0,,2.267246,-inf
+IEC_ISC,"1b,3a,12a-Trihydroxy-5b-cholanoic acid",345,0.014492753623188406,0.3574723882338482,24.665594788135525,1.7027262,-0.900631605136836
+IEC_ISC,2-Hydroxychlorpropamide,345,0.0,0.0,,2.2588284,-inf
+IEC_ISC,25-Hydroxycholesterol,345,0.0,0.0,,2.1027691,-inf
+IEC_ISC,"3',4'-Dihydrodiol",345,0.0,0.0,,2.267246,-inf
+IEC_ISC,3-Sulfodeoxycholic acid,345,0.014492753623188406,0.3574723882338482,24.665594788135525,1.7027262,-0.900631605136836
+IEC_ISC,"3alpha,7alpha-Dihydroxycoprostanic acid",345,0.014492753623188406,0.3574723882338482,24.665594788135525,1.7027262,-0.900631605136836
+IEC_ISC,3b-Hydroxy-5-cholenoic acid,345,0.014492753623188406,0.3574723882338482,24.665594788135525,1.7027262,-0.900631605136836
+IEC_ISC,4'-Hydroxydiclofenac,345,0.0,0.0,,2.267246,-inf
+IEC_ISC,4-Hydroxycyclophosphamide,345,0.0,0.0,,2.267246,-inf
+IEC_ISC,4-ene-Valproic acid,345,0.005797101449275362,1.024493862964902,31.149207793237792,1.318817,-0.6375971993030423
+IEC_ISC,5-Hydroxyomeprazole,345,0.014492753623188406,0.436973898579623,24.665594788135525,1.5034297,-1.3489452592899787
+IEC_ISC,8-Hydroxycarvedilol,345,0.0,0.0,,2.267246,-inf
+IEC_ISC,Acetate,345,0.02318840579710145,0.2775154406778592,11.967853379232679,1.4355029,-0.9671992220758255
+IEC_ISC,Acetyl-L-Carnitine,345,0.03768115942028986,0.5150433599657561,13.66845839909122,1.6238458,0.19362912637340404
+IEC_ISC,Adenosine diphosphate ribose,345,0.0,0.0,,2.1991677,-inf
+IEC_ISC,Adenosine triphosphate,345,0.02318840579710145,0.35587311469439076,15.347028071195602,1.4516388,-0.8885587728362611
+IEC_ISC,Amiloride-sensitive sodium transport,345,0.03188405797101449,0.5348839186309975,16.18966045418904,1.4624621,-0.6323414738515474
+IEC_ISC,Anion exchange,345,0.0,0.5582801327338971,,0.68574625,-inf
+IEC_ISC,Butyrate,345,0.011594202898550725,0.15288522705190555,13.186350833226854,1.9125446,-0.6279470292693232
+IEC_ISC,Chenodeoxycholic acid,345,0.014492753623188406,0.3574723882338482,24.665594788135525,1.7027262,-0.900631605136836
+IEC_ISC,Chenodeoxycholic acid 3-sulfate,345,0.014492753623188406,0.3574723882338482,24.665594788135525,1.7027262,-0.900631605136836
+IEC_ISC,Chloride,345,0.034782608695652174,0.638686931566151,18.362249282526843,1.5861484,0.126335442463433
+IEC_ISC,Chloride ion,345,0.17391304347826086,4.722671353520146,27.155360282740837,1.7236769,2.2454466543511087
+IEC_ISC,Cholesterol,345,0.0,0.0,,2.1633449,-inf
+IEC_ISC,Cholic acid,345,0.014492753623188406,0.436973898579623,24.665594788135525,1.5233135,-0.9755936628180584
+IEC_ISC,Choline,345,0.03768115942028986,0.5150433599657561,13.66845839909122,1.6238458,0.19362912637340404
+IEC_ISC,Citric acid,345,0.011594202898550725,0.12463021362595367,10.749355925238504,1.589149,-1.3276417460817558
+IEC_ISC,Coprocholic acid,345,0.014492753623188406,0.3574723882338482,24.665594788135525,1.7027262,-0.900631605136836
+IEC_ISC,Cortisol,345,0.0,0.0,,2.1633449,-inf
+IEC_ISC,Creatine,345,0.03768115942028986,0.5150433599657561,13.66845839909122,1.6238458,0.19362912637340404
+IEC_ISC,D-Lactate,345,0.011594202898550725,0.15288522705190555,13.186350833226854,1.9125446,-0.6279470292693232
+IEC_ISC,Deoxycholic acid,345,0.014492753623188406,0.3574723882338482,24.665594788135525,1.7027262,-0.900631605136836
+IEC_ISC,Dopamine,345,0.03768115942028986,0.5150433599657561,13.66845839909122,1.6238458,0.19362912637340404
+IEC_ISC,E-3179,345,0.0,0.0,,2.267246,-inf
+IEC_ISC,Estradiol,345,0.011594202898550725,0.12463021362595367,10.749355925238504,1.4949867,-1.896618542630213
+IEC_ISC,Estriol,345,0.0,0.0,,2.267246,-inf
+IEC_ISC,Fatty acid,345,0.017391304347826087,14.750225895733623,129.2402974044165,0.63832885,-0.6051757216106648
+IEC_ISC,Folic acid,345,0.014492753623188406,0.3574723882338482,24.665594788135525,1.674885,-1.33002439739275
+IEC_ISC,Folinic acid,345,0.014492753623188406,0.3574723882338482,24.665594788135525,1.7027262,-0.900631605136836
+IEC_ISC,Glutathione,345,0.014492753623188406,0.3574723882338482,24.665594788135525,1.7027262,-0.900631605136836
+IEC_ISC,Glycerol,345,0.0,0.0,,2.267246,-inf
+IEC_ISC,Glycochenodeoxycholate-3-sulfate,345,0.014492753623188406,0.3574723882338482,24.665594788135525,1.7027262,-0.900631605136836
+IEC_ISC,Histamine,345,0.03768115942028986,0.5150433599657561,13.66845839909122,1.6238458,0.19362912637340404
+IEC_ISC,Hydroxylansoprazole,345,0.0,0.0,,2.1633449,-inf
+IEC_ISC,Hyodeoxycholic acid,345,0.014492753623188406,0.3574723882338482,24.665594788135525,1.7027262,-0.900631605136836
+IEC_ISC,Iron,345,0.005797101449275362,0.04443246792327928,7.664600716765676,1.5022599,-2.721661464091517
+IEC_ISC,Isoursodeoxycholic acid,345,0.014492753623188406,0.3574723882338482,24.665594788135525,1.7027262,-0.900631605136836
+IEC_ISC,Ketone bodies,345,0.011594202898550725,0.15288522705190555,13.186350833226854,1.9125446,-0.6279470292693232
+IEC_ISC,L-Arginine,345,0.0,0.0,,2.62461,-inf
+IEC_ISC,L-Carnitine,345,0.03768115942028986,0.6699064027647436,13.66845839909122,1.5240083,0.2309652776463769
+IEC_ISC,L-Cystine,345,0.0,0.0,,2.62461,-inf
+IEC_ISC,L-Lactate,345,0.011594202898550725,0.15288522705190555,13.186350833226854,1.9125446,-0.6279470292693232
+IEC_ISC,L-Lysine,345,0.0,0.0,,2.62461,-inf
+IEC_ISC,L-Ornithine,345,0.0,0.0,,2.62461,-inf
+IEC_ISC,Lithocholic acid,345,0.014492753623188406,0.3574723882338482,24.665594788135525,1.7027262,-0.900631605136836
+IEC_ISC,N-Desmethylcitalopram,345,0.0,0.0,,2.267246,-inf
+IEC_ISC,N-Desmethyleletriptan,345,0.0,0.0,,2.267246,-inf
+IEC_ISC,N-Desmethyltamoxifen,345,0.0,0.0,,2.1633449,-inf
+IEC_ISC,N-desmethylimatinib,345,0.0,0.0,,2.1633449,-inf
+IEC_ISC,Neurotransmitter,345,0.0,0.0,,2.402193,-inf
+IEC_ISC,Nicotinate,345,0.014492753623188406,1.1491240765908557,20.30923206468425,1.1429433,-0.8283174003209461
+IEC_ISC,Norepinephrine,345,0.03768115942028986,0.5150433599657561,13.66845839909122,1.6238458,0.19362912637340404
+IEC_ISC,O-Deethylated candesartan,345,0.0,0.0,,2.267246,-inf
+IEC_ISC,O-Desmethylverapamil (D-702),345,0.0,1.8095489730970395,,1.1140724,-inf
+IEC_ISC,Oxalic acid,345,0.011594202898550725,0.12463021362595367,10.749355925238504,1.589149,-1.3276417460817558
+IEC_ISC,Phosphate,345,0.0,0.0,,2.79918,-inf
+IEC_ISC,Progesterone,345,0.0,0.0,,2.267246,-inf
+IEC_ISC,Pyruvate,345,0.011594202898550725,0.15288522705190555,13.186350833226854,1.9125446,-0.6279470292693232
+IEC_ISC,Sodium,345,0.12173913043478261,6.89598428984228,42.229450329024424,1.2844405,1.612851507164381
+IEC_ISC,Sodium_hydrogen exchange,345,0.0,0.16180324172172242,,1.096553,-inf
+IEC_ISC,Sulfolithocholic acid,345,0.014492753623188406,0.3574723882338482,24.665594788135525,1.7027262,-0.900631605136836
+IEC_ISC,Taurocholic acid,345,0.011594202898550725,1.2266116459307739,31.273228287268807,1.1080424,-1.7486285116917861
+IEC_ISC,Testosterone,345,0.0,0.0,,2.127834,-inf
+IEC_ISC,Trihydroxycoprostanoic acid,345,0.014492753623188406,0.3574723882338482,24.665594788135525,1.7027262,-0.900631605136836
+IEC_ISC,Ursocholic acid,345,0.014492753623188406,0.3574723882338482,24.665594788135525,1.7027262,-0.900631605136836
+IEC_ISC,Ursodeoxycholic acid,345,0.014492753623188406,0.3574723882338482,24.665594788135525,1.7027262,-0.900631605136836
+IEC_ISC,Ursodeoxycholic acid 3-sulfate,345,0.014492753623188406,0.3574723882338482,24.665594788135525,1.7027262,-0.900631605136836
+IEC_ISC,Varanic acid,345,0.014492753623188406,0.3574723882338482,24.665594788135525,1.7027262,-0.900631605136836
+IEC_ISC,Water,345,0.002898550724637681,0.08877082916914945,30.625936063356562,1.7518387,-3.892594286071418
+IEC_ISC,alpha-Ketoisovaleric acid,345,0.011594202898550725,0.15288522705190555,13.186350833226854,1.9125446,-0.6279470292693232
+IEC_NOS2_DUOX2_colonocyte,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid",6,0.3333333333333333,3.971070387750842,11.913211163252527,1.7190924,3.6229303509201767
+IEC_NOS2_DUOX2_colonocyte,17a-Ethynylestradiol,6,0.0,0.0,,2.2228296,-inf
+IEC_NOS2_DUOX2_colonocyte,"1b,3a,12a-Trihydroxy-5b-cholanoic acid",6,0.3333333333333333,3.971070387750842,11.913211163252527,1.7190924,3.6229303509201767
+IEC_NOS2_DUOX2_colonocyte,2-Hydroxychlorpropamide,6,0.0,0.0,,2.2228296,-inf
+IEC_NOS2_DUOX2_colonocyte,25-Hydroxycholesterol,6,0.0,0.0,,2.057655,-inf
+IEC_NOS2_DUOX2_colonocyte,"3',4'-Dihydrodiol",6,0.0,0.0,,2.2228296,-inf
+IEC_NOS2_DUOX2_colonocyte,3-Sulfodeoxycholic acid,6,0.3333333333333333,3.971070387750842,11.913211163252527,1.7190924,3.6229303509201767
+IEC_NOS2_DUOX2_colonocyte,"3alpha,7alpha-Dihydroxycoprostanic acid",6,0.3333333333333333,3.971070387750842,11.913211163252527,1.7190924,3.6229303509201767
+IEC_NOS2_DUOX2_colonocyte,3b-Hydroxy-5-cholenoic acid,6,0.3333333333333333,3.971070387750842,11.913211163252527,1.7190924,3.6229303509201767
+IEC_NOS2_DUOX2_colonocyte,4'-Hydroxydiclofenac,6,0.0,0.0,,2.2228296,-inf
+IEC_NOS2_DUOX2_colonocyte,4-Hydroxycyclophosphamide,6,0.0,0.0,,2.2228296,-inf
+IEC_NOS2_DUOX2_colonocyte,4-ene-Valproic acid,6,0.0,0.0,,1.3543667,-inf
+IEC_NOS2_DUOX2_colonocyte,5-Hydroxyomeprazole,6,0.3333333333333333,3.971070387750842,11.913211163252527,1.4200712,3.174616696767034
+IEC_NOS2_DUOX2_colonocyte,8-Hydroxycarvedilol,6,0.0,0.0,,2.2228296,-inf
+IEC_NOS2_DUOX2_colonocyte,Acetate,6,0.0,0.0,,1.3780473,-inf
+IEC_NOS2_DUOX2_colonocyte,Acetyl-L-Carnitine,6,0.0,0.0,,1.6011788,-inf
+IEC_NOS2_DUOX2_colonocyte,Adenosine diphosphate ribose,6,0.0,0.0,,2.3883564,-inf
+IEC_NOS2_DUOX2_colonocyte,Adenosine triphosphate,6,0.5,29.411791637204562,58.823583274409124,2.2069724,3.5418937788292704
+IEC_NOS2_DUOX2_colonocyte,Amiloride-sensitive sodium transport,6,0.0,0.0,,1.3570294,-inf
+IEC_NOS2_DUOX2_colonocyte,Anion exchange,6,0.0,4.269171698612884,,0.58301026,-inf
+IEC_NOS2_DUOX2_colonocyte,Butyrate,6,0.0,0.0,,1.8267635,-inf
+IEC_NOS2_DUOX2_colonocyte,Chenodeoxycholic acid,6,0.3333333333333333,3.971070387750842,11.913211163252527,1.7190924,3.6229303509201767
+IEC_NOS2_DUOX2_colonocyte,Chenodeoxycholic acid 3-sulfate,6,0.3333333333333333,3.971070387750842,11.913211163252527,1.7190924,3.6229303509201767
+IEC_NOS2_DUOX2_colonocyte,Chloride,6,0.0,0.0,,1.468491,-inf
+IEC_NOS2_DUOX2_colonocyte,Chloride ion,6,0.0,0.0,,1.5514697,-inf
+IEC_NOS2_DUOX2_colonocyte,Cholesterol,6,0.0,0.0,,1.7581235,-inf
+IEC_NOS2_DUOX2_colonocyte,Cholic acid,6,0.3333333333333333,3.971070387750842,11.913211163252527,1.4200712,3.5479682932389545
+IEC_NOS2_DUOX2_colonocyte,Choline,6,0.0,0.0,,1.6011788,-inf
+IEC_NOS2_DUOX2_colonocyte,Citric acid,6,0.0,0.0,,1.5541043,-inf
+IEC_NOS2_DUOX2_colonocyte,Coprocholic acid,6,0.3333333333333333,3.971070387750842,11.913211163252527,1.7190924,3.6229303509201767
+IEC_NOS2_DUOX2_colonocyte,Cortisol,6,0.0,0.0,,1.7581235,-inf
+IEC_NOS2_DUOX2_colonocyte,Creatine,6,0.0,0.0,,1.6011788,-inf
+IEC_NOS2_DUOX2_colonocyte,D-Lactate,6,0.0,0.0,,1.8267635,-inf
+IEC_NOS2_DUOX2_colonocyte,Deoxycholic acid,6,0.3333333333333333,3.971070387750842,11.913211163252527,1.7190924,3.6229303509201767
+IEC_NOS2_DUOX2_colonocyte,Dopamine,6,0.0,0.0,,1.6011788,-inf
+IEC_NOS2_DUOX2_colonocyte,E-3179,6,0.0,0.0,,2.2228296,-inf
+IEC_NOS2_DUOX2_colonocyte,Estradiol,6,0.0,0.0,,1.3437715,-inf
+IEC_NOS2_DUOX2_colonocyte,Estriol,6,0.0,0.0,,2.2228296,-inf
+IEC_NOS2_DUOX2_colonocyte,Fatty acid,6,0.0,3.4352596258277117,,0.51530445,-inf
+IEC_NOS2_DUOX2_colonocyte,Folic acid,6,0.3333333333333333,3.971070387750842,11.913211163252527,1.7097102,3.193537558664263
+IEC_NOS2_DUOX2_colonocyte,Folinic acid,6,0.3333333333333333,3.971070387750842,11.913211163252527,1.7190924,3.6229303509201767
+IEC_NOS2_DUOX2_colonocyte,Glutathione,6,0.3333333333333333,3.971070387750842,11.913211163252527,1.7190924,3.6229303509201767
+IEC_NOS2_DUOX2_colonocyte,Glycerol,6,0.0,0.0,,2.2228296,-inf
+IEC_NOS2_DUOX2_colonocyte,Glycochenodeoxycholate-3-sulfate,6,0.3333333333333333,3.971070387750842,11.913211163252527,1.7190924,3.6229303509201767
+IEC_NOS2_DUOX2_colonocyte,Histamine,6,0.0,0.0,,1.6011788,-inf
+IEC_NOS2_DUOX2_colonocyte,Hydroxylansoprazole,6,0.0,0.0,,1.7581235,-inf
+IEC_NOS2_DUOX2_colonocyte,Hyodeoxycholic acid,6,0.3333333333333333,3.971070387750842,11.913211163252527,1.7190924,3.6229303509201767
+IEC_NOS2_DUOX2_colonocyte,Iron,6,0.16666666666666666,1.6488711427377325,9.893226856426395,1.4995254,2.1238285868528584
+IEC_NOS2_DUOX2_colonocyte,Isoursodeoxycholic acid,6,0.3333333333333333,3.971070387750842,11.913211163252527,1.7190924,3.6229303509201767
+IEC_NOS2_DUOX2_colonocyte,Ketone bodies,6,0.0,0.0,,1.8267635,-inf
+IEC_NOS2_DUOX2_colonocyte,L-Arginine,6,0.0,0.0,,2.7202272,-inf
+IEC_NOS2_DUOX2_colonocyte,L-Carnitine,6,0.0,0.0,,1.5621648,-inf
+IEC_NOS2_DUOX2_colonocyte,L-Cystine,6,0.0,0.0,,2.7202272,-inf
+IEC_NOS2_DUOX2_colonocyte,L-Lactate,6,0.0,0.0,,1.8267635,-inf
+IEC_NOS2_DUOX2_colonocyte,L-Lysine,6,0.0,0.0,,2.7202272,-inf
+IEC_NOS2_DUOX2_colonocyte,L-Ornithine,6,0.0,0.0,,2.7202272,-inf
+IEC_NOS2_DUOX2_colonocyte,Lithocholic acid,6,0.3333333333333333,3.971070387750842,11.913211163252527,1.7190924,3.6229303509201767
+IEC_NOS2_DUOX2_colonocyte,N-Desmethylcitalopram,6,0.0,0.0,,2.2228296,-inf
+IEC_NOS2_DUOX2_colonocyte,N-Desmethyleletriptan,6,0.0,0.0,,2.2228296,-inf
+IEC_NOS2_DUOX2_colonocyte,N-Desmethyltamoxifen,6,0.0,0.0,,1.7581235,-inf
+IEC_NOS2_DUOX2_colonocyte,N-desmethylimatinib,6,0.0,0.0,,1.7581235,-inf
+IEC_NOS2_DUOX2_colonocyte,Neurotransmitter,6,0.0,0.0,,2.2926843,-inf
+IEC_NOS2_DUOX2_colonocyte,Nicotinate,6,0.0,0.0,,1.1515831,-inf
+IEC_NOS2_DUOX2_colonocyte,Norepinephrine,6,0.0,0.0,,1.6011788,-inf
+IEC_NOS2_DUOX2_colonocyte,O-Deethylated candesartan,6,0.0,0.0,,2.2228296,-inf
+IEC_NOS2_DUOX2_colonocyte,O-Desmethylverapamil (D-702),6,0.0,3.971070387750842,,0.87687707,-inf
+IEC_NOS2_DUOX2_colonocyte,Oxalic acid,6,0.0,0.0,,1.5541043,-inf
+IEC_NOS2_DUOX2_colonocyte,Phosphate,6,0.0,0.0,,2.8205707,-inf
+IEC_NOS2_DUOX2_colonocyte,Progesterone,6,0.0,0.0,,2.2228296,-inf
+IEC_NOS2_DUOX2_colonocyte,Pyruvate,6,0.0,0.0,,1.8267635,-inf
+IEC_NOS2_DUOX2_colonocyte,Sodium,6,0.0,0.0,,1.2494305,-inf
+IEC_NOS2_DUOX2_colonocyte,Sodium_hydrogen exchange,6,0.0,0.0,,1.064329,-inf
+IEC_NOS2_DUOX2_colonocyte,Sulfolithocholic acid,6,0.3333333333333333,3.971070387750842,11.913211163252527,1.7190924,3.6229303509201767
+IEC_NOS2_DUOX2_colonocyte,Taurocholic acid,6,0.0,3.971070387750842,,0.88295317,-inf
+IEC_NOS2_DUOX2_colonocyte,Testosterone,6,0.0,0.0,,1.7581235,-inf
+IEC_NOS2_DUOX2_colonocyte,Trihydroxycoprostanoic acid,6,0.3333333333333333,3.971070387750842,11.913211163252527,1.7190924,3.6229303509201767
+IEC_NOS2_DUOX2_colonocyte,Ursocholic acid,6,0.3333333333333333,3.971070387750842,11.913211163252527,1.7190924,3.6229303509201767
+IEC_NOS2_DUOX2_colonocyte,Ursodeoxycholic acid,6,0.3333333333333333,3.971070387750842,11.913211163252527,1.7190924,3.6229303509201767
+IEC_NOS2_DUOX2_colonocyte,Ursodeoxycholic acid 3-sulfate,6,0.3333333333333333,3.971070387750842,11.913211163252527,1.7190924,3.6229303509201767
+IEC_NOS2_DUOX2_colonocyte,Varanic acid,6,0.3333333333333333,3.971070387750842,11.913211163252527,1.7190924,3.6229303509201767
+IEC_NOS2_DUOX2_colonocyte,Water,6,0.0,0.0,,1.8766519,-inf
+IEC_NOS2_DUOX2_colonocyte,alpha-Ketoisovaleric acid,6,0.0,0.0,,1.8267635,-inf
+IEC_Tuft,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid",31,0.03225806451612903,0.6146554690787467,19.054319541441146,1.7477763,0.25369654125445756
+IEC_Tuft,17a-Ethynylestradiol,31,0.0,0.0,,2.319728,-inf
+IEC_Tuft,"1b,3a,12a-Trihydroxy-5b-cholanoic acid",31,0.03225806451612903,0.6146554690787467,19.054319541441146,1.7477763,0.25369654125445756
+IEC_Tuft,2-Hydroxychlorpropamide,31,0.0,0.0,,2.319728,-inf
+IEC_Tuft,25-Hydroxycholesterol,31,0.0,0.0,,2.171141,-inf
+IEC_Tuft,"3',4'-Dihydrodiol",31,0.0,0.0,,2.319728,-inf
+IEC_Tuft,3-Sulfodeoxycholic acid,31,0.03225806451612903,0.6146554690787467,19.054319541441146,1.7477763,0.25369654125445756
+IEC_Tuft,"3alpha,7alpha-Dihydroxycoprostanic acid",31,0.03225806451612903,0.6146554690787467,19.054319541441146,1.7477763,0.25369654125445756
+IEC_Tuft,3b-Hydroxy-5-cholenoic acid,31,0.03225806451612903,0.6146554690787467,19.054319541441146,1.7477763,0.25369654125445756
+IEC_Tuft,4'-Hydroxydiclofenac,31,0.0,0.0,,2.319728,-inf
+IEC_Tuft,4-Hydroxycyclophosphamide,31,0.0,0.0,,2.319728,-inf
+IEC_Tuft,4-ene-Valproic acid,31,0.0,0.35390017835008747,,1.3470467,-inf
+IEC_Tuft,5-Hydroxyomeprazole,31,0.03225806451612903,0.6146554690787467,19.054319541441146,1.5346413,-0.1946171128986848
+IEC_Tuft,8-Hydroxycarvedilol,31,0.0,0.0,,2.319728,-inf
+IEC_Tuft,Acetate,31,0.0,0.0,,1.4472659,-inf
+IEC_Tuft,Acetyl-L-Carnitine,31,0.03225806451612903,0.35390017835008747,10.970905528852711,1.6506674,-0.030554350489032038
+IEC_Tuft,Adenosine diphosphate ribose,31,0.0,0.0,,2.2105117,-inf
+IEC_Tuft,Adenosine triphosphate,31,0.12903225806451613,2.045936259828836,15.856006013673479,1.5473031,1.587697468442395
+IEC_Tuft,Amiloride-sensitive sodium transport,31,0.0,0.0,,1.476011,-inf
+IEC_Tuft,Anion exchange,31,0.0,1.02928748641287,,0.72534126,-inf
+IEC_Tuft,Butyrate,31,0.0,0.0,,1.9096701,-inf
+IEC_Tuft,Chenodeoxycholic acid,31,0.03225806451612903,0.6146554690787467,19.054319541441146,1.7477763,0.25369654125445756
+IEC_Tuft,Chenodeoxycholic acid 3-sulfate,31,0.03225806451612903,0.6146554690787467,19.054319541441146,1.7477763,0.25369654125445756
+IEC_Tuft,Chloride,31,0.03225806451612903,0.47925122405285947,14.856787945638644,1.5680556,0.017629183020933005
+IEC_Tuft,Chloride ion,31,0.03225806451612903,0.5648060513328435,17.508987591318146,1.6182147,-0.18518769997875384
+IEC_Tuft,Cholesterol,31,0.0,0.0,,2.211311,-inf
+IEC_Tuft,Cholic acid,31,0.03225806451612903,0.6146554690787467,19.054319541441146,1.5618445,0.1787344835732356
+IEC_Tuft,Choline,31,0.03225806451612903,0.35390017835008747,10.970905528852711,1.6506674,-0.030554350489032038
+IEC_Tuft,Citric acid,31,0.0,0.0,,1.6145066,-inf
+IEC_Tuft,Coprocholic acid,31,0.03225806451612903,0.6146554690787467,19.054319541441146,1.7477763,0.25369654125445756
+IEC_Tuft,Cortisol,31,0.0,0.0,,2.211311,-inf
+IEC_Tuft,Creatine,31,0.03225806451612903,0.35390017835008747,10.970905528852711,1.6506674,-0.030554350489032038
+IEC_Tuft,D-Lactate,31,0.0,0.0,,1.9096701,-inf
+IEC_Tuft,Deoxycholic acid,31,0.03225806451612903,0.6146554690787467,19.054319541441146,1.7477763,0.25369654125445756
+IEC_Tuft,Dopamine,31,0.03225806451612903,0.35390017835008747,10.970905528852711,1.6506674,-0.030554350489032038
+IEC_Tuft,E-3179,31,0.0,0.0,,2.319728,-inf
+IEC_Tuft,Estradiol,31,0.0,0.0,,1.5268767,-inf
+IEC_Tuft,Estriol,31,0.0,0.0,,2.319728,-inf
+IEC_Tuft,Fatty acid,31,0.06451612903225806,16.66301087814841,83.79836082862653,0.6831714,1.2861180189468353
+IEC_Tuft,Folic acid,31,0.03225806451612903,0.6146554690787467,19.054319541441146,1.7227315,-0.1756962510014562
+IEC_Tuft,Folinic acid,31,0.03225806451612903,0.6146554690787467,19.054319541441146,1.7477763,0.25369654125445756
+IEC_Tuft,Glutathione,31,0.03225806451612903,0.6146554690787467,19.054319541441146,1.7477763,0.25369654125445756
+IEC_Tuft,Glycerol,31,0.0,0.0,,2.319728,-inf
+IEC_Tuft,Glycochenodeoxycholate-3-sulfate,31,0.03225806451612903,0.6146554690787467,19.054319541441146,1.7477763,0.25369654125445756
+IEC_Tuft,Histamine,31,0.03225806451612903,0.35390017835008747,10.970905528852711,1.6506674,-0.030554350489032038
+IEC_Tuft,Hydroxylansoprazole,31,0.0,0.0,,2.211311,-inf
+IEC_Tuft,Hyodeoxycholic acid,31,0.03225806451612903,0.6146554690787467,19.054319541441146,1.7477763,0.25369654125445756
+IEC_Tuft,Iron,31,0.06451612903225806,0.5172171336165144,8.016865571055973,1.5517231,0.7545947771871393
+IEC_Tuft,Isoursodeoxycholic acid,31,0.03225806451612903,0.6146554690787467,19.054319541441146,1.7477763,0.25369654125445756
+IEC_Tuft,Ketone bodies,31,0.0,0.0,,1.9096701,-inf
+IEC_Tuft,L-Arginine,31,0.0,0.0,,2.665654,-inf
+IEC_Tuft,L-Carnitine,31,0.03225806451612903,0.35390017835008747,10.970905528852711,1.5740616,0.006781800783940883
+IEC_Tuft,L-Cystine,31,0.0,0.0,,2.665654,-inf
+IEC_Tuft,L-Lactate,31,0.0,0.0,,1.9096701,-inf
+IEC_Tuft,L-Lysine,31,0.0,0.0,,2.665654,-inf
+IEC_Tuft,L-Ornithine,31,0.0,0.0,,2.665654,-inf
+IEC_Tuft,Lithocholic acid,31,0.03225806451612903,0.6146554690787467,19.054319541441146,1.7477763,0.25369654125445756
+IEC_Tuft,N-Desmethylcitalopram,31,0.0,0.0,,2.319728,-inf
+IEC_Tuft,N-Desmethyleletriptan,31,0.0,0.0,,2.319728,-inf
+IEC_Tuft,N-Desmethyltamoxifen,31,0.0,0.0,,2.211311,-inf
+IEC_Tuft,N-desmethylimatinib,31,0.0,0.0,,2.211311,-inf
+IEC_Tuft,Neurotransmitter,31,0.0,0.0,,2.4279804,-inf
+IEC_Tuft,Nicotinate,31,0.0,0.35390017835008747,,1.1621661,-inf
+IEC_Tuft,Norepinephrine,31,0.03225806451612903,0.35390017835008747,10.970905528852711,1.6506674,-0.030554350489032038
+IEC_Tuft,O-Deethylated candesartan,31,0.0,0.0,,2.319728,-inf
+IEC_Tuft,O-Desmethylverapamil (D-702),31,0.0,1.628539774001757,,1.1695824,-inf
+IEC_Tuft,Oxalic acid,31,0.0,0.0,,1.6145066,-inf
+IEC_Tuft,Phosphate,31,0.0,0.0,,2.8109818,-inf
+IEC_Tuft,Progesterone,31,0.0,0.0,,2.319728,-inf
+IEC_Tuft,Pyruvate,31,0.0,0.0,,1.9096701,-inf
+IEC_Tuft,Sodium,31,0.0,0.9187062296829309,,1.2245201,-inf
+IEC_Tuft,Sodium_hydrogen exchange,31,0.0,0.0,,1.1217172,-inf
+IEC_Tuft,Sulfolithocholic acid,31,0.03225806451612903,0.6146554690787467,19.054319541441146,1.7477763,0.25369654125445756
+IEC_Tuft,Taurocholic acid,31,0.0,0.6146554690787467,,1.1262761,-inf
+IEC_Tuft,Testosterone,31,0.0,0.0,,2.1545477,-inf
+IEC_Tuft,Trihydroxycoprostanoic acid,31,0.03225806451612903,0.6146554690787467,19.054319541441146,1.7477763,0.25369654125445756
+IEC_Tuft,Ursocholic acid,31,0.03225806451612903,0.6146554690787467,19.054319541441146,1.7477763,0.25369654125445756
+IEC_Tuft,Ursodeoxycholic acid,31,0.03225806451612903,0.6146554690787467,19.054319541441146,1.7477763,0.25369654125445756
+IEC_Tuft,Ursodeoxycholic acid 3-sulfate,31,0.03225806451612903,0.6146554690787467,19.054319541441146,1.7477763,0.25369654125445756
+IEC_Tuft,Varanic acid,31,0.03225806451612903,0.6146554690787467,19.054319541441146,1.7477763,0.25369654125445756
+IEC_Tuft,Water,31,0.0,0.0,,1.8526076,-inf
+IEC_Tuft,alpha-Ketoisovaleric acid,31,0.0,0.0,,1.9096701,-inf
+MAST,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid",76,0.0,0.0,,1.7090248,-inf
+MAST,17a-Ethynylestradiol,76,0.0,0.0,,2.27565,-inf
+MAST,"1b,3a,12a-Trihydroxy-5b-cholanoic acid",76,0.0,0.0,,1.7090248,-inf
+MAST,2-Hydroxychlorpropamide,76,0.0,0.0,,2.27565,-inf
+MAST,25-Hydroxycholesterol,76,0.039473684210526314,1.0542286223592956,26.70712509976882,2.156485,2.036780935248578
+MAST,"3',4'-Dihydrodiol",76,0.0,0.0,,2.27565,-inf
+MAST,3-Sulfodeoxycholic acid,76,0.0,0.0,,1.7090248,-inf
+MAST,"3alpha,7alpha-Dihydroxycoprostanic acid",76,0.0,0.0,,1.7090248,-inf
+MAST,3b-Hydroxy-5-cholenoic acid,76,0.0,0.0,,1.7090248,-inf
+MAST,4'-Hydroxydiclofenac,76,0.0,0.0,,2.27565,-inf
+MAST,4-Hydroxycyclophosphamide,76,0.0,0.0,,2.27565,-inf
+MAST,4-ene-Valproic acid,76,0.0,0.0,,1.4156854,-inf
+MAST,5-Hydroxyomeprazole,76,0.0,0.0,,1.5542192,-inf
+MAST,8-Hydroxycarvedilol,76,0.0,0.0,,2.27565,-inf
+MAST,Acetate,76,0.013157894736842105,0.5096818106529243,38.735817609622245,1.455729,-1.7846741838538798
+MAST,Acetyl-L-Carnitine,76,0.0,0.0,,1.6193067,-inf
+MAST,Adenosine diphosphate ribose,76,0.0,0.0,,2.1841936,-inf
+MAST,Adenosine triphosphate,76,0.0,0.0,,1.460049,-inf
+MAST,Amiloride-sensitive sodium transport,76,0.013157894736842105,0.21636137961608806,16.443464850822693,1.4653605,-1.9092480542668986
+MAST,Anion exchange,76,0.0,0.0,,0.68456954,-inf
+MAST,Butyrate,76,0.0,0.0,,1.9278045,-inf
+MAST,Chenodeoxycholic acid,76,0.0,0.0,,1.7090248,-inf
+MAST,Chenodeoxycholic acid 3-sulfate,76,0.0,0.0,,1.7090248,-inf
+MAST,Chloride,76,0.0,0.0,,1.599281,-inf
+MAST,Chloride ion,76,0.013157894736842105,0.24641841880562473,18.72779982922748,1.6179558,-1.4789189030354644
+MAST,Cholesterol,76,0.0,0.0,,2.1588383,-inf
+MAST,Cholic acid,76,0.0,0.0,,1.582153,-inf
+MAST,Choline,76,0.0,0.0,,1.6193067,-inf
+MAST,Citric acid,76,0.013157894736842105,0.5096818106529243,38.735817609622245,1.6064934,-1.1451167078598101
+MAST,Coprocholic acid,76,0.0,0.0,,1.7090248,-inf
+MAST,Cortisol,76,0.0,0.0,,2.1588383,-inf
+MAST,Creatine,76,0.0,0.0,,1.6193067,-inf
+MAST,D-Lactate,76,0.0,0.0,,1.9278045,-inf
+MAST,Deoxycholic acid,76,0.0,0.0,,1.7090248,-inf
+MAST,Dopamine,76,0.0,0.0,,1.6193067,-inf
+MAST,E-3179,76,0.0,0.0,,2.27565,-inf
+MAST,Estradiol,76,0.013157894736842105,0.5096818106529243,38.735817609622245,1.5107743,-1.7140935044082668
+MAST,Estriol,76,0.0,0.0,,2.27565,-inf
+MAST,Fatty acid,76,0.0,2.97157866341742,,0.616811,-inf
+MAST,Folic acid,76,0.0,0.0,,1.6790284,-inf
+MAST,Folinic acid,76,0.0,0.0,,1.7090248,-inf
+MAST,Glutathione,76,0.0,0.0,,1.7090248,-inf
+MAST,Glycerol,76,0.0,0.0,,2.27565,-inf
+MAST,Glycochenodeoxycholate-3-sulfate,76,0.0,0.0,,1.7090248,-inf
+MAST,Histamine,76,0.0,0.0,,1.6193067,-inf
+MAST,Hydroxylansoprazole,76,0.0,0.0,,2.1588383,-inf
+MAST,Hyodeoxycholic acid,76,0.0,0.0,,1.7090248,-inf
+MAST,Iron,76,0.013157894736842105,0.12508008178340602,9.506086215538858,1.5199575,-1.539136425869571
+MAST,Isoursodeoxycholic acid,76,0.0,0.0,,1.7090248,-inf
+MAST,Ketone bodies,76,0.0,0.0,,1.9278045,-inf
+MAST,L-Arginine,76,0.0,0.0,,2.6561189,-inf
+MAST,L-Carnitine,76,0.0,0.0,,1.5689853,-inf
+MAST,L-Cystine,76,0.0,0.0,,2.6561189,-inf
+MAST,L-Lactate,76,0.0,0.0,,1.9278045,-inf
+MAST,L-Lysine,76,0.0,0.0,,2.6561189,-inf
+MAST,L-Ornithine,76,0.0,0.0,,2.6561189,-inf
+MAST,Lithocholic acid,76,0.0,0.0,,1.7090248,-inf
+MAST,N-Desmethylcitalopram,76,0.0,0.0,,2.27565,-inf
+MAST,N-Desmethyleletriptan,76,0.0,0.0,,2.27565,-inf
+MAST,N-Desmethyltamoxifen,76,0.0,0.0,,2.1588383,-inf
+MAST,N-desmethylimatinib,76,0.0,0.0,,2.1588383,-inf
+MAST,Neurotransmitter,76,0.0,0.0,,2.414046,-inf
+MAST,Nicotinate,76,0.013157894736842105,0.5096818106529243,38.735817609622245,1.2207588,-0.9677204569863627
+MAST,Norepinephrine,76,0.0,0.0,,1.6193067,-inf
+MAST,O-Deethylated candesartan,76,0.0,0.0,,2.27565,-inf
+MAST,O-Desmethylverapamil (D-702),76,0.0,0.0,,1.2227781,-inf
+MAST,Oxalic acid,76,0.013157894736842105,0.5096818106529243,38.735817609622245,1.6064934,-1.1451167078598101
+MAST,Phosphate,76,0.0,0.0,,2.8419893,-inf
+MAST,Progesterone,76,0.0,0.0,,2.27565,-inf
+MAST,Pyruvate,76,0.0,0.0,,1.9278045,-inf
+MAST,Sodium,76,0.0,0.24641841880562473,,1.2855458,-inf
+MAST,Sodium_hydrogen exchange,76,0.0,0.0938528687929737,,1.1032432,-inf
+MAST,Sulfolithocholic acid,76,0.0,0.0,,1.7090248,-inf
+MAST,Taurocholic acid,76,0.013157894736842105,0.5096818106529243,38.735817609622245,1.1943984,-1.5661034734698402
+MAST,Testosterone,76,0.0,0.0,,2.1088386,-inf
+MAST,Trihydroxycoprostanoic acid,76,0.0,0.0,,1.7090248,-inf
+MAST,Ursocholic acid,76,0.0,0.0,,1.7090248,-inf
+MAST,Ursodeoxycholic acid,76,0.0,0.0,,1.7090248,-inf
+MAST,Ursodeoxycholic acid 3-sulfate,76,0.0,0.0,,1.7090248,-inf
+MAST,Varanic acid,76,0.0,0.0,,1.7090248,-inf
+MAST,Water,76,0.0,0.29268311249755863,,1.7601471,-inf
+MAST,alpha-Ketoisovaleric acid,76,0.0,0.0,,1.9278045,-inf
+MNP_mDC,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid",33,0.030303030303030304,0.3429643961788687,11.317825073902668,1.6986371,0.16349873228287956
+MNP_mDC,17a-Ethynylestradiol,33,0.0,0.0,,2.2955036,-inf
+MNP_mDC,"1b,3a,12a-Trihydroxy-5b-cholanoic acid",33,0.030303030303030304,0.3429643961788687,11.317825073902668,1.6986371,0.16349873228287956
+MNP_mDC,2-Hydroxychlorpropamide,33,0.0,0.0,,2.2474594,-inf
+MNP_mDC,25-Hydroxycholesterol,33,0.0,0.0,,2.1248224,-inf
+MNP_mDC,"3',4'-Dihydrodiol",33,0.0,0.0,,2.2955036,-inf
+MNP_mDC,3-Sulfodeoxycholic acid,33,0.030303030303030304,0.3429643961788687,11.317825073902668,1.6986371,0.16349873228287956
+MNP_mDC,"3alpha,7alpha-Dihydroxycoprostanic acid",33,0.030303030303030304,0.3429643961788687,11.317825073902668,1.6986371,0.16349873228287956
+MNP_mDC,3b-Hydroxy-5-cholenoic acid,33,0.030303030303030304,0.3429643961788687,11.317825073902668,1.6986371,0.16349873228287956
+MNP_mDC,4'-Hydroxydiclofenac,33,0.0,0.0,,2.2955036,-inf
+MNP_mDC,4-Hydroxycyclophosphamide,33,0.0,0.0,,2.2955036,-inf
+MNP_mDC,4-ene-Valproic acid,33,0.0,0.0,,1.3954433,-inf
+MNP_mDC,5-Hydroxyomeprazole,33,0.030303030303030304,0.3429643961788687,11.317825073902668,1.5693694,-0.28481492187026286
+MNP_mDC,8-Hydroxycarvedilol,33,0.0,0.0,,2.2955036,-inf
+MNP_mDC,Acetate,33,0.0,0.0,,1.4224341,-inf
+MNP_mDC,Acetyl-L-Carnitine,33,0.0,0.0,,1.6117879,-inf
+MNP_mDC,Adenosine diphosphate ribose,33,0.030303030303030304,0.4524028204317195,14.929293074246743,2.173672,1.8275328039952343
+MNP_mDC,Adenosine triphosphate,33,0.09090909090909091,1.8739418975338373,20.61336087287221,1.4905629,1.082462160191973
+MNP_mDC,Amiloride-sensitive sodium transport,33,0.0,0.0,,1.4589041,-inf
+MNP_mDC,Anion exchange,33,0.030303030303030304,7.539964962253979,207.38772595799855,0.7115464,-1.496425826119499
+MNP_mDC,Butyrate,33,0.0,0.0,,1.8900242,-inf
+MNP_mDC,Chenodeoxycholic acid,33,0.030303030303030304,0.3429643961788687,11.317825073902668,1.6986371,0.16349873228287956
+MNP_mDC,Chenodeoxycholic acid 3-sulfate,33,0.030303030303030304,0.3429643961788687,11.317825073902668,1.6986371,0.16349873228287956
+MNP_mDC,Chloride,33,0.0,0.0,,1.5904942,-inf
+MNP_mDC,Chloride ion,33,0.0,0.0,,1.5937222,-inf
+MNP_mDC,Cholesterol,33,0.0,0.0,,2.2237628,-inf
+MNP_mDC,Cholic acid,33,0.030303030303030304,0.3429643961788687,11.317825073902668,1.5844997,0.08853667460165753
+MNP_mDC,Choline,33,0.0,0.0,,1.6117879,-inf
+MNP_mDC,Citric acid,33,0.0,0.0,,1.5832577,-inf
+MNP_mDC,Coprocholic acid,33,0.030303030303030304,0.3429643961788687,11.317825073902668,1.6986371,0.16349873228287956
+MNP_mDC,Cortisol,33,0.0,0.0,,2.2237628,-inf
+MNP_mDC,Creatine,33,0.0,0.0,,1.6117879,-inf
+MNP_mDC,D-Lactate,33,0.0,0.0,,1.8900242,-inf
+MNP_mDC,Deoxycholic acid,33,0.030303030303030304,0.3429643961788687,11.317825073902668,1.6986371,0.16349873228287956
+MNP_mDC,Dopamine,33,0.0,0.0,,1.6117879,-inf
+MNP_mDC,E-3179,33,0.0,0.0,,2.2955036,-inf
+MNP_mDC,Estradiol,33,0.0,0.0,,1.5056933,-inf
+MNP_mDC,Estriol,33,0.0,0.0,,2.2955036,-inf
+MNP_mDC,Fatty acid,33,0.030303030303030304,4.690725803555117,98.260954232931,0.6281532,0.19592020997525694
+MNP_mDC,Folic acid,33,0.030303030303030304,0.3429643961788687,11.317825073902668,1.6754055,-0.26589405997303434
+MNP_mDC,Folinic acid,33,0.030303030303030304,0.3429643961788687,11.317825073902668,1.6986371,0.16349873228287956
+MNP_mDC,Glutathione,33,0.030303030303030304,0.3429643961788687,11.317825073902668,1.6986371,0.16349873228287956
+MNP_mDC,Glycerol,33,0.0,0.0,,2.2955036,-inf
+MNP_mDC,Glycochenodeoxycholate-3-sulfate,33,0.030303030303030304,0.3429643961788687,11.317825073902668,1.6986371,0.16349873228287956
+MNP_mDC,Histamine,33,0.0,0.0,,1.6117879,-inf
+MNP_mDC,Hydroxylansoprazole,33,0.0,0.0,,2.2237628,-inf
+MNP_mDC,Hyodeoxycholic acid,33,0.030303030303030304,0.3429643961788687,11.317825073902668,1.6986371,0.16349873228287956
+MNP_mDC,Iron,33,0.06060606060606061,1.502687761669842,24.79434806755239,1.5547336,0.6643969682155612
+MNP_mDC,Isoursodeoxycholic acid,33,0.030303030303030304,0.3429643961788687,11.317825073902668,1.6986371,0.16349873228287956
+MNP_mDC,Ketone bodies,33,0.0,0.0,,1.8900242,-inf
+MNP_mDC,L-Arginine,33,0.0,0.0,,2.6131744,-inf
+MNP_mDC,L-Carnitine,33,0.0,0.0,,1.5365056,-inf
+MNP_mDC,L-Cystine,33,0.0,0.0,,2.6131744,-inf
+MNP_mDC,L-Lactate,33,0.0,0.0,,1.8900242,-inf
+MNP_mDC,L-Lysine,33,0.0,0.0,,2.6131744,-inf
+MNP_mDC,L-Ornithine,33,0.0,0.0,,2.6131744,-inf
+MNP_mDC,Lithocholic acid,33,0.030303030303030304,0.3429643961788687,11.317825073902668,1.6986371,0.16349873228287956
+MNP_mDC,N-Desmethylcitalopram,33,0.0,0.0,,2.2955036,-inf
+MNP_mDC,N-Desmethyleletriptan,33,0.0,0.0,,2.2955036,-inf
+MNP_mDC,N-Desmethyltamoxifen,33,0.0,0.0,,2.2237628,-inf
+MNP_mDC,N-desmethylimatinib,33,0.0,0.0,,2.2237628,-inf
+MNP_mDC,Neurotransmitter,33,0.0,0.0,,2.3712811,-inf
+MNP_mDC,Nicotinate,33,0.0,0.0,,1.1954852,-inf
+MNP_mDC,Norepinephrine,33,0.0,0.0,,1.6117879,-inf
+MNP_mDC,O-Deethylated candesartan,33,0.0,0.0,,2.2955036,-inf
+MNP_mDC,O-Desmethylverapamil (D-702),33,0.0,0.3429643961788687,,1.1892312,-inf
+MNP_mDC,Oxalic acid,33,0.0,0.0,,1.5832577,-inf
+MNP_mDC,Phosphate,33,0.0,0.0,,2.7634082,-inf
+MNP_mDC,Progesterone,33,0.0,0.0,,2.2955036,-inf
+MNP_mDC,Pyruvate,33,0.0,0.0,,1.8900242,-inf
+MNP_mDC,Sodium,33,0.0,0.0,,1.3180345,-inf
+MNP_mDC,Sodium_hydrogen exchange,33,0.0,0.4753769182958339,,1.1312819,-inf
+MNP_mDC,Sulfolithocholic acid,33,0.030303030303030304,0.3429643961788687,11.317825073902668,1.6986371,0.16349873228287956
+MNP_mDC,Taurocholic acid,33,0.0,0.3429643961788687,,1.1556492,-inf
+MNP_mDC,Testosterone,33,0.0,0.0,,2.212612,-inf
+MNP_mDC,Trihydroxycoprostanoic acid,33,0.030303030303030304,0.3429643961788687,11.317825073902668,1.6986371,0.16349873228287956
+MNP_mDC,Ursocholic acid,33,0.030303030303030304,0.3429643961788687,11.317825073902668,1.6986371,0.16349873228287956
+MNP_mDC,Ursodeoxycholic acid,33,0.030303030303030304,0.3429643961788687,11.317825073902668,1.6986371,0.16349873228287956
+MNP_mDC,Ursodeoxycholic acid 3-sulfate,33,0.030303030303030304,0.3429643961788687,11.317825073902668,1.6986371,0.16349873228287956
+MNP_mDC,Varanic acid,33,0.030303030303030304,0.3429643961788687,11.317825073902668,1.6986371,0.16349873228287956
+MNP_mDC,Water,33,0.0,0.0,,1.7573562,-inf
+MNP_mDC,alpha-Ketoisovaleric acid,33,0.0,0.0,,1.8900242,-inf
+MNP_macrophage,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid",277,0.0,0.0,,1.703689,-inf
+MNP_macrophage,17a-Ethynylestradiol,277,0.0,0.0,,2.276371,-inf
+MNP_macrophage,"1b,3a,12a-Trihydroxy-5b-cholanoic acid",277,0.0,0.0,,1.703689,-inf
+MNP_macrophage,2-Hydroxychlorpropamide,277,0.0,0.0,,2.2528505,-inf
+MNP_macrophage,25-Hydroxycholesterol,277,0.08303249097472924,1.5092068054017038,18.176099352011825,2.1584342,3.109565737978832
+MNP_macrophage,"3',4'-Dihydrodiol",277,0.0,0.0,,2.276371,-inf
+MNP_macrophage,3-Sulfodeoxycholic acid,277,0.0,0.0,,1.703689,-inf
+MNP_macrophage,"3alpha,7alpha-Dihydroxycoprostanic acid",277,0.0,0.0,,1.703689,-inf
+MNP_macrophage,3b-Hydroxy-5-cholenoic acid,277,0.0,0.0,,1.703689,-inf
+MNP_macrophage,4'-Hydroxydiclofenac,277,0.0,0.0,,2.276371,-inf
+MNP_macrophage,4-Hydroxycyclophosphamide,277,0.0,0.0,,2.276371,-inf
+MNP_macrophage,4-ene-Valproic acid,277,0.0036101083032490976,0.0811989520108223,22.49210970699778,1.4093711,-1.3208868136866991
+MNP_macrophage,5-Hydroxyomeprazole,277,0.0,0.06520090274183274,,1.5434643,-inf
+MNP_macrophage,8-Hydroxycarvedilol,277,0.0,0.0,,2.276371,-inf
+MNP_macrophage,Acetate,277,0.20577617328519857,4.600051348105913,22.35463549869014,1.5852262,2.182401177705259
+MNP_macrophage,Acetyl-L-Carnitine,277,0.0036101083032490976,0.0811989520108223,22.49210970699778,1.6207806,-3.190100206151345
+MNP_macrophage,Adenosine diphosphate ribose,277,0.018050541516245487,0.34209354045401486,18.95198214115242,2.1976004,1.0801128521918617
+MNP_macrophage,Adenosine triphosphate,277,0.018050541516245487,0.38615510351940074,21.392992734974804,1.456522,-1.2499202923325556
+MNP_macrophage,Amiloride-sensitive sodium transport,277,0.0,0.0,,1.4534873,-inf
+MNP_macrophage,Anion exchange,277,0.0036101083032490976,1.2921643645472884,179.36730058257126,0.6951944,-4.565773872810234
+MNP_macrophage,Butyrate,277,0.0,0.0,,1.9273064,-inf
+MNP_macrophage,Chenodeoxycholic acid,277,0.0,0.0,,1.703689,-inf
+MNP_macrophage,Chenodeoxycholic acid 3-sulfate,277,0.0,0.0,,1.703689,-inf
+MNP_macrophage,Chloride,277,0.0,0.0,,1.5727832,-inf
+MNP_macrophage,Chloride ion,277,0.0036101083032490976,0.07272374813750082,20.144478234087728,1.6155099,-3.344733555641067
+MNP_macrophage,Cholesterol,277,0.0,0.0,,2.1473944,-inf
+MNP_macrophage,Cholic acid,277,0.0,0.06520090274183274,,1.5726045,-inf
+MNP_macrophage,Choline,277,0.0036101083032490976,0.0811989520108223,22.49210970699778,1.6207806,-3.190100206151345
+MNP_macrophage,Citric acid,277,0.20577617328519857,4.600051348105913,22.35463549869014,1.7270004,2.821958653699329
+MNP_macrophage,Coprocholic acid,277,0.0,0.0,,1.703689,-inf
+MNP_macrophage,Cortisol,277,0.0,0.0,,2.1473944,-inf
+MNP_macrophage,Creatine,277,0.0036101083032490976,0.0811989520108223,22.49210970699778,1.6207806,-3.190100206151345
+MNP_macrophage,D-Lactate,277,0.0,0.0,,1.9273064,-inf
+MNP_macrophage,Deoxycholic acid,277,0.0,0.0,,1.703689,-inf
+MNP_macrophage,Dopamine,277,0.0036101083032490976,0.0811989520108223,22.49210970699778,1.6207806,-3.190100206151345
+MNP_macrophage,E-3179,277,0.0,0.0,,2.276371,-inf
+MNP_macrophage,Estradiol,277,0.20577617328519857,4.600051348105913,22.35463549869014,1.6296281,2.2529818571508717
+MNP_macrophage,Estriol,277,0.0,0.0,,2.276371,-inf
+MNP_macrophage,Fatty acid,277,0.007220216606498195,3.3789428162669535,72.44902634380526,0.61933917,-1.8734278367154777
+MNP_macrophage,Folic acid,277,0.0,0.0,,1.673417,-inf
+MNP_macrophage,Folinic acid,277,0.0,0.0,,1.703689,-inf
+MNP_macrophage,Glutathione,277,0.0,0.0,,1.703689,-inf
+MNP_macrophage,Glycerol,277,0.0,0.0,,2.276371,-inf
+MNP_macrophage,Glycochenodeoxycholate-3-sulfate,277,0.0,0.0,,1.703689,-inf
+MNP_macrophage,Histamine,277,0.0036101083032490976,0.0811989520108223,22.49210970699778,1.6207806,-3.190100206151345
+MNP_macrophage,Hydroxylansoprazole,277,0.0,0.0,,2.1473944,-inf
+MNP_macrophage,Hyodeoxycholic acid,277,0.0,0.0,,1.703689,-inf
+MNP_macrophage,Iron,277,0.22743682310469315,5.245150986846399,23.06201306915004,1.6512454,2.572328845024743
+MNP_macrophage,Isoursodeoxycholic acid,277,0.0,0.0,,1.703689,-inf
+MNP_macrophage,Ketone bodies,277,0.0,0.0,,1.9273064,-inf
+MNP_macrophage,L-Arginine,277,0.0,0.0,,2.629367,-inf
+MNP_macrophage,L-Carnitine,277,0.0036101083032490976,0.0811989520108223,22.49210970699778,1.5880255,-3.152764054878372
+MNP_macrophage,L-Cystine,277,0.0,0.0,,2.629367,-inf
+MNP_macrophage,L-Lactate,277,0.0,0.0,,1.9273064,-inf
+MNP_macrophage,L-Lysine,277,0.0,0.0,,2.629367,-inf
+MNP_macrophage,L-Ornithine,277,0.0,0.0,,2.629367,-inf
+MNP_macrophage,Lithocholic acid,277,0.0,0.0,,1.703689,-inf
+MNP_macrophage,N-Desmethylcitalopram,277,0.0,0.0,,2.276371,-inf
+MNP_macrophage,N-Desmethyleletriptan,277,0.0,0.0,,2.276371,-inf
+MNP_macrophage,N-Desmethyltamoxifen,277,0.0,0.0,,2.1473944,-inf
+MNP_macrophage,N-desmethylimatinib,277,0.0,0.0,,2.1473944,-inf
+MNP_macrophage,Neurotransmitter,277,0.0,0.0,,2.3788238,-inf
+MNP_macrophage,Nicotinate,277,0.16967509025270758,4.681250300116735,23.957205885410065,1.3421029,2.721053742085672
+MNP_macrophage,Norepinephrine,277,0.0036101083032490976,0.0811989520108223,22.49210970699778,1.6207806,-3.190100206151345
+MNP_macrophage,O-Deethylated candesartan,277,0.0,0.0,,2.276371,-inf
+MNP_macrophage,O-Desmethylverapamil (D-702),277,0.0,0.2765480723554875,,1.227606,-inf
+MNP_macrophage,Oxalic acid,277,0.20577617328519857,4.600051348105913,22.35463549869014,1.7270004,2.821958653699329
+MNP_macrophage,Phosphate,277,0.0,0.0,,2.82868,-inf
+MNP_macrophage,Progesterone,277,0.0,0.0,,2.276371,-inf
+MNP_macrophage,Pyruvate,277,0.0,0.0,,1.9273064,-inf
+MNP_macrophage,Sodium,277,0.0,0.15392270014832313,,1.3048248,-inf
+MNP_macrophage,Sodium_hydrogen exchange,277,0.0,0.0,,1.1277032,-inf
+MNP_macrophage,Sulfolithocholic acid,277,0.0,0.0,,1.703689,-inf
+MNP_macrophage,Taurocholic acid,277,0.1624548736462094,4.665252250847746,24.205583272420153,1.3067937,2.059934970254232
+MNP_macrophage,Testosterone,277,0.0,0.0,,2.119978,-inf
+MNP_macrophage,Trihydroxycoprostanoic acid,277,0.0,0.0,,1.703689,-inf
+MNP_macrophage,Ursocholic acid,277,0.0,0.0,,1.703689,-inf
+MNP_macrophage,Ursodeoxycholic acid,277,0.0,0.0,,1.703689,-inf
+MNP_macrophage,Ursodeoxycholic acid 3-sulfate,277,0.0,0.0,,1.703689,-inf
+MNP_macrophage,Varanic acid,277,0.0,0.0,,1.703689,-inf
+MNP_macrophage,Water,277,0.0036101083032490976,0.14771847776284797,40.91801834030889,1.759851,-3.5758839004550746
+MNP_macrophage,alpha-Ketoisovaleric acid,277,0.0,0.0,,1.9273064,-inf
+Muscularis_mucosa,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid",236,0.0,0.0,,1.7022874,-inf
+Muscularis_mucosa,17a-Ethynylestradiol,236,0.0,0.0,,2.2653277,-inf
+Muscularis_mucosa,"1b,3a,12a-Trihydroxy-5b-cholanoic acid",236,0.0,0.0,,1.7022874,-inf
+Muscularis_mucosa,2-Hydroxychlorpropamide,236,0.0,0.0,,2.2282343,-inf
+Muscularis_mucosa,25-Hydroxycholesterol,236,0.0,0.0,,2.1022792,-inf
+Muscularis_mucosa,"3',4'-Dihydrodiol",236,0.0,0.0,,2.2653277,-inf
+Muscularis_mucosa,3-Sulfodeoxycholic acid,236,0.0,0.0,,1.7022874,-inf
+Muscularis_mucosa,"3alpha,7alpha-Dihydroxycoprostanic acid",236,0.0,0.0,,1.7022874,-inf
+Muscularis_mucosa,3b-Hydroxy-5-cholenoic acid,236,0.0,0.0,,1.7022874,-inf
+Muscularis_mucosa,4'-Hydroxydiclofenac,236,0.0,0.0,,2.2653277,-inf
+Muscularis_mucosa,4-Hydroxycyclophosphamide,236,0.0,0.0,,2.2653277,-inf
+Muscularis_mucosa,4-ene-Valproic acid,236,0.0,0.0,,1.4206945,-inf
+Muscularis_mucosa,5-Hydroxyomeprazole,236,0.0,0.0,,1.5183806,-inf
+Muscularis_mucosa,8-Hydroxycarvedilol,236,0.0,0.0,,2.2653277,-inf
+Muscularis_mucosa,Acetate,236,0.00423728813559322,0.04082215424706053,9.634028402306285,1.4365345,-3.4193897197721355
+Muscularis_mucosa,Acetyl-L-Carnitine,236,0.0,0.0,,1.62517,-inf
+Muscularis_mucosa,Adenosine diphosphate ribose,236,0.00423728813559322,0.09962894696952286,23.512431484807394,2.1960988,-1.0107161260081534
+Muscularis_mucosa,Adenosine triphosphate,236,0.00423728813559322,0.05650813601180294,13.335920098785493,1.4547923,-3.340749270532571
+Muscularis_mucosa,Amiloride-sensitive sodium transport,236,0.0,0.0,,1.4524109,-inf
+Muscularis_mucosa,Anion exchange,236,0.0,0.49610491750618013,,0.6896985,-inf
+Muscularis_mucosa,Butyrate,236,0.0,0.0,,1.9089756,-inf
+Muscularis_mucosa,Chenodeoxycholic acid,236,0.0,0.0,,1.7022874,-inf
+Muscularis_mucosa,Chenodeoxycholic acid 3-sulfate,236,0.0,0.0,,1.7022874,-inf
+Muscularis_mucosa,Chloride,236,0.00847457627118644,0.2058552739343423,24.290922324252392,1.5814863,-1.910817555954033
+Muscularis_mucosa,Chloride ion,236,0.0211864406779661,0.39578800852242985,18.68119400225869,1.6329271,-0.7917063440663576
+Muscularis_mucosa,Cholesterol,236,0.0,0.0,,2.1270413,-inf
+Muscularis_mucosa,Cholic acid,236,0.0,0.0,,1.5488862,-inf
+Muscularis_mucosa,Choline,236,0.0,0.0,,1.62517,-inf
+Muscularis_mucosa,Citric acid,236,0.00423728813559322,0.04082215424706053,9.634028402306285,1.5942386,-2.7798322437780656
+Muscularis_mucosa,Coprocholic acid,236,0.0,0.0,,1.7022874,-inf
+Muscularis_mucosa,Cortisol,236,0.0,0.0,,2.1270413,-inf
+Muscularis_mucosa,Creatine,236,0.0,0.0,,1.62517,-inf
+Muscularis_mucosa,D-Lactate,236,0.0,0.0,,1.9089756,-inf
+Muscularis_mucosa,Deoxycholic acid,236,0.0,0.0,,1.7022874,-inf
+Muscularis_mucosa,Dopamine,236,0.0,0.0,,1.62517,-inf
+Muscularis_mucosa,E-3179,236,0.0,0.0,,2.2653277,-inf
+Muscularis_mucosa,Estradiol,236,0.00423728813559322,0.04082215424706053,9.634028402306285,1.4827895,-3.3488090403265227
+Muscularis_mucosa,Estriol,236,0.0,0.0,,2.2653277,-inf
+Muscularis_mucosa,Fatty acid,236,0.0,1.0819971271313829,,0.6070053,-inf
+Muscularis_mucosa,Folic acid,236,0.0,0.0,,1.674993,-inf
+Muscularis_mucosa,Folinic acid,236,0.0,0.0,,1.7022874,-inf
+Muscularis_mucosa,Glutathione,236,0.0,0.0,,1.7022874,-inf
+Muscularis_mucosa,Glycerol,236,0.0,0.0,,2.2653277,-inf
+Muscularis_mucosa,Glycochenodeoxycholate-3-sulfate,236,0.0,0.0,,1.7022874,-inf
+Muscularis_mucosa,Histamine,236,0.0,0.0,,1.62517,-inf
+Muscularis_mucosa,Hydroxylansoprazole,236,0.0,0.0,,2.1270413,-inf
+Muscularis_mucosa,Hyodeoxycholic acid,236,0.0,0.0,,1.7022874,-inf
+Muscularis_mucosa,Iron,236,0.00423728813559322,0.10119282442438832,23.881506564155643,1.51542,-3.1738519617878267
+Muscularis_mucosa,Isoursodeoxycholic acid,236,0.0,0.0,,1.7022874,-inf
+Muscularis_mucosa,Ketone bodies,236,0.0,0.0,,1.9089756,-inf
+Muscularis_mucosa,L-Arginine,236,0.0,0.0,,2.6192017,-inf
+Muscularis_mucosa,L-Carnitine,236,0.0,0.0,,1.5943549,-inf
+Muscularis_mucosa,L-Cystine,236,0.0,0.0,,2.6192017,-inf
+Muscularis_mucosa,L-Lactate,236,0.0,0.0,,1.9089756,-inf
+Muscularis_mucosa,L-Lysine,236,0.0,0.0,,2.6192017,-inf
+Muscularis_mucosa,L-Ornithine,236,0.0,0.0,,2.6192017,-inf
+Muscularis_mucosa,Lithocholic acid,236,0.0,0.0,,1.7022874,-inf
+Muscularis_mucosa,N-Desmethylcitalopram,236,0.0,0.0,,2.2653277,-inf
+Muscularis_mucosa,N-Desmethyleletriptan,236,0.0,0.0,,2.2653277,-inf
+Muscularis_mucosa,N-Desmethyltamoxifen,236,0.0,0.0,,2.1270413,-inf
+Muscularis_mucosa,N-desmethylimatinib,236,0.0,0.0,,2.1270413,-inf
+Muscularis_mucosa,Neurotransmitter,236,0.0,0.0,,2.4152422,-inf
+Muscularis_mucosa,Nicotinate,236,0.0,0.04082215424706053,,1.2102653,-inf
+Muscularis_mucosa,Norepinephrine,236,0.0,0.0,,1.62517,-inf
+Muscularis_mucosa,O-Deethylated candesartan,236,0.0,0.0,,2.2653277,-inf
+Muscularis_mucosa,O-Desmethylverapamil (D-702),236,0.0,0.16374508013047673,,1.222276,-inf
+Muscularis_mucosa,Oxalic acid,236,0.00423728813559322,0.04082215424706053,9.634028402306285,1.5942386,-2.7798322437780656
+Muscularis_mucosa,Phosphate,236,0.0,0.0,,2.8143656,-inf
+Muscularis_mucosa,Progesterone,236,0.0,0.0,,2.2653277,-inf
+Muscularis_mucosa,Pyruvate,236,0.0,0.0,,1.9089756,-inf
+Muscularis_mucosa,Sodium,236,0.00847457627118644,0.7205878303833284,58.66044867342271,1.3123652,-2.2316564133106893
+Muscularis_mucosa,Sodium_hydrogen exchange,236,0.0,0.0,,1.1394525,-inf
+Muscularis_mucosa,Sulfolithocholic acid,236,0.0,0.0,,1.7022874,-inf
+Muscularis_mucosa,Taurocholic acid,236,0.0,0.16428511222940875,,1.1402057,-inf
+Muscularis_mucosa,Testosterone,236,0.0,0.0,,2.1016996,-inf
+Muscularis_mucosa,Trihydroxycoprostanoic acid,236,0.0,0.0,,1.7022874,-inf
+Muscularis_mucosa,Ursocholic acid,236,0.0,0.0,,1.7022874,-inf
+Muscularis_mucosa,Ursodeoxycholic acid,236,0.0,0.0,,1.7022874,-inf
+Muscularis_mucosa,Ursodeoxycholic acid 3-sulfate,236,0.0,0.0,,1.7022874,-inf
+Muscularis_mucosa,Varanic acid,236,0.0,0.0,,1.7022874,-inf
+Muscularis_mucosa,Water,236,0.0,0.0,,1.7323549,-inf
+Muscularis_mucosa,alpha-Ketoisovaleric acid,236,0.0,0.0,,1.9089756,-inf
+Myofibroblast,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid",164,0.006097560975609756,0.15562764495211784,25.522933772147326,1.6873667,-2.149659152976751
+Myofibroblast,17a-Ethynylestradiol,164,0.0,0.0,,2.2836227,-inf
+Myofibroblast,"1b,3a,12a-Trihydroxy-5b-cholanoic acid",164,0.006097560975609756,0.15562764495211784,25.522933772147326,1.6873667,-2.149659152976751
+Myofibroblast,2-Hydroxychlorpropamide,164,0.0,0.0,,2.2549124,-inf
+Myofibroblast,25-Hydroxycholesterol,164,0.012195121951219513,0.3144630260369613,25.785968135030828,2.0891778,0.34219394335292375
+Myofibroblast,"3',4'-Dihydrodiol",164,0.0,0.0,,2.2836227,-inf
+Myofibroblast,3-Sulfodeoxycholic acid,164,0.006097560975609756,0.15562764495211784,25.522933772147326,1.6873667,-2.149659152976751
+Myofibroblast,"3alpha,7alpha-Dihydroxycoprostanic acid",164,0.006097560975609756,0.15562764495211784,25.522933772147326,1.6873667,-2.149659152976751
+Myofibroblast,3b-Hydroxy-5-cholenoic acid,164,0.006097560975609756,0.15562764495211784,25.522933772147326,1.6873667,-2.149659152976751
+Myofibroblast,4'-Hydroxydiclofenac,164,0.0,0.0,,2.2836227,-inf
+Myofibroblast,4-Hydroxycyclophosphamide,164,0.0,0.0,,2.2836227,-inf
+Myofibroblast,4-ene-Valproic acid,164,0.0,0.04425707992090384,,1.3739291,-inf
+Myofibroblast,5-Hydroxyomeprazole,164,0.006097560975609756,0.15562764495211784,25.522933772147326,1.4802501,-2.597972807129893
+Myofibroblast,8-Hydroxycarvedilol,164,0.0,0.0,,2.2836227,-inf
+Myofibroblast,Acetate,164,0.024390243902439025,0.2907109211440313,11.919147766905283,1.4377781,-0.8942986750283779
+Myofibroblast,Acetyl-L-Carnitine,164,0.0,0.0,,1.6120466,-inf
+Myofibroblast,Adenosine diphosphate ribose,164,0.0,0.0,,2.1852996,-inf
+Myofibroblast,Adenosine triphosphate,164,0.006097560975609756,0.058758674093032905,9.636422551257397,1.4495064,-2.8156582257888134
+Myofibroblast,Amiloride-sensitive sodium transport,164,0.0,0.0,,1.4472768,-inf
+Myofibroblast,Anion exchange,164,0.0,1.0675582241690607,,0.67876166,-inf
+Myofibroblast,Butyrate,164,0.006097560975609756,0.04425707992090384,7.258161107028229,1.9078745,-1.5550464822218755
+Myofibroblast,Chenodeoxycholic acid,164,0.006097560975609756,0.15562764495211784,25.522933772147326,1.6873667,-2.149659152976751
+Myofibroblast,Chenodeoxycholic acid 3-sulfate,164,0.006097560975609756,0.15562764495211784,25.522933772147326,1.6873667,-2.149659152976751
+Myofibroblast,Chloride,164,0.0,0.0,,1.5553786,-inf
+Myofibroblast,Chloride ion,164,0.0,0.0,,1.5880187,-inf
+Myofibroblast,Cholesterol,164,0.0,0.0,,2.1600373,-inf
+Myofibroblast,Cholic acid,164,0.006097560975609756,0.15562764495211784,25.522933772147326,1.5032345,-2.224621210657973
+Myofibroblast,Choline,164,0.0,0.0,,1.6120466,-inf
+Myofibroblast,Citric acid,164,0.018292682926829267,0.24645384122312747,13.4728099868643,1.5920293,-0.6697786983131522
+Myofibroblast,Coprocholic acid,164,0.006097560975609756,0.15562764495211784,25.522933772147326,1.6873667,-2.149659152976751
+Myofibroblast,Cortisol,164,0.0,0.0,,2.1600373,-inf
+Myofibroblast,Creatine,164,0.0,0.0,,1.6120466,-inf
+Myofibroblast,D-Lactate,164,0.006097560975609756,0.04425707992090384,7.258161107028229,1.9078745,-1.5550464822218755
+Myofibroblast,Deoxycholic acid,164,0.006097560975609756,0.15562764495211784,25.522933772147326,1.6873667,-2.149659152976751
+Myofibroblast,Dopamine,164,0.0,0.0,,1.6120466,-inf
+Myofibroblast,E-3179,164,0.0,0.0,,2.2836227,-inf
+Myofibroblast,Estradiol,164,0.018292682926829267,0.24645384122312747,13.4728099868643,1.494512,-1.238755494861609
+Myofibroblast,Estriol,164,0.0,0.0,,2.2836227,-inf
+Myofibroblast,Fatty acid,164,0.0,0.9900632780633045,,0.60619044,-inf
+Myofibroblast,Folic acid,164,0.006097560975609756,0.15562764495211784,25.522933772147326,1.6589707,-2.5790519452326643
+Myofibroblast,Folinic acid,164,0.006097560975609756,0.15562764495211784,25.522933772147326,1.6873667,-2.149659152976751
+Myofibroblast,Glutathione,164,0.006097560975609756,0.15562764495211784,25.522933772147326,1.6873667,-2.149659152976751
+Myofibroblast,Glycerol,164,0.0,0.0,,2.2836227,-inf
+Myofibroblast,Glycochenodeoxycholate-3-sulfate,164,0.006097560975609756,0.15562764495211784,25.522933772147326,1.6873667,-2.149659152976751
+Myofibroblast,Histamine,164,0.0,0.0,,1.6120466,-inf
+Myofibroblast,Hydroxylansoprazole,164,0.0,0.0,,2.1600373,-inf
+Myofibroblast,Hyodeoxycholic acid,164,0.006097560975609756,0.15562764495211784,25.522933772147326,1.6873667,-2.149659152976751
+Myofibroblast,Iron,164,0.006097560975609756,0.24133700689195925,39.57926913028132,1.4956557,-2.6487609170440694
+Myofibroblast,Isoursodeoxycholic acid,164,0.006097560975609756,0.15562764495211784,25.522933772147326,1.6873667,-2.149659152976751
+Myofibroblast,Ketone bodies,164,0.006097560975609756,0.04425707992090384,7.258161107028229,1.9078745,-1.5550464822218755
+Myofibroblast,L-Arginine,164,0.0,0.0,,2.6013691,-inf
+Myofibroblast,L-Carnitine,164,0.0,0.0,,1.5509962,-inf
+Myofibroblast,L-Cystine,164,0.0,0.0,,2.6013691,-inf
+Myofibroblast,L-Lactate,164,0.006097560975609756,0.04425707992090384,7.258161107028229,1.9078745,-1.5550464822218755
+Myofibroblast,L-Lysine,164,0.0,0.0,,2.6013691,-inf
+Myofibroblast,L-Ornithine,164,0.0,0.0,,2.6013691,-inf
+Myofibroblast,Lithocholic acid,164,0.006097560975609756,0.15562764495211784,25.522933772147326,1.6873667,-2.149659152976751
+Myofibroblast,N-Desmethylcitalopram,164,0.0,0.0,,2.2836227,-inf
+Myofibroblast,N-Desmethyleletriptan,164,0.0,0.0,,2.2836227,-inf
+Myofibroblast,N-Desmethyltamoxifen,164,0.0,0.0,,2.1600373,-inf
+Myofibroblast,N-desmethylimatinib,164,0.0,0.0,,2.1600373,-inf
+Myofibroblast,Neurotransmitter,164,0.018292682926829267,0.2914820735566664,15.934353354431096,2.3880403,1.3183472013985562
+Myofibroblast,Nicotinate,164,0.012195121951219513,0.2907109211440313,16.03022665980677,1.1850729,-1.0773449481608606
+Myofibroblast,Norepinephrine,164,0.0,0.0,,1.6120466,-inf
+Myofibroblast,O-Deethylated candesartan,164,0.0,0.0,,2.2836227,-inf
+Myofibroblast,O-Desmethylverapamil (D-702),164,0.0,0.15562764495211784,,1.1770438,-inf
+Myofibroblast,Oxalic acid,164,0.018292682926829267,0.24645384122312747,13.4728099868643,1.5920293,-0.6697786983131522
+Myofibroblast,Phosphate,164,0.0,0.0,,2.8136168,-inf
+Myofibroblast,Progesterone,164,0.0,0.0,,2.2836227,-inf
+Myofibroblast,Pyruvate,164,0.006097560975609756,0.04425707992090384,7.258161107028229,1.9078745,-1.5550464822218755
+Myofibroblast,Sodium,164,0.0,0.0,,1.2769347,-inf
+Myofibroblast,Sodium_hydrogen exchange,164,0.0,0.0,,1.1169261,-inf
+Myofibroblast,Sulfolithocholic acid,164,0.006097560975609756,0.15562764495211784,25.522933772147326,1.6873667,-2.149659152976751
+Myofibroblast,Taurocholic acid,164,0.006097560975609756,0.44633856609614914,24.702206925889868,1.1304665,-2.6757279646443384
+Myofibroblast,Testosterone,164,0.0,0.0,,2.1405492,-inf
+Myofibroblast,Trihydroxycoprostanoic acid,164,0.006097560975609756,0.15562764495211784,25.522933772147326,1.6873667,-2.149659152976751
+Myofibroblast,Ursocholic acid,164,0.006097560975609756,0.15562764495211784,25.522933772147326,1.6873667,-2.149659152976751
+Myofibroblast,Ursodeoxycholic acid,164,0.006097560975609756,0.15562764495211784,25.522933772147326,1.6873667,-2.149659152976751
+Myofibroblast,Ursodeoxycholic acid 3-sulfate,164,0.006097560975609756,0.15562764495211784,25.522933772147326,1.6873667,-2.149659152976751
+Myofibroblast,Varanic acid,164,0.006097560975609756,0.15562764495211784,25.522933772147326,1.6873667,-2.149659152976751
+Myofibroblast,Water,164,0.0,0.0,,1.7544193,-inf
+Myofibroblast,alpha-Ketoisovaleric acid,164,0.006097560975609756,0.04425707992090384,7.258161107028229,1.9078745,-1.5550464822218755
+Pericyte,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid",100,0.0,0.0,,1.6805035,-inf
+Pericyte,17a-Ethynylestradiol,100,0.0,0.0,,2.2574854,-inf
+Pericyte,"1b,3a,12a-Trihydroxy-5b-cholanoic acid",100,0.0,0.0,,1.6805035,-inf
+Pericyte,2-Hydroxychlorpropamide,100,0.0,0.0,,2.2503068,-inf
+Pericyte,25-Hydroxycholesterol,100,0.03,0.7662843170223801,25.54281056741267,2.1380394,1.6408522589174388
+Pericyte,"3',4'-Dihydrodiol",100,0.0,0.0,,2.2574854,-inf
+Pericyte,3-Sulfodeoxycholic acid,100,0.0,0.0,,1.6805035,-inf
+Pericyte,"3alpha,7alpha-Dihydroxycoprostanic acid",100,0.0,0.0,,1.6805035,-inf
+Pericyte,3b-Hydroxy-5-cholenoic acid,100,0.0,0.0,,1.6805035,-inf
+Pericyte,4'-Hydroxydiclofenac,100,0.0,0.0,,2.2574854,-inf
+Pericyte,4-Hydroxycyclophosphamide,100,0.0,0.0,,2.2574854,-inf
+Pericyte,4-ene-Valproic acid,100,0.0,0.0,,1.3924909,-inf
+Pericyte,5-Hydroxyomeprazole,100,0.0,0.0,,1.5231662,-inf
+Pericyte,8-Hydroxycarvedilol,100,0.0,0.0,,2.2574854,-inf
+Pericyte,Acetate,100,0.0,0.0,,1.4488012,-inf
+Pericyte,Acetyl-L-Carnitine,100,0.0,0.0,,1.6144084,-inf
+Pericyte,Adenosine diphosphate ribose,100,0.0,0.0,,2.2025025,-inf
+Pericyte,Adenosine triphosphate,100,0.0,0.0,,1.4445693,-inf
+Pericyte,Amiloride-sensitive sodium transport,100,0.0,0.0,,1.4505522,-inf
+Pericyte,Anion exchange,100,0.0,0.20688518810934511,,0.6780278,-inf
+Pericyte,Butyrate,100,0.0,0.0,,1.9345365,-inf
+Pericyte,Chenodeoxycholic acid,100,0.0,0.0,,1.6805035,-inf
+Pericyte,Chenodeoxycholic acid 3-sulfate,100,0.0,0.0,,1.6805035,-inf
+Pericyte,Chloride,100,0.01,0.06980606234269829,6.980606234269828,1.5718962,-1.6720306963669165
+Pericyte,Chloride ion,100,0.01,0.12217694449882402,12.217694449882401,1.619545,-1.8748475793666035
+Pericyte,Cholesterol,100,0.0,0.0,,2.1283128,-inf
+Pericyte,Cholic acid,100,0.0,0.0,,1.5501214,-inf
+Pericyte,Choline,100,0.0,0.0,,1.6144084,-inf
+Pericyte,Citric acid,100,0.0,0.0,,1.6033443,-inf
+Pericyte,Coprocholic acid,100,0.0,0.0,,1.6805035,-inf
+Pericyte,Cortisol,100,0.0,0.0,,2.1283128,-inf
+Pericyte,Creatine,100,0.0,0.0,,1.6144084,-inf
+Pericyte,D-Lactate,100,0.0,0.0,,1.9345365,-inf
+Pericyte,Deoxycholic acid,100,0.0,0.0,,1.6805035,-inf
+Pericyte,Dopamine,100,0.0,0.0,,1.6144084,-inf
+Pericyte,E-3179,100,0.0,0.0,,2.2574854,-inf
+Pericyte,Estradiol,100,0.0,0.0,,1.4952841,-inf
+Pericyte,Estriol,100,0.0,0.0,,2.2574854,-inf
+Pericyte,Fatty acid,100,0.02,5.7490843927627795,85.5486339815593,0.6149651,-0.4035418604410144
+Pericyte,Folic acid,100,0.0,0.0,,1.654903,-inf
+Pericyte,Folinic acid,100,0.0,0.0,,1.6805035,-inf
+Pericyte,Glutathione,100,0.0,0.0,,1.6805035,-inf
+Pericyte,Glycerol,100,0.0,0.0,,2.2574854,-inf
+Pericyte,Glycochenodeoxycholate-3-sulfate,100,0.0,0.0,,1.6805035,-inf
+Pericyte,Histamine,100,0.0,0.0,,1.6144084,-inf
+Pericyte,Hydroxylansoprazole,100,0.0,0.0,,2.1283128,-inf
+Pericyte,Hyodeoxycholic acid,100,0.0,0.0,,1.6805035,-inf
+Pericyte,Iron,100,0.05,0.9500318863821792,19.000637727643586,1.5356348,0.3868629926866523
+Pericyte,Isoursodeoxycholic acid,100,0.0,0.0,,1.6805035,-inf
+Pericyte,Ketone bodies,100,0.0,0.0,,1.9345365,-inf
+Pericyte,L-Arginine,100,0.0,0.0,,2.608986,-inf
+Pericyte,L-Carnitine,100,0.0,0.0,,1.5554999,-inf
+Pericyte,L-Cystine,100,0.0,0.0,,2.608986,-inf
+Pericyte,L-Lactate,100,0.0,0.0,,1.9345365,-inf
+Pericyte,L-Lysine,100,0.0,0.0,,2.608986,-inf
+Pericyte,L-Ornithine,100,0.0,0.0,,2.608986,-inf
+Pericyte,Lithocholic acid,100,0.0,0.0,,1.6805035,-inf
+Pericyte,N-Desmethylcitalopram,100,0.0,0.0,,2.2574854,-inf
+Pericyte,N-Desmethyleletriptan,100,0.0,0.0,,2.2574854,-inf
+Pericyte,N-Desmethyltamoxifen,100,0.0,0.0,,2.1283128,-inf
+Pericyte,N-desmethylimatinib,100,0.0,0.0,,2.1283128,-inf
+Pericyte,Neurotransmitter,100,0.0,0.0,,2.4103389,-inf
+Pericyte,Nicotinate,100,0.0,0.0,,1.1924282,-inf
+Pericyte,Norepinephrine,100,0.0,0.0,,1.6144084,-inf
+Pericyte,O-Deethylated candesartan,100,0.0,0.0,,2.2574854,-inf
+Pericyte,O-Desmethylverapamil (D-702),100,0.0,0.0,,1.2184905,-inf
+Pericyte,Oxalic acid,100,0.0,0.0,,1.6033443,-inf
+Pericyte,Phosphate,100,0.0,0.0,,2.7826629,-inf
+Pericyte,Progesterone,100,0.0,0.0,,2.2574854,-inf
+Pericyte,Pyruvate,100,0.0,0.0,,1.9345365,-inf
+Pericyte,Sodium,100,0.0,0.12217694449882402,,1.3081151,-inf
+Pericyte,Sodium_hydrogen exchange,100,0.0,0.0,,1.1098744,-inf
+Pericyte,Sulfolithocholic acid,100,0.0,0.0,,1.6805035,-inf
+Pericyte,Taurocholic acid,100,0.0,0.0,,1.1731349,-inf
+Pericyte,Testosterone,100,0.0,0.0,,2.1126847,-inf
+Pericyte,Trihydroxycoprostanoic acid,100,0.0,0.0,,1.6805035,-inf
+Pericyte,Ursocholic acid,100,0.0,0.0,,1.6805035,-inf
+Pericyte,Ursodeoxycholic acid,100,0.0,0.0,,1.6805035,-inf
+Pericyte,Ursodeoxycholic acid 3-sulfate,100,0.0,0.0,,1.6805035,-inf
+Pericyte,Varanic acid,100,0.0,0.0,,1.6805035,-inf
+Pericyte,Water,100,0.0,0.0,,1.7294589,-inf
+Pericyte,alpha-Ketoisovaleric acid,100,0.0,0.0,,1.9345365,-inf
+Plasma,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid",1340,0.0,0.0,,1.7047629,-inf
+Plasma,17a-Ethynylestradiol,1340,0.0007462686567164179,0.013117599164667551,17.577582880654518,2.2780032,-4.366343242486765
+Plasma,"1b,3a,12a-Trihydroxy-5b-cholanoic acid",1340,0.0,0.0,,1.7047629,-inf
+Plasma,2-Hydroxychlorpropamide,1340,0.0007462686567164179,0.013117599164667551,17.577582880654518,2.258743,-4.38871105551522
+Plasma,25-Hydroxycholesterol,1340,0.002238805970149254,0.0356170032308263,15.908928109769079,2.118261,-2.103308836652971
+Plasma,"3',4'-Dihydrodiol",1340,0.0007462686567164179,0.013117599164667551,17.577582880654518,2.2780032,-4.366343242486765
+Plasma,3-Sulfodeoxycholic acid,1340,0.0,0.0,,1.7047629,-inf
+Plasma,"3alpha,7alpha-Dihydroxycoprostanic acid",1340,0.0,0.0,,1.7047629,-inf
+Plasma,3b-Hydroxy-5-cholenoic acid,1340,0.0,0.0,,1.7047629,-inf
+Plasma,4'-Hydroxydiclofenac,1340,0.0007462686567164179,0.013117599164667551,17.577582880654518,2.2780032,-4.366343242486765
+Plasma,4-Hydroxycyclophosphamide,1340,0.0007462686567164179,0.013117599164667551,17.577582880654518,2.2780032,-4.366343242486765
+Plasma,4-ene-Valproic acid,1340,0.0,0.029485054959816022,,1.4217153,-inf
+Plasma,5-Hydroxyomeprazole,1340,0.0,0.022415728303139273,,1.5486194,-inf
+Plasma,8-Hydroxycarvedilol,1340,0.0007462686567164179,0.013117599164667551,17.577582880654518,2.2780032,-4.366343242486765
+Plasma,Acetate,1340,0.0029850746268656717,0.036736311020702295,12.306664191935269,1.4554008,-3.924763955755429
+Plasma,Acetyl-L-Carnitine,1340,0.0007462686567164179,0.008320574700664917,11.14957009889099,1.6374964,-5.464375325447292
+Plasma,Adenosine diphosphate ribose,1340,0.041791044776119404,0.7561330845469538,18.093184523087825,2.2204595,2.291264560066157
+Plasma,Adenosine triphosphate,1340,0.016417910447761194,0.24966236423205315,15.206707639588693,1.4652283,-1.3866918878785675
+Plasma,Amiloride-sensitive sodium transport,1340,0.0007462686567164179,0.00613852083976141,8.22561792528029,1.461985,-6.049337826168448
+Plasma,Anion exchange,1340,0.0,0.2270256610055006,,0.69341695,-inf
+Plasma,Butyrate,1340,0.0014925373134328358,0.010331403980004492,6.92204066660301,1.9342675,-3.5855117629489266
+Plasma,Chenodeoxycholic acid,1340,0.0,0.0,,1.7047629,-inf
+Plasma,Chenodeoxycholic acid 3-sulfate,1340,0.0,0.0,,1.7047629,-inf
+Plasma,Chloride,1340,0.002238805970149254,0.029793127293440018,13.307596857736542,1.5788147,-3.8312292912161703
+Plasma,Chloride ion,1340,0.002238805970149254,0.0463270576519279,20.69275241786113,1.6251472,-4.034046174215857
+Plasma,Cholesterol,1340,0.0,0.013117599164667551,,2.175158,-inf
+Plasma,Cholic acid,1340,0.0,0.022415728303139273,,1.5710897,-inf
+Plasma,Choline,1340,0.0007462686567164179,0.008320574700664917,11.14957009889099,1.6374964,-5.464375325447292
+Plasma,Citric acid,1340,0.0014925373134328358,0.026404907040697805,17.691287717267528,1.6100427,-4.285206479761359
+Plasma,Coprocholic acid,1340,0.0,0.0,,1.7047629,-inf
+Plasma,Cortisol,1340,0.0,0.013117599164667551,,2.175158,-inf
+Plasma,Creatine,1340,0.0007462686567164179,0.008320574700664917,11.14957009889099,1.6374964,-5.464375325447292
+Plasma,D-Lactate,1340,0.0014925373134328358,0.010331403980004492,6.92204066660301,1.9342675,-3.5855117629489266
+Plasma,Deoxycholic acid,1340,0.0,0.0,,1.7047629,-inf
+Plasma,Dopamine,1340,0.0007462686567164179,0.008320574700664917,11.14957009889099,1.6374964,-5.464375325447292
+Plasma,E-3179,1340,0.0007462686567164179,0.013117599164667551,17.577582880654518,2.2780032,-4.366343242486765
+Plasma,Estradiol,1340,0.0014925373134328358,0.039522506205365356,17.691287717267528,1.5128887,-4.854183276309817
+Plasma,Estriol,1340,0.0007462686567164179,0.013117599164667551,17.577582880654518,2.2780032,-4.366343242486765
+Plasma,Fatty acid,1340,0.0007462686567164179,1.4479648178933324,122.76062980097663,0.6139548,-5.1477029560114245
+Plasma,Folic acid,1340,0.0,0.0,,1.6769134,-inf
+Plasma,Folinic acid,1340,0.0,0.0,,1.7047629,-inf
+Plasma,Glutathione,1340,0.0,0.0,,1.7047629,-inf
+Plasma,Glycerol,1340,0.0007462686567164179,0.013117599164667551,17.577582880654518,2.2780032,-4.366343242486765
+Plasma,Glycochenodeoxycholate-3-sulfate,1340,0.0,0.0,,1.7047629,-inf
+Plasma,Histamine,1340,0.0007462686567164179,0.008320574700664917,11.14957009889099,1.6374964,-5.464375325447292
+Plasma,Hydroxylansoprazole,1340,0.0,0.013117599164667551,,2.175158,-inf
+Plasma,Hyodeoxycholic acid,1340,0.0,0.0,,1.7047629,-inf
+Plasma,Iron,1340,0.020149253731343283,0.4901220252147353,24.32457458473131,1.528859,-0.9243386956076518
+Plasma,Isoursodeoxycholic acid,1340,0.0,0.0,,1.7047629,-inf
+Plasma,Ketone bodies,1340,0.0014925373134328358,0.010331403980004492,6.92204066660301,1.9342675,-3.5855117629489266
+Plasma,L-Arginine,1340,0.0,0.0,,2.624206,-inf
+Plasma,L-Carnitine,1340,0.0007462686567164179,0.008320574700664917,11.14957009889099,1.5986863,-5.427039174174318
+Plasma,L-Cystine,1340,0.0,0.0,,2.624206,-inf
+Plasma,L-Lactate,1340,0.0014925373134328358,0.010331403980004492,6.92204066660301,1.9342675,-3.5855117629489266
+Plasma,L-Lysine,1340,0.0,0.0,,2.624206,-inf
+Plasma,L-Ornithine,1340,0.0,0.0,,2.624206,-inf
+Plasma,Lithocholic acid,1340,0.0,0.0,,1.7047629,-inf
+Plasma,N-Desmethylcitalopram,1340,0.0007462686567164179,0.013117599164667551,17.577582880654518,2.2780032,-4.366343242486765
+Plasma,N-Desmethyleletriptan,1340,0.0007462686567164179,0.013117599164667551,17.577582880654518,2.2780032,-4.366343242486765
+Plasma,N-Desmethyltamoxifen,1340,0.0,0.013117599164667551,,2.175158,-inf
+Plasma,N-desmethylimatinib,1340,0.0,0.013117599164667551,,2.175158,-inf
+Plasma,Neurotransmitter,1340,0.0014925373134328358,0.01439592698496338,9.645271079925465,2.409496,-2.297080580049651
+Plasma,Nicotinate,1340,0.0014925373134328358,0.055889962000513826,17.691287717267528,1.2164966,-4.107810228887912
+Plasma,Norepinephrine,1340,0.0007462686567164179,0.008320574700664917,11.14957009889099,1.6374964,-5.464375325447292
+Plasma,O-Deethylated candesartan,1340,0.0007462686567164179,0.013117599164667551,17.577582880654518,2.2780032,-4.366343242486765
+Plasma,O-Desmethylverapamil (D-702),1340,0.0,0.04957410248202532,,1.2426604,-inf
+Plasma,Oxalic acid,1340,0.0014925373134328358,0.026404907040697805,17.691287717267528,1.6100427,-4.285206479761359
+Plasma,Phosphate,1340,0.0,0.0,,2.8165517,-inf
+Plasma,Progesterone,1340,0.0007462686567164179,0.013117599164667551,17.577582880654518,2.2780032,-4.366343242486765
+Plasma,Pyruvate,1340,0.0014925373134328358,0.010331403980004492,6.92204066660301,1.9342675,-3.5855117629489266
+Plasma,Sodium,1340,0.0014925373134328358,0.08009689894659718,22.62579366742841,1.3223861,-4.737030649293983
+Plasma,Sodium_hydrogen exchange,1340,0.0,0.11155444014919322,,1.1431401,-inf
+Plasma,Sulfolithocholic acid,1340,0.0,0.0,,1.7047629,-inf
+Plasma,Taurocholic acid,1340,0.0014925373134328358,0.10955691007832241,17.691287717267528,1.1800898,-4.70619324537139
+Plasma,Testosterone,1340,0.0,0.013117599164667551,,2.1531808,-inf
+Plasma,Trihydroxycoprostanoic acid,1340,0.0,0.0,,1.7047629,-inf
+Plasma,Ursocholic acid,1340,0.0,0.0,,1.7047629,-inf
+Plasma,Ursodeoxycholic acid,1340,0.0,0.0,,1.7047629,-inf
+Plasma,Ursodeoxycholic acid 3-sulfate,1340,0.0,0.0,,1.7047629,-inf
+Plasma,Varanic acid,1340,0.0,0.0,,1.7047629,-inf
+Plasma,Water,1340,0.0014925373134328358,0.07343288261669523,11.418832001634371,1.7608615,-4.850159019751021
+Plasma,alpha-Ketoisovaleric acid,1340,0.0014925373134328358,0.010331403980004492,6.92204066660301,1.9342675,-3.5855117629489266
+T_CD4,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid",166,0.0,0.0,,1.7026767,-inf
+T_CD4,17a-Ethynylestradiol,166,0.012048192771084338,0.15456416116358399,12.82882537657747,2.2904336,-0.3533653884885548
+T_CD4,"1b,3a,12a-Trihydroxy-5b-cholanoic acid",166,0.0,0.0,,1.7026767,-inf
+T_CD4,2-Hydroxychlorpropamide,166,0.012048192771084338,0.15456416116358399,12.82882537657747,2.2341242,-0.37573320151700945
+T_CD4,25-Hydroxycholesterol,166,0.012048192771084338,0.21152504524148885,17.556578755043574,2.1094723,0.3247065166240829
+T_CD4,"3',4'-Dihydrodiol",166,0.012048192771084338,0.15456416116358399,12.82882537657747,2.2904336,-0.3533653884885548
+T_CD4,3-Sulfodeoxycholic acid,166,0.0,0.0,,1.7026767,-inf
+T_CD4,"3alpha,7alpha-Dihydroxycoprostanic acid",166,0.0,0.0,,1.7026767,-inf
+T_CD4,3b-Hydroxy-5-cholenoic acid,166,0.0,0.0,,1.7026767,-inf
+T_CD4,4'-Hydroxydiclofenac,166,0.012048192771084338,0.15456416116358399,12.82882537657747,2.2904336,-0.3533653884885548
+T_CD4,4-Hydroxycyclophosphamide,166,0.012048192771084338,0.15456416116358399,12.82882537657747,2.2904336,-0.3533653884885548
+T_CD4,4-ene-Valproic acid,166,0.0,0.0,,1.4097086,-inf
+T_CD4,5-Hydroxyomeprazole,166,0.0,0.7257072334591584,,1.5080472,-inf
+T_CD4,8-Hydroxycarvedilol,166,0.012048192771084338,0.15456416116358399,12.82882537657747,2.2904336,-0.3533653884885548
+T_CD4,Acetate,166,0.0,0.0,,1.4412524,-inf
+T_CD4,Acetyl-L-Carnitine,166,0.0,0.0,,1.6304426,-inf
+T_CD4,Adenosine diphosphate ribose,166,0.0,0.0,,2.189627,-inf
+T_CD4,Adenosine triphosphate,166,0.030120481927710843,0.4319575953944492,14.340992167095715,1.4573799,-0.5112175576302921
+T_CD4,Amiloride-sensitive sodium transport,166,0.0,0.0,,1.46127,-inf
+T_CD4,Anion exchange,166,0.0,0.7998114944537366,,0.6951261,-inf
+T_CD4,Butyrate,166,0.0,0.0,,1.9225181,-inf
+T_CD4,Chenodeoxycholic acid,166,0.0,0.0,,1.7026767,-inf
+T_CD4,Chenodeoxycholic acid 3-sulfate,166,0.0,0.0,,1.7026767,-inf
+T_CD4,Chloride,166,0.012048192771084338,0.23021283170673557,19.107665031659053,1.5910707,-1.4032139379391162
+T_CD4,Chloride ion,166,0.012048192771084338,0.2463684337949677,20.44858000498232,1.6258374,-1.6060308209388032
+T_CD4,Cholesterol,166,0.0,0.15456416116358399,,2.126142,-inf
+T_CD4,Cholic acid,166,0.0,0.7257072334591584,,1.5323282,-inf
+T_CD4,Choline,166,0.0,0.0,,1.6304426,-inf
+T_CD4,Citric acid,166,0.0,0.0,,1.596959,-inf
+T_CD4,Coprocholic acid,166,0.0,0.0,,1.7026767,-inf
+T_CD4,Cortisol,166,0.0,0.15456416116358399,,2.126142,-inf
+T_CD4,Creatine,166,0.0,0.0,,1.6304426,-inf
+T_CD4,D-Lactate,166,0.0,0.0,,1.9225181,-inf
+T_CD4,Deoxycholic acid,166,0.0,0.0,,1.7026767,-inf
+T_CD4,Dopamine,166,0.0,0.0,,1.6304426,-inf
+T_CD4,E-3179,166,0.012048192771084338,0.15456416116358399,12.82882537657747,2.2904336,-0.3533653884885548
+T_CD4,Estradiol,166,0.0,0.15456416116358399,,1.4767169,-inf
+T_CD4,Estriol,166,0.012048192771084338,0.15456416116358399,12.82882537657747,2.2904336,-0.3533653884885548
+T_CD4,Fatty acid,166,0.0,3.213876592473327,,0.62190104,-inf
+T_CD4,Folic acid,166,0.0,0.0,,1.6744378,-inf
+T_CD4,Folinic acid,166,0.0,0.0,,1.7026767,-inf
+T_CD4,Glutathione,166,0.0,0.0,,1.7026767,-inf
+T_CD4,Glycerol,166,0.012048192771084338,0.15456416116358399,12.82882537657747,2.2904336,-0.3533653884885548
+T_CD4,Glycochenodeoxycholate-3-sulfate,166,0.0,0.0,,1.7026767,-inf
+T_CD4,Histamine,166,0.0,0.0,,1.6304426,-inf
+T_CD4,Hydroxylansoprazole,166,0.0,0.15456416116358399,,2.126142,-inf
+T_CD4,Hyodeoxycholic acid,166,0.0,0.0,,1.7026767,-inf
+T_CD4,Iron,166,0.018072289156626505,0.43909174031142173,24.296409630565336,1.5244236,-1.081285843051754
+T_CD4,Isoursodeoxycholic acid,166,0.0,0.0,,1.7026767,-inf
+T_CD4,Ketone bodies,166,0.0,0.0,,1.9225181,-inf
+T_CD4,L-Arginine,166,0.0,0.0,,2.6300156,-inf
+T_CD4,L-Carnitine,166,0.0,0.0,,1.5897886,-inf
+T_CD4,L-Cystine,166,0.0,0.0,,2.6300156,-inf
+T_CD4,L-Lactate,166,0.0,0.0,,1.9225181,-inf
+T_CD4,L-Lysine,166,0.0,0.0,,2.6300156,-inf
+T_CD4,L-Ornithine,166,0.0,0.0,,2.6300156,-inf
+T_CD4,Lithocholic acid,166,0.0,0.0,,1.7026767,-inf
+T_CD4,N-Desmethylcitalopram,166,0.012048192771084338,0.15456416116358399,12.82882537657747,2.2904336,-0.3533653884885548
+T_CD4,N-Desmethyleletriptan,166,0.012048192771084338,0.15456416116358399,12.82882537657747,2.2904336,-0.3533653884885548
+T_CD4,N-Desmethyltamoxifen,166,0.0,0.15456416116358399,,2.126142,-inf
+T_CD4,N-desmethylimatinib,166,0.0,0.15456416116358399,,2.126142,-inf
+T_CD4,Neurotransmitter,166,0.0,0.0,,2.4130301,-inf
+T_CD4,Nicotinate,166,0.0,0.0,,1.202053,-inf
+T_CD4,Norepinephrine,166,0.0,0.0,,1.6304426,-inf
+T_CD4,O-Deethylated candesartan,166,0.012048192771084338,0.15456416116358399,12.82882537657747,2.2904336,-0.3533653884885548
+T_CD4,O-Desmethylverapamil (D-702),166,0.012048192771084338,1.682429329683473,104.67088365908626,1.2206578,-0.8847468490048668
+T_CD4,Oxalic acid,166,0.0,0.0,,1.596959,-inf
+T_CD4,Phosphate,166,0.0,0.0,,2.8108718,-inf
+T_CD4,Progesterone,166,0.012048192771084338,0.15456416116358399,12.82882537657747,2.2904336,-0.3533653884885548
+T_CD4,Pyruvate,166,0.0,0.0,,1.9225181,-inf
+T_CD4,Sodium,166,0.0,0.2463684337949677,,1.3208607,-inf
+T_CD4,Sodium_hydrogen exchange,166,0.0,0.2764997985825801,,1.1522315,-inf
+T_CD4,Sulfolithocholic acid,166,0.0,0.0,,1.7026767,-inf
+T_CD4,Taurocholic acid,166,0.0,0.9714600530782378,,1.1373553,-inf
+T_CD4,Testosterone,166,0.0,0.15456416116358399,,2.10394,-inf
+T_CD4,Trihydroxycoprostanoic acid,166,0.0,0.0,,1.7026767,-inf
+T_CD4,Ursocholic acid,166,0.0,0.0,,1.7026767,-inf
+T_CD4,Ursodeoxycholic acid,166,0.0,0.0,,1.7026767,-inf
+T_CD4,Ursodeoxycholic acid 3-sulfate,166,0.0,0.0,,1.7026767,-inf
+T_CD4,Varanic acid,166,0.0,0.0,,1.7026767,-inf
+T_CD4,Water,166,0.006024096385542169,0.37212169328417216,61.77220108517258,1.7835039,-2.837181165752811
+T_CD4,alpha-Ketoisovaleric acid,166,0.0,0.0,,1.9225181,-inf
+T_CD8,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid",198,0.005050505050505051,0.07592314158605543,15.032782034038974,1.6936496,-2.4214637684382767
+T_CD8,17a-Ethynylestradiol,198,0.005050505050505051,0.03129899232588512,6.197200480525254,2.2782772,-1.6076825772212398
+T_CD8,"1b,3a,12a-Trihydroxy-5b-cholanoic acid",198,0.005050505050505051,0.07592314158605543,15.032782034038974,1.6936496,-2.4214637684382767
+T_CD8,2-Hydroxychlorpropamide,198,0.005050505050505051,0.03129899232588512,6.197200480525254,2.2166097,-1.6300503902496941
+T_CD8,25-Hydroxycholesterol,198,0.005050505050505051,0.07595140752053482,15.038378689065894,2.1199784,-0.9296106721086019
+T_CD8,"3',4'-Dihydrodiol",198,0.005050505050505051,0.03129899232588512,6.197200480525254,2.2782772,-1.6076825772212398
+T_CD8,3-Sulfodeoxycholic acid,198,0.005050505050505051,0.07592314158605543,15.032782034038974,1.6936496,-2.4214637684382767
+T_CD8,"3alpha,7alpha-Dihydroxycoprostanic acid",198,0.005050505050505051,0.07592314158605543,15.032782034038974,1.6936496,-2.4214637684382767
+T_CD8,3b-Hydroxy-5-cholenoic acid,198,0.005050505050505051,0.07592314158605543,15.032782034038974,1.6936496,-2.4214637684382767
+T_CD8,4'-Hydroxydiclofenac,198,0.005050505050505051,0.03129899232588512,6.197200480525254,2.2782772,-1.6076825772212398
+T_CD8,4-Hydroxycyclophosphamide,198,0.005050505050505051,0.03129899232588512,6.197200480525254,2.2782772,-1.6076825772212398
+T_CD8,4-ene-Valproic acid,198,0.0,0.7509423231271548,,1.3429536,-inf
+T_CD8,5-Hydroxyomeprazole,198,0.010101010101010102,1.1513161608161204,36.64849903011964,1.4630932,-1.869777422591419
+T_CD8,8-Hydroxycarvedilol,198,0.005050505050505051,0.03129899232588512,6.197200480525254,2.2782772,-1.6076825772212398
+T_CD8,Acetate,198,0.020202020202020204,0.4223497481305244,20.90631253246096,1.4576691,-1.1661032904899038
+T_CD8,Acetyl-L-Carnitine,198,0.020202020202020204,0.25537646052726337,12.641134796099536,1.6328019,-0.7057146601817663
+T_CD8,Adenosine diphosphate ribose,198,0.010101010101010102,0.23342048321447265,23.108627838232792,2.2020931,0.24257030327407822
+T_CD8,Adenosine triphosphate,198,0.06060606060606061,1.0726537793741153,17.698787359672902,1.482132,0.49749965947081687
+T_CD8,Amiloride-sensitive sodium transport,198,0.010101010101010102,0.22342178909113689,22.11875712002255,1.469275,-2.2906771609029226
+T_CD8,Anion exchange,198,0.025252525252525252,8.976086323815123,163.63516578444586,0.7246394,-1.7594602319532926
+T_CD8,Butyrate,198,0.015151515151515152,0.28259323736591396,18.65115366615032,1.9312677,-0.2418885969622451
+T_CD8,Chenodeoxycholic acid,198,0.005050505050505051,0.07592314158605543,15.032782034038974,1.6936496,-2.4214637684382767
+T_CD8,Chenodeoxycholic acid 3-sulfate,198,0.005050505050505051,0.07592314158605543,15.032782034038974,1.6936496,-2.4214637684382767
+T_CD8,Chloride,198,0.005050505050505051,0.03303497109834208,6.540924277471731,1.5636096,-2.657531126671801
+T_CD8,Chloride ion,198,0.025252525252525252,0.32984505449635976,13.061864158055846,1.6285675,-0.538419914784126
+T_CD8,Cholesterol,198,0.0,0.03129899232588512,,2.1004622,-inf
+T_CD8,Cholic acid,198,0.015151515151515152,1.1513161608161204,46.33441897932653,1.4888195,-0.9114633253983425
+T_CD8,Choline,198,0.020202020202020204,0.25537646052726337,12.641134796099536,1.6328019,-0.7057146601817663
+T_CD8,Citric acid,198,0.010101010101010102,0.13975651076461046,13.835894565696435,1.6064321,-1.526545814495834
+T_CD8,Coprocholic acid,198,0.005050505050505051,0.07592314158605543,15.032782034038974,1.6936496,-2.4214637684382767
+T_CD8,Cortisol,198,0.0,0.03129899232588512,,2.1004622,-inf
+T_CD8,Creatine,198,0.020202020202020204,0.25537646052726337,12.641134796099536,1.6328019,-0.7057146601817663
+T_CD8,D-Lactate,198,0.015151515151515152,0.28259323736591396,18.65115366615032,1.9312677,-0.2418885969622451
+T_CD8,Deoxycholic acid,198,0.005050505050505051,0.07592314158605543,15.032782034038974,1.6936496,-2.4214637684382767
+T_CD8,Dopamine,198,0.020202020202020204,0.25537646052726337,12.641134796099536,1.6328019,-0.7057146601817663
+T_CD8,E-3179,198,0.005050505050505051,0.03129899232588512,6.197200480525254,2.2782772,-1.6076825772212398
+T_CD8,Estradiol,198,0.005050505050505051,0.17105550309049558,21.64291727304476,1.479902,-3.095522611044291
+T_CD8,Estriol,198,0.005050505050505051,0.03129899232588512,6.197200480525254,2.2782772,-1.6076825772212398
+T_CD8,Fatty acid,198,0.0,6.624793703198884,,0.6186395,-inf
+T_CD8,Folic acid,198,0.005050505050505051,0.07592314158605543,15.032782034038974,1.6645312,-2.8508565606941905
+T_CD8,Folinic acid,198,0.005050505050505051,0.07592314158605543,15.032782034038974,1.6936496,-2.4214637684382767
+T_CD8,Glutathione,198,0.005050505050505051,0.07592314158605543,15.032782034038974,1.6936496,-2.4214637684382767
+T_CD8,Glycerol,198,0.005050505050505051,0.03129899232588512,6.197200480525254,2.2782772,-1.6076825772212398
+T_CD8,Glycochenodeoxycholate-3-sulfate,198,0.005050505050505051,0.07592314158605543,15.032782034038974,1.6936496,-2.4214637684382767
+T_CD8,Histamine,198,0.020202020202020204,0.25537646052726337,12.641134796099536,1.6328019,-0.7057146601817663
+T_CD8,Hydroxylansoprazole,198,0.0,0.03129899232588512,,2.1004622,-inf
+T_CD8,Hyodeoxycholic acid,198,0.005050505050505051,0.07592314158605543,15.032782034038974,1.6936496,-2.4214637684382767
+T_CD8,Iron,198,0.015151515151515152,0.2879550932981397,19.00503615767722,1.5184462,-1.335603031784439
+T_CD8,Isoursodeoxycholic acid,198,0.005050505050505051,0.07592314158605543,15.032782034038974,1.6936496,-2.4214637684382767
+T_CD8,Ketone bodies,198,0.015151515151515152,0.28259323736591396,18.65115366615032,1.9312677,-0.2418885969622451
+T_CD8,L-Arginine,198,0.0,0.0,,2.633766,-inf
+T_CD8,L-Carnitine,198,0.020202020202020204,0.25537646052726337,12.641134796099536,1.5376657,-0.6683785089087935
+T_CD8,L-Cystine,198,0.0,0.0,,2.633766,-inf
+T_CD8,L-Lactate,198,0.015151515151515152,0.28259323736591396,18.65115366615032,1.9312677,-0.2418885969622451
+T_CD8,L-Lysine,198,0.0,0.0,,2.633766,-inf
+T_CD8,L-Ornithine,198,0.0,0.0,,2.633766,-inf
+T_CD8,Lithocholic acid,198,0.005050505050505051,0.07592314158605543,15.032782034038974,1.6936496,-2.4214637684382767
+T_CD8,N-Desmethylcitalopram,198,0.005050505050505051,0.03129899232588512,6.197200480525254,2.2782772,-1.6076825772212398
+T_CD8,N-Desmethyleletriptan,198,0.005050505050505051,0.03129899232588512,6.197200480525254,2.2782772,-1.6076825772212398
+T_CD8,N-Desmethyltamoxifen,198,0.0,0.03129899232588512,,2.1004622,-inf
+T_CD8,N-desmethylimatinib,198,0.0,0.03129899232588512,,2.1004622,-inf
+T_CD8,Neurotransmitter,198,0.005050505050505051,0.06027072292192426,11.933603138541002,2.4022005,-0.5384199147841258
+T_CD8,Nicotinate,198,0.005050505050505051,0.8906988338917653,21.64291727304476,1.1642597,-2.3491495636223867
+T_CD8,Norepinephrine,198,0.020202020202020204,0.25537646052726337,12.641134796099536,1.6328019,-0.7057146601817663
+T_CD8,O-Deethylated candesartan,198,0.005050505050505051,0.03129899232588512,6.197200480525254,2.2782772,-1.6076825772212398
+T_CD8,O-Desmethylverapamil (D-702),198,0.005050505050505051,2.469486693910829,93.75693178031884,1.1097947,-2.1390640377375516
+T_CD8,Oxalic acid,198,0.010101010101010102,0.13975651076461046,13.835894565696435,1.6064321,-1.526545814495834
+T_CD8,Phosphate,198,0.0,0.0,,2.8136246,-inf
+T_CD8,Progesterone,198,0.005050505050505051,0.03129899232588512,6.197200480525254,2.2782772,-1.6076825772212398
+T_CD8,Pyruvate,198,0.015151515151515152,0.28259323736591396,18.65115366615032,1.9312677,-0.2418885969622451
+T_CD8,Sodium,198,0.020202020202020204,0.7445053364244621,22.13131644493224,1.2945161,-0.9783699840284574
+T_CD8,Sodium_hydrogen exchange,198,0.0,1.3635546197757256,,1.1030391,-inf
+T_CD8,Sulfolithocholic acid,198,0.005050505050505051,0.07592314158605543,15.032782034038974,1.6936496,-2.4214637684382767
+T_CD8,Taurocholic acid,198,0.010101010101010102,2.7226146364961856,53.04829758632957,1.101589,-1.9475325801058643
+T_CD8,Testosterone,198,0.0,0.09223514872488683,,2.0740511,-inf
+T_CD8,Trihydroxycoprostanoic acid,198,0.005050505050505051,0.07592314158605543,15.032782034038974,1.6936496,-2.4214637684382767
+T_CD8,Ursocholic acid,198,0.005050505050505051,0.07592314158605543,15.032782034038974,1.6936496,-2.4214637684382767
+T_CD8,Ursodeoxycholic acid,198,0.005050505050505051,0.07592314158605543,15.032782034038974,1.6936496,-2.4214637684382767
+T_CD8,Ursodeoxycholic acid 3-sulfate,198,0.005050505050505051,0.07592314158605543,15.032782034038974,1.6936496,-2.4214637684382767
+T_CD8,Varanic acid,198,0.005050505050505051,0.07592314158605543,15.032782034038974,1.6936496,-2.4214637684382767
+T_CD8,Water,198,0.005050505050505051,0.1921416655944205,11.805511099133241,1.7233666,-3.091498354485496
+T_CD8,alpha-Ketoisovaleric acid,198,0.015151515151515152,0.28259323736591396,18.65115366615032,1.9312677,-0.2418885969622451
+T_gd_and_ambiguous,"(3a,5b,7a)-23-Carboxy-7-hydroxy-24-norcholan-3-yl-b-D-Glucopyranosiduronic acid",30,0.0,0.0,,1.6698012,-inf
+T_gd_and_ambiguous,17a-Ethynylestradiol,30,0.0,0.0,,2.2963345,-inf
+T_gd_and_ambiguous,"1b,3a,12a-Trihydroxy-5b-cholanoic acid",30,0.0,0.0,,1.6698012,-inf
+T_gd_and_ambiguous,2-Hydroxychlorpropamide,30,0.0,0.0,,2.2756746,-inf
+T_gd_and_ambiguous,25-Hydroxycholesterol,30,0.0,0.0,,2.065845,-inf
+T_gd_and_ambiguous,"3',4'-Dihydrodiol",30,0.0,0.0,,2.2963345,-inf
+T_gd_and_ambiguous,3-Sulfodeoxycholic acid,30,0.0,0.0,,1.6698012,-inf
+T_gd_and_ambiguous,"3alpha,7alpha-Dihydroxycoprostanic acid",30,0.0,0.0,,1.6698012,-inf
+T_gd_and_ambiguous,3b-Hydroxy-5-cholenoic acid,30,0.0,0.0,,1.6698012,-inf
+T_gd_and_ambiguous,4'-Hydroxydiclofenac,30,0.0,0.0,,2.2963345,-inf
+T_gd_and_ambiguous,4-Hydroxycyclophosphamide,30,0.0,0.0,,2.2963345,-inf
+T_gd_and_ambiguous,4-ene-Valproic acid,30,0.0,0.5091878501852534,,1.3488272,-inf
+T_gd_and_ambiguous,5-Hydroxyomeprazole,30,0.0,0.0,,1.5129436,-inf
+T_gd_and_ambiguous,8-Hydroxycarvedilol,30,0.0,0.0,,2.2963345,-inf
+T_gd_and_ambiguous,Acetate,30,0.0,0.0,,1.4505448,-inf
+T_gd_and_ambiguous,Acetyl-L-Carnitine,30,0.03333333333333333,0.5091878501852534,15.275635505557602,1.6098808,0.016751364289324517
+T_gd_and_ambiguous,Adenosine diphosphate ribose,30,0.0,0.0,,2.2228577,-inf
+T_gd_and_ambiguous,Adenosine triphosphate,30,0.0,0.0,,1.4673499,-inf
+T_gd_and_ambiguous,Amiloride-sensitive sodium transport,30,0.0,0.0,,1.4213964,-inf
+T_gd_and_ambiguous,Anion exchange,30,0.0,0.0,,0.69345754,-inf
+T_gd_and_ambiguous,Butyrate,30,0.0,0.0,,1.9298663,-inf
+T_gd_and_ambiguous,Chenodeoxycholic acid,30,0.0,0.0,,1.6698012,-inf
+T_gd_and_ambiguous,Chenodeoxycholic acid 3-sulfate,30,0.0,0.0,,1.6698012,-inf
+T_gd_and_ambiguous,Chloride,30,0.0,0.0,,1.5575542,-inf
+T_gd_and_ambiguous,Chloride ion,30,0.0,0.0,,1.574827,-inf
+T_gd_and_ambiguous,Cholesterol,30,0.0,0.0,,2.2028286,-inf
+T_gd_and_ambiguous,Cholic acid,30,0.0,0.0,,1.530638,-inf
+T_gd_and_ambiguous,Choline,30,0.03333333333333333,0.5091878501852534,15.275635505557602,1.6098808,0.016751364289324517
+T_gd_and_ambiguous,Citric acid,30,0.0,0.0,,1.6019522,-inf
+T_gd_and_ambiguous,Coprocholic acid,30,0.0,0.0,,1.6698012,-inf
+T_gd_and_ambiguous,Cortisol,30,0.0,0.0,,2.2028286,-inf
+T_gd_and_ambiguous,Creatine,30,0.03333333333333333,0.5091878501852534,15.275635505557602,1.6098808,0.016751364289324517
+T_gd_and_ambiguous,D-Lactate,30,0.0,0.0,,1.9298663,-inf
+T_gd_and_ambiguous,Deoxycholic acid,30,0.0,0.0,,1.6698012,-inf
+T_gd_and_ambiguous,Dopamine,30,0.03333333333333333,0.5091878501852534,15.275635505557602,1.6098808,0.016751364289324517
+T_gd_and_ambiguous,E-3179,30,0.0,0.0,,2.2963345,-inf
+T_gd_and_ambiguous,Estradiol,30,0.0,0.0,,1.5168705,-inf
+T_gd_and_ambiguous,Estriol,30,0.0,0.0,,2.2963345,-inf
+T_gd_and_ambiguous,Fatty acid,30,0.0,1.7065009188125666,,0.6165802,-inf
+T_gd_and_ambiguous,Folic acid,30,0.0,0.0,,1.6393392,-inf
+T_gd_and_ambiguous,Folinic acid,30,0.0,0.0,,1.6698012,-inf
+T_gd_and_ambiguous,Glutathione,30,0.0,0.0,,1.6698012,-inf
+T_gd_and_ambiguous,Glycerol,30,0.0,0.0,,2.2963345,-inf
+T_gd_and_ambiguous,Glycochenodeoxycholate-3-sulfate,30,0.0,0.0,,1.6698012,-inf
+T_gd_and_ambiguous,Histamine,30,0.03333333333333333,0.5091878501852534,15.275635505557602,1.6098808,0.016751364289324517
+T_gd_and_ambiguous,Hydroxylansoprazole,30,0.0,0.0,,2.2028286,-inf
+T_gd_and_ambiguous,Hyodeoxycholic acid,30,0.0,0.0,,1.6698012,-inf
+T_gd_and_ambiguous,Iron,30,0.0,0.0,,1.4828143,-inf
+T_gd_and_ambiguous,Isoursodeoxycholic acid,30,0.0,0.0,,1.6698012,-inf
+T_gd_and_ambiguous,Ketone bodies,30,0.0,0.0,,1.9298663,-inf
+T_gd_and_ambiguous,L-Arginine,30,0.0,0.0,,2.5941093,-inf
+T_gd_and_ambiguous,L-Carnitine,30,0.03333333333333333,0.5091878501852534,15.275635505557602,1.5266728,0.05408751556229752
+T_gd_and_ambiguous,L-Cystine,30,0.0,0.0,,2.5941093,-inf
+T_gd_and_ambiguous,L-Lactate,30,0.0,0.0,,1.9298663,-inf
+T_gd_and_ambiguous,L-Lysine,30,0.0,0.0,,2.5941093,-inf
+T_gd_and_ambiguous,L-Ornithine,30,0.0,0.0,,2.5941093,-inf
+T_gd_and_ambiguous,Lithocholic acid,30,0.0,0.0,,1.6698012,-inf
+T_gd_and_ambiguous,N-Desmethylcitalopram,30,0.0,0.0,,2.2963345,-inf
+T_gd_and_ambiguous,N-Desmethyleletriptan,30,0.0,0.0,,2.2963345,-inf
+T_gd_and_ambiguous,N-Desmethyltamoxifen,30,0.0,0.0,,2.2028286,-inf
+T_gd_and_ambiguous,N-desmethylimatinib,30,0.0,0.0,,2.2028286,-inf
+T_gd_and_ambiguous,Neurotransmitter,30,0.0,0.0,,2.348693,-inf
+T_gd_and_ambiguous,Nicotinate,30,0.0,0.5091878501852534,,1.1695267,-inf
+T_gd_and_ambiguous,Norepinephrine,30,0.03333333333333333,0.5091878501852534,15.275635505557602,1.6098808,0.016751364289324517
+T_gd_and_ambiguous,O-Deethylated candesartan,30,0.0,0.0,,2.2963345,-inf
+T_gd_and_ambiguous,O-Desmethylverapamil (D-702),30,0.0,1.6405634649943674,,1.1506383,-inf
+T_gd_and_ambiguous,Oxalic acid,30,0.0,0.0,,1.6019522,-inf
+T_gd_and_ambiguous,Phosphate,30,0.0,0.0,,2.751264,-inf
+T_gd_and_ambiguous,Progesterone,30,0.0,0.0,,2.2963345,-inf
+T_gd_and_ambiguous,Pyruvate,30,0.0,0.0,,1.9298663,-inf
+T_gd_and_ambiguous,Sodium,30,0.03333333333333333,0.5091878501852534,15.275635505557602,1.2360227,-0.2559039595573664
+T_gd_and_ambiguous,Sodium_hydrogen exchange,30,0.0,0.0,,1.1311724,-inf
+T_gd_and_ambiguous,Sulfolithocholic acid,30,0.0,0.0,,1.6698012,-inf
+T_gd_and_ambiguous,Taurocholic acid,30,0.0,1.037598078981076,,1.1602887,-inf
+T_gd_and_ambiguous,Testosterone,30,0.0,0.0,,2.1912692,-inf
+T_gd_and_ambiguous,Trihydroxycoprostanoic acid,30,0.0,0.0,,1.6698012,-inf
+T_gd_and_ambiguous,Ursocholic acid,30,0.0,0.0,,1.6698012,-inf
+T_gd_and_ambiguous,Ursodeoxycholic acid,30,0.0,0.0,,1.6698012,-inf
+T_gd_and_ambiguous,Ursodeoxycholic acid 3-sulfate,30,0.0,0.0,,1.6698012,-inf
+T_gd_and_ambiguous,Varanic acid,30,0.0,0.0,,1.6698012,-inf
+T_gd_and_ambiguous,Water,30,0.03333333333333333,1.0070400359160507,30.21120107748152,1.6852741,-0.3690323300144052
+T_gd_and_ambiguous,alpha-Ketoisovaleric acid,30,0.0,0.0,,1.9298663,-inf
