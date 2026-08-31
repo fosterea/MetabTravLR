@@ -100,10 +100,11 @@ DATASETS = {
 # annotation is both the cell_type and the single tier (-> metabtravlr_outputs/<annot>/);
 # these slices are small, so 8 cores is plenty.
 _ALEXI_ANNOT = '25_06_11_ICI_5K_Coarse_annotations'
+_ALEXI_SUB_ANNOT = '24_11_12_ICI_5K_Fine_annotations'
 for _slice in ('Slice_1', 'Slice_2', 'Slice_3', 'Slice_4'):
     DATASETS[f'13473_HS4_UC-{_slice}'] = {
         'cell_type_src': _ALEXI_ANNOT,
-        'tiers': [_ALEXI_ANNOT],
+        'tiers': [_ALEXI_ANNOT, _ALEXI_SUB_ANNOT],
         'slurm': {'cpus_per_task': 8},
     }
 

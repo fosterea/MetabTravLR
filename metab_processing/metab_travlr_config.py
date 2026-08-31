@@ -48,6 +48,9 @@ GENE_SETS = {
     'downstream_outcomes': [
         'MAPK14', 'MAPK11', 'MAPK12', 'SGK1', # These get phosphorylated
         'RORC' # Th17 TF
+        'IL23R', 'IL17A', 'IL17F', 'CSF2',
+
+        'NDRG1', 'FN1', 'COL1A1',
     ]
 }
 
