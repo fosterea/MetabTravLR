@@ -822,6 +822,69 @@ class TestArtifactsAgainstRealBetaAnalysis(unittest.TestCase):
             self.assertEqual(out.obsm["beta_CD4"].shape, (4, 1))
             self.assertEqual(list(out.uns["beta_modulators"]["CD4"]), ["ABCA1@ABCA1"])
 
+    def test_artifacts_stage_writes_x_metab_for_real_metabolites(self):
+        """End-to-end x-half wiring: a real metabolite selection + processed `_adata.h5ad`
+        (imputed_count + spatial) + `run_params.json` make the artifacts stage attach
+        `x_metab` (the communication scores) alongside the betas, matching a direct
+        `compute_metab_x` on the processed adata. Guards the runner<->beta_analysis signature
+        and the compute-once/reindex path. Needs torch (real diffusion)."""
+        import anndata as ad
+        import numpy as np
+        import pandas as pd
+
+        from metab_processing.SpaceTravLR import beta_analysis
+
+        with tempfile.TemporaryDirectory() as tmp:
+            paths = dataset_paths(DATASET, tmp)
+            cfg = get_config(DATASET)
+            cells = [f"c{i}" for i in range(6)]
+            genes = ["ABCA1", "ATP7A"]  # export, import transporters
+
+            rng = np.random.default_rng(0)
+            # Raw display adata (the file _load_adata reads) -- no imputed_count needed here.
+            raw = ad.AnnData(rng.random((6, 2)).astype("float32"))
+            raw.obs_names = cells
+            raw.var_names = genes
+            raw.obs[cfg["cell_type_src"]] = ["0"] * 3 + ["1"] * 3
+            raw.obs["Tier1"] = ["T Cell"] * 3 + ["Tumor"] * 3
+            paths["dataset_dir"].mkdir(parents=True, exist_ok=True)
+            raw.write_h5ad(paths["adata"])
+
+            # Processed adata the diffusion reads: imputed_count layer + spatial + same cells.
+            proc = raw.copy()
+            proc.layers["imputed_count"] = rng.random((6, 2)).astype("float32")
+            proc.obsm["spatial"] = rng.uniform(0, 400, size=(6, 2))
+            paths["input_data"].mkdir(parents=True, exist_ok=True)
+            proc.write_h5ad(paths["input_data"] / "_adata.h5ad")
+
+            paths["selection_yaml"].parent.mkdir(parents=True, exist_ok=True)
+            paths["selection_yaml"].write_text(
+                "metabolites:\n- name: Copper\n  gene_pairs:\n  - [ABCA1, ATP7A]\n")
+
+            paths["betadata"].mkdir(parents=True, exist_ok=True)
+            # metab@Copper is orientation-expanded to two pairs -> one summed column.
+            pd.DataFrame({"beta_metab@Copper": np.arange(6, dtype="float32"),
+                          "beta_STAT1": np.full(6, 0.5, dtype="float32")},
+                         index=cells).to_parquet(paths["betadata"] / "CD4_betadata.parquet")
+            (paths["betadata"] / "run_params.json").write_text(
+                '{"radius": 100, "contact_distance": 30, "scale_factor": 100, '
+                '"layer": "imputed_count"}')
+
+            run_spacetravlr.run_dataset(DATASET, stages=["artifacts"], data_dir=tmp)
+
+            out = ad.read_h5ad(paths["beta_adata"])
+            self.assertIn("x_metab", out.obsm)
+            self.assertEqual(list(out.uns["x_metab_modulators"]), ["metab@Copper"])
+            self.assertEqual(out.obsm["x_metab"].shape, (6, 1))
+
+            from metab_processing.SpaceTravLR.metab_loader import load_metabolites
+            metabolites, _ = load_metabolites(paths["selection_yaml"], var_names=genes)
+            expected = beta_analysis.compute_metab_x(
+                proc.copy(), metabolites, radius=100, contact_distance=30,
+                scale_factor=100, layer="imputed_count")
+            np.testing.assert_allclose(
+                out.obsm["x_metab"][:, 0], expected["metab@Copper"].values, rtol=1e-6, atol=1e-6)
+
 
 class TestRunSpacetravlrCli(unittest.TestCase):
     def test_stages_are_canonically_ordered_regardless_of_flag_order(self):

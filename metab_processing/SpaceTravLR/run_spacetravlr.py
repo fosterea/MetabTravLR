@@ -35,6 +35,7 @@ for _p in (str(_root), str(_root / "src")):
 
 import argparse
 import contextlib
+import json
 import os
 import re
 import shutil
@@ -422,12 +423,45 @@ def run_dataset(dataset, stages=STAGES, overwrite=False, clear_betadata=False,
             genes=focus_genes, plot=True)
         _log('wrote histograms.csv + histograms.png')
 
-        # Per-cell betas onto the full adata. group=None keeps every modulator group
-        # (tf + lr + ltf + metab), which is what makes this file big -- shapes below.
-        beta_analysis.betas_to_adata(
-            adata, str(paths['betadata']), genes=focus_genes, group=cfg['beta_group'])
+        # Per-cell betas onto the full adata (group=None keeps every modulator group --
+        # tf + lr + ltf + metab -- which is what makes this file big; shapes below), PLUS the
+        # shared metabolite communication-score matrix `x_metab` so the file also carries the `x`
+        # each metab beta multiplies (for a downstream `beta * x`). The diffusion behind `x_metab`
+        # must run over the exact TRAINING cells with the training layer/params, so it reads the
+        # processed `_adata.h5ad` (the raw display adata lacks `imputed_count`); metab defs and the
+        # diffusion params come from the same places the fit stage used, so artifacts stands alone.
+        # The x half needs the metabolite defs, the run's diffusion params, and the PROCESSED
+        # `_adata.h5ad` (training layer + spatial + exact training cells). After a real setup+fit
+        # all three exist; if any is missing (a partial/standalone artifacts run) we skip x with a
+        # note and still write the betas.
+        metabolites, x_adata, x_params = {}, None, {}
+        processed = paths['input_data'] / '_adata.h5ad'
+        run_params_path = paths['betadata'] / 'run_params.json'
+        if processed.is_file():
+            metabolites, _selection = load_metabolites(
+                paths['selection_yaml'], var_names=_processed_var_names(paths))
+        if metabolites and run_params_path.is_file():
+            run_params = json.loads(run_params_path.read_text())
+            x_adata = sc.read_h5ad(processed)
+            x_params = dict(
+                radius=run_params['radius'],
+                contact_distance=run_params.get('contact_distance', 50),
+                scale_factor=run_params.get('scale_factor', 100),
+                layer=run_params.get('layer', 'imputed_count'),
+            )
+        elif metabolites:
+            _log('NOTE: metabolites configured but input_data/_adata.h5ad or '
+                 'betadata/run_params.json missing; skipping x_metab (betas still written)')
+            metabolites = {}
+        beta_analysis.betas_and_metab_x_to_adata(
+            adata, str(paths['betadata']), metabolites, x_adata=x_adata,
+            genes=focus_genes, group=cfg['beta_group'], **x_params)
+        del x_adata
         for gene, mods in adata.uns.get('beta_modulators', {}).items():
             _log(f'  beta_{gene}: {adata.obsm[f"beta_{gene}"].shape} ({len(mods)} modulators)')
+        if 'x_metab' in adata.obsm:
+            _log(f'  x_metab: {adata.obsm["x_metab"].shape} '
+                 f'({len(adata.uns["x_metab_modulators"])} metabolites)')
         _log(f'writing {paths["beta_adata"]}')
         adata.write_h5ad(paths['beta_adata'])
         _log(f'wrote {paths["beta_adata"]} '
