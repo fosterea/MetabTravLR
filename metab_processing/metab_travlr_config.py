@@ -47,7 +47,7 @@ GENE_SETS = {
     'sodium_handlers': ['SLC9A3', 'SCNN1A', 'SCNN1G', 'SLC5A1', 'ATP1A1'],
     'downstream_outcomes': [
         'MAPK14', 'MAPK11', 'MAPK12', 'SGK1', # These get phosphorylated
-        'RORC' # Th17 TF
+        'RORC', # Th17 TF
         'IL23R', 'IL17A', 'IL17F', 'CSF2',
 
         'NDRG1', 'FN1', 'COL1A1',
