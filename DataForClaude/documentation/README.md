@@ -29,10 +29,16 @@ memory; the root `../../CLAUDE.md` points here).
   memory bottleneck: the **per-cell "neighborhood" analysis OOMs at ≥600k cells** (the aggregate
   CU-A–D fix doesn't cover it). Root cause + three fix options + testing, written for a future
   agent. Read alongside `05` §5.
+- `08_subsampling_pipeline.md` — **gene-pair permutation subsampling** (`metab_processing/
+  SpaceTravLR/run_subsamples.py` + `subsample_permutations.ipynb`): Bernoulli-subsample a
+  transporter panel, re-train per subsample (each pair = its own `metab@` column), aggregate the
+  betas. Read when working on coefficient-stability runs.
 - `05_harreman_reference.md` — **what harreman actually does**, read from its source: the
   pipeline, output tables, the **`CT1→CT2` "arrow" is NOT a direction** (undirected interface;
   sorted-label artifact), and the **per-cell "neighborhood" analysis + its GPU-OOM** and fix
   directions. Read before consuming harreman output or debugging the OOM.
+- `specs/` — archived **raw source specs** Foster wrote (verbatim), the origin of a built doc.
+  Currently `specs/subsample_spec.md` (→ `08_subsampling_pipeline.md`). Historical, don't edit.
 - `paper_fulltext.txt` — plain-text extraction of `../Space_TravLR_Preprint.pdf` (bioRxiv
   2025.11.13.688264), for quick grep/reference without re-parsing the PDF. Note: equations
   came through as garbled Unicode; use the PDF for the exact math.

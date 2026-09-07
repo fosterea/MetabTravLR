@@ -403,6 +403,30 @@ byte-identical), full suite green (340 passed, 1 skipped, 1 known-unrelated `tes
 - **Caveat carried forward:** near-OLS (2026-07-17) means a summed column's scale grows with its
   pair count and β absorbs the inverse — fine for read-time magnitude, documented.
 
+## Session 2026-09-07 — gene-pair permutation subsampling (`run_subsamples.py` + notebook)
+Built the `specs/subsample_spec.md` pipeline: re-train SpaceTravLR on random Bernoulli subsets of a
+curated transporter panel to study per-gene-pair coefficient stability. **Two new files, zero
+`src/SpaceTravLR/` changes** (Foster's hard constraint): `metab_processing/SpaceTravLR/
+run_subsamples.py` + `subsample_permutations.ipynb`; +26 tests in `tests/test_subsamples.py`.
+**Full doc: `08_subsampling_pipeline.md`.** Key points:
+- Each surviving gene pair is its OWN `metab@{Metabolite}-{g1}_{g2}` column (both orientations
+  summed) via a new `pairs_to_metabolites` — NOT `build_metabolites`' per-metabolite merge (D11).
+  Rides the existing `SpaceShip.fit(metabolites=dict)` path, so no core change.
+- **Foster's decisions:** (a) setup is metabolite-independent → built **once per run** and
+  symlinked into each subsample (only `fit` re-runs); guarded by the reused `_setup_lock`.
+  (b) `overwrite` redoes the shared setup only, keeps `DONE` markers (logs a NOTE); `clear_markers`
+  forces re-fit. (c) **annotation column is a CLI var** (`--cell-type-col`; Alexi UC = coarse).
+  (d) **both** analysis objects: `subsample_betas.h5ad` (per-cell obsm + JSON uns index) and
+  `subsample_beta_means.csv` (tidy `tier_means`). (e) resumable/linear, runs first subsample alone.
+- **Dev/review loop:** plan → independent critic (confirmed symlink safety: `fit` only reads
+  `input_data`, writes betadata+`run_params.json` per-subsample; caught YAML-tuple + uns-encoding
+  fixes) → metab-dev → metab-review (Majors applied: setup-concurrency lock, mocked orchestration
+  tests). Suite: 389 passed, 1 skipped, 2 known-unrelated fails (`test_spawn_worker`; the
+  pre-existing `test_every_dataset_keeps_the_default_resolution` config-drift on
+  `Sample_1_UC1_inflamed`). **Not yet committed.**
+- Flags for Foster: folder spelling `spacetravlr_subsamples` (vs spec's "spacetravler"); shared
+  setup deviates from the spec's literal "setup in each subsample folder" (efficiency; no core change).
+
 ## Local assets for dev/testing
 - Demo data in `data/`: `Slidetags_human_tonsil.h5ad`, `Slidetags_human_melanoma.h5ad`,
   `SlideSeqV2_mouse_lymphnode.h5ad`, `XYZeqV2_mouse_kidney_replicate_{1,2}.h5ad`,
