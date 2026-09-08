@@ -8,6 +8,7 @@ torch, no `SpaceShip`, no harreman -- `run_subsamples` (the SLURM job body that 
 is exercised only via its plumbing, not here.
 """
 import contextlib
+import io
 import json
 import os
 import sys
@@ -323,6 +324,53 @@ class BuildRunAnalysisTests(unittest.TestCase):
                     (means["modulator"] == "metab@Glucose-SLC2A1_SLC2A1") &
                     (means["cell_type"] == "T Cell")].iloc[0]
         self.assertEqual((row["mean"], row["std"], row["n"]), (2.0, 1.0, 3))
+
+    def test_no_metab_columns_warns_and_writes_header_only_csv(self):
+        """Regression for the "186 matrices / 0 rows" bug: betadata with only non-metab
+        columns yields (cells x 0) obsm matrices AND a header-only means CSV. The count of
+        obsm matrices alone hides this, so build_run_analysis must warn loudly.
+        """
+        # Overwrite every fixture parquet with a metab-column-free one (TF only).
+        for parquet in self.sub_root.glob("subsample_*/spacetravlr_output/betadata/*.parquet"):
+            pd.DataFrame({"beta_STAT1": [1.0] * 6}, index=self.CELLS).to_parquet(parquet)
+
+        buf = io.StringIO()
+        with self._patch_focus_genes(), contextlib.redirect_stdout(buf):
+            build_run_analysis(DATASET, 1, "cell_type", data_dir=self.tmp)
+        log = buf.getvalue()
+
+        # h5ad still lists matrices (one per parquet), but each is cells x 0 ...
+        ra = ad.read_h5ad(self.sub_root / "subsample_betas.h5ad")
+        self.assertTrue(ra.obsm)                                  # matrices present
+        self.assertTrue(all(m.shape[1] == 0 for m in ra.obsm.values()))
+        self.assertTrue(all(not e["columns"] for e in json.loads(ra.uns["subsample_index"])))
+
+        # ... the means CSV is header-only, and the cause is flagged.
+        means = pd.read_csv(self.sub_root / "subsample_beta_means.csv")
+        self.assertEqual(len(means), 0)
+        self.assertIn("ZERO metab@", log)
+
+    def test_metab_columns_present_but_cells_unlabeled_warns(self):
+        """The real "1-4 metabolites trained yet 0 rows" case: betadata HAS metab@ columns,
+        but the cell-type column is NaN for every trained cell, so tier_means groups to
+        nothing. build_run_analysis must still write a header-only CSV and name the cause
+        (unlabeled cells), NOT the missing-column cause.
+        """
+        # keep the metab-bearing fixture parquets; blank out the annotation for all cells.
+        adata = ad.read_h5ad(self.paths["adata"])
+        adata.obs["cell_type"] = np.full(adata.n_obs, np.nan)   # float NaN: writable, unlabeled
+        adata.write_h5ad(self.paths["adata"])
+
+        buf = io.StringIO()
+        with self._patch_focus_genes(), contextlib.redirect_stdout(buf):
+            build_run_analysis(DATASET, 1, "cell_type", data_dir=self.tmp)
+        log = buf.getvalue()
+
+        means = pd.read_csv(self.sub_root / "subsample_beta_means.csv")
+        self.assertEqual(len(means), 0)
+        self.assertIn("every trained cell is unlabeled", log)
+        self.assertNotIn("ZERO metab@", log)         # not the empty-column cause
+        self.assertIn("trained cells with a label: 0/6", log)
 
 
 # ------------------------------------------------------- run_subsamples (mocked, no torch)

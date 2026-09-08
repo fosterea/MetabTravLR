@@ -261,6 +261,16 @@ def run_subsamples(dataset, run=-1, overwrite=False, cell_type_col=None,
                           genes=focus_genes)
         _log(f"run_{r}/subsample_{j}: {n_sampled} sampled pairs -> {len(metabolites)} "
              f"pair-columns (post var-filter) over {len(focus_genes)} target genes")
+        if n_sampled and not metabolites:
+            # Every sampled pair was dropped by the var-filter -> fit trains ZERO metab@
+            # columns, so the betadata has no metabolite betas and the analysis CSV comes out
+            # header-only. Almost always a gene-symbol mismatch between sample_metabolites.yml
+            # and the panel. Warn loudly rather than train a useless subsample in silence.
+            sampled_genes = {g for pairs in selection_j.values() for pair in pairs for g in pair}
+            missing = sorted(sampled_genes - set(var_names))
+            _log(f"run_{r}/subsample_{j}: WARNING no metab@ columns will be trained -- every "
+                 f"sampled pair was dropped by the var-filter. Transporter genes absent from "
+                 f"the panel var_names: {missing}. Fix the symbols in sample_metabolites.yml.")
         ship.fit(metabolites=metabolites, **cfg["fit_kwargs"])
         done.write_text("done\n")
         trained = _trained_genes({"betadata": sub_out / "betadata"})
@@ -324,6 +334,14 @@ def build_run_analysis(dataset, run, cell_type_col, data_dir=PROJECT_DATA_DIR) -
     ra.uns["run"] = run
     ra.write_h5ad(sub_root / "subsample_betas.h5ad")
     _log(f"run_{run}: wrote subsample_betas.h5ad ({len(index_list)} obsm matrices)")
+    # A matrix is `cells x metab-columns`; a parquet with no metab@ columns still yields a
+    # (cells x 0) matrix here, so "N obsm matrices" alone does NOT prove any metab betas were
+    # trained. If EVERY matrix is empty, the means CSV below is header-only -- flag the cause.
+    metab_cols_total = sum(len(e["columns"]) for e in index_list)
+    if index_list and metab_cols_total == 0:
+        _log(f"run_{run}: WARNING all {len(index_list)} betadata parquet(s) have ZERO metab@ "
+             f"columns -- no metabolites were trained, so subsample_beta_means.csv will be "
+             f"header-only. Check sample_metabolites.yml gene symbols against the panel.")
 
     # --- Object B: tidy per-cell-type means
     frames = []
@@ -339,6 +357,25 @@ def build_run_analysis(dataset, run, cell_type_col, data_dir=PROJECT_DATA_DIR) -
              pd.DataFrame(columns=["sample", "gene", "cell_type", "modulator", "mean", "std", "n"]))
     means.to_csv(sub_root / "subsample_beta_means.csv", index=False)
     _log(f"run_{run}: wrote subsample_beta_means.csv ({len(means)} rows)")
+
+    # 0 rows despite trained metab@ columns means `tier_means` grouped every trained cell by
+    # `obs[cell_type_col]` and got NO valid label -> `groupby` drops NaN groups, emptying the
+    # frame (all-NaN betas would still yield rows; a barcode mismatch would raise, not empty).
+    # Report how many trained cells actually carry a label so the cause is unambiguous.
+    if len(means) == 0 and metab_cols_total > 0:
+        first_metab = next((e for e in index_list if e["columns"]), None)
+        n_lab = n_tot = None
+        if first_metab is not None:
+            bpath = (sub_root / f"subsample_{first_metab['sample']}" / "spacetravlr_output"
+                     / "betadata" / f"{first_metab['gene']}_betadata.parquet")
+            idx = beta_analysis._read_betas(bpath, group="metab").index
+            in_obs = idx.intersection(obs.index)
+            labels = obs.loc[in_obs, cell_type_col]
+            n_tot, n_lab = len(idx), int(labels.notna().sum())
+        _log(f"run_{run}: WARNING {metab_cols_total} metab@ columns were trained but "
+             f"subsample_beta_means.csv is empty -- every trained cell is unlabeled under "
+             f"cell_type_col={cell_type_col!r} (trained cells with a label: {n_lab}/{n_tot}). "
+             f"Point --cell-type-col at the annotation that actually covers these cells.")
 
 
 def main(argv=None):
