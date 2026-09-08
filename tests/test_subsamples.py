@@ -87,7 +87,7 @@ class SampleOnceTests(unittest.TestCase):
 
 # ---------------------------------------------------------------------- write_subsamples
 def _make_dataset_dir(root, dataset=DATASET, base_selection=None):
-    """Skeleton `<dataset>/easy_download/harreman_outputs/sample_metabolites.yml`."""
+    """Skeleton `<dataset>/easy_download/harreman_outputs/sample_metabolites.yaml`."""
     paths = dataset_paths(dataset, root)
     harreman_dir = paths["selection_yaml"].parent
     harreman_dir.mkdir(parents=True, exist_ok=True)
@@ -97,7 +97,7 @@ def _make_dataset_dir(root, dataset=DATASET, base_selection=None):
             for name, pairs in (base_selection or {}).items()
         ]
     }
-    with open(harreman_dir / "sample_metabolites.yml", "w") as f:
+    with open(harreman_dir / "sample_metabolites.yaml", "w") as f:
         yaml.safe_dump(doc, f)
     return paths
 
@@ -121,10 +121,10 @@ class WriteSubsamplesTests(unittest.TestCase):
         r = write_subsamples(DATASET, 3, 1.0, self.tmp, seed=0)
         self.assertEqual(r, 1)
         run_dir = self.tmp / DATASET / "easy_download" / "harreman_outputs" / "subsamples" / "run_1"
-        files = sorted(run_dir.glob("sampled_metabolites_*.yml"))
+        files = sorted(run_dir.glob("sampled_metabolites_*.yaml"))
         self.assertEqual(len(files), 3)
         for j, f in enumerate(files, start=1):
-            self.assertEqual(f.name, f"sampled_metabolites_{j}.yml")
+            self.assertEqual(f.name, f"sampled_metabolites_{j}.yaml")
             selection = load_metabolite_selection(f)
             # p=1.0 -> every file should round-trip to exactly the base selection.
             self.assertEqual(selection, self.base)
@@ -140,7 +140,7 @@ class WriteSubsamplesTests(unittest.TestCase):
         # persist that).
         r = write_subsamples(DATASET, 5, 0.05, self.tmp, seed=1)
         run_dir = self.tmp / DATASET / "easy_download" / "harreman_outputs" / "subsamples" / f"run_{r}"
-        files = sorted(run_dir.glob("sampled_metabolites_*.yml"))
+        files = sorted(run_dir.glob("sampled_metabolites_*.yaml"))
         self.assertEqual(len(files), 5)
         for f in files:
             selection = load_metabolite_selection(f)
@@ -349,6 +349,45 @@ class BuildRunAnalysisTests(unittest.TestCase):
         means = pd.read_csv(self.sub_root / "subsample_beta_means.csv")
         self.assertEqual(len(means), 0)
         self.assertIn("ZERO metab@", log)
+
+    def test_x_metab_stored_in_analysis_adata(self):
+        """When the shared processed adata, sampled ymls and run_params.json are present,
+        build_run_analysis computes x once (mocked here -- the real one needs torch) and stores
+        it as obsm['x_metab'] + uns['x_metab_modulators'], so the analysis needs no re-diffusion.
+        """
+        import metab_processing.SpaceTravLR.run_subsamples as rs
+        # shared processed adata (its var_names drive the var-filter)
+        idir = self.sub_root / "_setup" / "spacetravlr_output" / "input_data"
+        idir.mkdir(parents=True)
+        pa = ad.AnnData(np.zeros((6, 4), dtype="float32"))
+        pa.obs_names = self.CELLS
+        pa.var_names = ["SLC2A1", "SLC2A9", "ATP7A", "ATP7B"]
+        pa.write_h5ad(idir / "_adata.h5ad")
+        # sampled ymls (the run's draws) + a run_params.json
+        ydir = self.paths["selection_yaml"].parent / "subsamples" / "run_1"
+        ydir.mkdir(parents=True)
+        doc = {"metabolites": [{"name": "Glucose", "gene_pairs": [["SLC2A1", "SLC2A1"]]},
+                               {"name": "Copper", "gene_pairs": [["ATP7A", "ATP7B"]]}]}
+        with open(ydir / "sampled_metabolites_1.yaml", "w") as f:
+            yaml.safe_dump(doc, f)
+        (self.sub_root / "subsample_1" / "spacetravlr_output" / "betadata"
+         / "run_params.json").write_text(json.dumps({"radius": 100}))
+
+        cols = ["metab@Glucose-SLC2A1_SLC2A1", "metab@Copper-ATP7A_ATP7B"]
+        fake_x = pd.DataFrame(np.arange(12, dtype=float).reshape(6, 2),
+                              index=self.CELLS, columns=cols)
+        with self._patch_focus_genes(), \
+                mock.patch.object(rs.beta_analysis, "compute_metab_x", return_value=fake_x) as m:
+            build_run_analysis(DATASET, 1, "cell_type", data_dir=self.tmp)
+
+        m.assert_called_once()
+        # the union of both draws' pairs was passed to compute_metab_x
+        self.assertEqual(set(m.call_args.args[1]),
+                         {"Glucose-SLC2A1_SLC2A1", "Copper-ATP7A_ATP7B"})
+        ra = ad.read_h5ad(self.sub_root / "subsample_betas.h5ad")
+        self.assertIn("x_metab", ra.obsm)
+        self.assertEqual(ra.obsm["x_metab"].shape, (6, 2))
+        self.assertEqual(list(ra.uns["x_metab_modulators"]), cols)
 
     def test_metab_columns_present_but_cells_unlabeled_warns(self):
         """The real "1-4 metabolites trained yet 0 rows" case: betadata HAS metab@ columns,

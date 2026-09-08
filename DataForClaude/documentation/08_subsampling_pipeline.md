@@ -6,8 +6,8 @@
 > `metab_processing/SpaceTravLR/` and rides the existing `SpaceShip.fit(metabolites=...)` path.
 
 ## What it does
-1. Foster curates a small base panel `sample_metabolites.yml` (same schema as
-   `metabolite_selection.yaml`) next to the other ymls in `harreman_outputs/`.
+1. Foster curates a small base panel `sample_metabolites.yaml` (same schema as
+   `metabolite_selection.yaml`) next to the other yamls in `harreman_outputs/`.
 2. **Sample** (local, cheap): Bernoulli-keep each gene pair with prob `p`; drop metabolites
    left empty; retry a wholly-empty draw. Writes `n_permutations` files to a fresh run.
 3. **Fit** (SLURM): train SpaceTravLR on each subsample, then aggregate the metabolite betas.
@@ -32,17 +32,18 @@ columns in one fit (accepted at the near-OLS defaults; the point is per-pair att
 ## Directory layout
 ```
 <dataset>/easy_download/harreman_outputs/
-    sample_metabolites.yml                               # Foster's curated base panel
-    subsamples/run_{r}/sampled_metabolites_{j}.yml       # the draws
+    sample_metabolites.yaml                              # Foster's curated base panel
+    subsamples/run_{r}/sampled_metabolites_{j}.yaml      # the draws
 <dataset>/spacetravlr_subsamples/run_{r}/
     _setup/spacetravlr_output/input_data/...             # ONE shared setup (see below)
     subsample_{j}/spacetravlr_output/
         input_data -> symlink to ../../_setup/.../input_data
         betadata/<gene>_betadata.parquet
     subsample_{j}/DONE                                   # completion marker (resume skips these)
-    subsample_betas.h5ad                                 # analysis A (per-cell)
+    subsample_betas.h5ad                                 # analysis A (self-contained adata)
     subsample_beta_means.csv                             # analysis B (tidy per-cell-type means)
 ```
+(yamls are `.yaml`, matching `metabolite_selection.yaml`.)
 
 ## Design decisions (Foster's, 2026-09-07)
 - **Shared setup per run.** SpaceTravLR setup (MAGIC/CellOracle/NicheNet) is
@@ -56,10 +57,22 @@ columns in one fit (accepted at the near-OLS defaults; the point is per-pair att
   NOTE is logged). Use `clear_markers` to force a re-fit.
 - **Annotation column is a CLI variable** (`--cell-type-col`; Alexi UC = coarse
   `25_06_11_ICI_5K_Coarse_annotations`). Falls back to the dataset config's `cell_type_src`.
-- **Both analysis objects.** A = `subsample_betas.h5ad` (obs=cells; one
-  `obsm['beta_{gene}__sample{j}']` per (subsample, focus gene); JSON `uns['subsample_index']`
-  maps key→sample/gene/columns). B = `subsample_beta_means.csv` (tidy, via `beta_analysis.tier_means`,
-  with a `sample` column).
+- **Both analysis objects.** A = `subsample_betas.h5ad`, a **self-contained analysis adata**:
+  the display adata (raw counts in `X`, cell-type annotation in `obs`) with, as `obsm`, the
+  betas (`beta_{gene}__sample{j}`, read from the betadata parquet DB; JSON `uns['subsample_index']`
+  maps key→sample/gene/columns) **and the metabolite communication scores** `x_metab` (cells ×
+  gene-pair, names in `uns['x_metab_modulators']`) — computed ONCE per run over the union of drawn
+  pairs (`beta_analysis.compute_metab_x`, in the SLURM job where torch lives) so the downstream
+  **analysis reads only this file with pure pandas/numpy — no SpaceTravLR/torch, no re-diffusion**.
+  `x_metab` is skipped (with a NOTE, betas intact) if the processed adata / `run_params.json` is
+  missing. B = `subsample_beta_means.csv` (tidy, via `beta_analysis.tier_means`, `sample` column).
+- **Analysis notebook:** `metab_processing/Analysis/Foster/subsample_uc.ipynb` — loads A only;
+  average β per gene pair in a cell type, per-pair β distributions, and R² of the cell type's raw
+  counts vs β·x (`beta[:,pair]·x_metab[:,pair]`). Cell type starts at `T`.
+- **A "0-row" `subsample_beta_means.csv`** means either no `metab@` columns were trained (a
+  `sample_metabolites.yaml` gene-symbol vs panel mismatch) OR the trained cells carry no label
+  under `cell_type_col` (`tier_means`' `groupby` drops NaN groups). `build_run_analysis` logs a
+  distinct WARNING for each; the notebook's Diagnostic pins it down on real data.
 - **Resumable, linear.** A `DONE` marker per subsample; a resubmitted job (or a walltime kill)
   picks up the next unmarked subsample. `fit`'s own per-gene parquet resume composes under that.
   Running just the first subsample = sample `n_permutations=1`.

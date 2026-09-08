@@ -8,7 +8,7 @@ via `pairs_to_metabolites`), i.e. one `beta_metab@{name}-{g1}_{g2}` column per p
 
 Two sides, kept in separate directory trees:
   - sampling (cheap, notebook-facing): `<dataset>/easy_download/harreman_outputs/
-    subsamples/run_{r}/sampled_metabolites_{j}.yml`, written by `write_subsamples`.
+    subsamples/run_{r}/sampled_metabolites_{j}.yaml`, written by `write_subsamples`.
   - training (SLURM job body): `<dataset>/spacetravlr_subsamples/run_{r}/`, with ONE
     shared setup (`_setup/spacetravlr_output/`, since setup is metabolite-independent)
     symlinked into each `subsample_{j}/spacetravlr_output/input_data`, and a `DONE`
@@ -64,7 +64,7 @@ from metab_processing.SpaceTravLR.run_spacetravlr import (
 
 _RUN_RE = re.compile(r"run_(\d+)$")
 _SAMPLE_INDEX_RE = re.compile(r"_(\d+)$")
-_SAMPLE_YAML_RE = re.compile(r"_(\d+)\.yml$")
+_SAMPLE_YAML_RE = re.compile(r"_(\d+)\.yaml$")
 
 
 # --------------------------------------------------------------------- sampling (pure)
@@ -96,9 +96,9 @@ def latest_run(subsamples_dir) -> int:
 def write_subsamples(dataset, n_permutations, p, data_dir, seed=None) -> int:
     """Write `n_permutations` random subsamples of the base curated panel to a new run.
 
-    Reads `<harreman_outputs>/sample_metabolites.yml` (Foster's curated base subset, same
+    Reads `<harreman_outputs>/sample_metabolites.yaml` (Foster's curated base subset, same
     schema as `metabolite_selection.yaml`), draws `n_permutations` independent subsamples
-    via `sample_once`, and writes each as `sampled_metabolites_{j}.yml` (j = 1..n) under a
+    via `sample_once`, and writes each as `sampled_metabolites_{j}.yaml` (j = 1..n) under a
     fresh `subsamples/run_{r}/` directory (r = one past the highest existing run). A draw
     that comes back completely empty (no pair survives in any metabolite) is retried.
     Returns `r`.
@@ -107,7 +107,7 @@ def write_subsamples(dataset, n_permutations, p, data_dir, seed=None) -> int:
 
     paths = dataset_paths(dataset, data_dir)
     harreman_dir = paths["selection_yaml"].parent
-    selection = load_metabolite_selection(harreman_dir / "sample_metabolites.yml")
+    selection = load_metabolite_selection(harreman_dir / "sample_metabolites.yaml")
 
     subsamples_dir = harreman_dir / "subsamples"
     r = latest_run(subsamples_dir) + 1
@@ -125,7 +125,7 @@ def write_subsamples(dataset, n_permutations, p, data_dir, seed=None) -> int:
                 for name, pairs in sampled.items()
             ]
         }
-        with open(run_dir / f"sampled_metabolites_{j}.yml", "w") as f:
+        with open(run_dir / f"sampled_metabolites_{j}.yaml", "w") as f:
             yaml.safe_dump(doc, f)
 
     _log(f"write_subsamples: {dataset} run_{r}: wrote {n_permutations} files "
@@ -200,11 +200,11 @@ def run_subsamples(dataset, run=-1, overwrite=False, cell_type_col=None,
     r = latest_run(subsamples_dir) if run == -1 else run
     run_yaml_dir = subsamples_dir / f"run_{r}"
     sampled_paths = sorted(
-        run_yaml_dir.glob("sampled_metabolites_*.yml"),
+        run_yaml_dir.glob("sampled_metabolites_*.yaml"),
         key=lambda p: int(_SAMPLE_YAML_RE.search(p.name).group(1)),
     )
     if not sampled_paths:
-        raise FileNotFoundError(f"no sampled_metabolites_*.yml under {run_yaml_dir}")
+        raise FileNotFoundError(f"no sampled_metabolites_*.yaml under {run_yaml_dir}")
 
     _isolate_cache_dir()
 
@@ -264,13 +264,13 @@ def run_subsamples(dataset, run=-1, overwrite=False, cell_type_col=None,
         if n_sampled and not metabolites:
             # Every sampled pair was dropped by the var-filter -> fit trains ZERO metab@
             # columns, so the betadata has no metabolite betas and the analysis CSV comes out
-            # header-only. Almost always a gene-symbol mismatch between sample_metabolites.yml
+            # header-only. Almost always a gene-symbol mismatch between sample_metabolites.yaml
             # and the panel. Warn loudly rather than train a useless subsample in silence.
             sampled_genes = {g for pairs in selection_j.values() for pair in pairs for g in pair}
             missing = sorted(sampled_genes - set(var_names))
             _log(f"run_{r}/subsample_{j}: WARNING no metab@ columns will be trained -- every "
                  f"sampled pair was dropped by the var-filter. Transporter genes absent from "
-                 f"the panel var_names: {missing}. Fix the symbols in sample_metabolites.yml.")
+                 f"the panel var_names: {missing}. Fix the symbols in sample_metabolites.yaml.")
         ship.fit(metabolites=metabolites, **cfg["fit_kwargs"])
         done.write_text("done\n")
         trained = _trained_genes({"betadata": sub_out / "betadata"})
@@ -280,12 +280,63 @@ def run_subsamples(dataset, run=-1, overwrite=False, cell_type_col=None,
 
 
 # ---------------------------------------------------------------------------- analysis
+def _store_x_metab(ra, run, sub_root, paths, obs_names, metab_cols_total) -> bool:
+    """Attach the metabolite communication-score matrix to `ra.obsm['x_metab']` (+ column
+    names in `uns['x_metab_modulators']`), so the downstream analysis can build beta*x from
+    the saved adata alone -- no re-diffusion, no SpaceTravLR/torch.
+
+    `x` for a gene pair is target-gene- and subsample-independent, so we compute it ONCE for
+    the UNION of every pair drawn in the run (via the existing `beta_analysis.compute_metab_x`,
+    over the shared processed `_adata.h5ad` with the run's diffusion params). Skips -- with a
+    NOTE, leaving the betas intact -- if there are no metab columns, the processed adata or
+    `run_params.json` is missing, or the diffusion raises. Returns whether x was stored.
+    """
+    yaml_dir = paths["selection_yaml"].parent / "subsamples" / f"run_{run}"
+    processed = sub_root / "_setup" / "spacetravlr_output" / "input_data" / "_adata.h5ad"
+    rp_path = next(iter(sorted(
+        sub_root.glob("subsample_*/spacetravlr_output/betadata/run_params.json"))), None)
+    if not (metab_cols_total and processed.is_file() and rp_path is not None):
+        _log(f"run_{run}: x_metab NOT stored (needs metab columns + the shared processed "
+             f"_adata.h5ad + a subsample run_params.json). Analysis will have betas but no beta*x.")
+        return False
+    try:
+        var_names = _processed_var_names({"input_data": processed.parent})
+        union_meta = {}
+        for yp in sorted(yaml_dir.glob("sampled_metabolites_*.yaml")):
+            union_meta.update(
+                pairs_to_metabolites(load_metabolite_selection(yp), var_names=var_names))
+        if not union_meta:
+            _log(f"run_{run}: x_metab NOT stored (no gene pairs survived the var-filter).")
+            return False
+        rp = json.loads(rp_path.read_text())
+        x_adata = anndata.read_h5ad(processed)
+        x = beta_analysis.compute_metab_x(
+            x_adata, union_meta, radius=rp["radius"],
+            contact_distance=rp.get("contact_distance", 50),
+            scale_factor=rp.get("scale_factor", 100),
+            layer=rp.get("layer", "imputed_count"),
+        ).reindex(obs_names)
+        del x_adata
+        ra.obsm["x_metab"] = x.to_numpy()
+        ra.uns["x_metab_modulators"] = list(x.columns)   # 'metab@{Metabolite}-{g1}_{g2}'
+        _log(f"run_{run}: stored x_metab {tuple(x.shape)} ({len(x.columns)} gene-pair columns)")
+        return True
+    except Exception as e:
+        _log(f"run_{run}: NOTE could not compute x_metab ({type(e).__name__}: {e}); betas "
+             f"still written, but the analysis will lack beta*x.")
+        return False
+
+
 def build_run_analysis(dataset, run, cell_type_col, data_dir=PROJECT_DATA_DIR) -> None:
     """Write both analysis objects for `spacetravlr_subsamples/run_{run}/`:
 
-    - `subsample_betas.h5ad` (Object A, per-cell): one `obsm['beta_{gene}__sample{j}']`
-      matrix per (subsample, focus gene) present, plus a JSON-decodable
-      `uns['subsample_index']` describing each key (`key`, `sample`, `gene`, `columns`).
+    - `subsample_betas.h5ad` (Object A): a SELF-CONTAINED analysis AnnData -- the display
+      adata (raw counts in `X`, cell-type annotation in `obs`) with, attached as `obsm`, one
+      `beta_{gene}__sample{j}` matrix per (subsample, focus gene) and -- when it can be
+      computed -- the shared metabolite communication scores `x_metab` (cells x gene-pair,
+      names in `uns['x_metab_modulators']`). `uns['subsample_index']` describes each beta key
+      (`key`, `sample`, `gene`, `columns`). The downstream analysis reads ONLY this file with
+      pure pandas/numpy -- no SpaceTravLR/torch, no re-diffusion.
     - `subsample_beta_means.csv` (Object B, tidy): `tier_means` per subsample, concatenated
       with a leading `sample` column. Columns: sample, gene, cell_type, modulator, mean,
       std, n.
@@ -295,16 +346,13 @@ def build_run_analysis(dataset, run, cell_type_col, data_dir=PROJECT_DATA_DIR) -
     focus_genes = cfg["focus_genes"]
     sub_root = paths["dataset_dir"] / "spacetravlr_subsamples" / f"run_{run}"
 
-    # We only need the cell labels here, so read obs backed (X stays on disk) rather than
-    # loading the whole Xenium adata into memory. `cell_type_col` is an annotation column on
-    # the raw adata; `tier_means`/reindex group cells by it.
-    backed = anndata.read_h5ad(paths["adata"], backed="r")
-    try:
-        obs = backed.obs.copy()
-        obs_names = backed.obs_names.copy()
-    finally:
-        if backed.isbacked:
-            backed.file.close()
+    # Load the whole display adata (not backed) so the analysis object carries the raw counts
+    # (`X`) and the cell-type annotation (`obs`) the notebook needs -- it is the base we hang
+    # the betas and x scores on. The subsample pipeline targets small curated panels, so
+    # holding X in memory is affordable.
+    ra = anndata.read_h5ad(paths["adata"])
+    obs = ra.obs
+    obs_names = ra.obs_names
     if cell_type_col not in obs.columns:
         raise KeyError(f"cell_type_col {cell_type_col!r} not in adata.obs of {paths['adata']}")
 
@@ -313,8 +361,8 @@ def build_run_analysis(dataset, run, cell_type_col, data_dir=PROJECT_DATA_DIR) -
         key=lambda p: int(_SAMPLE_INDEX_RE.search(p.name).group(1)),
     )
 
-    # --- Object A: per-cell AnnData
-    ra = anndata.AnnData(obs=pd.DataFrame(index=obs_names))
+    # --- betas: one obsm['beta_{gene}__sample{j}'] per (subsample, focus gene), read from
+    # the betadata parquet database and reindexed onto every display cell (NaN where unfit).
     index_list = []
     for sub_dir in sub_dirs:
         j = int(_SAMPLE_INDEX_RE.search(sub_dir.name).group(1))
@@ -332,16 +380,22 @@ def build_run_analysis(dataset, run, cell_type_col, data_dir=PROJECT_DATA_DIR) -
                                 "columns": list(mat.columns)})
     ra.uns["subsample_index"] = json.dumps(index_list)
     ra.uns["run"] = run
-    ra.write_h5ad(sub_root / "subsample_betas.h5ad")
-    _log(f"run_{run}: wrote subsample_betas.h5ad ({len(index_list)} obsm matrices)")
+
     # A matrix is `cells x metab-columns`; a parquet with no metab@ columns still yields a
-    # (cells x 0) matrix here, so "N obsm matrices" alone does NOT prove any metab betas were
-    # trained. If EVERY matrix is empty, the means CSV below is header-only -- flag the cause.
+    # (cells x 0) matrix, so the matrix COUNT alone does NOT prove any metab betas were trained.
     metab_cols_total = sum(len(e["columns"]) for e in index_list)
     if index_list and metab_cols_total == 0:
         _log(f"run_{run}: WARNING all {len(index_list)} betadata parquet(s) have ZERO metab@ "
              f"columns -- no metabolites were trained, so subsample_beta_means.csv will be "
-             f"header-only. Check sample_metabolites.yml gene symbols against the panel.")
+             f"header-only. Check sample_metabolites.yaml gene symbols against the panel.")
+
+    # Compute + attach the metabolite communication scores `x_metab` so the analysis can form
+    # beta*x with NO SpaceTravLR/diffusion (this runs inside the SLURM job, where torch exists).
+    _store_x_metab(ra, run, sub_root, paths, obs_names, metab_cols_total)
+
+    ra.write_h5ad(sub_root / "subsample_betas.h5ad")
+    _log(f"run_{run}: wrote subsample_betas.h5ad ({len(index_list)} beta matrices"
+         + (" + x_metab" if "x_metab" in ra.obsm else "") + ")")
 
     # --- Object B: tidy per-cell-type means
     frames = []
