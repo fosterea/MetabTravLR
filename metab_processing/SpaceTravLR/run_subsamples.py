@@ -40,6 +40,7 @@ import json
 import os
 import re
 import shutil
+import time
 
 import anndata
 import numpy as np
@@ -280,6 +281,37 @@ def run_subsamples(dataset, run=-1, overwrite=False, cell_type_col=None,
 
 
 # ---------------------------------------------------------------------------- analysis
+def _read_display_adata(adata_path, focus_genes, tries=4, wait=10):
+    """The display adata reduced to what the analysis needs: full `obs` (cell types) + `X`
+    limited to the focus genes' raw counts (+ `obsm['spatial']` if present). Read BACKED so we
+    open the file without pulling the whole panel into memory, then materialise just the
+    focus-gene columns. Retries the open on transient cluster-FS errors (errno 108 / BrokenPipe
+    / other OSError), which is what crashed a full read mid-job.
+    """
+    last = None
+    for k in range(tries):
+        try:
+            backed = anndata.read_h5ad(adata_path, backed="r")
+            try:
+                present = [g for g in focus_genes if g in set(backed.var_names)]
+                ra = (backed[:, present].to_memory() if present
+                      else anndata.AnnData(obs=backed.obs.copy()))
+                ra.obs_names = backed.obs_names.copy()
+                if "spatial" in backed.obsm:
+                    ra.obsm["spatial"] = np.asarray(backed.obsm["spatial"])
+                return ra
+            finally:
+                if backed.isbacked:
+                    backed.file.close()
+        except (OSError, BrokenPipeError) as e:   # includes errno 108 ESHUTDOWN
+            last = e
+            _log(f"read {adata_path} failed ({type(e).__name__}: {e}); "
+                 f"retry {k + 1}/{tries - 1} after {wait}s")
+            if k < tries - 1:
+                time.sleep(wait)
+    raise last
+
+
 def _store_x_metab(ra, run, sub_root, paths, obs_names, metab_cols_total) -> bool:
     """Attach the metabolite communication-score matrix to `ra.obsm['x_metab']` (+ column
     names in `uns['x_metab_modulators']`), so the downstream analysis can build beta*x from
@@ -330,8 +362,9 @@ def _store_x_metab(ra, run, sub_root, paths, obs_names, metab_cols_total) -> boo
 def build_run_analysis(dataset, run, cell_type_col, data_dir=PROJECT_DATA_DIR) -> None:
     """Write both analysis objects for `spacetravlr_subsamples/run_{run}/`:
 
-    - `subsample_betas.h5ad` (Object A): a SELF-CONTAINED analysis AnnData -- the display
-      adata (raw counts in `X`, cell-type annotation in `obs`) with, attached as `obsm`, one
+    - `subsample_betas.h5ad` (Object A): a SELF-CONTAINED analysis AnnData -- the focus genes'
+      raw counts in `X` and the cell-type annotation in `obs` (from the display adata), with,
+      attached as `obsm`, one
       `beta_{gene}__sample{j}` matrix per (subsample, focus gene) and -- when it can be
       computed -- the shared metabolite communication scores `x_metab` (cells x gene-pair,
       names in `uns['x_metab_modulators']`). `uns['subsample_index']` describes each beta key
@@ -346,11 +379,13 @@ def build_run_analysis(dataset, run, cell_type_col, data_dir=PROJECT_DATA_DIR) -
     focus_genes = cfg["focus_genes"]
     sub_root = paths["dataset_dir"] / "spacetravlr_subsamples" / f"run_{run}"
 
-    # Load the whole display adata (not backed) so the analysis object carries the raw counts
-    # (`X`) and the cell-type annotation (`obs`) the notebook needs -- it is the base we hang
-    # the betas and x scores on. The subsample pipeline targets small curated panels, so
-    # holding X in memory is affordable.
-    ra = anndata.read_h5ad(paths["adata"])
+    # Build the analysis object from the display adata: its cell-type annotation (`obs`) plus
+    # ONLY the focus genes' raw counts as `X`. We read backed (open the file, don't pull the
+    # whole panel matrix into memory) and materialise just the focus-gene columns -- the
+    # analysis only needs the target genes' raw counts (for R^2 / expression), and a full-panel
+    # read/write is both heavy and, on the cluster FS, prone to transient I/O errors. The read
+    # is retried a few times for exactly those transient errno-108 / BrokenPipe hiccups.
+    ra = _read_display_adata(paths["adata"], focus_genes)
     obs = ra.obs
     obs_names = ra.obs_names
     if cell_type_col not in obs.columns:
