@@ -281,35 +281,40 @@ def run_subsamples(dataset, run=-1, overwrite=False, cell_type_col=None,
 
 
 # ---------------------------------------------------------------------------- analysis
-def _read_display_adata(adata_path, focus_genes, tries=4, wait=10):
-    """The display adata reduced to what the analysis needs: full `obs` (cell types) + `X`
-    limited to the focus genes' raw counts (+ `obsm['spatial']` if present). Read BACKED so we
-    open the file without pulling the whole panel into memory, then materialise just the
-    focus-gene columns. Retries the open on transient cluster-FS errors (errno 108 / BrokenPipe
-    / other OSError), which is what crashed a full read mid-job.
-    """
+def _read_h5ad_retry(path, tries=4, wait=10):
+    """`anndata.read_h5ad(path)` with retries for transient cluster-FS open errors
+    (errno 108 ESHUTDOWN / BrokenPipe / other OSError)."""
     last = None
     for k in range(tries):
         try:
-            backed = anndata.read_h5ad(adata_path, backed="r")
-            try:
-                present = [g for g in focus_genes if g in set(backed.var_names)]
-                ra = (backed[:, present].to_memory() if present
-                      else anndata.AnnData(obs=backed.obs.copy()))
-                ra.obs_names = backed.obs_names.copy()
-                if "spatial" in backed.obsm:
-                    ra.obsm["spatial"] = np.asarray(backed.obsm["spatial"])
-                return ra
-            finally:
-                if backed.isbacked:
-                    backed.file.close()
-        except (OSError, BrokenPipeError) as e:   # includes errno 108 ESHUTDOWN
+            return anndata.read_h5ad(path)
+        except (OSError, BrokenPipeError) as e:
             last = e
-            _log(f"read {adata_path} failed ({type(e).__name__}: {e}); "
+            _log(f"read {path} failed ({type(e).__name__}: {e}); "
                  f"retry {k + 1}/{tries - 1} after {wait}s")
             if k < tries - 1:
                 time.sleep(wait)
     raise last
+
+
+def _analysis_base(processed_path, focus_genes):
+    """The analysis AnnData's base, built from the PROCESSED `_adata.h5ad` (the shared setup's),
+    NOT the raw display `adata.h5ad`. The processed file is what betas + x are built on -- its
+    cells are exactly the trained cells and it always carries the cell-type annotation and the
+    `raw_count` layer -- and it opens reliably even when the raw display adata is unavailable on
+    the cluster FS (the errno-108 open failure). Returns focus-gene RAW counts as `X` + full
+    `obs` (cell types) + `obsm['spatial']`, everything the downstream analysis needs.
+    """
+    proc = _read_h5ad_retry(processed_path)
+    present = [g for g in focus_genes if g in set(proc.var_names)]
+    ra = proc[:, present].copy() if present else anndata.AnnData(obs=proc.obs.copy())
+    if present and "raw_count" in ra.layers:      # X after processing is log1p'd; use raw_count
+        ra.X = ra.layers["raw_count"].copy()
+    ra.layers.clear()                              # keep the stored file lean
+    for key in [k for k in ra.obsm if k != "spatial"]:
+        del ra.obsm[key]
+    ra.obs_names = proc.obs_names.copy()
+    return ra
 
 
 def _store_x_metab(ra, run, sub_root, paths, obs_names, metab_cols_total) -> bool:
@@ -363,8 +368,8 @@ def build_run_analysis(dataset, run, cell_type_col, data_dir=PROJECT_DATA_DIR) -
     """Write both analysis objects for `spacetravlr_subsamples/run_{run}/`:
 
     - `subsample_betas.h5ad` (Object A): a SELF-CONTAINED analysis AnnData -- the focus genes'
-      raw counts in `X` and the cell-type annotation in `obs` (from the display adata), with,
-      attached as `obsm`, one
+      raw counts in `X` and the cell-type annotation in `obs` (from the PROCESSED `_adata.h5ad`,
+      i.e. the trained cells), with, attached as `obsm`, one
       `beta_{gene}__sample{j}` matrix per (subsample, focus gene) and -- when it can be
       computed -- the shared metabolite communication scores `x_metab` (cells x gene-pair,
       names in `uns['x_metab_modulators']`). `uns['subsample_index']` describes each beta key
@@ -379,17 +384,19 @@ def build_run_analysis(dataset, run, cell_type_col, data_dir=PROJECT_DATA_DIR) -
     focus_genes = cfg["focus_genes"]
     sub_root = paths["dataset_dir"] / "spacetravlr_subsamples" / f"run_{run}"
 
-    # Build the analysis object from the display adata: its cell-type annotation (`obs`) plus
-    # ONLY the focus genes' raw counts as `X`. We read backed (open the file, don't pull the
-    # whole panel matrix into memory) and materialise just the focus-gene columns -- the
-    # analysis only needs the target genes' raw counts (for R^2 / expression), and a full-panel
-    # read/write is both heavy and, on the cluster FS, prone to transient I/O errors. The read
-    # is retried a few times for exactly those transient errno-108 / BrokenPipe hiccups.
-    ra = _read_display_adata(paths["adata"], focus_genes)
+    # Build the analysis object from the PROCESSED `_adata.h5ad` (the shared setup's), not the
+    # raw display `adata.h5ad`: it holds exactly the trained cells with their cell-type labels
+    # and the `raw_count` layer, and it opens reliably even when the raw adata is unavailable on
+    # the cluster FS (the errno-108 open failure that crashed this step). We keep only the focus
+    # genes' raw counts + obs + spatial -- all the analysis needs.
+    processed = sub_root / "_setup" / "spacetravlr_output" / "input_data" / "_adata.h5ad"
+    ra = _analysis_base(processed, focus_genes)
     obs = ra.obs
     obs_names = ra.obs_names
     if cell_type_col not in obs.columns:
-        raise KeyError(f"cell_type_col {cell_type_col!r} not in adata.obs of {paths['adata']}")
+        raise KeyError(
+            f"cell_type_col {cell_type_col!r} not in the processed adata's obs "
+            f"({processed}); columns e.g. {list(obs.columns)[:8]}")
 
     sub_dirs = sorted(
         (p for p in sub_root.glob("subsample_*") if _SAMPLE_INDEX_RE.search(p.name)),

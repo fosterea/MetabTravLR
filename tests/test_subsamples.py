@@ -256,13 +256,19 @@ class BuildRunAnalysisTests(unittest.TestCase):
         self.paths = dataset_paths(DATASET, self.tmp)
         self.paths["dataset_dir"].mkdir(parents=True, exist_ok=True)
 
-        # a tiny raw adata.h5ad with a cell-type annotation column
-        adata = ad.AnnData(np.zeros((6, 2), dtype="float32"))
-        adata.obs_names = self.CELLS
-        adata.obs["cell_type"] = pd.Categorical(["T Cell"] * 3 + ["other"] * 3)
-        adata.write_h5ad(self.paths["adata"])
-
         self.sub_root = self.paths["dataset_dir"] / "spacetravlr_subsamples" / "run_1"
+
+        # The analysis base is read from the PROCESSED _adata.h5ad (trained cells, cell-type
+        # annotation, raw_count layer) -- not the raw display adata. Write a tiny one.
+        idir = self.sub_root / "_setup" / "spacetravlr_output" / "input_data"
+        idir.mkdir(parents=True)
+        proc = ad.AnnData(np.zeros((6, 1), dtype="float32"))   # X (log1p'd in reality)
+        proc.obs_names = self.CELLS
+        proc.var_names = ["CD4"]                               # a focus gene present in the panel
+        proc.obs["cell_type"] = pd.Categorical(["T Cell"] * 3 + ["other"] * 3)
+        proc.layers["raw_count"] = np.arange(6, dtype="float32").reshape(6, 1)
+        proc.write_h5ad(idir / "_adata.h5ad")
+
         for j, genes in ((1, ("CD4", "CD3E")), (2, ("CD4",))):
             betadata_dir = self.sub_root / f"subsample_{j}" / "spacetravlr_output" / "betadata"
             betadata_dir.mkdir(parents=True)
@@ -356,12 +362,14 @@ class BuildRunAnalysisTests(unittest.TestCase):
         it as obsm['x_metab'] + uns['x_metab_modulators'], so the analysis needs no re-diffusion.
         """
         import metab_processing.SpaceTravLR.run_subsamples as rs
-        # shared processed adata (its var_names drive the var-filter)
+        # Overwrite setUp's processed adata with one whose var_names are the transporters
+        # (they drive the var-filter for the x union); keep obs cell_type + raw_count.
         idir = self.sub_root / "_setup" / "spacetravlr_output" / "input_data"
-        idir.mkdir(parents=True)
         pa = ad.AnnData(np.zeros((6, 4), dtype="float32"))
         pa.obs_names = self.CELLS
         pa.var_names = ["SLC2A1", "SLC2A9", "ATP7A", "ATP7B"]
+        pa.obs["cell_type"] = pd.Categorical(["T Cell"] * 3 + ["other"] * 3)
+        pa.layers["raw_count"] = np.zeros((6, 4), dtype="float32")
         pa.write_h5ad(idir / "_adata.h5ad")
         # sampled ymls (the run's draws) + a run_params.json
         ydir = self.paths["selection_yaml"].parent / "subsamples" / "run_1"
@@ -395,10 +403,12 @@ class BuildRunAnalysisTests(unittest.TestCase):
         nothing. build_run_analysis must still write a header-only CSV and name the cause
         (unlabeled cells), NOT the missing-column cause.
         """
-        # keep the metab-bearing fixture parquets; blank out the annotation for all cells.
-        adata = ad.read_h5ad(self.paths["adata"])
-        adata.obs["cell_type"] = np.full(adata.n_obs, np.nan)   # float NaN: writable, unlabeled
-        adata.write_h5ad(self.paths["adata"])
+        # keep the metab-bearing fixture parquets; blank out the annotation in the PROCESSED
+        # adata (what build_run_analysis groups by) for all cells.
+        proc_path = self.sub_root / "_setup" / "spacetravlr_output" / "input_data" / "_adata.h5ad"
+        proc = ad.read_h5ad(proc_path)
+        proc.obs["cell_type"] = np.full(proc.n_obs, np.nan)   # float NaN: writable, unlabeled
+        proc.write_h5ad(proc_path)
 
         buf = io.StringIO()
         with self._patch_focus_genes(), contextlib.redirect_stdout(buf):
@@ -436,8 +446,13 @@ class _MockShip:
         _MockShip.setups.append(self.outdir)
         idir = self.outdir / "input_data"
         idir.mkdir(parents=True, exist_ok=True)
-        a = ad.AnnData(np.zeros((3, 2), dtype="float32"))   # real h5ad so _h5ad_is_readable passes
+        # processed _adata.h5ad: build_run_analysis reads it as the analysis base (needs obs
+        # cell_type + raw_count + the trained cells).
+        a = ad.AnnData(np.zeros((6, 2), dtype="float32"))
+        a.obs_names = _CELLS
         a.var_names = ["SLC2A1", "SLC2A9"]
+        a.obs["cell_type"] = pd.Categorical(["T Cell"] * 3 + ["other"] * 3)
+        a.layers["raw_count"] = np.zeros((6, 2), dtype="float32")
         a.write_h5ad(idir / "_adata.h5ad")
         (idir / "celloracle_links.pkl").write_text("x")
         (idir / "tflinks.parquet").write_text("x")
