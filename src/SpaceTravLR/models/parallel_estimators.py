@@ -967,14 +967,22 @@ class SpatialCellularProgramsEstimator:
         lr_info = self.check_LR_properties(adata, self.layer)
         counts_df, cell_thresholds = lr_info
 
-        if not (('received_ligands' in adata.uns.keys()) | ('received_ligands_tfl' in self.adata.uns.keys())):
+        # Run the diffusion iff the adata we're operating on has neither cache. Both checks
+        # must reference the SAME object (`adata`, the local one being processed) -- the old
+        # code read `received_ligands` from `adata.uns` but `received_ligands_tfl` from
+        # `self.adata.uns`, so a `get_betas(adata=...)` call on a fresh adata whose uns lacks
+        # the caches would wrongly skip diffusion (self.adata still has tfl) and then KeyError
+        # at the metab/L-R reads below. `layer=self.layer` diffuses from the estimator's layer
+        # rather than silently hardcoding the function default.
+        if not (('received_ligands' in adata.uns) or ('received_ligands_tfl' in adata.uns)):
             adata = init_received_ligands(
                 adata,
-                radius=self.radius, 
-                contact_distance=self.contact_distance, 
+                radius=self.radius,
+                contact_distance=self.contact_distance,
                 cell_threshes=cell_thresholds,
                 extra_lr=self._diffusion_extra_lr,
-                scale_factor=self.scale_factor
+                scale_factor=self.scale_factor,
+                layer=self.layer,
             )
 
         if len(self.lr['pairs']) > 0:
