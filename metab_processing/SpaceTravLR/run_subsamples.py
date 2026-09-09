@@ -195,7 +195,8 @@ def run_subsamples(dataset, run=-1, overwrite=False, cell_type_col=None,
     cfg = get_config(dataset)
     paths = dataset_paths(dataset, data_dir)
     cell_type_src = cell_type_col or cfg["cell_type_src"]
-    focus_genes = cfg["focus_genes"]
+    # focus_genes = cfg["focus_genes"]
+    focus_genes = ['CD4', 'CD3E', 'IL2RA', 'CTLA4', 'FOXP3', 'IL10', 'ENTPD1', 'SLC9A3']
 
     subsamples_dir = paths["selection_yaml"].parent / "subsamples"
     r = latest_run(subsamples_dir) if run == -1 else run
