@@ -210,6 +210,31 @@ class LatestRunTests(unittest.TestCase):
         self.assertEqual(latest_run(d), 3)
 
 
+class SeedNichenetTests(unittest.TestCase):
+    def setUp(self):
+        self.tmp = Path(tempfile.mkdtemp())
+        _make_dataset_dir(self.tmp)
+        self.dataset_dir = dataset_paths(DATASET, self.tmp)["dataset_dir"]
+
+    def test_seeds_from_prior_run(self):
+        from metab_processing.SpaceTravLR.run_subsamples import _seed_nichenet_links
+        prior = (self.dataset_dir / "spacetravlr_subsamples" / "run_1" / "_setup"
+                 / "spacetravlr_output" / "input_data")
+        prior.mkdir(parents=True)
+        (prior / "tflinks.parquet").write_bytes(b"PAR1data")
+        new_input = (self.dataset_dir / "spacetravlr_subsamples" / "run_2" / "_setup"
+                     / "spacetravlr_output" / "input_data")
+        self.assertTrue(_seed_nichenet_links(new_input, DATASET, self.tmp))
+        self.assertEqual((new_input / "tflinks.parquet").read_bytes(), b"PAR1data")
+
+    def test_noop_when_none_found(self):
+        from metab_processing.SpaceTravLR.run_subsamples import _seed_nichenet_links
+        new_input = (self.dataset_dir / "spacetravlr_subsamples" / "run_1" / "_setup"
+                     / "spacetravlr_output" / "input_data")
+        self.assertFalse(_seed_nichenet_links(new_input, DATASET, self.tmp))
+        self.assertFalse((new_input / "tflinks.parquet").exists())
+
+
 class ClearMarkersTests(unittest.TestCase):
     def setUp(self):
         self.tmp = Path(tempfile.mkdtemp())

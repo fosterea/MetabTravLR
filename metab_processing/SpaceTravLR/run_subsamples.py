@@ -170,6 +170,31 @@ def pairs_to_metabolites(selection, var_names=None):
 
 
 # --------------------------------------------------------------------------- SLURM job
+def _seed_nichenet_links(shared_input, dataset, data_dir) -> bool:
+    """Copy an existing NicheNet `tflinks.parquet` into `shared_input` before setup, so
+    `get_nichenet_links_` reuses it instead of re-downloading from Zenodo (which 504s
+    persistently). The ligand-target matrix is species-only, so any prior copy for this
+    dataset is valid. No-op if one is already present or none is found (setup then downloads).
+    Returns whether a copy was seeded.
+    """
+    dest = Path(shared_input) / "tflinks.parquet"
+    if dest.exists():
+        return True
+    dataset_dir = dataset_paths(dataset, data_dir)["dataset_dir"]
+    candidates = [
+        *sorted(dataset_dir.glob(
+            "spacetravlr_subsamples/run_*/_setup/spacetravlr_output/input_data/tflinks.parquet")),
+        dataset_dir / "spacetravlr_output" / "input_data" / "tflinks.parquet",
+    ]
+    src = next((c for c in candidates if c.is_file() and c.resolve() != dest.resolve()), None)
+    if src is None:
+        return False
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(src, dest)
+    _log(f"seeded NicheNet tflinks from {src} (skips the Zenodo download)")
+    return True
+
+
 def clear_markers(dataset, run=-1, data_dir=PROJECT_DATA_DIR) -> int:
     """Delete every `subsample_{j}/DONE` marker under `spacetravlr_subsamples/run_{r}/`,
     forcing the next `run_subsamples` call to re-fit them. Returns the count removed.
@@ -230,6 +255,9 @@ def run_subsamples(dataset, run=-1, overwrite=False, cell_type_col=None,
         # same paths at once would corrupt the ONE setup every subsample symlinks into (HDF5
         # has no concurrent-write support). Same guard run_spacetravlr.py uses.
         with _setup_lock(shared_setup_out):
+            # Reuse a prior run's NicheNet links (species-only) so this fresh setup skips the
+            # flaky Zenodo download; setup's get_nichenet_links_ picks up the seeded file.
+            _seed_nichenet_links(shared_input, dataset, data_dir)
             adata = _load_adata(shared_paths, cell_type_src)
             adata = _drop_tiny_clusters(adata, cell_type_src)
             ship = SpaceShip(name=dataset.replace("/", "_"), outdir=str(shared_setup_out),

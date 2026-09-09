@@ -530,15 +530,34 @@ class SpaceShip:
         return self
     
     def get_nichenet_links_(self):
+        dest = f'{self.outdir}/input_data/tflinks.parquet'
+        # The ligand-target matrix is species-only (identical across runs/datasets of a
+        # species), so if this setup already has it (pre-seeded from a prior run, or a resumed
+        # setup), reuse it and never touch the network -- Zenodo 504s persistently.
+        if os.path.exists(dest):
+            if self.status_bar:
+                self.status_bar.update('🔗 NicheNet: using existing links')
+            return pd.read_parquet(dest)
+
         if self.status_bar:
             self.status_bar.update('🔗 NicheNet: Downloading ligand-target links...')
-        
         data_path = f'https://zenodo.org/records/17594271/files/ligand_target_{self.species}.parquet'
-        nichenet_lt = pd.read_parquet(data_path)
-        
+        nichenet_lt = None
+        for attempt in range(5):   # Zenodo is flaky (504 Gateway Time-out); retry with backoff
+            try:
+                nichenet_lt = pd.read_parquet(data_path)
+                break
+            except OSError as e:   # HTTPError/URLError from the remote fetch subclass OSError
+                if attempt == 4:
+                    raise
+                wait = 10 * (attempt + 1)
+                print(f'[nichenet] download failed ({type(e).__name__}: {e}); '
+                      f'retry {attempt + 1}/4 in {wait}s', flush=True)
+                time.sleep(wait)
+
         if self.status_bar:
             self.status_bar.update('🔗 NicheNet: Saving links...')
-        nichenet_lt.to_parquet(f'{self.outdir}/input_data/tflinks.parquet')
+        nichenet_lt.to_parquet(dest)
         
         if self.status_bar:
             self.status_bar.update('✅ NicheNet: Complete')
