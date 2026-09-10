@@ -1271,10 +1271,20 @@ class SpatialCellularProgramsEstimator:
                 groups = [1]*len(self.regulators) + [2]*len(self.lr_pairs) + [3]*len(self.tfl_pairs) + [4]*len(self.extra_modulators) + [5]*len(self.metab_pairs)
                 groups = np.array(groups)
                 if lasso_params is None:
+                    # ===== TEMPORARY (control experiment, Foster 2026-09-10) =====
+                    # Zero the group-lasso regularization on the METABOLITE group (5) ONLY, to
+                    # test whether the all-zero metab betas come from regularization or from
+                    # degenerate design columns. group_lasso takes a per-group `group_reg` array
+                    # aligned to np.unique(groups) (sorted); metab -> 0, all others unchanged.
+                    # REVERT to `group_reg=threshold_lambda` (scalar) when the control is done.
+                    # See DataForClaude/documentation/04_decisions_and_state.md (2026-09-10).
+                    _ug = np.unique(groups)
+                    _group_reg = ([0.0 if g == 5 else threshold_lambda for g in _ug]
+                                  if 5 in _ug else threshold_lambda)
                     gl = GroupLasso(
                         groups=groups,
-                        group_reg=threshold_lambda,
-                        l1_reg=l1_reg,
+                        group_reg=_group_reg,   # TEMPORARY: metab group unregularized
+                        l1_reg=l1_reg,          # global (1e-9, negligible); can't be per-group
                         frobenius_lipschitz=True,
                         scale_reg="inverse_group_size",
                         warm_start=True,
@@ -1283,34 +1293,19 @@ class SpatialCellularProgramsEstimator:
                         n_iter=1500,
                         tol=1e-5,
                     )
+                    # ===== END TEMPORARY =====
                 else:
                     gl = GroupLasso(
                         groups=groups,
                         **lasso_params
                     )
-                
+
                 gl.fit(X_cell, y_cell)
                 y_pred = gl.predict(X_cell)
                 coefs = gl.coef_.flatten()
                 _betas = np.hstack([gl.intercept_, coefs])
                 r2 = r2_score(y_cell, y_pred)
 
-                # METAB_DEBUG: metab is the last len(metab_pairs) columns/coefs (group 5).
-                # Log per-cluster whether the metab design columns are degenerate (std ~0) and
-                # whether GroupLasso zeroed their coefficients -- to explain empty metab@ betas.
-                if os.environ.get("METAB_DEBUG") and len(self.metab_pairs):
-                    _nm = len(self.metab_pairs)
-                    _Xm = X_cell[:, -_nm:]
-                    _bm = coefs[-_nm:]
-                    _std = _Xm.std(axis=0)
-                    print(f'[metab-debug] {self.target_gene} cluster {cluster}: '
-                          f'metab_cols={_nm} '
-                          f'X_std[min,max]=[{float(_std.min()):.3g},{float(_std.max()):.3g}] '
-                          f'X_absmax={float(np.abs(_Xm).max()):.3g} '
-                          f'coef_nonzero={int((_bm != 0).sum())}/{_nm} '
-                          f'coef_absmax={float(np.abs(_bm).max()):.3g} | '
-                          f'names={self.metab_pairs[:3]}', flush=True)
-                
             self.scores[cluster] = r2
             
             if r2 < 0.15:

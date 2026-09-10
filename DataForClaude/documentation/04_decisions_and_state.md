@@ -33,6 +33,16 @@ labeled gene sets to rank metabolites by effect (e.g. ↑T-cell activity / ↓ex
 | D11 | 2026-08-11 | **Metabolite terms now represent whole metabolites, not gene pairs: one summed modulator column per metabolite.** Supersedes the per-pair `beta_<export>@<import>` scheme (D6's per-pair columns). The estimator receives `metabolites: dict[name, list[(export, import)]]` and builds ONE column `metab@<name>` per metabolite = **sum over its pairs** of `received_ligand(export, diffused) × import(local)`, summing **both orientations** `(a,b)+(b,a)` (directionality dropped). One group-lasso group-#5 entry + one learned β per metabolite. Follows the paper's kernel-sum principle and weights every metabolite equally (one coefficient), vs. the old scheme where a metabolite with N transporter pairs got N columns. | Foster's call, 2026-08-11. **Merge** metabolites with an identical expanded pair-set into one `nameA\|nameB` column (they'd be perfectly-collinear duplicate predictors under near-OLS) — done in the **loader**, so the core estimator stays merge-agnostic. Betadata column `beta_metab@<name>` (the `metab@` marker keeps the read-back's `@`→metab classification). Param renamed `metab_pairs`→`metabolites` end-to-end (estimator/oracles/spaceship/loader/runner). **Downstream break (Foster to handle later):** viz + anything consuming the old `beta_<e>@<i>` columns or `gene_pairs.csv`. The near-OLS caveat (2026-07-17) still applies: summed-column scale grows with pair count, β absorbs the inverse — read magnitudes accordingly. |
 | D10 | 2026-07-21 | **Per-cell nbhd OOM (≥600k cells) → Option B: two-pass gene-pair + metabolite chunking, preserve the exact `uns` contract.** Foster chose **B over A** (stream-to-summary): our wall is **GPU** memory, not RAM, and B is simpler (no `summarize_nbhd_scores` refactor). B bounds GPU to `(n_cells, chunk)` but still stores the full `(n_cells, n_gp)`/`(n_cells, n_m)` matrices on **CPU** — accepted. | CU-E in `compute_interacting_cell_scores_lowmem`'s `np` branch. Params `gene_pair_chunk_size`/`metabolite_chunk_size` threaded through `nbhd_scores.compute_nbhd_scores` **only** (not `HarremanRunner`). Metabolite pass recomputes union gene-pair scores (~2× perm matmuls, sanctioned). **Review-caught bug:** observed `cs_m` must be reduced on the **same device** (GPU) as the perm scores — a CPU-side `.sum(dim=1)` over ≥3 pairs can ULP-differ from CUDA → flip an exceedance; CPU tests can't see it. See `07` §10, `05` §5. |
 
+## ⚠️ TEMPORARY patches to REVERT
+- **(2026-09-10) Metabolite group-lasso regularization ZEROED** in
+  `src/SpaceTravLR/models/parallel_estimators.py` (the `lasso_params is None` branch of
+  `fit`): `group_reg` is now a per-group array (`np.unique(groups)`-aligned) with the metab
+  group (5) set to `0.0`, all other groups still `threshold_lambda`. This is a **control
+  experiment** (Foster) to test whether the all-zero metab betas in the subsample runs come
+  from regularization or from degenerate design columns (near-constant/zero metab `x`).
+  **REVERT** to the scalar `group_reg=threshold_lambda` once the control is done. Marked in
+  code with `TEMPORARY` / `END TEMPORARY`. (`l1_reg=1e-9` is global and negligible, left as-is.)
+
 ## Leaning / proposed (not final)
 - Signed gene-set score: `mean_{positive} β̄ − mean_{negative/exhaustion} β̄`.
 
