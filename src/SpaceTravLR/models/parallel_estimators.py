@@ -1294,6 +1294,22 @@ class SpatialCellularProgramsEstimator:
                 coefs = gl.coef_.flatten()
                 _betas = np.hstack([gl.intercept_, coefs])
                 r2 = r2_score(y_cell, y_pred)
+
+                # METAB_DEBUG: metab is the last len(metab_pairs) columns/coefs (group 5).
+                # Log per-cluster whether the metab design columns are degenerate (std ~0) and
+                # whether GroupLasso zeroed their coefficients -- to explain empty metab@ betas.
+                if os.environ.get("METAB_DEBUG") and len(self.metab_pairs):
+                    _nm = len(self.metab_pairs)
+                    _Xm = X_cell[:, -_nm:]
+                    _bm = coefs[-_nm:]
+                    _std = _Xm.std(axis=0)
+                    print(f'[metab-debug] {self.target_gene} cluster {cluster}: '
+                          f'metab_cols={_nm} '
+                          f'X_std[min,max]=[{float(_std.min()):.3g},{float(_std.max()):.3g}] '
+                          f'X_absmax={float(np.abs(_Xm).max()):.3g} '
+                          f'coef_nonzero={int((_bm != 0).sum())}/{_nm} '
+                          f'coef_absmax={float(np.abs(_bm).max()):.3g} | '
+                          f'names={self.metab_pairs[:3]}', flush=True)
                 
             self.scores[cluster] = r2
             
