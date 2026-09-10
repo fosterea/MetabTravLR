@@ -432,27 +432,6 @@ def build_run_analysis(dataset, run, cell_type_col, data_dir=PROJECT_DATA_DIR) -
         key=lambda p: int(_SAMPLE_INDEX_RE.search(p.name).group(1)),
     )
 
-    # --- DIAGNOSTIC: dump the ACTUAL column names of the first betadata parquet and how each
-    # is classified, so a name mismatch (why "metab@" isn't found despite trained metabolites)
-    # is unambiguous in the log. Reads the schema only (no data load).
-    import pyarrow.parquet as pq
-    _first_pq = next((sub_dir / "spacetravlr_output" / "betadata" / f"{g}_betadata.parquet"
-                      for sub_dir in sub_dirs for g in focus_genes
-                      if (sub_dir / "spacetravlr_output" / "betadata" / f"{g}_betadata.parquet").is_file()),
-                     None)
-    if _first_pq is not None:
-        _all = list(pq.read_schema(_first_pq).names)
-        _beta = [c for c in _all if c.startswith("beta_")]
-        _by_group = {}
-        for c in _beta:
-            _by_group.setdefault(beta_analysis._group(c[len("beta_"):]), []).append(c)
-        _log(f"run_{run}: DIAGNOSTIC {_first_pq.parent.parent.parent.name}/{_first_pq.name}: "
-             f"{len(_all)} cols, {len(_beta)} beta_ cols; group counts "
-             f"{ {k: len(v) for k, v in _by_group.items()} }")
-        _log(f"run_{run}: DIAGNOSTIC non-beta0/tf/lr/ltf cols (first 12): "
-             f"{[c for c in _beta if beta_analysis._group(c[len('beta_'):]) == 'metab'][:12]}")
-        _log(f"run_{run}: DIAGNOSTIC sample of ALL beta_ column names (first 20): {_beta[:20]}")
-
     # --- betas: one obsm['beta_{gene}__sample{j}'] per (subsample, focus gene), read from
     # the betadata parquet database and reindexed onto every display cell (NaN where unfit).
     index_list = []
