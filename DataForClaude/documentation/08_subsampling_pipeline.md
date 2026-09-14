@@ -1,9 +1,11 @@
 # Gene-pair permutation subsampling (SpaceTravLR)
 
-> Built 2026-09-07 from `specs/subsample_spec.md`. Studies how **stable** the learned per-gene-pair
-> metabolite coefficients are by re-training SpaceTravLR on many random subsets of a curated
-> transporter-pair panel. **No `src/SpaceTravLR/` changes** — everything is in
-> `metab_processing/SpaceTravLR/` and rides the existing `SpaceShip.fit(metabolites=...)` path.
+> Built 2026-09-07 from `specs/subsample_spec.md` (working end-to-end by 2026-09-14). Studies how
+> **stable** the learned per-gene-pair metabolite coefficients are by re-training SpaceTravLR on
+> many random subsets of a curated transporter-pair panel. The pipeline lives in
+> `metab_processing/SpaceTravLR/` and rides the existing `SpaceShip.fit(metabolites=...)` path;
+> the only `src/SpaceTravLR/` edits are small setup-robustness / correctness fixes (see
+> **Core changes** below), not new feature logic.
 
 ## What it does
 1. Foster curates a small base panel `sample_metabolites.yaml` (same schema as
@@ -57,15 +59,19 @@ columns in one fit (accepted at the near-OLS defaults; the point is per-pair att
   NOTE is logged). Use `clear_markers` to force a re-fit.
 - **Annotation column is a CLI variable** (`--cell-type-col`; Alexi UC = coarse
   `25_06_11_ICI_5K_Coarse_annotations`). Falls back to the dataset config's `cell_type_src`.
-- **Both analysis objects.** A = `subsample_betas.h5ad`, a **self-contained analysis adata**:
-  the display adata (raw counts in `X`, cell-type annotation in `obs`) with, as `obsm`, the
-  betas (`beta_{gene}__sample{j}`, read from the betadata parquet DB; JSON `uns['subsample_index']`
-  maps key→sample/gene/columns) **and the metabolite communication scores** `x_metab` (cells ×
-  gene-pair, names in `uns['x_metab_modulators']`) — computed ONCE per run over the union of drawn
-  pairs (`beta_analysis.compute_metab_x`, in the SLURM job where torch lives) so the downstream
-  **analysis reads only this file with pure pandas/numpy — no SpaceTravLR/torch, no re-diffusion**.
-  `x_metab` is skipped (with a NOTE, betas intact) if the processed adata / `run_params.json` is
-  missing. B = `subsample_beta_means.csv` (tidy, via `beta_analysis.tier_means`, `sample` column).
+- **Both analysis objects.** A = `subsample_betas.h5ad`, a **self-contained analysis adata** built
+  from the shared setup's **processed `_adata.h5ad`** (the trained cells): the focus genes' **raw
+  counts** in `X` (from its `raw_count` layer) and the cell-type annotation in `obs`, with, as
+  `obsm`, the betas (`beta_{gene}__sample{j}`, read from the betadata parquet DB; JSON
+  `uns['subsample_index']` maps key→sample/gene/columns) **and the metabolite communication scores**
+  `x_metab` (cells × gene-pair, names in `uns['x_metab_modulators']`) — computed ONCE per run over
+  the union of drawn pairs (`beta_analysis.compute_metab_x`, in the SLURM job where torch lives) so
+  the downstream **analysis reads only this file with pure pandas/numpy — no SpaceTravLR/torch, no
+  re-diffusion**. (Sourcing from the *processed* adata, not the raw display `adata.h5ad`, is
+  deliberate: the raw file 504/errno-108'd on the cluster FS, and the processed one has exactly the
+  trained cells + their labels + `raw_count`.) `x_metab` is skipped (NOTE, betas intact) if the
+  processed adata / `run_params.json` is missing. B = `subsample_beta_means.csv` (tidy, via
+  `beta_analysis.tier_means`, `sample` column).
 - **Analysis notebook:** `metab_processing/Analysis/Foster/subsample_uc.ipynb` — loads A only;
   average β per gene pair in a cell type, per-pair β distributions, and R² of the cell type's raw
   counts vs β·x (`beta[:,pair]·x_metab[:,pair]`). Cell type starts at `T`.
@@ -77,20 +83,56 @@ columns in one fit (accepted at the near-OLS defaults; the point is per-pair att
   picks up the next unmarked subsample. `fit`'s own per-gene parquet resume composes under that.
   Running just the first subsample = sample `n_permutations=1`.
 
-## Usage
-```python
-# notebook
-run = write_subsamples('13473_HS4_UC-Slice_1', n_permutations=1, p=0.5,
-                       data_dir=f'{DATA_DIR}/Alexi_UC_Spliced', seed=0)
-# then the SLURM dispatch cell -> run_subsamples.py --dataset ... --run -1
-#   --cell-type-col 25_06_11_ICI_5K_Coarse_annotations --data-dir {DATA_DIR}/Alexi_UC_Spliced
-```
+## How to work with it (end to end)
+1. **Curate** `<dataset>/easy_download/harreman_outputs/sample_metabolites.yaml` (copy a subset of
+   that dataset's `metabolite_selection.yaml`; the transporter gene symbols must be in the panel).
+2. **Sample + dispatch** from `subsample_permutations.ipynb`:
+   ```python
+   run = write_subsamples('13473_HS4_UC-Slice_1', n_permutations=1, p=0.5,
+                          data_dir=f'{DATA_DIR}/Alexi_UC_Spliced', seed=0)
+   # then the SLURM dispatch cell -> run_subsamples.py --dataset ... --run -1
+   #   --cell-type-col 25_06_11_ICI_5K_Coarse_annotations --data-dir {DATA_DIR}/Alexi_UC_Spliced
+   ```
+   Training genes = `cfg["focus_genes"]` (shared `FOCUS_GENES` by default). To train **fewer genes
+   for speed**, set `'focus_genes': [...]` on the dataset in `dataset_configs.py` — do **not**
+   hardcode it in `run_subsamples.py`.
+3. **Analyse** in `metab_processing/Analysis/Foster/subsample_uc.ipynb` — point `RUN`/`DATASET`/
+   `GENE`/`CELL_TYPE` and run; it loads only `subsample_betas.h5ad`.
+
+**Re-fitting gotcha (important).** `clear_markers` deletes only the `DONE` markers, but `fit`
+resumes by **skipping any gene that already has a betadata parquet**. So to force a genuine re-fit
+of an existing run you must ALSO delete the parquets:
+`rm -rf <dataset>/spacetravlr_subsamples/run_{r}/subsample_*/spacetravlr_output/betadata` (or the
+whole `subsample_*` dirs), then re-dispatch. On a **fresh** run this doesn't apply.
+
+**Caveat — some metab betas legitimately come out zero (and vanish).** betadata is written with
+`nonzero_betadata = betadata.loc[:, (betadata != 0).any(axis=0)]` (`oracles.py`), so a metab column
+whose learned β is **exactly zero in every cell/cluster is dropped from the parquet** — it then
+appears in *no* `metab@` column and, if that happens to every metabolite, the CSV is header-only.
+This is data-driven: a metabolite's design column `x = received(export)·import` that is
+near-constant / near-zero (lowly-expressed transporters, clusterwise-smoothed) gives a zero
+group-lasso coefficient, which the fixed-anchor CNN can never move off zero. It is NOT a bug and
+**not fixable by regularization** (verified: at the near-OLS default `group_reg=1e-7`, zeroing the
+metab group's reg is a no-op — a degenerate column is zero either way). Different slices differ:
+Alexi Slice 4 yields nonzero metab betas (e.g. `metab@D-Glucose-SLC2A1_SLC2A1`,
+`metab@Lactate-SLC16A1_SLC16A1`); a slice whose sampled transporters are barely expressed will not.
+
+## Core changes (`src/SpaceTravLR/`, minimal)
+Kept small and general (not subsample-specific):
+- **`spaceship.get_nichenet_links_`** — reuse an existing `tflinks.parquet` (the ligand-target
+  matrix is species-only) instead of re-downloading, and retry the Zenodo fetch (it 504s
+  persistently). `run_subsamples._seed_nichenet_links` pre-seeds a fresh run's setup from a prior
+  run so it never hits the network. **Required** — setup dies on the 504 without it.
+- **`parallel_estimators.init_data`** — two behavior-preserving fixes (both cache checks now read
+  the local `adata.uns`, not a mix of `adata.uns`/`self.adata.uns`; `init_received_ligands` is
+  passed `layer=self.layer`). Correctness fixes, not needed by the feature per se.
 
 ## Tests
-`tests/test_subsamples.py` (26, Tier-0, no torch/SpaceShip/harreman): the pure functions,
-`build_run_analysis` over fake `beta_metab@...` parquets, and a **mocked `run_subsamples`**
-(SpaceShip stubbed) covering shared-setup + symlink + `DONE`-resume + `overwrite` rebuild.
-The real SLURM body (torch training) is only validated on Savio.
+`tests/test_subsamples.py` (31, Tier-0, no torch/SpaceShip/harreman): the pure functions,
+`build_run_analysis` over fake `beta_metab@...` parquets (incl. the zero-metab and unlabeled-cell
+warnings, and mocked `x_metab` storage), `_seed_nichenet_links`, and a **mocked `run_subsamples`**
+(SpaceShip stubbed) covering shared-setup + symlink + `DONE`-resume + `overwrite` rebuild. The real
+SLURM body (torch training) is only validated on Savio.
 
 ## Dev/review provenance
 Plan → independent **critic** (found the symlink-safety confirmation + YAML-tuple/uns-encoding

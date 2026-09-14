@@ -33,16 +33,6 @@ labeled gene sets to rank metabolites by effect (e.g. ↑T-cell activity / ↓ex
 | D11 | 2026-08-11 | **Metabolite terms now represent whole metabolites, not gene pairs: one summed modulator column per metabolite.** Supersedes the per-pair `beta_<export>@<import>` scheme (D6's per-pair columns). The estimator receives `metabolites: dict[name, list[(export, import)]]` and builds ONE column `metab@<name>` per metabolite = **sum over its pairs** of `received_ligand(export, diffused) × import(local)`, summing **both orientations** `(a,b)+(b,a)` (directionality dropped). One group-lasso group-#5 entry + one learned β per metabolite. Follows the paper's kernel-sum principle and weights every metabolite equally (one coefficient), vs. the old scheme where a metabolite with N transporter pairs got N columns. | Foster's call, 2026-08-11. **Merge** metabolites with an identical expanded pair-set into one `nameA\|nameB` column (they'd be perfectly-collinear duplicate predictors under near-OLS) — done in the **loader**, so the core estimator stays merge-agnostic. Betadata column `beta_metab@<name>` (the `metab@` marker keeps the read-back's `@`→metab classification). Param renamed `metab_pairs`→`metabolites` end-to-end (estimator/oracles/spaceship/loader/runner). **Downstream break (Foster to handle later):** viz + anything consuming the old `beta_<e>@<i>` columns or `gene_pairs.csv`. The near-OLS caveat (2026-07-17) still applies: summed-column scale grows with pair count, β absorbs the inverse — read magnitudes accordingly. |
 | D10 | 2026-07-21 | **Per-cell nbhd OOM (≥600k cells) → Option B: two-pass gene-pair + metabolite chunking, preserve the exact `uns` contract.** Foster chose **B over A** (stream-to-summary): our wall is **GPU** memory, not RAM, and B is simpler (no `summarize_nbhd_scores` refactor). B bounds GPU to `(n_cells, chunk)` but still stores the full `(n_cells, n_gp)`/`(n_cells, n_m)` matrices on **CPU** — accepted. | CU-E in `compute_interacting_cell_scores_lowmem`'s `np` branch. Params `gene_pair_chunk_size`/`metabolite_chunk_size` threaded through `nbhd_scores.compute_nbhd_scores` **only** (not `HarremanRunner`). Metabolite pass recomputes union gene-pair scores (~2× perm matmuls, sanctioned). **Review-caught bug:** observed `cs_m` must be reduced on the **same device** (GPU) as the perm scores — a CPU-side `.sum(dim=1)` over ≥3 pairs can ULP-differ from CUDA → flip an exceedance; CPU tests can't see it. See `07` §10, `05` §5. |
 
-## ⚠️ TEMPORARY patches to REVERT
-- **(2026-09-10) Metabolite group-lasso regularization ZEROED** in
-  `src/SpaceTravLR/models/parallel_estimators.py` (the `lasso_params is None` branch of
-  `fit`): `group_reg` is now a per-group array (`np.unique(groups)`-aligned) with the metab
-  group (5) set to `0.0`, all other groups still `threshold_lambda`. This is a **control
-  experiment** (Foster) to test whether the all-zero metab betas in the subsample runs come
-  from regularization or from degenerate design columns (near-constant/zero metab `x`).
-  **REVERT** to the scalar `group_reg=threshold_lambda` once the control is done. Marked in
-  code with `TEMPORARY` / `END TEMPORARY`. (`l1_reg=1e-9` is global and negligible, left as-is.)
-
 ## Leaning / proposed (not final)
 - Signed gene-set score: `mean_{positive} β̄ − mean_{negative/exhaustion} β̄`.
 
@@ -436,6 +426,33 @@ run_subsamples.py` + `subsample_permutations.ipynb`; +26 tests in `tests/test_su
   `Sample_1_UC1_inflamed`). **Not yet committed.**
 - Flags for Foster: folder spelling `spacetravlr_subsamples` (vs spec's "spacetravler"); shared
   setup deviates from the spec's literal "setup in each subsample folder" (efficiency; no core change).
+
+## Session 2026-09-14 — subsampling pipeline working end-to-end + cleanup (`08_...md`)
+Got the subsampling pipeline running to a real analysis on Alexi UC (Slice 4), then cleaned up.
+Fixes made along the way (all in `08_subsampling_pipeline.md`):
+- **`.yml` → `.yaml`** everywhere (matches `metabolite_selection.yaml`).
+- **`x_metab` is now stored** in `subsample_betas.h5ad` (computed once per run via
+  `beta_analysis.compute_metab_x`), and the analysis adata is built from the **processed
+  `_adata.h5ad`** (focus-gene `raw_count` + labels + betas + `x_metab`) — the raw display
+  `adata.h5ad` 504/errno-108'd on the cluster FS. So `subsample_uc.ipynb` is pure pandas/numpy.
+- **NicheNet setup no longer dies on Zenodo 504:** `spaceship.get_nichenet_links_` reuses an
+  existing species-only `tflinks.parquet` + retries; `run_subsamples._seed_nichenet_links` seeds a
+  fresh run from a prior one. **Required** for setup to complete.
+- Two behavior-preserving `parallel_estimators.init_data` fixes (local-`adata.uns` cache check;
+  `layer=self.layer` into `init_received_ligands`).
+- **KEY FINDING — empty metab betas are usually data, not a bug.** betadata drops all-zero columns
+  (`oracles.py`), so a metabolite whose design column `x = received(export)·import` is
+  near-constant/near-zero (lowly-expressed transporters, clusterwise MAGIC smoothing) gets a zero
+  group-lasso coefficient (the CNN anchor is a FIXED buffer, so it stays zero) and **disappears
+  from the parquet**. Confirmed with a control: at the near-OLS default `group_reg=1e-7`, zeroing
+  the metab group's reg is a **no-op** (a degenerate column is zero either way) — the temporary
+  reg-zeroing was reverted. Different slices differ (Slice 4 has nonzero metab betas; others may not).
+- **Re-fit gotcha:** `clear_markers` clears only `DONE`; `fit` still skips genes with an existing
+  parquet, so a real re-fit of an existing run also needs the betadata parquets deleted.
+- **Cleanup:** reverted the temp metab-reg change and the hardcoded 8-gene `focus_genes` (back to
+  `cfg["focus_genes"]`); removed the throwaway `METAB_DEBUG`/column-dump logging. Kept the NicheNet
+  fix (needed) and the two estimator fixes (correct, Foster-requested). Suite: `test_subsamples.py`
+  31 pass; metab/beta-analysis green.
 
 ## Local assets for dev/testing
 - Demo data in `data/`: `Slidetags_human_tonsil.h5ad`, `Slidetags_human_melanoma.h5ad`,

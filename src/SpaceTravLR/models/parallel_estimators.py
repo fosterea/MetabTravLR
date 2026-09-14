@@ -1271,20 +1271,10 @@ class SpatialCellularProgramsEstimator:
                 groups = [1]*len(self.regulators) + [2]*len(self.lr_pairs) + [3]*len(self.tfl_pairs) + [4]*len(self.extra_modulators) + [5]*len(self.metab_pairs)
                 groups = np.array(groups)
                 if lasso_params is None:
-                    # ===== TEMPORARY (control experiment, Foster 2026-09-10) =====
-                    # Zero the group-lasso regularization on the METABOLITE group (5) ONLY, to
-                    # test whether the all-zero metab betas come from regularization or from
-                    # degenerate design columns. group_lasso takes a per-group `group_reg` array
-                    # aligned to np.unique(groups) (sorted); metab -> 0, all others unchanged.
-                    # REVERT to `group_reg=threshold_lambda` (scalar) when the control is done.
-                    # See DataForClaude/documentation/04_decisions_and_state.md (2026-09-10).
-                    _ug = np.unique(groups)
-                    _group_reg = ([0.0 if g == 5 else threshold_lambda for g in _ug]
-                                  if 5 in _ug else threshold_lambda)
                     gl = GroupLasso(
                         groups=groups,
-                        group_reg=_group_reg,   # TEMPORARY: metab group unregularized
-                        l1_reg=l1_reg,          # global (1e-9, negligible); can't be per-group
+                        group_reg=threshold_lambda,
+                        l1_reg=l1_reg,
                         frobenius_lipschitz=True,
                         scale_reg="inverse_group_size",
                         warm_start=True,
@@ -1293,7 +1283,6 @@ class SpatialCellularProgramsEstimator:
                         n_iter=1500,
                         tol=1e-5,
                     )
-                    # ===== END TEMPORARY =====
                 else:
                     gl = GroupLasso(
                         groups=groups,
