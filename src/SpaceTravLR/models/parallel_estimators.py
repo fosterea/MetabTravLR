@@ -970,10 +970,10 @@ class SpatialCellularProgramsEstimator:
         # Run the diffusion iff the adata we're operating on has neither cache. Both checks
         # must reference the SAME object (`adata`, the local one being processed) -- the old
         # code read `received_ligands` from `adata.uns` but `received_ligands_tfl` from
-        # `self.adata.uns`, so a `get_betas(adata=...)` call on a fresh adata whose uns lacks
-        # the caches would wrongly skip diffusion (self.adata still has tfl) and then KeyError
-        # at the metab/L-R reads below. `layer=self.layer` diffuses from the estimator's layer
-        # rather than silently hardcoding the function default.
+        # `self.adata.uns`, so an `init_data(adata=...)` call on a fresh adata (via
+        # `predict(self, cluster, adata, ...)`) whose uns lacks the caches would wrongly skip
+        # diffusion (self.adata still has tfl) and then KeyError at the metab/L-R reads below.
+        # `layer=self.layer` diffuses from the estimator's layer, not the function default.
         if not (('received_ligands' in adata.uns) or ('received_ligands_tfl' in adata.uns)):
             adata = init_received_ligands(
                 adata,

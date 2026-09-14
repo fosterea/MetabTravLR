@@ -527,6 +527,20 @@ class RunSubsamplesTests(unittest.TestCase):
                 lambda paths: ["SLC2A1", "SLC2A9", "ATP7A", "ATP7B"]))
             yield
 
+    def test_all_pairs_var_filtered_warns_and_still_fits(self):
+        """When every sampled pair's genes are absent from the panel, pairs_to_metabolites
+        returns {}: the job warns loudly and still calls fit(metabolites={}) (no crash)."""
+        import metab_processing.SpaceTravLR.run_subsamples as rs
+        buf = io.StringIO()
+        with self._patched(), \
+                mock.patch.object(rs, "_processed_var_names", lambda paths: ["NOT_A_PANEL_GENE"]), \
+                contextlib.redirect_stdout(buf):
+            run_subsamples(DATASET, run=1, data_dir=self.tmp)
+        log = buf.getvalue()
+        self.assertIn("no metab@ columns will be trained", log)
+        self.assertTrue(_MockShip.fits)                       # fit still ran
+        self.assertTrue(all(meta == {} for _out, meta in _MockShip.fits))
+
     def test_full_run_fits_all_and_builds_analysis(self):
         with self._patched():
             run_subsamples(DATASET, run=-1, data_dir=self.tmp)

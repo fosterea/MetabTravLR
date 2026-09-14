@@ -128,11 +128,11 @@ Kept small and general (not subsample-specific):
   passed `layer=self.layer`). Correctness fixes, not needed by the feature per se.
 
 ## Tests
-`tests/test_subsamples.py` (31, Tier-0, no torch/SpaceShip/harreman): the pure functions,
+`tests/test_subsamples.py` (32, Tier-0, no torch/SpaceShip/harreman): the pure functions,
 `build_run_analysis` over fake `beta_metab@...` parquets (incl. the zero-metab and unlabeled-cell
 warnings, and mocked `x_metab` storage), `_seed_nichenet_links`, and a **mocked `run_subsamples`**
-(SpaceShip stubbed) covering shared-setup + symlink + `DONE`-resume + `overwrite` rebuild. The real
-SLURM body (torch training) is only validated on Savio.
+(SpaceShip stubbed) covering shared-setup + symlink + `DONE`-resume + `overwrite` rebuild + the
+all-pairs-var-filtered warning. The real SLURM body (torch training) is only validated on Savio.
 
 ## Dev/review provenance
 Plan → independent **critic** (found the symlink-safety confirmation + YAML-tuple/uns-encoding

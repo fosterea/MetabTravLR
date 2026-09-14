@@ -109,6 +109,10 @@ def write_subsamples(dataset, n_permutations, p, data_dir, seed=None) -> int:
     paths = dataset_paths(dataset, data_dir)
     harreman_dir = paths["selection_yaml"].parent
     selection = load_metabolite_selection(harreman_dir / "sample_metabolites.yaml")
+    if not any(pairs for pairs in selection.values()):
+        raise ValueError(
+            f"sample_metabolites.yaml has no gene pairs ({harreman_dir / 'sample_metabolites.yaml'}); "
+            f"nothing to sample (a wholly-empty base panel would retry forever).")
 
     subsamples_dir = harreman_dir / "subsamples"
     r = latest_run(subsamples_dir) + 1
@@ -325,47 +329,53 @@ def _read_h5ad_retry(path, tries=4, wait=10):
     raise last
 
 
-def _analysis_base(processed_path, focus_genes):
-    """The analysis AnnData's base, built from the PROCESSED `_adata.h5ad` (the shared setup's),
-    NOT the raw display `adata.h5ad`. The processed file is what betas + x are built on -- its
-    cells are exactly the trained cells and it always carries the cell-type annotation and the
-    `raw_count` layer -- and it opens reliably even when the raw display adata is unavailable on
-    the cluster FS (the errno-108 open failure). Returns focus-gene RAW counts as `X` + full
-    `obs` (cell types) + `obsm['spatial']`, everything the downstream analysis needs.
+def _analysis_base(proc, focus_genes):
+    """The analysis AnnData's base, built from the already-loaded PROCESSED adata `proc` (the
+    shared setup's `_adata.h5ad`), NOT the raw display `adata.h5ad`. The processed adata is what
+    betas + x are built on -- its cells are exactly the trained cells and it always carries the
+    cell-type annotation and the `raw_count` layer. Returns focus-gene RAW counts as `X` + full
+    `obs` (cell types) + `obsm['spatial']`, everything the downstream analysis needs. Does not
+    mutate `proc` (subsets a copy), so the caller can reuse it (e.g. for the x diffusion).
     """
-    proc = _read_h5ad_retry(processed_path)
     present = [g for g in focus_genes if g in set(proc.var_names)]
     ra = proc[:, present].copy() if present else anndata.AnnData(obs=proc.obs.copy())
-    if present and "raw_count" in ra.layers:      # X after processing is log1p'd; use raw_count
-        ra.X = ra.layers["raw_count"].copy()
+    if present:
+        if "raw_count" in ra.layers:              # X after processing is log1p'd; use raw_count
+            ra.X = ra.layers["raw_count"].copy()
+        else:
+            _log("NOTE: processed adata has no 'raw_count' layer; analysis X is the processed "
+                 "(log1p'd) X, not raw counts.")
     ra.layers.clear()                              # keep the stored file lean
-    for key in [k for k in ra.obsm if k != "spatial"]:
+    for key in list(ra.obsm.keys()):              # keep ONLY spatial (drop X_umap etc.)
         del ra.obsm[key]
+    if "spatial" in proc.obsm:
+        ra.obsm["spatial"] = np.asarray(proc.obsm["spatial"])
     ra.obs_names = proc.obs_names.copy()
     return ra
 
 
-def _store_x_metab(ra, run, sub_root, paths, obs_names, metab_cols_total) -> bool:
+def _store_x_metab(ra, run, sub_root, paths, obs_names, metab_cols_total, x_adata) -> bool:
     """Attach the metabolite communication-score matrix to `ra.obsm['x_metab']` (+ column
     names in `uns['x_metab_modulators']`), so the downstream analysis can build beta*x from
     the saved adata alone -- no re-diffusion, no SpaceTravLR/torch.
 
     `x` for a gene pair is target-gene- and subsample-independent, so we compute it ONCE for
     the UNION of every pair drawn in the run (via the existing `beta_analysis.compute_metab_x`,
-    over the shared processed `_adata.h5ad` with the run's diffusion params). Skips -- with a
-    NOTE, leaving the betas intact -- if there are no metab columns, the processed adata or
-    `run_params.json` is missing, or the diffusion raises. Returns whether x was stored.
+    over `x_adata` -- the already-loaded processed `_adata.h5ad`, shared with `_analysis_base`
+    so the flaky file is read only once -- with the run's diffusion params). `compute_metab_x`
+    mutates then restores `x_adata.uns`. Skips -- with a NOTE, leaving the betas intact -- if
+    there are no metab columns, no `run_params.json`, or the diffusion raises (the full
+    traceback is logged so a real bug isn't mistaken for a transient). Returns whether x stored.
     """
     yaml_dir = paths["selection_yaml"].parent / "subsamples" / f"run_{run}"
-    processed = sub_root / "_setup" / "spacetravlr_output" / "input_data" / "_adata.h5ad"
     rp_path = next(iter(sorted(
         sub_root.glob("subsample_*/spacetravlr_output/betadata/run_params.json"))), None)
-    if not (metab_cols_total and processed.is_file() and rp_path is not None):
-        _log(f"run_{run}: x_metab NOT stored (needs metab columns + the shared processed "
-             f"_adata.h5ad + a subsample run_params.json). Analysis will have betas but no beta*x.")
+    if not (metab_cols_total and rp_path is not None):
+        _log(f"run_{run}: x_metab NOT stored (needs metab columns + a subsample "
+             f"run_params.json). Analysis will have betas but no beta*x.")
         return False
     try:
-        var_names = _processed_var_names({"input_data": processed.parent})
+        var_names = list(x_adata.var_names)
         union_meta = {}
         for yp in sorted(yaml_dir.glob("sampled_metabolites_*.yaml")):
             union_meta.update(
@@ -374,21 +384,20 @@ def _store_x_metab(ra, run, sub_root, paths, obs_names, metab_cols_total) -> boo
             _log(f"run_{run}: x_metab NOT stored (no gene pairs survived the var-filter).")
             return False
         rp = json.loads(rp_path.read_text())
-        x_adata = anndata.read_h5ad(processed)
         x = beta_analysis.compute_metab_x(
             x_adata, union_meta, radius=rp["radius"],
             contact_distance=rp.get("contact_distance", 50),
             scale_factor=rp.get("scale_factor", 100),
             layer=rp.get("layer", "imputed_count"),
         ).reindex(obs_names)
-        del x_adata
         ra.obsm["x_metab"] = x.to_numpy()
         ra.uns["x_metab_modulators"] = list(x.columns)   # 'metab@{Metabolite}-{g1}_{g2}'
         _log(f"run_{run}: stored x_metab {tuple(x.shape)} ({len(x.columns)} gene-pair columns)")
         return True
-    except Exception as e:
-        _log(f"run_{run}: NOTE could not compute x_metab ({type(e).__name__}: {e}); betas "
-             f"still written, but the analysis will lack beta*x.")
+    except Exception:
+        import traceback
+        _log(f"run_{run}: NOTE could not compute x_metab; betas still written, but the analysis "
+             f"will lack beta*x. Traceback:\n{traceback.format_exc()}")
         return False
 
 
@@ -418,7 +427,8 @@ def build_run_analysis(dataset, run, cell_type_col, data_dir=PROJECT_DATA_DIR) -
     # the cluster FS (the errno-108 open failure that crashed this step). We keep only the focus
     # genes' raw counts + obs + spatial -- all the analysis needs.
     processed = sub_root / "_setup" / "spacetravlr_output" / "input_data" / "_adata.h5ad"
-    ra = _analysis_base(processed, focus_genes)
+    proc = _read_h5ad_retry(processed)          # read the flaky file ONCE (retry-guarded);
+    ra = _analysis_base(proc, focus_genes)      # reused by _store_x_metab's diffusion below
     obs = ra.obs
     obs_names = ra.obs_names
     if cell_type_col not in obs.columns:
@@ -461,7 +471,8 @@ def build_run_analysis(dataset, run, cell_type_col, data_dir=PROJECT_DATA_DIR) -
 
     # Compute + attach the metabolite communication scores `x_metab` so the analysis can form
     # beta*x with NO SpaceTravLR/diffusion (this runs inside the SLURM job, where torch exists).
-    _store_x_metab(ra, run, sub_root, paths, obs_names, metab_cols_total)
+    # Reuses the already-loaded `proc` (compute_metab_x mutates then restores its uns).
+    _store_x_metab(ra, run, sub_root, paths, obs_names, metab_cols_total, proc)
 
     ra.write_h5ad(sub_root / "subsample_betas.h5ad")
     _log(f"run_{run}: wrote subsample_betas.h5ad ({len(index_list)} beta matrices"
