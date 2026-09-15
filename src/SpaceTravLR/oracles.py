@@ -81,7 +81,8 @@ class BaseTravLR(ABC):
     
     
     @staticmethod
-    def impute_clusterwise(adata, annot='cell_type', layer='normalized_count', layer_added='imputed_count'):
+    def impute_clusterwise(adata, annot='cell_type', layer='normalized_count', layer_added='imputed_count',
+                           min_cells_for_magic=16):
         import magic
         import warnings
         import enlighten
@@ -105,11 +106,21 @@ class BaseTravLR(ABC):
         )
 
         for cell_type in adata.obs[annot].unique():
-            magic_operator = magic.MAGIC(verbose=0)
-
             mask = adata.obs[annot] == cell_type
             X_subset = X.loc[mask]
             _t = time.time()
+
+            # MAGIC's kNN graph asks for `min_cells_for_magic` (16 by default) neighbours, so a
+            # cluster smaller than that crashes it (n_neighbors > n_samples_fit). Keep those cells'
+            # raw `layer` values instead of imputing -- better than dropping the cluster.
+            if X_subset.shape[0] < min_cells_for_magic:
+                print(f'[impute] cluster {cell_type!r}: {X_subset.shape[0]} cells '
+                      f'< {min_cells_for_magic}, using raw {layer} (no MAGIC)', flush=True)
+                X_magic_list.append(X_subset)
+                pbar.update()
+                continue
+
+            magic_operator = magic.MAGIC(verbose=0)
             X_magic_subset = magic_operator.fit_transform(X_subset, genes='all_genes')
             print(f'[impute] cluster {cell_type!r}: {X_subset.shape[0]} cells '
                   f'in {time.time() - _t:.1f}s', flush=True)
