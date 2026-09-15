@@ -10,7 +10,6 @@ parallel_estimators); runs in the model env, not the pure-pandas Tier-0 loop.
 import os
 import sys
 import warnings
-from unittest.mock import patch
 
 warnings.filterwarnings("ignore")
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "src")))
@@ -121,78 +120,59 @@ def test_add_x_data_no_metabolites():
     assert len(adata.uns["received_ligands_cols"]) == adata.obsm["received_ligands"].shape[1]
 
 
-def test_build_x_adata_reuses_existing_setup(tmp_path):
-    """`build_x_adata` with `reuse_setup=True` reads an already-processed `_adata.h5ad`
-    instead of calling `SpaceShip.setup_` -- so this test never trains/builds networks.
+def _make_raw_adata(n=20, annot_col="my_annot", seed=8):
+    """A RAW (un-preprocessed) adata: counts in X, no imputed_count layer, spatial coords,
+    and a custom annotation column -- what `build_x_adata` takes as input. One cluster of
+    n>=16 cells so MAGIC runs on the real path."""
+    rng = np.random.default_rng(seed)
+    all_genes = GENES + [TARGET]
+    X = (rng.random((n, len(all_genes))) * 5).astype(np.float32)  # small values, no log1p
+    a = ad.AnnData(X=X)
+    a.var_names = all_genes
+    a.obs_names = [f"c{i}" for i in range(n)]
+    a.obs[annot_col] = pd.Categorical(["ctA"] * n)
+    a.obsm["spatial"] = rng.uniform(0, 500, size=(n, 2))
+    return a
 
-    `processed` deliberately has NO 'cell_type' obs column (only 'cell_type_int'), and
-    `annot` is left at its default 'cell_type': the relabel/raw_count step must be skipped
-    entirely on the reuse path, or this would raise a KeyError.
-    """
-    processed = _make_adata(seed=5)
-    assert "cell_type" not in processed.obs.columns
-    setup_dir = tmp_path / "spacetravlr_output"
-    (setup_dir / "input_data").mkdir(parents=True)
-    processed.write_h5ad(setup_dir / "input_data" / "_adata.h5ad")
 
-    out_path = tmp_path / "lr_x.h5ad"
-    result = build_x_adata(
-        processed, str(out_path), metabolites=METABOLITES,
-        radius=RADIUS, contact_distance=CONTACT, scale_factor=SCALE, setup_dir=setup_dir,
-        reuse_setup=True,
-    )
+def test_build_x_adata_preprocesses_and_writes_single_adata(tmp_path):
+    """End-to-end on a RAW adata: build_x_adata imputes, scales spatial, computes the x data,
+    and writes ONE adata (no spacetravlr_output tree). Runs real MAGIC + diffusion."""
+    raw = _make_raw_adata(n=20, annot_col="my_annot")
+    assert "imputed_count" not in raw.layers
+    spatial_in = raw.obsm["spatial"].copy()
 
-    assert result.obsm["x_metab"].shape == (processed.n_obs, 1)
-    assert "received_ligands" in result.obsm
+    out_path = tmp_path / "LinearRegression" / "x_adata.h5ad"
+    result = build_x_adata(raw, str(out_path), annot="my_annot", metabolites=METABOLITES,
+                           radius=RADIUS, contact_distance=CONTACT, scale_factor=SCALE)
 
+    # nothing but the one file was written (no spacetravlr_output/ tree)
     assert out_path.is_file()
+    assert [p.name for p in (tmp_path / "LinearRegression").iterdir()] == ["x_adata.h5ad"]
+
     written = ad.read_h5ad(out_path)
-    assert "x_metab" in written.obsm
-    assert "received_ligands" in written.obsm
+    assert "imputed_count" in written.layers
+    assert "cell_type_int" in written.obs.columns
+    assert written.obsm["x_metab"].shape == (raw.n_obs, 1)
     assert written.uns["x_metab_modulators"] == ["metab@M"]
+    assert "received_ligands" in written.obsm
+    # spatial was scaled in place, and the original is preserved as spatial_unscaled
+    assert "spatial_unscaled" in written.obsm
+    assert not np.allclose(written.obsm["spatial"], spatial_in)
+    np.testing.assert_allclose(written.obsm["spatial_unscaled"], spatial_in)
+    # the big diffusion frames are not left in uns
+    assert "received_ligands_tfl" not in written.uns
 
 
-def test_build_x_adata_fresh_setup_threads_args_to_spaceship(tmp_path):
-    """The reuse_setup=False (fresh setup_) path threads its args to `SpaceShip` correctly
-    -- constructor `genes=`, and `setup_(overwrite=True, run_commot=...)` -- with a fake
-    SpaceShip so this never runs the real (expensive) setup_ pipeline. Also proves Fix 1:
-    the relabel/raw_count mutation DOES happen on this path (the fake asserts on it)."""
-    calls = {}
-
-    class _FakeSpaceShip:
-        def __init__(self, name, outdir, genes=None):
-            calls["init"] = dict(name=name, outdir=outdir, genes=genes)
-            self.adata = None
-
-        def setup_(self, adata, overwrite=False, run_commot=False):
-            calls["setup_"] = dict(
-                overwrite=overwrite, run_commot=run_commot,
-                had_raw_count="raw_count" in adata.layers,
-                cell_type=list(adata.obs["cell_type"].unique()),
-            )
-            self.adata = _make_adata(seed=9)
-
-    raw = _make_adata(seed=8)
-    raw.obs["annotation"] = pd.Categorical(["ctA"] * raw.n_obs)
-    setup_dir = tmp_path / "spacetravlr_output"
-    out_path = tmp_path / "lr_x.h5ad"
-
-    with patch("SpaceTravLR.spaceship.SpaceShip", _FakeSpaceShip):
-        result = build_x_adata(
-            raw, str(out_path), annot="annotation", metabolites=METABOLITES,
-            focus_genes=["G"], radius=RADIUS, contact_distance=CONTACT, scale_factor=SCALE,
-            run_commot=True, setup_dir=setup_dir, reuse_setup=False,
-        )
-
-    assert calls["init"] == dict(name="lr_setup", outdir=str(setup_dir), genes=["G"])
-    assert calls["setup_"]["overwrite"] is True
-    assert calls["setup_"]["run_commot"] is True
-    assert calls["setup_"]["had_raw_count"] is True
-    assert calls["setup_"]["cell_type"] == ["ctA"]
-
-    assert "x_metab" in result.obsm
-    assert "received_ligands" in result.obsm
+def test_build_x_adata_small_cluster_uses_raw(tmp_path):
+    """A sub-`min_cells_for_magic` cluster does not crash MAGIC; build_x_adata completes and
+    its imputed_count for that cluster equals the (log/raw) input (via the impute fallback)."""
+    raw = _make_raw_adata(n=6, annot_col="my_annot")  # 6 < 16
+    out_path = tmp_path / "LinearRegression" / "x_adata.h5ad"
+    result = build_x_adata(raw, str(out_path), annot="my_annot", metabolites=METABOLITES)
     assert out_path.is_file()
+    assert "imputed_count" in result.layers
+    assert result.obsm["x_metab"].shape == (raw.n_obs, 1)
 
 
 if __name__ == "__main__":

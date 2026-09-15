@@ -64,34 +64,48 @@ def add_x_data(adata, metabolites=None, radius=100, contact_distance=30,
     return adata
 
 
-def build_x_adata(adata, out_path, *, annot='cell_type', metabolites=None, focus_genes=None,
-                  radius=100, contact_distance=30, scale_factor=100, run_commot=False,
-                  setup_dir=None, name='lr_setup', reuse_setup=True):
-    """End-to-end: preprocess + build networks (via `SpaceShip.setup_`) + `add_x_data` +
-    write `out_path`. Returns the written adata.
+def _preprocess(adata, annot='cell_type', min_cells_for_magic=16, layer_added='imputed_count'):
+    """In-house preprocessing: scale spatial coords, encode `cell_type_int`, and MAGIC-impute
+    into `layer_added`. Mirrors `SpaceShip.process_adata_` MINUS the UMAP (CellOracle-only) and
+    the file-tree writes -- we only need what the x computation consumes. Mutates `adata`.
     """
-    if setup_dir is None:
-        setup_dir = Path(out_path).parent / 'spacetravlr_output'
-    processed = Path(setup_dir) / 'input_data' / '_adata.h5ad'
+    import scanpy as sc
+    from SpaceTravLR.tools.utils import scale_adata
+    from SpaceTravLR.tools.network import encode_labels
+    from SpaceTravLR.oracles import BaseTravLR
 
-    if reuse_setup and processed.is_file():
-        import scanpy as sc
-        print(f'[build_x_adata] reusing existing setup: {processed}')
-        proc = sc.read_h5ad(processed)
-    else:
-        from SpaceTravLR.spaceship import SpaceShip
-        adata = adata.copy()
-        adata.obs['cell_type'] = adata.obs[annot]
-        if 'raw_count' not in adata.layers:
-            adata.layers['raw_count'] = adata.X.copy()
-        print(f'[build_x_adata] running setup_ -> {setup_dir}')
-        ship = SpaceShip(name=name, outdir=str(setup_dir), genes=focus_genes)
-        ship.setup_(adata, overwrite=True, run_commot=run_commot)
-        proc = ship.adata
+    adata.obs['cell_type'] = adata.obs[annot]
+    scale_adata(adata)  # scales obsm['spatial'] so `radius` is in the expected units
+    mapping = encode_labels(adata.obs['cell_type'], reverse_dict=True)
+    adata.obs['cell_type_int'] = adata.obs['cell_type'].map(mapping).astype(int)
 
-    add_x_data(proc, metabolites, radius, contact_distance, scale_factor)
+    if layer_added not in adata.layers:
+        if 'normalized_count' not in adata.layers:
+            if adata.X.max() > 100:
+                sc.pp.log1p(adata)
+            adata.layers['normalized_count'] = adata.X.copy()
+        BaseTravLR.impute_clusterwise(
+            adata, annot='cell_type', layer='normalized_count',
+            layer_added=layer_added, min_cells_for_magic=min_cells_for_magic,
+        )
+        adata.layers.pop('normalized_count', None)
+    return adata
+
+
+def build_x_adata(adata, out_path, *, annot='cell_type', metabolites=None,
+                  radius=100, contact_distance=30, scale_factor=100,
+                  min_cells_for_magic=16, layer='imputed_count'):
+    """End-to-end: preprocess (impute) + `add_x_data` + write a single adata to `out_path`.
+
+    Writes ONLY the one adata (imputed-count layer + the x data) -- no SpaceTravLR output tree,
+    no CellOracle/NicheNet networks (those aren't needed for the stored x building blocks).
+    Returns the written adata.
+    """
+    adata = adata.copy()
+    _preprocess(adata, annot=annot, min_cells_for_magic=min_cells_for_magic, layer_added=layer)
+    add_x_data(adata, metabolites, radius, contact_distance, scale_factor, layer)
 
     Path(out_path).parent.mkdir(parents=True, exist_ok=True)
-    proc.write_h5ad(out_path)
+    adata.write_h5ad(out_path)
     print(f'[build_x_adata] wrote {out_path}')
-    return proc
+    return adata
