@@ -483,6 +483,18 @@ computes and stores the model's **x building blocks**, and saves the adata.
     Rev-4 dedup design + interpretation before coding. Reviews caught (and fixed) a stale-diffusion/COMMOT
     blocker, a dead `receptor_thresh` run_params override, and the Rev-4 COMMOT-mask bypass in the empty-
     frame guard (now a hard error).
+- **`least_squares.py` (2026-09-16)** — the OLS layer over the Rev-4 factor store. `fit_gene_betas(adata,
+  genes=None, metabolites='all', *, annot_col, annot_value, cells, layer)` → tidy `[gene, factor, group,
+  beta, r2, n_cells]` (per-cell-type fit: filter cells by an annotation value, e.g. T cells);
+  `subsample_cells(seed, frac|n, annot_col, annot_value)` and `subsample_metab_betas(gene, metabolite, ...)`
+  for cell-subsampling distributions; `rank_coefficients` + `plot_top_coefficients`/`plot_beta_histogram`.
+  **Library = numpy `np.linalg.lstsq` (CPU, no GPU needed for fitting; GPU only for the upstream `setup_`).**
+  Raw OLS (no standardization); regularized regression is a future swap in `_fit_ols`. **Caveat:** with
+  collinear factor columns (metabolites sharing SLC2A*/ABC* genes), `lstsq` returns a min-norm, non-unique
+  solution — magnitude ranking is ambiguous among collinear columns. Notebooks: `build_x_test.ipynb` builds
+  x_adata for all 4 Alexi UC slices; `ols_analysis.ipynb` shows T-cell coefficient rankings per sample and
+  4 glucose cell-subsampling histograms (one fixed gene, T cells). metab-dev + metab-review; review caught
+  a per-subsample re-densification efficiency bug (fixed: build X/y once, row-slice per subsample).
 - **Storage = building blocks, not products** (D12): lossless, no cells×M×G blowup; per-gene design
   matrices reconstruct at regression time from `received_ligands × imputed_count` (+ networks on disk).
 - **Test notebook** `build_x_test.ipynb` (bare, no docs): defaults to UC slice 4
