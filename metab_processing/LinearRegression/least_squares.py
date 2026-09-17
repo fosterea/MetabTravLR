@@ -29,20 +29,8 @@ for _p in (str(_root), str(_root / "src")):
     if _p not in sys.path:
         sys.path.insert(0, _p)
 
-from metab_processing.LinearRegression.build_x import get_gene_factors, METAB_PREFIX  # noqa: E402
-
-# Factor-group classification by name separator, mirrored locally (from beta_analysis._group)
-# so the fitting/analysis path imports no heavy data-loader deps (e.g. pyarrow).
-_SEPARATORS = {"@": "metab", "$": "lr", "#": "ltf"}
-
-
-def _group(modulator):
-    """'metab' / 'lr' / 'ltf' by separator, else 'tf' (a bare gene name)."""
-    for sep, name in _SEPARATORS.items():
-        if sep in modulator:
-            return name
-    return "tf"
-
+from metab_processing.LinearRegression.build_x import get_gene_factors  # noqa: E402
+from metab_processing.SpaceTravLR.beta_analysis import _group, METAB_PREFIX  # noqa: E402
 
 _COLS = ["gene", "factor", "group", "beta", "r2", "n_cells"]
 

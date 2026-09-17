@@ -32,9 +32,7 @@ for _p in (str(_root), str(_root / "src")):
     if _p not in sys.path:
         sys.path.insert(0, _p)
 
-# Mirror of beta_analysis.METAB_PREFIX, kept local so importing build_x for the analysis
-# path (get_gene_factors) pulls no heavy data-loader deps (e.g. pyarrow via beta_analysis).
-METAB_PREFIX = "metab@"
+from metab_processing.SpaceTravLR.beta_analysis import METAB_PREFIX  # noqa: E402
 
 # Keys mirrored, when present, from betadata/run_params.json onto the matching kwarg.
 # NOTE: run_params.json never persists 'receptor_thresh' (SpaceTravLR.__init__'s dump,
