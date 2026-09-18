@@ -489,12 +489,33 @@ computes and stores the model's **x building blocks**, and saves the adata.
   `subsample_cells(seed, frac|n, annot_col, annot_value)` and `subsample_metab_betas(gene, metabolite, ...)`
   for cell-subsampling distributions; `rank_coefficients` + `plot_top_coefficients`/`plot_beta_histogram`.
   **Library = numpy `np.linalg.lstsq` (CPU, no GPU needed for fitting; GPU only for the upstream `setup_`).**
-  Raw OLS (no standardization); regularized regression is a future swap in `_fit_ols`. **Caveat:** with
-  collinear factor columns (metabolites sharing SLC2A*/ABC* genes), `lstsq` returns a min-norm, non-unique
-  solution — magnitude ranking is ambiguous among collinear columns. Notebooks: `build_x_test.ipynb` builds
-  x_adata for all 4 Alexi UC slices; `ols_analysis.ipynb` shows T-cell coefficient rankings per sample and
-  4 glucose cell-subsampling histograms (one fixed gene, T cells). metab-dev + metab-review; review caught
-  a per-subsample re-densification efficiency bug (fixed: build X/y once, row-slice per subsample).
+  Notebooks: `build_x_test.ipynb` builds x_adata for all 4 Alexi UC slices; `ols_analysis.ipynb` shows
+  T-cell coefficient rankings per sample and 4 glucose cell-subsampling histograms.
+  - **2026-09-17 extensions** (motivated by extremely large OLS coefficients — collinearity + scale):
+    - **L1 regression + standardization.** `fit_gene_betas(..., method='OLS'|'l1', penalty=1.0, standardize=False)`
+      via a shared `_fit` (sklearn `Lasso` lazy-imported, so the module still imports with no sklearn/pyarrow).
+      `standardize=True` z-scores each factor (per-SD betas) so an L1 penalty treats factors equally — the fix
+      for the huge/arbitrary OLS coefficients (`lstsq` min-norm under collinearity).
+    - **Generalized subsampling.** `subsample_metab_betas` → `subsample_gene_betas(adata, gene, factors=None, ...)`
+      returning a DataFrame (n_subsamples × selected factors) over ANY modulators (TF / L–R / L–TF / metab),
+      not metabolite-specific; `factors=None` = all of the gene's factors.
+    - **Two factor blocks per adata, `source=` selector.** `build_x_adata` now builds BOTH an `imputed`
+      (MAGIC, layer `imputed_count`) and a `lognorm` (un-imputed `log1p(raw)`, layer `normalized_count`,
+      recreated since it's not persisted) block. **Backward-compatible keys:** imputed keeps the original
+      unsuffixed keys (`x_factors`/`x_metab`/`x_factor_map`/`x_genes`) so pre-existing x_adatas still read
+      as `source='imputed'`; lognorm adds `_lognorm` variants. Fit/get/subsample take `source='imputed'|'lognorm'`
+      (selects the x block AND the y layer). Same log1p scale ⇒ the receptor filter behaves consistently
+      (no raw-count bloat). **Research fact:** the pipeline's only expression transform is `log1p` (no
+      `normalize_total`); `normalized_count` = `log1p(raw)`, created then deleted in `process_adata_`.
+    - **Review-caught BLOCKER (fixed):** `init_ligands_and_receptors` gates the receptor-threshold selection on
+      `'normalized_count' if present else 'imputed_count'`, independent of the estimator's `layer=`. So the
+      imputed block must be built while `normalized_count` is ABSENT (else its modulator SET silently diverges
+      from training). `build_x_adata` pops `normalized_count` → builds imputed → `ensure_lognorm_layer` → builds
+      lognorm. Also fixed: per-source `x_genes{sfx}` + `fit_gene_betas(genes=None)` defaults to the source's own
+      genes (a gene present for one source but not the other is no longer silently dropped).
+  - Process: metab-dev + metab-review (+ an independent critic pre-validated the dedup + the layer/receptor-cutoff
+    question). Reviews caught the min-norm collinearity caveat, a per-subsample re-densification efficiency bug,
+    the receptor-gate BLOCKER, and the shared-`x_genes` drop — all fixed.
 - **Storage = building blocks, not products** (D12): lossless, no cells×M×G blowup; per-gene design
   matrices reconstruct at regression time from `received_ligands × imputed_count` (+ networks on disk).
 - **Test notebook** `build_x_test.ipynb` (bare, no docs): defaults to UC slice 4

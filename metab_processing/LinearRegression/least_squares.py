@@ -17,8 +17,6 @@ import sys
 import warnings
 from pathlib import Path
 
-from sklearn.linear_model import Lasso
-
 import numpy as np
 import pandas as pd
 
@@ -31,7 +29,9 @@ for _p in (str(_root), str(_root / "src")):
     if _p not in sys.path:
         sys.path.insert(0, _p)
 
-from metab_processing.LinearRegression.build_x import get_gene_factors, METAB_PREFIX  # noqa: E402
+from metab_processing.LinearRegression.build_x import (  # noqa: E402
+    get_gene_factors, _source_layer, _SOURCE_SUFFIX, stored_genes,
+)
 
 # Factor-group classification by name separator, mirrored locally (from beta_analysis._group)
 # so the fitting/analysis path imports no heavy data-loader deps (e.g. pyarrow).
@@ -92,64 +92,102 @@ def _fit_lasso(X, y, alpha=1.0):
     Lasso (L1 regularized) regression with intercept via scikit-learn.
     Returns (beta aligned to X's columns, r2); the fitted intercept is omitted.
     """
+    from sklearn.linear_model import Lasso
+
     # fit_intercept=True is the default, handling the column of ones automatically
     model = Lasso(alpha=alpha, fit_intercept=True)
     model.fit(X, y)
-    
+
     # model.coef_ excludes the intercept when fit_intercept=True
     beta = model.coef_
-    
+
     # model.score returns the coefficient of determination (R^2)
     r2 = model.score(X, y)
-    
+
     return beta, r2
 
 
+def _fit(X, y, *, method='OLS', penalty=1.0, standardize=False):
+    """Dispatch to `_fit_ols`/`_fit_lasso`, with an optional z-score standardization
+    of X's columns first. Returns (beta aligned to X's columns, r2).
+
+    `standardize=True` z-scores each column of X (`(X - mean) / std`, constant
+    columns left un-divided) before fitting, so the returned betas are in
+    STANDARDIZED units (per-SD of that column) -- no back-transform is applied.
+    This is what makes an L1 penalty treat every factor equally regardless of its
+    raw scale.
+    """
+    if standardize:
+        mu = X.mean(axis=0)
+        sd = X.std(axis=0)
+        sd = np.where(sd == 0, 1.0, sd)
+        X = (X - mu) / sd
+    if method == 'OLS':
+        return _fit_ols(X, y)
+    elif method == 'l1':
+        return _fit_lasso(X, y, alpha=penalty)
+    else:
+        raise ValueError(f"invalid method: {method!r}")
+
+
 def fit_gene_betas(adata, genes=None, metabolites='all', *, annot_col=None, annot_value=None,
-                   cells=None, layer='imputed_count', method='OLS', penalty=1.0):
+                   cells=None, source='imputed', method='OLS', penalty=1.0,
+                   standardize=False):
     """OLS-fit each gene's expression on its factor matrix, over a selected set of cells.
+
+    `source` (`'imputed'` or `'lognorm'`, see `build_x.SOURCE_LAYERS`) selects BOTH the
+    factor block (`get_gene_factors(..., source=source)`) and the y layer
+    (`_source_layer(source)`) -- they must agree, so there is no separate `layer` param.
+    `'imputed'` reads/writes the ORIGINAL unsuffixed keys (`x_factor_map`, ...);
+    `'lognorm'` reads the `_lognorm`-suffixed ones (see `build_x._SOURCE_SUFFIX`).
 
     Returns a tidy DataFrame [gene, factor, group, beta, r2, n_cells] (one row per
     (gene, factor); r2/n_cells are the per-gene fit's, repeated). `metabolites` is
     passed to `get_gene_factors` as `metabs`. Cell selection: `annot_col`/`annot_value`
     filter, intersected with `cells` (a boolean mask or an obs-name array); default =
-    all cells. A gene absent from `x_factor_map`, or with fewer than n_factors+1 cells,
-    is skipped with a warning.
+    all cells. `genes=None` defaults to THIS source's own stored genes
+    (`build_x.stored_genes(adata, source)`) -- NOT a shared gene list -- so a gene built
+    for only one of the two sources is never silently dropped from the other's fit. A gene
+    absent from that source's factor map, or with fewer than n_factors+1 cells, is skipped
+    with a warning.
+
+    `standardize=True` z-scores each factor column before fitting (see `_fit`), so the
+    returned betas are per-SD and comparable across factors of different raw scale --
+    useful with `method='l1'` so the penalty doesn't favor large-scale factors. Default
+    `standardize=False` keeps raw-scale betas (current/original behavior).
 
     CAVEAT: with collinear/correlated factor columns, `_fit_ols` (`np.linalg.lstsq`)
     returns a min-norm solution, so individual `beta` values (and `rank_coefficients`'
     magnitude ranking) are not uniquely determined among the collinear columns -- see
     the module docstring.
     """
+    layer = _source_layer(source)
+    sfx = _SOURCE_SUFFIX[source]
     if genes is None:
-        genes = list(adata.uns.get('x_genes', []))
-    factor_map = adata.uns.get('x_factor_map', {})
+        genes = stored_genes(adata, source)
+    factor_map = adata.uns.get(f'x_factor_map{sfx}', {})
     kept_genes = []
     for gene in genes:
         if gene not in factor_map:
-            warnings.warn(f"fit_gene_betas: {gene!r} not in x_factor_map; skipping.")
+            warnings.warn(f"fit_gene_betas: {gene!r} not in x_factor_map{sfx}; skipping.")
             continue
         kept_genes.append(gene)
 
     rows = _select_cells(adata, annot_col, annot_value, cells)
     # Densify only the genes we'll actually fit (kept_genes are all in var_names, since
-    # x_factor_map is only populated for genes build_factor_block found there).
+    # x_factor_map{sfx} is only populated for genes build_factor_block found there).
     expr = adata[:, kept_genes].to_df(layer) if kept_genes else pd.DataFrame(index=adata.obs_names)
 
     records = []
     for gene in kept_genes:
-        X = get_gene_factors(adata, gene, metabs=metabolites).loc[rows]
+        X = get_gene_factors(adata, gene, metabs=metabolites, source=source).loc[rows]
         if len(rows) < X.shape[1] + 1:
             warnings.warn(f"fit_gene_betas: {gene!r} has too few cells "
                           f"({len(rows)} < {X.shape[1] + 1}); skipping.")
             continue
         y = expr.loc[rows, gene]
-        if method == 'OLS':
-            beta, r2 = _fit_ols(X.to_numpy(), y.to_numpy())
-        elif method == 'l1':
-            beta, r2  = _fit_lasso(X.to_numpy(), y.to_numpy(), alpha=penalty)
-        else:
-            raise Exception(f'Not a valid method: {method}')
+        beta, r2 = _fit(X.to_numpy(), y.to_numpy(), method=method, penalty=penalty,
+                        standardize=standardize)
         for factor, b in zip(X.columns, beta):
             records.append((gene, factor, _group(factor), b, r2, len(rows)))
 
@@ -172,31 +210,48 @@ def subsample_cells(adata, seed, *, frac=None, n=None, annot_col=None, annot_val
     return pool.to_numpy()[idx]
 
 
-def subsample_metab_betas(adata, gene, metabolite, *, n_subsamples=100, frac=0.8,
-                          annot_col=None, annot_value=None, seed0=0, layer='imputed_count'):
-    """`metabolite`'s OLS beta for `gene` across `n_subsamples` cell subsamples (seeds
-    `seed0..seed0+n_subsamples-1`). Builds X/y ONCE (not per subsample) and only
-    row-slices + refits per draw, to avoid re-densifying `adata` ~n_subsamples times.
+def subsample_gene_betas(adata, gene, factors=None, *, n_subsamples=100, frac=0.8,
+                         annot_col=None, annot_value=None, seed0=0, source='imputed',
+                         metabolites='all', method='OLS', penalty=1.0, standardize=False):
+    """Beta of each selected factor for `gene` across `n_subsamples` cell subsamples
+    (seeds seed0..seed0+n_subsamples-1). Returns a DataFrame of shape
+    (n_subsamples, n_selected_factors): row i = subsample i, columns = the selected
+    factor names, values = that factor's fitted beta. NOT metabolite-specific: `factors`
+    can be ANY modulator (bare TF gene, `lig$rec`, `lig#tf`, or `metab@<name>`).
 
-    NaN when (i) `metab@<metabolite>` is absent from `uns['x_metab_modulators']` --
-    global, the same for every gene, not gene-specific -- or (ii) a given subsample
-    draws too few cells to fit (`< n_factors + 1`).
+    `source` (`'imputed'` or `'lognorm'`, see `build_x.SOURCE_LAYERS`) selects BOTH the
+    factor block and the y layer (`_source_layer(source)`).
+
+    `factors=None` -> ALL of the gene's factor columns (from get_gene_factors(..., metabs=
+    metabolites, source=source)); otherwise a subset (a list of exact factor names; names
+    not present are warned about and dropped). A subsample drawing too few cells
+    (< n_factors+1) yields a NaN row. Builds X/y ONCE and only row-slices + refits per draw
+    (efficiency).
     """
-    col = METAB_PREFIX + metabolite
-    X = get_gene_factors(adata, gene, metabs=[metabolite])
-    betas = np.full(n_subsamples, np.nan)
-    if col not in X.columns:
-        return betas
-    ci = list(X.columns).index(col)
+    layer = _source_layer(source)
+    X = get_gene_factors(adata, gene, metabs=metabolites, source=source)
+    if factors is None:
+        selected_factors = list(X.columns)
+    else:
+        selected_factors = [f for f in factors if f in X.columns]
+        missing = [f for f in factors if f not in X.columns]
+        if missing:
+            warnings.warn(f"subsample_gene_betas: factors {missing} not in {gene!r}'s "
+                          f"columns; dropped.")
+
+    selected_idx = [list(X.columns).index(f) for f in selected_factors]
     y = adata[:, gene].to_df(layer)[gene]
+
+    out = np.full((n_subsamples, len(selected_factors)), np.nan)
     for i, seed in enumerate(range(seed0, seed0 + n_subsamples)):
         cells = subsample_cells(adata, seed, frac=frac, annot_col=annot_col,
                                 annot_value=annot_value)
         if len(cells) < X.shape[1] + 1:
             continue
-        beta, _ = _fit_ols(X.loc[cells].to_numpy(), y.loc[cells].to_numpy())
-        betas[i] = beta[ci]
-    return betas
+        beta, _ = _fit(X.loc[cells].to_numpy(), y.loc[cells].to_numpy(), method=method,
+                       penalty=penalty, standardize=standardize)
+        out[i] = beta[selected_idx]
+    return pd.DataFrame(out, columns=selected_factors)
 
 
 def rank_coefficients(betas_df):
