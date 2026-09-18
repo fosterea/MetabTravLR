@@ -17,6 +17,8 @@ import sys
 import warnings
 from pathlib import Path
 
+from sklearn.linear_model import Lasso
+
 import numpy as np
 import pandas as pd
 
@@ -85,9 +87,26 @@ def _fit_ols(X, y):
     r2 = 0.0 if ss_tot == 0 else 1.0 - ss_res / ss_tot
     return beta, r2
 
+def _fit_lasso(X, y, alpha=1.0):
+    """
+    Lasso (L1 regularized) regression with intercept via scikit-learn.
+    Returns (beta aligned to X's columns, r2); the fitted intercept is omitted.
+    """
+    # fit_intercept=True is the default, handling the column of ones automatically
+    model = Lasso(alpha=alpha, fit_intercept=True)
+    model.fit(X, y)
+    
+    # model.coef_ excludes the intercept when fit_intercept=True
+    beta = model.coef_
+    
+    # model.score returns the coefficient of determination (R^2)
+    r2 = model.score(X, y)
+    
+    return beta, r2
+
 
 def fit_gene_betas(adata, genes=None, metabolites='all', *, annot_col=None, annot_value=None,
-                   cells=None, layer='imputed_count'):
+                   cells=None, layer='imputed_count', method='OLS', penalty=1.0):
     """OLS-fit each gene's expression on its factor matrix, over a selected set of cells.
 
     Returns a tidy DataFrame [gene, factor, group, beta, r2, n_cells] (one row per
@@ -125,7 +144,12 @@ def fit_gene_betas(adata, genes=None, metabolites='all', *, annot_col=None, anno
                           f"({len(rows)} < {X.shape[1] + 1}); skipping.")
             continue
         y = expr.loc[rows, gene]
-        beta, r2 = _fit_ols(X.to_numpy(), y.to_numpy())
+        if method == 'OLS':
+            beta, r2 = _fit_ols(X.to_numpy(), y.to_numpy())
+        elif method == 'l1':
+            beta, r2  = _fit_lasso(X.to_numpy(), y.to_numpy(), alpha=penalty)
+        else:
+            raise Exception(f'Not a valid method: {method}')
         for factor, b in zip(X.columns, beta):
             records.append((gene, factor, _group(factor), b, r2, len(rows)))
 
