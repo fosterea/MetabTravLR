@@ -1,8 +1,13 @@
 #!/usr/bin/env python
-"""Drop mito genes, keep the top-N HVG, run SpaceTravLR prep (build_x_adata) per sample."""
+"""Drop mito genes, keep the top-N HVG, run SpaceTravLR prep (build_x_adata) per dataset path.
+
+Each `--paths` entry is a dataset directory holding `adata.h5ad`; output is written to
+`<path>/LinearRegression/hvg{top_n}_x_adata.h5ad`.
+"""
 import argparse
 import os
 import sys
+import time
 from pathlib import Path
 
 # celloracle/genomepy open a diskcache SQLite DB at import time; on Savio's NFS home its
@@ -20,23 +25,23 @@ for _p in (str(_root), str(_root / 'src')):
 
 import numpy as np
 import scanpy as sc
-from metab_processing.metab_travlr_config import DATA_DIR
-from metab_processing.SpaceTravLR.dataset_configs import dataset_paths
 from metab_processing.LinearRegression.build_x import build_x_adata
 
-DATA_ROOT = f'{DATA_DIR}/Alexi_UC_Spliced'
-ANNOT = '25_06_11_ICI_5K_Coarse_annotations'
+
+def _log(msg):
+    print(f'[{time.strftime("%Y-%m-%d %H:%M:%S")}] {msg}', flush=True)
 
 
-def run(sample, top_n):
-    paths = dataset_paths(sample, data_dir=DATA_ROOT)
-    adata = sc.read_h5ad(paths['adata'])
+def run(path, top_n, annot):
+    path = Path(path)
+    _log(f'{path.name}: reading {path / "adata.h5ad"}')
+    adata = sc.read_h5ad(path / 'adata.h5ad')
 
     # HVG selection and build_x both expect raw integer counts in X -- fail loud if not.
     x = adata.X
     vals = x.data if hasattr(x, 'data') else np.asarray(x).ravel()
     if vals.size and not np.allclose(vals, np.round(vals)):
-        raise ValueError(f'{sample}: adata.X is not raw integer counts.')
+        raise ValueError(f'{path.name}: adata.X is not raw integer counts.')
 
     adata = adata[:, ~adata.var_names.str.upper().str.startswith('MT-')].copy()
 
@@ -48,20 +53,25 @@ def run(sample, top_n):
     hvg = tmp.var.loc[tmp.var.highly_variable, 'dispersions_norm'] \
              .sort_values(ascending=False).index.tolist()
     if len(hvg) != top_n:
-        raise ValueError(f'{sample}: selected {len(hvg)} HVG != top_n={top_n}.')
+        raise ValueError(f'{path.name}: selected {len(hvg)} HVG != top_n={top_n}.')
     adata = adata[:, hvg].copy()
 
-    lr_dir = paths['dataset_dir'] / 'LinearRegression'
+    lr_dir = path / 'LinearRegression'
     out = lr_dir / f'hvg{top_n}_x_adata.h5ad'
-    build_x_adata(adata, str(out), focus_genes=hvg, annot=ANNOT,
+    build_x_adata(adata, str(out), focus_genes=hvg, annot=annot,
                   setup_dir=str(lr_dir / f'hvg{top_n}_setup'))
-    print(f'{sample}: wrote {out} ({len(hvg)} hvg)')
+    _log(f'{path.name}: wrote {out} ({len(hvg)} hvg)')
 
 
 if __name__ == '__main__':
     ap = argparse.ArgumentParser()
-    ap.add_argument('--samples', nargs='+', required=True)
+    ap.add_argument('--paths', nargs='+', required=True)
     ap.add_argument('--top-n', type=int, required=True)
+    ap.add_argument('--annot', required=True)
     args = ap.parse_args()
-    for s in args.samples:
-        run(s, args.top_n)
+
+    _log(f'top_n={args.top_n}, annot={args.annot}, {len(args.paths)} dataset(s) to run:')
+    for p in args.paths:
+        _log(f'  {p}')
+    for p in args.paths:
+        run(p, args.top_n, args.annot)
