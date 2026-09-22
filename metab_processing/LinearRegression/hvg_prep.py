@@ -1,8 +1,15 @@
 #!/usr/bin/env python
 """Drop mito genes, keep the top-N HVG, run SpaceTravLR prep (build_x_adata) per sample."""
 import argparse
+import os
 import sys
 from pathlib import Path
+
+# celloracle/genomepy open a diskcache SQLite DB at import time; on Savio's NFS home its
+# locking fails ("locking protocol"). Point the cache at node-local /tmp before that import
+# (mirrors run_spacetravlr._isolate_cache_dir).
+os.environ.setdefault('XDG_CACHE_HOME', f'/tmp/spacetravlr_cache_{os.environ.get("SLURM_JOB_ID", "local")}')
+os.makedirs(os.environ['XDG_CACHE_HOME'], exist_ok=True)
 
 _root = next((p for p in Path(__file__).resolve().parents
               if (p / '.git').exists() or (p / 'setup.py').exists()),
