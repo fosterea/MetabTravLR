@@ -156,7 +156,10 @@ class FitGeneBetasTests(unittest.TestCase):
         g = df[df["gene"] == "G"].set_index("factor")
         for factor, val in KNOWN_BETA_G_IMPUTED.items():
             self.assertAlmostEqual(g.loc[factor, "beta"], val, places=6)
-            self.assertAlmostEqual(g.loc[factor, "r2"], 1.0, places=6)
+            self.assertAlmostEqual(g.loc[factor, "model_r2"], 1.0, places=6)
+            # per-factor Pearson: r2 == r**2, both in [0, 1]
+            self.assertAlmostEqual(g.loc[factor, "r2"], g.loc[factor, "r"] ** 2, places=10)
+            self.assertTrue(0.0 <= g.loc[factor, "r2"] <= 1.0 + 1e-9)
             self.assertEqual(g.loc[factor, "n_cells"], N)
             self.assertEqual(g.loc[factor, "group"], _group(factor))
 
@@ -174,7 +177,7 @@ class FitGeneBetasTests(unittest.TestCase):
         g = df[df["gene"] == "G"].set_index("factor")
         for factor, val in KNOWN_BETA_G_LOGNORM.items():
             self.assertAlmostEqual(g.loc[factor, "beta"], val, places=6)
-            self.assertAlmostEqual(g.loc[factor, "r2"], 1.0, places=6)
+            self.assertAlmostEqual(g.loc[factor, "model_r2"], 1.0, places=6)
             self.assertEqual(g.loc[factor, "group"], _group(factor))
         # none of the imputed-source factor names should appear at all.
         self.assertFalse(set(FACTOR_COLS_IMPUTED) & set(g.index))

@@ -46,7 +46,7 @@ def _group(modulator):
     return "tf"
 
 
-_COLS = ["gene", "factor", "group", "beta", "r2", "n_cells"]
+_COLS = ["gene", "factor", "group", "beta", "r", "r2", "model_r2", "n_cells"]
 
 
 def _select_cells(adata, annot_col, annot_value, cells):
@@ -141,8 +141,10 @@ def fit_gene_betas(adata, genes=None, metabolites='all', *, annot_col=None, anno
     `'imputed'` reads/writes the ORIGINAL unsuffixed keys (`x_factor_map`, ...);
     `'lognorm'` reads the `_lognorm`-suffixed ones (see `build_x._SOURCE_SUFFIX`).
 
-    Returns a tidy DataFrame [gene, factor, group, beta, r2, n_cells] (one row per
-    (gene, factor); r2/n_cells are the per-gene fit's, repeated). `metabolites` is
+    Returns a tidy DataFrame [gene, factor, group, beta, r, r2, model_r2, n_cells] (one
+    row per (gene, factor)). `r` = Pearson correlation between the target y and that
+    factor's x, `r2` = r**2 (both per-factor); `model_r2` = the whole fit's R² and
+    `n_cells` are per-gene, repeated across the gene's rows. `metabolites` is
     passed to `get_gene_factors` as `metabs`. Cell selection: `annot_col`/`annot_value`
     filter, intersected with `cells` (a boolean mask or an obs-name array); default =
     all cells. `genes=None` defaults to THIS source's own stored genes
@@ -186,10 +188,16 @@ def fit_gene_betas(adata, genes=None, metabolites='all', *, annot_col=None, anno
                           f"({len(rows)} < {X.shape[1] + 1}); skipping.")
             continue
         y = expr.loc[rows, gene]
-        beta, r2 = _fit(X.to_numpy(), y.to_numpy(), method=method, penalty=penalty,
-                        standardize=standardize)
-        for factor, b in zip(X.columns, beta):
-            records.append((gene, factor, _group(factor), b, r2, len(rows)))
+        Xv, yv = X.to_numpy(), y.to_numpy()
+        beta, model_r2 = _fit(Xv, yv, method=method, penalty=penalty, standardize=standardize)
+        # Per-factor Pearson r between the target y and that factor's x (scale-invariant, so
+        # unaffected by `standardize`); r2 = r**2. 0 for a constant column / constant y.
+        Xc, yc = Xv - Xv.mean(axis=0), yv - yv.mean()
+        denom = np.sqrt((Xc ** 2).sum(axis=0) * (yc ** 2).sum())
+        with np.errstate(invalid='ignore', divide='ignore'):
+            r = np.where(denom > 0, (Xc * yc[:, None]).sum(axis=0) / denom, 0.0)
+        for factor, b, rj in zip(X.columns, beta, r):
+            records.append((gene, factor, _group(factor), b, rj, rj ** 2, model_r2, len(rows)))
 
     return pd.DataFrame.from_records(records, columns=_COLS)
 
