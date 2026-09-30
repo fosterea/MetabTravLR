@@ -516,6 +516,18 @@ computes and stores the model's **x building blocks**, and saves the adata.
   - Process: metab-dev + metab-review (+ an independent critic pre-validated the dedup + the layer/receptor-cutoff
     question). Reviews caught the min-norm collinearity caveat, a per-subsample re-densification efficiency bug,
     the receptor-gate BLOCKER, and the shared-`x_genes` drop — all fixed.
+  - **Rev 6 (2026-09-29) — dropped the dual `source` scheme; only ONE block, on `normalized_count`
+    (log1p raw).** Foster's call: "remove support for imputed counts, only raw" → keep the un-imputed
+    log1p(raw) block (not literally raw ints — log1p is what tamed the huge coefficients). Deleted
+    `SOURCE_LAYERS`/`_SOURCE_SUFFIX`/`_source_layer`/`source=` everywhere; `build_x.LAYER='normalized_count'`;
+    the surviving block uses the plain unsuffixed keys (`x_factors`/`x_factor_map`/`x_metab`/`x_metab_modulators`/`x_genes`)
+    but its VALUES are now log1p(raw). `build_x_adata` = `ensure_lognorm_layer` → one `build_factor_block` →
+    optional one `add_metabolites` (the imputed-first BLOCKER dance is gone: the receptor gate prefers
+    `normalized_count`, which is now exactly what we build on). `fit_gene_betas`/`subsample_gene_betas` read y
+    from `normalized_count`; `genes=None` → `stored_genes(adata)`. **Existing x_adata files must be rebuilt**
+    (their `x_factors` was imputed; now it's log1p raw). Net ~-350 lines. metab-dev + metab-review (no blockers).
+  - **`hvg_prep.py --top-n all`** (2026-09-29): `--top-n` accepts an int or the literal `all` (skip HVG
+    selection, use every gene after mito-drop; outputs `hvg_all_x_adata.h5ad`).
 - **Storage = building blocks, not products** (D12): lossless, no cells×M×G blowup; per-gene design
   matrices reconstruct at regression time from `received_ligands × imputed_count` (+ networks on disk).
 - **Test notebook** `build_x_test.ipynb` (bare, no docs): defaults to UC slice 4

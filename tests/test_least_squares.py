@@ -2,24 +2,19 @@
 
 Builds a synthetic AnnData directly against the store contract that `build_x.py` produces
 (no estimator/torch involved -- `get_gene_factors` is pure pandas), with a KNOWN linear
-generative model so OLS must recover the true betas. Rev 5: the fixture carries BOTH
-sources ('imputed' and 'lognorm', see `build_x.SOURCE_LAYERS`), each with its OWN factor
-block, metab column, known betas, and y layer (`imputed_count` / `normalized_count`) --
-deliberately distinct column names and values between sources so a test recovering the
-wrong source's betas, or reading the wrong layer, would actually fail rather than pass by
-coincidence.
+generative model so OLS must recover the true betas.
 
-Rev 5.1 (backward compat): `source='imputed'` uses the ORIGINAL unsuffixed keys
-(`x_factors`, `x_factors_cols`, `x_factor_map`, `x_metab`, `x_metab_modulators`,
-`x_genes`) -- byte-identical to the pre-dual-block scheme, so an existing x_adata.h5ad
-stays readable. Only `source='lognorm'` is `_lognorm`-suffixed. See `build_x._SOURCE_SUFFIX`.
+Rev 6 (2026-09-29): dropped the two-SOURCE ('imputed'/'lognorm') dual-block machinery.
+There is now ONE factor block (the plain unsuffixed keys: `x_factors`, `x_factors_cols`,
+`x_factor_map`, `x_metab`, `x_metab_modulators`, `x_genes`) and y is read from the single
+`normalized_count` layer (`build_x.LAYER`).
 
 Fixture: 40 cells, an obs['ct'] annotation ('T'/'B', 20 each), two genes:
-  - 'G' uses all 3 factor columns of its source plus that source's shared metab column;
-    y_G is an EXACT linear combination of all four (known betas) plus an intercept -- no
-    noise, so OLS recovery is exact to floating precision.
-  - 'H' uses only the source's first TF factor column; y_H depends only on that column, so
-    when 'all' metabolites are requested the extra metab column has a true coefficient of 0
+  - 'G' uses all 3 factor columns plus the shared metab column; y_G is an EXACT linear
+    combination of all four (known betas) plus an intercept -- no noise, so OLS recovery
+    is exact to floating precision.
+  - 'H' uses only the first TF factor column; y_H depends only on that column, so when
+    'all' metabolites are requested the extra metab column has a true coefficient of 0
     (tests OLS handling an unused predictor).
 """
 import os
@@ -49,64 +44,37 @@ from metab_processing.LinearRegression.least_squares import (
 
 N = 40
 
-FACTOR_COLS_IMPUTED = ["TF_A", "TF_B", "L$R"]
-METAB_COL_IMPUTED = "metab@Glucose"
-KNOWN_BETA_G_IMPUTED = {"TF_A": 1.5, "TF_B": -2.0, "L$R": 0.7, METAB_COL_IMPUTED: 0.9}
-INTERCEPT_G_IMPUTED = 0.3
-KNOWN_BETA_H_IMPUTED = {"TF_A": -1.2}
-INTERCEPT_H_IMPUTED = 0.05
-
-# 'lognorm' fixture: deliberately DIFFERENT column names and coefficients from 'imputed'
-# so a bug that reads the wrong source's block/layer produces a visibly wrong (not
-# coincidentally-correct) recovery.
-FACTOR_COLS_LOGNORM = ["TF_A2", "TF_B2", "L$R2"]
-METAB_COL_LOGNORM = "metab@Fructose"
-KNOWN_BETA_G_LOGNORM = {"TF_A2": 2.2, "TF_B2": -0.4, "L$R2": 1.1, METAB_COL_LOGNORM: -0.6}
-INTERCEPT_G_LOGNORM = -0.15
-KNOWN_BETA_H_LOGNORM = {"TF_A2": 0.85}
-INTERCEPT_H_LOGNORM = 0.2
+FACTOR_COLS = ["TF_A", "TF_B", "L$R"]
+METAB_COL = "metab@Glucose"
+KNOWN_BETA_G = {"TF_A": 1.5, "TF_B": -2.0, "L$R": 0.7, METAB_COL: 0.9}
+INTERCEPT_G = 0.3
+KNOWN_BETA_H = {"TF_A": -1.2}
+INTERCEPT_H = 0.05
 
 
 def _make_adata():
     rng = np.random.default_rng(0)
-    factors_imp = rng.normal(size=(N, 3))   # columns: TF_A, TF_B, L$R
-    metab_imp = rng.normal(size=(N, 1))     # column: metab@Glucose
+    factors = rng.normal(size=(N, 3))   # columns: TF_A, TF_B, L$R
+    metab = rng.normal(size=(N, 1))     # column: metab@Glucose
 
-    rng2 = np.random.default_rng(42)
-    factors_log = rng2.normal(size=(N, 3))  # columns: TF_A2, TF_B2, L$R2
-    metab_log = rng2.normal(size=(N, 1))    # column: metab@Fructose
-
-    y_g_imp = (factors_imp @ np.array([KNOWN_BETA_G_IMPUTED[c] for c in FACTOR_COLS_IMPUTED])
-               + metab_imp[:, 0] * KNOWN_BETA_G_IMPUTED[METAB_COL_IMPUTED] + INTERCEPT_G_IMPUTED)
-    y_h_imp = factors_imp[:, 0] * KNOWN_BETA_H_IMPUTED["TF_A"] + INTERCEPT_H_IMPUTED
-
-    y_g_log = (factors_log @ np.array([KNOWN_BETA_G_LOGNORM[c] for c in FACTOR_COLS_LOGNORM])
-               + metab_log[:, 0] * KNOWN_BETA_G_LOGNORM[METAB_COL_LOGNORM] + INTERCEPT_G_LOGNORM)
-    y_h_log = factors_log[:, 0] * KNOWN_BETA_H_LOGNORM["TF_A2"] + INTERCEPT_H_LOGNORM
+    y_g = (factors @ np.array([KNOWN_BETA_G[c] for c in FACTOR_COLS])
+           + metab[:, 0] * KNOWN_BETA_G[METAB_COL] + INTERCEPT_G)
+    y_h = factors[:, 0] * KNOWN_BETA_H["TF_A"] + INTERCEPT_H
 
     obs_names = [f"c{i}" for i in range(N)]
     adata = AnnData(X=np.zeros((N, 2), dtype=np.float64))
     adata.var_names = ["G", "H"]
     adata.obs_names = obs_names
     adata.obs["ct"] = ["T"] * (N // 2) + ["B"] * (N // 2)
-    adata.layers["imputed_count"] = np.column_stack([y_g_imp, y_h_imp])
-    adata.layers["normalized_count"] = np.column_stack([y_g_log, y_h_log])
+    # y is read from LAYER ('normalized_count'); the fixture carries the known-beta y there.
+    adata.layers["normalized_count"] = np.column_stack([y_g, y_h])
 
-    # 'imputed' uses the ORIGINAL unsuffixed keys (backward compat with pre-dual-block
-    # x_adata.h5ad files); only 'lognorm' is suffixed.
-    adata.obsm["x_factors"] = factors_imp
-    adata.uns["x_factors_cols"] = list(FACTOR_COLS_IMPUTED)
-    adata.uns["x_factor_map"] = {"G": list(FACTOR_COLS_IMPUTED), "H": ["TF_A"]}
-    adata.obsm["x_metab"] = metab_imp
-    adata.uns["x_metab_modulators"] = [METAB_COL_IMPUTED]
+    adata.obsm["x_factors"] = factors
+    adata.uns["x_factors_cols"] = list(FACTOR_COLS)
+    adata.uns["x_factor_map"] = {"G": list(FACTOR_COLS), "H": ["TF_A"]}
+    adata.obsm["x_metab"] = metab
+    adata.uns["x_metab_modulators"] = [METAB_COL]
     adata.uns["x_genes"] = ["G", "H"]
-
-    adata.obsm["x_factors_lognorm"] = factors_log
-    adata.uns["x_factors_lognorm_cols"] = list(FACTOR_COLS_LOGNORM)
-    adata.uns["x_factor_map_lognorm"] = {"G": list(FACTOR_COLS_LOGNORM), "H": ["TF_A2"]}
-    adata.obsm["x_metab_lognorm"] = metab_log
-    adata.uns["x_metab_lognorm_modulators"] = [METAB_COL_LOGNORM]
-    adata.uns["x_genes_lognorm"] = ["G", "H"]
 
     return adata
 
@@ -151,10 +119,9 @@ class FitGeneBetasTests(unittest.TestCase):
         self.adata = _make_adata()
 
     def test_recovery_all_cells(self):
-        """Default source='imputed'."""
         df = fit_gene_betas(self.adata)
         g = df[df["gene"] == "G"].set_index("factor")
-        for factor, val in KNOWN_BETA_G_IMPUTED.items():
+        for factor, val in KNOWN_BETA_G.items():
             self.assertAlmostEqual(g.loc[factor, "beta"], val, places=6)
             self.assertAlmostEqual(g.loc[factor, "model_r2"], 1.0, places=6)
             # per-factor Pearson: r2 == r**2, both in [0, 1]
@@ -164,42 +131,15 @@ class FitGeneBetasTests(unittest.TestCase):
             self.assertEqual(g.loc[factor, "group"], _group(factor))
 
         h = df[df["gene"] == "H"].set_index("factor")
-        self.assertAlmostEqual(h.loc["TF_A", "beta"], KNOWN_BETA_H_IMPUTED["TF_A"], places=6)
+        self.assertAlmostEqual(h.loc["TF_A", "beta"], KNOWN_BETA_H["TF_A"], places=6)
         # metab@Glucose has a TRUE coefficient of 0 for H (y_H doesn't depend on it).
-        self.assertAlmostEqual(h.loc[METAB_COL_IMPUTED, "beta"], 0.0, places=6)
+        self.assertAlmostEqual(h.loc[METAB_COL, "beta"], 0.0, places=6)
 
-    def test_recovery_all_cells_source_lognorm(self):
-        """source='lognorm' must read the lognorm factor block AND the normalized_count
-        layer -- both known betas AND the y values differ from the 'imputed' fixture, so
-        recovering KNOWN_BETA_*_LOGNORM (not the imputed betas) proves both are wired
-        consistently."""
-        df = fit_gene_betas(self.adata, source="lognorm")
-        g = df[df["gene"] == "G"].set_index("factor")
-        for factor, val in KNOWN_BETA_G_LOGNORM.items():
-            self.assertAlmostEqual(g.loc[factor, "beta"], val, places=6)
-            self.assertAlmostEqual(g.loc[factor, "model_r2"], 1.0, places=6)
-            self.assertEqual(g.loc[factor, "group"], _group(factor))
-        # none of the imputed-source factor names should appear at all.
-        self.assertFalse(set(FACTOR_COLS_IMPUTED) & set(g.index))
-
-        h = df[df["gene"] == "H"].set_index("factor")
-        self.assertAlmostEqual(h.loc["TF_A2", "beta"], KNOWN_BETA_H_LOGNORM["TF_A2"], places=6)
-        self.assertAlmostEqual(h.loc[METAB_COL_LOGNORM, "beta"], 0.0, places=6)
-
-    def test_unknown_source_raises_keyerror(self):
-        """Change D: routed through build_x's `_source_layer` so the message is friendly
-        ('unknown source ...'), not a bare KeyError('bogus')."""
-        with self.assertRaises(KeyError) as ctx:
-            fit_gene_betas(self.adata, genes=["G"], source="bogus")
-        self.assertIn("unknown source", str(ctx.exception))
-
-    def test_genes_none_defaults_to_this_sources_own_stored_genes(self):
-        """MAJOR regression: 'Z' has an 'imputed' x_factor_map entry but NO 'lognorm'
-        entry (as if build_factor_block(source='lognorm') found zero modulators for it).
-        uns['x_genes'] deliberately does NOT include 'Z' (simulating a stale/otherwise-
-        derived shared list) -- fit_gene_betas(source='imputed', genes=None) must still
-        fit Z, because the default now comes from build_x.stored_genes(adata, 'imputed')
-        (= that source's OWN x_factor_map keys), not any shared/other-source list."""
+    def test_genes_none_defaults_to_stored_genes(self):
+        """'Z' has an x_factor_map entry but is deliberately absent from uns['x_genes']
+        (simulating a stale/otherwise-derived list) -- fit_gene_betas(genes=None) must
+        still fit Z, because the default now comes from build_x.stored_genes(adata)
+        (= x_factor_map's own keys), not any separately-tracked gene list."""
         n = 20
         rng = np.random.default_rng(77)
         tf = rng.normal(size=n)
@@ -208,35 +148,34 @@ class FitGeneBetasTests(unittest.TestCase):
         adata = AnnData(X=np.zeros((n, 1), dtype=np.float64))
         adata.var_names = ["Z"]
         adata.obs_names = [f"c{i}" for i in range(n)]
-        adata.layers["imputed_count"] = y_z.reshape(-1, 1)
+        adata.layers["normalized_count"] = y_z.reshape(-1, 1)
 
         adata.obsm["x_factors"] = tf.reshape(-1, 1)
         adata.uns["x_factors_cols"] = ["TF_A"]
-        adata.uns["x_factor_map"] = {"Z": ["TF_A"]}   # 'imputed' HAS Z
-        adata.uns["x_factor_map_lognorm"] = {}         # 'lognorm' does NOT have Z
-        adata.uns["x_genes"] = []                      # deliberately stale/empty shared list
+        adata.uns["x_factor_map"] = {"Z": ["TF_A"]}
+        adata.uns["x_genes"] = []  # deliberately stale/empty
 
-        df = fit_gene_betas(adata, genes=None, metabolites=None, source="imputed")
+        df = fit_gene_betas(adata, genes=None, metabolites=None)
         self.assertIn("Z", set(df["gene"]))
         z = df.set_index("factor")
         self.assertAlmostEqual(z.loc["TF_A", "beta"], 2.0, places=6)
 
     def test_metabolites_selection(self):
         only_glucose = fit_gene_betas(self.adata, genes=["G"], metabolites=["Glucose"])
-        self.assertEqual(set(only_glucose["factor"]), set(FACTOR_COLS_IMPUTED) | {METAB_COL_IMPUTED})
+        self.assertEqual(set(only_glucose["factor"]), set(FACTOR_COLS) | {METAB_COL})
 
         no_metab = fit_gene_betas(self.adata, genes=["G"], metabolites=None)
-        self.assertEqual(set(no_metab["factor"]), set(FACTOR_COLS_IMPUTED))
-        self.assertNotIn(METAB_COL_IMPUTED, set(no_metab["factor"]))
+        self.assertEqual(set(no_metab["factor"]), set(FACTOR_COLS))
+        self.assertNotIn(METAB_COL, set(no_metab["factor"]))
 
         all_metab = fit_gene_betas(self.adata, genes=["G"], metabolites="all")
-        self.assertEqual(set(all_metab["factor"]), set(FACTOR_COLS_IMPUTED) | {METAB_COL_IMPUTED})
+        self.assertEqual(set(all_metab["factor"]), set(FACTOR_COLS) | {METAB_COL})
 
     def test_annotation_filter_restricts_cells_and_still_recovers(self):
         df = fit_gene_betas(self.adata, genes=["G"], annot_col="ct", annot_value="T")
         self.assertTrue((df["n_cells"] == N // 2).all())
         g = df.set_index("factor")
-        for factor, val in KNOWN_BETA_G_IMPUTED.items():
+        for factor, val in KNOWN_BETA_G.items():
             self.assertAlmostEqual(g.loc[factor, "beta"], val, places=5)
 
     def test_skips_gene_not_in_factor_map(self):
@@ -306,7 +245,7 @@ class FitStandardizeTests(unittest.TestCase):
     def test_raw_scale_recovers_known_betas(self):
         df = fit_gene_betas(self.adata, genes=["G"], standardize=False)
         raw = df.set_index("factor")["beta"]
-        for factor, val in KNOWN_BETA_G_IMPUTED.items():
+        for factor, val in KNOWN_BETA_G.items():
             self.assertAlmostEqual(raw.loc[factor], val, places=6)
 
     def test_standardized_betas_are_raw_betas_times_column_sd(self):
@@ -386,28 +325,19 @@ class SubsampleGeneBetasTests(unittest.TestCase):
         self.assertIn("lr", groups)
         self.assertIn("metab", groups)
 
-    def test_source_lognorm_recovers_known_betas(self):
+    def test_recovers_known_betas_with_full_resample(self):
         """No noise + frac=1.0 -> every subsample refits on all N cells, so betas should
-        match KNOWN_BETA_G_LOGNORM (not the 'imputed' fixture's betas) to floating
-        precision."""
-        df = subsample_gene_betas(self.adata, "G", source="lognorm",
-                                  n_subsamples=3, frac=1.0, seed0=0)
+        match KNOWN_BETA_G to floating precision."""
+        df = subsample_gene_betas(self.adata, "G", n_subsamples=3, frac=1.0, seed0=0)
         groups = {_group(c) for c in df.columns}
         self.assertEqual(groups, {"tf", "lr", "metab"})
-        for factor, val in KNOWN_BETA_G_LOGNORM.items():
+        for factor, val in KNOWN_BETA_G.items():
             self.assertTrue(np.allclose(df[factor].to_numpy(), val, atol=1e-6))
 
     def test_factor_subset_returns_just_those_columns_in_order(self):
         df = subsample_gene_betas(self.adata, "G", factors=["L$R", "TF_A"],
                                   n_subsamples=3, frac=0.8, seed0=0)
         self.assertEqual(list(df.columns), ["L$R", "TF_A"])
-
-    def test_unknown_source_raises_friendly_keyerror(self):
-        """Change D: routed through build_x's `_source_layer`, so the message is
-        friendly ('unknown source ...'), not a bare KeyError('bogus')."""
-        with self.assertRaises(KeyError) as ctx:
-            subsample_gene_betas(self.adata, "G", source="bogus", n_subsamples=1)
-        self.assertIn("unknown source", str(ctx.exception))
 
     def test_bad_factor_name_warns_and_is_dropped(self):
         with warnings.catch_warnings(record=True) as caught:

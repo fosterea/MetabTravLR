@@ -30,7 +30,7 @@ for _p in (str(_root), str(_root / "src")):
         sys.path.insert(0, _p)
 
 from metab_processing.LinearRegression.build_x import (  # noqa: E402
-    get_gene_factors, _source_layer, _SOURCE_SUFFIX, stored_genes,
+    get_gene_factors, stored_genes, LAYER,
 )
 
 # Factor-group classification by name separator, mirrored locally (from beta_analysis._group)
@@ -131,15 +131,11 @@ def _fit(X, y, *, method='OLS', penalty=1.0, standardize=False):
 
 
 def fit_gene_betas(adata, genes=None, metabolites='all', *, annot_col=None, annot_value=None,
-                   cells=None, source='imputed', method='OLS', penalty=1.0,
-                   standardize=False):
+                   cells=None, method='OLS', penalty=1.0, standardize=False):
     """OLS-fit each gene's expression on its factor matrix, over a selected set of cells.
 
-    `source` (`'imputed'` or `'lognorm'`, see `build_x.SOURCE_LAYERS`) selects BOTH the
-    factor block (`get_gene_factors(..., source=source)`) and the y layer
-    (`_source_layer(source)`) -- they must agree, so there is no separate `layer` param.
-    `'imputed'` reads/writes the ORIGINAL unsuffixed keys (`x_factor_map`, ...);
-    `'lognorm'` reads the `_lognorm`-suffixed ones (see `build_x._SOURCE_SUFFIX`).
+    Both the factor block (`get_gene_factors`) and the y layer (`LAYER` =
+    `'normalized_count'`) come from the single build_x factor store.
 
     Returns a tidy DataFrame [gene, factor, group, beta, r, r2, model_r2, n_cells] (one
     row per (gene, factor)). `r` = Pearson correlation between the target y and that
@@ -147,11 +143,8 @@ def fit_gene_betas(adata, genes=None, metabolites='all', *, annot_col=None, anno
     `n_cells` are per-gene, repeated across the gene's rows. `metabolites` is
     passed to `get_gene_factors` as `metabs`. Cell selection: `annot_col`/`annot_value`
     filter, intersected with `cells` (a boolean mask or an obs-name array); default =
-    all cells. `genes=None` defaults to THIS source's own stored genes
-    (`build_x.stored_genes(adata, source)`) -- NOT a shared gene list -- so a gene built
-    for only one of the two sources is never silently dropped from the other's fit. A gene
-    absent from that source's factor map, or with fewer than n_factors+1 cells, is skipped
-    with a warning.
+    all cells. `genes=None` defaults to `build_x.stored_genes(adata)`. A gene absent from
+    the factor map, or with fewer than n_factors+1 cells, is skipped with a warning.
 
     `standardize=True` z-scores each factor column before fitting (see `_fit`), so the
     returned betas are per-SD and comparable across factors of different raw scale --
@@ -163,26 +156,24 @@ def fit_gene_betas(adata, genes=None, metabolites='all', *, annot_col=None, anno
     magnitude ranking) are not uniquely determined among the collinear columns -- see
     the module docstring.
     """
-    layer = _source_layer(source)
-    sfx = _SOURCE_SUFFIX[source]
     if genes is None:
-        genes = stored_genes(adata, source)
-    factor_map = adata.uns.get(f'x_factor_map{sfx}', {})
+        genes = stored_genes(adata)
+    factor_map = adata.uns.get('x_factor_map', {})
     kept_genes = []
     for gene in genes:
         if gene not in factor_map:
-            warnings.warn(f"fit_gene_betas: {gene!r} not in x_factor_map{sfx}; skipping.")
+            warnings.warn(f"fit_gene_betas: {gene!r} not in x_factor_map; skipping.")
             continue
         kept_genes.append(gene)
 
     rows = _select_cells(adata, annot_col, annot_value, cells)
     # Densify only the genes we'll actually fit (kept_genes are all in var_names, since
-    # x_factor_map{sfx} is only populated for genes build_factor_block found there).
-    expr = adata[:, kept_genes].to_df(layer) if kept_genes else pd.DataFrame(index=adata.obs_names)
+    # x_factor_map is only populated for genes build_factor_block found there).
+    expr = adata[:, kept_genes].to_df(LAYER) if kept_genes else pd.DataFrame(index=adata.obs_names)
 
     records = []
     for gene in kept_genes:
-        X = get_gene_factors(adata, gene, metabs=metabolites, source=source).loc[rows]
+        X = get_gene_factors(adata, gene, metabs=metabolites).loc[rows]
         if len(rows) < X.shape[1] + 1:
             warnings.warn(f"fit_gene_betas: {gene!r} has too few cells "
                           f"({len(rows)} < {X.shape[1] + 1}); skipping.")
@@ -219,7 +210,7 @@ def subsample_cells(adata, seed, *, frac=None, n=None, annot_col=None, annot_val
 
 
 def subsample_gene_betas(adata, gene, factors=None, *, n_subsamples=100, frac=0.8,
-                         annot_col=None, annot_value=None, seed0=0, source='imputed',
+                         annot_col=None, annot_value=None, seed0=0,
                          metabolites='all', method='OLS', penalty=1.0, standardize=False):
     """Beta of each selected factor for `gene` across `n_subsamples` cell subsamples
     (seeds seed0..seed0+n_subsamples-1). Returns a DataFrame of shape
@@ -227,17 +218,12 @@ def subsample_gene_betas(adata, gene, factors=None, *, n_subsamples=100, frac=0.
     factor names, values = that factor's fitted beta. NOT metabolite-specific: `factors`
     can be ANY modulator (bare TF gene, `lig$rec`, `lig#tf`, or `metab@<name>`).
 
-    `source` (`'imputed'` or `'lognorm'`, see `build_x.SOURCE_LAYERS`) selects BOTH the
-    factor block and the y layer (`_source_layer(source)`).
-
     `factors=None` -> ALL of the gene's factor columns (from get_gene_factors(..., metabs=
-    metabolites, source=source)); otherwise a subset (a list of exact factor names; names
-    not present are warned about and dropped). A subsample drawing too few cells
-    (< n_factors+1) yields a NaN row. Builds X/y ONCE and only row-slices + refits per draw
-    (efficiency).
+    metabolites)); otherwise a subset (a list of exact factor names; names not present are
+    warned about and dropped). A subsample drawing too few cells (< n_factors+1) yields a
+    NaN row. Builds X/y ONCE and only row-slices + refits per draw (efficiency).
     """
-    layer = _source_layer(source)
-    X = get_gene_factors(adata, gene, metabs=metabolites, source=source)
+    X = get_gene_factors(adata, gene, metabs=metabolites)
     if factors is None:
         selected_factors = list(X.columns)
     else:
@@ -248,7 +234,7 @@ def subsample_gene_betas(adata, gene, factors=None, *, n_subsamples=100, frac=0.
                           f"columns; dropped.")
 
     selected_idx = [list(X.columns).index(f) for f in selected_factors]
-    y = adata[:, gene].to_df(layer)[gene]
+    y = adata[:, gene].to_df(LAYER)[gene]
 
     out = np.full((n_subsamples, len(selected_factors)), np.nan)
     for i, seed in enumerate(range(seed0, seed0 + n_subsamples)):

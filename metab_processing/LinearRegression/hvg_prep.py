@@ -1,8 +1,11 @@
 #!/usr/bin/env python
-"""Drop mito genes, keep the top-N HVG, run SpaceTravLR prep (build_x_adata) per dataset path.
+"""Drop mito genes, keep the top-N HVG (or all genes), run SpaceTravLR prep
+(build_x_adata) per dataset path.
 
 Each `--paths` entry is a dataset directory holding `adata.h5ad`; output is written to
-`<path>/LinearRegression/hvg{top_n}_x_adata.h5ad`.
+`<path>/LinearRegression/hvg{top_n}_x_adata.h5ad`, or `hvg_all_x_adata.h5ad` when
+`--top-n all` is given (skips HVG selection entirely; uses every gene left after the
+mito drop).
 """
 import argparse
 import os
@@ -45,28 +48,36 @@ def run(path, top_n, annot):
 
     adata = adata[:, ~adata.var_names.str.upper().str.startswith('MT-')].copy()
 
-    # HVG on a normalized+log copy (skmisc-free), then subset the raw adata, HVG-ranked.
-    tmp = adata.copy()
-    sc.pp.normalize_total(tmp, target_sum=1e4)
-    sc.pp.log1p(tmp)
-    sc.pp.highly_variable_genes(tmp, n_top_genes=top_n, flavor='cell_ranger')
-    hvg = tmp.var.loc[tmp.var.highly_variable, 'dispersions_norm'] \
-             .sort_values(ascending=False).index.tolist()
-    if len(hvg) != top_n:
-        raise ValueError(f'{path.name}: selected {len(hvg)} HVG != top_n={top_n}.')
-    adata = adata[:, hvg].copy()
+    if top_n == 'all':
+        hvg = list(adata.var_names)
+        tag = 'all'
+    else:
+        n = int(top_n)
+        # HVG on a normalized+log copy (skmisc-free), then subset the raw adata, HVG-ranked.
+        tmp = adata.copy()
+        sc.pp.normalize_total(tmp, target_sum=1e4)
+        sc.pp.log1p(tmp)
+        sc.pp.highly_variable_genes(tmp, n_top_genes=n, flavor='cell_ranger')
+        hvg = tmp.var.loc[tmp.var.highly_variable, 'dispersions_norm'] \
+                 .sort_values(ascending=False).index.tolist()
+        if len(hvg) != n:
+            raise ValueError(f'{path.name}: selected {len(hvg)} HVG != top_n={n}.')
+        adata = adata[:, hvg].copy()
+        tag = str(n)
 
     lr_dir = path / 'LinearRegression'
-    out = lr_dir / f'hvg{top_n}_x_adata.h5ad'
+    out = lr_dir / f'hvg{tag}_x_adata.h5ad'
     build_x_adata(adata, str(out), focus_genes=hvg, annot=annot,
-                  setup_dir=str(lr_dir / f'hvg{top_n}_setup'))
+                  setup_dir=str(lr_dir / f'hvg{tag}_setup'))
     _log(f'{path.name}: wrote {out} ({len(hvg)} hvg)')
 
 
 if __name__ == '__main__':
     ap = argparse.ArgumentParser()
     ap.add_argument('--paths', nargs='+', required=True)
-    ap.add_argument('--top-n', type=int, required=True)
+    ap.add_argument('--top-n', required=True,
+                     help="int, or the literal string 'all' to skip HVG selection and use "
+                          "every gene (after the mito drop).")
     ap.add_argument('--annot', required=True)
     args = ap.parse_args()
 
