@@ -248,6 +248,114 @@ def get_gene_factors(adata, gene, metabs=None):
     return pd.concat([df, metab_df[metab_cols]], axis=1)
 
 
+def add_gene_signature(adata, name, positive=(), negative=(), factor_mode='union'):
+    """Create a signature pseudo-gene `name` fittable exactly like a real gene, and RETURN
+    a NEW adata with it appended (original untouched).
+
+    Score (per cell), on the LAYER ('normalized_count'): sum of the positive genes' values
+    minus the negative genes' values. This score becomes the pseudo-gene's expression.
+
+    `name` is appended to var_names and to EVERY layer + X (so anndata stays shape-consistent;
+    only LAYER's value matters for fitting -- the score goes into every layer's new column).
+    `uns['x_factor_map'][name]` = the union (default) or intersection of the factor-column
+    lists of the constituent genes (positive+negative) that are present in x_factor_map; `name`
+    is appended to `uns['x_genes']`. So `fit_gene_betas(adata2, genes=[name], ...)` and
+    `get_gene_factors(adata2, name)` work with no other change.
+
+    Returns a NEW adata; the input's var/X/layers and its `x_factor_map`/`x_genes` are not
+    modified. `obsm`/`obsp` arrays are shared by reference with the input (treat the result
+    as read-only for those; do not mutate obsm arrays in place).
+    """
+    import anndata as ad
+    import scipy.sparse as sp
+
+    if factor_mode not in ('union', 'intersection'):
+        raise ValueError(f"add_gene_signature: invalid factor_mode {factor_mode!r}; "
+                         "must be 'union' or 'intersection'.")
+    if name in adata.var_names:
+        raise ValueError(f"add_gene_signature: {name!r} already in adata.var_names.")
+
+    def _present(genes, label):
+        present = [g for g in genes if g in adata.var_names]
+        missing = [g for g in genes if g not in adata.var_names]
+        if missing:
+            warnings.warn(f"add_gene_signature: {label} genes {missing} not in "
+                         "adata.var_names; skipping.")
+        return present
+
+    # Dedup within each list (preserving first-seen order) BEFORE summing, so a repeated
+    # name (e.g. positive=['A','A','B']) doesn't double-count. A gene present in BOTH
+    # positive and negative still counts once on each side (nets to ~0), since dedup is
+    # applied per-list independently.
+    pos_present = list(dict.fromkeys(_present(list(positive), 'positive')))
+    neg_present = list(dict.fromkeys(_present(list(negative), 'negative')))
+
+    if not pos_present and not neg_present:
+        warnings.warn(f"add_gene_signature: no positive/negative genes found for "
+                     f"{name!r}; score will be all zeros.")
+        score = np.zeros(adata.n_obs, dtype=np.float32)
+    else:
+        present = pos_present + neg_present
+        df = adata[:, present].to_df(LAYER)
+        pos_sum = df[pos_present].sum(axis=1).to_numpy() if pos_present else 0.0
+        neg_sum = df[neg_present].sum(axis=1).to_numpy() if neg_present else 0.0
+        score = pos_sum - neg_sum
+
+    factor_map = adata.uns.get('x_factor_map', {})
+    constituents = [g for g in (pos_present + neg_present) if g in factor_map]
+    if not constituents:
+        warnings.warn(f"add_gene_signature: none of {name!r}'s constituent genes are in "
+                     "x_factor_map; the signature will have no modulators.")
+        factors = []
+    elif factor_mode == 'union':
+        factors = []
+        seen = set()
+        for g in constituents:
+            for c in factor_map[g]:
+                if c not in seen:
+                    seen.add(c)
+                    factors.append(c)
+    else:  # intersection
+        common = set(factor_map[constituents[0]])
+        for g in constituents[1:]:
+            common &= set(factor_map[g])
+        factors = [c for c in factor_map[constituents[0]] if c in common]
+
+    # Keep the score as FLOAT regardless of the target layer's own dtype -- casting to an
+    # integer layer's dtype (e.g. raw_count int) would truncate/round the score to 0.
+    # np.hstack/scipy.sparse.hstack upcast the layer to float as needed; that's fine here
+    # since this analysis adata's non-normalized_count layers aren't re-consumed downstream.
+    def _append_col(mat, col):
+        col = np.asarray(col, dtype=float).reshape(-1, 1)
+        if sp.issparse(mat):
+            return sp.hstack([mat, sp.csr_matrix(col)], format=mat.format)
+        return np.hstack([mat, col])
+
+    new_X = _append_col(adata.X, score)
+    new_layers = {k: _append_col(v, score) for k, v in adata.layers.items()}
+    new_var = pd.concat([adata.var, pd.DataFrame(index=[name])])
+
+    # Copy each per-gene factor list so the new adata's x_factor_map shares no mutable
+    # list objects with the input's (isolation: mutating new.uns['x_factor_map'][g] must
+    # not affect adata.uns['x_factor_map'][g]).
+    new_factor_map = {g: list(v) for g, v in factor_map.items()}
+    new_factor_map[name] = factors
+
+    new_uns = dict(adata.uns)
+    new_uns['x_factor_map'] = new_factor_map
+    new_uns['x_genes'] = list(adata.uns.get('x_genes', [])) + [name]
+
+    new_adata = ad.AnnData(
+        X=new_X, obs=adata.obs.copy(), var=new_var, uns=new_uns,
+        obsm={k: v for k, v in adata.obsm.items()},
+        obsp={k: v for k, v in adata.obsp.items()},
+        layers=new_layers,
+    )
+    new_adata.obs_names = adata.obs_names
+    new_adata.var_names = list(adata.var_names) + [name]
+    return new_adata
+
+
 def add_metabolites(adata, metabolites, *, radius=300, contact_distance=50, scale_factor=1):
     """Add/extend the shared metabolite block (`obsm['x_metab']` +
     `uns['x_metab_modulators']`) so more metabolites can be added after the fact, without

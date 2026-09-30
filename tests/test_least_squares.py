@@ -35,7 +35,7 @@ from metab_processing.LinearRegression.least_squares import (
     _fit,
     _fit_ols,
     _select_cells,
-    subsample_cells,
+    resample_cells,
     subsample_gene_betas,
     rank_coefficients,
     plot_top_coefficients,
@@ -194,45 +194,40 @@ class FitGeneBetasTests(unittest.TestCase):
         self.assertTrue(any("too few cells" in str(w.message) for w in caught))
 
 
-class SubsampleCellsTests(unittest.TestCase):
+class ResampleCellsTests(unittest.TestCase):
     def setUp(self):
         self.adata = _make_adata()
 
+    def test_size_equals_pool_size(self):
+        out = resample_cells(self.adata, seed=0)
+        self.assertEqual(len(out), N)
+
     def test_reproducible_for_fixed_seed(self):
-        a = subsample_cells(self.adata, seed=42, frac=0.5)
-        b = subsample_cells(self.adata, seed=42, frac=0.5)
+        a = resample_cells(self.adata, seed=42)
+        b = resample_cells(self.adata, seed=42)
         np.testing.assert_array_equal(a, b)
 
-    def test_frac_size(self):
-        out = subsample_cells(self.adata, seed=0, frac=0.25)
-        self.assertEqual(len(out), 10)  # round(0.25 * 40)
+    def test_all_returned_names_in_pool(self):
+        pool = set(self.adata.obs_names)
+        out = resample_cells(self.adata, seed=1)
+        self.assertTrue(set(out) <= pool)
 
-    def test_n_size(self):
-        out = subsample_cells(self.adata, seed=0, n=7)
-        self.assertEqual(len(out), 7)
+    def test_contains_duplicates(self):
+        # with N=40 draws with replacement from a pool of 40, some duplicate is
+        # overwhelmingly likely; check across a few seeds to avoid flakiness.
+        found_dup = any(
+            len(set(resample_cells(self.adata, seed=s))) < N for s in range(5))
+        self.assertTrue(found_dup)
 
     def test_respects_annotation_filter(self):
-        out = subsample_cells(self.adata, seed=0, frac=1.0, annot_col="ct", annot_value="T")
+        out = resample_cells(self.adata, seed=0, annot_col="ct", annot_value="T")
         t_cells = set(self.adata.obs_names[self.adata.obs["ct"] == "T"])
-        self.assertEqual(set(out), t_cells)
-
-    def test_samples_without_replacement(self):
-        out = subsample_cells(self.adata, seed=3, n=N)
-        self.assertEqual(len(set(out)), N)
+        self.assertTrue(set(out) <= t_cells)
+        self.assertEqual(len(out), len(t_cells))
 
     def test_raises_on_empty_pool(self):
         with self.assertRaises(ValueError):
-            subsample_cells(self.adata, seed=0, frac=0.5, annot_col="ct", annot_value="ZZZ")
-
-    def test_raises_when_n_exceeds_pool(self):
-        with self.assertRaises(ValueError):
-            subsample_cells(self.adata, seed=0, n=N + 1)
-
-    def test_raises_unless_exactly_one_of_frac_n(self):
-        with self.assertRaises(ValueError):
-            subsample_cells(self.adata, seed=0)
-        with self.assertRaises(ValueError):
-            subsample_cells(self.adata, seed=0, frac=0.5, n=5)
+            resample_cells(self.adata, seed=0, annot_col="ct", annot_value="ZZZ")
 
 
 class FitStandardizeTests(unittest.TestCase):
@@ -318,49 +313,66 @@ class SubsampleGeneBetasTests(unittest.TestCase):
         self.adata = _make_adata()
 
     def test_shape_and_default_includes_all_factor_groups(self):
-        df = subsample_gene_betas(self.adata, "G", n_subsamples=5, frac=0.8, seed0=0)
+        df = subsample_gene_betas(self.adata, "G", n_subsamples=5, seed0=0)
         self.assertEqual(df.shape, (5, 4))
         groups = {_group(c) for c in df.columns}
         self.assertIn("tf", groups)
         self.assertIn("lr", groups)
         self.assertIn("metab", groups)
 
-    def test_recovers_known_betas_with_full_resample(self):
-        """No noise + frac=1.0 -> every subsample refits on all N cells, so betas should
-        match KNOWN_BETA_G to floating precision."""
-        df = subsample_gene_betas(self.adata, "G", n_subsamples=3, frac=1.0, seed0=0)
-        groups = {_group(c) for c in df.columns}
-        self.assertEqual(groups, {"tf", "lr", "metab"})
-        for factor, val in KNOWN_BETA_G.items():
-            self.assertTrue(np.allclose(df[factor].to_numpy(), val, atol=1e-6))
-
     def test_factor_subset_returns_just_those_columns_in_order(self):
         df = subsample_gene_betas(self.adata, "G", factors=["L$R", "TF_A"],
-                                  n_subsamples=3, frac=0.8, seed0=0)
+                                  n_subsamples=3, seed0=0)
         self.assertEqual(list(df.columns), ["L$R", "TF_A"])
 
     def test_bad_factor_name_warns_and_is_dropped(self):
         with warnings.catch_warnings(record=True) as caught:
             warnings.simplefilter("always")
             df = subsample_gene_betas(self.adata, "G", factors=["TF_A", "NOPE"],
-                                      n_subsamples=3, frac=0.8, seed0=0)
+                                      n_subsamples=3, seed0=0)
         self.assertEqual(list(df.columns), ["TF_A"])
         self.assertTrue(any("NOPE" in str(w.message) for w in caught))
 
     def test_method_penalty_standardize_honored(self):
-        df = subsample_gene_betas(self.adata, "G", n_subsamples=5, frac=1.0, seed0=0,
+        df = subsample_gene_betas(self.adata, "G", n_subsamples=5, seed0=0,
                                   method="l1", penalty=1000.0, standardize=True)
         self.assertGreater((df.abs() < 1e-8).to_numpy().mean(), 0.5)
 
-    def test_too_small_draw_yields_nan_rows(self):
-        # frac=0.05 of 40 cells -> 2 cells, < n_factors(4)+1 for G.
-        df = subsample_gene_betas(self.adata, "G", n_subsamples=3, frac=0.05, seed0=0)
+    def test_too_few_cells_in_pool_yields_nan_rows(self):
+        """A resample is always the same size as the eligible pool, so the only way to
+        get a too-small draw is a too-small pool -- restrict via annot_col/annot_value to
+        a 2-cell pool, < n_factors(4)+1 for G."""
+        adata = self.adata.copy()
+        adata.obs["ct2"] = ["small"] * 2 + ["rest"] * (N - 2)
+        df = subsample_gene_betas(adata, "G", n_subsamples=3, seed0=0,
+                                  annot_col="ct2", annot_value="small")
         self.assertTrue(np.all(np.isnan(df.to_numpy())))
 
     def test_deterministic_given_seed0(self):
-        a = subsample_gene_betas(self.adata, "G", n_subsamples=5, frac=0.8, seed0=0)
-        b = subsample_gene_betas(self.adata, "G", n_subsamples=5, frac=0.8, seed0=0)
+        a = subsample_gene_betas(self.adata, "G", n_subsamples=5, seed0=0)
+        b = subsample_gene_betas(self.adata, "G", n_subsamples=5, seed0=0)
         pd.testing.assert_frame_equal(a, b)
+
+    def test_betas_vary_across_resamples(self):
+        """With a resample-with-replacement (not the exact all-cells fit), per-factor
+        betas should vary from row to row across a reasonably large n_subsamples --
+        confirms subsample_gene_betas is actually driven by resample_cells rather than
+        e.g. accidentally refitting on the same (full) cell set every time. `_make_adata`'s
+        'G' is a NOISE-FREE exact linear function of its factors, so an OLS fit on any
+        full-rank subset (duplicates included) recovers the exact true beta every time --
+        that would make this test vacuous. So we add a little noise to y_G here, just for
+        this test, to make the fit sensitive to which rows (and how many duplicates of
+        each) a given resample happens to draw."""
+        adata = self.adata.copy()
+        rng = np.random.default_rng(99)
+        noise = rng.normal(scale=0.5, size=N)
+        y = pd.DataFrame(adata.layers["normalized_count"], columns=adata.var_names)
+        y["G"] = y["G"] + noise
+        adata.layers["normalized_count"] = y.to_numpy()
+
+        df = subsample_gene_betas(adata, "G", n_subsamples=25, seed0=0)
+        stds = df.std(axis=0)
+        self.assertTrue((stds > 1e-9).all())
 
 
 class SelectCellsGuardTests(unittest.TestCase):

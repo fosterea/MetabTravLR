@@ -36,10 +36,11 @@ from SpaceTravLR.models.parallel_estimators import SpatialCellularProgramsEstima
 from metab_processing.SpaceTravLR.beta_analysis import _group, compute_metab_x
 from metab_processing.LinearRegression import build_x as bx
 from metab_processing.LinearRegression.build_x import (
-    build_factor_block, get_gene_factors, add_metabolites, build_x_adata,
+    build_factor_block, get_gene_factors, add_metabolites, add_gene_signature, build_x_adata,
     ensure_lognorm_layer, stored_genes, LAYER,
     _CLEANUP_OBSM, _CLEANUP_UNS,
 )
+from metab_processing.LinearRegression.least_squares import fit_gene_betas
 
 RADIUS, CONTACT, SCALE = 100, 30, 100
 
@@ -554,6 +555,197 @@ def test_build_x_adata_run_params_json_overrides_args(tmp_path):
     assert captured["cluster_annot"] == "cell_type_int_alt"
     # receptor_thresh has no run_params.json key -> always the caller's default, unchanged.
     assert captured["receptor_thresh"] == 0.42
+
+
+
+# ---------------------------------------------------------------------------
+# add_gene_signature: pure-pandas, single-block fixture (no estimator/torch needed)
+# ---------------------------------------------------------------------------
+
+SIG_N = 20
+
+
+def _make_signature_adata(seed=0):
+    """A minimal single-block-shaped AnnData: var_names A/B/C/D, a `normalized_count`
+    layer (plus `raw_count`, to check the column-append mechanism handles >1 layer), a
+    deduplicated `x_factors` block (5 unique columns f1..f5) and `x_factor_map` for
+    A/B/C only (D is present in var_names but deliberately NOT a trained focus gene, to
+    exercise the "constituent not in x_factor_map" skip)."""
+    rng = np.random.default_rng(seed)
+    genes = ["A", "B", "C", "D"]
+    a = ad.AnnData(X=rng.normal(size=(SIG_N, len(genes))).astype(np.float32))
+    a.var_names = genes
+    a.obs_names = [f"c{i}" for i in range(SIG_N)]
+    norm = rng.normal(size=(SIG_N, len(genes))).astype(np.float32)
+    a.layers["normalized_count"] = norm
+    a.layers["raw_count"] = rng.normal(size=(SIG_N, len(genes))).astype(np.float32)
+    a.obsm["spatial"] = rng.uniform(0, 100, size=(SIG_N, 2))
+
+    factors = rng.normal(size=(SIG_N, 5)).astype(np.float32)
+    a.obsm["x_factors"] = factors
+    a.uns["x_factors_cols"] = ["f1", "f2", "f3", "f4", "f5"]
+    a.uns["x_factor_map"] = {
+        "A": ["f1", "f2", "f3"],
+        "B": ["f2", "f4"],
+        "C": ["f2", "f3", "f5"],
+    }
+    a.uns["x_genes"] = ["A", "B", "C"]
+    return a
+
+
+def test_add_gene_signature_score_and_appending():
+    adata = _make_signature_adata(seed=30)
+    norm = pd.DataFrame(adata.layers["normalized_count"], columns=adata.var_names)
+
+    new = add_gene_signature(adata, "SIG1", positive=["A", "B"], negative=["C"])
+
+    assert "SIG1" in new.var_names
+    assert "SIG1" in list(new.uns["x_genes"])
+    expected_score = (norm["A"] + norm["B"] - norm["C"]).to_numpy()
+    got_score = new[:, "SIG1"].layers["normalized_count"].ravel()
+    np.testing.assert_allclose(got_score, expected_score, atol=1e-5)
+    # score also lands in X and every other layer (shape-consistency requirement).
+    got_score_X = np.asarray(new[:, "SIG1"].X).ravel()
+    np.testing.assert_allclose(got_score_X, expected_score, atol=1e-5)
+    np.testing.assert_allclose(
+        new[:, "SIG1"].layers["raw_count"].ravel(), expected_score, atol=1e-5)
+
+    # original untouched.
+    assert "SIG1" not in adata.var_names
+    assert "SIG1" not in list(adata.uns["x_genes"])
+    assert adata.obsm["x_factors"].shape[1] == 5
+
+
+def test_add_gene_signature_factor_union_order():
+    adata = _make_signature_adata(seed=31)
+    new = add_gene_signature(adata, "SIG1", positive=["A", "B"], negative=["C"],
+                             factor_mode="union")
+    # A: f1,f2,f3 ; B: f2,f4 ; C: f2,f3,f5 -> first-seen union across A,B,C.
+    assert new.uns["x_factor_map"]["SIG1"] == ["f1", "f2", "f3", "f4", "f5"]
+
+
+def test_add_gene_signature_factor_intersection_order():
+    adata = _make_signature_adata(seed=32)
+    new = add_gene_signature(adata, "SIG2", positive=["A", "B"], negative=["C"],
+                             factor_mode="intersection")
+    # only f2 is common to A, B and C.
+    assert new.uns["x_factor_map"]["SIG2"] == ["f2"]
+
+
+def test_add_gene_signature_get_gene_factors_and_fit_gene_betas():
+    adata = _make_signature_adata(seed=33)
+    new = add_gene_signature(adata, "SIG1", positive=["A", "B"], negative=["C"])
+
+    got = get_gene_factors(new, "SIG1")
+    assert list(got.columns) == new.uns["x_factor_map"]["SIG1"]
+
+    df = fit_gene_betas(new, genes=["SIG1"], metabolites=None)
+    assert set(df["gene"]) == {"SIG1"}
+    assert set(df["factor"]) == set(new.uns["x_factor_map"]["SIG1"])
+
+
+def test_add_gene_signature_missing_var_name_warns_and_skipped_from_score():
+    adata = _make_signature_adata(seed=34)
+    norm = pd.DataFrame(adata.layers["normalized_count"], columns=adata.var_names)
+
+    with pytest.warns(UserWarning, match="ZZZ"):
+        new = add_gene_signature(adata, "SIG1", positive=["A", "ZZZ"], negative=[])
+
+    got_score = new[:, "SIG1"].layers["normalized_count"].ravel()
+    np.testing.assert_allclose(got_score, norm["A"].to_numpy(), atol=1e-5)
+
+
+def test_add_gene_signature_constituent_not_in_factor_map_skipped():
+    adata = _make_signature_adata(seed=35)
+    # D is a real gene (in var_names) but has no x_factor_map entry -> contributes to the
+    # score but not to the factor set.
+    new = add_gene_signature(adata, "SIG1", positive=["A", "D"], negative=[])
+    assert new.uns["x_factor_map"]["SIG1"] == new.uns["x_factor_map"]["A"]
+
+
+def test_add_gene_signature_all_missing_gives_zero_score_and_empty_factors():
+    adata = _make_signature_adata(seed=36)
+    with pytest.warns(UserWarning):
+        new = add_gene_signature(adata, "SIG1", positive=["ZZZ"], negative=["YYY"])
+    got_score = new[:, "SIG1"].layers["normalized_count"].ravel()
+    np.testing.assert_allclose(got_score, np.zeros(SIG_N), atol=1e-8)
+    assert new.uns["x_factor_map"]["SIG1"] == []
+
+
+def test_add_gene_signature_preserves_float_score_in_integer_layer():
+    """A layer with an integer dtype (e.g. raw_count as int) must still carry the exact
+    float score in its appended `name` column -- casting the score to the layer's own
+    dtype would truncate/round it (regression guard for the dtype-truncation bug)."""
+    adata = _make_signature_adata(seed=39)
+    norm = pd.DataFrame(adata.layers["normalized_count"], columns=adata.var_names)
+    # replace raw_count with a small-integer layer so a truncating cast would be obvious.
+    rng = np.random.default_rng(40)
+    adata.layers["raw_count"] = rng.integers(0, 10, size=adata.shape).astype(np.int64)
+
+    new = add_gene_signature(adata, "SIG1", positive=["A", "B"], negative=["C"])
+
+    expected_score = (norm["A"] + norm["B"] - norm["C"]).to_numpy()
+    got = new[:, "SIG1"].layers["raw_count"].ravel()
+    np.testing.assert_allclose(got, expected_score, atol=1e-5)
+    # sanity: the expected score is NOT (mostly) integer-valued, so a truncating cast
+    # would have visibly failed this comparison.
+    assert not np.allclose(got, np.round(got), atol=1e-3)
+
+
+def test_add_gene_signature_duplicate_name_in_list_does_not_double_count():
+    adata = _make_signature_adata(seed=41)
+    norm = pd.DataFrame(adata.layers["normalized_count"], columns=adata.var_names)
+
+    new = add_gene_signature(adata, "SIG1", positive=["A", "A", "B"], negative=[])
+
+    expected_score = (norm["A"] + norm["B"]).to_numpy()  # NOT 2*A + B
+    got = new[:, "SIG1"].layers["normalized_count"].ravel()
+    np.testing.assert_allclose(got, expected_score, atol=1e-5)
+
+
+def test_add_gene_signature_gene_in_both_lists_nets_to_zero():
+    """A gene present in BOTH positive and negative nets to ~0 for that gene's
+    contribution (each list is deduped independently, so it still counts once per
+    side)."""
+    adata = _make_signature_adata(seed=42)
+    norm = pd.DataFrame(adata.layers["normalized_count"], columns=adata.var_names)
+
+    new = add_gene_signature(adata, "SIG1", positive=["A", "B"], negative=["A"])
+
+    expected_score = norm["B"].to_numpy()  # A - A cancels, leaving just B
+    got = new[:, "SIG1"].layers["normalized_count"].ravel()
+    np.testing.assert_allclose(got, expected_score, atol=1e-5)
+
+
+def test_add_gene_signature_isolation_from_original():
+    """The original adata is untouched by add_gene_signature: var_names/uns['x_genes']
+    stay as they were, and the new adata's per-gene x_factor_map lists are independent
+    copies -- mutating one does not affect the other's list for the same gene."""
+    adata = _make_signature_adata(seed=43)
+    orig_x_genes = list(adata.uns["x_genes"])
+    orig_a_factors = list(adata.uns["x_factor_map"]["A"])
+
+    new = add_gene_signature(adata, "SIG1", positive=["A", "B"], negative=["C"])
+
+    assert "SIG1" not in adata.var_names
+    assert list(adata.uns["x_genes"]) == orig_x_genes
+    assert list(adata.uns["x_factor_map"]["A"]) == orig_a_factors
+
+    new.uns["x_factor_map"]["A"].append("x")
+    assert adata.uns["x_factor_map"]["A"] == orig_a_factors
+    assert "x" not in adata.uns["x_factor_map"]["A"]
+
+
+def test_add_gene_signature_bad_factor_mode_raises():
+    adata = _make_signature_adata(seed=37)
+    with pytest.raises(ValueError):
+        add_gene_signature(adata, "SIG1", positive=["A"], negative=[], factor_mode="bogus")
+
+
+def test_add_gene_signature_duplicate_name_raises():
+    adata = _make_signature_adata(seed=38)
+    with pytest.raises(ValueError):
+        add_gene_signature(adata, "A", positive=["B"], negative=[])
 
 
 if __name__ == "__main__":

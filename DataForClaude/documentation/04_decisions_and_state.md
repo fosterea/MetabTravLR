@@ -527,7 +527,17 @@ computes and stores the model's **x building blocks**, and saves the adata.
     from `normalized_count`; `genes=None` → `stored_genes(adata)`. **Existing x_adata files must be rebuilt**
     (their `x_factors` was imputed; now it's log1p raw). Net ~-350 lines. metab-dev + metab-review (no blockers).
   - **`hvg_prep.py --top-n all`** (2026-09-29): `--top-n` accepts an int or the literal `all` (skip HVG
-    selection, use every gene after mito-drop; outputs `hvg_all_x_adata.h5ad`).
+    selection, use every gene after mito-drop; outputs `hvgall_x_adata.h5ad`).
+  - **Gene signatures + resample CIs (2026-09-29).** `build_x.add_gene_signature(adata, name, positive=(),
+    negative=(), factor_mode='union')` returns a NEW adata with a signature pseudo-gene: score =
+    Σ(positive) − Σ(negative) on `normalized_count`, appended as a var (fittable exactly like a real gene);
+    its `x_factor_map[name]` = union (default) or intersection of the constituents' factor columns.
+    `least_squares.resample_cells(seed, ...)` = a same-size, uniform draw-with-replacement over the
+    (optionally annotation-filtered) cells; it REPLACED the old without-replacement `subsample_cells`
+    (deleted), and `subsample_gene_betas` now resamples that way (no `frac`). Notebook
+    `signature_analysis.ipynb` (melanoma, `Tier1`/`T Cell`, all-genes build): add a signature → fit it →
+    resample → an in-notebook `add_subsample_percentiles(betas, sub, lower, upper)` adds
+    min/max/lower_/upper_ percentile subsample-beta columns → display + per-factor histogram.
 - **Storage = building blocks, not products** (D12): lossless, no cells×M×G blowup; per-gene design
   matrices reconstruct at regression time from `received_ligands × imputed_count` (+ networks on disk).
 - **Test notebook** `build_x_test.ipynb` (bare, no docs): defaults to UC slice 4

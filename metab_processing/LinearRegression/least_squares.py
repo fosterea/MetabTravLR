@@ -193,35 +193,36 @@ def fit_gene_betas(adata, genes=None, metabolites='all', *, annot_col=None, anno
     return pd.DataFrame.from_records(records, columns=_COLS)
 
 
-def subsample_cells(adata, seed, *, frac=None, n=None, annot_col=None, annot_value=None):
-    """Sample obs_names without replacement from the eligible pool (all cells, or
-    those matching `annot_col == annot_value`). Exactly one of frac/n must be given."""
-    if (frac is None) == (n is None):
-        raise ValueError("subsample_cells: pass exactly one of frac/n")
+def resample_cells(adata, seed, *, annot_col=None, annot_value=None):
+    """Resample the eligible cells (all cells, or those matching `annot_col ==
+    annot_value`) WITH replacement to the same size as the pool -- a uniform draw with
+    replacement over the pool, so the result is the same length as the pool but with
+    duplicates expected. Raises `ValueError` if the eligible pool is empty."""
     pool = _select_cells(adata, annot_col, annot_value, None)
     if len(pool) == 0:
-        raise ValueError("subsample_cells: eligible pool is empty")
-    size = round(frac * len(pool)) if frac is not None else n
-    if size > len(pool):
-        raise ValueError(f"subsample_cells: requested size {size} exceeds pool {len(pool)}")
+        raise ValueError("resample_cells: eligible pool is empty")
     rng = np.random.default_rng(seed)
-    idx = rng.choice(len(pool), size=size, replace=False)
+    idx = rng.integers(0, len(pool), size=len(pool))
     return pool.to_numpy()[idx]
 
 
-def subsample_gene_betas(adata, gene, factors=None, *, n_subsamples=100, frac=0.8,
+def subsample_gene_betas(adata, gene, factors=None, *, n_subsamples=100,
                          annot_col=None, annot_value=None, seed0=0,
                          metabolites='all', method='OLS', penalty=1.0, standardize=False):
-    """Beta of each selected factor for `gene` across `n_subsamples` cell subsamples
-    (seeds seed0..seed0+n_subsamples-1). Returns a DataFrame of shape
-    (n_subsamples, n_selected_factors): row i = subsample i, columns = the selected
-    factor names, values = that factor's fitted beta. NOT metabolite-specific: `factors`
-    can be ANY modulator (bare TF gene, `lig$rec`, `lig#tf`, or `metab@<name>`).
+    """Beta of each selected factor for `gene` across `n_subsamples` cell resamples
+    (seeds seed0..seed0+n_subsamples-1), each a same-size-with-replacement resample
+    (see `resample_cells`) of the (optionally annotation-filtered) eligible cells.
+    Returns a DataFrame of shape (n_subsamples, n_selected_factors): row i = resample i,
+    columns = the selected factor names, values = that factor's fitted beta. NOT
+    metabolite-specific: `factors` can be ANY modulator (bare TF gene, `lig$rec`,
+    `lig#tf`, or `metab@<name>`).
 
     `factors=None` -> ALL of the gene's factor columns (from get_gene_factors(..., metabs=
     metabolites)); otherwise a subset (a list of exact factor names; names not present are
-    warned about and dropped). A subsample drawing too few cells (< n_factors+1) yields a
-    NaN row. Builds X/y ONCE and only row-slices + refits per draw (efficiency).
+    warned about and dropped). A resample drawing too few cells (< n_factors+1) yields a
+    NaN row -- only possible when the eligible pool itself is that small, since each
+    resample is the same size as the pool. Builds X/y ONCE and only row-slices + refits
+    per draw (efficiency).
     """
     X = get_gene_factors(adata, gene, metabs=metabolites)
     if factors is None:
@@ -238,8 +239,7 @@ def subsample_gene_betas(adata, gene, factors=None, *, n_subsamples=100, frac=0.
 
     out = np.full((n_subsamples, len(selected_factors)), np.nan)
     for i, seed in enumerate(range(seed0, seed0 + n_subsamples)):
-        cells = subsample_cells(adata, seed, frac=frac, annot_col=annot_col,
-                                annot_value=annot_value)
+        cells = resample_cells(adata, seed, annot_col=annot_col, annot_value=annot_value)
         if len(cells) < X.shape[1] + 1:
             continue
         beta, _ = _fit(X.loc[cells].to_numpy(), y.loc[cells].to_numpy(), method=method,
