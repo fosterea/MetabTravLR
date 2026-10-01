@@ -150,39 +150,94 @@ def build_factor_block(adata, grn, tflinks, focus_genes, *, radius=300,
     union_cols = {}
     kept_genes = []
 
-    for i, gene in enumerate(genes):
-        # Guard a pre-existing bug (parallel_estimators.py ~991-997): a gene with zero
-        # L-R pairs sets uns['received_ligands'] to an EMPTY frame in the shared uns; a
-        # later L-R gene then KeyErrors reading it. received_ligands_tfl is never emptied
-        # and (COMMOT refused above) always equals received_ligands, so repair ONLY the
-        # empty-frame case -- never overwrite an already-valid, non-empty frame.
-        if i > 0 and 'received_ligands_tfl' in adata.uns:
-            rl = adata.uns.get('received_ligands')
-            if rl is None or getattr(rl, 'shape', (0, 0))[1] == 0:
-                adata.uns['received_ligands'] = adata.uns['received_ligands_tfl']
+    # Perf fix 1 (memoize get_regulators for this build only): `grn.get_regulators(adata,
+    # gene)` is called once per target gene (line ~645 in parallel_estimators.py) AND once
+    # per NicheNet ligand column inside init_ligands_and_receptors (~L566) -- the latter are
+    # target-gene-INDEPENDENT (same `adata`, same GRN links, same var_names throughout this
+    # build), so across ~5000 genes x ~46 ligands this redoes ~46 distinct lookups ~230k
+    # times. Wrap the instance method with a per-build memo keyed on `gene` alone (confirmed
+    # the only two call sites pass no other varying arg), live only for this call, and
+    # restore the `grn` object to its EXACT pre-call state afterward (not merely "patched
+    # back to the original method" -- if it had no instance-level `get_regulators` shadow
+    # before this call, it must have none after either).
+    _had_attr = 'get_regulators' in vars(grn)
+    _orig_get_regulators = grn.get_regulators
+    _reg_cache = {}
 
-        est = SpatialCellularProgramsEstimator(
-            adata=adata, target_gene=gene, layer=LAYER, cluster_annot=cluster_annot,
-            radius=radius, contact_distance=contact_distance,
-            tf_ligand_cutoff=tf_ligand_cutoff, grn=grn, scale_factor=scale_factor,
-            tflinks=tflinks, receptor_thresh=receptor_thresh, metabolites=None,
-        )
-        est.init_data()
+    def _cached_get_regulators(adata_arg, gene, *a, **k):
+        # Only cache the no-extra-args shape that both known call sites use; any call with
+        # extra positional/keyword args (e.g. a future `alpha=` override) bypasses the
+        # cache entirely rather than risk caching a result keyed on `gene` alone that
+        # actually depended on those args too.
+        if a or k:
+            return _orig_get_regulators(adata_arg, gene, *a, **k)
+        if gene not in _reg_cache:
+            _reg_cache[gene] = list(_orig_get_regulators(adata_arg, gene))
+        return list(_reg_cache[gene])  # fresh copy each call -> safe if a caller mutates it
 
-        X = est.train_df.drop(columns=[gene]).reindex(adata.obs_names)
-        if X.shape[1] == 0:
-            warnings.warn(f"build_factor_block: {gene!r} has no modulators; skipping.")
-            continue
+    grn.get_regulators = _cached_get_regulators
+    try:
+        for i, gene in enumerate(genes):
+            # Guard a pre-existing bug (parallel_estimators.py ~991-997): a gene with zero
+            # L-R pairs sets uns['received_ligands'] to an EMPTY frame in the shared uns; a
+            # later L-R gene then KeyErrors reading it. received_ligands_tfl is never emptied
+            # and (COMMOT refused above) always equals received_ligands, so repair ONLY the
+            # empty-frame case -- never overwrite an already-valid, non-empty frame.
+            if i > 0 and 'received_ligands_tfl' in adata.uns:
+                rl = adata.uns.get('received_ligands')
+                if rl is None or getattr(rl, 'shape', (0, 0))[1] == 0:
+                    adata.uns['received_ligands'] = adata.uns['received_ligands_tfl']
 
-        x_factor_map[gene] = list(X.columns)
-        for col in X.columns:
-            if col not in union_cols:
-                union_cols[col] = X[col].to_numpy()
-        kept_genes.append(gene)
+            est = SpatialCellularProgramsEstimator(
+                adata=adata, target_gene=gene, layer=LAYER, cluster_annot=cluster_annot,
+                radius=radius, contact_distance=contact_distance,
+                tf_ligand_cutoff=tf_ligand_cutoff, grn=grn, scale_factor=scale_factor,
+                tflinks=tflinks, receptor_thresh=receptor_thresh, metabolites=None,
+            )
+            est.init_data()
 
+            X = est.train_df.drop(columns=[gene]).reindex(adata.obs_names)
+            if X.shape[1] == 0:
+                warnings.warn(f"build_factor_block: {gene!r} has no modulators; skipping.")
+                continue
+
+            x_factor_map[gene] = list(X.columns)
+            for col in X.columns:
+                if col not in union_cols:
+                    # Perf fix 2 (float32 block): materialize a standalone, OWNED 1-D
+                    # float32 copy of this column. `X[col].to_numpy()` on a pandas frame
+                    # whose same-dtype columns got consolidated into one block returns a
+                    # VIEW into that (n_obs x ~M) block, not an independent array --
+                    # `.astype(..., copy=False)` is then a no-op when already float32, so
+                    # the stored "column" would pin the ENTIRE per-gene train_df block in
+                    # memory for the rest of the build (worse than the old column_stack
+                    # path this fix was meant to replace). NOTE: `np.ascontiguousarray`
+                    # does NOT reliably fix this -- if the view is already C-contiguous
+                    # float32 (the common case for a pandas block row), it returns the
+                    # SAME view with no copy (verified). `.astype(float32)` with the
+                    # DEFAULT `copy=True` is what numpy guarantees always allocates a new,
+                    # data-owning array, regardless of the source's existing dtype/layout.
+                    union_cols[col] = X[col].to_numpy().astype(np.float32, copy=True)
+            kept_genes.append(gene)
+    finally:
+        # Restore grn to its EXACT pre-call state: if it had no instance-level
+        # get_regulators shadow before, leave none after (don't introduce one via
+        # assignment); if it did, put that exact original back.
+        if _had_attr:
+            grn.get_regulators = _orig_get_regulators
+        else:
+            del grn.get_regulators
+
+    # Perf fix 2 (float32 + preallocated block, the OOM fix): fill a preallocated float32
+    # array column-by-column instead of np.column_stack, which transiently doubles peak
+    # memory (the list-of-arrays plus the stacked result).
     cols = list(union_cols.keys())
-    block = (np.column_stack([union_cols[c] for c in cols]) if cols
-             else np.empty((adata.n_obs, 0), dtype=np.float32))
+    if cols:
+        block = np.empty((adata.n_obs, len(cols)), dtype=np.float32)
+        for j, c in enumerate(cols):
+            block[:, j] = union_cols[c]
+    else:
+        block = np.empty((adata.n_obs, 0), dtype=np.float32)
 
     adata.obsm['x_factors'] = block
     adata.uns['x_factors_cols'] = cols
@@ -438,6 +493,11 @@ def build_x_adata(adata, out_path, *, focus_genes, metabolites=None, setup_dir=N
     tflinks = pd.read_parquet(setup_dir / 'input_data' / 'tflinks.parquet')
 
     ensure_lognorm_layer(proc)
+    # Perf fix (OOM): the single factor block is built on `normalized_count` only (LAYER);
+    # `imputed_count` (the MAGIC layer, ~2.25GB) is unused downstream (fit_gene_betas,
+    # get_gene_factors, add_metabolites, compute_metab_x all read `normalized_count`), so
+    # drop it before the per-gene loop to free that memory during the build.
+    proc.layers.pop('imputed_count', None)
     build_factor_block(proc, grn, tflinks, focus_genes, **params)
     if metabolites:
         add_metabolites(proc, metabolites, radius=params['radius'],

@@ -538,6 +538,19 @@ computes and stores the model's **x building blocks**, and saves the adata.
     `signature_analysis.ipynb` (melanoma, `Tier1`/`T Cell`, all-genes build): add a signature → fit it →
     resample → an in-notebook `add_subsample_percentiles(betas, sub, lower, upper)` adds
     min/max/lower_/upper_ percentile subsample-beta columns → display + per-factor histogram.
+  - **All-genes build perf (2026-10-01).** `--top-n all` (~5000 focus genes) timed out (12h, UC) / OOM'd
+    (melanoma, 112k cells) in `build_factor_block`. Profiling found it was NOT inherent: (a) each gene's
+    estimator called `grn.get_regulators` ~47× (target + NicheNet ligands), target-INDEPENDENT → ~230k calls
+    for ~46 distinct results; (b) the union block was float64 + `np.column_stack` (2× transient). Fixes
+    (build_x.py only, no core edits): memoize `grn.get_regulators` per build (wrap the grn instance, keyed on
+    gene, restored in `finally`) → per-gene cost ~8s→<1s (~1.4h for 5000 genes); store the block as **float32**
+    into a **preallocated** array (per-column COPY via `.astype(np.float32, copy=True)`, NOT a view into the
+    per-gene `train_df` block — a subtle pandas-consolidation trap the reviewer caught; `np.ascontiguousarray`
+    would NOT copy an already-contiguous view) and `pop('imputed_count')`
+    before the loop → ~4× lower peak, fits the savio3 8-core (~24GB) allocation. Behavior change: `x_factors`
+    is now float32 (betas differ ~1e-6) and the written adata no longer carries `imputed_count`. A further
+    "compute each unique column once" refactor (removes the O(n_genes×N×M) shared-column recompute) is a
+    documented optional follow-up, not needed after these fixes.
 - **Storage = building blocks, not products** (D12): lossless, no cells×M×G blowup; per-gene design
   matrices reconstruct at regression time from `received_ligands × imputed_count` (+ networks on disk).
 - **Test notebook** `build_x_test.ipynb` (bare, no docs): defaults to UC slice 4
