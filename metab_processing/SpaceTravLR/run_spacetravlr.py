@@ -110,16 +110,39 @@ def _h5ad_is_readable(path) -> bool:
         return False
 
 
+def _artifacts_loadable(outdir) -> bool:
+    """The non-h5ad setup artifacts actually LOAD, not just exist -- catches a pkl/parquet
+    left truncated/corrupt by an interrupted (flaky-FS) write, so setup is rebuilt rather
+    than reused-and-crash. Mirrors `_h5ad_is_readable`'s cheap-check-then-rebuild philosophy.
+    """
+    import pickle
+    import pyarrow.parquet as pq
+    try:
+        with open(outdir / 'input_data' / 'celloracle_links.pkl', 'rb') as f:
+            pickle.load(f)
+        pq.read_schema(outdir / 'input_data' / 'tflinks.parquet')  # reads the footer; fails on truncation
+        return True
+    except Exception:
+        return False
+
+
 def setup_is_complete(outdir) -> bool:
     """True if a previous setup left everything the fit stage needs.
 
     Deliberately not `SpaceShip.is_everything_ok()`: that asserts a CWD-relative
     `launch.py` exists, which is never true inside a SLURM job.
+
+    Checks, in order (cheapest first): all three artifacts exist; `_adata.h5ad` opens
+    and has the expected groups; `celloracle_links.pkl` unpickles and `tflinks.parquet`'s
+    footer reads. A flaky FS can leave any of these truncated/corrupt mid-write, which
+    existence-only checking would skip past and then crash deep inside `fit`.
     """
     outdir = Path(outdir)
     if not all((outdir / f).is_file() for f in _SETUP_ARTIFACTS):
         return False
-    return _h5ad_is_readable(outdir / 'input_data' / '_adata.h5ad')
+    if not _h5ad_is_readable(outdir / 'input_data' / '_adata.h5ad'):
+        return False
+    return _artifacts_loadable(outdir)
 
 
 def _job_is_active(job_id) -> bool:

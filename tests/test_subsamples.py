@@ -11,6 +11,7 @@ import contextlib
 import io
 import json
 import os
+import pickle
 import sys
 import tempfile
 import unittest
@@ -479,8 +480,11 @@ class _MockShip:
         a.obs["cell_type"] = pd.Categorical(["T Cell"] * 3 + ["other"] * 3)
         a.layers["raw_count"] = np.zeros((6, 2), dtype="float32")
         a.write_h5ad(idir / "_adata.h5ad")
-        (idir / "celloracle_links.pkl").write_text("x")
-        (idir / "tflinks.parquet").write_text("x")
+        # Real stand-ins, not text stubs -- `setup_is_complete` now pickle-loads the links
+        # and reads the parquet footer, so a bare "x" would read as a corrupt setup.
+        with open(idir / "celloracle_links.pkl", "wb") as f:
+            pickle.dump({}, f)
+        pd.DataFrame({"a": [1]}).to_parquet(idir / "tflinks.parquet")
 
     def fit(self, metabolites=None, **kwargs):
         _MockShip.fits.append((self.outdir, metabolites))

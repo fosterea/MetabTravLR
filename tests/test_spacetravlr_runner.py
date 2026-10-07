@@ -37,6 +37,21 @@ def write_tiny_h5ad(path, var_names=("A", "B")):
     adata.write_h5ad(path)
 
 
+def write_valid_setup_artifacts(input_data_dir):
+    """Real stand-ins for the two non-h5ad setup artifacts -- `setup_is_complete` now
+    pickle-loads `celloracle_links.pkl` and reads `tflinks.parquet`'s footer, so a bare
+    text stub (the old `.write_text("x")`) would read as a corrupt setup."""
+    import pickle
+
+    import pandas as pd
+
+    input_data_dir = Path(input_data_dir)
+    input_data_dir.mkdir(parents=True, exist_ok=True)
+    with open(input_data_dir / "celloracle_links.pkl", "wb") as f:
+        pickle.dump({}, f)
+    pd.DataFrame({"a": [1]}).to_parquet(input_data_dir / "tflinks.parquet")
+
+
 def make_dataset_tree(root, dataset=DATASET, setup=False, betadata_genes=()):
     """A skeleton dataset directory: the two required inputs, optionally a finished setup."""
     paths = dataset_paths(dataset, root)
@@ -47,8 +62,7 @@ def make_dataset_tree(root, dataset=DATASET, setup=False, betadata_genes=()):
     if setup:
         paths["input_data"].mkdir(parents=True, exist_ok=True)
         write_tiny_h5ad(paths["input_data"] / "_adata.h5ad")
-        for name in ("celloracle_links.pkl", "tflinks.parquet"):
-            (paths["input_data"] / name).write_text("x")
+        write_valid_setup_artifacts(paths["input_data"])
     for gene in betadata_genes:
         paths["betadata"].mkdir(parents=True, exist_ok=True)
         (paths["betadata"] / f"{gene}_betadata.parquet").write_text("x")
@@ -193,6 +207,30 @@ class TestSetupIsComplete(unittest.TestCase):
             finally:
                 os.chdir(cwd)
 
+    def test_corrupt_pickle_counts_as_incomplete(self):
+        # A flaky-FS write interrupted mid-pickle leaves a file that EXISTS but doesn't
+        # unpickle. Existence-only checking (the pre-hardening behavior) would happily
+        # reuse it and crash later inside fit when the links are actually loaded.
+        with tempfile.TemporaryDirectory() as tmp:
+            paths = make_dataset_tree(tmp, setup=True)
+            (paths["input_data"] / "celloracle_links.pkl").write_bytes(b"not a pickle")
+            self.assertFalse(run_spacetravlr.setup_is_complete(paths["outdir"]))
+
+    def test_truncated_parquet_counts_as_incomplete(self):
+        # Same failure mode for the other non-h5ad artifact: a truncated parquet file
+        # has no readable footer.
+        with tempfile.TemporaryDirectory() as tmp:
+            paths = make_dataset_tree(tmp, setup=True)
+            (paths["input_data"] / "tflinks.parquet").write_bytes(b"notparquet")
+            self.assertFalse(run_spacetravlr.setup_is_complete(paths["outdir"]))
+
+    def test_valid_pkl_and_parquet_are_accepted(self):
+        # Guard against the check being accidentally too strict (e.g. requiring specific
+        # pickled content) -- the existing "complete" fixture must still read True.
+        with tempfile.TemporaryDirectory() as tmp:
+            paths = make_dataset_tree(tmp, setup=True)
+            self.assertTrue(run_spacetravlr._artifacts_loadable(paths["outdir"]))
+
 
 class TestIsolateCacheDir(unittest.TestCase):
     """genomepy opens a SQLite cache under `~/.cache` at import time; on Savio that is NFS,
@@ -247,8 +285,7 @@ class TestIsolateCacheDir(unittest.TestCase):
                 order.append("setup_")
                 (self.outdir / "input_data").mkdir(parents=True, exist_ok=True)
                 write_tiny_h5ad(self.outdir / "input_data" / "_adata.h5ad")
-                for name in ("celloracle_links.pkl", "tflinks.parquet"):
-                    (self.outdir / "input_data" / name).write_text("x")
+                write_valid_setup_artifacts(self.outdir / "input_data")
 
         with tempfile.TemporaryDirectory() as tmp:
             make_dataset_tree(tmp)
@@ -448,8 +485,7 @@ class RunDatasetCase(unittest.TestCase):
                 outer.setup_calls.append({"overwrite": overwrite, "run_commot": run_commot})
                 (self.outdir / "input_data").mkdir(parents=True, exist_ok=True)
                 write_tiny_h5ad(self.outdir / "input_data" / "_adata.h5ad")
-                for name in ("celloracle_links.pkl", "tflinks.parquet"):
-                    (self.outdir / "input_data" / name).write_text("x")
+                write_valid_setup_artifacts(self.outdir / "input_data")
 
             def fit(self, metabolites=None, **kwargs):
                 betadata = self.outdir / "betadata"

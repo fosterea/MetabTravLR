@@ -20,7 +20,7 @@ if _TESTS_DIR not in sys.path:
 
 from metab_processing.SpaceTravLR import run_all_metab, run_spacetravlr
 from metab_processing.SpaceTravLR.dataset_configs import dataset_paths
-from test_spacetravlr_runner import write_tiny_h5ad
+from test_spacetravlr_runner import write_tiny_h5ad, write_valid_setup_artifacts
 
 DATASET = "Primary_Dermal_Melanoma"
 
@@ -271,8 +271,7 @@ class TestRunAllMetabEndToEnd(unittest.TestCase):
 
         paths["input_data"].mkdir(parents=True, exist_ok=True)
         write_tiny_h5ad(paths["input_data"] / "_adata.h5ad", var_names=self.var_names)
-        for name in ("celloracle_links.pkl", "tflinks.parquet"):
-            (paths["input_data"] / name).write_text("x")
+        write_valid_setup_artifacts(paths["input_data"])
         return paths
 
     def test_main_redirects_run_dataset_to_all_metab_paths_and_dict_loader(self):
