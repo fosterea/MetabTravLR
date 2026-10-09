@@ -63,20 +63,30 @@ def _group_label(name):
 _COLS = ["gene", "factor", "group", "beta", "r", "r2", "model_r2", "n_cells"]
 
 
-def cluster_factors(X, threshold=0.5, method='average'):
-    """Hierarchically cluster a factor DataFrame's columns by correlation distance.
+def cluster_factors(adata, gene, *, metabs=None, annot_col=None, annot_value=None,
+                    threshold=0.5, method='average'):
+    """Hierarchically cluster `gene`'s factor columns by correlation distance.
 
-    Ported from the `clusters.ipynb::cluster_factors` notebook function (same steps):
-    correlation matrix -> `1 - corr` distance -> average/etc. linkage -> flat clusters
-    cut at `threshold` (distance criterion). `X` is a factor DataFrame (e.g. from
-    `get_gene_factors`); returns `{group_id: [factor names]}`.
+    Builds the factor matrix with `get_gene_factors(adata, gene, metabs=metabs)`,
+    restricted to the selected cells (`annot_col`/`annot_value` -- a value or a list;
+    default all cells, same selection as the fit functions), then: correlation matrix
+    -> `1 - corr` distance -> average/etc. linkage -> flat clusters cut at `threshold`
+    (distance criterion). Returns `{group_id: [factor names]}` suitable for the
+    `groups=` argument of `fit_gene_betas`/`subsample_gene_betas`.
 
-    A zero-variance (constant) column has no correlation structure (`np.corrcoef`
-    would emit NaNs for it, which `squareform`/`linkage` then reject) and is dropped
-    before clustering -- it simply isn't grouped, and stays an ungrouped individual
-    factor at `_reduce_groups` time.
+    `metabs`: None (default, no metabolites) / 'all' / a list -> passed through to
+    `get_gene_factors`. Correlation is scale-invariant, so no standardization is needed
+    here. A zero-variance (constant over the selected cells) column has no correlation
+    structure (`np.corrcoef` would emit NaNs, which `squareform`/`linkage` reject) and
+    is dropped before clustering -- it isn't grouped, so it stays an ungrouped
+    individual factor at `_reduce_groups` time. With fewer than 2 non-constant columns
+    there is nothing to cluster: each remaining column is returned as its own group.
     """
+    rows = _select_cells(adata, annot_col, annot_value, None)
+    X = get_gene_factors(adata, gene, metabs=metabs).loc[rows]
     X = X.loc[:, X.std() > 0]
+    if X.shape[1] < 2:
+        return {i + 1: [c] for i, c in enumerate(X.columns)}
     corr = np.corrcoef(X.values.T)
     dist = 1 - corr
     np.fill_diagonal(dist, 0)

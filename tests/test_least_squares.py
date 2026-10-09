@@ -563,29 +563,42 @@ class ClusterFactorsAndGroupsTests(unittest.TestCase):
         adata.uns["x_factor_map"] = {"G": ["A", "B", "C"]}
         return adata, a, b, c
 
+    def _make_factor_adata(self, cols):
+        """A tiny adata exposing `cols` (dict name->vector) as gene 'G's factor block,
+        so cluster_factors(adata, 'G', ...) can extract them."""
+        N = len(next(iter(cols.values())))
+        adata = AnnData(X=np.zeros((N, 1), dtype=np.float64))
+        adata.var_names = ["G"]
+        adata.obs_names = [f"c{i}" for i in range(N)]
+        adata.layers["normalized_count"] = np.zeros((N, 1))
+        adata.obsm["x_factors"] = np.column_stack([cols[c] for c in cols])
+        adata.uns["x_factors_cols"] = list(cols)
+        adata.uns["x_factor_map"] = {"G": list(cols)}
+        return adata
+
     def test_cluster_factors_drops_constant_column_without_raising(self):
         """A zero-variance column gives NaN correlations (np.corrcoef), which would
         otherwise crash `squareform`/`linkage`. It's dropped up front instead -- not
         clustered, so it isn't in any returned group (and so stays an ungrouped
         individual factor at `_reduce_groups` time)."""
-        X = pd.DataFrame({
+        adata = self._make_factor_adata({
             "A": np.array([1.0, 2.0, 3.0, 4.0, 5.0]),
             "B": np.array([1.0, 2.0, 3.0, 4.0, 5.0]),  # identical to A -> dist 0
             "CONST": np.zeros(5),  # zero variance -> would NaN out corrcoef
         })
-        groups = cluster_factors(X, threshold=0.5)  # must not raise
+        groups = cluster_factors(adata, "G", threshold=0.5)  # must not raise
         all_members = {m for members in groups.values() for m in members}
         self.assertNotIn("CONST", all_members)
         self.assertIn("A", all_members)
         self.assertIn("B", all_members)
 
     def test_cluster_factors_groups_identical_columns(self):
-        X = pd.DataFrame({
+        adata = self._make_factor_adata({
             "A": np.array([1.0, 2.0, 3.0, 4.0, 5.0]),
             "B": np.array([1.0, 2.0, 3.0, 4.0, 5.0]),  # identical to A -> dist 0
             "C": np.array([5.0, 1.0, 4.0, 2.0, 3.0]),  # unrelated
         })
-        groups = cluster_factors(X, threshold=0.5)
+        groups = cluster_factors(adata, "G", threshold=0.5)
         # A and B land in the same group; C is on its own.
         group_of = {name: gid for gid, members in groups.items() for name in members}
         self.assertEqual(group_of["A"], group_of["B"])

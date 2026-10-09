@@ -520,8 +520,10 @@ computes and stores the model's **x building blocks**, and saves the adata.
     through `_fit`/`fit_gene_betas`/`subsample_gene_betas`; **defaults byte-identical** (OLS/l1, no groups/onehot).
     - **Elastic net:** `method='elastic'` + `l1_ratio=0.5` (sklearn `ElasticNet(alpha=penalty, l1_ratio=...)`,
       lazy import); `method='l1'`/`'OLS'` unchanged.
-    - **Cluster feature-reduction:** `cluster_factors(X, threshold, method)` (ported from `clusters.ipynb`,
-      drops zero-variance columns) returns `{id:[factors]}`; pass `groups=` to a fit → each group's present
+    - **Cluster feature-reduction:** `cluster_factors(adata, gene, *, metabs=None, annot_col=None,
+      annot_value=None, threshold=0.5, method='average')` builds the gene's factor matrix internally (via
+      `get_gene_factors`, restricted to the selected cells) and clusters by correlation distance (drops
+      zero-variance columns) → `{id:[factors]}`; pass `groups=` to a fit → each group's present
       factors collapse into one summed `cluster_{id}` column (constituents z-scored before the sum when
       `standardize`; the sum is then a normal factor, re-standardized at fit), ungrouped factors kept; output
       group label `'cluster'`. **Reduction is per-fit-population** (both `fit_gene_betas` over its cells and
