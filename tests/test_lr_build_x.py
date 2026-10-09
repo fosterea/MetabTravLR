@@ -38,7 +38,7 @@ from metab_processing.LinearRegression import build_x as bx
 from metab_processing.LinearRegression.build_x import (
     build_factor_block, get_gene_factors, add_metabolites, add_gene_signature, build_x_adata,
     ensure_lognorm_layer, stored_genes, LAYER,
-    _CLEANUP_OBSM, _CLEANUP_UNS,
+    _CLEANUP_OBSM, _CLEANUP_UNS, _factor_genes,
 )
 from metab_processing.LinearRegression.least_squares import fit_gene_betas
 
@@ -854,6 +854,106 @@ def test_add_gene_signature_factor_intersection_order():
                              factor_mode="intersection")
     # only f2 is common to A, B and C.
     assert new.uns["x_factor_map"]["SIG2"] == ["f2"]
+
+
+# ---------------------------------------------------------------------------
+# add_gene_signature: overlap between the gene set and the genes its factors
+# reference (keep_when_overlap / verbose).
+# ---------------------------------------------------------------------------
+
+def _make_overlap_adata(seed=0):
+    """A signature fixture engineered so some factor columns reference genes that are
+    (or can be) in the signature's own gene set: a bare TF column ``B`` that is also a
+    gene, and an L-R column ``L$R`` whose receptor ``R`` is also a gene. Only ``A`` is in
+    x_factor_map, and its factor list is ``[B, L$R, f5]``."""
+    rng = np.random.default_rng(seed)
+    genes = ["A", "B", "L", "R"]
+    a = ad.AnnData(X=rng.normal(size=(SIG_N, len(genes))).astype(np.float32))
+    a.var_names = genes
+    a.obs_names = [f"c{i}" for i in range(SIG_N)]
+    a.layers["normalized_count"] = rng.normal(size=(SIG_N, len(genes))).astype(np.float32)
+    a.obsm["spatial"] = rng.uniform(0, 100, size=(SIG_N, 2))
+
+    a.obsm["x_factors"] = rng.normal(size=(SIG_N, 3)).astype(np.float32)
+    a.uns["x_factors_cols"] = ["B", "L$R", "f5"]
+    a.uns["x_factor_map"] = {"A": ["B", "L$R", "f5"]}
+    a.uns["x_genes"] = ["A"]
+    return a
+
+
+def test_factor_genes_helper():
+    # bare TF -> itself; L-R / L-TF -> both sides; metab@ -> none (names a metabolite).
+    assert _factor_genes("TF1") == ["TF1"]
+    assert _factor_genes("L$R") == ["L", "R"]
+    assert _factor_genes("LIG#TF") == ["LIG", "TF"]
+    assert _factor_genes("metab@Glc") == []
+
+
+def test_add_gene_signature_overlap_target_drops_factor():
+    adata = _make_overlap_adata(seed=40)
+    norm = pd.DataFrame(adata.layers["normalized_count"], columns=adata.var_names)
+    # gene set {A, B}; factor "B" references gene B -> overlap.
+    new = add_gene_signature(adata, "SIG", positive=["A", "B"],
+                             keep_when_overlap="target")
+    # 'target' keeps the gene set, drops the self-predicting factor "B".
+    assert new.uns["x_factor_map"]["SIG"] == ["L$R", "f5"]
+    expected = (norm["A"] + norm["B"]).to_numpy()
+    np.testing.assert_allclose(
+        new[:, "SIG"].layers["normalized_count"].ravel(), expected, atol=1e-5)
+
+
+def test_add_gene_signature_overlap_factor_drops_gene():
+    adata = _make_overlap_adata(seed=41)
+    norm = pd.DataFrame(adata.layers["normalized_count"], columns=adata.var_names)
+    new = add_gene_signature(adata, "SIG", positive=["A", "B"],
+                             keep_when_overlap="factor")
+    # 'factor' keeps every factor, drops the overlapping gene B from the score.
+    assert new.uns["x_factor_map"]["SIG"] == ["B", "L$R", "f5"]
+    expected = norm["A"].to_numpy()
+    np.testing.assert_allclose(
+        new[:, "SIG"].layers["normalized_count"].ravel(), expected, atol=1e-5)
+
+
+def test_add_gene_signature_overlap_both_keeps_everything():
+    adata = _make_overlap_adata(seed=42)
+    norm = pd.DataFrame(adata.layers["normalized_count"], columns=adata.var_names)
+    new = add_gene_signature(adata, "SIG", positive=["A", "B"],
+                             keep_when_overlap="both")
+    assert new.uns["x_factor_map"]["SIG"] == ["B", "L$R", "f5"]
+    expected = (norm["A"] + norm["B"]).to_numpy()
+    np.testing.assert_allclose(
+        new[:, "SIG"].layers["normalized_count"].ravel(), expected, atol=1e-5)
+
+
+def test_add_gene_signature_overlap_lr_receptor():
+    adata = _make_overlap_adata(seed=43)
+    # gene set {A, R}; factor "L$R" references receptor R -> overlap (exercises L-R split).
+    new = add_gene_signature(adata, "SIG", positive=["A", "R"],
+                             keep_when_overlap="target")
+    assert new.uns["x_factor_map"]["SIG"] == ["B", "f5"]
+
+
+def test_add_gene_signature_overlap_none_default():
+    # No overlap (gene set {A} vs factors referencing B/L/R) -> default 'target' is a no-op.
+    adata = _make_overlap_adata(seed=44)
+    new = add_gene_signature(adata, "SIG", positive=["A"])
+    assert new.uns["x_factor_map"]["SIG"] == ["B", "L$R", "f5"]
+
+
+def test_add_gene_signature_verbose_reports_drops(capsys):
+    adata = _make_overlap_adata(seed=45)
+    add_gene_signature(adata, "SIG", positive=["A", "B"],
+                       keep_when_overlap="target", verbose=True)
+    out = capsys.readouterr().out
+    assert "keep_when_overlap='target'" in out
+    assert "'B'" in out                 # the dropped overlapping factor is named
+    assert "dropped" in out
+
+
+def test_add_gene_signature_invalid_keep_when_overlap():
+    adata = _make_overlap_adata(seed=46)
+    with pytest.raises(ValueError, match="keep_when_overlap"):
+        add_gene_signature(adata, "SIG", positive=["A"], keep_when_overlap="nope")
 
 
 def test_add_gene_signature_get_gene_factors_and_fit_gene_betas():

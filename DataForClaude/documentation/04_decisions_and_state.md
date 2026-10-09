@@ -574,6 +574,17 @@ computes and stores the model's **x building blocks**, and saves the adata.
     is now float32 (betas differ ~1e-6) and the written adata no longer carries `imputed_count`. A further
     "compute each unique column once" refactor (removes the O(n_genes×N×M) shared-column recompute) is a
     documented optional follow-up, not needed after these fixes.
+  - **Signature overlap handling (2026-10-09).** `add_gene_signature` gained `keep_when_overlap` +
+    `verbose`. "Overlap" = a factor column that references a gene in the signature's own gene set
+    (positive+negative) — i.e. a self-predicting factor (leakage). A factor's referenced genes come from
+    the new `_factor_genes()` helper: bare `TF` → `[TF]`, `lig$rec`/`lig#tf` → both sides, `metab@<name>` →
+    `[]` (names a metabolite, never a gene, so metab factors never overlap). Modes: `'target'` (DEFAULT,
+    anti-leakage) keeps the gene set intact and DROPS the overlapping factor columns from
+    `x_factor_map[name]`; `'factor'` keeps every factor and DROPS the overlapping gene(s) from the
+    score/target; `'both'` allows the overlap (keeps everything). `verbose=True` prints what was kept vs
+    dropped. Default `'target'` is backward-compatible (no overlap in existing fixtures → no-op). Tests:
+    `tests/test_lr_build_x.py` overlap cases (bare-TF overlap × 3 modes, L-R receptor overlap, no-overlap
+    no-op, verbose output, invalid-value ValueError) + `_factor_genes` unit test; file 46 pass.
 - **Storage = building blocks, not products** (D12): lossless, no cells×M×G blowup; per-gene design
   matrices reconstruct at regression time from `received_ligands × imputed_count` (+ networks on disk).
 - **Test notebook** `build_x_test.ipynb` (bare, no docs): defaults to UC slice 4

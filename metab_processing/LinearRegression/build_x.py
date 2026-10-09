@@ -303,7 +303,20 @@ def get_gene_factors(adata, gene, metabs=None):
     return pd.concat([df, metab_df[metab_cols]], axis=1)
 
 
-def add_gene_signature(adata, name, positive=(), negative=(), factor_mode='union'):
+def _factor_genes(factor):
+    """Gene symbol(s) a factor column references: the bare TF name, or both sides of a
+    `lig$rec` / `lig#tf` pair. A `metab@<name>` column names a metabolite (not a gene),
+    so it references none."""
+    if factor.startswith(METAB_PREFIX):
+        return []
+    for sep in ('$', '#'):
+        if sep in factor:
+            return factor.split(sep)
+    return [factor]
+
+
+def add_gene_signature(adata, name, positive=(), negative=(), factor_mode='union',
+                       keep_when_overlap='target', verbose=False):
     """Create a signature pseudo-gene `name` fittable exactly like a real gene, and RETURN
     a NEW adata with it appended (original untouched).
 
@@ -317,6 +330,18 @@ def add_gene_signature(adata, name, positive=(), negative=(), factor_mode='union
     is appended to `uns['x_genes']`. So `fit_gene_betas(adata2, genes=[name], ...)` and
     `get_gene_factors(adata2, name)` work with no other change.
 
+    OVERLAP (`keep_when_overlap`): the signature's gene set (positive+negative) can overlap
+    the genes its factors reference -- e.g. a TF factor that is itself a signature gene, or a
+    `lig$rec` whose receptor is a signature gene -- i.e. a factor that partly predicts its own
+    target (leakage). On overlap:
+      - `'target'` (default): keep the gene set intact, DROP the overlapping factor(s) -- the
+        anti-leakage choice (the signature is defined by its genes; remove self-predicting
+        factors).
+      - `'factor'`: keep all factors, DROP the overlapping gene(s) from the target/score.
+      - `'both'`: keep everything (allow the overlap).
+    `metab@` factors name a metabolite, not a gene, so they never count as overlap.
+    `verbose=True` prints what is kept and what is dropped.
+
     Returns a NEW adata; the input's var/X/layers and its `x_factor_map`/`x_genes` are not
     modified. `obsm`/`obsp` arrays are shared by reference with the input (treat the result
     as read-only for those; do not mutate obsm arrays in place).
@@ -327,6 +352,9 @@ def add_gene_signature(adata, name, positive=(), negative=(), factor_mode='union
     if factor_mode not in ('union', 'intersection'):
         raise ValueError(f"add_gene_signature: invalid factor_mode {factor_mode!r}; "
                          "must be 'union' or 'intersection'.")
+    if keep_when_overlap not in ('target', 'factor', 'both'):
+        raise ValueError(f"add_gene_signature: invalid keep_when_overlap "
+                         f"{keep_when_overlap!r}; must be 'target', 'factor', or 'both'.")
     if name in adata.var_names:
         raise ValueError(f"add_gene_signature: {name!r} already in adata.var_names.")
 
@@ -345,17 +373,7 @@ def add_gene_signature(adata, name, positive=(), negative=(), factor_mode='union
     pos_present = list(dict.fromkeys(_present(list(positive), 'positive')))
     neg_present = list(dict.fromkeys(_present(list(negative), 'negative')))
 
-    if not pos_present and not neg_present:
-        warnings.warn(f"add_gene_signature: no positive/negative genes found for "
-                     f"{name!r}; score will be all zeros.")
-        score = np.zeros(adata.n_obs, dtype=np.float32)
-    else:
-        present = pos_present + neg_present
-        df = adata[:, present].to_df(LAYER)
-        pos_sum = df[pos_present].sum(axis=1).to_numpy() if pos_present else 0.0
-        neg_sum = df[neg_present].sum(axis=1).to_numpy() if neg_present else 0.0
-        score = pos_sum - neg_sum
-
+    # Factor set from the constituent genes present in x_factor_map (union/intersection).
     factor_map = adata.uns.get('x_factor_map', {})
     constituents = [g for g in (pos_present + neg_present) if g in factor_map]
     if not constituents:
@@ -375,6 +393,46 @@ def add_gene_signature(adata, name, positive=(), negative=(), factor_mode='union
         for g in constituents[1:]:
             common &= set(factor_map[g])
         factors = [c for c in factor_map[constituents[0]] if c in common]
+
+    # Resolve overlap between the signature's gene set and the genes its factors reference.
+    gene_set = set(pos_present) | set(neg_present)
+    overlap = {f: [g for g in _factor_genes(f) if g in gene_set] for f in factors}
+    overlap = {f: gs for f, gs in overlap.items() if gs}         # only the overlapping factors
+    overlap_genes = sorted({g for gs in overlap.values() for g in gs})
+    if overlap:
+        if keep_when_overlap == 'target':      # keep the gene set; drop overlapping factors
+            factors = [f for f in factors if f not in overlap]
+        elif keep_when_overlap == 'factor':    # keep factors; drop overlapping genes from y
+            drop = set(overlap_genes)
+            pos_present = [g for g in pos_present if g not in drop]
+            neg_present = [g for g in neg_present if g not in drop]
+        # 'both': keep everything
+    if verbose:
+        print(f"[add_gene_signature {name!r}] factor_mode={factor_mode!r} "
+              f"keep_when_overlap={keep_when_overlap!r}")
+        if not overlap:
+            print(f"  no overlap: kept {len(factors)} factor(s), "
+                  f"{len(pos_present) + len(neg_present)} target gene(s)")
+        elif keep_when_overlap == 'target':
+            print(f"  dropped {len(overlap)} overlapping factor(s): {sorted(overlap)}")
+            print(f"  kept {len(factors)} factor(s); target gene set unchanged ({len(gene_set)})")
+        elif keep_when_overlap == 'factor':
+            print(f"  dropped {len(overlap_genes)} gene(s) from the target: {overlap_genes}")
+            print(f"  kept all {len(factors)} factor(s)")
+        else:
+            print(f"  kept BOTH (overlap allowed): {dict(sorted(overlap.items()))}")
+
+    # Score (per cell) on LAYER from the (possibly overlap-trimmed) gene set.
+    if not pos_present and not neg_present:
+        warnings.warn(f"add_gene_signature: no positive/negative genes for {name!r} "
+                     f"(after overlap handling); score will be all zeros.")
+        score = np.zeros(adata.n_obs, dtype=np.float32)
+    else:
+        present = pos_present + neg_present
+        df = adata[:, present].to_df(LAYER)
+        pos_sum = df[pos_present].sum(axis=1).to_numpy() if pos_present else 0.0
+        neg_sum = df[neg_present].sum(axis=1).to_numpy() if neg_present else 0.0
+        score = pos_sum - neg_sum
 
     # Keep the score as FLOAT regardless of the target layer's own dtype -- casting to an
     # integer layer's dtype (e.g. raw_count int) would truncate/round the score to 0.
