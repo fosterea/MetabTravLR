@@ -34,12 +34,17 @@ from metab_processing.LinearRegression.least_squares import (
     fit_gene_betas,
     _fit,
     _fit_ols,
+    _fit_lasso,
+    _fit_elastic,
     _select_cells,
     resample_cells,
     subsample_gene_betas,
     rank_coefficients,
     plot_top_coefficients,
     plot_beta_histogram,
+    cluster_factors,
+    _reduce_groups,
+    _group_label,
 )
 
 N = 40
@@ -259,8 +264,8 @@ class FitStandardizeTests(unittest.TestCase):
         X = rng.normal(loc=5.0, scale=2.0, size=(60, 3))
         beta_true = np.array([2.0, -1.0, 0.5])
         y = X @ beta_true + 1.0
-        beta_raw, _ = _fit(X, y, method="OLS", standardize=False)
-        beta_std, _ = _fit(X, y, method="OLS", standardize=True)
+        beta_raw, _, _ = _fit(X, y, method="OLS", standardize=False)
+        beta_std, _, _ = _fit(X, y, method="OLS", standardize=True)
         np.testing.assert_allclose(beta_raw, beta_true, atol=1e-8)
         sd = X.std(axis=0)
         np.testing.assert_allclose(beta_std, beta_true * sd, atol=1e-6)
@@ -279,7 +284,7 @@ class FitL1SparsityTests(unittest.TestCase):
         self.y = self.X @ self.beta_true
 
     def test_moderate_penalty_zeroes_irrelevant_keeps_relevant(self):
-        beta, _ = _fit(self.X, self.y, method="l1", penalty=0.5, standardize=True)
+        beta, _, _ = _fit(self.X, self.y, method="l1", penalty=0.5, standardize=True)
         for i in (1, 2, 4):
             self.assertEqual(beta[i], 0.0)
         for i in (0, 3):
@@ -289,8 +294,8 @@ class FitL1SparsityTests(unittest.TestCase):
         self.assertLess(beta[3], 0)
 
     def test_larger_penalty_shrinks_magnitude(self):
-        beta_small, _ = _fit(self.X, self.y, method="l1", penalty=0.2, standardize=True)
-        beta_large, _ = _fit(self.X, self.y, method="l1", penalty=2.0, standardize=True)
+        beta_small, _, _ = _fit(self.X, self.y, method="l1", penalty=0.2, standardize=True)
+        beta_large, _, _ = _fit(self.X, self.y, method="l1", penalty=2.0, standardize=True)
         self.assertLess(abs(beta_large[0]), abs(beta_small[0]))
         self.assertLess(abs(beta_large[3]), abs(beta_small[3]))
 
@@ -435,6 +440,427 @@ class PlotSmokeTests(unittest.TestCase):
         values = np.array([1.0, 2.0, np.nan, 3.0])
         ax = plot_beta_histogram(values, title="test")
         self.assertIsNotNone(ax)
+
+
+class DefaultsByteIdenticalTests(unittest.TestCase):
+    """With all new params at their defaults (`method` in {'OLS','l1'}, `l1_ratio`
+    unused, `groups=None`, `onehot_col=None`), `fit_gene_betas`/`subsample_gene_betas`
+    must behave exactly as before this change -- recompute a baseline straight from
+    `_fit_ols`/`_fit_lasso` (the untouched pre-existing helpers) and compare."""
+
+    def setUp(self):
+        self.adata = _make_adata()
+
+    def test_fit_gene_betas_ols_matches_fit_ols_baseline(self):
+        X = get_gene_factors(self.adata, "G", metabs="all")
+        y = pd.Series(self.adata.layers["normalized_count"][:, 0], index=self.adata.obs_names)
+        beta_baseline, r2_baseline = _fit_ols(X.to_numpy(), y.to_numpy())
+
+        df = fit_gene_betas(self.adata, genes=["G"])
+        g = df.set_index("factor")
+        for i, factor in enumerate(X.columns):
+            self.assertAlmostEqual(g.loc[factor, "beta"], beta_baseline[i], places=10)
+        self.assertAlmostEqual(g["model_r2"].iloc[0], r2_baseline, places=10)
+
+    def test_fit_gene_betas_l1_matches_fit_lasso_baseline(self):
+        X = get_gene_factors(self.adata, "G", metabs="all")
+        y = pd.Series(self.adata.layers["normalized_count"][:, 0], index=self.adata.obs_names)
+        beta_baseline, r2_baseline = _fit_lasso(X.to_numpy(), y.to_numpy(), alpha=0.1)
+
+        df = fit_gene_betas(self.adata, genes=["G"], method="l1", penalty=0.1)
+        g = df.set_index("factor")
+        for i, factor in enumerate(X.columns):
+            self.assertAlmostEqual(g.loc[factor, "beta"], beta_baseline[i], places=10)
+        self.assertAlmostEqual(g["model_r2"].iloc[0], r2_baseline, places=10)
+
+    def test_subsample_gene_betas_ols_matches_manual_resample_baseline(self):
+        X = get_gene_factors(self.adata, "G", metabs="all")
+        y = pd.Series(self.adata.layers["normalized_count"][:, 0], index=self.adata.obs_names)
+        baseline = np.full((4, X.shape[1]), np.nan)
+        for i, seed in enumerate(range(4)):
+            cells = resample_cells(self.adata, seed)
+            b, _ = _fit_ols(X.loc[cells].to_numpy(), y.loc[cells].to_numpy())
+            baseline[i] = b
+
+        df = subsample_gene_betas(self.adata, "G", n_subsamples=4, seed0=0)
+        np.testing.assert_allclose(df.to_numpy(), baseline, atol=1e-10)
+
+    def test_fit_returns_three_tuple_with_none_bD_when_D_not_given(self):
+        X = get_gene_factors(self.adata, "G", metabs="all").to_numpy()
+        y = self.adata.layers["normalized_count"][:, 0]
+        beta, bD, r2 = _fit(X, y, method="OLS")
+        self.assertIsNone(bD)
+        beta_ref, r2_ref = _fit_ols(X, y)
+        np.testing.assert_allclose(beta, beta_ref)
+        self.assertAlmostEqual(r2, r2_ref)
+
+
+class ElasticNetTests(unittest.TestCase):
+    """`method='elastic'` dispatches to sklearn `ElasticNet(alpha=penalty,
+    l1_ratio=l1_ratio)`; l1_ratio=1.0 collapses to the l1 path, l1_ratio=0.0 behaves
+    ridge-like (typically no exact zeros)."""
+
+    def setUp(self):
+        rng = np.random.default_rng(11)
+        n, k = 400, 5
+        self.X = rng.normal(size=(n, k))
+        self.beta_true = np.array([3.0, 0.0, 0.0, -2.0, 0.0])
+        self.y = self.X @ self.beta_true
+
+    def test_elastic_runs_and_returns_three_tuple(self):
+        beta, bD, r2 = _fit(self.X, self.y, method="elastic", penalty=0.5, l1_ratio=0.5,
+                            standardize=True)
+        self.assertIsNone(bD)
+        self.assertEqual(beta.shape, (5,))
+        self.assertTrue(np.all(np.isfinite(beta)))
+        self.assertTrue(np.isfinite(r2))
+
+    def test_l1_ratio_one_matches_lasso(self):
+        beta_elastic, _, _ = _fit(self.X, self.y, method="elastic", penalty=0.5,
+                                  l1_ratio=1.0, standardize=True)
+        mu, sd = self.X.mean(axis=0), self.X.std(axis=0)
+        beta_l1, _ = _fit_lasso((self.X - mu) / sd, self.y, alpha=0.5)
+        np.testing.assert_allclose(beta_elastic, beta_l1, atol=1e-6)
+
+    def test_l1_ratio_zero_is_ridge_like_no_exact_zeros(self):
+        beta_ridge, _, _ = _fit(self.X, self.y, method="elastic", penalty=0.5,
+                                l1_ratio=0.0, standardize=True)
+        self.assertEqual(int(np.sum(beta_ridge == 0.0)), 0)
+
+    def test_deterministic(self):
+        a, _, _ = _fit(self.X, self.y, method="elastic", penalty=0.5, l1_ratio=0.5,
+                       standardize=True)
+        b, _, _ = _fit(self.X, self.y, method="elastic", penalty=0.5, l1_ratio=0.5,
+                       standardize=True)
+        np.testing.assert_array_equal(a, b)
+
+    def test_fit_gene_betas_elastic_runs(self):
+        adata = _make_adata()
+        df = fit_gene_betas(adata, genes=["G"], method="elastic", penalty=0.1, l1_ratio=0.3)
+        self.assertFalse(df.empty)
+        self.assertTrue(np.all(np.isfinite(df["beta"])))
+
+
+class ClusterFactorsAndGroupsTests(unittest.TestCase):
+    """`cluster_factors` groups collinear columns by correlation distance;
+    `_reduce_groups`/`groups=` on `fit_gene_betas`/`subsample_gene_betas` collapses
+    each group's present columns into one summed `cluster_{id}` column, labeled
+    group='cluster', while leaving ungrouped factors untouched."""
+
+    def _make_group_adata(self, y_fn):
+        N = 60
+        rng = np.random.default_rng(5)
+        a = rng.normal(size=N)
+        b = a.copy()  # identical to 'a' -> perfectly collinear, must cluster together
+        c = rng.normal(size=N)  # independent -> its own singleton cluster
+
+        adata = AnnData(X=np.zeros((N, 1), dtype=np.float64))
+        adata.var_names = ["G"]
+        adata.obs_names = [f"c{i}" for i in range(N)]
+        adata.layers["normalized_count"] = y_fn(a, b, c).reshape(-1, 1)
+        adata.obsm["x_factors"] = np.column_stack([a, b, c])
+        adata.uns["x_factors_cols"] = ["A", "B", "C"]
+        adata.uns["x_factor_map"] = {"G": ["A", "B", "C"]}
+        return adata, a, b, c
+
+    def test_cluster_factors_drops_constant_column_without_raising(self):
+        """A zero-variance column gives NaN correlations (np.corrcoef), which would
+        otherwise crash `squareform`/`linkage`. It's dropped up front instead -- not
+        clustered, so it isn't in any returned group (and so stays an ungrouped
+        individual factor at `_reduce_groups` time)."""
+        X = pd.DataFrame({
+            "A": np.array([1.0, 2.0, 3.0, 4.0, 5.0]),
+            "B": np.array([1.0, 2.0, 3.0, 4.0, 5.0]),  # identical to A -> dist 0
+            "CONST": np.zeros(5),  # zero variance -> would NaN out corrcoef
+        })
+        groups = cluster_factors(X, threshold=0.5)  # must not raise
+        all_members = {m for members in groups.values() for m in members}
+        self.assertNotIn("CONST", all_members)
+        self.assertIn("A", all_members)
+        self.assertIn("B", all_members)
+
+    def test_cluster_factors_groups_identical_columns(self):
+        X = pd.DataFrame({
+            "A": np.array([1.0, 2.0, 3.0, 4.0, 5.0]),
+            "B": np.array([1.0, 2.0, 3.0, 4.0, 5.0]),  # identical to A -> dist 0
+            "C": np.array([5.0, 1.0, 4.0, 2.0, 3.0]),  # unrelated
+        })
+        groups = cluster_factors(X, threshold=0.5)
+        # A and B land in the same group; C is on its own.
+        group_of = {name: gid for gid, members in groups.items() for name in members}
+        self.assertEqual(group_of["A"], group_of["B"])
+        self.assertNotEqual(group_of["A"], group_of["C"])
+
+    def test_reduce_groups_sum_semantics_unstandardized(self):
+        adata, a, b, c = self._make_group_adata(lambda a, b, c: 3.0 * a)
+        groups = {1: ["A", "B"], 2: ["C"]}
+        df = fit_gene_betas(adata, genes=["G"], metabolites=None, groups=groups,
+                           standardize=False)
+        g = df.set_index("factor")
+        # cluster_1 = A + B = 2a (unstandardized sum); y = 3a = 1.5 * (2a).
+        self.assertAlmostEqual(g.loc["cluster_1", "beta"], 1.5, places=8)
+        self.assertEqual(g.loc["cluster_1", "group"], "cluster")
+        # cluster_2 (singleton group) == C itself; y has no C term -> beta ~ 0.
+        self.assertAlmostEqual(g.loc["cluster_2", "beta"], 0.0, places=8)
+        self.assertEqual(g.loc["cluster_2", "group"], "cluster")
+        self.assertAlmostEqual(df["model_r2"].iloc[0], 1.0, places=8)
+
+    def test_ungrouped_factor_untouched_when_not_in_any_group(self):
+        adata, a, b, c = self._make_group_adata(lambda a, b, c: 3.0 * a + 1.5 * c)
+        groups = {1: ["A", "B"]}  # C deliberately left out of every group
+        df = fit_gene_betas(adata, genes=["G"], metabolites=None, groups=groups)
+        self.assertEqual(set(df["factor"]), {"C", "cluster_1"})
+        c_row = df.set_index("factor").loc["C"]
+        self.assertEqual(c_row["group"], "tf")  # _group_label falls through to _group
+        self.assertAlmostEqual(c_row["beta"], 1.5, places=8)
+        cluster_row = df.set_index("factor").loc["cluster_1"]
+        self.assertAlmostEqual(cluster_row["beta"], 1.5, places=8)  # 3a == 1.5*(2a)
+
+    def test_group_label_helper(self):
+        self.assertEqual(_group_label("cluster_7"), "cluster")
+        self.assertEqual(_group_label("TF_A"), _group("TF_A"))
+        self.assertEqual(_group_label("metab@Glucose"), _group("metab@Glucose"))
+
+    def test_subsample_gene_betas_with_groups_returns_cluster_columns(self):
+        adata, a, b, c = self._make_group_adata(lambda a, b, c: 3.0 * a)
+        groups = {1: ["A", "B"], 2: ["C"]}
+        df = subsample_gene_betas(adata, "G", n_subsamples=3, seed0=0, metabolites=None,
+                                  groups=groups)
+        self.assertEqual(list(df.columns), ["cluster_1", "cluster_2"])
+
+
+class OnehotFWLTests(unittest.TestCase):
+    """`onehot_col` adds an UNPENALIZED one-hot covariate via Frisch-Waugh-Lovell:
+    `_fit`'s `D` path. Noise-free construction `y = X@bX_true + D@bD_true` lets OLS
+    recover both exactly; a large L1 penalty shrinks the factor betas but leaves the
+    onehot betas close to their unpenalized (OLS) value."""
+
+    def setUp(self):
+        N = 300
+        rng = np.random.default_rng(42)
+        self.X2 = rng.normal(size=(N, 2))
+        self.grp = np.array(["A"] * 100 + ["B"] * 100 + ["C"] * 100)  # 3 labels
+        self.labels = sorted(np.unique(self.grp))
+        dummy_labels = self.labels[1:]
+        D = np.column_stack([(self.grp == lbl).astype(float) for lbl in dummy_labels])
+        self.bX_true = np.array([1.2, -0.8])
+        self.bD_true = {dummy_labels[0]: 2.5, dummy_labels[1]: -1.3}
+        y = self.X2 @ self.bX_true + D @ np.array([self.bD_true[l] for l in dummy_labels])
+
+        adata = AnnData(X=np.zeros((N, 1), dtype=np.float64))
+        adata.var_names = ["G"]
+        adata.obs_names = [f"c{i}" for i in range(N)]
+        adata.obs["grp"] = self.grp
+        adata.layers["normalized_count"] = y.reshape(-1, 1)
+        adata.obsm["x_factors"] = self.X2
+        adata.uns["x_factors_cols"] = ["F1", "F2"]
+        adata.uns["x_factor_map"] = {"G": ["F1", "F2"]}
+        self.adata = adata
+
+    def test_ols_recovers_factor_and_onehot_betas_exactly(self):
+        df = fit_gene_betas(self.adata, genes=["G"], metabolites=None, method="OLS",
+                           onehot_col="grp")
+        g = df.set_index("factor")
+        self.assertAlmostEqual(g.loc["F1", "beta"], self.bX_true[0], places=6)
+        self.assertAlmostEqual(g.loc["F2", "beta"], self.bX_true[1], places=6)
+        # reference label (alphanumerically first == 'A') is zeroed.
+        self.assertEqual(g.loc["grp[A]", "beta"], 0.0)
+        self.assertAlmostEqual(g.loc["grp[B]", "beta"], self.bD_true["B"], places=6)
+        self.assertAlmostEqual(g.loc["grp[C]", "beta"], self.bD_true["C"], places=6)
+        self.assertEqual(g.loc["grp[A]", "group"], "onehot")
+        self.assertEqual(g.loc["grp[B]", "group"], "onehot")
+        self.assertAlmostEqual(df["model_r2"].iloc[0], 1.0, places=6)
+
+    def test_onehot_betas_unpenalized_under_large_l1_while_factors_shrink(self):
+        ols = fit_gene_betas(self.adata, genes=["G"], metabolites=None, method="OLS",
+                            onehot_col="grp").set_index("factor")
+        l1 = fit_gene_betas(self.adata, genes=["G"], metabolites=None, method="l1",
+                           penalty=5.0, standardize=True, onehot_col="grp").set_index("factor")
+
+        # the large penalty materially shrinks (here, zeroes) the factor betas...
+        self.assertLess(abs(l1.loc["F1", "beta"]), abs(ols.loc["F1", "beta"]))
+        self.assertLess(abs(l1.loc["F2", "beta"]), abs(ols.loc["F2", "beta"]))
+        # ...but leaves the UNPENALIZED onehot betas close to their OLS value.
+        self.assertAlmostEqual(l1.loc["grp[B]", "beta"], ols.loc["grp[B]", "beta"], delta=0.2)
+        self.assertAlmostEqual(l1.loc["grp[C]", "beta"], ols.loc["grp[C]", "beta"], delta=0.2)
+        self.assertEqual(l1.loc["grp[A]", "beta"], 0.0)
+
+    def test_subsample_gene_betas_includes_onehot_columns(self):
+        df = subsample_gene_betas(self.adata, "G", n_subsamples=5, seed0=0, metabolites=None,
+                                  onehot_col="grp")
+        self.assertEqual(
+            set(df.columns), {"F1", "F2", "grp[A]", "grp[B]", "grp[C]"})
+        # reference column is always exactly 0 (never fitted, just zeroed).
+        self.assertTrue((df["grp[A]"] == 0.0).all())
+        # with 100 cells/label and a same-size resample, every label is present with
+        # overwhelming probability, so OLS should recover the true values closely.
+        self.assertTrue(np.allclose(df["F1"], self.bX_true[0], atol=0.2))
+        self.assertTrue(np.allclose(df["grp[B]"], self.bD_true["B"], atol=0.5))
+
+    def test_subsample_gene_betas_onehot_factor_subset(self):
+        df = subsample_gene_betas(self.adata, "G", factors=["grp[B]", "F1"],
+                                  n_subsamples=3, seed0=0, metabolites=None, onehot_col="grp")
+        self.assertEqual(list(df.columns), ["grp[B]", "F1"])
+
+
+class OnehotMissingLabelTests(unittest.TestCase):
+    """A resample that happens to omit a label raises (naming the param to fix it) or,
+    opted in, records a NaN row and continues."""
+
+    def setUp(self):
+        N = 20
+        rng = np.random.default_rng(3)
+        self.X1 = rng.normal(size=N)
+        grp = np.array(["rare"] * 2 + ["common"] * (N - 2))  # tiny 'rare' group: a
+        # same-size-with-replacement resample of this 20-cell pool can plausibly draw
+        # zero 'rare' cells.
+        y = self.X1 * 2.0 + (grp == "rare").astype(float) * 5.0
+
+        adata = AnnData(X=np.zeros((N, 1), dtype=np.float64))
+        adata.var_names = ["G"]
+        adata.obs_names = [f"c{i}" for i in range(N)]
+        adata.obs["grp"] = grp
+        adata.layers["normalized_count"] = y.reshape(-1, 1)
+        adata.obsm["x_factors"] = self.X1.reshape(-1, 1)
+        adata.uns["x_factors_cols"] = ["F1"]
+        adata.uns["x_factor_map"] = {"G": ["F1"]}
+        self.adata = adata
+        # seed0=5, n_subsamples=5 -> seeds 5..9; seed=6 is verified (above, during
+        # test authoring) to draw zero 'rare' cells from this exact fixture/RNG.
+        self.seed0 = 5
+        self.n_subsamples = 5
+        self.missing_seed_offset = 1  # seed 6 is the 2nd draw (index 1)
+
+    def test_raises_value_error_naming_the_param(self):
+        with self.assertRaises(ValueError) as ctx:
+            subsample_gene_betas(self.adata, "G", n_subsamples=self.n_subsamples,
+                                 seed0=self.seed0, metabolites=None, onehot_col="grp")
+        msg = str(ctx.exception)
+        self.assertIn("just_skip_samples_without_all_labels", msg)
+        self.assertIn("grp", msg)
+
+    def test_just_skip_records_nan_row_only_for_the_bad_resample(self):
+        df = subsample_gene_betas(self.adata, "G", n_subsamples=self.n_subsamples,
+                                  seed0=self.seed0, metabolites=None, onehot_col="grp",
+                                  just_skip_samples_without_all_labels=True)
+        nan_rows = df.index[df.isna().all(axis=1)].tolist()
+        self.assertEqual(nan_rows, [self.missing_seed_offset])
+        good_rows = df.drop(index=nan_rows)
+        self.assertTrue(np.all(np.isfinite(good_rows.to_numpy())))
+        # the good rows still recover the known-exact betas (noise-free generative model).
+        self.assertTrue(np.allclose(good_rows["F1"], 2.0, atol=1e-8))
+        self.assertTrue(np.allclose(good_rows["grp[rare]"], 5.0, atol=1e-8))
+
+    def test_fit_gene_betas_unaffected_by_the_flag_single_fit_always_has_all_labels(self):
+        """`fit_gene_betas` derives labels from its own fitted cells (all of them, by
+        default), so every label is present by construction -- no missing-label error,
+        regardless of the (unused there) flag."""
+        df = fit_gene_betas(self.adata, genes=["G"], metabolites=None, onehot_col="grp")
+        self.assertEqual(set(df["factor"]), {"F1", "grp[rare]", "grp[common]"})
+
+
+class SubsampleFitClusterContractTests(unittest.TestCase):
+    """Regression test for the subsample<->fit cluster-beta contract: `groups` +
+    `standardize=True` reduction must happen PER RESAMPLE, on that resample's own
+    drawn cells -- matching `fit_gene_betas`'s "z-score over the cells actually being
+    fit" semantics. Before the fix, `subsample_gene_betas` reduced ONCE over the whole
+    (unfiltered) adata, so the `cluster_*` beta for a given draw did not match
+    `fit_gene_betas(cells=<that exact draw>, ...)`'s point estimate -- defeating the
+    purpose of using the bootstrap to characterize that estimate's variability.
+
+    Fixture is built so seed=22 draws a *permutation* (no duplicate cells) of the
+    6-cell annotation-filtered pool -- found by brute-force search over seeds, purely
+    so `fit_gene_betas(cells=<drawn>)` (which can only select a SET of cells, not a
+    multiset with repeats) exactly reproduces the resample's fit for comparison.
+    """
+
+    def setUp(self):
+        N = 30
+        rng = np.random.default_rng(5)
+        a = rng.normal(size=N)
+        b = a.copy()  # identical to 'a' -> clusters with it
+        c = rng.normal(size=N)
+        grp = np.array(["T"] * 6 + ["B"] * (N - 6))
+        y = 3.0 * a + 2.0 * c
+
+        adata = AnnData(X=np.zeros((N, 1), dtype=np.float64))
+        adata.var_names = ["G"]
+        adata.obs_names = [f"c{i}" for i in range(N)]
+        adata.obs["ct"] = grp
+        adata.layers["normalized_count"] = y.reshape(-1, 1)
+        adata.obsm["x_factors"] = np.column_stack([a, b, c])
+        adata.uns["x_factors_cols"] = ["A", "B", "C"]
+        adata.uns["x_factor_map"] = {"G": ["A", "B", "C"]}
+        self.adata = adata
+        self.groups = {1: ["A", "B"]}
+        self.seed = 22  # verified (search, see module history) to draw a permutation
+
+    def test_cluster_beta_matches_fit_on_the_same_drawn_cells(self):
+        pool = _select_cells(self.adata, "ct", "T", None)
+        rng = np.random.default_rng(self.seed)
+        idx = rng.integers(0, len(pool), size=len(pool))
+        drawn = pool.to_numpy()[idx]
+        self.assertEqual(len(set(drawn)), len(drawn))  # sanity: this seed is a permutation
+
+        sub = subsample_gene_betas(self.adata, "G", n_subsamples=1, seed0=self.seed,
+                                   metabolites=None, groups=self.groups, standardize=True,
+                                   annot_col="ct", annot_value="T")
+        fit = fit_gene_betas(self.adata, genes=["G"], metabolites=None, groups=self.groups,
+                            standardize=True, cells=drawn)
+        fit_beta = fit.set_index("factor").loc["cluster_1", "beta"]
+        self.assertAlmostEqual(sub["cluster_1"].iloc[0], fit_beta, places=8)
+
+    def test_subsample_draws_match_resample_cells_exactly(self):
+        """Fix 4: the hoisted inline draw in the resample loop must produce the exact
+        same per-seed draws as `resample_cells` (same seed -> same draw), confirmed by
+        comparing full OLS fits (no groups/onehot) computed each way."""
+        X = get_gene_factors(self.adata, "G", metabs=None)
+        y = self.adata[:, "G"].to_df("normalized_count")["G"]
+        df = subsample_gene_betas(self.adata, "G", n_subsamples=4, seed0=0, metabolites=None)
+        for i, seed in enumerate(range(4)):
+            cells = resample_cells(self.adata, seed)
+            beta, _, _ = _fit(X.loc[cells].to_numpy(), y.loc[cells].to_numpy())
+            np.testing.assert_allclose(df.iloc[i].to_numpy(), beta, atol=1e-10)
+
+
+class DofGuardCountsOnehotColumnsTests(unittest.TestCase):
+    """The too-few-cells guard must also count the onehot dummy columns + their shared
+    intercept, so a fit that would otherwise be underdetermined (or exactly saturated
+    by D, degenerate) is skipped-with-warning rather than silently run."""
+
+    def setUp(self):
+        # 1 factor + a 3-label onehot (2 dummy cols) + intercept = 4 DOF needed;
+        # 3 cells (one per label) is enough for the OLD guard (>= 1+1=2) but not the
+        # new one (>= 1+2+1=4).
+        N = 3
+        rng = np.random.default_rng(1)
+        tf = rng.normal(size=N)
+        grp = np.array(["A", "B", "C"])
+        y = tf * 2.0
+
+        adata = AnnData(X=np.zeros((N, 1), dtype=np.float64))
+        adata.var_names = ["G"]
+        adata.obs_names = [f"c{i}" for i in range(N)]
+        adata.obs["grp"] = grp
+        adata.layers["normalized_count"] = y.reshape(-1, 1)
+        adata.obsm["x_factors"] = tf.reshape(-1, 1)
+        adata.uns["x_factors_cols"] = ["TF_A"]
+        adata.uns["x_factor_map"] = {"G": ["TF_A"]}
+        self.adata = adata
+
+    def test_fit_gene_betas_skips_with_warning(self):
+        with warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter("always")
+            df = fit_gene_betas(self.adata, genes=["G"], metabolites=None, onehot_col="grp")
+        self.assertTrue(df.empty)
+        self.assertTrue(any("too few cells" in str(w.message) for w in caught))
+
+    def test_subsample_gene_betas_every_resample_skipped(self):
+        """The eligible pool itself (3 cells) is below the new min_cells (4), so every
+        resample (same size as the pool) is also below it -- all-NaN, not a silent fit."""
+        df = subsample_gene_betas(self.adata, "G", n_subsamples=5, seed0=0, metabolites=None,
+                                  onehot_col="grp")
+        self.assertTrue(np.all(np.isnan(df.to_numpy())))
 
 
 if __name__ == "__main__":

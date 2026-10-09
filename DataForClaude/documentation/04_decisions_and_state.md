@@ -516,6 +516,25 @@ computes and stores the model's **x building blocks**, and saves the adata.
   - Process: metab-dev + metab-review (+ an independent critic pre-validated the dedup + the layer/receptor-cutoff
     question). Reviews caught the min-norm collinearity caveat, a per-subsample re-densification efficiency bug,
     the receptor-gate BLOCKER, and the shared-`x_genes` drop — all fixed.
+  - **2026-10-08 fit extensions** (elastic net + cluster feature-reduction + unpenalized one-hot). All threaded
+    through `_fit`/`fit_gene_betas`/`subsample_gene_betas`; **defaults byte-identical** (OLS/l1, no groups/onehot).
+    - **Elastic net:** `method='elastic'` + `l1_ratio=0.5` (sklearn `ElasticNet(alpha=penalty, l1_ratio=...)`,
+      lazy import); `method='l1'`/`'OLS'` unchanged.
+    - **Cluster feature-reduction:** `cluster_factors(X, threshold, method)` (ported from `clusters.ipynb`,
+      drops zero-variance columns) returns `{id:[factors]}`; pass `groups=` to a fit → each group's present
+      factors collapse into one summed `cluster_{id}` column (constituents z-scored before the sum when
+      `standardize`; the sum is then a normal factor, re-standardized at fit), ungrouped factors kept; output
+      group label `'cluster'`. **Reduction is per-fit-population** (both `fit_gene_betas` over its cells and
+      `subsample_gene_betas` PER RESAMPLE, so the bootstrap matches the point estimate).
+    - **Unpenalized one-hot (combine samples / batch covariate):** `onehot_col=` one-hots an obs column as an
+      UNPENALIZED covariate via Frisch–Waugh–Lovell (project `[1|dummies]` out of X and y, penalized-fit on
+      residuals with `fit_intercept=False`, recover the dummy coefs from `y − X·bX`) — exact, numpy+sklearn, no
+      new dep. Alpha-first label = zeroed reference; betas reported as `col[label]` rows, group `'onehot'`.
+      Subsample: label set fixed from the pool; a resample missing any label raises (names the missing labels)
+      unless `just_skip_samples_without_all_labels=True` (→ NaN row). The DOF/too-few-cells guard counts the
+      dummy columns. metab-dev + metab-review; review (numerically-sensitive, so a careful pass) confirmed FWL
+      exact + defaults byte-identical, and caught (fixed) the constant-column `cluster_factors` crash and the
+      subsample-reduces-on-wrong-population bug.
   - **Rev 6 (2026-09-29) — dropped the dual `source` scheme; only ONE block, on `normalized_count`
     (log1p raw).** Foster's call: "remove support for imputed counts, only raw" → keep the un-imputed
     log1p(raw) block (not literally raw ints — log1p is what tamed the huge coefficients). Deleted
