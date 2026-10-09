@@ -44,7 +44,6 @@ from metab_processing.LinearRegression.least_squares import (
     plot_beta_histogram,
     cluster_factors,
     _reduce_groups,
-    _group_label,
 )
 
 N = 40
@@ -544,8 +543,10 @@ class ElasticNetTests(unittest.TestCase):
 class ClusterFactorsAndGroupsTests(unittest.TestCase):
     """`cluster_factors` groups collinear columns by correlation distance;
     `_reduce_groups`/`groups=` on `fit_gene_betas`/`subsample_gene_betas` collapses
-    each group's present columns into one summed `cluster_{id}` column, labeled
-    group='cluster', while leaving ungrouped factors untouched."""
+    each group's present columns into one summed column NAMED by the factor(s) it
+    represents (a multi-member group -> `'+'.join(members)`, labeled group='cluster';
+    a single-member group -> that factor's name and natural group), while leaving
+    ungrouped factors untouched."""
 
     def _make_group_adata(self, y_fn):
         N = 60
@@ -610,36 +611,35 @@ class ClusterFactorsAndGroupsTests(unittest.TestCase):
         df = fit_gene_betas(adata, genes=["G"], metabolites=None, groups=groups,
                            standardize=False)
         g = df.set_index("factor")
-        # cluster_1 = A + B = 2a (unstandardized sum); y = 3a = 1.5 * (2a).
-        self.assertAlmostEqual(g.loc["cluster_1", "beta"], 1.5, places=8)
-        self.assertEqual(g.loc["cluster_1", "group"], "cluster")
-        # cluster_2 (singleton group) == C itself; y has no C term -> beta ~ 0.
-        self.assertAlmostEqual(g.loc["cluster_2", "beta"], 0.0, places=8)
-        self.assertEqual(g.loc["cluster_2", "group"], "cluster")
+        # multi-member group -> named by its members 'A+B'; = A + B = 2a (unstandardized
+        # sum); y = 3a = 1.5 * (2a); labeled group='cluster'.
+        self.assertAlmostEqual(g.loc["A+B", "beta"], 1.5, places=8)
+        self.assertEqual(g.loc["A+B", "group"], "cluster")
+        # singleton group -> named by the factor it represents ('C'), keeps C's natural
+        # group ('tf'); y has no C term -> beta ~ 0.
+        self.assertAlmostEqual(g.loc["C", "beta"], 0.0, places=8)
+        self.assertEqual(g.loc["C", "group"], _group("C"))
         self.assertAlmostEqual(df["model_r2"].iloc[0], 1.0, places=8)
 
     def test_ungrouped_factor_untouched_when_not_in_any_group(self):
         adata, a, b, c = self._make_group_adata(lambda a, b, c: 3.0 * a + 1.5 * c)
         groups = {1: ["A", "B"]}  # C deliberately left out of every group
         df = fit_gene_betas(adata, genes=["G"], metabolites=None, groups=groups)
-        self.assertEqual(set(df["factor"]), {"C", "cluster_1"})
+        self.assertEqual(set(df["factor"]), {"C", "A+B"})
         c_row = df.set_index("factor").loc["C"]
-        self.assertEqual(c_row["group"], "tf")  # _group_label falls through to _group
+        self.assertEqual(c_row["group"], _group("C"))  # ungrouped -> its own group
         self.assertAlmostEqual(c_row["beta"], 1.5, places=8)
-        cluster_row = df.set_index("factor").loc["cluster_1"]
+        cluster_row = df.set_index("factor").loc["A+B"]
+        self.assertEqual(cluster_row["group"], "cluster")
         self.assertAlmostEqual(cluster_row["beta"], 1.5, places=8)  # 3a == 1.5*(2a)
 
-    def test_group_label_helper(self):
-        self.assertEqual(_group_label("cluster_7"), "cluster")
-        self.assertEqual(_group_label("TF_A"), _group("TF_A"))
-        self.assertEqual(_group_label("metab@Glucose"), _group("metab@Glucose"))
-
-    def test_subsample_gene_betas_with_groups_returns_cluster_columns(self):
+    def test_subsample_gene_betas_with_groups_returns_member_named_columns(self):
         adata, a, b, c = self._make_group_adata(lambda a, b, c: 3.0 * a)
         groups = {1: ["A", "B"], 2: ["C"]}
         df = subsample_gene_betas(adata, "G", n_subsamples=3, seed0=0, metabolites=None,
                                   groups=groups)
-        self.assertEqual(list(df.columns), ["cluster_1", "cluster_2"])
+        # multi-member group -> 'A+B'; singleton group -> the factor name 'C'.
+        self.assertEqual(list(df.columns), ["A+B", "C"])
 
 
 class OnehotFWLTests(unittest.TestCase):
@@ -820,8 +820,8 @@ class SubsampleFitClusterContractTests(unittest.TestCase):
                                    annot_col="ct", annot_value="T")
         fit = fit_gene_betas(self.adata, genes=["G"], metabolites=None, groups=self.groups,
                             standardize=True, cells=drawn)
-        fit_beta = fit.set_index("factor").loc["cluster_1", "beta"]
-        self.assertAlmostEqual(sub["cluster_1"].iloc[0], fit_beta, places=8)
+        fit_beta = fit.set_index("factor").loc["A+B", "beta"]
+        self.assertAlmostEqual(sub["A+B"].iloc[0], fit_beta, places=8)
 
     def test_subsample_draws_match_resample_cells_exactly(self):
         """Fix 4: the hoisted inline draw in the resample loop must produce the exact

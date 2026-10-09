@@ -524,10 +524,12 @@ computes and stores the model's **x building blocks**, and saves the adata.
       annot_value=None, threshold=0.5, method='average')` builds the gene's factor matrix internally (via
       `get_gene_factors`, restricted to the selected cells) and clusters by correlation distance (drops
       zero-variance columns) → `{id:[factors]}`; pass `groups=` to a fit → each group's present
-      factors collapse into one summed `cluster_{id}` column (constituents z-scored before the sum when
-      `standardize`; the sum is then a normal factor, re-standardized at fit), ungrouped factors kept; output
-      group label `'cluster'`. **Reduction is per-fit-population** (both `fit_gene_betas` over its cells and
-      `subsample_gene_betas` PER RESAMPLE, so the bootstrap matches the point estimate).
+      factors collapse into one summed column **named by the factor(s) it represents** (multi-member →
+      `'+'.join(members)`, group label `'cluster'`; single-member → that factor's own name + natural group — NOT
+      `cluster_{id}`); ungrouped factors stay individual. Constituents z-scored before the sum when `standardize`;
+      the sum is then a normal factor, re-standardized at fit. **Reduction is per-fit-population** (both
+      `fit_gene_betas` over its cells and `subsample_gene_betas` PER RESAMPLE, so the bootstrap matches the
+      point estimate).
     - **Unpenalized one-hot (combine samples / batch covariate):** `onehot_col=` one-hots an obs column as an
       UNPENALIZED covariate via Frisch–Waugh–Lovell (project `[1|dummies]` out of X and y, penalized-fit on
       residuals with `fit_intercept=False`, recover the dummy coefs from `y − X·bX`) — exact, numpy+sklearn, no

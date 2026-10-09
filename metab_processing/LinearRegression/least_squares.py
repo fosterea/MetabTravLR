@@ -53,13 +53,6 @@ def _group(modulator):
     return "tf"
 
 
-def _group_label(name):
-    """Like `_group`, but a reduced cluster column (`cluster_<id>`, from
-    `_reduce_groups`) is labeled 'cluster' rather than mis-tagged by `_group` (which
-    would read it as a bare TF gene)."""
-    return "cluster" if name.startswith("cluster_") else _group(name)
-
-
 _COLS = ["gene", "factor", "group", "beta", "r", "r2", "model_r2", "n_cells"]
 
 
@@ -99,18 +92,26 @@ def cluster_factors(adata, gene, *, metabs=None, annot_col=None, annot_value=Non
 
 
 def _reduce_groups(X, groups, standardize):
-    """Collapse each group's present-in-`X` factors into one summed `cluster_{id}`
-    column; factors not in any group are left untouched. If `standardize`, each
-    constituent is z-scored (`(col - mean) / (std or 1)`) before summing, so the
-    group's columns are balanced before being combined.
+    """Collapse each group's present-in-`X` factors into one summed column; factors not
+    in any group are left untouched. If `standardize`, each constituent is z-scored
+    (`(col - mean) / (std or 1)`) before summing, so the group's columns are balanced
+    before being combined.
 
-    Column order: ungrouped columns (in `X`'s original order), then one `cluster_{id}`
+    Each reduced column is NAMED by the factor(s) it represents: a single-member group
+    keeps that factor's own name (so it is indistinguishable from the raw factor, which
+    it is), a multi-member group is named `'+'.join(members)`. Returns
+    `(reduced_df, multi_member_names)` where `multi_member_names` is the list of the
+    multi-member reduced columns (the ones the caller labels group='cluster'; a
+    single-member reduced column keeps its factor's natural `_group`).
+
+    Column order: ungrouped columns (in `X`'s original order), then one reduced column
     per non-empty group, ordered by sorted group id.
     """
     grouped_cols = {c for members in groups.values() for c in members if c in X.columns}
     ungrouped = [c for c in X.columns if c not in grouped_cols]
 
     data = {c: X[c] for c in ungrouped}
+    multi_member_names = []
     for gid in sorted(groups):
         members = [c for c in groups[gid] if c in X.columns]
         if not members:
@@ -124,9 +125,12 @@ def _reduce_groups(X, groups, standardize):
             summed = sum(parts)
         else:
             summed = X[members].sum(axis=1)
-        data[f"cluster_{gid}"] = summed
+        name = '+'.join(members)
+        data[name] = summed
+        if len(members) > 1:
+            multi_member_names.append(name)
 
-    return pd.DataFrame(data, index=X.index)
+    return pd.DataFrame(data, index=X.index), multi_member_names
 
 
 def _select_cells(adata, annot_col, annot_value, cells):
@@ -348,8 +352,10 @@ def fit_gene_betas(adata, genes=None, metabolites='all', *, annot_col=None, anno
     records = []
     for gene in kept_genes:
         X = get_gene_factors(adata, gene, metabs=metabolites).loc[rows]
+        cluster_names = set()
         if groups is not None:
-            X = _reduce_groups(X, groups, standardize)
+            X, multi = _reduce_groups(X, groups, standardize)
+            cluster_names = set(multi)
         min_cells = X.shape[1] + n_dummy_cols + 1
         if len(rows) < min_cells:
             warnings.warn(f"fit_gene_betas: {gene!r} has too few cells "
@@ -366,7 +372,8 @@ def fit_gene_betas(adata, genes=None, metabolites='all', *, annot_col=None, anno
         with np.errstate(invalid='ignore', divide='ignore'):
             r = np.where(denom > 0, (Xc * yc[:, None]).sum(axis=0) / denom, 0.0)
         for factor, b, rj in zip(X.columns, beta, r):
-            records.append((gene, factor, _group_label(factor), b, rj, rj ** 2, model_r2, len(rows)))
+            grp = 'cluster' if factor in cluster_names else _group(factor)
+            records.append((gene, factor, grp, b, rj, rj ** 2, model_r2, len(rows)))
 
         if bD is not None:
             for i, lbl in enumerate(labels):
@@ -449,7 +456,7 @@ def subsample_gene_betas(adata, gene, factors=None, *, n_subsamples=100,
     pool_arr = pool.to_numpy()
 
     def _reduced(X_sub):
-        return _reduce_groups(X_sub, groups, standardize) if groups is not None else X_sub
+        return _reduce_groups(X_sub, groups, standardize)[0] if groups is not None else X_sub
 
     # Column set/order is population-independent (depends only on X_raw's columns +
     # groups), so a template built over the full pool gives the universe/order that
