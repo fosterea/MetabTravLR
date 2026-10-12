@@ -585,6 +585,27 @@ computes and stores the model's **x building blocks**, and saves the adata.
     dropped. Default `'target'` is backward-compatible (no overlap in existing fixtures → no-op). Tests:
     `tests/test_lr_build_x.py` overlap cases (bare-TF overlap × 3 modes, L-R receptor overlap, no-overlap
     no-op, verbose output, invalid-value ValueError) + `_factor_genes` unit test; file 46 pass.
+  - **Merging per-sample stores (2026-10-12).** `build_x.merge_x_adatas(adatas, keys, *, label='slice',
+    fill=0.0, cols='union', verbose=True)` pools several per-sample `hvgall_x_adata.h5ad` factor stores into
+    ONE adata with the SAME structure so every downstream fn runs unchanged. Plain `anndata.concat` is wrong
+    here: it DROPS `uns` (losing `x_factors_cols`/`x_factor_map`/`x_genes`/`x_metab_modulators` → fitters
+    break) and can't stack `x_factors`/`x_metab` when samples built different columns. The function rebuilds
+    both blocks against a reconciled column space (`cols='union'` keeps every factor, 0-filling a column a
+    sample never built; `'intersection'` keeps only shared columns), merges `x_factor_map` as a per-gene
+    ordered union, and adds `obs[label]` naming each cell's source sample. **Why union+0-fill is lossless
+    for a single-sample subset:** `_fit(standardize=True)` z-scores columns and a 0-filled column is constant
+    within one sample → becomes all-zeros → β 0, so merged-then-subset-to-one-sample == that sample's
+    standalone fit. For POOLED fits, pass `onehot_col=label` to give each sample its own unpenalized
+    intercept (FWL) — this is the notebook's "sample features" toggle. Tests: `tests/test_lr_build_x.py`
+    7 merge cases (union structure/scatter/fill, single-sample-subset reproduction, intersection, metab
+    block, pooled fit with/without one-hot, validation); file 53 pass.
+  - **`colon_test.ipynb` rewrite (2026-10-12).** One SETTINGS cell drives everything: a run-once
+    `REBUILD_FULL` block merges all samples via `merge_x_adatas` → `Alexi_UC_Full_Data/processed_adata.h5ad`;
+    `LOAD_MODE='single'|'merged'` chooses loading one sample's file vs loading the merged file and subsetting
+    (`SUBSET_COL`/`SUBSET_VALUE`, or `None` for all cells); `USE_SAMPLE_ONEHOT` flips the sample one-hot
+    (resolved to `onehot_col='slice'` only when the loaded cells span >1 sample) threaded into
+    `fit_gene_betas`/`subsample_gene_betas`. "With sample features" = `USE_SAMPLE_ONEHOT=True` + `LOAD_MODE`
+    producing a multi-sample subset; "without" = `False` (or any single-sample load).
 - **Storage = building blocks, not products** (D12): lossless, no cells×M×G blowup; per-gene design
   matrices reconstruct at regression time from `received_ligands × imputed_count` (+ networks on disk).
 - **Test notebook** `build_x_test.ipynb` (bare, no docs): defaults to UC slice 4

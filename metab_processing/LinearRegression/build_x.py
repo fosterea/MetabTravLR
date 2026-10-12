@@ -571,3 +571,170 @@ def build_x_adata(adata, out_path, *, focus_genes, metabolites=None, setup_dir=N
     proc.write_h5ad(out_path)
     print(f'[build_x_adata] wrote {out_path}')
     return proc
+
+
+def _union_cols(per_sample_cols):
+    """Ordered union of several column-name lists (first-seen order across samples)."""
+    seen, out = set(), []
+    for cols in per_sample_cols:
+        for c in cols:
+            if c not in seen:
+                seen.add(c)
+                out.append(c)
+    return out
+
+
+def _stack_block(adatas, obsm_key, cols_per_sample, union_cols, fill, verbose, label):
+    """Scatter each sample's (cells x its-own-cols) obsm block into one
+    (total-cells x union_cols) float32 array, filling columns a sample never built with
+    `fill`. Returns None if no sample carries `obsm_key`."""
+    present = [obsm_key in a.obsm for a in adatas]
+    if not any(present):
+        return None
+    if not all(present):
+        missing = [i for i, p in enumerate(present) if not p]
+        warnings.warn(f"merge_x_adatas: {obsm_key!r} missing from {len(missing)} of "
+                      f"{len(adatas)} samples; their cells get {fill} for all {label}.")
+    col_index = {c: j for j, c in enumerate(union_cols)}
+    n_total = sum(a.n_obs for a in adatas)
+    block = np.full((n_total, len(union_cols)), fill, dtype=np.float32)
+    row = 0
+    for a, cols in zip(adatas, cols_per_sample):
+        n = a.n_obs
+        if obsm_key in a.obsm and cols:
+            mat = np.asarray(a.obsm[obsm_key], dtype=np.float32)
+            # keep only this sample's columns that survive into union_cols (all of them
+            # for 'union'; the shared subset for 'intersection').
+            src = [j for j, c in enumerate(cols) if c in col_index]
+            dest = [col_index[cols[j]] for j in src]
+            if dest:
+                block[row:row + n, dest] = mat[:, src]
+        row += n
+    if verbose:
+        widths = [len(c) for c in cols_per_sample]
+        print(f"  {label}: {len(union_cols)} union columns "
+              f"(per-sample {min(widths)}..{max(widths)}); "
+              f"{'identical across samples' if len(set(map(tuple, cols_per_sample))) == 1 else 'differ across samples'}")
+    return block
+
+
+def merge_x_adatas(adatas, keys, *, label='slice', fill=0.0, cols='union', verbose=True):
+    """Merge several per-sample factor-store adatas (each as written by `build_x_adata`)
+    into ONE adata with the SAME structure, so every downstream function
+    (`fit_gene_betas`, `subsample_gene_betas`, `cluster_factors`, `get_gene_factors`,
+    `add_gene_signature`, ...) runs on it unchanged.
+
+    Why not plain `anndata.concat`? It DROPS `uns` (so `x_factors_cols` / `x_factor_map` /
+    `x_genes` / `x_metab_modulators` vanish and the fitters break) and it cannot stack the
+    `x_factors` / `x_metab` blocks when samples built different column sets. This function
+    rebuilds those blocks against a reconciled column space and restores the `uns` metadata.
+
+    Column reconciliation (`cols`):
+      - `'union'` (default): keep every factor column any sample built; a cell from a sample
+        that never built column f gets `fill` (0.0) there. This is lossless for a fit
+        restricted to one sample's cells: with `standardize=True` a column that is constant
+        within the selected cells (a 0-filled column is constant 0 there) z-scores to all
+        zeros and contributes beta 0 -- so subsetting the merged adata back to one sample
+        reproduces that sample's standalone fit. For a fit POOLED across samples, a 0-fill
+        means "factor absent / no signal" for the samples that lack it; pass
+        `onehot_col=<label>` to the fitters to give each sample its own intercept (FWL).
+      - `'intersection'`: keep only columns EVERY sample built (no fill; every value real).
+
+    `x_factor_map` is merged per gene as the ordered union (filtered to the kept columns) of
+    that gene's factor lists across the samples that have it; `x_genes` / `x_metab_modulators`
+    likewise become the kept-column-filtered union. `obs` gains a categorical `<label>` column
+    naming each cell's source sample (its `keys` entry), for subsetting and for `onehot_col`.
+
+    Parameters
+    ----------
+    adatas : list of AnnData   -- the per-sample stores (in the same order as `keys`).
+    keys   : list of str       -- a sample name per adata (written to `obs[label]`).
+    label  : str               -- the obs column that records the source sample.
+    fill   : float             -- value for a (cell, column) a sample never built ('union').
+    cols   : 'union'|'intersection'
+    verbose: bool              -- print a merge report (cells, column overlap, fill rate).
+
+    Returns a NEW merged AnnData (inputs untouched).
+    """
+    import anndata as ad
+
+    if len(adatas) != len(keys):
+        raise ValueError(f"merge_x_adatas: got {len(adatas)} adatas but {len(keys)} keys.")
+    if not adatas:
+        raise ValueError("merge_x_adatas: no adatas to merge.")
+    if cols not in ('union', 'intersection'):
+        raise ValueError(f"merge_x_adatas: invalid cols {cols!r}; 'union' or 'intersection'.")
+    for a, k in zip(adatas, keys):
+        if 'x_factors_cols' not in a.uns or 'x_factor_map' not in a.uns:
+            raise ValueError(f"merge_x_adatas: sample {k!r} has no factor store "
+                             "(missing x_factors_cols / x_factor_map).")
+
+    fac_cols_per = [list(a.uns['x_factors_cols']) for a in adatas]
+    if cols == 'union':
+        union_fac = _union_cols(fac_cols_per)
+    else:
+        common = set.intersection(*(set(c) for c in fac_cols_per))
+        union_fac = [c for c in fac_cols_per[0] if c in common]
+    keep_fac = set(union_fac)
+
+    if verbose:
+        print(f"[merge_x_adatas] {len(adatas)} samples, "
+              f"{sum(a.n_obs for a in adatas)} cells total; cols={cols!r}, fill={fill}")
+
+    # --- core (X / obs / var / layers / spatial) via anndata.concat; our custom blocks are
+    #     rebuilt below, so strip them from shells first so concat never sees ragged widths.
+    custom_obsm = ('x_factors', 'x_metab')
+    shells = []
+    for a in adatas:
+        shells.append(ad.AnnData(
+            X=a.X, obs=a.obs.copy(), var=a.var,
+            layers={k: v for k, v in a.layers.items()},
+            obsm={k: v for k, v in a.obsm.items() if k not in custom_obsm},
+        ))
+    merged = ad.concat(shells, keys=list(keys), label=label, join='outer', uns_merge=None)
+    merged.obs[label] = merged.obs[label].astype(str).astype('category')
+    merged.obs_names_make_unique()
+
+    # --- factor block + metadata.
+    block = _stack_block(adatas, 'x_factors', fac_cols_per, union_fac, fill,
+                         verbose, 'x_factors')
+    merged.obsm['x_factors'] = block
+    merged.uns['x_factors_cols'] = union_fac
+
+    merged_map = {}
+    for a in adatas:
+        for gene, clist in a.uns['x_factor_map'].items():
+            kept = [c for c in clist if c in keep_fac]
+            if gene not in merged_map:
+                merged_map[gene] = list(kept)
+            else:
+                have = set(merged_map[gene])
+                merged_map[gene].extend(c for c in kept if c not in have)
+    merged.uns['x_factor_map'] = merged_map
+    merged.uns['x_genes'] = list(merged_map.keys())
+
+    # --- metabolite block (same reconciliation), if any sample has one.
+    metab_cols_per = [list(a.uns.get('x_metab_modulators', [])) for a in adatas]
+    if any(metab_cols_per):
+        if cols == 'union':
+            union_metab = _union_cols(metab_cols_per)
+        else:
+            nonempty = [set(c) for c in metab_cols_per if c]
+            common_m = set.intersection(*nonempty) if nonempty else set()
+            first = next((c for c in metab_cols_per if c), [])
+            union_metab = [c for c in first if c in common_m]
+        mblock = _stack_block(adatas, 'x_metab', metab_cols_per, union_metab, fill,
+                              verbose, 'x_metab')
+        if mblock is not None:
+            merged.obsm['x_metab'] = mblock
+            merged.uns['x_metab_modulators'] = union_metab
+
+    if verbose:
+        print(f"  x_genes: {len(merged.uns['x_genes'])} | "
+              f"x_metab_modulators: {len(merged.uns.get('x_metab_modulators', []))}")
+        if cols == 'union' and block is not None:
+            filled = float((block == fill).mean()) * 100
+            print(f"  x_factors fill rate: {filled:.1f}% of entries are {fill} "
+                  "(0% means every sample built identical columns)")
+        print(f"  obs['{label}'] categories: {list(merged.obs[label].cat.categories)}")
+    return merged

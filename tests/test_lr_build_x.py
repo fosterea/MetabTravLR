@@ -37,7 +37,7 @@ from metab_processing.SpaceTravLR.beta_analysis import _group, compute_metab_x
 from metab_processing.LinearRegression import build_x as bx
 from metab_processing.LinearRegression.build_x import (
     build_factor_block, get_gene_factors, add_metabolites, add_gene_signature, build_x_adata,
-    ensure_lognorm_layer, stored_genes, LAYER,
+    ensure_lognorm_layer, stored_genes, LAYER, merge_x_adatas,
     _CLEANUP_OBSM, _CLEANUP_UNS, _factor_genes,
 )
 from metab_processing.LinearRegression.least_squares import fit_gene_betas
@@ -954,6 +954,125 @@ def test_add_gene_signature_invalid_keep_when_overlap():
     adata = _make_overlap_adata(seed=46)
     with pytest.raises(ValueError, match="keep_when_overlap"):
         add_gene_signature(adata, "SIG", positive=["A"], keep_when_overlap="nope")
+
+
+# ---------------------------------------------------------------------------
+# merge_x_adatas: pool per-sample factor stores into one, same structure.
+# ---------------------------------------------------------------------------
+
+def _make_mergeable(name, n, genes, factor_cols, factor_map, *, metab_cols=None, seed=0):
+    """A minimal factor-store adata like build_x_adata writes: var=genes, a
+    normalized_count layer, obsm['x_factors'] with named cols + uns metadata, optional
+    obsm['x_metab']."""
+    rng = np.random.default_rng(seed)
+    a = ad.AnnData(X=rng.normal(size=(n, len(genes))).astype(np.float32))
+    a.var_names = list(genes)
+    a.obs_names = [f"{name}_{i}" for i in range(n)]
+    a.layers["normalized_count"] = rng.normal(size=(n, len(genes))).astype(np.float32)
+    a.obsm["spatial"] = rng.uniform(0, 100, size=(n, 2))
+    a.obsm["x_factors"] = rng.normal(size=(n, len(factor_cols))).astype(np.float32)
+    a.uns["x_factors_cols"] = list(factor_cols)
+    a.uns["x_factor_map"] = {g: list(v) for g, v in factor_map.items()}
+    a.uns["x_genes"] = list(factor_map.keys())
+    if metab_cols:
+        a.obsm["x_metab"] = rng.normal(size=(n, len(metab_cols))).astype(np.float32)
+        a.uns["x_metab_modulators"] = list(metab_cols)
+    return a
+
+
+def _merge_pair():
+    s1 = _make_mergeable("s1", 3, ["A", "B"], ["f1", "f2"],
+                         {"A": ["f1", "f2"], "B": ["f1"]}, seed=1)
+    s2 = _make_mergeable("s2", 2, ["A", "B"], ["f2", "f3"],
+                         {"A": ["f2"], "C": ["f3"]}, seed=2)
+    return s1, s2
+
+
+def test_merge_x_adatas_union_structure():
+    s1, s2 = _merge_pair()
+    m = merge_x_adatas([s1, s2], ["s1", "s2"], verbose=False)
+
+    assert m.n_obs == 5
+    # ordered union of factor columns (first-seen across samples).
+    assert list(m.uns["x_factors_cols"]) == ["f1", "f2", "f3"]
+    # per-gene ordered union, filtered to kept columns.
+    assert m.uns["x_factor_map"]["A"] == ["f1", "f2"]
+    assert m.uns["x_factor_map"]["B"] == ["f1"]
+    assert m.uns["x_factor_map"]["C"] == ["f3"]
+    assert list(m.uns["x_genes"]) == ["A", "B", "C"]
+    # sample label present and correct.
+    assert list(m.obs["slice"]) == ["s1", "s1", "s1", "s2", "s2"]
+    # inputs untouched.
+    assert list(s1.uns["x_factors_cols"]) == ["f1", "f2"]
+
+
+def test_merge_x_adatas_union_scatter_and_fill():
+    s1, s2 = _merge_pair()
+    m = merge_x_adatas([s1, s2], ["s1", "s2"], verbose=False)
+    cols = list(m.uns["x_factors_cols"])
+    blk = m.obsm["x_factors"]
+    # s1 (rows 0:3) built f1,f2 -> real; f3 -> 0.
+    np.testing.assert_allclose(blk[0:3, cols.index("f1")], s1.obsm["x_factors"][:, 0])
+    np.testing.assert_allclose(blk[0:3, cols.index("f2")], s1.obsm["x_factors"][:, 1])
+    assert np.all(blk[0:3, cols.index("f3")] == 0.0)
+    # s2 (rows 3:5) built f2,f3 -> real; f1 -> 0.
+    np.testing.assert_allclose(blk[3:5, cols.index("f2")], s2.obsm["x_factors"][:, 0])
+    np.testing.assert_allclose(blk[3:5, cols.index("f3")], s2.obsm["x_factors"][:, 1])
+    assert np.all(blk[3:5, cols.index("f1")] == 0.0)
+
+
+def test_merge_x_adatas_subset_reproduces_single_sample():
+    # get_gene_factors on the merged adata, subset back to one sample, must equal the
+    # standalone sample's own factor matrix for that gene's own columns.
+    s1, s2 = _merge_pair()
+    m = merge_x_adatas([s1, s2], ["s1", "s2"], verbose=False)
+    m_s1 = m[m.obs["slice"] == "s1"].copy()
+    got = get_gene_factors(m_s1, "A")[["f1", "f2"]].to_numpy()
+    want = get_gene_factors(s1, "A")[["f1", "f2"]].to_numpy()
+    np.testing.assert_allclose(got, want)
+
+
+def test_merge_x_adatas_intersection():
+    s1, s2 = _merge_pair()
+    m = merge_x_adatas([s1, s2], ["s1", "s2"], cols="intersection", verbose=False)
+    # only f2 is in both samples.
+    assert list(m.uns["x_factors_cols"]) == ["f2"]
+    assert m.uns["x_factor_map"]["A"] == ["f2"]
+    assert m.uns["x_factor_map"]["B"] == []      # f1 dropped (not shared)
+    assert m.obsm["x_factors"].shape == (5, 1)
+
+
+def test_merge_x_adatas_metab_block():
+    s1 = _make_mergeable("s1", 3, ["A"], ["f1"], {"A": ["f1"]},
+                         metab_cols=["metab@Glc", "metab@Lac"], seed=1)
+    s2 = _make_mergeable("s2", 2, ["A"], ["f1"], {"A": ["f1"]},
+                         metab_cols=["metab@Lac"], seed=2)
+    m = merge_x_adatas([s1, s2], ["s1", "s2"], verbose=False)
+    assert list(m.uns["x_metab_modulators"]) == ["metab@Glc", "metab@Lac"]
+    mb = m.obsm["x_metab"]
+    assert mb.shape == (5, 2)
+    # s2 never built metab@Glc -> 0 for its rows.
+    assert np.all(mb[3:5, 0] == 0.0)
+    np.testing.assert_allclose(mb[3:5, 1], s2.obsm["x_metab"][:, 0])
+
+
+def test_merge_x_adatas_fit_runs_pooled():
+    # end-to-end smoke: the merged adata fits with and without the sample one-hot.
+    s1, s2 = _merge_pair()
+    m = merge_x_adatas([s1, s2], ["s1", "s2"], verbose=False)
+    plain = fit_gene_betas(m, genes=["A"], method="OLS", standardize=True)
+    withoh = fit_gene_betas(m, genes=["A"], method="OLS", standardize=True,
+                            onehot_col="slice")
+    assert set(plain["factor"]) >= {"f1", "f2"}
+    assert any(f == "slice[s2]" for f in withoh["factor"])
+
+
+def test_merge_x_adatas_validates():
+    s1, s2 = _merge_pair()
+    with pytest.raises(ValueError, match="keys"):
+        merge_x_adatas([s1, s2], ["only_one"], verbose=False)
+    with pytest.raises(ValueError, match="cols"):
+        merge_x_adatas([s1, s2], ["s1", "s2"], cols="nope", verbose=False)
 
 
 def test_add_gene_signature_get_gene_factors_and_fit_gene_betas():
