@@ -405,12 +405,16 @@ def subsample_gene_betas(adata, gene, factors=None, *, n_subsamples=100,
                          annot_col=None, annot_value=None, seed0=0,
                          metabolites='all', method='OLS', penalty=1.0, l1_ratio=0.5,
                          standardize=False, groups=None, onehot_col=None,
-                         just_skip_samples_without_all_labels=False):
+                         just_skip_samples_without_all_labels=False, return_r=False):
     """Beta of each selected factor for `gene` across `n_subsamples` cell resamples
     (seeds seed0..seed0+n_subsamples-1), each a same-size-with-replacement resample
     (see `resample_cells`) of the (optionally annotation-filtered) eligible cells.
     Returns a DataFrame of shape (n_subsamples, n_selected), columns = the selected
-    column names, values = that column's fitted beta. NOT metabolite-specific:
+    column names, values = that column's fitted beta. `return_r=True` instead returns a
+    tuple `(betas, rs)` of two same-shaped DataFrames, `rs` holding each column's per-factor
+    Pearson r (between the target y and that column's x) for that resample -- the same r as
+    `fit_gene_betas`' `r` column, recomputed on each resample's drawn cells. NOT
+    metabolite-specific:
     `factors` can be ANY modulator (bare TF gene, `lig$rec`, `lig#tf`, `metab@<name>`),
     plus (see below) a reduced `cluster_{id}` or a `{onehot_col}[{label}]` column.
 
@@ -486,6 +490,7 @@ def subsample_gene_betas(adata, gene, factors=None, *, n_subsamples=100,
     min_cells = X_template.shape[1] + n_dummy_cols + 1
 
     out = np.full((n_subsamples, len(selected)), np.nan)
+    out_r = np.full((n_subsamples, len(selected)), np.nan)
     for i, seed in enumerate(range(seed0, seed0 + n_subsamples)):
         rng = np.random.default_rng(seed)
         idx = rng.integers(0, len(pool_arr), size=len(pool_arr))
@@ -510,18 +515,38 @@ def subsample_gene_betas(adata, gene, factors=None, *, n_subsamples=100,
                  if dummy_labels else np.zeros((len(cells), 0)))
 
         Xsub = _reduced(X_raw.loc[cells])
-        beta, bD, _ = _fit(Xsub.to_numpy(), y.loc[cells].to_numpy(), method=method,
+        Xv = Xsub.to_numpy()
+        yv = y.loc[cells].to_numpy()
+        beta, bD, _ = _fit(Xv, yv, method=method,
                            penalty=penalty, l1_ratio=l1_ratio, standardize=standardize, D=D)
 
+        # Per-factor Pearson r on this resample's cells (mirrors fit_gene_betas, scale-
+        # invariant so unaffected by `standardize`); 0 for a constant column / constant y.
+        Xc, yc = Xv - Xv.mean(axis=0), yv - yv.mean()
+        denom = np.sqrt((Xc ** 2).sum(axis=0) * (yc ** 2).sum())
+        with np.errstate(invalid='ignore', divide='ignore'):
+            r_all = np.where(denom > 0, (Xc * yc[:, None]).sum(axis=0) / denom, 0.0)
+
         row = np.empty(len(selected))
+        row_r = np.empty(len(selected))
         for j, f in enumerate(selected):
             if f in onehot_name_to_label:
                 lbl = onehot_name_to_label[f]
                 row[j] = 0.0 if lbl == labels[0] else bD[dummy_labels.index(lbl)]
+                dc = (vals == lbl).astype(float)
+                dc = dc - dc.mean()
+                denom_o = np.sqrt((dc ** 2).sum() * (yc ** 2).sum())
+                row_r[j] = float((dc * yc).sum() / denom_o) if denom_o > 0 else 0.0
             else:
-                row[j] = beta[x_col_index[f]]
+                k = x_col_index[f]
+                row[j] = beta[k]
+                row_r[j] = r_all[k]
         out[i] = row
-    return pd.DataFrame(out, columns=selected)
+        out_r[i] = row_r
+    betas = pd.DataFrame(out, columns=selected)
+    if return_r:
+        return betas, pd.DataFrame(out_r, columns=selected)
+    return betas
 
 
 def rank_coefficients(betas_df):
