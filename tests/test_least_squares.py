@@ -337,6 +337,17 @@ class SubsampleGeneBetasTests(unittest.TestCase):
         self.assertEqual(list(df.columns), ["TF_A"])
         self.assertTrue(any("NOPE" in str(w.message) for w in caught))
 
+    def test_return_r_returns_matching_r_frame(self):
+        betas = subsample_gene_betas(self.adata, "G", n_subsamples=5, seed0=0)
+        b2, rs = subsample_gene_betas(self.adata, "G", n_subsamples=5, seed0=0,
+                                      return_r=True)
+        # betas identical to the single-return call; rs same shape/cols, and a valid r.
+        pd.testing.assert_frame_equal(betas, b2)
+        self.assertEqual(list(rs.columns), list(betas.columns))
+        self.assertEqual(rs.shape, betas.shape)
+        finite = rs.to_numpy()[np.isfinite(rs.to_numpy())]
+        self.assertTrue(np.all(np.abs(finite) <= 1.0 + 1e-9))
+
     def test_method_penalty_standardize_honored(self):
         df = subsample_gene_betas(self.adata, "G", n_subsamples=5, seed0=0,
                                   method="l1", penalty=1000.0, standardize=True)

@@ -606,6 +606,18 @@ computes and stores the model's **x building blocks**, and saves the adata.
     (resolved to `onehot_col='slice'` only when the loaded cells span >1 sample) threaded into
     `fit_gene_betas`/`subsample_gene_betas`. "With sample features" = `USE_SAMPLE_ONEHOT=True` + `LOAD_MODE`
     producing a multi-sample subset; "without" = `False` (or any single-sample load).
+  - **Subsample r + interval filter (2026-10-13).** `subsample_gene_betas(..., return_r=True)` now returns a
+    tuple `(betas, rs)` of two same-shaped (n_subsamples x factor) DataFrames; `rs` holds each column's
+    per-factor Pearson r on that resample's drawn cells (same r as `fit_gene_betas`' `r` column). Default
+    (`return_r=False`) is unchanged — still one betas DataFrame, so every existing caller/test is unaffected.
+    The notebook helper `add_subsample_percentiles(betas_df, sub, sub_r=None, lower, upper)` (colon_test +
+    signature_analysis) now also writes `avg_subsample_beta` and, when `sub_r` is passed,
+    `min_/max_/avg_subsample_r`; call sites updated to `sub, sub_r = subsample_gene_betas(..., return_r=True)`.
+    New `signature_analysis.ipynb` helper `filter_nonzero_interval(res, touch_zero=False)` keeps only rows
+    whose subsample beta interval [min,max] excludes zero: default drops intervals that strictly CROSS zero
+    (keep min>=0 or max<=0, touching allowed); `touch_zero=True` is the stricter `>` form that also drops
+    intervals touching zero (keep min>0 or max<0); NaN-bound rows dropped. `tests/test_least_squares.py` +1
+    (return_r shape/r-range + betas-identical); suites 114 pass.
 - **Storage = building blocks, not products** (D12): lossless, no cells×M×G blowup; per-gene design
   matrices reconstruct at regression time from `received_ligands × imputed_count` (+ networks on disk).
 - **Test notebook** `build_x_test.ipynb` (bare, no docs): defaults to UC slice 4
