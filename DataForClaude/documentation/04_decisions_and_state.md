@@ -618,6 +618,15 @@ computes and stores the model's **x building blocks**, and saves the adata.
     (keep min>=0 or max<=0, touching allowed); `touch_zero=True` is the stricter `>` form that also drops
     intervals touching zero (keep min>0 or max<0); NaN-bound rows dropped. `tests/test_least_squares.py` +1
     (return_r shape/r-range + betas-identical); suites 114 pass.
+  - **Subsample spread columns + diagnostic plots (2026-10-13).** `add_subsample_percentiles` (both
+    notebooks) now also writes `var_subsample_beta` (variance of the subsample betas) and
+    `msd_subsample_beta` (mean squared distance of the subsample betas about the POINT beta =
+    var + bias², so ≥ var). Three simple scatter helpers added to `signature_analysis.ipynb`:
+    `plot_r_vs_beta` (point r vs point beta), `plot_log_interval_vs_beta` (`log(max−min subsample beta)` vs
+    beta), `plot_msd_vs_beta` (`msd_subsample_beta` vs beta); each is one `ax.scatter`, returns the Axes.
+    `run_signature` now draws those three per signature INSTEAD of `plot_top_coefficients`. Caveat: the log
+    interval is literal `np.log` — a factor with a zero-width interval (common under L1 sparsity, beta≡0
+    across resamples) maps to −inf on that plot. Notebook-only change; package suites unchanged (114).
 - **Storage = building blocks, not products** (D12): lossless, no cells×M×G blowup; per-gene design
   matrices reconstruct at regression time from `received_ligands × imputed_count` (+ networks on disk).
 - **Test notebook** `build_x_test.ipynb` (bare, no docs): defaults to UC slice 4
