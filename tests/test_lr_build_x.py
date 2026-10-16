@@ -32,12 +32,14 @@ import pytest
 from unittest.mock import patch
 
 from SpaceTravLR.tools.network import RegulatoryFactory
-from SpaceTravLR.models.parallel_estimators import SpatialCellularProgramsEstimator
+from SpaceTravLR.models.parallel_estimators import (
+    SpatialCellularProgramsEstimator, compute_radius_weights_fast,
+)
 from metab_processing.SpaceTravLR.beta_analysis import _group, compute_metab_x
 from metab_processing.LinearRegression import build_x as bx
 from metab_processing.LinearRegression.build_x import (
     build_factor_block, get_gene_factors, add_metabolites, add_gene_signature, build_x_adata,
-    ensure_lognorm_layer, stored_genes, LAYER, merge_x_adatas,
+    ensure_lognorm_layer, stored_genes, LAYER, merge_x_adatas, add_neighborhood_scores,
     _CLEANUP_OBSM, _CLEANUP_UNS, _factor_genes,
 )
 from metab_processing.LinearRegression.least_squares import fit_gene_betas
@@ -1189,6 +1191,198 @@ def test_add_gene_signature_duplicate_name_raises():
     adata = _make_signature_adata(seed=38)
     with pytest.raises(ValueError):
         add_gene_signature(adata, "A", positive=["B"], negative=[])
+
+
+# ---------------------------------------------------------------------------
+# add_neighborhood_scores: general custom-factors block (obsm['x_custom'] +
+# uns['x_custom_cols']), mirroring the metab block additively.
+# ---------------------------------------------------------------------------
+
+NBHD_SETS = {"S1": ["TGFB1", "TGFBR1"]}
+
+
+def test_add_neighborhood_scores_no_annot_matches_direct_diffusion():
+    """One column per set (no annot_col); value equals compute_radius_weights_fast
+    applied directly to the summed set-expression pseudo-ligand."""
+    adata = _make_adata(MOD_GENES, [TARGET], n=30, seed=60)
+
+    setexpr = adata[:, ["TGFB1", "TGFBR1"]].to_df(LAYER).sum(axis=1)
+    truth = compute_radius_weights_fast(
+        adata.obsm["spatial"], pd.DataFrame({"S1": setexpr}, index=adata.obs_names),
+        RADIUS, SCALE, eps=1e-3)
+
+    result = add_neighborhood_scores(adata, NBHD_SETS, radius=RADIUS, scale_factor=SCALE)
+
+    assert list(result.uns["x_custom_cols"]) == ["S1"]
+    got = pd.DataFrame(result.obsm["x_custom"], columns=result.uns["x_custom_cols"],
+                       index=result.obs_names)
+    np.testing.assert_allclose(got["S1"].to_numpy(), truth["S1"].to_numpy())
+
+
+def test_add_neighborhood_scores_annot_split_matches_masked_diffusion():
+    """annot_col given -> one `{ct}-{SET}` column per present cell type, each equal to
+    diffusing setexpr with non-ct cells zeroed first."""
+    adata = _make_adata(MOD_GENES, [TARGET], n=30, seed=61)
+
+    result = add_neighborhood_scores(adata, NBHD_SETS, annot_col="cell_type",
+                                     radius=RADIUS, scale_factor=SCALE)
+
+    cols = list(result.uns["x_custom_cols"])
+    assert set(cols) == {"ctA-S1", "ctB-S1"}
+    got = pd.DataFrame(result.obsm["x_custom"], columns=cols, index=result.obs_names)
+
+    setexpr = adata[:, ["TGFB1", "TGFBR1"]].to_df(LAYER).sum(axis=1).to_numpy()
+    for ct in ("ctA", "ctB"):
+        mask = (adata.obs["cell_type"].astype(str) == ct).to_numpy()
+        masked = np.where(mask, setexpr, 0.0)
+        truth = compute_radius_weights_fast(
+            adata.obsm["spatial"],
+            pd.DataFrame({f"{ct}-S1": masked}, index=adata.obs_names),
+            RADIUS, SCALE, eps=1e-3)
+        np.testing.assert_allclose(got[f"{ct}-S1"].to_numpy(), truth[f"{ct}-S1"].to_numpy())
+
+
+def test_add_proximity_requires_annot_col():
+    adata = _make_adata(MOD_GENES, [TARGET], n=20, seed=62)
+    with pytest.raises(ValueError, match="annot_col"):
+        add_neighborhood_scores(adata, {}, add_proximity=True)
+
+
+def test_add_proximity_columns_are_kernel_weighted_density():
+    """add_proximity -> one `{ct}-proximity` column per ct, equal to diffusing an
+    all-ones pseudo-ligand masked to that ct (kernel-weighted density of ct)."""
+    adata = _make_adata(MOD_GENES, [TARGET], n=20, seed=63)
+
+    result = add_neighborhood_scores(adata, {}, annot_col="cell_type", add_proximity=True,
+                                     radius=RADIUS, scale_factor=SCALE)
+
+    cols = list(result.uns["x_custom_cols"])
+    assert set(cols) == {"ctA-proximity", "ctB-proximity"}
+    got = pd.DataFrame(result.obsm["x_custom"], columns=cols, index=result.obs_names)
+
+    for ct in ("ctA", "ctB"):
+        mask = (adata.obs["cell_type"].astype(str) == ct).to_numpy().astype(float)
+        truth = compute_radius_weights_fast(
+            adata.obsm["spatial"],
+            pd.DataFrame({f"{ct}-proximity": mask}, index=adata.obs_names),
+            RADIUS, SCALE, eps=1e-3)
+        np.testing.assert_allclose(got[f"{ct}-proximity"].to_numpy(),
+                                   truth[f"{ct}-proximity"].to_numpy())
+
+
+def test_add_neighborhood_scores_idempotent_on_repeat_call():
+    """Calling twice with the same sets/proximity does not duplicate columns, and the
+    column count/values are stable."""
+    adata = _make_adata(MOD_GENES, [TARGET], n=20, seed=64)
+
+    add_neighborhood_scores(adata, NBHD_SETS, annot_col="cell_type", add_proximity=True,
+                            radius=RADIUS, scale_factor=SCALE)
+    cols_first = list(adata.uns["x_custom_cols"])
+    block_first = adata.obsm["x_custom"].copy()
+
+    result = add_neighborhood_scores(adata, NBHD_SETS, annot_col="cell_type",
+                                     add_proximity=True, radius=RADIUS, scale_factor=SCALE)
+
+    assert list(result.uns["x_custom_cols"]) == cols_first
+    assert result.obsm["x_custom"].shape == block_first.shape
+    np.testing.assert_allclose(result.obsm["x_custom"], block_first)
+
+
+def test_add_neighborhood_scores_missing_gene_warns_and_skips_that_gene():
+    """A gene in a set that's absent from var_names is warned about and dropped from
+    that set's sum; the set still builds off its remaining present genes."""
+    adata = _make_adata(MOD_GENES, [TARGET], n=20, seed=65)
+    with pytest.warns(UserWarning, match="ZZZ"):
+        result = add_neighborhood_scores(adata, {"S2": ["TGFB1", "ZZZ"]},
+                                         radius=RADIUS, scale_factor=SCALE)
+    assert "S2" in result.uns["x_custom_cols"]
+
+
+def test_add_neighborhood_scores_set_with_zero_present_genes_warns_and_skipped():
+    """A set with no genes present in var_names is warned about and skipped entirely
+    (no column created for it)."""
+    adata = _make_adata(MOD_GENES, [TARGET], n=20, seed=66)
+    with pytest.warns(UserWarning, match="no genes present"):
+        result = add_neighborhood_scores(adata, {"S3": ["ZZZ", "YYY"]},
+                                         radius=RADIUS, scale_factor=SCALE)
+    assert "S3" not in result.uns.get("x_custom_cols", [])
+
+
+# ---------------------------------------------------------------------------
+# get_gene_factors: custom selection (and ValueError on a missing name, unlike metabs)
+# ---------------------------------------------------------------------------
+
+def test_get_gene_factors_custom_selection():
+    adata = _make_adata(MOD_GENES, [TARGET], n=30, seed=70)
+    grn, tflinks = _build_networks()
+    kwargs = _est_kwargs()
+
+    result = build_factor_block(adata, grn, tflinks, [TARGET], **kwargs)
+    add_neighborhood_scores(result, NBHD_SETS, annot_col="cell_type",
+                            radius=RADIUS, scale_factor=SCALE)
+
+    base = get_gene_factors(result, TARGET)  # custom=None baseline
+    none_df = get_gene_factors(result, TARGET, custom=None)
+    assert list(none_df.columns) == list(base.columns)
+
+    custom_cols = list(result.uns["x_custom_cols"])
+    all_df = get_gene_factors(result, TARGET, custom="all")
+    assert list(all_df.columns) == list(base.columns) + custom_cols
+
+    all_true_df = get_gene_factors(result, TARGET, custom=True)
+    assert list(all_true_df.columns) == list(all_df.columns)
+
+    one_col = custom_cols[0]
+    one_df = get_gene_factors(result, TARGET, custom=[one_col])
+    assert list(one_df.columns) == list(base.columns) + [one_col]
+    np.testing.assert_allclose(one_df[one_col].to_numpy(), all_df[one_col].to_numpy())
+
+    with pytest.raises(ValueError, match="ZZZ"):
+        get_gene_factors(result, TARGET, custom=["ZZZ"])
+
+
+# ---------------------------------------------------------------------------
+# fitters: custom= threaded through fit_gene_betas / subsample_gene_betas
+# ---------------------------------------------------------------------------
+
+def test_fit_gene_betas_custom_all_includes_custom_columns():
+    adata = _make_adata(MOD_GENES, [TARGET], n=30, seed=71)
+    grn, tflinks = _build_networks()
+    kwargs = _est_kwargs()
+
+    result = build_factor_block(adata, grn, tflinks, [TARGET], **kwargs)
+    add_neighborhood_scores(result, NBHD_SETS, annot_col="cell_type",
+                            radius=RADIUS, scale_factor=SCALE)
+    custom_cols = set(result.uns["x_custom_cols"])
+
+    df = fit_gene_betas(result, genes=[TARGET], metabolites=None, custom="all")
+    assert custom_cols <= set(df["factor"])
+    # custom columns are tagged group='custom', not misread as a TF.
+    custom_rows = df[df["factor"].isin(custom_cols)]
+    assert (custom_rows["group"] == "custom").all()
+
+
+def test_add_neighborhood_scores_accumulates_distinct_sets():
+    """Two calls with different gene sets: the first call's columns (names AND values)
+    survive and the second's are appended -- the genuine merge-accumulate path."""
+    adata = _make_adata(MOD_GENES, [TARGET], n=30, seed=72)
+
+    add_neighborhood_scores(adata, {"S1": ["TGFB1", "TGFBR1"]}, radius=RADIUS, scale_factor=SCALE)
+    first = pd.DataFrame(adata.obsm["x_custom"], columns=list(adata.uns["x_custom_cols"]),
+                         index=adata.obs_names)["S1"].to_numpy().copy()
+
+    add_neighborhood_scores(adata, {"S2": ["TGFB1"]}, radius=RADIUS, scale_factor=SCALE)
+    cols = list(adata.uns["x_custom_cols"])
+    assert cols == ["S1", "S2"]                      # accumulated, order preserved
+    block = pd.DataFrame(adata.obsm["x_custom"], columns=cols, index=adata.obs_names)
+    np.testing.assert_allclose(block["S1"].to_numpy(), first)   # first set untouched
+
+
+def test_add_neighborhood_scores_rejects_proximity_named_set():
+    adata = _make_adata(MOD_GENES, [TARGET], n=20, seed=73)
+    with pytest.raises(ValueError, match="proximity"):
+        add_neighborhood_scores(adata, {"proximity": ["TGFB1"]}, annot_col="cell_type",
+                                add_proximity=True, radius=RADIUS, scale_factor=SCALE)
 
 
 if __name__ == "__main__":

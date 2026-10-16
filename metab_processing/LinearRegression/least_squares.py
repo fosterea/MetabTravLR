@@ -273,8 +273,9 @@ def _fit(X, y, *, method='OLS', penalty=1.0, l1_ratio=0.5, standardize=False, D=
 
 
 def fit_gene_betas(adata, genes=None, metabolites='all', *, annot_col=None, annot_value=None,
-                   cells=None, method='OLS', penalty=1.0, l1_ratio=0.5, standardize=False,
-                   groups=None, onehot_col=None, just_skip_samples_without_all_labels=False):
+                   cells=None, custom=None, method='OLS', penalty=1.0, l1_ratio=0.5,
+                   standardize=False, groups=None, onehot_col=None,
+                   just_skip_samples_without_all_labels=False):
     """OLS-fit each gene's expression on its factor matrix, over a selected set of cells.
 
     Both the factor block (`get_gene_factors`) and the y layer (`LAYER` =
@@ -284,7 +285,10 @@ def fit_gene_betas(adata, genes=None, metabolites='all', *, annot_col=None, anno
     row per (gene, factor)). `r` = Pearson correlation between the target y and that
     factor's x, `r2` = r**2 (both per-factor); `model_r2` = the whole fit's R² and
     `n_cells` are per-gene, repeated across the gene's rows. `metabolites` is
-    passed to `get_gene_factors` as `metabs`. Cell selection: `annot_col`/`annot_value`
+    passed to `get_gene_factors` as `metabs`; `custom` (default None) is passed through
+    to `get_gene_factors` as-is to include columns from the general custom-factors block
+    (`obsm['x_custom']`, e.g. `add_neighborhood_scores`) -- None (default) includes none.
+    Cell selection: `annot_col`/`annot_value`
     filter, intersected with `cells` (a boolean mask or an obs-name array); default =
     all cells. `genes=None` defaults to `build_x.stored_genes(adata)`. A gene absent from
     the factor map, or with fewer than n_factors+1 cells, is skipped with a warning.
@@ -349,9 +353,13 @@ def fit_gene_betas(adata, genes=None, metabolites='all', *, annot_col=None, anno
     # intercept), else an underdetermined fit with onehot_col set can pass silently.
     n_dummy_cols = len(dummy_labels)
 
+    # Custom-block columns (e.g. add_neighborhood_scores) get group='custom' rather than
+    # being misread as a TF by `_group`'s name-separator rule.
+    custom_cols = set(adata.uns.get('x_custom_cols', [])) if custom is not None else set()
+
     records = []
     for gene in kept_genes:
-        X = get_gene_factors(adata, gene, metabs=metabolites).loc[rows]
+        X = get_gene_factors(adata, gene, metabs=metabolites, custom=custom).loc[rows]
         cluster_names = set()
         if groups is not None:
             X, multi = _reduce_groups(X, groups, standardize)
@@ -372,7 +380,12 @@ def fit_gene_betas(adata, genes=None, metabolites='all', *, annot_col=None, anno
         with np.errstate(invalid='ignore', divide='ignore'):
             r = np.where(denom > 0, (Xc * yc[:, None]).sum(axis=0) / denom, 0.0)
         for factor, b, rj in zip(X.columns, beta, r):
-            grp = 'cluster' if factor in cluster_names else _group(factor)
+            if factor in cluster_names:
+                grp = 'cluster'
+            elif factor in custom_cols:
+                grp = 'custom'
+            else:
+                grp = _group(factor)
             records.append((gene, factor, grp, b, rj, rj ** 2, model_r2, len(rows)))
 
         if bD is not None:
@@ -403,8 +416,8 @@ def resample_cells(adata, seed, *, annot_col=None, annot_value=None):
 
 def subsample_gene_betas(adata, gene, factors=None, *, n_subsamples=100,
                          annot_col=None, annot_value=None, seed0=0,
-                         metabolites='all', method='OLS', penalty=1.0, l1_ratio=0.5,
-                         standardize=False, groups=None, onehot_col=None,
+                         metabolites='all', custom=None, method='OLS', penalty=1.0,
+                         l1_ratio=0.5, standardize=False, groups=None, onehot_col=None,
                          just_skip_samples_without_all_labels=False, return_r=False):
     """Beta of each selected factor for `gene` across `n_subsamples` cell resamples
     (seeds seed0..seed0+n_subsamples-1), each a same-size-with-replacement resample
@@ -417,6 +430,8 @@ def subsample_gene_betas(adata, gene, factors=None, *, n_subsamples=100,
     metabolite-specific:
     `factors` can be ANY modulator (bare TF gene, `lig$rec`, `lig#tf`, `metab@<name>`),
     plus (see below) a reduced `cluster_{id}` or a `{onehot_col}[{label}]` column.
+    `custom` (default None) is passed through to `get_gene_factors` as-is, so custom
+    columns (e.g. from `add_neighborhood_scores`) are also addressable via `factors`.
 
     `groups` (default None): reduces the gene's factor matrix via `_reduce_groups`
     (see `fit_gene_betas`) -- same resulting `cluster_{id}` column(s), part of the
@@ -453,7 +468,7 @@ def subsample_gene_betas(adata, gene, factors=None, *, n_subsamples=100,
     per-iteration call to `resample_cells`, which would recompute the pool every time);
     behavior (same seed -> same draw) is identical to `resample_cells`.
     """
-    X_raw = get_gene_factors(adata, gene, metabs=metabolites)
+    X_raw = get_gene_factors(adata, gene, metabs=metabolites, custom=custom)
     pool = _select_cells(adata, annot_col, annot_value, None)
     if len(pool) == 0:
         raise ValueError("subsample_gene_betas: eligible pool is empty")

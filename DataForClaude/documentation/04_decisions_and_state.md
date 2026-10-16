@@ -627,6 +627,29 @@ computes and stores the model's **x building blocks**, and saves the adata.
     `run_signature` now draws those three per signature INSTEAD of `plot_top_coefficients`. Caveat: the log
     interval is literal `np.log` — a factor with a zero-width interval (common under L1 sparsity, beta≡0
     across resamples) maps to −inf on that plot. Notebook-only change; package suites unchanged (114).
+  - **Custom factors block + `add_neighborhood_scores` (2026-10-16).** New general optional data struct on the
+    analysis adata, mirroring the metab block additively: `obsm['x_custom']` + `uns['x_custom_cols']`, merged
+    by `build_x._merge_custom` (idempotent BY NAME — an already-stored column name is skipped, never
+    overwritten). First adder `add_neighborhood_scores(adata, gene_sets, *, annot_col=None,
+    add_proximity=False, radius=300, scale_factor=1, eps=1e-3)` reuses the metab path's diffusion primitive
+    (`parallel_estimators.compute_radius_weights_fast`) directly — `nbhd(S)[i] = (scale_factor/N)·Σ_k K(i,k)·
+    Σ_{g∈S} normalized_count[g][k]` (same narrow Gaussian K, self-weight 1). `annot_col` splits each set into
+    `{ct}-{SET}` columns (setexpr masked to the source cell type); `add_proximity` (requires annot_col) adds
+    `{ct}-proximity` = the same kernel on an all-ones ct-masked pseudo-ligand (kernel-weighted ct density, the
+    matched control). Idempotent+efficient: already-present column names are dropped BEFORE any summing/
+    masking/diffusion; all remaining columns diffuse in ONE call. `get_gene_factors(..., custom=None|'all'|
+    [names])` appends custom columns AFTER the metab block; a requested name absent from `x_custom_cols`
+    RAISES (intentionally stricter than `metabs`' warn). `fit_gene_betas`/`subsample_gene_betas` gain a
+    keyword-only `custom=None` passthrough (default = unchanged). Decisions: proximity is kernel-weighted
+    density; custom columns stay penalized like any factor; they are tagged `group='custom'` in the
+    `fit_gene_betas` output (a ~2-line carve-out so they aren't misread as TFs by `_group`); defaults use
+    `radius=300` (not pulled from run params). Review (metab-review) caught both applied fixes: the
+    `group='custom'` tag and a guard rejecting a gene set literally named `'proximity'` under `add_proximity`
+    (would collide with `{ct}-proximity`). NOTE: `merge_x_adatas` does NOT carry an `x_custom` block across a
+    per-sample merge — custom factors are meant to be computed post-load on the working adata.
+    `tests/test_lr_build_x.py` +12 (diffusion/split/proximity parity, idempotency, accumulate, missing/empty
+    sets, `get_gene_factors` custom selection incl. ValueError, fit smoke + group='custom', proximity-name
+    guard); `test_least_squares.py` fit/subsample custom passthrough; suites 125 pass.
 - **Storage = building blocks, not products** (D12): lossless, no cells×M×G blowup; per-gene design
   matrices reconstruct at regression time from `received_ligands × imputed_count` (+ networks on disk).
 - **Test notebook** `build_x_test.ipynb` (bare, no docs): defaults to UC slice 4

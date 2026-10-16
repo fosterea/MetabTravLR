@@ -246,9 +246,9 @@ def build_factor_block(adata, grn, tflinks, focus_genes, *, radius=300,
     return adata
 
 
-def get_gene_factors(adata, gene, metabs=None):
+def get_gene_factors(adata, gene, metabs=None, custom=None):
     """Reconstruct one gene's design matrix from the shared blocks built by
-    `build_factor_block` (+ `add_metabolites`).
+    `build_factor_block` (+ `add_metabolites` / `add_neighborhood_scores`).
 
     Returns a DataFrame indexed by `adata.obs_names`. Non-metab columns are the gene's
     `uns['x_factor_map'][gene]` names, sliced out of `obsm['x_factors']`. `metabs`
@@ -261,6 +261,14 @@ def get_gene_factors(adata, gene, metabs=None):
         (D11 -- metabolites with an identical expanded pair-set collapse into one column)
         is named `metab@nameA|nameB`; to select it by list you must pass the full merged
         name (`"nameA|nameB"` or `"metab@nameA|nameB"`), not a single constituent name.
+
+    `custom` selects which columns of the general custom-factors block (`obsm['x_custom']`
+    / `uns['x_custom_cols']`, e.g. from `add_neighborhood_scores`) to append:
+      - `None` (default): none.
+      - `True` / `'all'`: every stored custom column.
+      - a list of exact column names: a requested name NOT found in `x_custom_cols`
+        RAISES `ValueError` (unlike `metabs`, which only warns on a miss) -- selecting a
+        custom factor by name is intentionally strict.
 
     Raises `KeyError` if the factor block was never built (`uns['x_factor_map']` absent)
     or if `gene` was not stored.
@@ -280,27 +288,39 @@ def get_gene_factors(adata, gene, metabs=None):
     assert (idx >= 0).all(), "x_factor_map references a column missing from x_factors_cols"
     df = pd.DataFrame(adata.obsm['x_factors'][:, idx], columns=cols, index=adata.obs_names)
 
-    if metabs is None:
-        return df
+    if metabs is not None:
+        modulators = list(adata.uns.get('x_metab_modulators', []))
+        if metabs is True or metabs == 'all':
+            metab_cols = list(modulators)
+        else:
+            by_bare = {c[len(METAB_PREFIX):]: c for c in modulators if c.startswith(METAB_PREFIX)}
+            metab_cols = []
+            for name in metabs:
+                bare = name[len(METAB_PREFIX):] if name.startswith(METAB_PREFIX) else name
+                if bare in by_bare:
+                    metab_cols.append(by_bare[bare])
+                else:
+                    warnings.warn(f"get_gene_factors: metab {name!r} not found in x_metab_modulators.")
+        if metab_cols:
+            metab_df = pd.DataFrame(adata.obsm['x_metab'], columns=modulators, index=adata.obs_names)
+            df = pd.concat([df, metab_df[metab_cols]], axis=1)
 
-    modulators = list(adata.uns.get('x_metab_modulators', []))
-    if metabs is True or metabs == 'all':
-        metab_cols = list(modulators)
-    else:
-        by_bare = {c[len(METAB_PREFIX):]: c for c in modulators if c.startswith(METAB_PREFIX)}
-        metab_cols = []
-        for name in metabs:
-            bare = name[len(METAB_PREFIX):] if name.startswith(METAB_PREFIX) else name
-            if bare in by_bare:
-                metab_cols.append(by_bare[bare])
-            else:
-                warnings.warn(f"get_gene_factors: metab {name!r} not found in x_metab_modulators.")
+    if custom is not None:
+        custom_cols_all = list(adata.uns.get('x_custom_cols', []))
+        if custom is True or custom == 'all':
+            sel_cols = list(custom_cols_all)
+        else:
+            sel_cols = []
+            for name in custom:
+                if name not in custom_cols_all:
+                    raise ValueError(
+                        f"get_gene_factors: custom {name!r} not found in x_custom_cols.")
+                sel_cols.append(name)
+        if sel_cols:
+            custom_df = pd.DataFrame(adata.obsm['x_custom'], columns=custom_cols_all, index=adata.obs_names)
+            df = pd.concat([df, custom_df[sel_cols]], axis=1)
 
-    if not metab_cols:
-        return df
-
-    metab_df = pd.DataFrame(adata.obsm['x_metab'], columns=modulators, index=adata.obs_names)
-    return pd.concat([df, metab_df[metab_cols]], axis=1)
+    return df
 
 
 def _factor_genes(factor):
@@ -498,6 +518,140 @@ def add_metabolites(adata, metabolites, *, radius=300, contact_distance=50, scal
     adata.obsm['x_metab'] = merged.to_numpy()
     adata.uns['x_metab_modulators'] = list(merged.columns)
     return adata
+
+
+def _merge_custom(adata, df):
+    """Merge new columns into the shared general-purpose custom-factors block
+    (`obsm['x_custom']` + `uns['x_custom_cols']`), mirroring `add_metabolites`' merge
+    pattern. IDEMPOTENT BY NAME: a column whose name is already stored is SKIPPED (never
+    overwritten) rather than merely deduplicated by value -- callers (e.g.
+    `add_neighborhood_scores`) are expected to have already dropped such columns before
+    doing any expensive work, but this is also enforced here as the storage contract.
+
+    `df` is indexed by (a subset of) `adata.obs_names` and is reindexed to
+    `adata.obs_names` before storing. Mutates `adata` in place and returns it.
+    """
+    df = df.reindex(adata.obs_names)
+
+    if 'x_custom' not in adata.obsm:
+        adata.obsm['x_custom'] = df.to_numpy()
+        adata.uns['x_custom_cols'] = list(df.columns)
+        return adata
+
+    existing_cols = list(adata.uns['x_custom_cols'])
+    new_cols = [c for c in df.columns if c not in existing_cols]
+    if not new_cols:
+        return adata
+
+    existing = pd.DataFrame(adata.obsm['x_custom'], columns=existing_cols, index=adata.obs_names)
+    merged = pd.concat([existing, df[new_cols]], axis=1)
+
+    adata.obsm['x_custom'] = merged.to_numpy()
+    adata.uns['x_custom_cols'] = list(merged.columns)
+    return adata
+
+
+def add_neighborhood_scores(adata, gene_sets, *, annot_col=None,
+                            add_proximity=False, radius=300, scale_factor=1, eps=1e-3):
+    """Add spatial-neighborhood pseudo-ligand scores for gene sets to the shared
+    custom-factors block (`obsm['x_custom']` + `uns['x_custom_cols']`, via
+    `_merge_custom`), reusing the metabolite path's diffusion primitive
+    (`parallel_estimators.compute_radius_weights_fast`) directly rather than
+    reimplementing any spatial math.
+
+    Formula (per cell i, per set S):
+        nbhd(S)[i] = (scale_factor/N) * sum_k K(i,k) * sum_{g in S} normalized_count[g][k]
+    where `K` is the SAME narrow Gaussian kernel used for the metabolite "received
+    ligand" diffusion (sigma fixed by `eps`, hard cutoff at `radius`, self-weight 1), and
+    N = total cell count. `gene_sets` = `{SET_NAME: [gene, ...]}`; for each set we build
+    the per-cell pseudo-ligand `setexpr_S[k] = sum_{g in S present in var_names}
+    normalized_count[g][k]` (genes absent from `var_names` are warned about and skipped;
+    a set with zero present genes is warned about and skipped), then diffuse it.
+
+    `annot_col` (default None): if given, each set's pseudo-ligand is SPLIT by the
+    source cell's annotation value -- one column `f"{ct}-{SET_NAME}"` per cell-type
+    value `ct` present in `adata.obs[annot_col].astype(str)`, equal to `setexpr_S` with
+    non-`ct` cells zeroed (so after diffusion the column reads "how much of S is
+    received from `ct` neighbors").
+
+    `add_proximity` (default False; REQUIRES `annot_col`, else raises `ValueError`): for
+    each `ct`, also diffuses an all-ones pseudo-ligand masked to `ct` into a column
+    `f"{ct}-proximity"` -- the SAME kernel with expression replaced by 1, i.e. the
+    kernel-weighted DENSITY of `ct` around each cell (no expression involved).
+
+    IDEMPOTENT BY NAME (and efficient): any pseudo-ligand column whose name is already
+    in `uns['x_custom_cols']` is identified and skipped BEFORE any per-set/per-ct work
+    (expression summing, mask building) or diffusion happens, so a repeated call (e.g.
+    re-adding the same proximity columns) does no recomputation and never duplicates a
+    column. If nothing new remains, returns `adata` unchanged. All remaining new
+    pseudo-ligand columns are diffused together in ONE `compute_radius_weights_fast`
+    call (one matvec, one KDTree build), then merged via `_merge_custom`.
+    """
+    from SpaceTravLR.models.parallel_estimators import compute_radius_weights_fast
+
+    if add_proximity and annot_col is None:
+        raise ValueError("add_neighborhood_scores: add_proximity=True requires annot_col.")
+    # A set named 'proximity' would produce `{ct}-proximity` columns identical in name to the
+    # proximity-density columns -- reject rather than silently clobber one with the other.
+    if add_proximity and 'proximity' in gene_sets:
+        raise ValueError("add_neighborhood_scores: a gene set cannot be named 'proximity' "
+                         "when add_proximity=True (its columns would collide).")
+
+    existing_cols = set(adata.uns.get('x_custom_cols', []))
+
+    cts = []
+    cell_types = None
+    if annot_col is not None:
+        cell_types = adata.obs[annot_col].astype(str)
+        cts = list(cell_types.unique())
+
+    lig_cols = {}
+
+    for name, genes in gene_sets.items():
+        if annot_col is None:
+            needed_cts = None if name not in existing_cols else []
+        else:
+            needed_cts = [ct for ct in cts if f"{ct}-{name}" not in existing_cols]
+        if needed_cts is not None and not needed_cts:
+            continue  # every column this set would produce already exists
+
+        present = [g for g in genes if g in adata.var_names]
+        missing = [g for g in genes if g not in adata.var_names]
+        if missing:
+            warnings.warn(
+                f"add_neighborhood_scores: set {name!r} genes {missing} not in "
+                "adata.var_names; skipping those.")
+        if not present:
+            warnings.warn(
+                f"add_neighborhood_scores: set {name!r} has no genes present in "
+                "adata.var_names; skipping.")
+            continue
+
+        setexpr = adata[:, present].to_df(LAYER).sum(axis=1).to_numpy()
+
+        if annot_col is None:
+            lig_cols[name] = setexpr
+        else:
+            for ct in needed_cts:
+                mask = (cell_types == ct).to_numpy()
+                lig_cols[f"{ct}-{name}"] = np.where(mask, setexpr, 0.0)
+
+    if add_proximity:
+        for ct in cts:
+            col = f"{ct}-proximity"
+            if col in existing_cols:
+                continue
+            mask = (cell_types == ct).to_numpy()
+            lig_cols[col] = mask.astype(float)
+
+    if not lig_cols:
+        return adata
+
+    lig = pd.DataFrame(lig_cols, index=adata.obs_names)
+    received = compute_radius_weights_fast(
+        adata.obsm['spatial'], lig, radius, scale_factor, eps=eps)
+
+    return _merge_custom(adata, received)
 
 
 def build_x_adata(adata, out_path, *, focus_genes, metabolites=None, setup_dir=None,
