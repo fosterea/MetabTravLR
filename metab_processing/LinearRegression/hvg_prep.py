@@ -47,6 +47,16 @@ def run(path, top_n, annot):
     _log(f'{path.name}: reading {path / "adata.h5ad"}')
     adata = sc.read_h5ad(path / 'adata.h5ad')
 
+    # Drop cells with no `annot` label (e.g. Atera's unlabeled cells are NaN). Otherwise
+    # process_adata's label encoding (encode_labels -> sorted(set(labels))) hits a mix of
+    # NaN (float) and str and raises "'<' not supported between 'float' and 'str'". Such
+    # cells can't be used in a cell-type-conditioned fit anyway.
+    if annot in adata.obs:
+        n_na = int(adata.obs[annot].isna().sum())
+        if n_na:
+            _log(f'{path.name}: dropping {n_na} cells with no {annot!r} annotation')
+            adata = adata[adata.obs[annot].notna()].copy()
+
     # HVG selection and build_x both expect raw integer counts in X -- fail loud if not.
     x = adata.X
     vals = x.data if hasattr(x, 'data') else np.asarray(x).ravel()

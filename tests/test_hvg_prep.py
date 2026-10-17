@@ -133,5 +133,38 @@ class SkipExistingTests(unittest.TestCase):
             self.assertEqual(build_calls["n"], 1)
 
 
+class DropUnannotatedCellsTests(unittest.TestCase):
+    def test_cells_with_nan_annotation_are_dropped(self):
+        """A mix of labelled + NaN annotation (e.g. Atera unlabelled cells) would crash
+        label encoding; run() drops the NaN cells before building."""
+        import tempfile
+        import numpy as np
+        import scipy.sparse as sp
+        import anndata as ad
+
+        with tempfile.TemporaryDirectory() as tmp:
+            dataset_dir = Path(tmp) / "dataset"
+            dataset_dir.mkdir(parents=True)
+
+            stub = ad.AnnData(sp.csr_matrix(
+                np.array([[1.0, 2.0], [0.0, 3.0], [4.0, 1.0]], dtype="float32")))
+            stub.var_names = ["A", "B"]
+            stub.obs["cell_type"] = ["T", np.nan, "B"]   # one unlabelled cell
+
+            seen = {}
+
+            def fake_build_x_adata(adata, *args, **kwargs):
+                seen["n_obs"] = adata.n_obs
+                seen["labels"] = list(adata.obs["cell_type"])
+
+            with mock.patch.object(hp.sc, "read_h5ad", return_value=stub), \
+                 mock.patch.object(hp, "build_x_adata", side_effect=fake_build_x_adata):
+                hp.run(dataset_dir, "all", "cell_type")
+
+            self.assertEqual(seen["n_obs"], 2)
+            self.assertNotIn(np.nan, seen["labels"])
+            self.assertEqual(set(seen["labels"]), {"T", "B"})
+
+
 if __name__ == "__main__":
     unittest.main()
