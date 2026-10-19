@@ -678,6 +678,19 @@ computes and stores the model's **x building blocks**, and saves the adata.
     call this instead of `build_x_adata` (Phase 3); optional full metab independence already done here.
     `tests/test_linear_factors.py` 16 (incl. no-SpaceTravLR/no-torch subprocess check, store consumability by
     `fit_gene_betas`, and the two regression tests for the fixes); suites 141 pass.
+  - **Phase 3: `hvg_prep.py` wired to `linear_factors` (2026-10-19).** `hvg_prep.run` now calls
+    `build_linear_factor_store` (+ `ensure_lognorm_layer`) and writes the adata directly, INSTEAD of
+    `build_x_adata`/`SpaceShip.setup_`. This removes the MAGIC `imputed_count` densification that OOM'd the
+    717k×18k Atera data (the old path reached `[impute] densifying ... 51.7 GB dense` then Killed). hvg_prep is
+    now SpaceTravLR-free and torch-free: dropped the `build_x_adata` + `run_spacetravlr._h5ad_is_readable`
+    imports and the celloracle XDG-cache hack; `_h5ad_is_readable` is a local h5py check. X (raw counts) is
+    exposed as `raw_count` before the build so `ensure_lognorm_layer` can make `normalized_count`. New
+    optional `--tflinks <path>` passes a cached NicheNet parquet for offline nodes (else downloaded from
+    Zenodo). **No GPU needed** — dispatch notebook noted to prefer a high-memory CPU (bigmem) node; the GPU
+    partitions capped RAM. Verified end-to-end offline (read→drop→MT→hvg=all→build→write) on a tiny real-gene
+    adata using the shipped base-GRN/CellChat + cached tflinks: wrote a TF + L-R store consumable by
+    `fit_gene_betas`. `tests/test_hvg_prep.py` updated (mocks `build_linear_factor_store`); suites 148 pass.
+    Still open: the deferred pruning decision (all base-GRN candidate TFs included → large factor store).
 - **Storage = building blocks, not products** (D12): lossless, no cells×M×G blowup; per-gene design
   matrices reconstruct at regression time from `received_ligands × imputed_count` (+ networks on disk).
 - **Test notebook** `build_x_test.ipynb` (bare, no docs): defaults to UC slice 4

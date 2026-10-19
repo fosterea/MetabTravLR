@@ -10,7 +10,7 @@ Covers:
     existing output short-circuits before any read/build work; a missing output does not.
 
 No heavy env needed for the retry tests (they monkeypatch `hp.run` directly, never
-touching scanpy/torch). The skip-existing tests monkeypatch `hp.build_x_adata` and
+touching scanpy/torch). The skip-existing tests monkeypatch `hp.build_linear_factor_store` and
 `hp.sc.read_h5ad` so `run()` can execute without real data; the "written" h5ad in the
 positive case is a real (if minimal) file via `anndata`, matching the module's own
 `_h5ad_is_readable` check (`h5py.File` open + `'var'`/`'obs'` present).
@@ -42,7 +42,7 @@ class RetryTests(unittest.TestCase):
     def test_retry_then_succeed(self):
         calls = {"n": 0}
 
-        def flaky(path, top_n, annot):
+        def flaky(path, top_n, annot, tflinks=None):
             calls["n"] += 1
             if calls["n"] <= 2:
                 raise OSError("boom")
@@ -71,7 +71,7 @@ class RetryTests(unittest.TestCase):
         # BrokenPipeError is a subclass of OSError (ESHUTDOWN on reads/stats).
         calls = {"n": 0}
 
-        def flaky(path, top_n, annot):
+        def flaky(path, top_n, annot, tflinks=None):
             calls["n"] += 1
             if calls["n"] == 1:
                 raise BrokenPipeError("pipe broke")
@@ -94,10 +94,10 @@ class SkipExistingTests(unittest.TestCase):
 
             build_calls = {"n": 0}
 
-            def fake_build_x_adata(*args, **kwargs):
+            def fake_build_store(*args, **kwargs):
                 build_calls["n"] += 1
 
-            with mock.patch.object(hp, "build_x_adata", side_effect=fake_build_x_adata), \
+            with mock.patch.object(hp, "build_linear_factor_store", side_effect=fake_build_store), \
                  mock.patch.object(hp.sc, "read_h5ad", side_effect=AssertionError(
                      "should not read adata.h5ad when output already present")):
                 hp.run(dataset_dir, "all", "annot")
@@ -123,11 +123,11 @@ class SkipExistingTests(unittest.TestCase):
 
             build_calls = {"n": 0}
 
-            def fake_build_x_adata(*args, **kwargs):
+            def fake_build_store(*args, **kwargs):
                 build_calls["n"] += 1
 
             with mock.patch.object(hp.sc, "read_h5ad", return_value=stub_adata), \
-                 mock.patch.object(hp, "build_x_adata", side_effect=fake_build_x_adata):
+                 mock.patch.object(hp, "build_linear_factor_store", side_effect=fake_build_store):
                 hp.run(dataset_dir, "all", "annot")
 
             self.assertEqual(build_calls["n"], 1)
@@ -153,12 +153,12 @@ class DropUnannotatedCellsTests(unittest.TestCase):
 
             seen = {}
 
-            def fake_build_x_adata(adata, *args, **kwargs):
+            def fake_build_store(adata, *args, **kwargs):
                 seen["n_obs"] = adata.n_obs
                 seen["labels"] = list(adata.obs["cell_type"])
 
             with mock.patch.object(hp.sc, "read_h5ad", return_value=stub), \
-                 mock.patch.object(hp, "build_x_adata", side_effect=fake_build_x_adata):
+                 mock.patch.object(hp, "build_linear_factor_store", side_effect=fake_build_store):
                 hp.run(dataset_dir, "all", "cell_type")
 
             self.assertEqual(seen["n_obs"], 2)

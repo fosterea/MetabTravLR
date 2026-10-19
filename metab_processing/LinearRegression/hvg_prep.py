@@ -1,23 +1,27 @@
 #!/usr/bin/env python
-"""Drop mito genes, keep the top-N HVG (or all genes), run SpaceTravLR prep
-(build_x_adata) per dataset path.
+"""Drop mito genes, keep the top-N HVG (or all genes), then build the LinearRegression
+factor store per dataset path via the standalone `linear_factors` builder.
+
+This path is SpaceTravLR-free and CPU-only: it does NOT run `SpaceShip.setup_`, so there
+is no MAGIC imputation (the ~50 GB dense `imputed_count` layer the old `build_x_adata`
+built and the LR analysis discarded -- the OOM on large whole-transcriptome data). The
+GRN is read directly from the shipped base-GRN parquet (all candidate TFs, no regression),
+and L-R/L-TF columns are built with the copied Gaussian kernel. Run on a high-memory CPU
+node (no GPU needed).
 
 Each `--paths` entry is a dataset directory holding `adata.h5ad`; output is written to
-`<path>/LinearRegression/hvg{top_n}_x_adata.h5ad`, or `hvg_all_x_adata.h5ad` when
+`<path>/LinearRegression/hvg{top_n}_x_adata.h5ad`, or `hvgall_x_adata.h5ad` when
 `--top-n all` is given (skips HVG selection entirely; uses every gene left after the
 mito drop).
 """
 import argparse
-import os
 import sys
 import time
 from pathlib import Path
 
-# celloracle/genomepy open a diskcache SQLite DB at import time; on Savio's NFS home its
-# locking fails ("locking protocol"). Point the cache at node-local /tmp before that import
-# (mirrors run_spacetravlr._isolate_cache_dir).
-os.environ.setdefault('XDG_CACHE_HOME', f'/tmp/spacetravlr_cache_{os.environ.get("SLURM_JOB_ID", "local")}')
-os.makedirs(os.environ['XDG_CACHE_HOME'], exist_ok=True)
+import h5py
+import numpy as np
+import scanpy as sc
 
 _root = next((p for p in Path(__file__).resolve().parents
               if (p / '.git').exists() or (p / 'setup.py').exists()),
@@ -26,17 +30,25 @@ for _p in (str(_root), str(_root / 'src')):
     if _p not in sys.path:
         sys.path.insert(0, _p)
 
-import numpy as np
-import scanpy as sc
-from metab_processing.LinearRegression.build_x import build_x_adata
-from metab_processing.SpaceTravLR.run_spacetravlr import _h5ad_is_readable
+from metab_processing.LinearRegression.build_x import ensure_lognorm_layer
+from metab_processing.LinearRegression.linear_factors import build_linear_factor_store
 
 
 def _log(msg):
     print(f'[{time.strftime("%Y-%m-%d %H:%M:%S")}] {msg}', flush=True)
 
 
-def run(path, top_n, annot):
+def _h5ad_is_readable(path):
+    """Minimal readability check (file opens, has 'var'/'obs') -- a local copy so hvg_prep
+    imports nothing from the SpaceTravLR stack."""
+    try:
+        with h5py.File(path, 'r') as f:
+            return 'var' in f and 'obs' in f
+    except Exception:
+        return False
+
+
+def run(path, top_n, annot, tflinks=None):
     path = Path(path)
     tag = 'all' if top_n == 'all' else str(int(top_n))
     out = path / 'LinearRegression' / f'hvg{tag}_x_adata.h5ad'
@@ -57,7 +69,7 @@ def run(path, top_n, annot):
             _log(f'{path.name}: dropping {n_na} cells with no {annot!r} annotation')
             adata = adata[adata.obs[annot].notna()].copy()
 
-    # HVG selection and build_x both expect raw integer counts in X -- fail loud if not.
+    # HVG selection and the factor build both expect raw integer counts in X -- fail loud if not.
     x = adata.X
     vals = x.data if hasattr(x, 'data') else np.asarray(x).ravel()
     if vals.size and not np.allclose(vals, np.round(vals)):
@@ -80,20 +92,26 @@ def run(path, top_n, annot):
             raise ValueError(f'{path.name}: selected {len(hvg)} HVG != top_n={n}.')
         adata = adata[:, hvg].copy()
 
-    lr_dir = path / 'LinearRegression'
-    build_x_adata(adata, str(out), focus_genes=hvg, annot=annot,
-                  setup_dir=str(lr_dir / f'hvg{tag}_setup'))
+    # Build the factor store with the standalone, SpaceTravLR-free builder (no MAGIC
+    # imputation). It calls ensure_lognorm_layer internally, which needs raw counts in a
+    # layer -- X is raw here (asserted above), so expose it as raw_count by reference.
+    if 'raw_count' not in adata.layers and 'normalized_count' not in adata.layers:
+        adata.layers['raw_count'] = adata.X
+    build_linear_factor_store(adata, hvg, annot_col=annot, tflinks=tflinks)
+
+    out.parent.mkdir(parents=True, exist_ok=True)
+    adata.write_h5ad(out)
     _log(f'{path.name}: wrote {out} ({len(hvg)} hvg)')
 
 
-def _run_with_retry(path, top_n, annot, retries=3, wait=30):
+def _run_with_retry(path, top_n, annot, tflinks=None, retries=3, wait=30):
     """Run one dataset, retrying on transient filesystem OSErrors (Savio Lustre:
     errno 5 EIO / errno 108 ESHUTDOWN). Returns True on success, False if it gave up or
     hit a non-retryable error. Never raises."""
     name = Path(path).name
     for attempt in range(1, retries + 1):
         try:
-            run(path, top_n, annot)
+            run(path, top_n, annot, tflinks=tflinks)
             return True
         except OSError as e:
             _log(f'{name}: attempt {attempt}/{retries} OSError: {e}')
@@ -113,13 +131,17 @@ if __name__ == '__main__':
                      help="int, or the literal string 'all' to skip HVG selection and use "
                           "every gene (after the mito drop).")
     ap.add_argument('--annot', required=True)
+    ap.add_argument('--tflinks', default=None,
+                     help="optional path to a cached NicheNet ligand_target_<species>.parquet "
+                          "(for offline nodes); if omitted it is downloaded from Zenodo.")
     args = ap.parse_args()
 
     _log(f'top_n={args.top_n}, annot={args.annot}, {len(args.paths)} dataset(s) to run:')
     for p in args.paths:
         _log(f'  {p}')
 
-    failed = [p for p in args.paths if not _run_with_retry(p, args.top_n, args.annot)]
+    failed = [p for p in args.paths
+              if not _run_with_retry(p, args.top_n, args.annot, tflinks=args.tflinks)]
     _log(f'done: {len(args.paths) - len(failed)} ok, {len(failed)} failed')
     for p in failed:
         _log(f'  FAILED: {p}')
