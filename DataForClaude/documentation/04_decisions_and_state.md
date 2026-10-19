@@ -650,6 +650,34 @@ computes and stores the model's **x building blocks**, and saves the adata.
     `tests/test_lr_build_x.py` +12 (diffusion/split/proximity parity, idempotency, accumulate, missing/empty
     sets, `get_gene_factors` custom selection incl. ValueError, fit smoke + group='custom', proximity-name
     guard); `test_least_squares.py` fit/subsample custom passthrough; suites 125 pass.
+  - **Standalone `linear_factors.py` — SpaceTravLR-independent factor builder (2026-10-18).** New module
+    `metab_processing/LinearRegression/linear_factors.py` builds the SAME factor store
+    (`obsm['x_factors']` + `uns['x_factors_cols']`/`x_factor_map`/`x_genes`, plus a standalone metab block)
+    that `get_gene_factors`/`fit_gene_betas`/`add_neighborhood_scores` consume, with **zero SpaceTravLR/torch
+    import** (CPU-only — research confirmed GPUs were ONLY for the CNN path; this path never needs one, so it
+    can run on high-memory CPU nodes). It copies the pure helpers (Gaussian kernel `compute_radius_weights_fast`,
+    `scale_adata`, `is_mouse_data`, `get_cellchat_db`/`expand_paired_interactions`, `metabolite_interactions`)
+    and reads the shipped data files directly (`src/SpaceTravLR_data/{species}_base_grn.parquet`,
+    `cellchat_{species}.csv`, NicheNet `ligand_target` parquet). **Why:** the SpaceShip `setup_` path densifies
+    a 51.7 GB MAGIC `imputed_count` layer that the LR path discards (OOM'd the 717k×18k Atera data), and runs a
+    per-cluster CellOracle ridge whose output `build_x` collapses to a global TF→target edge SET anyway.
+    DESIGN DECISIONS (Foster, 2026-10-18): **GRN = ALL base-GRN candidate TFs per gene, NO regression/pruning**
+    (median ~160 TFs/gene; downstream per-cell-type L1/elastic does the selection — pruning via regression or
+    cutoffs deferred to a later pass); NicheNet/CellChat cutoffs unchanged (top-5 ligands/TF over
+    `tf_ligand_cutoff`, `receptor_thresh` mean-max over `annot_col`, secreted→`radius`/contact→`contact_distance`);
+    **self-exclusion simplified to DIRECT self only** (drop any TF/L-R/L-TF column whose gene == target; the
+    CellOracle regression-feedback exclusion dropped); **drop any identically-zero column** (non-negative values,
+    `max==0`); metab math copied in (no `compute_metab_x`/SpaceTravLR dep). NOT bit-for-bit with the old pipeline
+    (intended). Dev/review loop (metab-dev → metab-review) caught and I applied two real correctness fixes:
+    (1) **L-TF top-5 now excludes the target gene BEFORE ranking** (kept per-TF ranked ligand lists so a
+    self-ligand target backfills the next ligand — the old global top-5 silently dropped it); (2) **ligand
+    diffusion radius sourced from the var_names-filtered table BEFORE the receptor_thresh/dedup filters**
+    (mirrors `init_received_ligands`; the old code picked the wrong radius for a ligand whose first pair's
+    receptor fails the threshold). Also: base-GRN groupby restricted to focus genes; columns materialized only
+    if referenced (no orphans), in deterministic order. Still TODO (not yet wired): have `hvg_prep`/dispatch
+    call this instead of `build_x_adata` (Phase 3); optional full metab independence already done here.
+    `tests/test_linear_factors.py` 16 (incl. no-SpaceTravLR/no-torch subprocess check, store consumability by
+    `fit_gene_betas`, and the two regression tests for the fixes); suites 141 pass.
 - **Storage = building blocks, not products** (D12): lossless, no cells×M×G blowup; per-gene design
   matrices reconstruct at regression time from `received_ligands × imputed_count` (+ networks on disk).
 - **Test notebook** `build_x_test.ipynb` (bare, no docs): defaults to UC slice 4
