@@ -691,6 +691,28 @@ computes and stores the model's **x building blocks**, and saves the adata.
     adata using the shipped base-GRN/CellChat + cached tflinks: wrote a TF + L-R store consumable by
     `fit_gene_betas`. `tests/test_hvg_prep.py` updated (mocks `build_linear_factor_store`); suites 148 pass.
     Still open: the deferred pruning decision (all base-GRN candidate TFs included → large factor store).
+  - **Signature-analysis expansion: cancer/T-cell/UC gene sets + batch controls (2026-10-19).** New shared
+    module `signature_helpers.py` (MSigDB load, membership + factor-removal reporting, `add_subsample_percentiles`,
+    `filter_nonzero_interval`, the ratio/variance-ratio diagnostic plots, `add_cancer_factors`, and the
+    `run_signature` (multi cell-type) / `run_one` (single) drivers) keeps the notebooks thin. Three notebooks:
+    `signature_analysis_cervical.ipynb` + `signature_analysis_breast.ipynb` (NEW) and `signature_analysis_colon.ipynb`
+    (rewritten). Pattern: cancer-associated gene sets are added as **spatial-neighborhood FACTORS** (via
+    `add_neighborhood_scores`, split by `cell_type`, + `{ct}-proximity` density controls) and enter every T-cell
+    target fit via `custom='all'`; T-cell program gene sets are the **predicted targets** (`keep_when_overlap='factor'`
+    drops signature genes already present as factors). Each target runs 3 ways: all T types pooled, pooled + `cell_type`
+    covariate (unpenalized FWL), each T type alone (pooling uses a derived `_tcell_group` obs column since
+    `fit_gene_betas` matches one annot_value, not a list). Breast adds estrogen + `WP_BREAST_CANCER_PATHWAY`. Colon
+    rewrite mirrors `colon_test`'s subset x covariate grid (all/UC/HC/ICI x none/condition/patient/slice) predicting
+    each signature, with `CD3E` as a single-gene reference at the top. Gene sets (coworker-driven, verified in MSigDB
+    `2024.1.Hs` via gseapy; categories extended with reactome + wikipathways): T-cell targets add IFN-alpha, GOBP
+    cell-killing / granzyme / lymphocyte-mediated-immunity; cancer factors = proliferation (G2M/E2F/ANGIOGENESIS/P53/
+    KRAS up+dn/`MYC_TARGETS_V1` = the MYC answer) + metabolic (glyco/hypoxia/OXPHOS/cholesterol/ROS/glyco-gluco/pentose/
+    TCA/one-carbon-folate/purine); UC adds apical junction+surface/bile-acid/xenobiotic/inflammatory + GO
+    bicarbonate+sodium transport + defense-to-bacterium/antimicrobial; neg controls PANCREAS_BETA_CELLS +
+    SPERMATOGENESIS; vessel marker `VESSEL_PECAM1=['PECAM1']` (CD31==PECAM1) as a 1-gene factor. Overlap note: only
+    G2M-E2F (J=0.22) and GLYCOLYSIS-HYPOXIA (0.19) notable; kept all. Env: `gseapy` (+`lxml`) installed;
+    `seaborn`/`adjustText` already present. `tests/test_signature_helpers.py` 7 (synthetic data; MSigDB fetch not
+    exercised). Suites 155 pass. NOT run on real Atera/colon data here (cluster).
 - **Storage = building blocks, not products** (D12): lossless, no cells×M×G blowup; per-gene design
   matrices reconstruct at regression time from `received_ligands × imputed_count` (+ networks on disk).
 - **Test notebook** `build_x_test.ipynb` (bare, no docs): defaults to UC slice 4
