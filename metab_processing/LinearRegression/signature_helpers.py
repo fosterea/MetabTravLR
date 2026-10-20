@@ -116,6 +116,7 @@ def add_subsample_percentiles(betas_df, sub, sub_r=None, lower=15, upper=85):
     out['max_subsample_beta'] = stat(sub, np.nanmax)
     out['avg_subsample_beta'] = stat(sub, np.nanmean)
     out['var_subsample_beta'] = stat(sub, np.nanvar)
+    out['meansq_subsample_beta'] = stat(sub, lambda s: np.nanmean(np.square(s)))  # mean(beta^2)
     out['msd_subsample_beta'] = [np.nanmean((sub[f] - b0) ** 2) if f in sub.columns else np.nan
                                  for f, b0 in zip(out['factor'], out['beta'])]
     out[f'lower_{lower}_subsample_beta'] = stat(sub, lambda s: np.nanpercentile(s, lower))
@@ -214,6 +215,18 @@ def filter_and_plot_variance_ratio(res, ax=None, figsize=(10, 6), highlight_gene
     return _ratio_scatter(res, ax, figsize, 'log(|avg_subsample_beta| / subsample_variance)')
 
 
+def filter_and_plot_meansq_variance_ratio(res, ax=None, figsize=(10, 6), highlight_genes=None):
+    """mean(beta^2) / subsample variance vs beta, over factors whose interval excludes 0
+    (touch_zero). High = the beta's second moment is dominated by its mean, not its spread
+    (a stable, consistently-signed effect). Signature genes highlighted."""
+    highlight_set = set(highlight_genes or [])
+    res = filter_nonzero_interval(res, touch_zero=True).copy()
+    res['x'] = res['beta']
+    res['y'] = res['meansq_subsample_beta'] / res['var_subsample_beta']
+    res['Gene Status'] = _highlight_status(res, highlight_set)
+    return _ratio_scatter(res, ax, figsize, 'mean(beta^2) / subsample variance')
+
+
 # ---------------------------------------------------------------------------------
 # Cancer gene-set signatures as spatial-neighborhood FACTORS
 # ---------------------------------------------------------------------------------
@@ -255,7 +268,7 @@ def make_group_column(adata, cell_type_col, group_values, group_name='_group',
 def run_one(adata, name, sets, *, annot_col, annot_value, onehot_col=None, samples_name='',
             method='l1', penalty=0.005, standardize=True, n_sub=50, lower=15, upper=85,
             top=40, custom='all', metabolites=(), keep_when_overlap='factor',
-            plots=('ratio', 'variance_ratio')):
+            plots=('ratio', 'variance_ratio', 'meansq_variance_ratio')):
     """One signature fit: build the `name` pseudo-gene, fit on `annot_col==annot_value`
     cells with an optional unpenalized batch covariate `onehot_col`, resample, and plot the
     ratio diagnostics. Used by the colon notebook (fixed cell type, varying sample subset +
@@ -280,20 +293,29 @@ def run_one(adata, name, sets, *, annot_col, annot_value, onehot_col=None, sampl
         print(f'  run failed ({type(e).__name__}: {e})'); return None
     res = add_subsample_percentiles(rank_coefficients(b), sub, sub_r, lower, upper)
     display(res.head(top))
-    if not res.empty:
-        if 'ratio' in plots:
-            filter_and_plot_ratio(res, highlight_genes=genes).set_title(
-                f'{name} | {label} | |avg_beta|/INTERVAL')
-        if 'variance_ratio' in plots:
-            filter_and_plot_variance_ratio(res, highlight_genes=genes).set_title(
-                f'{name} | {label} | |avg_beta|/VARIANCE')
+    plot_res(res, genes, title=f'{name} | {label}', plots=plots)
     return res
+
+
+def plot_res(res, highlight_genes=None, *, title='', plots=('ratio', 'variance_ratio',
+                                                            'meansq_variance_ratio')):
+    """Render the selected ratio diagnostics for an (already computed / loaded) res frame.
+    The viewer notebooks call this on cached DataFrames."""
+    if res is None or res.empty:
+        print(f'(no rows to plot) {title}'); return
+    specs = {'ratio': (filter_and_plot_ratio, '|avg_beta|/INTERVAL'),
+             'variance_ratio': (filter_and_plot_variance_ratio, '|avg_beta|/VARIANCE'),
+             'meansq_variance_ratio': (filter_and_plot_meansq_variance_ratio, 'mean(beta^2)/VARIANCE')}
+    for key in plots:
+        fn, tag = specs[key]
+        fn(res, highlight_genes=highlight_genes).set_title(f'{title} | {tag}')
 
 
 def run_signature(adata, name, sets, cell_types, *, cell_type_col='cell_type',
                   method='l1', penalty=0.005, standardize=True, n_sub=50,
                   lower=15, upper=85, top=40, custom='all', metabolites=(),
-                  keep_when_overlap='factor', plots=('ratio', 'variance_ratio'),
+                  keep_when_overlap='factor',
+                  plots=('ratio', 'variance_ratio', 'meansq_variance_ratio'),
                   highlight_full_set=None):
     """Predict target signature `name` (an all-positive pseudo-gene) across cell-type
     groupings and plot the ratio diagnostics for each run. Three kinds of run:
@@ -310,10 +332,14 @@ def run_signature(adata, name, sets, cell_types, *, cell_type_col='cell_type',
     ad2 = add_gene_signature(adata, name, positive=genes,
                              keep_when_overlap=keep_when_overlap, verbose=True)
 
-    grp_col = make_group_column(ad2, cell_type_col, cell_types,
-                                group_name='_tcell_group', group_label='GROUP')
-    runs = [('all cell types (pooled)', grp_col, 'GROUP', None),
-            (f'all cell types (pooled) + {cell_type_col} covariate', grp_col, 'GROUP', cell_type_col)]
+    # Pooled / pooled+covariate runs only make sense with >1 cell type; with a single type
+    # they collapse to the per-type run (e.g. breast's lone 'T Lymphocytes'), so skip them.
+    runs = []
+    if len(cell_types) > 1:
+        grp_col = make_group_column(ad2, cell_type_col, cell_types,
+                                    group_name='_tcell_group', group_label='GROUP')
+        runs += [('all cell types (pooled)', grp_col, 'GROUP', None),
+                 (f'all cell types (pooled) + {cell_type_col} covariate', grp_col, 'GROUP', cell_type_col)]
     runs += [(f'{ct} only', cell_type_col, ct, None) for ct in cell_types]
 
     results = {}
@@ -334,9 +360,5 @@ def run_signature(adata, name, sets, cell_types, *, cell_type_col='cell_type',
         res = add_subsample_percentiles(rank_coefficients(b), sub, sub_r, lower, upper)
         results[label] = res
         display(res.head(top))
-        if not res.empty:
-            if 'ratio' in plots:
-                filter_and_plot_ratio(res, highlight_genes=highlight).set_title(f'{name} | {label}')
-            if 'variance_ratio' in plots:
-                filter_and_plot_variance_ratio(res, highlight_genes=highlight).set_title(f'{name} | {label}')
+        plot_res(res, highlight, title=f'{name} | {label}', plots=plots)
     return results

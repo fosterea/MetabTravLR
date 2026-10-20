@@ -60,6 +60,16 @@ class TableAndFilterTests(unittest.TestCase):
         self.assertAlmostEqual(out.loc[out.factor == "TF1", "msd_subsample_beta"].iloc[0],
                                float(np.mean((np.array([0.9, 1.1, 1.0]) - 1.0) ** 2)), places=6)
 
+    def test_meansq_subsample_beta_value_and_identity(self):
+        betas = pd.DataFrame({"factor": ["F"], "beta": [1.0]})
+        sub = pd.DataFrame({"F": [0.0, 2.0, 4.0]})
+        out = sh.add_subsample_percentiles(betas, sub)
+        got = out["meansq_subsample_beta"].iloc[0]
+        self.assertAlmostEqual(got, float(np.mean(np.square([0.0, 2.0, 4.0]))), places=6)
+        # mean(beta^2) == var + mean^2
+        self.assertAlmostEqual(got, float(np.var([0.0, 2.0, 4.0]) + np.mean([0.0, 2.0, 4.0]) ** 2),
+                               places=6)
+
     def test_filter_nonzero_interval_cross_vs_touch(self):
         res = pd.DataFrame({
             "factor": ["cross", "touch", "pos"],
@@ -126,6 +136,23 @@ class RunSignatureTests(unittest.TestCase):
                          method="OLS", n_sub=4, custom="all", plots=())
         self.assertIsNotNone(res)
         self.assertIn("avg_subsample_beta", res.columns)
+
+
+class PlotRenderTests(unittest.TestCase):
+    def test_ratio_plots_render(self):
+        import matplotlib
+        matplotlib.use("Agg")
+        import matplotlib.pyplot as plt
+        res = pd.DataFrame({
+            "factor": ["TF1", "TF2", "TF3"], "beta": [1.0, -2.0, 0.5],
+            "min_subsample_beta": [0.5, -2.5, 0.1], "max_subsample_beta": [1.5, -1.5, 0.9],
+            "avg_subsample_beta": [1.0, -2.0, 0.5], "var_subsample_beta": [0.1, 0.2, 0.05],
+            "meansq_subsample_beta": [1.1, 4.2, 0.3], "r": [0.3, -0.4, 0.1],
+        })
+        ax = sh.filter_and_plot_meansq_variance_ratio(res, highlight_genes=["TF1"])
+        self.assertIsNotNone(ax)
+        sh.plot_res(res, highlight_genes=["TF1"], title="t")   # all 3 ratio plots; must not raise
+        plt.close("all")
 
 
 if __name__ == "__main__":

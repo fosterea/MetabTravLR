@@ -713,6 +713,26 @@ computes and stores the model's **x building blocks**, and saves the adata.
     G2M-E2F (J=0.22) and GLYCOLYSIS-HYPOXIA (0.19) notable; kept all. Env: `gseapy` (+`lxml`) installed;
     `seaborn`/`adjustText` already present. `tests/test_signature_helpers.py` 7 (synthetic data; MSigDB fetch not
     exercised). Suites 155 pass. NOT run on real Atera/colon data here (cluster).
+  - **Signature compute split to SLURM + cached DataFrames + viewer notebooks (2026-10-20).** Three small
+    changes + a cache/dispatch system. (1) `run_signature` emits the pooled/covariate runs only when >1 cell
+    type, so breast (single `T Lymphocytes`) collapses to one per-type run. (2) `add_subsample_percentiles`
+    now also writes `meansq_subsample_beta` (mean β²) and a new plot `filter_and_plot_meansq_variance_ratio`
+    (mean(β²)/variance) was added and wired into a `plot_res` dispatcher. (3) The heavy compute moved off the
+    notebooks: `signature_configs.py` (DatasetConfig + CONFIGS cervical/breast/colon = single source of truth
+    for gene-set lists + settings + paths), `signature_batch.py` (`runspecs`, `cache_path`, `load_res`,
+    `compute_run`, `compute_dataset`), and a `signature_run.py` CLI run on SLURM via `signature_dispatch.ipynb`
+    (cervical→savio3 bigmem, breast/colon→savio3 htc — partition/QOS flagged `# VERIFY`). `compute_dataset`
+    caches one parquet per (signature, run-label) and the 3 rewritten notebooks (`signature_analysis_*`) are
+    thin VIEWERS: regenerate run labels from the config (no manifest), load the cached parquet + `_membership.json`,
+    and plot via `sh.plot_res`. Dev/review loop (design fork for simplicity → metab-dev → metab-review).
+    Reviewer-caught fixes applied: the resume short-circuit now treats a combo as done if its parquet OR a
+    `.skip` marker exists (missing-from-MSigDB sets and failed combos write a `.skip` marker), so a resubmitted
+    bigmem/24h job re-engages the short-circuit instead of re-paying the adata load + factor diffusion every
+    time; `_membership.json` is written atomically (tmp + os.replace) like the parquets; a slug-collision guard
+    raises if two (signature,label) pairs map to the same cache filename. `tests/test_signature_batch.py` (incl.
+    a compute_dataset short-circuit test that mocks `load_msigdb`/`read_h5ad` and a missing set) + 
+    `test_signature_helpers.py` (meansq value + ratio-plot render); the two suites 20 pass. Notebooks/compute
+    NOT run on real cluster data here.
 - **Storage = building blocks, not products** (D12): lossless, no cells×M×G blowup; per-gene design
   matrices reconstruct at regression time from `received_ligands × imputed_count` (+ networks on disk).
 - **Test notebook** `build_x_test.ipynb` (bare, no docs): defaults to UC slice 4
