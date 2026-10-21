@@ -112,7 +112,7 @@ CONFIGS = {
         cell_type_col='25_06_11_ICI_5K_Coarse_annotations',
         annot_col='25_06_11_ICI_5K_Coarse_annotations', cell_type='IEC',
         condition_col='240927_Condition', patient_col='25_06_11_Patient_ID_HS', sample_col='slice',
-        single_gene='CD3E',
+        single_gene='DUOX2',
         target_signatures=COLON_SIGNATURES, neg_controls=NEG_CONTROL,
         slurm_hint='savio3 htc'),
 }
