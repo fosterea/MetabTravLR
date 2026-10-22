@@ -55,6 +55,15 @@ def runspecs(cfg):
     return specs
 
 
+def all_targets(cfg):
+    """The ordered list of target names cached/plotted for `cfg`: the colon raw single gene
+    (if any), then the MSigDB target signatures, negative controls, and any MANUAL gene sets
+    (`cfg.manual_sets`, resolved from a literal gene list rather than MSigDB). Shared by the
+    compute loop and the viewer notebooks so they never drift."""
+    base = [cfg.single_gene] if (cfg.kind == 'colon' and cfg.single_gene) else []
+    return base + list(cfg.target_signatures) + list(cfg.neg_controls) + list(cfg.manual_sets)
+
+
 def cache_path(cfg, signature, label):
     return Path(cfg.cache_dir) / f'{_slug(signature)}__{_slug(label)}.parquet'
 
@@ -122,9 +131,8 @@ def compute_run(adata, name, genes, spec, cfg, raw=False):
 def compute_dataset(cfg, overwrite=False):
     """Compute + cache every (target, run-spec) result for `cfg`, skipping work already
     cached unless `overwrite=True`."""
-    target_names = (([cfg.single_gene] if cfg.kind == 'colon' else [])
-                    + list(cfg.target_signatures) + list(cfg.neg_controls))
-    raw_names = {cfg.single_gene} if cfg.kind == 'colon' else set()
+    target_names = all_targets(cfg)
+    raw_names = {cfg.single_gene} if (cfg.kind == 'colon' and cfg.single_gene) else set()
     specs = runspecs(cfg)
 
     # Guard against two distinct (signature, label) pairs slugging to the same cache file.
@@ -163,6 +171,14 @@ def compute_dataset(cfg, overwrite=False):
         membership[name] = {'present': present, 'missing': missing, 'total': len(genes),
                             'factor_removed': removed, 'remaining': remaining}
 
+    # Manual (non-MSigDB) target sets: resolve from the literal gene list.
+    for name, genes in cfg.manual_sets.items():
+        present = [g for g in genes if g in var]
+        missing = [g for g in genes if g not in var]
+        removed, remaining = sh.signature_factor_split(adata, present)
+        membership[name] = {'present': present, 'missing': missing, 'total': len(genes),
+                            'factor_removed': removed, 'remaining': remaining}
+
     for name in cfg.cancer_factors:
         genes = library.get(name)
         if genes is None:
@@ -194,11 +210,14 @@ def compute_dataset(cfg, overwrite=False):
 
     sets = {name: [g for g in library.get(name, []) if g in var]
             for name in cfg.target_signatures + cfg.neg_controls}
+    sets.update({name: [g for g in genes if g in var]
+                 for name, genes in cfg.manual_sets.items()})
 
     n_done, n_failed, n_missing, n_cached = 0, 0, 0, 0
     for name in target_names:
         raw = name in raw_names
-        missing_set = (not raw) and (name not in library)
+        # A manual set is a valid target even though it's absent from the MSigDB library.
+        missing_set = (not raw) and (name not in library) and (name not in cfg.manual_sets)
         for spec in specs:
             p = cache_path(cfg, name, spec['label'])
             m = _skip_marker(cfg, name, spec['label'])

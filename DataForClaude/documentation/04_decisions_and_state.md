@@ -733,6 +733,17 @@ computes and stores the model's **x building blocks**, and saves the adata.
     a compute_dataset short-circuit test that mocks `load_msigdb`/`read_h5ad` and a missing set) + 
     `test_signature_helpers.py` (meansq value + ratio-plot render); the two suites 20 pass. Notebooks/compute
     NOT run on real cluster data here.
+  - **Manual (non-MSigDB) negative-control set, cancers only (2026-10-22).** `DatasetConfig.manual_sets`
+    ({name: [literal gene list]}) lets a target set be resolved from a gene list instead of the MSigDB library.
+    Added `MANUAL_ISLET_NEG_CONTROL` (ABCC8, CHGA, DCX, G6PC2, PCSK1, PCSK2, PKLR, SCGN, SLC2A2, SYT13 — islet/
+    neuroendocrine, less T-cell overlap than HALLMARK_PANCREAS_BETA_CELLS) to cervical + breast only. New
+    `signature_batch.all_targets(cfg)` (single source of the cached/plotted target order: colon raw gene +
+    target_signatures + neg_controls + manual_sets) used by `compute_dataset` and all three viewers.
+    `compute_dataset` resolves manual sets' present genes + factor-split into `_membership.json` and exempts
+    them from the "missing from MSigDB" skip; viewers include them in the membership report and TARGETS, and
+    the cancer viewers got a `view('MANUAL_ISLET_NEG_CONTROL')` cell. (Also: colon `single_gene` set to DUOX2.)
+    `tests/test_signature_batch.py` +1 (manual set is a computed target, in membership with factor_removed);
+    suites 21 pass.
 - **Storage = building blocks, not products** (D12): lossless, no cells×M×G blowup; per-gene design
   matrices reconstruct at regression time from `received_ligands × imputed_count` (+ networks on disk).
 - **Test notebook** `build_x_test.ipynb` (bare, no docs): defaults to UC slice 4

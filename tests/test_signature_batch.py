@@ -240,5 +240,35 @@ class ComputeDatasetShortCircuitTests(unittest.TestCase):
             self.assertEqual(reads["n"], 1)                      # short-circuited: no reload
 
 
+class ManualSetTests(unittest.TestCase):
+    """A manual (non-MSigDB) target set is resolved from its literal gene list, computed
+    (not treated as missing), and appears in membership with the factor-split report."""
+
+    def test_manual_set_is_a_target_and_computed(self):
+        tmp = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, tmp, ignore_errors=True)
+        adata = _make_store_adata(9)
+        adata_path = os.path.join(tmp, "adata.h5ad")
+        adata.write_h5ad(adata_path)
+
+        cfg = _minimal_cfg(name="man", kind="cancer", adata_path=adata_path, cache_root=tmp,
+                           t_cell_types=["T1"], target_signatures=["PRESENT"], neg_controls=[],
+                           cancer_factors=[], vessel={}, method="OLS", n_sub=3,
+                           manual_sets={"MAN_NEG": ["A", "B"]})   # literal genes, in var
+        self.assertIn("MAN_NEG", sb.all_targets(cfg))
+
+        with mock.patch.object(sb.sh, "load_msigdb", return_value={"PRESENT": ["A", "B", "C"]}):
+            sb.compute_dataset(cfg)
+
+        import json
+        membership = json.load(open(os.path.join(cfg.cache_dir, "_membership.json")))
+        self.assertIn("MAN_NEG", membership)
+        self.assertEqual(set(membership["MAN_NEG"]["present"]), {"A", "B"})
+        self.assertIn("factor_removed", membership["MAN_NEG"])     # treated as a target
+        # computed (not skipped as "missing from MSigDB")
+        self.assertIsNotNone(sb.load_res(cfg, "MAN_NEG", "T1_only"))
+        self.assertFalse(sb._skip_marker(cfg, "MAN_NEG", "T1_only").exists())
+
+
 if __name__ == "__main__":
     unittest.main()

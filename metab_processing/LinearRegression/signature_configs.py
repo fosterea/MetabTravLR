@@ -25,6 +25,15 @@ TCELL_TARGETS = [
 ]
 NEG_CONTROL = ['HALLMARK_PANCREAS_BETA_CELLS', 'HALLMARK_SPERMATOGENESIS']
 
+# Manual (non-MSigDB) negative-control gene sets: {name: [literal gene list]}. Resolved from
+# the list directly (not the MSigDB library). Cancers only. The islet/neuroendocrine set below
+# complements HALLMARK_PANCREAS_BETA_CELLS but with less overlap with T-cell-expressed genes.
+MANUAL_NEG_CONTROLS = {
+    'MANUAL_ISLET_NEG_CONTROL': [
+        'ABCC8', 'CHGA', 'DCX', 'G6PC2', 'PCSK1', 'PCSK2', 'PKLR', 'SCGN', 'SLC2A2', 'SYT13',
+    ],
+}
+
 # --- Cancer-associated signatures ADDED AS FACTORS (spatial-neighborhood predictors) ---
 CANCER_FACTORS = [
     'HALLMARK_G2M_CHECKPOINT', 'HALLMARK_E2F_TARGETS', 'HALLMARK_ANGIOGENESIS',
@@ -62,6 +71,7 @@ class DatasetConfig:
     t_cell_types: list = field(default_factory=list)
     cancer_factors: list = field(default_factory=list)
     vessel: dict = field(default_factory=dict)
+    manual_sets: dict = field(default_factory=dict)   # {name: [literal gene list]} targets
     # colon-only
     annot_col: str = None
     cell_type: str = None
@@ -94,7 +104,7 @@ CONFIGS = {
         t_cell_types=['Naive & Memory T Cells', 'Regulatory T Cells',
                       'Cytotoxic T Cells', 'Exhausted T Cells'],
         target_signatures=TCELL_TARGETS, neg_controls=NEG_CONTROL,
-        cancer_factors=CANCER_FACTORS, vessel=VESSEL,
+        cancer_factors=CANCER_FACTORS, vessel=VESSEL, manual_sets=MANUAL_NEG_CONTROLS,
         slurm_hint='savio3 bigmem (large whole-transcriptome dataset)'),
 
     'breast': DatasetConfig(
@@ -104,6 +114,7 @@ CONFIGS = {
         t_cell_types=['T Lymphocytes'],       # single T type -> one run per signature
         target_signatures=TCELL_TARGETS, neg_controls=NEG_CONTROL,
         cancer_factors=BREAST_FACTORS + CANCER_FACTORS, vessel=VESSEL,
+        manual_sets=MANUAL_NEG_CONTROLS,
         slurm_hint='savio3 htc'),
 
     'colon': DatasetConfig(
