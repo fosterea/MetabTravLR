@@ -36,9 +36,11 @@ from metab_processing.LinearRegression.least_squares import (
     _fit_ols,
     _fit_lasso,
     _fit_elastic,
+    _fit_ridge,
     _select_cells,
     resample_cells,
     subsample_gene_betas,
+    sweep_gene_betas,
     rank_coefficients,
     plot_top_coefficients,
     plot_beta_histogram,
@@ -549,6 +551,106 @@ class ElasticNetTests(unittest.TestCase):
         df = fit_gene_betas(adata, genes=["G"], method="elastic", penalty=0.1, l1_ratio=0.3)
         self.assertFalse(df.empty)
         self.assertTrue(np.all(np.isfinite(df["beta"])))
+
+
+class RidgeTests(unittest.TestCase):
+    """`method='ridge'` dispatches to sklearn `Ridge(alpha=penalty)`: a closed-form L2 fit
+    that runs, returns finite betas, and -- unlike `l1` at the same alpha -- does NOT zero
+    out irrelevant columns. `_fit(..., method='ridge', D=<onehot>)` exercises the FWL
+    (Frisch-Waugh-Lovell) branch."""
+
+    def setUp(self):
+        rng = np.random.default_rng(11)
+        n, k = 400, 5
+        self.X = rng.normal(size=(n, k))
+        # only columns 0 and 3 are relevant.
+        self.beta_true = np.array([3.0, 0.0, 0.0, -2.0, 0.0])
+        self.y = self.X @ self.beta_true
+
+    def test_ridge_runs_and_returns_finite_betas(self):
+        beta, bD, r2 = _fit(self.X, self.y, method="ridge", penalty=1.0, standardize=True)
+        self.assertIsNone(bD)
+        self.assertEqual(beta.shape, (5,))
+        self.assertTrue(np.all(np.isfinite(beta)))
+        self.assertTrue(np.isfinite(r2))
+
+    def test_ridge_is_not_sparse_unlike_l1_at_same_alpha(self):
+        beta_ridge, _, _ = _fit(self.X, self.y, method="ridge", penalty=0.5, standardize=True)
+        beta_l1, _, _ = _fit(self.X, self.y, method="l1", penalty=0.5, standardize=True)
+        # l1 zeroes at least one of the truly-irrelevant columns at this penalty...
+        self.assertTrue(np.any(beta_l1[[1, 2, 4]] == 0.0))
+        # ...ridge (almost) never produces an exact zero.
+        self.assertEqual(int(np.sum(beta_ridge == 0.0)), 0)
+        self.assertFalse(np.allclose(beta_ridge, beta_l1))
+
+    def test_fit_ridge_matches_sklearn_directly(self):
+        from sklearn.linear_model import Ridge
+        beta, r2 = _fit_ridge(self.X, self.y, alpha=2.0)
+        ref = Ridge(alpha=2.0, fit_intercept=True).fit(self.X, self.y)
+        np.testing.assert_allclose(beta, ref.coef_)
+        self.assertAlmostEqual(r2, ref.score(self.X, self.y))
+
+    def test_fit_D_given_ridge_fwl_path_runs(self):
+        """`_fit(..., method='ridge', D=<onehot>)` -- the FWL branch mirrors the
+        l1/elastic branches: an unpenalized onehot covariate, ridge-penalized residual fit.
+        Must run and return finite coefficients for both X and D."""
+        n = self.X.shape[0]
+        grp = np.array(["A"] * (n // 2) + ["B"] * (n - n // 2))
+        D = (grp == "B").astype(float).reshape(-1, 1)
+        bX, bD, r2 = _fit(self.X, self.y, method="ridge", penalty=1.0, standardize=True, D=D)
+        self.assertEqual(bX.shape, (5,))
+        self.assertEqual(bD.shape, (1,))
+        self.assertTrue(np.all(np.isfinite(bX)))
+        self.assertTrue(np.all(np.isfinite(bD)))
+        self.assertTrue(np.isfinite(r2))
+
+    def test_fit_gene_betas_ridge_runs(self):
+        adata = _make_adata()
+        df = fit_gene_betas(adata, genes=["G"], method="ridge", penalty=0.1)
+        self.assertFalse(df.empty)
+        self.assertTrue(np.all(np.isfinite(df["beta"])))
+
+
+class SweepGeneBetasTests(unittest.TestCase):
+    """`sweep_gene_betas` refits the SAME cells at each penalty (no resampling) and
+    returns `fit_gene_betas`' columns plus `penalty`, one block of rows per penalty."""
+
+    def setUp(self):
+        self.adata = _make_adata()
+
+    def test_returns_penalty_column_with_one_block_per_penalty(self):
+        penalties = [0.01, 0.5, 5.0]
+        df = sweep_gene_betas(self.adata, "G", penalties, metabolites="all", method="l1",
+                              standardize=True)
+        self.assertIn("penalty", df.columns)
+        self.assertEqual(sorted(df["penalty"].unique().tolist()), sorted(penalties))
+        for p in penalties:
+            block = df[df["penalty"] == p]
+            self.assertEqual(set(block["factor"]), set(FACTOR_COLS) | {METAB_COL})
+
+    def test_betas_change_with_penalty(self):
+        df = sweep_gene_betas(self.adata, "G", [0.01, 5.0], metabolites="all", method="l1",
+                              standardize=True)
+        small = df[df["penalty"] == 0.01].set_index("factor")["beta"]
+        large = df[df["penalty"] == 5.0].set_index("factor")["beta"]
+        self.assertFalse(np.allclose(small.to_numpy(), large.to_numpy()))
+
+    def test_matches_fit_gene_betas_per_penalty(self):
+        """Same cells, same fit -- each penalty's block must equal a direct
+        `fit_gene_betas` call at that penalty (no resampling happening)."""
+        df = sweep_gene_betas(self.adata, "G", [0.2], metabolites="all", method="l1",
+                              standardize=True)
+        ref = fit_gene_betas(self.adata, genes=["G"], metabolites="all", method="l1",
+                             penalty=0.2, standardize=True)
+        pd.testing.assert_frame_equal(
+            df.drop(columns=["penalty"]).reset_index(drop=True), ref.reset_index(drop=True))
+
+    def test_ridge_sweep_runs_and_notes_no_zeroing(self):
+        """Ridge never zeros, but the sweep machinery itself is method-agnostic."""
+        df = sweep_gene_betas(self.adata, "G", [0.1, 10.0], metabolites="all", method="ridge",
+                              standardize=True)
+        self.assertTrue(np.all(np.isfinite(df["beta"])))
+        self.assertEqual(int((df["beta"] == 0.0).sum()), 0)
 
 
 class ClusterFactorsAndGroupsTests(unittest.TestCase):

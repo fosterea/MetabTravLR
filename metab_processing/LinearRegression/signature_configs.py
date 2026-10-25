@@ -82,6 +82,7 @@ class DatasetConfig:
     # regression settings
     method: str = 'l1'
     penalty: float = 0.005
+    l1_ratio: float = 0.5
     standardize: bool = True
     n_sub: int = 50
     lower: int = 15

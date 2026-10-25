@@ -744,6 +744,27 @@ computes and stores the model's **x building blocks**, and saves the adata.
     the cancer viewers got a `view('MANUAL_ISLET_NEG_CONTROL')` cell. (Also: colon `single_gene` set to DUOX2.)
     `tests/test_signature_batch.py` +1 (manual set is a computed target, in membership with factor_removed);
     suites 21 pass.
+  - **Ridge + settings-keyed cache + raw-beta caching + penalty sweep + test notebooks (2026-10-24).** Three
+    asks. (1 — permanent, skeptic→dev→review) `least_squares._fit` gained a dedicated `ridge` method
+    (sklearn `Ridge`, closed-form; `ElasticNet(l1_ratio=0)` is the slow/discouraged path) incl. the FWL
+    branch (`Ridge(fit_intercept=False)`). The signature cache is now KEYED BY FIT SETTINGS: a params subdir
+    `{cache_dir}/{method}_p{penalty}[_l{l1}][_nostd]/{sig}__{label}.parquet` via one `params_slug` behind
+    `cache_path` (deterministic `_num`: `0.005`≡`5e-3`); `_membership.json` stays at the cache_dir root;
+    `DatasetConfig` gained `l1_ratio`. **The old flat caches are orphaned by this (recompute once).** Raw
+    subsample betas are now cached to a second `{sig}__{label}.betas.parquet` (written BEFORE res so
+    `res.exists()⇒betas.exists()` and `_combo_done` still checks res only); `signature_helpers.subsample_stats`
+    computes 95% CI + `selection_freq` + a labeled bootstrap `p_stability` (not a frequentist p-value) from
+    the raw betas; viewers gained a `stats(sig)` cell. (2) `param_tester.ipynb` — load → optional add
+    signatures/factors → one no-subsampling fit → view betas. (3) `least_squares.sweep_gene_betas` (refit
+    across a penalty grid, same cells — reuses the point-fit path, no resampling) + `signature_helpers.
+    sweep_filter` (per-factor min/max, n_sign_flips, frac_zero, stable_sign) + `penalty_sweep_demo.ipynb`.
+    Reviewer-caught fixes applied: a now-FAILING/missing combo under `overwrite` clears its stale res+betas
+    before writing the `.skip` marker (else a later run served stale "cached" data); `sweep_filter` is
+    NaN-safe (drops NaN betas, no phantom sign flips). Caveats documented: ridge never zeros (frac_zero/
+    selection filters are L1/elastic-only); n_sub=50 CI is coarse. `tests/test_{least_squares,signature_batch,
+    signature_helpers}.py` +~40 (ridge, FWL ridge, sweep, params_slug determinism, betas round-trip, stale-
+    cache clear, subsample_stats, sweep_filter incl. +,0,- and NaN); the three suites 119 pass. Notebooks not
+    run on real cluster data here.
 - **Storage = building blocks, not products** (D12): lossless, no cells×M×G blowup; per-gene design
   matrices reconstruct at regression time from `received_ligands × imputed_count` (+ networks on disk).
 - **Test notebook** `build_x_test.ipynb` (bare, no docs): defaults to UC slice 4

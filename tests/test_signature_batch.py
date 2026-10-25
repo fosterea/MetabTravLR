@@ -137,11 +137,65 @@ class SlugAndCachePathTests(unittest.TestCase):
         self.assertEqual(sb._slug("  weird//name--here  "), "weird_name_here")
         self.assertEqual(sb._slug("T1_only"), "T1_only")
 
-    def test_cache_path_shape(self):
-        cfg = _minimal_cfg()
+    def test_cache_path_puts_file_under_params_subdir(self):
+        cfg = _minimal_cfg(method="l1", penalty=0.005, standardize=True)
         p = sb.cache_path(cfg, "HALLMARK_FOO", "T1_only")
-        self.assertEqual(p.parent.as_posix(), cfg.cache_dir)
+        self.assertEqual(p.parent.parent.as_posix(), cfg.cache_dir)
+        self.assertEqual(p.parent.name, sb.params_slug("l1", 0.005, cfg.l1_ratio, True))
         self.assertEqual(p.name, "HALLMARK_FOO__T1_only.parquet")
+
+
+class NumAndParamsSlugTests(unittest.TestCase):
+    def test_num_matches_regardless_of_literal_form(self):
+        self.assertEqual(sb._num(0.005), sb._num(5e-3))
+        self.assertEqual(sb._num(0.005), "0p005")
+
+    def test_num_handles_scientific_and_negative(self):
+        self.assertEqual(sb._num(1e-05), "1em05")
+        self.assertEqual(sb._num(-0.5), "m0p5")
+
+    def test_params_slug_basic_l1(self):
+        self.assertEqual(sb.params_slug("l1", 0.005, 0.5, True), "l1_p0p005")
+
+    def test_params_slug_elastic_adds_l1_ratio(self):
+        slug = sb.params_slug("elastic", 1.0, 0.3, True)
+        self.assertEqual(slug, "elastic_p1_l0p3")
+
+    def test_params_slug_l1_ratio_ignored_for_non_elastic(self):
+        # l1_ratio must not affect the slug for a non-elastic method.
+        a = sb.params_slug("l1", 0.5, 0.1, True)
+        b = sb.params_slug("l1", 0.5, 0.9, True)
+        self.assertEqual(a, b)
+
+    def test_params_slug_nostd_suffix(self):
+        self.assertEqual(sb.params_slug("l1", 0.005, 0.5, False), "l1_p0p005_nostd")
+        self.assertEqual(sb.params_slug("l1", 0.005, 0.5, True), "l1_p0p005")
+
+    def test_params_slug_is_deterministic_for_equal_values(self):
+        self.assertEqual(sb.params_slug("l1", 0.005, 0.5, True),
+                         sb.params_slug("l1", 5e-3, 0.5, True))
+
+
+class BetasPathAndSkipMarkerTests(unittest.TestCase):
+    def test_betas_path_shape(self):
+        cfg = _minimal_cfg(method="l1", penalty=0.005)
+        res_p = sb.cache_path(cfg, "TARGET", "T1_only")
+        betas_p = sb.betas_path(cfg, "TARGET", "T1_only")
+        self.assertEqual(betas_p.parent, res_p.parent)
+        self.assertEqual(betas_p.name, "TARGET__T1_only.betas.parquet")
+
+    def test_skip_marker_shares_params_subdir_with_cache_path(self):
+        cfg = _minimal_cfg(method="l1", penalty=0.005)
+        res_p = sb.cache_path(cfg, "TARGET", "T1_only")
+        skip_p = sb._skip_marker(cfg, "TARGET", "T1_only")
+        self.assertEqual(skip_p.parent, res_p.parent)
+        self.assertEqual(skip_p.suffix, ".skip")
+
+    def test_overrides_resolve_to_a_different_subdir(self):
+        cfg = _minimal_cfg(method="l1", penalty=0.005)
+        default_p = sb.cache_path(cfg, "TARGET", "T1_only")
+        override_p = sb.cache_path(cfg, "TARGET", "T1_only", method="ridge", penalty=1.0)
+        self.assertNotEqual(default_p.parent, override_p.parent)
 
 
 class LoadResTests(unittest.TestCase):
@@ -161,6 +215,17 @@ class LoadResTests(unittest.TestCase):
         out = sb.load_res(self.cfg, "TARGET", "T1_only")
         pd.testing.assert_frame_equal(out, df)
 
+    def test_load_betas_missing_returns_none(self):
+        self.assertIsNone(sb.load_betas(self.cfg, "NOPE", "T1_only"))
+
+    def test_load_betas_round_trips(self):
+        df = pd.DataFrame({"TF1": [0.1, 0.2], "TF2": [-0.3, -0.4]})
+        p = sb.betas_path(self.cfg, "TARGET", "T1_only")
+        p.parent.mkdir(parents=True, exist_ok=True)
+        df.to_parquet(p)
+        out = sb.load_betas(self.cfg, "TARGET", "T1_only")
+        pd.testing.assert_frame_equal(out, df)
+
 
 class ComputeRunTests(unittest.TestCase):
     def setUp(self):
@@ -170,12 +235,24 @@ class ComputeRunTests(unittest.TestCase):
     def test_returns_expected_columns(self):
         spec = {"annot_col": "cell_type", "annot_value": "T1", "onehot_col": None,
                 "subset": None, "label": "t"}
-        res = sb.compute_run(self.adata, "TARGET", ["A", "B"], spec, self.cfg, raw=False)
+        res, betas = sb.compute_run(self.adata, "TARGET", ["A", "B"], spec, self.cfg, raw=False)
         self.assertFalse(res.empty)
         for col in ("gene", "factor", "beta", "r", "r2", "model_r2", "n_cells",
                     "min_subsample_beta", "max_subsample_beta", "avg_subsample_beta",
                     "meansq_subsample_beta", "msd_subsample_beta"):
             self.assertIn(col, res.columns)
+
+    def test_returns_tuple_with_raw_betas_shape(self):
+        """`betas` is the raw `n_sub x n_selected_factors` subsample-beta frame (the `sub`
+        `subsample_gene_betas(..., return_r=True)` builds), distinct from the ranked/
+        percentiled `res` table."""
+        spec = {"annot_col": "cell_type", "annot_value": "T1", "onehot_col": None,
+                "subset": None, "label": "t"}
+        res, betas = sb.compute_run(self.adata, "TARGET", ["A", "B"], spec, self.cfg, raw=False)
+        self.assertIsInstance(betas, pd.DataFrame)
+        self.assertEqual(betas.shape[0], self.cfg.n_sub)
+        self.assertEqual(betas.shape[1], len(res))     # one column per selected factor
+        self.assertEqual(set(betas.columns), set(res["factor"]))
 
     def test_subset_spec_selects_fewer_cells(self):
         t1_idx = np.where(self.adata.obs["cell_type"] == "T1")[0]
@@ -190,8 +267,8 @@ class ComputeRunTests(unittest.TestCase):
         spec_sub = {"annot_col": "cell_type", "annot_value": "T1", "onehot_col": None,
                     "subset": ("batch", "x"), "label": "sub"}
 
-        res_full = sb.compute_run(self.adata, "TARGET", ["A", "B"], spec_full, self.cfg)
-        res_sub = sb.compute_run(self.adata, "TARGET", ["A", "B"], spec_sub, self.cfg)
+        res_full, _ = sb.compute_run(self.adata, "TARGET", ["A", "B"], spec_full, self.cfg)
+        res_sub, _ = sb.compute_run(self.adata, "TARGET", ["A", "B"], spec_sub, self.cfg)
 
         self.assertEqual(int(res_full["n_cells"].iloc[0]), len(t1_idx))
         self.assertEqual(int(res_sub["n_cells"].iloc[0]), half)
@@ -200,9 +277,10 @@ class ComputeRunTests(unittest.TestCase):
     def test_raw_true_fits_the_raw_gene(self):
         spec = {"annot_col": "cell_type", "annot_value": "T1", "onehot_col": None,
                 "subset": None, "label": "t"}
-        res = sb.compute_run(self.adata, "B", [], spec, self.cfg, raw=True)
+        res, betas = sb.compute_run(self.adata, "B", [], spec, self.cfg, raw=True)
         self.assertFalse(res.empty)
         self.assertEqual(set(res["gene"]), {"B"})
+        self.assertFalse(betas.empty)
 
 
 class ComputeDatasetShortCircuitTests(unittest.TestCase):
@@ -236,8 +314,51 @@ class ComputeDatasetShortCircuitTests(unittest.TestCase):
             self.assertIsNotNone(sb.load_res(cfg, "PRESENT", "T1_only"))
             self.assertTrue(sb._skip_marker(cfg, "MISSING", "T1_only").exists())
 
+            # Both the result parquet AND its raw-betas sidecar were written, under the
+            # same settings subdir; load_betas round-trips what compute_run returned.
+            res_path = sb.cache_path(cfg, "PRESENT", "T1_only")
+            betas_path = sb.betas_path(cfg, "PRESENT", "T1_only")
+            self.assertTrue(res_path.exists())
+            self.assertTrue(betas_path.exists())
+            self.assertEqual(betas_path.parent, res_path.parent)
+            betas_df = sb.load_betas(cfg, "PRESENT", "T1_only")
+            self.assertIsNotNone(betas_df)
+            res_df = sb.load_res(cfg, "PRESENT", "T1_only")
+            self.assertEqual(set(betas_df.columns), set(res_df["factor"]))
+            self.assertEqual(len(betas_df), cfg.n_sub)
+
             sb.compute_dataset(cfg)                              # second call
             self.assertEqual(reads["n"], 1)                      # short-circuited: no reload
+
+    def test_overwrite_then_fail_clears_stale_cache(self):
+        """overwrite=True on a now-FAILING combo must remove the prior success's res+betas
+        (not leave them next to a .skip marker, or a later run serves stale data)."""
+        tmp = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, tmp, ignore_errors=True)
+        adata = _make_store_adata(11)
+        adata_path = os.path.join(tmp, "adata.h5ad")
+        adata.write_h5ad(adata_path)
+        cfg = _minimal_cfg(name="sf", kind="cancer", adata_path=adata_path, cache_root=tmp,
+                           t_cell_types=["T1"], target_signatures=["PRESENT"], neg_controls=[],
+                           cancer_factors=[], vessel={}, method="OLS", n_sub=3)
+        lib = {"PRESENT": ["A", "B", "C"]}
+
+        with mock.patch.object(sb.sh, "load_msigdb", return_value=lib):
+            sb.compute_dataset(cfg)
+        self.assertIsNotNone(sb.load_res(cfg, "PRESENT", "T1_only"))
+        self.assertIsNotNone(sb.load_betas(cfg, "PRESENT", "T1_only"))
+
+        with mock.patch.object(sb.sh, "load_msigdb", return_value=lib), \
+             mock.patch.object(sb, "compute_run", side_effect=RuntimeError("boom")):
+            sb.compute_dataset(cfg, overwrite=True)
+        # stale res + betas gone; only the skip marker remains
+        self.assertIsNone(sb.load_res(cfg, "PRESENT", "T1_only"))
+        self.assertIsNone(sb.load_betas(cfg, "PRESENT", "T1_only"))
+        self.assertTrue(sb._skip_marker(cfg, "PRESENT", "T1_only").exists())
+
+        with mock.patch.object(sb.sh, "load_msigdb", return_value=lib):
+            sb.compute_dataset(cfg)                              # plain rerun short-circuits
+        self.assertIsNone(sb.load_res(cfg, "PRESENT", "T1_only"))   # NOT resurrected
 
 
 class ManualSetTests(unittest.TestCase):

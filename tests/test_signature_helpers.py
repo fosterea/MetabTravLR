@@ -82,6 +82,134 @@ class TableAndFilterTests(unittest.TestCase):
         self.assertEqual(set(touch.factor), {"pos"})            # touching dropped
 
 
+class SubsampleStatsTests(unittest.TestCase):
+    """`subsample_stats` computes known-answer per-factor stats from a raw `n_sub x
+    factor` betas frame: `ci_lo`/`ci_hi` (percentiles), `selection_freq` (mean(b != 0)),
+    `p_stability` (2*min(mean(b<=0), mean(b>=0)), clipped to [0,1])."""
+
+    def test_known_values_positive_factor(self):
+        # 8 values, all > 0 -> selection_freq=1, p_stability = 2*min(0, 1) clipped = 0.
+        vals = [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]
+        betas = pd.DataFrame({"POS": vals})
+        out = sh.subsample_stats(betas, ci=(0, 100)).set_index("factor")
+        self.assertAlmostEqual(out.loc["POS", "ci_lo"], np.nanpercentile(vals, 0), places=8)
+        self.assertAlmostEqual(out.loc["POS", "ci_hi"], np.nanpercentile(vals, 100), places=8)
+        self.assertAlmostEqual(out.loc["POS", "selection_freq"], 1.0, places=8)
+        self.assertAlmostEqual(out.loc["POS", "p_stability"], 0.0, places=8)
+
+    def test_known_values_mixed_sign_factor(self):
+        # half negative, half positive -> p_stability = 2*min(0.5,0.5) = 1.0 (max instability).
+        vals = [-2.0, -1.0, 1.0, 2.0]
+        betas = pd.DataFrame({"MIXED": vals})
+        out = sh.subsample_stats(betas).set_index("factor")
+        self.assertAlmostEqual(out.loc["MIXED", "selection_freq"], 1.0, places=8)
+        self.assertAlmostEqual(out.loc["MIXED", "p_stability"], 1.0, places=8)
+
+    def test_all_zero_factor(self):
+        betas = pd.DataFrame({"ZERO": [0.0, 0.0, 0.0, 0.0]})
+        out = sh.subsample_stats(betas).set_index("factor")
+        self.assertAlmostEqual(out.loc["ZERO", "selection_freq"], 0.0, places=8)
+        # all values <= 0 AND all values >= 0 -> 2*min(1,1) clipped to 1 -> max "stability".
+        self.assertAlmostEqual(out.loc["ZERO", "p_stability"], 1.0, places=8)
+        self.assertAlmostEqual(out.loc["ZERO", "ci_lo"], 0.0, places=8)
+        self.assertAlmostEqual(out.loc["ZERO", "ci_hi"], 0.0, places=8)
+
+    def test_nan_rows_excluded_from_stats(self):
+        betas = pd.DataFrame({"F": [1.0, np.nan, 1.0, np.nan]})
+        out = sh.subsample_stats(betas).set_index("factor")
+        self.assertAlmostEqual(out.loc["F", "selection_freq"], 1.0, places=8)
+
+    def test_multiple_factors_independent_columns(self):
+        betas = pd.DataFrame({"POS": [1.0, 2.0, 3.0], "ZERO": [0.0, 0.0, 0.0]})
+        out = sh.subsample_stats(betas).set_index("factor")
+        self.assertEqual(set(out.index), {"POS", "ZERO"})
+        self.assertAlmostEqual(out.loc["POS", "selection_freq"], 1.0, places=8)
+        self.assertAlmostEqual(out.loc["ZERO", "selection_freq"], 0.0, places=8)
+
+
+class SweepFilterTests(unittest.TestCase):
+    """`sweep_filter` summarizes a `sweep_gene_betas`-shaped frame (columns `factor`,
+    `beta`, `penalty`) per factor: min/max beta, sign-flip count, frac_zero, stable_sign."""
+
+    def _sweep_df(self, factor, penalties, betas):
+        return pd.DataFrame({"factor": [factor] * len(betas), "penalty": penalties,
+                             "beta": betas})
+
+    def test_sign_flip_detected(self):
+        df = self._sweep_df("FLIP", [0.1, 0.5, 1.0, 2.0], [2.0, 1.0, -1.0, -2.0])
+        out = sh.sweep_filter(df).set_index("factor")
+        self.assertEqual(out.loc["FLIP", "n_sign_flips"], 1)
+        self.assertFalse(out.loc["FLIP", "stable_sign"])
+        self.assertAlmostEqual(out.loc["FLIP", "min_beta"], -2.0, places=8)
+        self.assertAlmostEqual(out.loc["FLIP", "max_beta"], 2.0, places=8)
+        self.assertAlmostEqual(out.loc["FLIP", "frac_zero"], 0.0, places=8)
+
+    def test_zeroing_factor_no_flip(self):
+        df = self._sweep_df("ZEROING", [0.1, 0.5, 1.0, 2.0], [3.0, 2.0, 0.0, 0.0])
+        out = sh.sweep_filter(df).set_index("factor")
+        self.assertEqual(out.loc["ZEROING", "n_sign_flips"], 0)
+        self.assertTrue(out.loc["ZEROING", "stable_sign"])
+        self.assertAlmostEqual(out.loc["ZEROING", "frac_zero"], 0.5, places=8)
+
+    def test_zero_between_opposite_signs_counts_one_flip(self):
+        # +,0,- : the zero is a gap (not a third state) -> 1 flip, frac_zero reports it.
+        df = self._sweep_df("PASS0", [0.1, 0.5, 1.0], [1.0, 0.0, -1.0])
+        out = sh.sweep_filter(df).set_index("factor")
+        self.assertEqual(out.loc["PASS0", "n_sign_flips"], 1)
+        self.assertAlmostEqual(out.loc["PASS0", "frac_zero"], 1.0 / 3.0, places=8)
+        self.assertFalse(out.loc["PASS0", "stable_sign"])
+
+    def test_nan_betas_are_dropped_no_phantom_flip(self):
+        df = self._sweep_df("NANS", [0.1, 0.5, 1.0], [1.0, np.nan, -1.0])
+        out = sh.sweep_filter(df).set_index("factor")
+        self.assertEqual(out.loc["NANS", "n_sign_flips"], 1)        # NaN dropped, not a phantom flip
+        self.assertAlmostEqual(out.loc["NANS", "min_beta"], -1.0, places=8)
+        self.assertAlmostEqual(out.loc["NANS", "max_beta"], 1.0, places=8)
+
+    def test_all_nan_factor(self):
+        df = self._sweep_df("ALLNAN", [0.1, 1.0], [np.nan, np.nan])
+        out = sh.sweep_filter(df).set_index("factor")
+        self.assertEqual(out.loc["ALLNAN", "n_sign_flips"], 0)
+        self.assertTrue(out.loc["ALLNAN", "stable_sign"])
+        self.assertTrue(np.isnan(out.loc["ALLNAN", "min_beta"]))
+
+    def test_stable_positive_factor(self):
+        df = self._sweep_df("STABLE", [0.1, 1.0, 10.0], [3.0, 2.0, 1.0])
+        out = sh.sweep_filter(df).set_index("factor")
+        self.assertTrue(out.loc["STABLE", "stable_sign"])
+        self.assertEqual(out.loc["STABLE", "n_sign_flips"], 0)
+        self.assertAlmostEqual(out.loc["STABLE", "frac_zero"], 0.0, places=8)
+
+    def test_tol_treats_small_values_as_zero(self):
+        df = self._sweep_df("TOL", [0.1, 1.0], [0.001, -0.001])
+        out_no_tol = sh.sweep_filter(df, tol=0.0).set_index("factor")
+        out_tol = sh.sweep_filter(df, tol=0.01).set_index("factor")
+        self.assertEqual(out_no_tol.loc["TOL", "n_sign_flips"], 1)
+        self.assertEqual(out_tol.loc["TOL", "n_sign_flips"], 0)
+        self.assertAlmostEqual(out_tol.loc["TOL", "frac_zero"], 1.0, places=8)
+
+    def test_multiple_factors_grouped_independently(self):
+        flip = self._sweep_df("A", [0.1, 1.0], [1.0, -1.0])
+        zeroing = self._sweep_df("B", [0.1, 1.0], [1.0, 0.0])
+        df = pd.concat([flip, zeroing], ignore_index=True)
+        out = sh.sweep_filter(df).set_index("factor")
+        self.assertEqual(set(out.index), {"A", "B"})
+        self.assertEqual(out.loc["A", "n_sign_flips"], 1)
+        self.assertEqual(out.loc["B", "n_sign_flips"], 0)
+
+    def test_unordered_penalty_input_is_sorted_before_flip_counting(self):
+        """Rows given out of penalty order must be sorted internally -- same result as if
+        they'd been passed in ascending-penalty order."""
+        shuffled = pd.DataFrame({"factor": ["A"] * 3, "penalty": [1.0, 0.1, 0.5],
+                                 "beta": [-1.0, 2.0, 1.0]})
+        ordered = pd.DataFrame({"factor": ["A"] * 3, "penalty": [0.1, 0.5, 1.0],
+                                "beta": [2.0, 1.0, -1.0]})
+        out_shuffled = sh.sweep_filter(shuffled).set_index("factor")
+        out_ordered = sh.sweep_filter(ordered).set_index("factor")
+        self.assertEqual(out_shuffled.loc["A", "n_sign_flips"], out_ordered.loc["A", "n_sign_flips"])
+        self.assertEqual(out_shuffled.loc["A", "n_sign_flips"], 1)
+
+
 class FactorSplitTests(unittest.TestCase):
     def test_signature_gene_referenced_by_factor_is_removed(self):
         adata = _make_store_adata()

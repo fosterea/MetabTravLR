@@ -139,6 +139,74 @@ def filter_nonzero_interval(res, lo_col='min_subsample_beta', hi_col='max_subsam
     return res[keep].copy()
 
 
+def subsample_stats(betas, ci=(2.5, 97.5)):
+    """Per-factor stats from a RAW `n_sub x factor` subsample-betas DataFrame (e.g. the
+    `betas_path`/`load_betas` sidecar from `signature_batch`): `factor`, `ci_lo`/`ci_hi`
+    (`np.nanpercentile` over `ci`), `selection_freq` (`mean(b != 0)`), `p_stability`
+    (`2*min(mean(b<=0), mean(b>=0))`, clipped to `[0, 1]`).
+
+    CAVEATS:
+    - At the project's default `n_sub=50`, a 95% percentile CI has ~1 sample per tail --
+      coarse. Raise `n_sub` if a CI is load-bearing.
+    - Under L1 (or elastic with l1_ratio>0), betas pile up at exactly 0, so a CI of width 0
+      (or one that excludes 0) and `selection_freq` are the honest significance signals here.
+      `p_stability` is a conservative STABILITY HEURISTIC (how consistently one-signed a
+      factor's subsample betas are), NOT a frequentist p-value.
+    """
+    lo, hi = ci
+    rows = []
+    for factor in betas.columns:
+        b = betas[factor].to_numpy(dtype=float)
+        finite = b[~np.isnan(b)]
+        if finite.size == 0:
+            ci_lo = ci_hi = selection_freq = np.nan
+            p_stability = np.nan
+        else:
+            ci_lo = np.nanpercentile(finite, lo)
+            ci_hi = np.nanpercentile(finite, hi)
+            selection_freq = float(np.mean(finite != 0))
+            frac_le0 = float(np.mean(finite <= 0))
+            frac_ge0 = float(np.mean(finite >= 0))
+            p_stability = min(1.0, max(0.0, 2 * min(frac_le0, frac_ge0)))
+        rows.append((factor, ci_lo, ci_hi, selection_freq, p_stability))
+    return pd.DataFrame(rows, columns=['factor', 'ci_lo', 'ci_hi', 'selection_freq',
+                                       'p_stability'])
+
+
+def sweep_filter(sweep_df, tol=0.0):
+    """Per-factor summary of a `sweep_gene_betas` penalty-path frame (columns incl.
+    `factor`, `beta`, `penalty`): grouped by `factor`, with rows ordered by ascending
+    `penalty`, compute `min_beta`/`max_beta` (over the path), `n_sign_flips` (sign changes
+    along the path, treating `abs(b) <= tol` as 0 -- a flip is any transition between a
+    strictly-positive and a strictly-negative value, skipping zero stretches), `frac_zero`
+    (`mean(abs(b) <= tol)`), and `stable_sign` (all nonzero betas along the path share one
+    sign). Returns one row per factor.
+
+    NOTE: `frac_zero`/zeroing out is an L1/elastic-net concept -- ridge coefficients are
+    (almost) never exactly zero, so `frac_zero` will read ~0 and `n_sign_flips` is not a
+    meaningful sparsity signal on a ridge sweep. NaN betas (a factor absent from a fit) are
+    dropped before the path analysis; an all-NaN factor yields NaN min/max, 0 flips, True.
+    """
+    rows = []
+    for factor, g in sweep_df.groupby('factor'):
+        g = g.sort_values('penalty')
+        b = g['beta'].to_numpy(dtype=float)
+        b = b[~np.isnan(b)]                      # NaN carries no path info (cf. subsample_stats)
+        if b.size == 0:
+            rows.append((factor, np.nan, np.nan, 0, np.nan, True))
+            continue
+        signs = np.where(np.abs(b) <= tol, 0, np.sign(b))
+        nonzero_signs = signs[signs != 0]
+        n_sign_flips = int(np.sum(nonzero_signs[1:] != nonzero_signs[:-1])) \
+            if nonzero_signs.size > 1 else 0
+        frac_zero = float(np.mean(np.abs(b) <= tol))
+        stable_sign = bool(nonzero_signs.size == 0 or np.all(nonzero_signs == nonzero_signs[0]))
+        rows.append((factor, float(np.min(b)), float(np.max(b)), n_sign_flips, frac_zero,
+                    stable_sign))
+    return pd.DataFrame(rows, columns=['factor', 'min_beta', 'max_beta', 'n_sign_flips',
+                                       'frac_zero', 'stable_sign'])
+
+
 # ---------------------------------------------------------------------------------
 # Diagnostic plots
 # ---------------------------------------------------------------------------------

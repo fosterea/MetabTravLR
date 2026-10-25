@@ -205,6 +205,21 @@ def _fit_elastic(X, y, alpha=1.0, l1_ratio=0.5):
     return beta, r2
 
 
+def _fit_ridge(X, y, alpha=1.0):
+    """
+    Ridge (L2 regularized) regression with intercept via scikit-learn's closed-form
+    solver -- faster than `ElasticNet(l1_ratio=0)`, which sklearn itself discourages.
+    Returns (beta aligned to X's columns, r2); the fitted intercept is omitted.
+    """
+    from sklearn.linear_model import Ridge
+
+    model = Ridge(alpha=alpha, fit_intercept=True)
+    model.fit(X, y)
+    beta = model.coef_
+    r2 = model.score(X, y)
+    return beta, r2
+
+
 def _fit(X, y, *, method='OLS', penalty=1.0, l1_ratio=0.5, standardize=False, D=None):
     """Dispatch to `_fit_ols`/`_fit_lasso`/`_fit_elastic`, with an optional z-score
     standardization of X's columns first, and an optional Frisch-Waugh-Lovell (FWL)
@@ -239,6 +254,8 @@ def _fit(X, y, *, method='OLS', penalty=1.0, l1_ratio=0.5, standardize=False, D=
             beta, r2 = _fit_lasso(X, y, alpha=penalty)
         elif method == 'elastic':
             beta, r2 = _fit_elastic(X, y, alpha=penalty, l1_ratio=l1_ratio)
+        elif method == 'ridge':
+            beta, r2 = _fit_ridge(X, y, alpha=penalty)
         else:
             raise ValueError(f"invalid method: {method!r}")
         return beta, None, r2
@@ -259,6 +276,9 @@ def _fit(X, y, *, method='OLS', penalty=1.0, l1_ratio=0.5, standardize=False, D=
     elif method == 'elastic':
         from sklearn.linear_model import ElasticNet
         bX = ElasticNet(alpha=penalty, l1_ratio=l1_ratio, fit_intercept=False).fit(Xr, yr).coef_
+    elif method == 'ridge':
+        from sklearn.linear_model import Ridge
+        bX = Ridge(alpha=penalty, fit_intercept=False).fit(Xr, yr).coef_
     else:
         raise ValueError(f"invalid method: {method!r}")
 
@@ -562,6 +582,27 @@ def subsample_gene_betas(adata, gene, factors=None, *, n_subsamples=100,
     if return_r:
         return betas, pd.DataFrame(out_r, columns=selected)
     return betas
+
+
+def sweep_gene_betas(adata, gene, penalties, *, annot_col=None, annot_value=None, cells=None,
+                     metabolites='all', custom=None, method='l1', l1_ratio=0.5,
+                     standardize=False, groups=None, onehot_col=None):
+    """Fit `gene` at each penalty in `penalties` (same cells each time, via `fit_gene_betas`
+    -- no resampling) and return a tidy frame = `fit_gene_betas`'s output with an added
+    `penalty` column, one block of rows per penalty.
+
+    NOTE: 'goes to zero' is an L1/elastic concept -- ridge never zeros coefficients.
+    """
+    frames = []
+    for p in penalties:
+        df = fit_gene_betas(adata, genes=[gene], metabolites=metabolites, annot_col=annot_col,
+                            annot_value=annot_value, cells=cells, custom=custom, method=method,
+                            penalty=p, l1_ratio=l1_ratio, standardize=standardize, groups=groups,
+                            onehot_col=onehot_col)
+        df = df.copy()
+        df['penalty'] = p
+        frames.append(df)
+    return pd.concat(frames, ignore_index=True)
 
 
 def rank_coefficients(betas_df):

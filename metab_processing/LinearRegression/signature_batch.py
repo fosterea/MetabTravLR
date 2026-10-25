@@ -5,6 +5,12 @@ on SLURM; the notebooks only call `runspecs`/`load_res`.
 
 No `src/SpaceTravLR/` changes. Depends only on numpy/pandas/scanpy + `signature_helpers`
 (`sh`) + `signature_configs.DatasetConfig`.
+
+NOTE -- cache layout: cached results (and the raw-betas sidecar) are keyed by
+`(method, penalty, l1_ratio, standardize)` -- see `params_slug`/`cache_path` -- so each
+distinct settings combo gets its own subdirectory under `cfg.cache_dir`. The OLD flat
+`{cache_dir}/*.parquet` caches (written before this keying was added) are orphaned by this
+change and can be deleted.
 """
 import json
 import os
@@ -20,6 +26,24 @@ from metab_processing.LinearRegression import signature_helpers as sh
 
 def _slug(x):
     return re.sub(r'[^0-9A-Za-z]+', '_', str(x)).strip('_')
+
+
+def _num(x):
+    """Deterministic, filename-safe number -> slug: `format(x, 'g')` (so `0.005` and `5e-3`
+    collapse to the same slug), then `.`->`p`, `-`->`m`, `+` dropped. E.g. `0.005`/`5e-3` ->
+    `'0p005'`; `1e-05` -> `'1em05'`."""
+    return format(x, 'g').replace('.', 'p').replace('-', 'm').replace('+', '')
+
+
+def params_slug(method, penalty, l1_ratio, standardize):
+    """The ONE place the cache settings-slug is built: `{method}_p{penalty}` +
+    `_l{l1_ratio}` (elastic only) + `_nostd` (when standardize is False)."""
+    slug = f"{method}_p{_num(penalty)}"
+    if method == 'elastic':
+        slug += f"_l{_num(l1_ratio)}"
+    if not standardize:
+        slug += "_nostd"
+    return slug
 
 
 def _log(msg):
@@ -64,23 +88,58 @@ def all_targets(cfg):
     return base + list(cfg.target_signatures) + list(cfg.neg_controls) + list(cfg.manual_sets)
 
 
-def cache_path(cfg, signature, label):
-    return Path(cfg.cache_dir) / f'{_slug(signature)}__{_slug(label)}.parquet'
+def cache_path(cfg, signature, label, *, method=None, penalty=None, l1_ratio=None,
+              standardize=None):
+    """Cache file for (signature, label) under the settings subdir `params_slug(method,
+    penalty, l1_ratio, standardize)` -- any override left `None` resolves to `cfg`'s own
+    value. So `_membership.json` (written directly to `cfg.cache_dir`) stays
+    penalty-independent, while every (method, penalty, l1_ratio, standardize) combo gets
+    its own subdirectory of result/betas parquets."""
+    method = cfg.method if method is None else method
+    penalty = cfg.penalty if penalty is None else penalty
+    l1_ratio = cfg.l1_ratio if l1_ratio is None else l1_ratio
+    standardize = cfg.standardize if standardize is None else standardize
+    return (Path(cfg.cache_dir) / params_slug(method, penalty, l1_ratio, standardize)
+            / f'{_slug(signature)}__{_slug(label)}.parquet')
 
 
-def load_res(cfg, signature, label):
+def betas_path(cfg, signature, label, **ov):
+    """The raw-betas sidecar for (signature, label) (the n_sub x factor subsample-beta
+    DataFrame), next to the result parquet from `cache_path`."""
+    p = cache_path(cfg, signature, label, **ov)
+    return p.with_name(p.stem + '.betas.parquet')
+
+
+def load_res(cfg, signature, label, **ov):
     """Read a cached result, or None if not yet computed."""
-    p = cache_path(cfg, signature, label)
+    p = cache_path(cfg, signature, label, **ov)
     if not p.exists():
         return None
     return pd.read_parquet(p)
 
 
-def _skip_marker(cfg, signature, label):
+def load_betas(cfg, signature, label, **ov):
+    """Read the cached raw-betas sidecar, or None if not yet computed."""
+    p = betas_path(cfg, signature, label, **ov)
+    if not p.exists():
+        return None
+    return pd.read_parquet(p)
+
+
+def _clear_outputs(cfg, signature, label):
+    """Remove any stale res + betas parquets for a combo, so a combo that is being marked
+    `.skip` (missing/failed) can never leave a prior success's data behind -- `_combo_done`
+    would otherwise be satisfied by the stale res and serve it as 'cached'."""
+    for f in (cache_path(cfg, signature, label), betas_path(cfg, signature, label)):
+        if f.exists():
+            f.unlink()
+
+
+def _skip_marker(cfg, signature, label, **ov):
     """Sidecar marking a combo that was TRIED but can't produce a parquet (set missing from
     MSigDB, or the fit failed). Lets the short-circuit treat it as 'done' so a resubmitted
     job doesn't re-pay the adata load + factor diffusion just to re-skip it."""
-    return cache_path(cfg, signature, label).with_suffix('.skip')
+    return cache_path(cfg, signature, label, **ov).with_suffix('.skip')
 
 
 def _combo_done(cfg, signature, label):
@@ -89,8 +148,11 @@ def _combo_done(cfg, signature, label):
 
 def _atomic_write(path, text=None, df=None):
     """Write `text` (str) or `df` (parquet) via a tmp file + os.replace, so a job killed
-    mid-write never leaves a truncated-but-existing file the short-circuit would trust."""
+    mid-write never leaves a truncated-but-existing file the short-circuit would trust.
+    Creates the parent directory (e.g. the settings subdir from `cache_path`) lazily, so no
+    other call site needs an explicit mkdir."""
     path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
     tmp = path.with_suffix(path.suffix + '.tmp')
     if df is not None:
         df.to_parquet(tmp)
@@ -100,8 +162,10 @@ def _atomic_write(path, text=None, df=None):
 
 
 def compute_run(adata, name, genes, spec, cfg, raw=False):
-    """Run one (signature-or-gene, run-spec) fit + subsample on `adata` and return the
-    ranked/percentiled result DataFrame."""
+    """Run one (signature-or-gene, run-spec) fit + subsample on `adata` and return
+    `(res, betas)`: the ranked/percentiled result DataFrame, and the raw `n_sub x factor`
+    subsample-beta DataFrame (`sub` from `subsample_gene_betas(..., return_r=True)`) it was
+    built from -- the same object `compute_dataset` caches as the `.betas.parquet` sidecar."""
     ad = adata
     if spec['subset'] is not None:
         col, val = spec['subset']
@@ -116,16 +180,17 @@ def compute_run(adata, name, genes, spec, cfg, raw=False):
 
     b = sh.fit_gene_betas(ad2, genes=[target], annot_col=spec['annot_col'],
                           annot_value=spec['annot_value'], metabolites=[], custom='all',
-                          method=cfg.method, penalty=cfg.penalty, standardize=cfg.standardize,
-                          onehot_col=spec['onehot_col'])
+                          method=cfg.method, penalty=cfg.penalty, l1_ratio=cfg.l1_ratio,
+                          standardize=cfg.standardize, onehot_col=spec['onehot_col'])
     sub, sub_r = sh.subsample_gene_betas(
         ad2, target, factors=None, n_subsamples=cfg.n_sub, annot_col=spec['annot_col'],
         annot_value=spec['annot_value'], metabolites=[], custom='all', method=cfg.method,
-        penalty=cfg.penalty, standardize=cfg.standardize, onehot_col=spec['onehot_col'],
-        return_r=True, just_skip_samples_without_all_labels=True)
+        penalty=cfg.penalty, l1_ratio=cfg.l1_ratio, standardize=cfg.standardize,
+        onehot_col=spec['onehot_col'], return_r=True,
+        just_skip_samples_without_all_labels=True)
     res = sh.add_subsample_percentiles(sh.rank_coefficients(b), sub, sub_r,
                                        cfg.lower, cfg.upper).reset_index(drop=True)
-    return res
+    return res, sub
 
 
 def compute_dataset(cfg, overwrite=False):
@@ -228,6 +293,7 @@ def compute_dataset(cfg, overwrite=False):
             if overwrite and m.exists():
                 m.unlink()                       # redo: clear a stale skip marker
             if missing_set:
+                _clear_outputs(cfg, name, spec['label'])     # don't leave stale success behind
                 _atomic_write(m, text=f'missing from MSigDB: {name}')
                 _log(f'{cfg.name}: SKIP (not in MSigDB) {name} | {spec["label"]}')
                 n_missing += 1
@@ -235,12 +301,16 @@ def compute_dataset(cfg, overwrite=False):
             _log(f'{cfg.name}: computing {name} | {spec["label"]}')
             t0 = time.time()
             try:
-                res = compute_run(adata, name, sets.get(name, []), spec, cfg, raw=raw)
+                res, betas = compute_run(adata, name, sets.get(name, []), spec, cfg, raw=raw)
             except Exception as e:
+                _clear_outputs(cfg, name, spec['label'])     # a now-failing combo must not serve stale data
                 _atomic_write(m, text=f'{type(e).__name__}: {e}')   # mark failed -> short-circuitable
                 _log(f'{cfg.name}: FAILED {name} | {spec["label"]}: {type(e).__name__}: {e}')
                 n_failed += 1
                 continue
+            # Write betas FIRST then res, so `res.exists() => betas.exists()` always holds
+            # (the short-circuit / _combo_done checks only the res parquet).
+            _atomic_write(betas_path(cfg, name, spec['label']), df=betas)
             _atomic_write(p, df=res)
             if m.exists():
                 m.unlink()                       # success supersedes any prior skip marker
