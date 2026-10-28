@@ -25,6 +25,15 @@ TCELL_TARGETS = [
 ]
 NEG_CONTROL = ['HALLMARK_PANCREAS_BETA_CELLS', 'HALLMARK_SPERMATOGENESIS']
 
+# Metabolic program signatures also PREDICTED as targets (the melanoma metabolic block),
+# added to the cancer datasets alongside the T-cell targets. (The colon list already has
+# these.) NOTE: hypoxia/glycolysis/oxphos are also cancer FACTORS -- a gene set can be both a
+# predicted target (the cell's own program) and a neighborhood factor (a neighbor's program).
+METABOLIC_TARGETS = [
+    'HALLMARK_HYPOXIA', 'HALLMARK_GLYCOLYSIS', 'HALLMARK_OXIDATIVE_PHOSPHORYLATION',
+    'HALLMARK_FATTY_ACID_METABOLISM', 'HALLMARK_MTORC1_SIGNALING',
+]
+
 # Manual (non-MSigDB) negative-control gene sets: {name: [literal gene list]}. Resolved from
 # the list directly (not the MSigDB library). Cancers only. The islet/neuroendocrine set below
 # complements HALLMARK_PANCREAS_BETA_CELLS but with less overlap with T-cell-expressed genes.
@@ -104,7 +113,7 @@ CONFIGS = {
         cell_type_col='cell_type',
         t_cell_types=['Naive & Memory T Cells', 'Regulatory T Cells',
                       'Cytotoxic T Cells', 'Exhausted T Cells'],
-        target_signatures=TCELL_TARGETS, neg_controls=NEG_CONTROL,
+        target_signatures=TCELL_TARGETS + METABOLIC_TARGETS, neg_controls=NEG_CONTROL,
         cancer_factors=CANCER_FACTORS, vessel=VESSEL, manual_sets=MANUAL_NEG_CONTROLS,
         slurm_hint='savio3 bigmem (large whole-transcriptome dataset)'),
 
@@ -113,7 +122,7 @@ CONFIGS = {
         adata_path=f'{DATA_DIR}/Atera/FFPE_Human_Breast_Cancer/LinearRegression/hvgall_x_adata.h5ad',
         cell_type_col='cell_type',
         t_cell_types=['T Lymphocytes'],       # single T type -> one run per signature
-        target_signatures=TCELL_TARGETS, neg_controls=NEG_CONTROL,
+        target_signatures=TCELL_TARGETS + METABOLIC_TARGETS, neg_controls=NEG_CONTROL,
         cancer_factors=BREAST_FACTORS + CANCER_FACTORS, vessel=VESSEL,
         manual_sets=MANUAL_NEG_CONTROLS,
         slurm_hint='savio3 htc'),

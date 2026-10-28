@@ -284,15 +284,16 @@ def filter_and_plot_variance_ratio(res, ax=None, figsize=(10, 6), highlight_gene
 
 
 def filter_and_plot_meansq_variance_ratio(res, ax=None, figsize=(10, 6), highlight_genes=None):
-    """mean(beta^2) / subsample variance vs beta, over factors whose interval excludes 0
-    (touch_zero). High = the beta's second moment is dominated by its mean, not its spread
-    (a stable, consistently-signed effect). Signature genes highlighted."""
+    """log(mean(beta^2) / subsample variance) vs beta, over factors whose interval excludes 0
+    (touch_zero) -- logged like the other two ratio plots. High = the beta's second moment is
+    dominated by its mean, not its spread (a stable, consistently-signed effect). mean(b^2) >=
+    var always, so the ratio is >= 1 and the log >= 0. Signature genes highlighted."""
     highlight_set = set(highlight_genes or [])
     res = filter_nonzero_interval(res, touch_zero=True).copy()
     res['x'] = res['beta']
-    res['y'] = res['meansq_subsample_beta'] / res['var_subsample_beta']
+    res['y'] = np.log(res['meansq_subsample_beta'] / res['var_subsample_beta'])
     res['Gene Status'] = _highlight_status(res, highlight_set)
-    return _ratio_scatter(res, ax, figsize, 'mean(beta^2) / subsample variance')
+    return _ratio_scatter(res, ax, figsize, 'log(mean(beta^2) / subsample variance)')
 
 
 # ---------------------------------------------------------------------------------

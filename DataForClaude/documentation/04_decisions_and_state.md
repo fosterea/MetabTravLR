@@ -765,6 +765,22 @@ computes and stores the model's **x building blocks**, and saves the adata.
     signature_helpers}.py` +~40 (ridge, FWL ridge, sweep, params_slug determinism, betas round-trip, stale-
     cache clear, subsample_stats, sweep_filter incl. +,0,- and NaN); the three suites 119 pass. Notebooks not
     run on real cluster data here.
+  - **Cache migration + breast spatial panels + plotting/metabolic follow-ups (2026-10-27).**
+    `migrate_signature_cache.py` (run-once, then delete): moves old flat `{cache_dir}/*.parquet`(+`.skip`)
+    into the new `{cache_dir}/{params_slug}/` layout so caches aren't orphaned (dry-run default, `--apply`).
+    Breast viewer spatial gene-set panels (`gene_set_score`/`significant_neighborhood_factors`/
+    `plot_spatial_gene_set_panels`): T cells coloured by their target gene-set score (others grey), then a
+    panel per significant `{ct}-{SET}` neighborhood factor = that cell type coloured by the set's per-cell
+    score (recomputed from `normalized_count`; T cells overlaid red). Follow-up fixes: (1)
+    `significant_neighborhood_factors` searches ALL cell types, not just `t_cell_types` (was returning 0 --
+    the significant neighbors are cancer/stroma, not T cells); (2) panel colour capped at p95; (3) a
+    `spatial_view(sig)` + all-targets loop at the bottom of the breast viewer. Config: `METABOLIC_TARGETS`
+    (HYPOXIA/GLYCOLYSIS/OXPHOS/FATTY_ACID/MTORC1) added to cervical+breast `target_signatures` (colon already
+    had them) + per-sig `view()` cells in the cancer viewers (a set can be both a predicted target and a
+    neighborhood factor). Each viewer gained a top-of-file `PLOTS` setting threaded into `view()` via
+    `plot_res(..., plots=PLOTS)` -- breast keeps all 3 ratio plots, cervical+colon show only `variance_ratio`.
+    `filter_and_plot_meansq_variance_ratio` now LOGGED (`log(mean(beta^2)/var)`) like the other two. Helper
+    suite 23 pass; notebooks validated (not run on cluster data).
 - **Storage = building blocks, not products** (D12): lossless, no cells×M×G blowup; per-gene design
   matrices reconstruct at regression time from `received_ligands × imputed_count` (+ networks on disk).
 - **Test notebook** `build_x_test.ipynb` (bare, no docs): defaults to UC slice 4
