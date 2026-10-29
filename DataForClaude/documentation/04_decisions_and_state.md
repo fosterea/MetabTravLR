@@ -781,6 +781,15 @@ computes and stores the model's **x building blocks**, and saves the adata.
     `plot_res(..., plots=PLOTS)` -- breast keeps all 3 ratio plots, cervical+colon show only `variance_ratio`.
     `filter_and_plot_meansq_variance_ratio` now LOGGED (`log(mean(beta^2)/var)`) like the other two. Helper
     suite 23 pass; notebooks validated (not run on cluster data).
+  - **Read-params selector + ridge/L1 comparison notebook (2026-10-29).** Each viewer gained a top-of-file
+    `READ = dict(method=cfg.method, penalty=cfg.penalty, l1_ratio=cfg.l1_ratio)` (default = the config's fit,
+    l1@0.005; one commented line to switch, e.g. `READ = dict(method='ridge', penalty=800)`), threaded into
+    every `sb.load_res`/`sb.load_betas` call (`**READ`) so you choose which cached params subdir to view from.
+    Also: significant `{ct}-proximity` factors now surface as presence panels in the breast spatial view (done
+    the prior turn). New `compare_ridge_l1.ipynb`: `compare(sig, label)` draws the `log(mean(beta^2)/variance)`
+    plot for L1 and ridge **side by side on separate axes** (no over-plotting), reading two params subdirs
+    (`L1 = l1@0.005`, `RIDGE = ridge@800`); both fits must be cached. Notebook-only; validated (not run on
+    cluster data).
 - **Storage = building blocks, not products** (D12): lossless, no cells×M×G blowup; per-gene design
   matrices reconstruct at regression time from `received_ligands × imputed_count` (+ networks on disk).
 - **Test notebook** `build_x_test.ipynb` (bare, no docs): defaults to UC slice 4
