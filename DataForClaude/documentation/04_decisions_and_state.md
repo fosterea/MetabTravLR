@@ -790,6 +790,7 @@ computes and stores the model's **x building blocks**, and saves the adata.
     plot for L1 and ridge **side by side on separate axes** (no over-plotting), reading two params subdirs
     (`L1 = l1@0.005`, `RIDGE = ridge@800`); both fits must be cached. Notebook-only; validated (not run on
     cluster data).
+  - **Inline breast run+view notebook (2026-10-30).** `signature_analysis_breast_run.ipynb` -- a self-contained, old-`signature_analysis`-style notebook: loads the breast adata, adds the cancer gene-set neighborhood factors, then `run(sig)` = `sh.run_signature(...)` fits + resamples + plots each target INLINE (no SLURM cache) with a top settings cell (`METHOD/PENALTY/STANDARDIZE/N_SUB/PLOTS`) so params can be changed and re-run (e.g. ridge@800). Covers T-cell + metabolic + neg + manual targets. Complements the cache-backed `signature_analysis_breast.ipynb` viewer (left untouched).
 - **Storage = building blocks, not products** (D12): lossless, no cells×M×G blowup; per-gene design
   matrices reconstruct at regression time from `received_ligands × imputed_count` (+ networks on disk).
 - **Test notebook** `build_x_test.ipynb` (bare, no docs): defaults to UC slice 4
