@@ -103,10 +103,10 @@ class DatasetConfig:
     sample_col: str = None
     single_gene: str = None
     # regression settings
-    # method: str = 'l1'
-    # penalty: float = 0.005
-    method: str = 'ridge'
-    penalty: float = 800
+    method: str = 'l1'
+    penalty: float = 0.005
+    # method: str = 'ridge'
+    # penalty: float = 800
     l1_ratio: float = 0.5
     standardize: bool = True
     n_sub: int = 200
