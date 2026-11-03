@@ -22,6 +22,7 @@ import pandas as pd
 import scanpy as sc
 
 from metab_processing.LinearRegression import signature_helpers as sh
+from metab_processing.LinearRegression import least_squares as ls
 
 
 def _slug(x):
@@ -319,3 +320,249 @@ def compute_dataset(cfg, overwrite=False):
 
     _log(f'{cfg.name}: done -- {n_done} computed, {n_cached} cached, '
         f'{n_failed} failed, {n_missing} missing from MSigDB')
+
+
+# ---------------------------------------------------------------------------------
+# Penalty sweep over subsamples -- a thin cache/SLURM wrapper over the PURE training
+# primitive `least_squares.sweep_subsample_betas` (see that function + `signature_helpers.
+# plot_sweep_factor` for the notebook-only path with no cache). One cache file per
+# (signature, method); penalties live INSIDE the file (not in the cache path), so adding a
+# penalty to `cfg.sweep_penalties[method]` only computes the new one and UNIONS it into the
+# existing cached frame -- a cached (penalty, subsample) is never dropped.
+# ---------------------------------------------------------------------------------
+def sweep_method_slug(method, l1_ratio, standardize):
+    """Cache-settings slug for the penalty sweep: `{method}` + `_l{l1_ratio}` (elastic
+    only) + `_nostd` (when `standardize` is False) -- like `params_slug` but WITHOUT the
+    penalty, since a sweep's file holds every penalty for that method."""
+    slug = str(method)
+    if method == 'elastic':
+        slug += f"_l{_num(l1_ratio)}"
+    if not standardize:
+        slug += "_nostd"
+    return slug
+
+
+def sweep_path(cfg, signature, *, method=None, l1_ratio=None, standardize=None):
+    """Cache file for one (signature, method) sweep: `{cache_dir}/sweep/{method_slug}/
+    {signature}.parquet`. Any override left `None` resolves against `cfg`'s own value,
+    like `cache_path`."""
+    method = cfg.method if method is None else method
+    l1_ratio = cfg.l1_ratio if l1_ratio is None else l1_ratio
+    standardize = cfg.standardize if standardize is None else standardize
+    return (Path(cfg.cache_dir) / 'sweep' / sweep_method_slug(method, l1_ratio, standardize)
+            / f'{_slug(signature)}.parquet')
+
+
+def _encode_sweep_subsample(df):
+    """Parquet (pyarrow) can't write the `subsample` column as-is -- it mixes the string
+    `'full'` with int subsample ids, which pyarrow's type inference rejects. Stringify it
+    for storage only; `load_sweep` reverses this on read, so every in-memory consumer
+    (incl. the incremental-cache comparison in `compute_sweep_dataset`) still sees the
+    original `{'full', 0, 1, ...}` contract."""
+    df = df.copy()
+    df['subsample'] = df['subsample'].astype(str)
+    return df
+
+
+def _decode_sweep_subsample(df):
+    """Inverse of `_encode_sweep_subsample`: `'full'` stays a string, every other value is
+    parsed back to its int subsample id."""
+    df = df.copy()
+    df['subsample'] = df['subsample'].map(
+        lambda v: v if v == 'full' else int(v))
+    return df
+
+
+def load_sweep(cfg, signature, **ov):
+    """Read a cached penalty-sweep result (a `sweep_subsample_betas`-shaped DataFrame), or
+    None if not yet computed."""
+    p = sweep_path(cfg, signature, **ov)
+    if not p.exists():
+        return None
+    return _decode_sweep_subsample(pd.read_parquet(p))
+
+
+def _sweep_cell_types(cfg):
+    """Cell types POOLED into the single `_sweep_group` fit: `cfg.sweep_cell_types` if set,
+    else the dataset's own default (`t_cell_types` for a cancer config, `[cell_type]`
+    otherwise)."""
+    return list(cfg.sweep_cell_types) if cfg.sweep_cell_types else (
+        list(cfg.t_cell_types) if cfg.kind == 'cancer' else [cfg.cell_type])
+
+
+def _sweep_skip_marker(cfg, signature, **ov):
+    """Sidecar marking a (signature, method) sweep that was TRIED but can't be computed
+    (a target absent from MSigDB, or a fit that raised -- e.g. an empty factor matrix for
+    the pseudo-gene). Lets the short-circuit treat it as 'done' so a resubmitted job doesn't
+    re-pay the adata load + factor diffusion just to re-skip it. The sweep analogue of
+    `_skip_marker`."""
+    return sweep_path(cfg, signature, **ov).with_suffix('.skip')
+
+
+def _sweep_penalties_present(df, penalties):
+    """True if cached sweep `df` already holds every penalty in `penalties`. Float-safe:
+    compares values rounded to 12 dp, since penalties round-trip through parquet as
+    float64."""
+    have = {round(float(p), 12) for p in df['penalty'].unique()}
+    return all(round(float(p), 12) in have for p in penalties)
+
+
+def _sweep_target_done(cfg, signature, method, penalties, k):
+    """A target's sweep is 'done' (short-circuitable) if it was marked `.skip`, or its cache
+    exists with the expected subsample set (`{'full'} | {0..k-1}`) AND every requested
+    penalty. Mirrors `_combo_done`, but accounts for the sweep's INCREMENTAL penalty union
+    (a cache missing a newly-added penalty is NOT done)."""
+    if _sweep_skip_marker(cfg, signature, method=method).exists():
+        return True
+    df = load_sweep(cfg, signature, method=method)
+    if df is None:
+        return False
+    expected_subsamples = {'full'} | set(range(k))
+    return (set(df['subsample'].unique()) == expected_subsamples
+            and _sweep_penalties_present(df, penalties))
+
+
+def compute_sweep_dataset(cfg, method, overwrite=False):
+    """Compute + cache the penalty sweep (`least_squares.sweep_subsample_betas`) for every
+    resolvable target of `cfg` (`all_targets`, incl. the colon raw single gene), at every
+    penalty in `cfg.sweep_penalties[method]`.
+
+    INCREMENTAL: a target's existing cache is reused and only the penalties not already in
+    it are computed and UNIONED in, UNLESS its cached subsample set doesn't match what this
+    call expects (`{'full'} | {0..cfg.sweep_k-1}`), in which case it's recomputed fresh.
+    `overwrite=True` always recomputes fresh (ignores any existing cache).
+
+    RESUMABLE (mirrors `compute_dataset`): short-circuits BEFORE loading adata / MSigDB /
+    diffusing factors when every target is already fully cached or `.skip`-marked; a target
+    absent from MSigDB, or one whose fit raises (e.g. an empty factor matrix), is written a
+    `.skip` marker and the run continues to the next target instead of aborting."""
+    penalties = cfg.sweep_penalties[method]
+    target_names = all_targets(cfg)
+    raw_names = {cfg.single_gene} if (cfg.kind == 'colon' and cfg.single_gene) else set()
+
+    # Guard against two distinct target names slugging to the same sweep cache file.
+    fnames = [sweep_path(cfg, name, method=method).name for name in target_names]
+    if len(set(fnames)) != len(fnames):
+        dupes = sorted({f for f in fnames if fnames.count(f) > 1})
+        raise ValueError(f'{cfg.name}: sweep cache filename collision from _slug: {dupes}')
+
+    # Short-circuit a fully-done sweep BEFORE loading adata / fetching MSigDB / diffusing
+    # factors: every target is either fully cached (expected subsamples + all requested
+    # penalties) or permanently `.skip`-marked.
+    if not overwrite and all(
+            _sweep_target_done(cfg, name, method, penalties, cfg.sweep_k)
+            for name in target_names):
+        _log(f'{cfg.name}: sweep[{method}]: all cached, nothing to do')
+        return
+
+    _log(f'{cfg.name}: sweep[{method}]: reading {cfg.adata_path}')
+    adata = sc.read_h5ad(cfg.adata_path)
+    var = set(adata.var_names)
+    _log(f'{cfg.name}: sweep[{method}]: {adata.n_obs} cells, {adata.n_vars} genes')
+    library = sh.load_msigdb(cfg.dbver, cfg.categories)
+
+    # Resolve the target sets exactly as `compute_dataset` does: MSigDB target
+    # signatures + neg controls, plus manual (literal-gene-list) sets. (The colon raw
+    # single gene isn't a set -- it's swept directly, like `compute_run`'s raw path.)
+    sets = {}
+    for name in cfg.target_signatures + cfg.neg_controls:
+        genes = library.get(name)
+        if genes is not None:
+            sets[name] = [g for g in genes if g in var]
+    for name, genes in cfg.manual_sets.items():
+        sets[name] = [g for g in genes if g in var]
+
+    if cfg.kind == 'cancer':
+        cancer_sets = {name: [g for g in library.get(name, []) if g in var]
+                       for name in cfg.cancer_factors}
+        cancer_sets.update({vname: [g for g in gl if g in var]
+                            for vname, gl in cfg.vessel.items()})
+        cancer_sets = {k: v for k, v in cancer_sets.items() if v}
+        sh.add_cancer_factors(adata, cancer_sets, annot_col=cfg.cell_type_col,
+                              add_proximity=True)
+
+    # Pooled cell selection, built ONCE: every signature's sweep fits on this one group.
+    cts = _sweep_cell_types(cfg)
+    sh.make_group_column(adata, cfg.cell_type_col, cts, group_name='_sweep_group',
+                         group_label='GROUP')
+
+    expected_subsamples = {'full'} | set(range(cfg.sweep_k))
+
+    n_computed, n_cached_pen, n_skipped, n_failed = 0, 0, 0, 0
+    for sig in target_names:
+        raw = sig in raw_names
+        sp = sweep_path(cfg, sig, method=method)
+        skip = _sweep_skip_marker(cfg, sig, method=method)
+
+        if not overwrite and _sweep_target_done(cfg, sig, method, penalties, cfg.sweep_k):
+            _log(f'{cfg.name}: sweep[{method}]: CACHED {sig}')
+            n_cached_pen += len(penalties)
+            continue
+        if overwrite and skip.exists():
+            skip.unlink()                        # redo: clear a stale skip marker
+
+        # A non-raw target absent from MSigDB (and not a manual set) can never resolve ->
+        # mark `.skip` so the dataset still short-circuits next time.
+        if (not raw) and (sig not in sets):
+            if sp.exists():
+                sp.unlink()                      # don't leave a stale success behind the marker
+            _atomic_write(skip, text=f'not resolvable: {sig}')
+            _log(f'{cfg.name}: sweep[{method}]: SKIP (not resolvable) {sig}')
+            n_skipped += 1
+            continue
+
+        existing = None if overwrite else load_sweep(cfg, sig, method=method)
+        if existing is not None and set(existing['subsample'].unique()) == expected_subsamples:
+            done = {round(float(p), 12) for p in existing['penalty'].unique()}
+            missing_penalties = [p for p in penalties if round(float(p), 12) not in done]
+        else:
+            existing = None                      # mismatched/overwritten -> recompute fresh
+            missing_penalties = list(penalties)
+
+        n_cached_pen += len(penalties) - len(missing_penalties)
+        if not missing_penalties:
+            _log(f'{cfg.name}: sweep[{method}]: CACHED {sig} (0 new)')
+            continue
+
+        _log(f'{cfg.name}: sweep[{method}]: computing {sig} ({len(missing_penalties)} new, '
+            f'{len(penalties) - len(missing_penalties)} cached)')
+        try:
+            # raw single gene: sweep it directly (no pseudo-gene); else build the
+            # add_gene_signature pseudo-gene, exactly like `compute_run`'s two branches.
+            ad2 = adata if raw else sh.add_gene_signature(
+                adata, sig, positive=sets[sig], keep_when_overlap='factor', verbose=False)
+            new = ls.sweep_subsample_betas(
+                ad2, sig, missing_penalties, n_subsamples=cfg.sweep_k, include_full=True,
+                annot_col='_sweep_group', annot_value='GROUP', metabolites=[], custom='all',
+                method=method, l1_ratio=cfg.l1_ratio, standardize=cfg.standardize)
+        except Exception as e:
+            if sp.exists():
+                sp.unlink()                      # a now-failing target must not serve stale data
+            _atomic_write(skip, text=f'{type(e).__name__}: {e}')
+            _log(f'{cfg.name}: sweep[{method}]: FAILED {sig}: {type(e).__name__}: {e}')
+            n_failed += 1
+            continue
+
+        merged = (pd.concat([existing, new], ignore_index=True) if existing is not None
+                  else new)
+        merged = merged.drop_duplicates(subset=['subsample', 'penalty', 'factor'],
+                                        keep='last').reset_index(drop=True)
+        _atomic_write(sp, df=_encode_sweep_subsample(merged))
+        if skip.exists():
+            skip.unlink()                        # success supersedes any prior skip marker
+        n_computed += len(missing_penalties)
+
+    _log(f'{cfg.name}: sweep[{method}]: done -- {n_computed} penalties computed, '
+        f'{n_cached_pen} cached, {n_skipped} not resolvable, {n_failed} failed')
+
+
+def plot_cached_sweep_factor(cfg, method, target, factor, **ov):
+    """The user-facing `plot(method, target, factor)`: load `target`'s cached penalty
+    sweep for `method` and plot one factor's beta-vs-penalty curve
+    (`signature_helpers.plot_sweep_factor`). Prints a note and returns None if that sweep
+    hasn't been computed yet."""
+    df = load_sweep(cfg, target, method=method, **ov)
+    if df is None:
+        print(f'plot_cached_sweep_factor: no cached sweep for {target!r} | method={method!r}')
+        return None
+    return sh.plot_sweep_factor(df, factor)

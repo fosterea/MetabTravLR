@@ -41,6 +41,7 @@ from metab_processing.LinearRegression.least_squares import (
     resample_cells,
     subsample_gene_betas,
     sweep_gene_betas,
+    sweep_subsample_betas,
     rank_coefficients,
     plot_top_coefficients,
     plot_beta_histogram,
@@ -651,6 +652,73 @@ class SweepGeneBetasTests(unittest.TestCase):
                               standardize=True)
         self.assertTrue(np.all(np.isfinite(df["beta"])))
         self.assertEqual(int((df["beta"] == 0.0).sum()), 0)
+
+
+class SweepSubsampleBetasTests(unittest.TestCase):
+    """`sweep_subsample_betas` is the PURE training primitive for the "penalty sweep over
+    subsamples" feature: fits `gene` at every penalty, on the full selected cells AND on
+    `n_subsamples` deterministic bootstrap resamples, the SAME draws reused across
+    penalties. No cache/SLURM dependency -- notebook-usable directly."""
+
+    def setUp(self):
+        self.adata = _make_adata()
+
+    def test_returns_tidy_columns(self):
+        df = sweep_subsample_betas(self.adata, "G", [0.01, 0.1], n_subsamples=2, seed0=0)
+        self.assertEqual(list(df.columns),
+                         ["subsample", "penalty", "factor", "beta", "n_cells"])
+        self.assertFalse(df.empty)
+
+    def test_subsample_set_is_full_plus_range(self):
+        df = sweep_subsample_betas(self.adata, "G", [0.01], n_subsamples=4, seed0=0)
+        self.assertEqual(set(df["subsample"]), {"full", 0, 1, 2, 3})
+
+    def test_deterministic_given_seed0(self):
+        a = sweep_subsample_betas(self.adata, "G", [0.01, 0.5], n_subsamples=3, seed0=0)
+        b = sweep_subsample_betas(self.adata, "G", [0.01, 0.5], n_subsamples=3, seed0=0)
+        pd.testing.assert_frame_equal(a, b)
+
+    def test_full_and_subsample_n_cells_equal_pool_size(self):
+        """The 'full' rows see the whole pool (N); a bootstrap-resample's rows are the
+        SAME SIZE as the pool (with-replacement draw), even though the drawn cells differ."""
+        df = sweep_subsample_betas(self.adata, "G", [0.01], n_subsamples=3, seed0=0)
+        full_rows = df[df["subsample"] == "full"]
+        self.assertTrue((full_rows["n_cells"] == N).all())
+        for sid in range(3):
+            sub_rows = df[df["subsample"] == sid]
+            self.assertTrue((sub_rows["n_cells"] == N).all())
+
+    def test_beta_varies_across_penalties(self):
+        df = sweep_subsample_betas(self.adata, "G", [0.01, 5.0], n_subsamples=2, seed0=0,
+                                   metabolites="all", method="l1", standardize=True)
+        full = df[df["subsample"] == "full"]
+        small = full[full["penalty"] == 0.01].set_index("factor")["beta"]
+        large = full[full["penalty"] == 5.0].set_index("factor")["beta"]
+        self.assertFalse(np.allclose(small.to_numpy(), large.to_numpy()))
+
+    def test_include_full_false_omits_full(self):
+        df = sweep_subsample_betas(self.adata, "G", [0.01], n_subsamples=3, seed0=0,
+                                   include_full=False)
+        self.assertNotIn("full", set(df["subsample"]))
+        self.assertEqual(set(df["subsample"]), {0, 1, 2})
+
+    def test_bootstrap_draw_matches_resample_cells(self):
+        """Subsample 0's draw must be the exact same bootstrap as `resample_cells(seed=0)`
+        -- i.e. the same deterministic-bootstrap contract `subsample_gene_betas` uses,
+        reused here. Checked via the recovered beta: `_fit` on the manually-reproduced
+        draw must equal subsample 0's row."""
+        expected_cells = resample_cells(self.adata, seed=0)
+        X_raw = get_gene_factors(self.adata, "G", metabs="all")
+        y = self.adata[:, "G"].to_df("normalized_count")["G"]
+        Xv = X_raw.loc[expected_cells].to_numpy()
+        yv = y.loc[expected_cells].to_numpy()
+        expected_beta, _, _ = _fit(Xv, yv, method="l1", penalty=0.1, standardize=True)
+
+        df = sweep_subsample_betas(self.adata, "G", [0.1], n_subsamples=1, seed0=0,
+                                   metabolites="all", method="l1", standardize=True)
+        got = df[df["subsample"] == 0].set_index("factor")["beta"]
+        np.testing.assert_allclose(got.loc[list(X_raw.columns)].to_numpy(), expected_beta,
+                                   atol=1e-10)
 
 
 class ClusterFactorsAndGroupsTests(unittest.TestCase):

@@ -20,7 +20,7 @@ from metab_processing.LinearRegression.build_x import (
     add_gene_signature, add_neighborhood_scores, _factor_genes,
 )
 from metab_processing.LinearRegression.least_squares import (
-    fit_gene_betas, subsample_gene_betas, rank_coefficients,
+    fit_gene_betas, subsample_gene_betas, rank_coefficients, sweep_subsample_betas,
 )
 
 try:
@@ -294,6 +294,39 @@ def filter_and_plot_meansq_variance_ratio(res, ax=None, figsize=(10, 6), highlig
     res['y'] = np.log(res['meansq_subsample_beta'] / res['var_subsample_beta'])
     res['Gene Status'] = _highlight_status(res, highlight_set)
     return _ratio_scatter(res, ax, figsize, 'log(mean(beta^2) / subsample variance)')
+
+
+def plot_sweep_factor(sweep_df, factor, ax=None, figsize=(8, 5), full_label='full'):
+    """beta-vs-penalty (log x) for ONE factor from a `sweep_subsample_betas` frame: the
+    `full_label` ('full') series drawn bold, each subsample drawn as a faint thin line.
+    Takes a plain DataFrame (fresh from `sweep_subsample_betas`, or loaded from the sweep
+    cache via `signature_batch.load_sweep`) -- no cache dependency itself. Returns the
+    Axes; prints a note and returns (without plotting) if `factor` has no rows."""
+    df = sweep_df[sweep_df['factor'] == factor]
+    if ax is None:
+        _, ax = plt.subplots(figsize=figsize)
+    if df.empty:
+        print(f"plot_sweep_factor: no rows for factor {factor!r}")
+        return ax
+
+    has_full = False
+    for sid, g in df.groupby('subsample'):
+        g = g.sort_values('penalty')
+        if sid == full_label:
+            ax.plot(g['penalty'], g['beta'], lw=2.5, alpha=1.0, marker='o',
+                    color='#D55E00', label=full_label, zorder=5)
+            has_full = True
+        else:
+            ax.plot(g['penalty'], g['beta'], lw=1, alpha=0.4, color='grey', zorder=1)
+
+    ax.set_xscale('log')
+    ax.axhline(0, color='gray', lw=0.5)
+    ax.set_xlabel('penalty')
+    ax.set_ylabel('beta')
+    ax.set_title(factor)
+    if has_full:                 # only a labelled artist -> avoid an empty-legend warning
+        ax.legend()
+    return ax
 
 
 # ---------------------------------------------------------------------------------

@@ -605,6 +605,52 @@ def sweep_gene_betas(adata, gene, penalties, *, annot_col=None, annot_value=None
     return pd.concat(frames, ignore_index=True)
 
 
+def sweep_subsample_betas(adata, gene, penalties, *, n_subsamples=4, include_full=True,
+                          annot_col=None, annot_value=None, seed0=0, metabolites='all',
+                          custom=None, method='l1', l1_ratio=0.5, standardize=False):
+    """Fit `gene` at every penalty in `penalties`, both on the FULL selected cells (if
+    `include_full`) and on `n_subsamples` deterministic bootstrap resamples (seeds
+    `seed0`..`seed0+n_subsamples-1`) -- the SAME draws reused for every penalty, so the
+    penalty-path is comparable across penalties for a given subsample. This is a PURE
+    training primitive (no cache, no SLURM): intended to be called directly from a
+    notebook and handed straight to `signature_helpers.plot_sweep_factor`.
+
+    Combined cell selection only (`annot_col`/`annot_value`, a single value -- no
+    groups/onehot); pool multiple cell types by passing a derived annotation column, e.g.
+    via `signature_helpers.make_group_column`.
+
+    Returns a tidy DataFrame `[subsample, penalty, factor, beta, n_cells]`, one row per
+    (subsample, penalty, factor). `subsample` is `'full'` (if `include_full`) or an int in
+    `range(n_subsamples)`. The bootstrap draw mirrors `subsample_gene_betas`: a uniform
+    draw-with-replacement, the same size as the eligible pool, from
+    `np.random.default_rng(seed0 + i)`.
+    """
+    X_raw = get_gene_factors(adata, gene, metabs=metabolites, custom=custom)
+    y = adata[:, gene].to_df(LAYER)[gene]
+    pool_arr = _select_cells(adata, annot_col, annot_value, None).to_numpy()
+
+    draws = []
+    if include_full:
+        draws.append(('full', pool_arr))
+    for i in range(n_subsamples):
+        rng = np.random.default_rng(seed0 + i)
+        idx = rng.integers(0, len(pool_arr), len(pool_arr))
+        draws.append((i, pool_arr[idx]))
+
+    records = []
+    for sid, cells in draws:
+        Xv = X_raw.loc[cells].to_numpy()
+        yv = y.loc[cells].to_numpy()
+        for p in penalties:
+            beta, _, _ = _fit(Xv, yv, method=method, penalty=p, l1_ratio=l1_ratio,
+                              standardize=standardize, D=None)
+            for factor, b in zip(X_raw.columns, beta):
+                records.append((sid, p, factor, b, len(cells)))
+
+    return pd.DataFrame.from_records(
+        records, columns=['subsample', 'penalty', 'factor', 'beta', 'n_cells'])
+
+
 def rank_coefficients(betas_df):
     """`betas_df` sorted by |beta| descending (a copy)."""
     order = betas_df['beta'].abs().sort_values(ascending=False).index

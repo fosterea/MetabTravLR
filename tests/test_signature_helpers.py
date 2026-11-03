@@ -266,6 +266,44 @@ class RunSignatureTests(unittest.TestCase):
         self.assertIn("avg_subsample_beta", res.columns)
 
 
+class PlotSweepFactorTests(unittest.TestCase):
+    """`plot_sweep_factor` is pure plotting over a `sweep_subsample_betas`-shaped frame
+    (columns `subsample`, `penalty`, `factor`, `beta`, `n_cells`) -- no cache dependency."""
+
+    def setUp(self):
+        import matplotlib
+        matplotlib.use("Agg")
+
+    def _sweep_df(self):
+        rows = []
+        for sid in ["full", 0, 1]:
+            for p in [0.1, 1.0, 10.0]:
+                rows.append({"subsample": sid, "penalty": p, "factor": "F1",
+                            "beta": 1.0 / p if sid == "full" else 0.5 / p, "n_cells": 10})
+                rows.append({"subsample": sid, "penalty": p, "factor": "F2",
+                            "beta": -1.0 / p, "n_cells": 10})
+        return pd.DataFrame(rows)
+
+    def test_renders_and_returns_axes(self):
+        import matplotlib.pyplot as plt
+        df = self._sweep_df()
+        ax = sh.plot_sweep_factor(df, "F1")
+        self.assertIsNotNone(ax)
+        self.assertEqual(ax.get_xscale(), "log")
+        self.assertEqual(ax.get_xlabel(), "penalty")
+        self.assertEqual(ax.get_ylabel(), "beta")
+        self.assertEqual(ax.get_title(), "F1")
+        # 3 subsamples ('full', 0, 1) -> 3 lines, plus the axhline(0) reference line.
+        self.assertEqual(len(ax.get_lines()), 4)
+        plt.close("all")
+
+    def test_empty_factor_returns_without_raising(self):
+        df = self._sweep_df()
+        ax = sh.plot_sweep_factor(df, "NOPE")
+        self.assertIsNotNone(ax)
+        self.assertEqual(len(ax.get_lines()), 0)
+
+
 class PlotRenderTests(unittest.TestCase):
     def test_ratio_plots_render(self):
         import matplotlib

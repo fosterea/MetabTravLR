@@ -791,6 +791,38 @@ computes and stores the model's **x building blocks**, and saves the adata.
     (`L1 = l1@0.005`, `RIDGE = ridge@800`); both fits must be cached. Notebook-only; validated (not run on
     cluster data).
   - **Inline breast run+view notebook (2026-10-30).** `signature_analysis_breast_run.ipynb` -- a self-contained, old-`signature_analysis`-style notebook: loads the breast adata, adds the cancer gene-set neighborhood factors, then `run(sig)` = `sh.run_signature(...)` fits + resamples + plots each target INLINE (no SLURM cache) with a top settings cell (`METHOD/PENALTY/STANDARDIZE/N_SUB/PLOTS`) so params can be changed and re-run (e.g. ridge@800). Covers T-cell + metabolic + neg + manual targets. Complements the cache-backed `signature_analysis_breast.ipynb` viewer (left untouched).
+  - **Penalty sweep over subsamples (2026-11-02).** Take the data as-is plus `k` deterministic subsamples (the
+    "full" series + bootstrap draws `0..k-1`, seeds `0..k-1`) and refit a target across a penalty grid, so you
+    can see how each factor's beta moves with the penalty. **Training/plotting is pure; the SLURM cache is a thin
+    wrapper on top** (kept deliberately separate, per Foster). (1) `least_squares.sweep_subsample_betas(adata,
+    gene, penalties, n_subsamples=4, include_full=True, ...)` -- builds `X_raw`/`y` once, slices each draw once,
+    loops `_fit` over penalties; returns a tidy `[subsample, penalty, factor, beta, n_cells]` frame (`subsample`
+    in `{'full', 0..k-1}`). (2) `signature_helpers.plot_sweep_factor(sweep_df, factor)` -- one factor's
+    beta-vs-penalty (log-x), `full` bold + subsamples faint; takes a plain frame, no cache dependency. Both are
+    usable in a notebook with NO cache (`penalty_sweep_subsample_demo.ipynb`). (3) Cache layer in
+    `signature_batch`: ONE parquet per `(signature, method)` at `{cache_dir}/sweep/{method_slug}/{sig}.parquet`
+    (`sweep_method_slug` = `params_slug` WITHOUT the penalty -- all penalties live inside the file), so
+    `compute_sweep_dataset(cfg, method)` is INCREMENTAL: adding a penalty to `cfg.sweep_penalties[method]`
+    computes only the new one and UNIONS it in (dedup on `(subsample,penalty,factor)`), and a cached
+    `(penalty, subsample)` is never dropped; a mismatched subsample set (e.g. shrinking `k`) recomputes fresh.
+    Parquet can't store the mixed-type `subsample` column, so `_encode/_decode_sweep_subsample` stringify on
+    write / parse on read (in-memory contract stays `{'full', int}`). Resolves targets exactly like
+    `compute_dataset` (`all_targets`, incl. the colon raw `single_gene`, swept directly like `compute_run`'s raw
+    branch), pooled onto ONE `_sweep_group` fit (`_sweep_cell_types`: `t_cell_types` for cancers, `[cell_type]`
+    for colon; overridable via `DatasetConfig.sweep_cell_types`). Configurable in `signature_configs`:
+    `SWEEP_PENALTIES={'l1':[...7...], 'ridge':[...7...]}` (very different scales), `sweep_penalties`/`sweep_k=4`/
+    `sweep_cell_types` fields. **Resumability mirrors `compute_dataset`'s `.skip` pattern** (review findings
+    applied): dataset-level short-circuit BEFORE loading adata/MSigDB/diffusing factors when every target is
+    fully cached or `.skip`-marked; per-target `try/except` writes a `.skip` marker (clearing any stale parquet
+    first) so one unresolvable/raising target (e.g. an empty factor matrix for the pseudo-gene) doesn't abort the
+    run; a sweep filename-collision guard; `overwrite=True` clears a stale skip and recomputes. User-facing
+    `plot(method, target, factor)` = `signature_batch.plot_cached_sweep_factor(cfg, method, target, factor)`.
+    CLI `signature_sweep_run.py` (`--config/--method/--overwrite`) + sweep-dispatch cells in
+    `signature_dispatch.ipynb`. `tests/test_signature_batch.py` +~15 (slug/path, encode round-trip,
+    `_sweep_cell_types`, incremental extend/no-op, unresolvable→skip, raising→skip + others still computed,
+    short-circuit no adata re-read, skip-only dataset short-circuits, overwrite clears skip, shrink-k
+    recompute, colon raw-gene swept); `tests/test_least_squares.py` sweep-primitive tests; the three suites
+    148 pass. Notebooks ast-validated, not executed (need real data + MSigDB).
 - **Storage = building blocks, not products** (D12): lossless, no cells×M×G blowup; per-gene design
   matrices reconstruct at regression time from `received_ligands × imputed_count` (+ networks on disk).
 - **Test notebook** `build_x_test.ipynb` (bare, no docs): defaults to UC slice 4

@@ -57,6 +57,14 @@ BREAST_FACTORS = ['HALLMARK_ESTROGEN_RESPONSE_EARLY', 'HALLMARK_ESTROGEN_RESPONS
                   'WP_BREAST_CANCER_PATHWAY']
 VESSEL = {'VESSEL_PECAM1': ['PECAM1']}      # CD31 == PECAM1, a 1-gene vessel-marker factor
 
+# Penalty grid for the "penalty sweep over subsamples" feature (least_squares.
+# sweep_subsample_betas / signature_batch.compute_sweep_dataset), keyed by fit method --
+# l1 and ridge need very different scales. Shared by all three dataset configs below.
+SWEEP_PENALTIES = {
+    'l1': [0.0005, 0.001, 0.002, 0.005, 0.01, 0.02, 0.05],
+    'ridge': [50, 100, 200, 400, 800, 1600, 3200],
+}
+
 COLON_SIGNATURES = [
     'GOBP_INTESTINAL_EPITHELIAL_CELL_DIFFERENTIATION',
     'HALLMARK_TNFA_SIGNALING_VIA_NFKB', 'HALLMARK_INFLAMMATORY_RESPONSE',
@@ -81,6 +89,12 @@ class DatasetConfig:
     cancer_factors: list = field(default_factory=list)
     vessel: dict = field(default_factory=dict)
     manual_sets: dict = field(default_factory=dict)   # {name: [literal gene list]} targets
+    # penalty-sweep settings (least_squares.sweep_subsample_betas / signature_batch.
+    # compute_sweep_dataset)
+    sweep_penalties: dict = field(default_factory=dict)   # {method: [penalty, ...]}
+    sweep_k: int = 4                                      # n_subsamples for the sweep
+    sweep_cell_types: list = field(default_factory=list)  # cell types to POOL for the
+    # sweep; empty -> default resolved at compute time (signature_batch._sweep_cell_types)
     # colon-only
     annot_col: str = None
     cell_type: str = None
@@ -117,6 +131,7 @@ CONFIGS = {
                       'Cytotoxic T Cells', 'Exhausted T Cells'],
         target_signatures=TCELL_TARGETS + METABOLIC_TARGETS, neg_controls=NEG_CONTROL,
         cancer_factors=CANCER_FACTORS, vessel=VESSEL, manual_sets=MANUAL_NEG_CONTROLS,
+        sweep_penalties=SWEEP_PENALTIES,
         slurm_hint='savio3 bigmem (large whole-transcriptome dataset)'),
 
     'breast': DatasetConfig(
@@ -126,7 +141,7 @@ CONFIGS = {
         t_cell_types=['T Lymphocytes'],       # single T type -> one run per signature
         target_signatures=TCELL_TARGETS + METABOLIC_TARGETS, neg_controls=NEG_CONTROL,
         cancer_factors=BREAST_FACTORS + CANCER_FACTORS, vessel=VESSEL,
-        manual_sets=MANUAL_NEG_CONTROLS,
+        manual_sets=MANUAL_NEG_CONTROLS, sweep_penalties=SWEEP_PENALTIES,
         slurm_hint='savio3 htc'),
 
     'colon': DatasetConfig(
@@ -137,5 +152,6 @@ CONFIGS = {
         condition_col='240927_Condition', patient_col='25_06_11_Patient_ID_HS', sample_col='slice',
         single_gene='DUOX2',
         target_signatures=COLON_SIGNATURES, neg_controls=NEG_CONTROL,
+        sweep_penalties=SWEEP_PENALTIES,
         slurm_hint='savio3 htc'),
 }
