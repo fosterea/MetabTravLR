@@ -19,6 +19,14 @@ if __name__ == '__main__':
     ap = argparse.ArgumentParser()
     ap.add_argument('--config', required=True, choices=list(CONFIGS))
     ap.add_argument('--overwrite', action='store_true')
+    ap.add_argument('--targets', default=None,
+                    help='comma-separated subset of all_targets(cfg) to compute in THIS job '
+                         '(for fanning one dataset across concurrent jobs); default = all')
     args = ap.parse_args()
 
-    compute_dataset(CONFIGS[args.config], overwrite=args.overwrite)
+    targets = None
+    if args.targets is not None:
+        targets = [t for t in args.targets.split(',') if t]
+        if not targets:                      # '' or ',,' -> empty: a mistake, not "all"
+            ap.error('--targets was empty after parsing; omit it to compute all targets')
+    compute_dataset(CONFIGS[args.config], overwrite=args.overwrite, targets=targets)

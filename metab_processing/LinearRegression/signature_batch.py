@@ -151,10 +151,19 @@ def _atomic_write(path, text=None, df=None):
     """Write `text` (str) or `df` (parquet) via a tmp file + os.replace, so a job killed
     mid-write never leaves a truncated-but-existing file the short-circuit would trust.
     Creates the parent directory (e.g. the settings subdir from `cache_path`) lazily, so no
-    other call site needs an explicit mkdir."""
+    other call site needs an explicit mkdir.
+
+    The tmp name is made unique per writer (`pid.time_ns`) so that CONCURRENT jobs writing
+    the SAME destination -- which happens for the shared `_membership.json` when one
+    dataset's targets are fanned out across several SLURM jobs -- never share a tmp file.
+    With a fixed `.tmp` name, job B's `os.replace` could fire after job A already renamed
+    that tmp away and raise `FileNotFoundError`, killing B. pid alone isn't enough: fanned
+    jobs run on different nodes over a shared FS and can reuse pids, so the ns timestamp
+    disambiguates. The final `os.replace` is still atomic; concurrent writers of identical
+    content just race harmlessly to be last."""
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
-    tmp = path.with_suffix(path.suffix + '.tmp')
+    tmp = path.with_suffix(path.suffix + f'.{os.getpid()}.{time.time_ns()}.tmp')
     if df is not None:
         df.to_parquet(tmp)
     else:
@@ -194,19 +203,46 @@ def compute_run(adata, name, genes, spec, cfg, raw=False):
     return res, sub
 
 
-def compute_dataset(cfg, overwrite=False):
+def compute_dataset(cfg, overwrite=False, targets=None):
     """Compute + cache every (target, run-spec) result for `cfg`, skipping work already
-    cached unless `overwrite=True`."""
-    target_names = all_targets(cfg)
+    cached unless `overwrite=True`.
+
+    `targets` (optional): restrict the compute loop to this subset of `all_targets(cfg)`,
+    for fanning one dataset's targets out across several concurrent SLURM jobs (each writes
+    its own disjoint per-(target, label) cache files into the shared `cfg.cache_dir`). The
+    full-config membership JSON + factor diffusion are unaffected -- every job still writes
+    the complete `_membership.json` and builds all neighborhood factors, so the subset only
+    narrows which (target, spec) fits this job performs. None = every target (the default).
+    Names must be members of `all_targets(cfg)`; an unknown name is an error (fail fast
+    rather than silently compute nothing)."""
+    full_target_names = all_targets(cfg)
+    target_names = full_target_names
+    if targets is not None:
+        want = list(dict.fromkeys(targets))                 # dedupe, preserve caller order
+        unknown = [t for t in want if t not in full_target_names]
+        if unknown:
+            raise ValueError(f'{cfg.name}: unknown targets {unknown}; '
+                             f'valid targets are {full_target_names}')
+        want_set = set(want)
+        target_names = [t for t in full_target_names if t in want_set]  # keep canonical order
+        if not target_names:                                # empty selection -> nothing to do
+            _log('no targets selected, nothing to do')      # (before any adata load)
+            return
     raw_names = {cfg.single_gene} if (cfg.kind == 'colon' and cfg.single_gene) else set()
     specs = runspecs(cfg)
 
     # Guard against two distinct (signature, label) pairs slugging to the same cache file.
-    combos = [(name, spec['label']) for name in target_names for spec in specs]
-    fnames = [cache_path(cfg, name, label).name for name, label in combos]
+    # Run over the FULL target list (not just this job's subset) so a collision between two
+    # targets that land in DIFFERENT fan-out slices is still caught -- otherwise each job
+    # passes its own guard and the two jobs silently overwrite each other's cache file.
+    guard_combos = [(name, spec['label']) for name in full_target_names for spec in specs]
+    fnames = [cache_path(cfg, name, label).name for name, label in guard_combos]
     if len(set(fnames)) != len(fnames):
         dupes = sorted({f for f in fnames if fnames.count(f) > 1})
         raise ValueError(f'{cfg.name}: cache filename collision from _slug: {dupes}')
+
+    # This job's own combos drive the short-circuit + compute loop (its slice only).
+    combos = [(name, spec['label']) for name in target_names for spec in specs]
 
     # Short-circuit a fully-done dataset BEFORE loading adata / fetching MSigDB / diffusing
     # factors. A combo is "done" if its parquet OR a .skip marker exists -- so a dataset with

@@ -823,6 +823,23 @@ computes and stores the model's **x building blocks**, and saves the adata.
     short-circuit no adata re-read, skip-only dataset short-circuits, overwrite clears skip, shrink-k
     recompute, colon raw-gene swept); `tests/test_least_squares.py` sweep-primitive tests; the three suites
     148 pass. Notebooks ast-validated, not executed (need real data + MSigDB).
+- **Signature fan-out across concurrent jobs (2026-11-09).** `compute_dataset` gained an optional
+    `targets=` kwarg (a subset of `all_targets(cfg)`; dedupe+canonical-order; unknown name → `ValueError`;
+    empty → early no-op before any adata load) and `signature_run.py` a matching `--targets a,b,c` flag
+    (empty value → argparse error), so ONE dataset's targets can be split across several SLURM jobs that run
+    at once (cervical/breast when a single job is too slow). Safe because results are cached per
+    `(target, run-spec)` → slices write disjoint files into the shared `cache_dir`; `_membership.json` +
+    neighborhood factors are still rebuilt in full by every job (only the per-target fits are split).
+    `signature_dispatch.ipynb` gained TWO sections: **Single slice (manual)** (cell 1 picks `sel` = a slice
+    of `all_targets(cfg)`, e.g. last 75% `targets[len//4:]`; cell 2 dispatches it as ONE `--targets` job) and
+    **Parallel fan-out** (`np.array_split(all_targets(cfg), n_jobs)` → one job per contiguous slice). No change
+    to the sweep path or the viewers (read merged cache). **Reviewed (metab-review)** — fixed before commit:
+    (1) MAJOR concurrency race — `_atomic_write` now uses a unique tmp name (`pid.time_ns`) so concurrent jobs
+    writing the shared `_membership.json` can't `FileNotFoundError` each other on `os.replace`; (2) the slug
+    collision guard runs over the FULL target list (not just this job's slice) so a cross-slice collision still
+    raises. `tests/test_signature_batch.py` +7 (subset restricts compute + full membership; unknown→raises;
+    disjoint slices reproduce the full-run cache frame-for-frame; dedupe/unordered; neg_control-in-slice;
+    empty→no-op-no-adata-read; cross-slice collision guard); batch+helpers suites 78 pass.
 - **Storage = building blocks, not products** (D12): lossless, no cells×M×G blowup; per-gene design
   matrices reconstruct at regression time from `received_ligands × imputed_count` (+ networks on disk).
 - **Test notebook** `build_x_test.ipynb` (bare, no docs): defaults to UC slice 4

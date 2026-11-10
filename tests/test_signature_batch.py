@@ -361,6 +361,125 @@ class ComputeDatasetShortCircuitTests(unittest.TestCase):
         self.assertIsNone(sb.load_res(cfg, "PRESENT", "T1_only"))   # NOT resurrected
 
 
+class ComputeDatasetTargetsSubsetTests(unittest.TestCase):
+    """`compute_dataset(cfg, targets=...)` restricts the compute loop to a subset of
+    `all_targets(cfg)` -- the mechanism behind fanning one dataset across concurrent jobs.
+    Disjoint slices must (a) each compute only their own targets and (b) together reproduce
+    exactly the full-run cache."""
+
+    def _setup(self, seed):
+        tmp = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, tmp, ignore_errors=True)
+        adata = _make_store_adata(seed)
+        adata_path = os.path.join(tmp, "adata.h5ad")
+        adata.write_h5ad(adata_path)
+        cfg = _minimal_cfg(name="sub", kind="cancer", adata_path=adata_path, cache_root=tmp,
+                           t_cell_types=["T1"],                    # single T type -> one spec
+                           target_signatures=["S1", "S2", "S3"], neg_controls=[],
+                           cancer_factors=[], vessel={}, method="OLS", n_sub=3)
+        library = {"S1": ["A", "B", "C"], "S2": ["A", "B", "D"], "S3": ["B", "C", "D"]}
+        return cfg, library
+
+    def test_targets_restricts_compute_to_the_subset(self):
+        cfg, library = self._setup(21)
+        with mock.patch.object(sb.sh, "load_msigdb", return_value=library):
+            sb.compute_dataset(cfg, targets=["S2"])
+        # Only S2 computed; S1/S3 left entirely uncomputed (no res, no skip marker).
+        self.assertIsNotNone(sb.load_res(cfg, "S2", "T1_only"))
+        for other in ("S1", "S3"):
+            self.assertIsNone(sb.load_res(cfg, other, "T1_only"))
+            self.assertFalse(sb._skip_marker(cfg, other, "T1_only").exists())
+        # Membership is still written in FULL (every job needs the complete sidecar).
+        import json
+        membership = json.load(open(os.path.join(cfg.cache_dir, "_membership.json")))
+        self.assertEqual({"S1", "S2", "S3"}, set(membership))
+
+    def test_unknown_target_raises(self):
+        cfg, library = self._setup(22)
+        with mock.patch.object(sb.sh, "load_msigdb", return_value=library):
+            with self.assertRaises(ValueError):
+                sb.compute_dataset(cfg, targets=["S2", "NOPE"])
+
+    def test_duplicate_and_unordered_targets_dedupe(self):
+        cfg, library = self._setup(24)
+        with mock.patch.object(sb.sh, "load_msigdb", return_value=library):
+            # reversed order + a duplicate -> deduped, both computed, no error
+            sb.compute_dataset(cfg, targets=["S2", "S1", "S2"])
+        self.assertIsNotNone(sb.load_res(cfg, "S1", "T1_only"))
+        self.assertIsNotNone(sb.load_res(cfg, "S2", "T1_only"))
+        self.assertIsNone(sb.load_res(cfg, "S3", "T1_only"))
+
+    def test_neg_control_target_in_slice(self):
+        tmp = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, tmp, ignore_errors=True)
+        adata = _make_store_adata(25)
+        adata_path = os.path.join(tmp, "adata.h5ad")
+        adata.write_h5ad(adata_path)
+        cfg = _minimal_cfg(name="nc", kind="cancer", adata_path=adata_path, cache_root=tmp,
+                           t_cell_types=["T1"], target_signatures=["S1"],
+                           neg_controls=["NC"], cancer_factors=[], vessel={},
+                           method="OLS", n_sub=3)
+        library = {"S1": ["A", "B", "C"], "NC": ["B", "C", "D"]}
+        # A neg_control is a valid target name (via all_targets) and must be selectable.
+        self.assertIn("NC", sb.all_targets(cfg))
+        with mock.patch.object(sb.sh, "load_msigdb", return_value=library):
+            sb.compute_dataset(cfg, targets=["NC"])
+        self.assertIsNotNone(sb.load_res(cfg, "NC", "T1_only"))
+        self.assertIsNone(sb.load_res(cfg, "S1", "T1_only"))
+
+    def test_empty_targets_is_a_noop_without_loading_adata(self):
+        cfg, library = self._setup(26)
+        reads = {"n": 0}
+        real_read = sb.sc.read_h5ad
+
+        def counting_read(path, *a, **k):
+            reads["n"] += 1
+            return real_read(path, *a, **k)
+
+        with mock.patch.object(sb.sh, "load_msigdb", return_value=library), \
+             mock.patch.object(sb.sc, "read_h5ad", side_effect=counting_read):
+            sb.compute_dataset(cfg, targets=[])          # empty selection
+        self.assertEqual(reads["n"], 0)                   # returned before any adata load
+        for name in ("S1", "S2", "S3"):
+            self.assertIsNone(sb.load_res(cfg, name, "T1_only"))
+        self.assertFalse(os.path.exists(os.path.join(cfg.cache_dir, "_membership.json")))
+
+    def test_collision_guard_runs_over_full_list_not_just_slice(self):
+        # Two target names that _slug to the SAME cache filename but sit in DIFFERENT slices.
+        # The guard must still raise, or two fan-out jobs would overwrite each other's file.
+        tmp = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, tmp, ignore_errors=True)
+        adata = _make_store_adata(27)
+        adata_path = os.path.join(tmp, "adata.h5ad")
+        adata.write_h5ad(adata_path)
+        cfg = _minimal_cfg(name="col", kind="cancer", adata_path=adata_path, cache_root=tmp,
+                           t_cell_types=["T1"], target_signatures=["A-B", "A_B"],  # both -> 'A_B'
+                           neg_controls=[], cancer_factors=[], vessel={},
+                           method="OLS", n_sub=3)
+        # Select only ONE of the colliding pair; the guard over the full list still fires.
+        with self.assertRaises(ValueError):
+            sb.compute_dataset(cfg, targets=["A-B"])
+
+    def test_disjoint_slices_reproduce_full_run(self):
+        # Full run into one cache dir.
+        cfg_full, library = self._setup(23)
+        with mock.patch.object(sb.sh, "load_msigdb", return_value=library):
+            sb.compute_dataset(cfg_full)
+
+        # Two disjoint slices into a SEPARATE cache dir (same adata/library/seed).
+        cfg_a, lib_a = self._setup(23)
+        with mock.patch.object(sb.sh, "load_msigdb", return_value=lib_a):
+            sb.compute_dataset(cfg_a, targets=["S1"])
+            sb.compute_dataset(cfg_a, targets=["S2", "S3"])
+
+        # Same set of result files, and each (target) result is numerically identical.
+        for name in ("S1", "S2", "S3"):
+            full = sb.load_res(cfg_full, name, "T1_only")
+            split = sb.load_res(cfg_a, name, "T1_only")
+            self.assertIsNotNone(split, f"{name} missing from the split run")
+            pd.testing.assert_frame_equal(full, split)
+
+
 class ManualSetTests(unittest.TestCase):
     """A manual (non-MSigDB) target set is resolved from its literal gene list, computed
     (not treated as missing), and appears in membership with the factor-split report."""
