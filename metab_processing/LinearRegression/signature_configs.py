@@ -76,6 +76,11 @@ COLON_SIGNATURES = [
 ]
 
 
+# SLC transporter genes (SLC#A#, and SLCO#X# e.g. SLCO1B1); the `$` excludes pseudogenes
+# like SLC2A1P.
+SLC_REGEX = r'^SLC([0-9]+A[0-9]+|O[0-9]+[A-Z][0-9]+)$'
+
+
 @dataclass
 class DatasetConfig:
     name: str                       # short key, also the cache subdir
@@ -109,6 +114,8 @@ class DatasetConfig:
     # penalty: float = 800
     l1_ratio: float = 0.5
     standardize: bool = True
+    factor_group: str = 'nbhd'      # 'nbhd' (cancer neighborhood factors) | 'slc' (SLC genes)
+    slc_pattern: str = SLC_REGEX    # var_names regex selecting the SLC factors
     n_sub: int = 200
     lower: int = 15
     upper: int = 85
@@ -119,7 +126,8 @@ class DatasetConfig:
 
     @property
     def cache_dir(self):
-        return f'{self.cache_root}/{self.name}'
+        base = f'{self.cache_root}/{self.name}'
+        return base if self.factor_group == 'nbhd' else f'{base}/fg_{self.factor_group}'
 
 
 CONFIGS = {

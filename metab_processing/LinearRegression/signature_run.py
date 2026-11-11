@@ -3,6 +3,7 @@
 (`signature_configs.CONFIGS`), so heavy compute runs on SLURM instead of in a notebook."""
 import argparse
 import sys
+from dataclasses import replace
 from pathlib import Path
 
 _root = next((p for p in Path(__file__).resolve().parents
@@ -18,6 +19,8 @@ from metab_processing.LinearRegression.signature_configs import CONFIGS
 if __name__ == '__main__':
     ap = argparse.ArgumentParser()
     ap.add_argument('--config', required=True, choices=list(CONFIGS))
+    ap.add_argument('--factor-group', default='nbhd', choices=['nbhd', 'slc'],
+                    help="factor block: cancer neighborhood ('nbhd') or cell-autonomous SLC genes")
     ap.add_argument('--overwrite', action='store_true')
     ap.add_argument('--targets', default=None,
                     help='comma-separated subset of all_targets(cfg) to compute in THIS job '
@@ -29,4 +32,7 @@ if __name__ == '__main__':
         targets = [t for t in args.targets.split(',') if t]
         if not targets:                      # '' or ',,' -> empty: a mistake, not "all"
             ap.error('--targets was empty after parsing; omit it to compute all targets')
-    compute_dataset(CONFIGS[args.config], overwrite=args.overwrite, targets=targets)
+    cfg = CONFIGS[args.config]
+    if args.factor_group != cfg.factor_group:
+        cfg = replace(cfg, factor_group=args.factor_group)
+    compute_dataset(cfg, overwrite=args.overwrite, targets=targets)

@@ -654,6 +654,26 @@ def add_neighborhood_scores(adata, gene_sets, *, annot_col=None,
     return _merge_custom(adata, received)
 
 
+def add_expression_factors(adata, genes, *, layer=LAYER, verbose=False):
+    """Add each gene's OWN per-cell expression (`layer`) as a cell-autonomous column in the
+    shared custom-factors block (obsm['x_custom'] + uns['x_custom_cols'], via _merge_custom),
+    so it becomes a predictor for any fit with custom='all' -- i.e. added like a TF, NOT
+    spatially diffused. `genes` filtered to those present in adata.var_names (missing ones
+    warned + skipped). IDEMPOTENT BY NAME (a column name already in x_custom_cols is skipped
+    by _merge_custom). Returns adata."""
+    present = [g for g in genes if g in adata.var_names]
+    missing = [g for g in genes if g not in adata.var_names]
+    if missing:
+        warnings.warn(f'add_expression_factors: {len(missing)} gene(s) not in adata, '
+                      f'skipped: {missing[:10]}')
+    if not present:
+        return adata
+    if verbose:
+        print(f'add_expression_factors: adding {len(present)} cell-autonomous factors')
+    df = adata[:, present].to_df(layer)
+    return _merge_custom(adata, df)
+
+
 def build_x_adata(adata, out_path, *, focus_genes, metabolites=None, setup_dir=None,
                   annot='cell_type', cluster_annot='cell_type_int', run_commot=False,
                   radius=300, contact_distance=50, scale_factor=1,

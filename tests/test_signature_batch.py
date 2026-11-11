@@ -805,5 +805,179 @@ class ComputeSweepDatasetResumabilityTests(unittest.TestCase):
         self.assertIsNotNone(sb.load_sweep(cfg, "PRESENT", method="l1"))
 
 
+SLC_EXTRA = ["SLC2A1", "SLCO1B1", "SLC2A1P", "CD8A"]
+
+
+def _make_slc_adata(seed=0):
+    """`_make_store_adata` plus extra genes: two true SLC transporters (SLC2A1, SLCO1B1), an
+    SLC pseudogene (SLC2A1P) and a non-SLC gene (CD8A), with distinct per-cell expression."""
+    base = _make_store_adata(seed)
+    rng = np.random.default_rng(seed + 1000)
+    extra = (rng.random((N, len(SLC_EXTRA))).astype(np.float32) + 0.5)
+    X = np.hstack([base.X, extra])
+    a = ad.AnnData(X=X.copy())
+    a.var_names = GENES + SLC_EXTRA
+    a.obs_names = base.obs_names
+    a.layers["normalized_count"] = X.copy()
+    a.obsm["spatial"] = base.obsm["spatial"]
+    a.obs["cell_type"] = base.obs["cell_type"]
+    a.obsm["x_factors"] = base.obsm["x_factors"]
+    for k in ("x_factors_cols", "x_factor_map", "x_genes"):
+        a.uns[k] = base.uns[k]
+    return a
+
+
+class FactorGroupTests(unittest.TestCase):
+    """The SLC factor group: cache_dir routing, cell-autonomous expression factors, the
+    compute_dataset branch, and the validation / sweep guards."""
+
+    def _slc_setup(self, seed, **ov):
+        tmp = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, tmp, ignore_errors=True)
+        adata_path = os.path.join(tmp, "adata.h5ad")
+        _make_slc_adata(seed).write_h5ad(adata_path)
+        kw = dict(name="fg", kind="cancer", adata_path=adata_path, cache_root=tmp,
+                  t_cell_types=["T1"], target_signatures=["S1"], neg_controls=[],
+                  cancer_factors=[], vessel={}, method="OLS", n_sub=3)
+        kw.update(ov)
+        return _minimal_cfg(**kw), {"S1": ["A", "B", "C"]}
+
+    def test_cache_dir_nbhd_unchanged_and_slc_nested(self):
+        nb = _minimal_cfg(name="nm", cache_root="/root")
+        self.assertEqual("/root/nm", nb.cache_dir)
+        self.assertEqual("nbhd", nb.factor_group)
+        sl = _minimal_cfg(name="nm", cache_root="/root", factor_group="slc")
+        self.assertEqual("/root/nm/fg_slc", sl.cache_dir)
+
+    def test_slc_regex_selects_only_transporters(self):
+        from metab_processing.LinearRegression import signature_helpers as sh
+        from metab_processing.LinearRegression.signature_configs import SLC_REGEX
+        a = _make_slc_adata(1)
+        self.assertEqual(["SLC2A1", "SLCO1B1"], sh.add_slc_factors(a, SLC_REGEX, verbose=False))
+        self.assertEqual(["SLC2A1", "SLCO1B1"], list(a.uns["x_custom_cols"]))
+        for g in ("SLC2A1P", "CD8A"):
+            self.assertNotIn(g, a.uns["x_custom_cols"])
+
+    def test_expression_factors_equal_per_cell_expression(self):
+        from metab_processing.LinearRegression import signature_helpers as sh
+        from metab_processing.LinearRegression.signature_configs import SLC_REGEX
+        a = _make_slc_adata(2)
+        sh.add_slc_factors(a, SLC_REGEX, verbose=False)
+        cols = list(a.uns["x_custom_cols"])
+        want = a[:, cols].layers["normalized_count"]
+        np.testing.assert_allclose(np.asarray(a.obsm["x_custom"]), np.asarray(want))
+
+    def test_expression_factors_idempotent_and_skip_missing(self):
+        from metab_processing.LinearRegression.build_x import add_expression_factors
+        a = _make_slc_adata(3)
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter("always")
+            add_expression_factors(a, ["SLC2A1", "NOPE"])
+        self.assertTrue(any("NOPE" in str(x.message) for x in w))
+        add_expression_factors(a, ["SLC2A1", "SLCO1B1"])
+        add_expression_factors(a, ["SLC2A1"])          # re-add: no duplicate column
+        self.assertEqual(["SLC2A1", "SLCO1B1"], list(a.uns["x_custom_cols"]))
+        self.assertEqual((N, 2), a.obsm["x_custom"].shape)
+        add_expression_factors(a, ["NOPE"])            # nothing present: no-op
+        self.assertEqual((N, 2), a.obsm["x_custom"].shape)
+
+    def test_no_slc_genes_returns_empty(self):
+        from metab_processing.LinearRegression import signature_helpers as sh
+        from metab_processing.LinearRegression.signature_configs import SLC_REGEX
+        a = _make_store_adata(4)
+        self.assertEqual([], sh.add_slc_factors(a, SLC_REGEX, verbose=False))
+        self.assertNotIn("x_custom", a.obsm)
+
+    def test_compute_dataset_slc_uses_slc_columns_and_own_cache_dir(self):
+        import json
+        # Give the config non-empty cancer_factors + vessel so that IF the nbhd gating
+        # regressed (add_cancer_factors ran in slc mode), the resulting `{ct}-CF1` /
+        # `{ct}-proximity` / VESSEL custom columns would break the exact-equality assertion
+        # below -- making this a real gating test, not a vacuous string check.
+        cfg_slc, lib = self._slc_setup(5, factor_group="slc",
+                                       cancer_factors=["CF1"], vessel={"VESSEL_X": ["A"]})
+        lib = {**lib, "CF1": ["A", "B"]}
+        with mock.patch.object(sb.sh, "load_msigdb", return_value=lib):
+            sb.compute_dataset(cfg_slc)
+        self.assertTrue(cfg_slc.cache_dir.endswith("/fg_slc"))
+        res = sb.load_res(cfg_slc, "S1", "T1_only")
+        self.assertIsNotNone(res)
+        # EXACTLY the SLC columns are custom factors -- no nbhd `{ct}-SET` / proximity leak.
+        self.assertEqual({"SLC2A1", "SLCO1B1"},
+                         set(res.loc[res["group"] == "custom", "factor"]))
+        self.assertEqual([], [f for f in res["factor"] if f.endswith("-proximity")])
+        membership = json.load(open(os.path.join(cfg_slc.cache_dir, "_membership.json")))
+        self.assertEqual({"present": ["SLC2A1", "SLCO1B1"], "missing": [], "total": 2},
+                         membership["_SLC_FACTORS"])
+        self.assertIn("S1", membership)
+        # Cancer-factor membership is nbhd-only, so CF1/VESSEL_X are absent in slc mode.
+        self.assertNotIn("CF1", membership)
+        self.assertNotIn("VESSEL_X", membership)
+
+    def test_slc_factor_in_target_is_dropped_from_target_not_leaked(self):
+        # A target signature that CONTAINS an SLC gene: that gene is the cell's own
+        # expression, so leaving it in both the target sum (y) and the SLC design (X) is
+        # self-leakage. compute_run drops it from the target (keeps it as a predictor);
+        # membership records it in `slc_removed` (parallel to TF `factor_removed`).
+        import json
+        cfg, _ = self._slc_setup(9, factor_group="slc")
+        lib = {"S1": ["A", "B", "SLC2A1"]}        # signature overlaps an SLC transporter
+        with mock.patch.object(sb.sh, "load_msigdb", return_value=lib):
+            sb.compute_dataset(cfg)
+        membership = json.load(open(os.path.join(cfg.cache_dir, "_membership.json")))
+        self.assertIn("SLC2A1", membership["S1"]["present"])      # present in the data
+        self.assertEqual(["SLC2A1"], membership["S1"]["slc_removed"])
+        res = sb.load_res(cfg, "S1", "T1_only")
+        # SLC2A1 is still a PREDICTOR (custom factor), just no longer part of the target.
+        self.assertIn("SLC2A1", set(res.loc[res["group"] == "custom", "factor"]))
+
+    def test_expression_factors_permuted_obs_and_sparse_layer(self):
+        # A reindex/positional-merge bug would misalign rows: use a permuted obs order and a
+        # sparse normalized_count layer, then assert each stored column equals that gene's
+        # own per-cell expression.
+        from scipy import sparse
+        from metab_processing.LinearRegression.build_x import add_expression_factors
+        a = _make_slc_adata(8)
+        perm = np.random.default_rng(0).permutation(a.n_obs)
+        a = a[perm].copy()
+        a.layers["normalized_count"] = sparse.csr_matrix(a.layers["normalized_count"])
+        add_expression_factors(a, ["SLC2A1", "SLCO1B1"])
+        cols = list(a.uns["x_custom_cols"])
+        want = a[:, cols].to_df("normalized_count")[cols].to_numpy()
+        np.testing.assert_allclose(np.asarray(a.obsm["x_custom"]), want)
+
+    def test_slc_and_nbhd_do_not_collide(self):
+        cfg_slc, lib = self._slc_setup(6, factor_group="slc")
+        cfg_nb = _minimal_cfg(**{**cfg_slc.__dict__, "factor_group": "nbhd"})
+        self.assertNotEqual(cfg_slc.cache_dir, cfg_nb.cache_dir)
+        with mock.patch.object(sb.sh, "load_msigdb", return_value=lib):
+            sb.compute_dataset(cfg_slc)
+            self.assertIsNone(sb.load_res(cfg_nb, "S1", "T1_only"))   # nbhd not satisfied
+            sb.compute_dataset(cfg_nb)
+        self.assertIsNotNone(sb.load_res(cfg_nb, "S1", "T1_only"))
+        self.assertIsNotNone(sb.load_res(cfg_slc, "S1", "T1_only"))
+        self.assertEqual(os.path.join(cfg_nb.cache_dir, "fg_slc"), cfg_slc.cache_dir)
+        res_nb = sb.load_res(cfg_nb, "S1", "T1_only")
+        self.assertFalse({"SLC2A1", "SLCO1B1"} & set(res_nb["factor"]))   # nbhd untouched
+
+    def test_slc_pooled_group_column_still_built(self):
+        cfg, lib = self._slc_setup(7, factor_group="slc", t_cell_types=["T1", "T2"])
+        with mock.patch.object(sb.sh, "load_msigdb", return_value=lib):
+            sb.compute_dataset(cfg)
+        labels = [s["label"] for s in sb.runspecs(cfg)]
+        self.assertTrue(any(sb.load_res(cfg, "S1", lb) is not None for lb in labels))
+        self.assertTrue(all(sb.load_res(cfg, "S1", lb) is not None for lb in labels))
+
+    def test_sweep_rejects_non_nbhd(self):
+        cfg = _minimal_cfg(factor_group="slc", sweep_penalties={"l1": [0.1]}, method="l1")
+        with self.assertRaises(NotImplementedError):
+            sb.compute_sweep_dataset(cfg, "l1")
+
+    def test_unknown_factor_group_raises(self):
+        cfg = _minimal_cfg(factor_group="bogus")
+        with self.assertRaises(ValueError):
+            sb.compute_dataset(cfg)
+
+
 if __name__ == "__main__":
     unittest.main()

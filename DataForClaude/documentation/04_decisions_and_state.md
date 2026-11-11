@@ -840,6 +840,25 @@ computes and stores the model's **x building blocks**, and saves the adata.
     raises. `tests/test_signature_batch.py` +7 (subset restricts compute + full membership; unknown→raises;
     disjoint slices reproduce the full-run cache frame-for-frame; dedupe/unordered; neg_control-in-slice;
     empty→no-op-no-adata-read; cross-slice collision guard); batch+helpers suites 78 pass.
+- **SLC transporter factor group (2026-11-11).** A SELECTABLE alternative to the cancer neighborhood
+    ("nbhd") factors: SLC transporter genes added as CELL-AUTONOMOUS factors (each T cell's OWN RNA, like a
+    TF — no spatial diffusion). `DatasetConfig.factor_group` ('nbhd' default | 'slc') + `slc_pattern`
+    (`SLC_REGEX = ^SLC([0-9]+A[0-9]+|O[0-9]+[A-Z][0-9]+)$`, Foster's regex: SLC#A# + SLCO#X#, `$` drops
+    pseudogenes; NOTE it excludes non-A subfamilies like SLC35B1 and SLC51B — widen to `^SLC[0-9]+[A-Z][0-9]+$`
+    if wanted). `cache_dir` is byte-identical for nbhd (`{root}/{name}`) and nests slc under `{root}/{name}/fg_slc`
+    so slc NEVER overwrites nbhd. `build_x.add_expression_factors` (merge each gene's own LAYER expression into
+    the x_custom block) + `signature_helpers.add_slc_factors` (regex-select var_names). `compute_dataset` branches
+    on factor_group (nbhd → `add_cancer_factors`; slc → `add_slc_factors`, records `membership['_SLC_FACTORS']`);
+    `make_group_column` still runs for cancer regardless. `signature_run.py --factor-group {nbhd,slc}` (composes
+    with `--targets`); `signature_dispatch.ipynb` threads a `FACTOR_GROUP` param. `compute_sweep_dataset` raises
+    NotImplementedError for non-nbhd (sweep stays nbhd-only). **Anti-self-leakage (metab-review MAJOR):** a target
+    signature gene that is itself an SLC factor is DROPPED from the target in `compute_run` (it stays a predictor),
+    mirroring `keep_when_overlap='factor'`; recorded per-target as `membership[sig]['slc_removed']`. New viewer
+    `signature_analysis_breast_slc.ipynb` = breast viewer with `cfg=replace(CONFIGS['breast'], factor_group='slc')`,
+    nbhd spatial-panel/heatmap sections removed, `slc_removed` + `_SLC_FACTORS` surfaced. `tests/test_signature_batch.py`
+    `FactorGroupTests` (cache_dir routing, regex selection, per-cell expression incl. permuted-obs+sparse, idempotent
+    merge, slc compute uses exactly the SLC custom factors + no nbhd leak, nbhd/slc cache isolation, pooled specs,
+    self-leakage removal, sweep + unknown-group guards); batch+helpers suites 90 pass.
 - **Storage = building blocks, not products** (D12): lossless, no cells×M×G blowup; per-gene design
   matrices reconstruct at regression time from `received_ligands × imputed_count` (+ networks on disk).
 - **Test notebook** `build_x_test.ipynb` (bare, no docs): defaults to UC slice 4

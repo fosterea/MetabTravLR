@@ -17,7 +17,7 @@ import seaborn as sns
 from adjustText import adjust_text
 
 from metab_processing.LinearRegression.build_x import (
-    add_gene_signature, add_neighborhood_scores, _factor_genes,
+    add_gene_signature, add_neighborhood_scores, add_expression_factors, _factor_genes,
 )
 from metab_processing.LinearRegression.least_squares import (
     fit_gene_betas, subsample_gene_betas, rank_coefficients, sweep_subsample_betas,
@@ -332,6 +332,18 @@ def plot_sweep_factor(sweep_df, factor, ax=None, figsize=(8, 5), full_label='ful
 # ---------------------------------------------------------------------------------
 # Cancer gene-set signatures as spatial-neighborhood FACTORS
 # ---------------------------------------------------------------------------------
+def add_slc_factors(adata, pattern, verbose=True):
+    """Select var_names matching `pattern` (the SLC transporter regex) and add each as a
+    CELL-AUTONOMOUS custom factor (its own expression), via build_x.add_expression_factors.
+    Returns the sorted list of matched gene names (for membership/logging)."""
+    slc = sorted(g for g in adata.var_names if re.fullmatch(pattern, str(g)))
+    if not slc:
+        print('add_slc_factors: no var_names match the SLC pattern; nothing added.')
+        return []
+    add_expression_factors(adata, slc, verbose=verbose)
+    return slc
+
+
 def add_cancer_factors(adata, sets, annot_col, add_proximity=True,
                        radius=300, scale_factor=1, eps=1e-3, verbose=True):
     """Add each cancer-associated gene-set signature in `sets` ({name: [present genes]}) to

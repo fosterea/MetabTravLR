@@ -184,7 +184,15 @@ def compute_run(adata, name, genes, spec, cfg, raw=False):
     if raw:
         ad2, target = ad, name
     else:
-        ad2 = sh.add_gene_signature(ad, name, positive=genes, keep_when_overlap='factor',
+        positive = genes
+        if cfg.factor_group == 'slc':
+            # Anti-self-leakage, mirroring `keep_when_overlap='factor'` for the SLC custom
+            # block: an SLC factor is the cell's OWN expression, so a signature gene that is
+            # itself an SLC factor would sit in BOTH the target sum (y) and the design (X).
+            # Drop it from the target (it stays a predictor). `signature_factor_split` only
+            # inspects x_factor_map (TF/LR), so it can't catch this; do it here.
+            positive = [g for g in genes if not re.fullmatch(cfg.slc_pattern, str(g))]
+        ad2 = sh.add_gene_signature(ad, name, positive=positive, keep_when_overlap='factor',
                                     verbose=False)
         target = name
 
@@ -215,6 +223,9 @@ def compute_dataset(cfg, overwrite=False, targets=None):
     narrows which (target, spec) fits this job performs. None = every target (the default).
     Names must be members of `all_targets(cfg)`; an unknown name is an error (fail fast
     rather than silently compute nothing)."""
+    if cfg.factor_group not in ('nbhd', 'slc'):
+        raise ValueError(f"{cfg.name}: unknown factor_group {cfg.factor_group!r}; "
+                         f"expected 'nbhd' or 'slc'")
     full_target_names = all_targets(cfg)
     target_names = full_target_names
     if targets is not None:
@@ -281,7 +292,8 @@ def compute_dataset(cfg, overwrite=False, targets=None):
         membership[name] = {'present': present, 'missing': missing, 'total': len(genes),
                             'factor_removed': removed, 'remaining': remaining}
 
-    for name in cfg.cancer_factors:
+    nbhd = cfg.factor_group == 'nbhd'
+    for name in (cfg.cancer_factors if nbhd else []):
         genes = library.get(name)
         if genes is None:
             _log(f'{cfg.name}: {name!r} not found in MSigDB; skipping at compute')
@@ -290,22 +302,37 @@ def compute_dataset(cfg, overwrite=False, targets=None):
         present = [g for g in genes if g in var]
         missing = [g for g in genes if g not in var]
         membership[name] = {'present': present, 'missing': missing, 'total': len(genes)}
-    for vname, gl in cfg.vessel.items():
+    for vname, gl in (cfg.vessel.items() if nbhd else []):
         present = [g for g in gl if g in var]
         missing = [g for g in gl if g not in var]
         membership[vname] = {'present': present, 'missing': missing, 'total': len(gl)}
+
+    if cfg.factor_group == 'slc':       # cell-autonomous SLC expression factors (no diffusion)
+        slc_genes = sh.add_slc_factors(adata, cfg.slc_pattern)
+        membership['_SLC_FACTORS'] = {'present': slc_genes, 'missing': [],
+                                      'total': len(slc_genes)}
+        # Per-target transparency: which of a target's present genes are dropped from the
+        # target for being an SLC factor (compute_run does the actual removal). Parallels
+        # `factor_removed` for TF/LR overlaps, so the viewer can see self-term handling.
+        slc_set = set(slc_genes)
+        for name in (list(cfg.target_signatures) + list(cfg.neg_controls)
+                     + list(cfg.manual_sets)):
+            m = membership.get(name)
+            if m is not None:
+                m['slc_removed'] = [g for g in m.get('present', []) if g in slc_set]
 
     membership_path.parent.mkdir(parents=True, exist_ok=True)
     _atomic_write(membership_path, text=json.dumps(membership, indent=2))
 
     if cfg.kind == 'cancer':
-        cancer_sets = {name: [g for g in library.get(name, []) if g in var]
-                       for name in cfg.cancer_factors}
-        cancer_sets.update({vname: [g for g in gl if g in var]
-                            for vname, gl in cfg.vessel.items()})
-        cancer_sets = {k: v for k, v in cancer_sets.items() if v}
-        sh.add_cancer_factors(adata, cancer_sets, annot_col=cfg.cell_type_col,
-                              add_proximity=True)
+        if nbhd:
+            cancer_sets = {name: [g for g in library.get(name, []) if g in var]
+                           for name in cfg.cancer_factors}
+            cancer_sets.update({vname: [g for g in gl if g in var]
+                                for vname, gl in cfg.vessel.items()})
+            cancer_sets = {k: v for k, v in cancer_sets.items() if v}
+            sh.add_cancer_factors(adata, cancer_sets, annot_col=cfg.cell_type_col,
+                                  add_proximity=True)
         if len(cfg.t_cell_types) > 1:
             sh.make_group_column(adata, cfg.cell_type_col, cfg.t_cell_types,
                                  group_name='_tcell_group', group_label='GROUP')
@@ -472,6 +499,9 @@ def compute_sweep_dataset(cfg, method, overwrite=False):
     diffusing factors when every target is already fully cached or `.skip`-marked; a target
     absent from MSigDB, or one whose fit raises (e.g. an empty factor matrix), is written a
     `.skip` marker and the run continues to the next target instead of aborting."""
+    if cfg.factor_group != 'nbhd':
+        raise NotImplementedError(f"compute_sweep_dataset: factor_group "
+                                  f"{cfg.factor_group!r} not supported (only 'nbhd').")
     penalties = cfg.sweep_penalties[method]
     target_names = all_targets(cfg)
     raw_names = {cfg.single_gene} if (cfg.kind == 'colon' and cfg.single_gene) else set()
