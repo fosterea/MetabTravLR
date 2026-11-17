@@ -859,6 +859,30 @@ computes and stores the model's **x building blocks**, and saves the adata.
     `FactorGroupTests` (cache_dir routing, regex selection, per-cell expression incl. permuted-obs+sparse, idempotent
     merge, slc compute uses exactly the SLC custom factors + no nbhd leak, nbhd/slc cache isolation, pooled specs,
     self-leakage removal, sweep + unknown-group guards); batch+helpers suites 90 pass.
+- **CPM target-y + count covariates + cache versioning (2026-11-16).** Three orthogonal, backward-compatible
+    knobs on `DatasetConfig`, all cache-keyed so a variant NEVER overwrites the default run.
+    (1) `y_transform` ('normalized' default | 'cpm'): model the TARGET y as log1p(CPM) instead of log1p(raw).
+    Since X (the factor store) is PREBUILT on `normalized_count`, only y changes — `build_x.ensure_cpm_layer`
+    builds `log1p_cpm = log1p(raw/library*1e6)` (library = `obs['total_counts']` if present — true depth for a
+    gene-subset adata — else `raw_count.sum(1)`; non-finite/≤0 depth → 1.0 so a bad row can't NaN-out the fit),
+    `add_gene_signature` gained `score_layer=` (default LAYER), and `compute_run` passes `score_layer='log1p_cpm'`.
+    (2) `covariates` (subset of `('n_total_genes','n_total_transcripts')`): added as CELL-AUTONOMOUS custom columns
+    (`build_x.add_count_covariates`, prefers obs QC cols), picked up by `custom='all'` (group='custom', z-scored
+    with the rest). (3) `cache_dir` nests: default byte-identical `{root}/{name}`; non-default appends `/fg_{fg}`,
+    `/y_{t}`, `/cov_{sorted+deduped '+'-join}`. Guards: `compute_dataset` rejects cpm+colon-raw-single-gene up
+    front (no pseudo-gene to swap) + unknown y_transform/covariate; `compute_sweep_dataset` rejects non-default
+    y/covariates (its pseudo-gene build doesn't thread them). Harness: `signature_run.py --y-transform/--covariates`;
+    `signature_dispatch.ipynb` threads `Y_TRANSFORM`/`COVARIATES` (+ variant_tag() so variant jobs don't collide).
+    Viewer `signature_analysis_breast_slc.ipynb` selects a variant via setup-cell `Y_TRANSFORM`/`COVARIATES`
+    (defaults to the plain SLC run); its residual helpers thread `score_layer=Y_SCORE_LAYER` + re-add the variant's
+    cpm layer/covariates so plots match the cached fit. **metab-review (2 MAJOR fixed):** viewer residual helpers
+    were rebuilding y on the wrong (normalized) scale for a cpm cache → now threaded; viewer no longer DEFAULTS to
+    the variant cache (surprising/empty) → defaults to plain SLC. NOTE a cpm run's betas are on a larger raw scale
+    than the default's (percentiles/ratios still fine). **The breast run Foster wants:** `--config breast
+    --factor-group slc --y-transform cpm --covariates n_total_genes` → cache `breast/fg_slc/y_cpm__cov_n_total_genes`.
+    `tests/test_signature_batch.py` +~18 (cache-dir composition; CPM math incl. sparse==dense + zero/NaN-depth;
+    covariate values obs-vs-raw + sparse + both-fitters-standardized; score_layer; end-to-end cpm X-unchanged/
+    y-changed + covariate-as-predictor + default-clean; cpm-raw + sweep + unknown guards); full LR suite 269 pass.
 - **Storage = building blocks, not products** (D12): lossless, no cells×M×G blowup; per-gene design
   matrices reconstruct at regression time from `received_ligands × imputed_count` (+ networks on disk).
 - **Test notebook** `build_x_test.ipynb` (bare, no docs): defaults to UC slice 4

@@ -18,6 +18,7 @@ from adjustText import adjust_text
 
 from metab_processing.LinearRegression.build_x import (
     add_gene_signature, add_neighborhood_scores, add_expression_factors, _factor_genes,
+    ensure_cpm_layer, add_count_covariates, COUNT_COVARIATES,
 )
 from metab_processing.LinearRegression.least_squares import (
     fit_gene_betas, subsample_gene_betas, rank_coefficients, sweep_subsample_betas,

@@ -192,8 +192,11 @@ def compute_run(adata, name, genes, spec, cfg, raw=False):
             # Drop it from the target (it stays a predictor). `signature_factor_split` only
             # inspects x_factor_map (TF/LR), so it can't catch this; do it here.
             positive = [g for g in genes if not re.fullmatch(cfg.slc_pattern, str(g))]
+        # Target-y transform: 'cpm' sums the pseudo-gene score on the log1p(CPM) layer (built
+        # once in compute_dataset); X (the normalized_count factor block) is unchanged.
+        score_kw = {'score_layer': 'log1p_cpm'} if cfg.y_transform == 'cpm' else {}
         ad2 = sh.add_gene_signature(ad, name, positive=positive, keep_when_overlap='factor',
-                                    verbose=False)
+                                    verbose=False, **score_kw)
         target = name
 
     b = sh.fit_gene_betas(ad2, genes=[target], annot_col=spec['annot_col'],
@@ -226,6 +229,19 @@ def compute_dataset(cfg, overwrite=False, targets=None):
     if cfg.factor_group not in ('nbhd', 'slc'):
         raise ValueError(f"{cfg.name}: unknown factor_group {cfg.factor_group!r}; "
                          f"expected 'nbhd' or 'slc'")
+    if cfg.y_transform not in ('normalized', 'cpm'):
+        raise ValueError(f"{cfg.name}: unknown y_transform {cfg.y_transform!r}; "
+                         f"expected 'normalized' or 'cpm'")
+    bad_cov = [c for c in cfg.covariates if c not in sh.COUNT_COVARIATES]
+    if bad_cov:
+        raise ValueError(f"{cfg.name}: unknown covariate(s) {bad_cov}; "
+                         f"valid = {list(sh.COUNT_COVARIATES)}")
+    # CPM replaces the pseudo-gene score; a colon raw single-gene target has no pseudo-gene.
+    # Guard up front (before adata load / cache mkdir) so a doomed run leaves no stray dir.
+    if cfg.y_transform == 'cpm' and cfg.kind == 'colon' and cfg.single_gene:
+        raise NotImplementedError(
+            f"{cfg.name}: y_transform='cpm' is not supported with a raw single-gene target "
+            f"({cfg.single_gene!r}); only pseudo-gene (signature) targets.")
     full_target_names = all_targets(cfg)
     target_names = full_target_names
     if targets is not None:
@@ -269,6 +285,17 @@ def compute_dataset(cfg, overwrite=False, targets=None):
     adata = sc.read_h5ad(cfg.adata_path)
     var = set(adata.var_names)
     _log(f'{cfg.name}: {adata.n_obs} cells, {adata.n_vars} genes')
+
+    # Target-y transform: build the log1p(CPM) layer once; compute_run sums the pseudo-gene
+    # score on it (X stays on normalized_count). The raw single-gene case was rejected up front.
+    if cfg.y_transform == 'cpm':
+        _log(f'{cfg.name}: building log1p(CPM) layer for y_transform=cpm')
+        sh.ensure_cpm_layer(adata)
+    # Extra per-cell covariates -> custom columns (included by custom='all' in every fit).
+    cov_added = sh.add_count_covariates(adata, cfg.covariates) if cfg.covariates else []
+    if cov_added:
+        _log(f'{cfg.name}: added count covariates {cov_added}')
+
     library = sh.load_msigdb(cfg.dbver, cfg.categories)
 
     membership = {}
@@ -320,6 +347,10 @@ def compute_dataset(cfg, overwrite=False, targets=None):
             m = membership.get(name)
             if m is not None:
                 m['slc_removed'] = [g for g in m.get('present', []) if g in slc_set]
+
+    if cov_added:       # transparency: the extra covariate columns added as predictors
+        membership['_COVARIATES'] = {'present': cov_added, 'missing': [],
+                                     'total': len(cov_added)}
 
     membership_path.parent.mkdir(parents=True, exist_ok=True)
     _atomic_write(membership_path, text=json.dumps(membership, indent=2))
@@ -502,6 +533,11 @@ def compute_sweep_dataset(cfg, method, overwrite=False):
     if cfg.factor_group != 'nbhd':
         raise NotImplementedError(f"compute_sweep_dataset: factor_group "
                                   f"{cfg.factor_group!r} not supported (only 'nbhd').")
+    if cfg.y_transform != 'normalized' or cfg.covariates:
+        raise NotImplementedError(
+            f"compute_sweep_dataset: y_transform={cfg.y_transform!r} / "
+            f"covariates={tuple(cfg.covariates)} not supported (only the default "
+            f"'normalized' y and no covariates).")
     penalties = cfg.sweep_penalties[method]
     target_names = all_targets(cfg)
     raw_names = {cfg.single_gene} if (cfg.kind == 'colon' and cfg.single_gene) else set()

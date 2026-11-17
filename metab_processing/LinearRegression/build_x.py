@@ -102,6 +102,51 @@ def ensure_lognorm_layer(adata):
     return adata
 
 
+def _library_size(adata, total_counts_obs='total_counts'):
+    """Per-cell library size (total transcripts): prefer `obs[total_counts_obs]` (the TRUE
+    full-transcriptome depth if the adata is a gene subset), else the row-sum of `raw_count`.
+    Raises if neither is available. Returns a float64 1-D array of length n_obs."""
+    if total_counts_obs in adata.obs:
+        return adata.obs[total_counts_obs].to_numpy().astype(float)
+    if 'raw_count' not in adata.layers:
+        raise ValueError("_library_size: adata has neither obs['total_counts'] nor a "
+                         "'raw_count' layer; cannot compute the per-cell library size.")
+    return np.asarray(adata.layers['raw_count'].sum(axis=1)).ravel().astype(float)
+
+
+def ensure_cpm_layer(adata, *, layer='log1p_cpm', total_counts_obs='total_counts'):
+    """Recreate `adata.layers[layer]` = log1p(CPM) if missing, where CPM[c,g] =
+    raw_count[c,g] / library_size[c] * 1e6 (the standard scanpy `normalize_total(1e6)` +
+    `log1p`). Library size is `obs[total_counts_obs]` when present (the true depth even for a
+    gene-subset adata), else `raw_count.sum(axis=1)`. Used to model the target y as log(CPM+1)
+    WITHOUT touching the `normalized_count`-based factor matrix.
+
+    Mutates `adata` in place and returns it. Raises `ValueError` if `raw_count` is missing.
+    `log1p(0) == 0`, so the sparse path logs only the stored (nonzero) entries."""
+    import scipy.sparse as sp
+
+    if layer in adata.layers:
+        return adata
+    if 'raw_count' not in adata.layers:
+        raise ValueError(f"ensure_cpm_layer: adata has no 'raw_count' layer; cannot compute "
+                         f"the CPM layer {layer!r}.")
+    raw = adata.layers['raw_count']
+    lib = _library_size(adata, total_counts_obs)
+    # Empty cells (/0) AND any non-finite depth (a NaN/inf in obs['total_counts']) -> 1.0, so a
+    # bad library size can't poison the whole CPM row with NaN (which would later NaN-out y and
+    # fail the fit silently via a .skip marker). A truly empty cell's row is all-0 anyway.
+    lib = np.where(~np.isfinite(lib) | (lib <= 0), 1.0, lib)
+    if sp.issparse(raw):
+        cpm = (sp.diags(1.0 / lib) @ raw.tocsr()) * 1e6
+        cpm = cpm.tocsr()
+        cpm.data = np.log1p(cpm.data)
+        adata.layers[layer] = cpm
+    else:
+        cpm = np.asarray(raw, dtype=float) / lib[:, None] * 1e6
+        adata.layers[layer] = np.log1p(cpm)
+    return adata
+
+
 def build_factor_block(adata, grn, tflinks, focus_genes, *, radius=300,
                        contact_distance=50, scale_factor=1, tf_ligand_cutoff=0.01,
                        receptor_thresh=0.01, cluster_annot='cell_type_int'):
@@ -336,12 +381,15 @@ def _factor_genes(factor):
 
 
 def add_gene_signature(adata, name, positive=(), negative=(), factor_mode='union',
-                       keep_when_overlap='target', verbose=False):
+                       keep_when_overlap='target', verbose=False, score_layer=None):
     """Create a signature pseudo-gene `name` fittable exactly like a real gene, and RETURN
     a NEW adata with it appended (original untouched).
 
-    Score (per cell), on the LAYER ('normalized_count'): sum of the positive genes' values
-    minus the negative genes' values. This score becomes the pseudo-gene's expression.
+    Score (per cell), on `score_layer` (default `LAYER` = 'normalized_count'): sum of the
+    positive genes' values minus the negative genes' values. This score becomes the
+    pseudo-gene's expression (written into EVERY layer's new column, and the fitters read it
+    back from `LAYER`). Pass e.g. `score_layer='log1p_cpm'` to model the target as log(CPM+1)
+    while the factor matrix X stays on `normalized_count` -- only the target y changes.
 
     `name` is appended to var_names and to EVERY layer + X (so anndata stays shape-consistent;
     only LAYER's value matters for fitting -- the score goes into every layer's new column).
@@ -442,14 +490,19 @@ def add_gene_signature(adata, name, positive=(), negative=(), factor_mode='union
         else:
             print(f"  kept BOTH (overlap allowed): {dict(sorted(overlap.items()))}")
 
-    # Score (per cell) on LAYER from the (possibly overlap-trimmed) gene set.
+    # Score (per cell) on `score_layer` (default LAYER) from the (possibly overlap-trimmed)
+    # gene set.
+    score_layer = LAYER if score_layer is None else score_layer
+    if score_layer != LAYER and score_layer not in adata.layers:
+        raise ValueError(f"add_gene_signature: score_layer {score_layer!r} not in "
+                         f"adata.layers (have {list(adata.layers)}).")
     if not pos_present and not neg_present:
         warnings.warn(f"add_gene_signature: no positive/negative genes for {name!r} "
                      f"(after overlap handling); score will be all zeros.")
         score = np.zeros(adata.n_obs, dtype=np.float32)
     else:
         present = pos_present + neg_present
-        df = adata[:, present].to_df(LAYER)
+        df = adata[:, present].to_df(score_layer)
         pos_sum = df[pos_present].sum(axis=1).to_numpy() if pos_present else 0.0
         neg_sum = df[neg_present].sum(axis=1).to_numpy() if neg_present else 0.0
         score = pos_sum - neg_sum
@@ -672,6 +725,65 @@ def add_expression_factors(adata, genes, *, layer=LAYER, verbose=False):
         print(f'add_expression_factors: adding {len(present)} cell-autonomous factors')
     df = adata[:, present].to_df(layer)
     return _merge_custom(adata, df)
+
+
+# Per-cell count covariates: a short, fixed menu of library-complexity controls, added to the
+# custom-factors block (like a TF) so a fit with custom='all' can regress them out.
+COUNT_COVARIATES = ('n_total_genes', 'n_total_transcripts')
+
+
+def add_count_covariates(adata, which, *, total_counts_obs='total_counts',
+                         n_genes_obs='n_genes_by_counts', verbose=False):
+    """Add per-cell count covariates to the shared custom-factors block (obsm['x_custom'] +
+    uns['x_custom_cols'], via `_merge_custom`), so each becomes a cell-autonomous predictor
+    for any fit with custom='all'. `which` is a subset of `COUNT_COVARIATES`:
+      - 'n_total_transcripts' : total UMIs per cell -- `obs[total_counts_obs]` if present
+        (true depth even for a gene-subset adata), else `raw_count.sum(axis=1)`.
+      - 'n_total_genes'       : genes detected per cell -- `obs[n_genes_obs]` if present,
+        else the per-cell nnz of `raw_count`.
+    IDEMPOTENT BY NAME (a column already in x_custom_cols is skipped by `_merge_custom`).
+    Returns the list of covariate names added (its own order). Raises `ValueError` on an
+    unknown name, or when a requested covariate can't be sourced (no obs column and no
+    `raw_count` layer to fall back to)."""
+    import scipy.sparse as sp
+
+    which = list(which)
+    unknown = [w for w in which if w not in COUNT_COVARIATES]
+    if unknown:
+        raise ValueError(f"add_count_covariates: unknown covariate(s) {unknown}; "
+                         f"valid = {list(COUNT_COVARIATES)}.")
+    if not which:
+        return []
+    raw = adata.layers.get('raw_count')
+    cols = {}
+    for w in which:
+        if w == 'n_total_transcripts':
+            if total_counts_obs in adata.obs:
+                cols[w] = adata.obs[total_counts_obs].to_numpy().astype(float)
+            elif raw is not None:
+                cols[w] = np.asarray(raw.sum(axis=1)).ravel().astype(float)
+            else:
+                raise ValueError("add_count_covariates: 'n_total_transcripts' needs "
+                                 f"obs[{total_counts_obs!r}] or a 'raw_count' layer.")
+        else:  # 'n_total_genes'
+            if n_genes_obs in adata.obs:
+                cols[w] = adata.obs[n_genes_obs].to_numpy().astype(float)
+            elif raw is not None:
+                nnz = (raw > 0).sum(axis=1) if sp.issparse(raw) else (np.asarray(raw) > 0).sum(axis=1)
+                cols[w] = np.asarray(nnz).ravel().astype(float)
+            else:
+                raise ValueError("add_count_covariates: 'n_total_genes' needs "
+                                 f"obs[{n_genes_obs!r}] or a 'raw_count' layer.")
+    # Warn (don't silently use stale values) if a covariate name is already a custom column:
+    # `_merge_custom` is idempotent-by-name and would KEEP the existing column, not ours.
+    clash = [w for w in cols if w in set(adata.uns.get('x_custom_cols', []))]
+    if clash:
+        warnings.warn(f"add_count_covariates: {clash} already in x_custom_cols; keeping the "
+                      f"existing column(s), not recomputing.")
+    if verbose:
+        print(f'add_count_covariates: adding {list(cols)}')
+    _merge_custom(adata, pd.DataFrame(cols, index=adata.obs_names))
+    return list(cols)
 
 
 def build_x_adata(adata, out_path, *, focus_genes, metabolites=None, setup_dir=None,

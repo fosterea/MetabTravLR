@@ -979,5 +979,267 @@ class FactorGroupTests(unittest.TestCase):
             sb.compute_dataset(cfg)
 
 
+def _make_counts_adata(seed=0, with_obs_qc=False):
+    """`_make_store_adata` plus a `raw_count` layer (integer counts), so the CPM layer and the
+    count covariates can be derived. `with_obs_qc` also sets obs['total_counts'] /
+    obs['n_genes_by_counts'] (the preferred, true-depth source)."""
+    a = _make_store_adata(seed)
+    rng = np.random.default_rng(seed + 500)
+    raw = rng.integers(0, 50, size=a.shape).astype(np.float32)
+    a.layers["raw_count"] = raw
+    if with_obs_qc:
+        a.obs["total_counts"] = raw.sum(1).astype(float)
+        a.obs["n_genes_by_counts"] = (raw > 0).sum(1).astype(float)
+    return a
+
+
+class CacheDirVariantTests(unittest.TestCase):
+    """`cache_dir` routing for the y-transform / covariate variants -- the default stays the
+    historical path byte-for-byte; each non-default knob adds its own subdir."""
+
+    def test_default_unchanged(self):
+        self.assertEqual("/root/nm", _minimal_cfg(name="nm", cache_root="/root").cache_dir)
+
+    def test_cpm_nests(self):
+        c = _minimal_cfg(name="nm", cache_root="/root", y_transform="cpm")
+        self.assertEqual("/root/nm/y_cpm", c.cache_dir)
+
+    def test_covariates_sorted_and_joined(self):
+        c = _minimal_cfg(name="nm", cache_root="/root",
+                         covariates=("n_total_transcripts", "n_total_genes"))
+        self.assertEqual("/root/nm/cov_n_total_genes+n_total_transcripts", c.cache_dir)
+
+    def test_slc_cpm_cov_compose_in_order(self):
+        c = _minimal_cfg(name="nm", cache_root="/root", factor_group="slc",
+                         y_transform="cpm", covariates=("n_total_genes",))
+        self.assertEqual("/root/nm/fg_slc/y_cpm__cov_n_total_genes", c.cache_dir)
+
+
+class EnsureCpmLayerTests(unittest.TestCase):
+    def test_cpm_is_log1p_normalize_total_rowsum(self):
+        from metab_processing.LinearRegression.build_x import ensure_cpm_layer
+        a = _make_counts_adata(1)
+        ensure_cpm_layer(a)
+        raw = a.layers["raw_count"]
+        lib = raw.sum(1, keepdims=True)
+        want = np.log1p(raw / lib * 1e6)
+        np.testing.assert_allclose(np.asarray(a.layers["log1p_cpm"]), want, rtol=1e-5)
+
+    def test_prefers_obs_total_counts(self):
+        from metab_processing.LinearRegression.build_x import ensure_cpm_layer
+        a = _make_counts_adata(2, with_obs_qc=True)
+        a.obs["total_counts"] = a.obs["total_counts"] * 2.0      # a DISTINCT library size
+        ensure_cpm_layer(a)
+        raw = np.asarray(a.layers["raw_count"])
+        lib = a.obs["total_counts"].to_numpy()[:, None]
+        np.testing.assert_allclose(np.asarray(a.layers["log1p_cpm"]),
+                                   np.log1p(raw / lib * 1e6), rtol=1e-5)
+
+    def test_sparse_matches_dense(self):
+        from scipy import sparse
+        from metab_processing.LinearRegression.build_x import ensure_cpm_layer
+        dense = _make_counts_adata(3); ensure_cpm_layer(dense)
+        sp = _make_counts_adata(3)
+        sp.layers["raw_count"] = sparse.csr_matrix(sp.layers["raw_count"])
+        ensure_cpm_layer(sp)
+        got = sp.layers["log1p_cpm"]
+        got = got.toarray() if sparse.issparse(got) else np.asarray(got)
+        np.testing.assert_allclose(got, np.asarray(dense.layers["log1p_cpm"]), rtol=1e-5)
+
+    def test_idempotent_and_requires_raw(self):
+        from metab_processing.LinearRegression.build_x import ensure_cpm_layer
+        a = _make_counts_adata(4); ensure_cpm_layer(a)
+        before = np.asarray(a.layers["log1p_cpm"]).copy()
+        a.layers["raw_count"] = a.layers["raw_count"] * 0 + 1     # change raw; layer must NOT rebuild
+        ensure_cpm_layer(a)
+        np.testing.assert_allclose(np.asarray(a.layers["log1p_cpm"]), before)
+        b = _make_store_adata(4)                                  # no raw_count layer
+        with self.assertRaises(ValueError):
+            ensure_cpm_layer(b)
+
+    def test_zero_library_and_nan_total_counts_produce_no_nan(self):
+        from metab_processing.LinearRegression.build_x import ensure_cpm_layer
+        a = _make_counts_adata(20, with_obs_qc=True)
+        raw = np.asarray(a.layers["raw_count"]); raw[0] = 0.0      # an empty cell (lib 0)
+        a.layers["raw_count"] = raw
+        tc = a.obs["total_counts"].to_numpy().astype(float)
+        tc[0] = 0.0; tc[1] = np.nan                               # zero + NaN library sizes
+        a.obs["total_counts"] = tc
+        ensure_cpm_layer(a)
+        cpm = np.asarray(a.layers["log1p_cpm"])
+        self.assertFalse(np.isnan(cpm).any())                    # guard neutralizes 0 / NaN depth
+        np.testing.assert_allclose(cpm[0], 0.0)                  # empty cell stays all-zero
+
+
+class AddCountCovariatesTests(unittest.TestCase):
+    def test_values_from_raw_when_no_obs(self):
+        from metab_processing.LinearRegression.build_x import add_count_covariates
+        a = _make_counts_adata(5)
+        added = add_count_covariates(a, ("n_total_genes", "n_total_transcripts"))
+        self.assertEqual(["n_total_genes", "n_total_transcripts"], added)
+        cols = list(a.uns["x_custom_cols"])
+        x = np.asarray(a.obsm["x_custom"])
+        raw = np.asarray(a.layers["raw_count"])
+        np.testing.assert_allclose(x[:, cols.index("n_total_transcripts")], raw.sum(1))
+        np.testing.assert_allclose(x[:, cols.index("n_total_genes")], (raw > 0).sum(1))
+
+    def test_prefers_obs_qc_columns(self):
+        from metab_processing.LinearRegression.build_x import add_count_covariates
+        a = _make_counts_adata(6, with_obs_qc=True)
+        a.obs["total_counts"] = a.obs["total_counts"] + 7.0      # make obs != raw row-sum
+        a.obs["n_genes_by_counts"] = a.obs["n_genes_by_counts"] + 3.0
+        add_count_covariates(a, ("n_total_genes", "n_total_transcripts"))
+        cols = list(a.uns["x_custom_cols"]); x = np.asarray(a.obsm["x_custom"])
+        np.testing.assert_allclose(x[:, cols.index("n_total_transcripts")],
+                                   a.obs["total_counts"].to_numpy())
+        np.testing.assert_allclose(x[:, cols.index("n_total_genes")],
+                                   a.obs["n_genes_by_counts"].to_numpy())
+
+    def test_idempotent_empty_and_unknown(self):
+        from metab_processing.LinearRegression.build_x import add_count_covariates
+        a = _make_counts_adata(7)
+        add_count_covariates(a, ("n_total_genes",))
+        add_count_covariates(a, ("n_total_genes",))              # re-add: no duplicate
+        self.assertEqual(["n_total_genes"], list(a.uns["x_custom_cols"]))
+        self.assertEqual([], add_count_covariates(a, ()))        # empty -> no-op
+        with self.assertRaises(ValueError):
+            add_count_covariates(a, ("bogus",))
+
+    def test_sparse_raw_matches_dense(self):
+        from scipy import sparse
+        from metab_processing.LinearRegression.build_x import add_count_covariates
+        dense = _make_counts_adata(21)
+        sp = _make_counts_adata(21)
+        sp.layers["raw_count"] = sparse.csr_matrix(sp.layers["raw_count"])
+        add_count_covariates(dense, ("n_total_genes", "n_total_transcripts"))
+        add_count_covariates(sp, ("n_total_genes", "n_total_transcripts"))
+        np.testing.assert_allclose(np.asarray(sp.obsm["x_custom"]),
+                                   np.asarray(dense.obsm["x_custom"]))
+
+    def test_covariate_enters_both_fitters_standardized(self):
+        from metab_processing.LinearRegression import least_squares as ls
+        from metab_processing.LinearRegression.build_x import add_count_covariates
+        a = _make_counts_adata(22)
+        add_count_covariates(a, ("n_total_genes",))              # a raw-scale (large) count column
+        df = ls.fit_gene_betas(a, genes=["A"], metabolites=[], custom="all",
+                               annot_col="cell_type", annot_value="T1", standardize=True)
+        row = df[df["factor"] == "n_total_genes"]
+        self.assertEqual("custom", row["group"].iloc[0])         # tagged custom, z-scored with the rest
+        self.assertTrue(np.isfinite(row["beta"].iloc[0]))        # not blown up by raw scale
+        sub = ls.subsample_gene_betas(a, "A", factors=None, n_subsamples=3, metabolites=[],
+                                      custom="all", annot_col="cell_type", annot_value="T1",
+                                      standardize=True)
+        self.assertIn("n_total_genes", list(sub.columns))
+
+
+class AddGeneSignatureScoreLayerTests(unittest.TestCase):
+    def test_score_uses_named_layer(self):
+        from metab_processing.LinearRegression import signature_helpers as sh
+        from metab_processing.LinearRegression.build_x import ensure_cpm_layer, LAYER
+        a = _make_counts_adata(8); ensure_cpm_layer(a)
+        genes = ["C", "D"]      # neither is a factor column -> no overlap removal
+        ad2 = sh.add_gene_signature(a, "SIG", positive=genes, keep_when_overlap="factor",
+                                    score_layer="log1p_cpm")
+        y = ad2[:, "SIG"].to_df(LAYER)["SIG"].to_numpy()         # fitters read LAYER
+        want = a[:, genes].to_df("log1p_cpm")[genes].sum(1).to_numpy()
+        np.testing.assert_allclose(y, want, rtol=1e-5)
+
+    def test_default_layer_unchanged_and_missing_raises(self):
+        from metab_processing.LinearRegression import signature_helpers as sh
+        from metab_processing.LinearRegression.build_x import LAYER
+        a = _make_counts_adata(9)
+        ad2 = sh.add_gene_signature(a, "SIG", positive=["C", "D"], keep_when_overlap="factor")
+        want = a[:, ["C", "D"]].to_df(LAYER)[["C", "D"]].sum(1).to_numpy()
+        np.testing.assert_allclose(ad2[:, "SIG"].to_df(LAYER)["SIG"].to_numpy(), want, rtol=1e-5)
+        with self.assertRaises(ValueError):
+            sh.add_gene_signature(a, "SIG2", positive=["A"], score_layer="nope")
+
+
+class ComputeDatasetVariantTests(unittest.TestCase):
+    """End-to-end wiring of y_transform / covariates through `compute_dataset`."""
+
+    def _setup(self, seed, with_obs_qc=False, **ov):
+        tmp = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, tmp, ignore_errors=True)
+        p = os.path.join(tmp, "adata.h5ad")
+        _make_counts_adata(seed, with_obs_qc=with_obs_qc).write_h5ad(p)
+        kw = dict(name="cv", kind="cancer", adata_path=p, cache_root=tmp,
+                  t_cell_types=["T1"], target_signatures=["S1"], neg_controls=[],
+                  cancer_factors=[], vessel={}, method="OLS", n_sub=3)
+        kw.update(ov)
+        return _minimal_cfg(**kw), {"S1": ["A", "B", "C"]}
+
+    def test_cpm_changes_y_and_caches_separately(self):
+        cfg_n, lib = self._setup(10)
+        cfg_c = _minimal_cfg(**{**cfg_n.__dict__, "y_transform": "cpm"})
+        self.assertTrue(cfg_c.cache_dir.endswith("/y_cpm"))
+        self.assertNotEqual(cfg_n.cache_dir, cfg_c.cache_dir)
+        with mock.patch.object(sb.sh, "load_msigdb", return_value=lib):
+            sb.compute_dataset(cfg_n)
+            sb.compute_dataset(cfg_c)
+        rn = sb.load_res(cfg_n, "S1", "T1_only")
+        rc = sb.load_res(cfg_c, "S1", "T1_only")
+        self.assertIsNotNone(rn); self.assertIsNotNone(rc)
+        # X is identical (same factor universe) -- only y changed ...
+        self.assertEqual(set(rn["factor"]), set(rc["factor"]))
+        # ... so the CPM target y gives DIFFERENT betas (the wiring really changed y).
+        merged = rn.merge(rc, on="factor", suffixes=("_n", "_c"))
+        self.assertFalse(np.allclose(merged["beta_n"], merged["beta_c"]))
+
+    def test_covariates_become_predictors_and_logged(self):
+        import json
+        cfg, lib = self._setup(11, covariates=("n_total_genes",))
+        self.assertTrue(cfg.cache_dir.endswith("/cov_n_total_genes"))
+        with mock.patch.object(sb.sh, "load_msigdb", return_value=lib):
+            sb.compute_dataset(cfg)
+        res = sb.load_res(cfg, "S1", "T1_only")
+        self.assertIn("n_total_genes", set(res.loc[res["group"] == "custom", "factor"]))
+        membership = json.load(open(os.path.join(cfg.cache_dir, "_membership.json")))
+        self.assertEqual(["n_total_genes"], membership["_COVARIATES"]["present"])
+
+    def test_default_run_has_no_cpm_layer_or_covariates(self):
+        import json
+        cfg, lib = self._setup(12)
+        with mock.patch.object(sb.sh, "load_msigdb", return_value=lib):
+            sb.compute_dataset(cfg)
+        membership = json.load(open(os.path.join(cfg.cache_dir, "_membership.json")))
+        self.assertNotIn("_COVARIATES", membership)
+        res = sb.load_res(cfg, "S1", "T1_only")
+        self.assertEqual([], [f for f in res["factor"] if "n_total" in str(f)])
+
+    def test_cpm_with_raw_single_gene_rejected(self):
+        # A colon raw single-gene target has no pseudo-gene for the CPM score to replace.
+        tmp = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, tmp, ignore_errors=True)
+        p = os.path.join(tmp, "adata.h5ad")
+        a = _make_counts_adata(13)
+        a.obs["cond"] = "UC"; a.obs["pat"] = "p1"; a.obs["smp"] = "s1"
+        a.write_h5ad(p)
+        cfg = _minimal_cfg(name="cl", kind="colon", adata_path=p, cache_root=tmp,
+                           annot_col="cell_type", cell_type="T1", single_gene="A",
+                           condition_col="cond", patient_col="pat", sample_col="smp",
+                           target_signatures=["S1"], t_cell_types=[], y_transform="cpm")
+        with mock.patch.object(sb.sh, "load_msigdb", return_value={"S1": ["A", "B"]}):
+            with self.assertRaises(NotImplementedError):
+                sb.compute_dataset(cfg)
+
+    def test_sweep_rejects_cpm_and_covariates(self):
+        cfg_c = _minimal_cfg(sweep_penalties={"l1": [0.1]}, method="l1", y_transform="cpm")
+        cfg_v = _minimal_cfg(sweep_penalties={"l1": [0.1]}, method="l1",
+                             covariates=("n_total_genes",))
+        for cfg in (cfg_c, cfg_v):
+            with self.assertRaises(NotImplementedError):
+                sb.compute_sweep_dataset(cfg, "l1")
+
+    def test_unknown_y_transform_and_covariate_raise(self):
+        cfg_y, lib = self._setup(14, y_transform="bogus")
+        cfg_c, _ = self._setup(15, covariates=("nope",))
+        with mock.patch.object(sb.sh, "load_msigdb", return_value=lib):
+            with self.assertRaises(ValueError):
+                sb.compute_dataset(cfg_y)
+            with self.assertRaises(ValueError):
+                sb.compute_dataset(cfg_c)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -116,6 +116,14 @@ class DatasetConfig:
     standardize: bool = True
     factor_group: str = 'nbhd'      # 'nbhd' (cancer neighborhood factors) | 'slc' (SLC genes)
     slc_pattern: str = SLC_REGEX    # var_names regex selecting the SLC factors
+    # Target-y transform + extra covariates (both cache-keyed via `cache_dir`, so a variant
+    # NEVER overwrites the default run). `y_transform`: 'normalized' (the default -- the
+    # pseudo-gene score summed on the log1p(raw) `normalized_count` layer, i.e. unchanged) |
+    # 'cpm' (score summed on log1p(CPM); X factors stay on `normalized_count`). `covariates`:
+    # subset of ('n_total_genes', 'n_total_transcripts') added as cell-autonomous custom
+    # predictors (like a TF), included by `custom='all'`.
+    y_transform: str = 'normalized'
+    covariates: tuple = ()
     n_sub: int = 200
     lower: int = 15
     upper: int = 85
@@ -126,8 +134,23 @@ class DatasetConfig:
 
     @property
     def cache_dir(self):
+        # Backward-compatible nesting: the DEFAULT (nbhd, normalized y, no covariates)
+        # resolves to the historical `{cache_root}/{name}` path byte-for-byte. Each non-default
+        # knob appends its own subdir so a new variant is cached SEPARATELY (never overwrites):
+        #   factor_group != 'nbhd' -> /fg_{factor_group}
+        #   y_transform  != 'normalized' -> /y_{y_transform}
+        #   covariates non-empty         -> /cov_{a+b+...}  (sorted, '+'-joined)
         base = f'{self.cache_root}/{self.name}'
-        return base if self.factor_group == 'nbhd' else f'{base}/fg_{self.factor_group}'
+        if self.factor_group != 'nbhd':
+            base = f'{base}/fg_{self.factor_group}'
+        parts = []
+        if self.y_transform != 'normalized':
+            parts.append(f'y_{self.y_transform}')
+        if self.covariates:
+            # sorted+deduped: the fit is set-like in the covariates (add_count_covariates
+            # dedupes by name), so ('a','b'), ('b','a') and ('a','a') must share one dir.
+            parts.append('cov_' + '+'.join(sorted(set(self.covariates))))
+        return base if not parts else base + '/' + '__'.join(parts)
 
 
 CONFIGS = {

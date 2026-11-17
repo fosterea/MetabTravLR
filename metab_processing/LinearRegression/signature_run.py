@@ -21,6 +21,13 @@ if __name__ == '__main__':
     ap.add_argument('--config', required=True, choices=list(CONFIGS))
     ap.add_argument('--factor-group', default='nbhd', choices=['nbhd', 'slc'],
                     help="factor block: cancer neighborhood ('nbhd') or cell-autonomous SLC genes")
+    ap.add_argument('--y-transform', default='normalized', choices=['normalized', 'cpm'],
+                    help="target y: log1p(raw) 'normalized' (default) or log1p(CPM) 'cpm'. "
+                         "Caches separately ({...}/y_cpm), never overwriting the default run.")
+    ap.add_argument('--covariates', default=None,
+                    help="comma-separated extra per-cell covariates to add as predictors: "
+                         "subset of n_total_genes,n_total_transcripts (default none). "
+                         "Caches separately ({...}/cov_...).")
     ap.add_argument('--overwrite', action='store_true')
     ap.add_argument('--targets', default=None,
                     help='comma-separated subset of all_targets(cfg) to compute in THIS job '
@@ -32,7 +39,20 @@ if __name__ == '__main__':
         targets = [t for t in args.targets.split(',') if t]
         if not targets:                      # '' or ',,' -> empty: a mistake, not "all"
             ap.error('--targets was empty after parsing; omit it to compute all targets')
+    covariates = None
+    if args.covariates is not None:
+        covariates = tuple(c for c in args.covariates.split(',') if c)
+        if not covariates:                   # '' or ',,' -> empty: a mistake, not "none"
+            ap.error('--covariates was empty after parsing; omit it for no covariates')
+
     cfg = CONFIGS[args.config]
+    overrides = {}
     if args.factor_group != cfg.factor_group:
-        cfg = replace(cfg, factor_group=args.factor_group)
+        overrides['factor_group'] = args.factor_group
+    if args.y_transform != cfg.y_transform:
+        overrides['y_transform'] = args.y_transform
+    if covariates is not None:
+        overrides['covariates'] = covariates
+    if overrides:
+        cfg = replace(cfg, **overrides)
     compute_dataset(cfg, overwrite=args.overwrite, targets=targets)
