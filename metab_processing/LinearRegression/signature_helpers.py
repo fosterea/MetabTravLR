@@ -18,7 +18,7 @@ from adjustText import adjust_text
 
 from metab_processing.LinearRegression.build_x import (
     add_gene_signature, add_neighborhood_scores, add_expression_factors, _factor_genes,
-    ensure_cpm_layer, add_count_covariates, COUNT_COVARIATES,
+    _factor_group, ensure_cpm_layer, add_count_covariates, COUNT_COVARIATES,
 )
 from metab_processing.LinearRegression.least_squares import (
     fit_gene_betas, subsample_gene_betas, rank_coefficients, sweep_subsample_betas,
@@ -73,15 +73,23 @@ def resolve_sets(signatures, library, var, label='signatures'):
     return sets
 
 
-def signature_factor_split(adata, present_genes):
+def signature_factor_split(adata, present_genes, exclude_groups=()):
     """Mirror `add_gene_signature(keep_when_overlap='factor')`: a present signature gene is
     REMOVED if it is referenced by one of the signature's own factor columns (its union of
     constituent `x_factor_map` lists), else it REMAINS in the scored target. Returns
-    (removed, remaining)."""
+    (removed, remaining).
+
+    `exclude_groups` (default `()`): factor groups (subset of `'tf'`/`'lr'`/`'ltf'`, by
+    `_factor_group`) left OUT of the factor union before dereferencing -- mirrors
+    `add_gene_signature`'s `exclude_groups`, so a gene referenced ONLY by an excluded-group
+    factor is reported as remaining, not removed."""
     fmap = adata.uns.get('x_factor_map', {})
     factors = set()
     for g in present_genes:
         factors.update(fmap.get(g, []))
+    if exclude_groups:
+        excl = set(exclude_groups)
+        factors = {f for f in factors if _factor_group(f) not in excl}
     referenced = set()
     for f in factors:
         referenced.update(_factor_genes(f))

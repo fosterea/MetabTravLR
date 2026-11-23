@@ -295,7 +295,7 @@ def _fit(X, y, *, method='OLS', penalty=1.0, l1_ratio=0.5, standardize=False, D=
 def fit_gene_betas(adata, genes=None, metabolites='all', *, annot_col=None, annot_value=None,
                    cells=None, custom=None, method='OLS', penalty=1.0, l1_ratio=0.5,
                    standardize=False, groups=None, onehot_col=None,
-                   just_skip_samples_without_all_labels=False):
+                   just_skip_samples_without_all_labels=False, exclude_groups=()):
     """OLS-fit each gene's expression on its factor matrix, over a selected set of cells.
 
     Both the factor block (`get_gene_factors`) and the y layer (`LAYER` =
@@ -338,6 +338,10 @@ def fit_gene_betas(adata, genes=None, metabolites='all', *, annot_col=None, anno
     path always derives labels from its own fitted cells, so every label is present by
     construction.
 
+    `exclude_groups` (default `()`): passed through to `get_gene_factors` -- drops whole
+    factor groups (subset of `'tf'`/`'lr'`/`'ltf'`) from each gene's `x_factor_map`
+    design; the metab (`metabolites`) and custom (`custom`) blocks are never affected.
+
     CAVEAT: with collinear/correlated factor columns, `_fit_ols` (`np.linalg.lstsq`)
     returns a min-norm solution, so individual `beta` values (and `rank_coefficients`'
     magnitude ranking) are not uniquely determined among the collinear columns -- see
@@ -379,11 +383,17 @@ def fit_gene_betas(adata, genes=None, metabolites='all', *, annot_col=None, anno
 
     records = []
     for gene in kept_genes:
-        X = get_gene_factors(adata, gene, metabs=metabolites, custom=custom).loc[rows]
+        X = get_gene_factors(adata, gene, metabs=metabolites, custom=custom,
+                             exclude_groups=exclude_groups).loc[rows]
         cluster_names = set()
         if groups is not None:
             X, multi = _reduce_groups(X, groups, standardize)
             cluster_names = set(multi)
+        if X.shape[1] == 0:
+            raise ValueError(
+                f"fit_gene_betas: {gene!r} has no factor columns to fit "
+                f"(exclude_groups={tuple(exclude_groups)}, custom={custom!r}, "
+                f"metabolites={metabolites!r}).")
         min_cells = X.shape[1] + n_dummy_cols + 1
         if len(rows) < min_cells:
             warnings.warn(f"fit_gene_betas: {gene!r} has too few cells "
@@ -438,7 +448,8 @@ def subsample_gene_betas(adata, gene, factors=None, *, n_subsamples=100,
                          annot_col=None, annot_value=None, seed0=0,
                          metabolites='all', custom=None, method='OLS', penalty=1.0,
                          l1_ratio=0.5, standardize=False, groups=None, onehot_col=None,
-                         just_skip_samples_without_all_labels=False, return_r=False):
+                         just_skip_samples_without_all_labels=False, return_r=False,
+                         exclude_groups=()):
     """Beta of each selected factor for `gene` across `n_subsamples` cell resamples
     (seeds seed0..seed0+n_subsamples-1), each a same-size-with-replacement resample
     (see `resample_cells`) of the (optionally annotation-filtered) eligible cells.
@@ -487,8 +498,19 @@ def subsample_gene_betas(adata, gene, factors=None, *, n_subsamples=100,
     rows). The resample itself is drawn inline from a pool computed once (not via a
     per-iteration call to `resample_cells`, which would recompute the pool every time);
     behavior (same seed -> same draw) is identical to `resample_cells`.
+
+    `exclude_groups` (default `()`): passed through to the single `get_gene_factors(X_raw)`
+    call above -- drops whole factor groups (subset of `'tf'`/`'lr'`/`'ltf'`) from the
+    gene's `x_factor_map` design (once, before the per-draw row-slicing); `metabolites`/
+    `custom` blocks are never affected.
     """
-    X_raw = get_gene_factors(adata, gene, metabs=metabolites, custom=custom)
+    X_raw = get_gene_factors(adata, gene, metabs=metabolites, custom=custom,
+                             exclude_groups=exclude_groups)
+    if X_raw.shape[1] == 0:
+        raise ValueError(
+            f"subsample_gene_betas: {gene!r} has no factor columns to fit "
+            f"(exclude_groups={tuple(exclude_groups)}, custom={custom!r}, "
+            f"metabolites={metabolites!r}).")
     pool = _select_cells(adata, annot_col, annot_value, None)
     if len(pool) == 0:
         raise ValueError("subsample_gene_betas: eligible pool is empty")
@@ -607,7 +629,8 @@ def sweep_gene_betas(adata, gene, penalties, *, annot_col=None, annot_value=None
 
 def sweep_subsample_betas(adata, gene, penalties, *, n_subsamples=4, include_full=True,
                           annot_col=None, annot_value=None, seed0=0, metabolites='all',
-                          custom=None, method='l1', l1_ratio=0.5, standardize=False):
+                          custom=None, method='l1', l1_ratio=0.5, standardize=False,
+                          exclude_groups=()):
     """Fit `gene` at every penalty in `penalties`, both on the FULL selected cells (if
     `include_full`) and on `n_subsamples` deterministic bootstrap resamples (seeds
     `seed0`..`seed0+n_subsamples-1`) -- the SAME draws reused for every penalty, so the
@@ -624,8 +647,13 @@ def sweep_subsample_betas(adata, gene, penalties, *, n_subsamples=4, include_ful
     `range(n_subsamples)`. The bootstrap draw mirrors `subsample_gene_betas`: a uniform
     draw-with-replacement, the same size as the eligible pool, from
     `np.random.default_rng(seed0 + i)`.
+
+    `exclude_groups` (default `()`): passed through to the single `get_gene_factors(X_raw)`
+    call below -- drops whole factor groups (subset of `'tf'`/`'lr'`/`'ltf'`) from the
+    gene's `x_factor_map` design; `metabolites`/`custom` blocks are never affected.
     """
-    X_raw = get_gene_factors(adata, gene, metabs=metabolites, custom=custom)
+    X_raw = get_gene_factors(adata, gene, metabs=metabolites, custom=custom,
+                             exclude_groups=exclude_groups)
     y = adata[:, gene].to_df(LAYER)[gene]
     pool_arr = _select_cells(adata, annot_col, annot_value, None).to_numpy()
 

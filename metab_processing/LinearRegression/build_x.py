@@ -291,12 +291,16 @@ def build_factor_block(adata, grn, tflinks, focus_genes, *, radius=300,
     return adata
 
 
-def get_gene_factors(adata, gene, metabs=None, custom=None):
+def get_gene_factors(adata, gene, metabs=None, custom=None, exclude_groups=()):
     """Reconstruct one gene's design matrix from the shared blocks built by
     `build_factor_block` (+ `add_metabolites` / `add_neighborhood_scores`).
 
     Returns a DataFrame indexed by `adata.obs_names`. Non-metab columns are the gene's
-    `uns['x_factor_map'][gene]` names, sliced out of `obsm['x_factors']`. `metabs`
+    `uns['x_factor_map'][gene]` names, sliced out of `obsm['x_factors']`, filtered to
+    drop any column whose group (`_factor_group`: 'tf'/'lr'/'ltf', by the `$`/`#`
+    separator) is in `exclude_groups` (default `()` -- no change; the metab and custom
+    blocks below are NEVER affected by `exclude_groups`, only the `x_factor_map` columns
+    built by `build_factor_block`). `metabs`
     selects which metabolite columns (from `obsm['x_metab']`) to append:
       - `None` (default): none.
       - `'all'` / `True`: every stored metabolite (`uns['x_metab_modulators']`).
@@ -328,6 +332,8 @@ def get_gene_factors(adata, gene, metabs=None, custom=None):
         raise KeyError(f"get_gene_factors: {gene!r} not in adata.uns['x_factor_map']")
 
     cols = list(factor_map[gene])
+    if exclude_groups:
+        cols = [c for c in cols if _factor_group(c) not in set(exclude_groups)]
     all_cols = list(adata.uns.get('x_factors_cols', []))
     idx = pd.Index(all_cols).get_indexer(cols)
     assert (idx >= 0).all(), "x_factor_map references a column missing from x_factors_cols"
@@ -368,6 +374,19 @@ def get_gene_factors(adata, gene, metabs=None, custom=None):
     return df
 
 
+def _factor_group(factor):
+    """'metab' / 'lr' / 'ltf' by separator, else 'tf' (a bare gene name) -- mirrors
+    `least_squares._group`, duplicated here rather than imported (least_squares imports
+    FROM build_x, so importing it back here would be circular)."""
+    if '@' in factor:
+        return 'metab'
+    if '$' in factor:
+        return 'lr'
+    if '#' in factor:
+        return 'ltf'
+    return 'tf'
+
+
 def _factor_genes(factor):
     """Gene symbol(s) a factor column references: the bare TF name, or both sides of a
     `lig$rec` / `lig#tf` pair. A `metab@<name>` column names a metabolite (not a gene),
@@ -381,7 +400,8 @@ def _factor_genes(factor):
 
 
 def add_gene_signature(adata, name, positive=(), negative=(), factor_mode='union',
-                       keep_when_overlap='target', verbose=False, score_layer=None):
+                       keep_when_overlap='target', verbose=False, score_layer=None,
+                       exclude_groups=()):
     """Create a signature pseudo-gene `name` fittable exactly like a real gene, and RETURN
     a NEW adata with it appended (original untouched).
 
@@ -409,6 +429,14 @@ def add_gene_signature(adata, name, positive=(), negative=(), factor_mode='union
       - `'both'`: keep everything (allow the overlap).
     `metab@` factors name a metabolite, not a gene, so they never count as overlap.
     `verbose=True` prints what is kept and what is dropped.
+
+    `exclude_groups` (default `()`): factor groups (subset of `'tf'`/`'lr'`/`'ltf'`, by
+    `_factor_group`) to leave OUT of the overlap computation above -- a factor whose group
+    is excluded is treated as never-overlapping, so a signature gene referenced ONLY by an
+    excluded-group factor stays in the score (and, in `'target'` mode, that factor is not
+    dropped either). This does NOT filter `x_factor_map[name]` itself -- the stored factor
+    list is always the full union/intersection computed above; `exclude_groups` only
+    changes which of those factors can trigger the overlap handling.
 
     Returns a NEW adata; the input's var/X/layers and its `x_factor_map`/`x_genes` are not
     modified. `obsm`/`obsp` arrays are shared by reference with the input (treat the result
@@ -463,8 +491,13 @@ def add_gene_signature(adata, name, positive=(), negative=(), factor_mode='union
         factors = [c for c in factor_map[constituents[0]] if c in common]
 
     # Resolve overlap between the signature's gene set and the genes its factors reference.
+    # A factor whose group is in `exclude_groups` is left OUT of this computation entirely
+    # (never counts as overlapping), but `factors` itself (the stored union/intersection)
+    # is untouched here -- only the overlap decision is filtered.
     gene_set = set(pos_present) | set(neg_present)
-    overlap = {f: [g for g in _factor_genes(f) if g in gene_set] for f in factors}
+    excl = set(exclude_groups)
+    overlap_candidates = [f for f in factors if _factor_group(f) not in excl] if excl else factors
+    overlap = {f: [g for g in _factor_genes(f) if g in gene_set] for f in overlap_candidates}
     overlap = {f: gs for f, gs in overlap.items() if gs}         # only the overlapping factors
     overlap_genes = sorted({g for gs in overlap.values() for g in gs})
     if overlap:

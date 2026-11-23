@@ -221,6 +221,25 @@ class FactorSplitTests(unittest.TestCase):
         adata = _make_store_adata()
         sh.report_factor_removal(adata, {"SIG": ["A", "B"]})   # just must not raise
 
+    def test_exclude_groups_keeps_tf_referenced_gene_but_still_removes_lr_referenced(self):
+        """B is referenced ONLY by the tf-group factor 'B' (bare name, no separator); E is
+        referenced by the lr-group factor 'L$E'. exclude_groups=('tf',) must NOT remove B
+        (its only referencing factor's group is excluded), but must still remove E (its
+        referencing factor's group, lr, is not excluded)."""
+        adata = _make_store_adata()
+        adata.uns["x_factor_map"] = dict(adata.uns["x_factor_map"])
+        adata.uns["x_factor_map"]["A"] = ["TF1", "B", "L$E"]
+
+        # sanity: without exclude_groups, both B and E are removed.
+        removed, remaining = sh.signature_factor_split(adata, ["A", "B", "E"])
+        self.assertEqual(sorted(removed), ["B", "E"])
+        self.assertEqual(remaining, ["A"])
+
+        removed, remaining = sh.signature_factor_split(
+            adata, ["A", "B", "E"], exclude_groups=("tf",))
+        self.assertEqual(removed, ["E"])
+        self.assertEqual(sorted(remaining), ["A", "B"])
+
 
 class AddCancerFactorsTests(unittest.TestCase):
     def test_adds_celltype_split_and_proximity_custom_columns(self):

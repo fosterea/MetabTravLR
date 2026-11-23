@@ -196,19 +196,21 @@ def compute_run(adata, name, genes, spec, cfg, raw=False):
         # once in compute_dataset); X (the normalized_count factor block) is unchanged.
         score_kw = {'score_layer': 'log1p_cpm'} if cfg.y_transform == 'cpm' else {}
         ad2 = sh.add_gene_signature(ad, name, positive=positive, keep_when_overlap='factor',
-                                    verbose=False, **score_kw)
+                                    verbose=False, exclude_groups=cfg.exclude_factor_groups,
+                                    **score_kw)
         target = name
 
     b = sh.fit_gene_betas(ad2, genes=[target], annot_col=spec['annot_col'],
                           annot_value=spec['annot_value'], metabolites=[], custom='all',
                           method=cfg.method, penalty=cfg.penalty, l1_ratio=cfg.l1_ratio,
-                          standardize=cfg.standardize, onehot_col=spec['onehot_col'])
+                          standardize=cfg.standardize, onehot_col=spec['onehot_col'],
+                          exclude_groups=cfg.exclude_factor_groups)
     sub, sub_r = sh.subsample_gene_betas(
         ad2, target, factors=None, n_subsamples=cfg.n_sub, annot_col=spec['annot_col'],
         annot_value=spec['annot_value'], metabolites=[], custom='all', method=cfg.method,
         penalty=cfg.penalty, l1_ratio=cfg.l1_ratio, standardize=cfg.standardize,
         onehot_col=spec['onehot_col'], return_r=True,
-        just_skip_samples_without_all_labels=True)
+        just_skip_samples_without_all_labels=True, exclude_groups=cfg.exclude_factor_groups)
     res = sh.add_subsample_percentiles(sh.rank_coefficients(b), sub, sub_r,
                                        cfg.lower, cfg.upper).reset_index(drop=True)
     return res, sub
@@ -236,6 +238,10 @@ def compute_dataset(cfg, overwrite=False, targets=None):
     if bad_cov:
         raise ValueError(f"{cfg.name}: unknown covariate(s) {bad_cov}; "
                          f"valid = {list(sh.COUNT_COVARIATES)}")
+    bad_fg = [g for g in cfg.exclude_factor_groups if g not in ('tf', 'lr', 'ltf')]
+    if bad_fg:
+        raise ValueError(f"{cfg.name}: unknown exclude_factor_groups {bad_fg}; "
+                         f"valid = ['tf', 'lr', 'ltf']")
     # CPM replaces the pseudo-gene score; a colon raw single-gene target has no pseudo-gene.
     # Guard up front (before adata load / cache mkdir) so a doomed run leaves no stray dir.
     if cfg.y_transform == 'cpm' and cfg.kind == 'colon' and cfg.single_gene:
@@ -307,7 +313,8 @@ def compute_dataset(cfg, overwrite=False, targets=None):
             continue
         present = [g for g in genes if g in var]
         missing = [g for g in genes if g not in var]
-        removed, remaining = sh.signature_factor_split(adata, present)
+        removed, remaining = sh.signature_factor_split(
+            adata, present, exclude_groups=cfg.exclude_factor_groups)
         membership[name] = {'present': present, 'missing': missing, 'total': len(genes),
                             'factor_removed': removed, 'remaining': remaining}
 
@@ -315,7 +322,8 @@ def compute_dataset(cfg, overwrite=False, targets=None):
     for name, genes in cfg.manual_sets.items():
         present = [g for g in genes if g in var]
         missing = [g for g in genes if g not in var]
-        removed, remaining = sh.signature_factor_split(adata, present)
+        removed, remaining = sh.signature_factor_split(
+            adata, present, exclude_groups=cfg.exclude_factor_groups)
         membership[name] = {'present': present, 'missing': missing, 'total': len(genes),
                             'factor_removed': removed, 'remaining': remaining}
 
@@ -533,11 +541,12 @@ def compute_sweep_dataset(cfg, method, overwrite=False):
     if cfg.factor_group != 'nbhd':
         raise NotImplementedError(f"compute_sweep_dataset: factor_group "
                                   f"{cfg.factor_group!r} not supported (only 'nbhd').")
-    if cfg.y_transform != 'normalized' or cfg.covariates:
+    if cfg.y_transform != 'normalized' or cfg.covariates or cfg.exclude_factor_groups:
         raise NotImplementedError(
             f"compute_sweep_dataset: y_transform={cfg.y_transform!r} / "
-            f"covariates={tuple(cfg.covariates)} not supported (only the default "
-            f"'normalized' y and no covariates).")
+            f"covariates={tuple(cfg.covariates)} / "
+            f"exclude_factor_groups={tuple(cfg.exclude_factor_groups)} not supported "
+            f"(only the default 'normalized' y, no covariates, no excluded factor groups).")
     penalties = cfg.sweep_penalties[method]
     target_names = all_targets(cfg)
     raw_names = {cfg.single_gene} if (cfg.kind == 'colon' and cfg.single_gene) else set()

@@ -1014,6 +1014,18 @@ class CacheDirVariantTests(unittest.TestCase):
                          y_transform="cpm", covariates=("n_total_genes",))
         self.assertEqual("/root/nm/fg_slc/y_cpm__cov_n_total_genes", c.cache_dir)
 
+    def test_exclude_factor_groups_nests_sorted(self):
+        c = _minimal_cfg(name="nm", cache_root="/root",
+                         exclude_factor_groups=("ltf", "tf"))
+        self.assertEqual("/root/nm/excl_ltf+tf", c.cache_dir)
+        # default (no exclude_factor_groups) stays the historical path.
+        self.assertEqual("/root/nm", _minimal_cfg(name="nm", cache_root="/root").cache_dir)
+
+    def test_exclude_factor_groups_composes_after_covariates(self):
+        c = _minimal_cfg(name="nm", cache_root="/root", covariates=("n_total_genes",),
+                         exclude_factor_groups=("lr",))
+        self.assertEqual("/root/nm/cov_n_total_genes__excl_lr", c.cache_dir)
+
 
 class EnsureCpmLayerTests(unittest.TestCase):
     def test_cpm_is_log1p_normalize_total_rowsum(self):
@@ -1227,7 +1239,9 @@ class ComputeDatasetVariantTests(unittest.TestCase):
         cfg_c = _minimal_cfg(sweep_penalties={"l1": [0.1]}, method="l1", y_transform="cpm")
         cfg_v = _minimal_cfg(sweep_penalties={"l1": [0.1]}, method="l1",
                              covariates=("n_total_genes",))
-        for cfg in (cfg_c, cfg_v):
+        cfg_e = _minimal_cfg(sweep_penalties={"l1": [0.1]}, method="l1",
+                             exclude_factor_groups=("tf",))
+        for cfg in (cfg_c, cfg_v, cfg_e):
             with self.assertRaises(NotImplementedError):
                 sb.compute_sweep_dataset(cfg, "l1")
 
@@ -1239,6 +1253,32 @@ class ComputeDatasetVariantTests(unittest.TestCase):
                 sb.compute_dataset(cfg_y)
             with self.assertRaises(ValueError):
                 sb.compute_dataset(cfg_c)
+
+    def test_unknown_exclude_factor_group_raises(self):
+        cfg, lib = self._setup(16, exclude_factor_groups=("bogus",))
+        with mock.patch.object(sb.sh, "load_msigdb", return_value=lib):
+            with self.assertRaises(ValueError):
+                sb.compute_dataset(cfg)
+
+    def test_exclude_factor_groups_removes_tf_columns_end_to_end(self):
+        """`_make_store_adata`'s x_factor_map entries (TF1/B/TF2) are all tf-group (bare
+        names, no separator). exclude_factor_groups=('tf',) must make them disappear from
+        the computed result's factor rows entirely, while an unrelated custom-block
+        covariate (a different group) is unaffected -- and the two configs cache
+        separately."""
+        cfg_n, lib = self._setup(17, covariates=("n_total_transcripts",))
+        cfg_e = _minimal_cfg(**{**cfg_n.__dict__, "exclude_factor_groups": ("tf",)})
+        self.assertTrue(cfg_e.cache_dir.endswith("excl_tf"))
+        self.assertNotEqual(cfg_n.cache_dir, cfg_e.cache_dir)
+        with mock.patch.object(sb.sh, "load_msigdb", return_value=lib):
+            sb.compute_dataset(cfg_n)
+            sb.compute_dataset(cfg_e)
+        rn = sb.load_res(cfg_n, "S1", "T1_only")
+        re = sb.load_res(cfg_e, "S1", "T1_only")
+        self.assertIsNotNone(rn); self.assertIsNotNone(re)
+        self.assertTrue({"TF1", "TF2", "B"} & set(rn["factor"]))
+        self.assertFalse({"TF1", "TF2", "B"} & set(re["factor"]))
+        self.assertIn("n_total_transcripts", set(re["factor"]))   # custom block untouched
 
 
 if __name__ == "__main__":

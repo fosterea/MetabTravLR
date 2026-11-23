@@ -28,6 +28,10 @@ if __name__ == '__main__':
                     help="comma-separated extra per-cell covariates to add as predictors: "
                          "subset of n_total_genes,n_total_transcripts (default none). "
                          "Caches separately ({...}/cov_...).")
+    ap.add_argument('--exclude-factor-groups', default=None,
+                    help="comma-separated factor groups to drop from the x design: subset "
+                         "of tf,lr,ltf (default none). E.g. 'tf,ltf' keeps only LR factors "
+                         "+ any custom block. Caches separately ({...}/excl_...).")
     ap.add_argument('--overwrite', action='store_true')
     ap.add_argument('--targets', default=None,
                     help='comma-separated subset of all_targets(cfg) to compute in THIS job '
@@ -44,6 +48,14 @@ if __name__ == '__main__':
         covariates = tuple(c for c in args.covariates.split(',') if c)
         if not covariates:                   # '' or ',,' -> empty: a mistake, not "none"
             ap.error('--covariates was empty after parsing; omit it for no covariates')
+    exclude_factor_groups = None
+    if args.exclude_factor_groups is not None:
+        exclude_factor_groups = tuple(g for g in args.exclude_factor_groups.split(',') if g)
+        if not exclude_factor_groups:        # '' or ',,' -> empty: a mistake, not "none"
+            ap.error('--exclude-factor-groups was empty after parsing; omit it for none')
+        bad = [g for g in exclude_factor_groups if g not in ('tf', 'lr', 'ltf')]
+        if bad:
+            ap.error(f'--exclude-factor-groups: unknown group(s) {bad}; valid = tf,lr,ltf')
 
     cfg = CONFIGS[args.config]
     overrides = {}
@@ -53,6 +65,8 @@ if __name__ == '__main__':
         overrides['y_transform'] = args.y_transform
     if covariates is not None:
         overrides['covariates'] = covariates
+    if exclude_factor_groups is not None:
+        overrides['exclude_factor_groups'] = exclude_factor_groups
     if overrides:
         cfg = replace(cfg, **overrides)
     compute_dataset(cfg, overwrite=args.overwrite, targets=targets)

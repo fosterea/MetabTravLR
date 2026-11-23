@@ -959,6 +959,96 @@ def test_add_gene_signature_invalid_keep_when_overlap():
 
 
 # ---------------------------------------------------------------------------
+# get_gene_factors / add_gene_signature: exclude_groups (drop whole factor groups)
+# ---------------------------------------------------------------------------
+
+def test_get_gene_factors_exclude_groups_drops_only_that_group():
+    """exclude_groups=('tf',) must drop ONLY the target's tf-group x_factor_map columns,
+    leaving its lr/ltf columns -- and the metab + custom blocks, which are appended
+    AFTER the x_factor_map slice and must never be touched by exclude_groups -- intact."""
+    adata = _make_adata(MOD_GENES, [TARGET], n=30, seed=60)
+    grn, tflinks = _build_networks()
+    kwargs = _est_kwargs()
+
+    result = build_factor_block(adata, grn, tflinks, [TARGET], **kwargs)
+    add_metabolites(result, METABOLITES, radius=RADIUS, contact_distance=CONTACT,
+                    scale_factor=SCALE)
+    from metab_processing.LinearRegression.build_x import add_count_covariates
+    add_count_covariates(result, ["n_total_transcripts"])
+
+    factor_cols = list(result.uns["x_factor_map"][TARGET])
+    tf_cols = [c for c in factor_cols if bx._factor_group(c) == "tf"]
+    other_cols = [c for c in factor_cols if bx._factor_group(c) != "tf"]
+    assert tf_cols, "fixture must have >=1 tf-group factor column"
+    assert other_cols, "fixture must have >=1 non-tf factor column (lr/ltf)"
+
+    base = get_gene_factors(result, TARGET, metabs="all", custom="all")
+    filtered = get_gene_factors(result, TARGET, metabs="all", custom="all",
+                                exclude_groups=("tf",))
+
+    for c in tf_cols:
+        assert c in base.columns
+        assert c not in filtered.columns
+    for c in other_cols:
+        assert c in filtered.columns
+    # metab + custom blocks are untouched by exclude_groups.
+    assert "metab@M" in filtered.columns
+    assert "n_total_transcripts" in filtered.columns
+    np.testing.assert_allclose(
+        filtered["metab@M"].to_numpy(), base["metab@M"].to_numpy())
+
+
+def test_add_gene_signature_exclude_groups_factor_mode_keeps_tf_referenced_gene():
+    """keep_when_overlap='factor' normally drops every gene referenced by an overlapping
+    factor from the score. With exclude_groups=('tf',), a tf-group overlap (factor "B",
+    gene B) is ignored -- B stays in the score -- but an lr-group overlap (factor "L$R",
+    gene R) still counts -- R is still dropped. The stored x_factor_map stays the FULL
+    union regardless (exclude_groups never filters the stored factor list itself)."""
+    adata = _make_overlap_adata(seed=47)
+    norm = pd.DataFrame(adata.layers["normalized_count"], columns=adata.var_names)
+    new = add_gene_signature(adata, "SIG", positive=["A", "B", "R"],
+                             keep_when_overlap="factor", exclude_groups=("tf",))
+    expected = (norm["A"] + norm["B"]).to_numpy()   # B kept, R dropped
+    np.testing.assert_allclose(
+        new[:, "SIG"].layers["normalized_count"].ravel(), expected, atol=1e-5)
+    assert new.uns["x_factor_map"]["SIG"] == ["B", "L$R", "f5"]
+
+
+def test_add_gene_signature_exclude_groups_target_mode_keeps_tf_factor():
+    """keep_when_overlap='target' (default) normally drops the overlapping factor "B"
+    (see test_add_gene_signature_overlap_target_drops_factor). With exclude_groups=('tf',)
+    that tf-group overlap is ignored, so "B" is NOT dropped from the factor list."""
+    adata = _make_overlap_adata(seed=48)
+    new = add_gene_signature(adata, "SIG", positive=["A", "B"],
+                             keep_when_overlap="target", exclude_groups=("tf",))
+    assert new.uns["x_factor_map"]["SIG"] == ["B", "L$R", "f5"]
+
+
+def test_get_gene_factors_exclude_two_groups_leaves_lr_only():
+    """The motivating case: exclude_groups=('tf','ltf') drops every tf AND ltf gene-factor
+    column, leaving only the lr group (plus the untouched metab/custom blocks)."""
+    adata = _make_adata(MOD_GENES, [TARGET], n=30, seed=61)
+    result = build_factor_block(adata, *_build_networks(), [TARGET], **_est_kwargs())
+    factor_cols = list(result.uns["x_factor_map"][TARGET])
+    groups = {c: bx._factor_group(c) for c in factor_cols}
+    assert "lr" in groups.values() and "tf" in groups.values(), "fixture needs tf + lr"
+    filtered = get_gene_factors(result, TARGET, exclude_groups=("tf", "ltf"))
+    kept = [bx._factor_group(c) for c in filtered.columns]
+    assert set(kept) <= {"lr"}, f"only lr should survive, got {set(kept)}"
+    assert all(groups[c] == "lr" for c in factor_cols if c in filtered.columns)
+    # every non-lr gene-factor column was dropped
+    assert not any(groups[c] in ("tf", "ltf") and c in filtered.columns for c in factor_cols)
+
+
+def test_factor_group_matches_least_squares_group():
+    """build_x._factor_group is a hand-copy of least_squares._group (circular-import reason);
+    they must agree so excluded groups match how fit_gene_betas labels them."""
+    from metab_processing.LinearRegression.least_squares import _group
+    for name in ["TF1", "L$R", "LIG#TF", "metab@Glc", "SLC2A1", "n_total_genes", "A_B_C"]:
+        assert bx._factor_group(name) == _group(name), name
+
+
+# ---------------------------------------------------------------------------
 # merge_x_adatas: pool per-sample factor stores into one, same structure.
 # ---------------------------------------------------------------------------
 

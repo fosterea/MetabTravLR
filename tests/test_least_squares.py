@@ -332,6 +332,23 @@ class SubsampleGeneBetasTests(unittest.TestCase):
                                   n_subsamples=3, seed0=0)
         self.assertEqual(list(df.columns), ["L$R", "TF_A"])
 
+    def test_exclude_groups_drops_tf_from_subsample_design(self):
+        # Guards that exclude_groups reaches the subsample X build (not just the point fit):
+        # the cached *_subsample_beta columns would otherwise be computed on the wrong design.
+        df = subsample_gene_betas(self.adata, "G", n_subsamples=5, seed0=0,
+                                  exclude_groups=("tf",))
+        self.assertNotIn("TF_A", df.columns)
+        self.assertNotIn("TF_B", df.columns)
+        self.assertIn("L$R", df.columns)          # lr kept
+        self.assertIn(METAB_COL, df.columns)      # metab block untouched
+
+    def test_exclude_all_gene_groups_no_custom_raises(self):
+        # Empty design (all gene-factor groups excluded, no custom/metab) -> clear error,
+        # not a cryptic sklearn "0 feature(s)" crash.
+        with self.assertRaises(ValueError):
+            subsample_gene_betas(self.adata, "G", n_subsamples=3, seed0=0,
+                                 metabolites=None, exclude_groups=("tf", "lr", "ltf"))
+
     def test_bad_factor_name_warns_and_is_dropped(self):
         with warnings.catch_warnings(record=True) as caught:
             warnings.simplefilter("always")

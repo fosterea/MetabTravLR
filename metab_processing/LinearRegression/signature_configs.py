@@ -124,6 +124,9 @@ class DatasetConfig:
     # predictors (like a TF), included by `custom='all'`.
     y_transform: str = 'normalized'
     covariates: tuple = ()
+    # Factor groups (subset of 'tf','lr','ltf') dropped from the x_factor_map design (see
+    # least_squares.get_gene_factors/fit_gene_betas `exclude_groups`); cache-keyed below.
+    exclude_factor_groups: tuple = ()
     n_sub: int = 200
     lower: int = 15
     upper: int = 85
@@ -140,6 +143,7 @@ class DatasetConfig:
         #   factor_group != 'nbhd' -> /fg_{factor_group}
         #   y_transform  != 'normalized' -> /y_{y_transform}
         #   covariates non-empty         -> /cov_{a+b+...}  (sorted, '+'-joined)
+        #   exclude_factor_groups non-empty -> /excl_{a+b+...}  (sorted, '+'-joined)
         base = f'{self.cache_root}/{self.name}'
         if self.factor_group != 'nbhd':
             base = f'{base}/fg_{self.factor_group}'
@@ -150,6 +154,8 @@ class DatasetConfig:
             # sorted+deduped: the fit is set-like in the covariates (add_count_covariates
             # dedupes by name), so ('a','b'), ('b','a') and ('a','a') must share one dir.
             parts.append('cov_' + '+'.join(sorted(set(self.covariates))))
+        if self.exclude_factor_groups:
+            parts.append('excl_' + '+'.join(sorted(set(self.exclude_factor_groups))))
         return base if not parts else base + '/' + '__'.join(parts)
 
 
