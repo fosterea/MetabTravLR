@@ -19,8 +19,9 @@ from metab_processing.LinearRegression.signature_configs import CONFIGS
 if __name__ == '__main__':
     ap = argparse.ArgumentParser()
     ap.add_argument('--config', required=True, choices=list(CONFIGS))
-    ap.add_argument('--factor-group', default='nbhd', choices=['nbhd', 'slc'],
-                    help="factor block: cancer neighborhood ('nbhd') or cell-autonomous SLC genes")
+    ap.add_argument('--factor-group', default='nbhd', choices=['nbhd', 'slc', 'both'],
+                    help="factor block: cancer neighborhood ('nbhd'), cell-autonomous SLC "
+                         "genes ('slc'), or BOTH ('both')")
     ap.add_argument('--y-transform', default='normalized', choices=['normalized', 'cpm'],
                     help="target y: log1p(raw) 'normalized' (default) or log1p(CPM) 'cpm'. "
                          "Caches separately ({...}/y_cpm), never overwriting the default run.")

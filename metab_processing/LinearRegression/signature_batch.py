@@ -185,7 +185,7 @@ def compute_run(adata, name, genes, spec, cfg, raw=False):
         ad2, target = ad, name
     else:
         positive = genes
-        if cfg.factor_group == 'slc':
+        if cfg.factor_group in ('slc', 'both'):
             # Anti-self-leakage, mirroring `keep_when_overlap='factor'` for the SLC custom
             # block: an SLC factor is the cell's OWN expression, so a signature gene that is
             # itself an SLC factor would sit in BOTH the target sum (y) and the design (X).
@@ -228,9 +228,9 @@ def compute_dataset(cfg, overwrite=False, targets=None):
     narrows which (target, spec) fits this job performs. None = every target (the default).
     Names must be members of `all_targets(cfg)`; an unknown name is an error (fail fast
     rather than silently compute nothing)."""
-    if cfg.factor_group not in ('nbhd', 'slc'):
+    if cfg.factor_group not in ('nbhd', 'slc', 'both'):
         raise ValueError(f"{cfg.name}: unknown factor_group {cfg.factor_group!r}; "
-                         f"expected 'nbhd' or 'slc'")
+                         f"expected 'nbhd', 'slc', or 'both'")
     if cfg.y_transform not in ('normalized', 'cpm'):
         raise ValueError(f"{cfg.name}: unknown y_transform {cfg.y_transform!r}; "
                          f"expected 'normalized' or 'cpm'")
@@ -327,7 +327,7 @@ def compute_dataset(cfg, overwrite=False, targets=None):
         membership[name] = {'present': present, 'missing': missing, 'total': len(genes),
                             'factor_removed': removed, 'remaining': remaining}
 
-    nbhd = cfg.factor_group == 'nbhd'
+    nbhd = cfg.factor_group in ('nbhd', 'both')
     for name in (cfg.cancer_factors if nbhd else []):
         genes = library.get(name)
         if genes is None:
@@ -342,7 +342,7 @@ def compute_dataset(cfg, overwrite=False, targets=None):
         missing = [g for g in gl if g not in var]
         membership[vname] = {'present': present, 'missing': missing, 'total': len(gl)}
 
-    if cfg.factor_group == 'slc':       # cell-autonomous SLC expression factors (no diffusion)
+    if cfg.factor_group in ('slc', 'both'):   # cell-autonomous SLC expression factors (no diffusion)
         slc_genes = sh.add_slc_factors(adata, cfg.slc_pattern)
         membership['_SLC_FACTORS'] = {'present': slc_genes, 'missing': [],
                                       'total': len(slc_genes)}

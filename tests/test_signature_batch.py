@@ -848,6 +848,8 @@ class FactorGroupTests(unittest.TestCase):
         self.assertEqual("nbhd", nb.factor_group)
         sl = _minimal_cfg(name="nm", cache_root="/root", factor_group="slc")
         self.assertEqual("/root/nm/fg_slc", sl.cache_dir)
+        bo = _minimal_cfg(name="nm", cache_root="/root", factor_group="both")
+        self.assertEqual("/root/nm/fg_both", bo.cache_dir)
 
     def test_slc_regex_selects_only_transporters(self):
         from metab_processing.LinearRegression import signature_helpers as sh
@@ -913,6 +915,26 @@ class FactorGroupTests(unittest.TestCase):
         # Cancer-factor membership is nbhd-only, so CF1/VESSEL_X are absent in slc mode.
         self.assertNotIn("CF1", membership)
         self.assertNotIn("VESSEL_X", membership)
+
+    def test_compute_dataset_both_includes_slc_and_nbhd_factors(self):
+        # factor_group='both' builds BOTH custom blocks: the cell-autonomous SLC columns AND
+        # the cancer neighborhood {ct}-SET / proximity columns, cached under /fg_both.
+        import json
+        cfg, lib = self._slc_setup(15, factor_group="both",
+                                   cancer_factors=["CF1"], vessel={"VESSEL_X": ["A"]})
+        lib = {**lib, "CF1": ["A", "B"]}
+        with mock.patch.object(sb.sh, "load_msigdb", return_value=lib):
+            sb.compute_dataset(cfg)
+        self.assertTrue(cfg.cache_dir.endswith("/fg_both"))
+        res = sb.load_res(cfg, "S1", "T1_only")
+        self.assertIsNotNone(res)
+        custom = set(res.loc[res["group"] == "custom", "factor"])
+        self.assertTrue({"SLC2A1", "SLCO1B1"} <= custom)                  # SLC block present
+        self.assertTrue(any(f.endswith("-proximity") for f in res["factor"]))  # nbhd present
+        self.assertTrue(any("-CF1" in str(f) for f in res["factor"]))
+        membership = json.load(open(os.path.join(cfg.cache_dir, "_membership.json")))
+        self.assertIn("_SLC_FACTORS", membership)
+        self.assertIn("CF1", membership)                                   # nbhd membership too
 
     def test_slc_factor_in_target_is_dropped_from_target_not_leaked(self):
         # A target signature that CONTAINS an SLC gene: that gene is the cell's own

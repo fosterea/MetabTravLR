@@ -114,7 +114,7 @@ class DatasetConfig:
     # penalty: float = 800
     l1_ratio: float = 0.5
     standardize: bool = True
-    factor_group: str = 'nbhd'      # 'nbhd' (cancer neighborhood factors) | 'slc' (SLC genes)
+    factor_group: str = 'nbhd'      # 'nbhd' (cancer neighborhood) | 'slc' (SLC genes) | 'both'
     slc_pattern: str = SLC_REGEX    # var_names regex selecting the SLC factors
     # Target-y transform + extra covariates (both cache-keyed via `cache_dir`, so a variant
     # NEVER overwrites the default run). `y_transform`: 'normalized' (the default -- the
